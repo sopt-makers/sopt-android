@@ -36,6 +36,7 @@ dependencies {
     implementation libs.core.ktx
     implementation libs.bundles.compose
     implementation libs.appcompat
+    implementation libs.lifecycle.viewmodel
     implementation libs.material
     implementation platform(libs.okhttp.bom)
     implementation libs.bundles.okhttp
@@ -44,6 +45,7 @@ dependencies {
     androidTestImplementation libs.bundles.android.test
     debugImplementation libs.bundles.compose.android.test
     debugImplementation libs.bundles.flipper
+    releaseImplementation libs.flipper.noop
     debugImplementation(libs.flipper.network.get()) {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }

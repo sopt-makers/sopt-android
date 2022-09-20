@@ -11,10 +11,12 @@ gradleplugin = "7.3.0"
 flipper = "0.164.0"
 soloader = "0.10.4"
 okhttp = "4.10.0"
+lifecycle = "2.5.1"
 
 [libraries]
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
@@ -28,6 +30,7 @@ androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "andro
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
 
 flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
+flipper-noop = { module = "com.facebook.flipper:flipper-noop", version.ref = "flipper" }
 soloader = { module = "com.facebook.soloader:soloader", version.ref = "soloader" }
 flipper-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "flipper" }
 
