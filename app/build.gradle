@@ -31,6 +31,9 @@ android {
     kotlinOptions {
         jvmTarget = '11'
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
 }
 
 dependencies {
@@ -41,6 +44,7 @@ dependencies {
     implementation libs.material
     implementation platform(libs.okhttp.bom)
     implementation libs.bundles.okhttp
+    implementation libs.bundles.compose
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test
     androidTestImplementation libs.bundles.android.test
