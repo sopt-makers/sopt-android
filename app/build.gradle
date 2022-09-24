@@ -1,6 +1,7 @@
 plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
+    alias libs.plugins.kotlin.kapt
 }
 
 android {
@@ -45,6 +46,8 @@ dependencies {
     implementation platform(libs.okhttp.bom)
     implementation libs.bundles.okhttp
     implementation libs.bundles.compose
+    implementation libs.hilt
+    kapt libs.hilt.kapt
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test
     androidTestImplementation libs.bundles.android.test
