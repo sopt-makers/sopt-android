@@ -1,4 +1,4 @@
-package org.sopt.official
+package org.sopt.official.feature.home
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
