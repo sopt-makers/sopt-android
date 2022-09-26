@@ -3,6 +3,7 @@ plugins {
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.kapt
     alias libs.plugins.google.services
+    alias libs.plugins.crashlytics
 }
 
 android {
@@ -50,7 +51,7 @@ dependencies {
     implementation libs.hilt
     kapt libs.hilt.kapt
     implementation platform(libs.firebase)
-    implementation libs.firebase.analytics
+    implementation libs.bundles.firebase
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test
     androidTestImplementation libs.bundles.android.test
