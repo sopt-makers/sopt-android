@@ -2,6 +2,7 @@ plugins {
     alias libs.plugins.android.application
     alias libs.plugins.kotlin.android
     alias libs.plugins.kotlin.kapt
+    alias libs.plugins.google.services
 }
 
 android {
@@ -48,6 +49,8 @@ dependencies {
     implementation libs.bundles.compose
     implementation libs.hilt
     kapt libs.hilt.kapt
+    implementation platform(libs.firebase)
+    implementation libs.firebase.analytics
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test
     androidTestImplementation libs.bundles.android.test
