@@ -20,7 +20,7 @@ okhttp = "4.10.0"
 
 google-services = "4.3.14"
 crashlytics = "2.9.2"
-firebase = "30.4.1"
+firebase = "30.5.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
