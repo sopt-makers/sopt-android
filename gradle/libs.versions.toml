@@ -61,7 +61,7 @@ google-services = { module = "com.google.gms:google-services", version.ref = "go
 crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlyrics = { module = "com.google.firebase:firebase-analytics-ktx" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 
 [bundles]
 compose = ["compose-ui", "compose-ui-tooling", "compose-activity", "compose-animation", "compose-viewmodel", "compose-material", "compose-runtime", "compose-ui-tooling-preview"]
@@ -70,7 +70,7 @@ compose-android-test = ["compose-ui-test"]
 android-test = ["androidx-test-junit", "androidx-test-espresso"]
 okhttp = ["okhttp", "okhttp-logging-interceptor"]
 flipper = ["flipper", "soloader"]
-firebase = ["firebase-analytics", "firebase-crashlyrics"]
+firebase = ["firebase-analytics", "firebase-crashlytics"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin" }
