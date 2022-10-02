@@ -38,6 +38,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {

@@ -22,62 +22,26 @@ class InAppUpdateManagerImpl(
 
     init {
         inAppUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            val updatePriority = info.updatePriority()
+            val stalenessDay = info.clientVersionStalenessDays()
             if (info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) { // UPDATE IS AVAILABLE
-                if (info.updatePriority() == 5) { // Priority: 5 (Immediate update flow)
-                    if (info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
-                        launchUpdateFlow(info, AppUpdateType.IMMEDIATE)
-                    }
-                } else if (info.updatePriority() == 4) { // Priority: 4
-                    val clientVersionStalenessDays = info.clientVersionStalenessDays()
-                    if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 5 && info.isUpdateTypeAllowed(
-                            AppUpdateType.IMMEDIATE
-                        )
-                    ) {
-                        // Trigger IMMEDIATE flow
-                        launchUpdateFlow(info, AppUpdateType.IMMEDIATE)
-                    } else if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 3 && info.isUpdateTypeAllowed(
-                            AppUpdateType.FLEXIBLE
-                        )
-                    ) {
-                        // Trigger FLEXIBLE flow
-                        launchUpdateFlow(info, AppUpdateType.FLEXIBLE)
-                    }
-                } else if (info.updatePriority() == 3) { // Priority: 3
-                    val clientVersionStalenessDays = info.clientVersionStalenessDays()
-                    if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 30 && info.isUpdateTypeAllowed(
-                            AppUpdateType.IMMEDIATE
-                        )
-                    ) {
-                        // Trigger IMMEDIATE flow
-                        launchUpdateFlow(info, AppUpdateType.IMMEDIATE)
-                    } else if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 15 && info.isUpdateTypeAllowed(
-                            AppUpdateType.FLEXIBLE
-                        )
-                    ) {
-                        // Trigger FLEXIBLE flow
-                        launchUpdateFlow(info, AppUpdateType.FLEXIBLE)
-                    }
-                } else if (info.updatePriority() == 2) { // Priority: 2
-                    val clientVersionStalenessDays = info.clientVersionStalenessDays()
-                    if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 90 &&
-                        info.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
-                    ) {
-                        // Trigger IMMEDIATE flow
-                        launchUpdateFlow(info, AppUpdateType.IMMEDIATE)
-                    } else if (clientVersionStalenessDays != null && clientVersionStalenessDays >= 30 &&
-                        info.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)
-                    ) {
-                        // Trigger FLEXIBLE flow
-                        launchUpdateFlow(info, AppUpdateType.FLEXIBLE)
-                    }
-                } else if (info.updatePriority() == 1) { // Priority: 1
-                    // Trigger FLEXIBLE flow
+                if (
+                    UpdateCriteria.isUpdatableOf(
+                        updatePriority,
+                        stalenessDay,
+                        AppUpdateType.IMMEDIATE
+                    )
+                ) {
+                    launchUpdateFlow(info, AppUpdateType.IMMEDIATE)
+                } else if (
+                    UpdateCriteria.isUpdatableOf(
+                        updatePriority,
+                        stalenessDay,
+                        AppUpdateType.FLEXIBLE
+                    )
+                ) {
                     launchUpdateFlow(info, AppUpdateType.FLEXIBLE)
-                } else { // Priority: 0
-                    // Do not show in-app update
-                }
-            } else {
-                // UPDATE IS NOT AVAILABLE
+                } else return@addOnSuccessListener
             }
         }
         inAppUpdateManager.registerListener(this)
@@ -105,7 +69,7 @@ class InAppUpdateManagerImpl(
     }
 
     private fun launchUpdateFlow(info: AppUpdateInfo, type: Int) {
-        inAppUpdateManager.startUpdateFlowForResult(info, type, parentActivity, MY_REQUEST_CODE)
+        inAppUpdateManager.startUpdateFlowForResult(info, type, parentActivity, UPDATE_REQUEST_CODE)
         currentType = type
     }
 
@@ -114,7 +78,7 @@ class InAppUpdateManagerImpl(
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == MY_REQUEST_CODE) {
+        if (requestCode == UPDATE_REQUEST_CODE) {
             if (resultCode != Activity.RESULT_OK) {
                 // If the update is cancelled or fails, you can request to start the update again.
                 Log.e("ERROR", "Update flow failed! Result code: $resultCode")
@@ -129,6 +93,6 @@ class InAppUpdateManagerImpl(
     }
 
     companion object {
-        private const val MY_REQUEST_CODE = 3131
+        private const val UPDATE_REQUEST_CODE = 3131
     }
 }
