@@ -38,6 +38,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion libs.versions.compose.get()
     }
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
@@ -46,6 +49,7 @@ dependencies {
     implementation libs.appcompat
     implementation libs.lifecycle.viewmodel
     implementation libs.material
+    implementation libs.inappupdate
     implementation platform(libs.okhttp.bom)
     implementation libs.bundles.okhttp
     implementation libs.bundles.compose
