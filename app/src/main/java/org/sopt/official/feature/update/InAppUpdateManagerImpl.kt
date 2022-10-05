@@ -3,6 +3,7 @@ package org.sopt.official.feature.update
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManager
@@ -11,13 +12,13 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import javax.inject.Inject
 
-class InAppUpdateManagerImpl(
+class InAppUpdateManagerImpl @Inject constructor(
     private val inAppUpdateManager: AppUpdateManager,
-    activity: Activity
+    private val parentActivity: FragmentActivity
 ) : InAppUpdateManager, InstallStateUpdatedListener {
     private var currentType = AppUpdateType.FLEXIBLE
-    private var parentActivity: Activity = activity
     private var onUpdateCompleteListener: OnUpdateCompleteListener? = null
 
     init {

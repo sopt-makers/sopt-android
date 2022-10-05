@@ -8,17 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.Text
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.feature.update.InAppUpdateManager
-import org.sopt.official.feature.update.InAppUpdateManagerFactory
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     @Inject
-    lateinit var factory: InAppUpdateManagerFactory
     lateinit var inAppUpdateManager: InAppUpdateManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inAppUpdateManager = factory.create(this)
         inAppUpdateManager.setOnFlexibleUpdateCompleted {
             Toast.makeText(this, "Flexible Update completed", Toast.LENGTH_SHORT).show()
         }
