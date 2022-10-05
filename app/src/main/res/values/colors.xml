@@ -1,10 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Material Theme -->
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- BlueScale -->
+    <color name="blue_100">#C1CDFF</color>
+    <color name="blue_200">#A1B3FF</color>
+    <color name="blue_300">#7F98FF</color>
+    <color name="blue_400">#6380FC</color>
+    <color name="blue_500">#5070F7</color>
+    <color name="blue_600">#5070F7</color>
+    <color name="blue_700">#2E60F6</color>
+    <!-- GrayScale -->
+    <color name="gray_50">#F7F8F9</color>
+    <color name="gray_100">#EFF0F1</color>
+    <color name="gray_200">#E4E5E6</color>
+    <color name="gray_300">#D3D4D5</color>
+    <color name="gray_400">#AEAFB0</color>
+    <color name="gray_500">#8E8F90</color>
+    <color name="gray_600">#666768</color>
+    <color name="gray_700">#535455</color>
+    <color name="gray_800">#353637</color>
+    <color name="gray_900">#151617</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
 </resources>
