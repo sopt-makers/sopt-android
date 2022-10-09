@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextAppearance.SOPT" parent="">
+        <item name="android:fontFamily">@font/sopt_font</item>
+        <item name="fontWeight">400</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLine1">
+        <item name="fontWeight">800</item>
+        <item name="android:textSize">32sp</item>
+        <item name="android:letterSpacing">-0.32</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLine2">
+        <item name="fontWeight">700</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">-0.24</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLine3">
+        <item name="fontWeight">700</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:letterSpacing">-0.2</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLine4">
+        <item name="fontWeight">700</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.18</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLine5">
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:letterSpacing">-0.18</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.SubTitle1">
+        <item name="fontWeight">700</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.16</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.SubTitle2">
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.16</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.Body1">
+        <item name="fontWeight">400</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:letterSpacing">-0.16</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.Body2">
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:letterSpacing">-0.14</item>
+    </style>
+</resources>
