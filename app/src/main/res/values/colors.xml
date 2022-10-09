@@ -12,8 +12,7 @@
     <color name="blue_300">#7F98FF</color>
     <color name="blue_400">#6380FC</color>
     <color name="blue_500">#5070F7</color>
-    <color name="blue_600">#5070F7</color>
-    <color name="blue_700">#2E60F6</color>
+    <color name="blue_600">#2E60F6</color>
     <!-- GrayScale -->
     <color name="gray_50">#F7F8F9</color>
     <color name="gray_100">#EFF0F1</color>
