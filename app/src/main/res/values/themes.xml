@@ -30,5 +30,6 @@
 
     <style name="Theme.SOPT.Spalsh" type="Theme.SOPT">
         <item name="android:windowBackground">@color/gray_900</item>
+        <item name="android:statusBarColor">@color/gray_900</item>
     </style>
 </resources>
