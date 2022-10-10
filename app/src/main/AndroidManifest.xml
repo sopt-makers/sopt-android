@@ -14,14 +14,17 @@
         android:theme="@style/Theme.SOPT"
         tools:targetApi="31">
         <activity
-            android:name=".feature.home.MainActivity"
-            android:exported="true">
+            android:name=".feature.splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.SOPT.Spalsh">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".feature.home.MainActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
