@@ -9,6 +9,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.Text
@@ -45,24 +46,45 @@ fun SplashScreen() {
                 if (textAnimationState.currentState) isTitleAnimationFinished = true
             }
 
-            AnimatedVisibility(
-                visibleState = textAnimationState,
-                modifier = Modifier.align(Alignment.Center),
-                enter = slideInHorizontally(tween(800)) {
-                    with(density) { -20.dp.roundToPx() }
-                } + fadeIn(
-                    animationSpec = tween(800, easing = FastOutSlowInEasing),
-                    initialAlpha = 0.1f
-                ),
+            Column(
+                modifier = Modifier.align(Alignment.Center)
             ) {
-                Text(
-                    text = "SOPT",
-                    style = SoptTheme.typography.h1,
-                    color = SoptTheme.colors.background,
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .align(Alignment.Center)
-                )
+                AnimatedVisibility(
+                    visibleState = textAnimationState,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    enter = slideInHorizontally(tween(800)) {
+                        with(density) { -20.dp.roundToPx() }
+                    } + fadeIn(
+                        animationSpec = tween(800, easing = FastOutSlowInEasing),
+                        initialAlpha = 0.1f
+                    ),
+                ) {
+                    Text(
+                        text = "SOPT",
+                        style = SoptTheme.typography.h1,
+                        color = SoptTheme.colors.background,
+                        modifier = Modifier
+                            .wrapContentSize()
+                    )
+                }
+                AnimatedVisibility(
+                    visibleState = textAnimationState,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    enter = slideInHorizontally(tween(800)) {
+                        with(density) { 20.dp.roundToPx() }
+                    } + fadeIn(
+                        animationSpec = tween(800, easing = FastOutSlowInEasing),
+                        initialAlpha = 0.1f
+                    ),
+                ) {
+                    Text(
+                        text = "Shout Our Passion Together",
+                        style = SoptTheme.typography.b2,
+                        color = SoptTheme.colors.onSurface50,
+                        modifier = Modifier
+                            .wrapContentSize()
+                    )
+                }
             }
         }
     }
