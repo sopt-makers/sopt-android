@@ -21,6 +21,7 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.style.Blue500
 import org.sopt.official.style.SoptTheme
 
 @Composable
@@ -37,12 +38,11 @@ fun SplashScreen() {
                     .apply { targetState = true }
             }
             var isTitleAnimationFinished by remember(textAnimationState.currentState) {
-                Log.d("Nunu", "isTitleAnimationFinished: ${textAnimationState.currentState}")
                 mutableStateOf(false)
             }
             val remainedAnimationState = remember(isTitleAnimationFinished) {
-                MutableTransitionState(isTitleAnimationFinished)
-                    .apply { targetState = true }
+                MutableTransitionState(false)
+                    .apply { targetState = isTitleAnimationFinished }
             }
 
             LaunchedEffect(textAnimationState.currentState) {
@@ -54,7 +54,6 @@ fun SplashScreen() {
     }
 }
 
-@OptIn(ExperimentalTextApi::class)
 @Composable
 private fun Title(
     titleAnimationState: MutableTransitionState<Boolean>,
@@ -85,9 +84,6 @@ private fun Title(
                     style = SoptTheme.typography.h1,
                     color = SoptTheme.colors.background,
                     modifier = Modifier.wrapContentSize(),
-                    platformStyle = PlatformTextStyle(
-                        includeFontPadding = false
-                    )
                 )
             }
             AnimatedVisibility(
@@ -105,7 +101,7 @@ private fun Title(
                         .align(Alignment.Bottom)
                 ) {
                     drawRect(
-                        color = Color(0xFF5070F7),
+                        color = Blue500,
                         size = Size(size.width, size.height)
                     )
                 }
