@@ -84,8 +84,7 @@ compose = [
     "compose-material-icons-extended",
     "compose-material-icons",
     "compose-runtime",
-    "compose-ui-tooling-preview",
-    "compose-navigation",
+    "compose-ui-tooling-preview"
 ]
 compose-test = ["compose-junit"]
 compose-android-test = ["compose-ui-test"]
