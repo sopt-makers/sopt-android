@@ -13,6 +13,16 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SOPT"
         tools:targetApi="31">
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="org.sopt.official.config.TimberInitializer"
+                android:value="androidx.startup" />
+        </provider>
+
         <activity
             android:name=".feature.splash.SplashActivity"
             android:exported="true"
