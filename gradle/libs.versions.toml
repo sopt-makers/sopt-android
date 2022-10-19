@@ -5,6 +5,7 @@ corektx = "1.9.0"
 appcompat = "1.5.1"
 activity = "1.6.0"
 lifecycle = "2.5.1"
+navigation = "2.5.2"
 
 material = "1.6.1"
 in-app-update = "2.0.0"
@@ -45,6 +46,7 @@ compose-material-icons-extended = { module = "androidx.compose.material:material
 compose-material-icons = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
 compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
+compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
