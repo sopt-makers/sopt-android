@@ -77,6 +77,8 @@ dependencies {
 
     implementation libs.bundles.compose
 
+    implementation libs.bundles.mavericks
+
     implementation libs.hilt
     kapt libs.hilt.kapt
 
