@@ -5,6 +5,7 @@ plugins {
     alias libs.plugins.dagger.hilt
     alias libs.plugins.google.services
     alias libs.plugins.crashlytics
+    alias libs.plugins.ktlint
 }
 
 android {
@@ -76,4 +77,12 @@ dependencies {
     debugImplementation(libs.flipper.network.get()) {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
+}
+
+ktlint {
+    android = true
+    debug = true
+    coloredOutput = true
+    verbose = true
+    outputToConsole = true
 }
