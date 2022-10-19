@@ -10,7 +10,7 @@ buildscript {
         classpath libs.hilt.plugin
         classpath libs.agp
         classpath libs.crashlytics.plugin
-        classpath 'org.jlleitschuh.gradle:ktlint-gradle:10.2.1'
+        classpath libs.ktlint
     }
 }
 
@@ -22,18 +22,8 @@ plugins {
     alias libs.plugins.dagger.hilt apply false
     alias libs.plugins.google.services apply false
     alias libs.plugins.crashlytics apply false
-    id "org.jlleitschuh.gradle.ktlint" version "10.2.1"
+    alias libs.plugins.ktlint apply false
 }
-//
-//subprojects {
-//    configure(KtlintExtension) {
-//        debug = true
-//        android = true
-//        outputColorName = "RED"
-//        outputToConsole = true
-//
-//    }
-//}
 
 task clean(type: Delete) {
     delete rootProject.buildDir
