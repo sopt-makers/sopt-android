@@ -59,7 +59,7 @@ private fun Title(
 
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .wrapContentSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row(
@@ -83,18 +83,18 @@ private fun Title(
                 )
             }
             AnimatedVisibility(
-                visibleState = remainedAnimationState,
+                visibleState = titleAnimationState,
                 enter = slideInHorizontally(tween(800)) {
                     with(density) { -20.dp.roundToPx() }
                 } + fadeIn(
                     animationSpec = tween(800, easing = FastOutSlowInEasing),
                     initialAlpha = 0.1f
                 ),
+                modifier = Modifier.offset(y = (-4).dp)
             ) {
                 Canvas(
                     modifier = Modifier
                         .size(6.dp)
-                        .align(Alignment.Bottom)
                 ) {
                     drawRect(
                         color = Blue500,
@@ -103,23 +103,30 @@ private fun Title(
                 }
             }
         }
-
-        AnimatedVisibility(
-            visibleState = remainedAnimationState,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            enter = slideInHorizontally(tween(800)) {
-                with(density) { 20.dp.roundToPx() }
-            } + fadeIn(
-                animationSpec = tween(800, easing = FastOutSlowInEasing),
-                initialAlpha = 0.1f
-            ),
-        ) {
+        if (titleAnimationState.isIdle && titleAnimationState.currentState) {
+            AnimatedVisibility(
+                visibleState = remainedAnimationState,
+                enter = slideInHorizontally(tween(800)) {
+                    with(density) { 20.dp.roundToPx() }
+                } + fadeIn(
+                    animationSpec = tween(800, easing = FastOutSlowInEasing),
+                    initialAlpha = 0.1f
+                ),
+                modifier = Modifier.wrapContentSize()
+            ) {
+                Text(
+                    text = "Shout Our Passion Together",
+                    style = SoptTheme.typography.b2,
+                    color = SoptTheme.colors.onSurface50,
+                    modifier = Modifier.wrapContentSize()
+                )
+            }
+        } else {
             Text(
                 text = "Shout Our Passion Together",
                 style = SoptTheme.typography.b2,
-                color = SoptTheme.colors.onSurface50,
-                modifier = Modifier
-                    .wrapContentSize()
+                color = SoptTheme.colors.onSurface90,
+                modifier = Modifier.wrapContentSize()
             )
         }
     }
