@@ -58,6 +58,18 @@ private fun NoticeItemTitle(
     }
 }
 
+@Composable
+private fun NoticeItemInformation(
+    creator: String,
+    createdAt: String
+) {
+    Text(
+        text = "$creator · $createdAt",
+        style = SoptTheme.typography.caption,
+        color = SoptTheme.colors.onSurface40
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun PreviewNoticeItem() {
