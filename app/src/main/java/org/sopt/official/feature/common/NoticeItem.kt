@@ -18,10 +18,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
+import org.sopt.official.feature.notice.model.NoticeItemModel
 import org.sopt.official.style.SoptTheme
 
 @Composable
-fun NoticeItem() {
+fun NoticeItem(
+    noticeItemModel: NoticeItemModel
+) {
     Box(
         modifier = Modifier.fillMaxWidth()
             .padding(top = 16.dp, bottom = 14.dp)
@@ -29,6 +32,15 @@ fun NoticeItem() {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
+            NoticeItemTitle(
+                title = noticeItemModel.title,
+                isNewNotice = noticeItemModel.isNewNotice
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            NoticeItemInformation(
+                creator = noticeItemModel.creator,
+                createdAt = noticeItemModel.createdAt
+            )
         }
     }
 }
@@ -72,8 +84,45 @@ private fun NoticeItemInformation(
 
 @Preview(showBackground = true)
 @Composable
+fun PreviewNewNoticeItem() {
+    SoptTheme() {
+        NoticeItem(
+            NoticeItemModel(
+                title = "SOPT Notice",
+                isNewNotice = true,
+                creator = "관리자",
+                createdAt = "22.00.00"
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
 fun PreviewNoticeItem() {
-    SoptTheme {
-        NoticeItem()
+    SoptTheme() {
+        NoticeItem(
+            NoticeItemModel(
+                title = "SOPT Notice",
+                isNewNotice = false,
+                creator = "관리자",
+                createdAt = "22.00.00"
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMaxSizeTitleNoticeItem() {
+    SoptTheme() {
+        NoticeItem(
+            NoticeItemModel(
+                title = "SOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT Notice",
+                isNewNotice = false,
+                creator = "관리자",
+                createdAt = "22.00.00"
+            )
+        )
     }
 }
