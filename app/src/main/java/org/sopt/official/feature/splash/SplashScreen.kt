@@ -22,10 +22,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.config.navigation.SplashNavGraph
+import org.sopt.official.designsystem.style.Blue500
+import org.sopt.official.designsystem.style.Gray900
+import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.feature.destinations.EmailInputScreenDestination
-import org.sopt.official.style.Blue500
-import org.sopt.official.style.Gray900
-import org.sopt.official.style.SoptTheme
 
 @SplashNavGraph(start = true)
 @Destination("entrypoint")

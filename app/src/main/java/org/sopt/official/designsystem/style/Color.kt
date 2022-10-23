@@ -1,4 +1,4 @@
-package org.sopt.official.style
+package org.sopt.official.designsystem.style
 
 import androidx.compose.ui.graphics.Color
 
