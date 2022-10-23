@@ -17,11 +17,19 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import org.sopt.official.config.navigation.SplashNavGraph
 import org.sopt.official.style.Blue500
 import org.sopt.official.style.SoptTheme
 
+@SplashNavGraph(start = true)
+@Destination("splash")
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navigator: DestinationsNavigator
+) {
     SoptTheme {
         Box(
             modifier = Modifier
@@ -135,5 +143,5 @@ private fun Title(
 @Preview("Splash 화면")
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(navigator = EmptyDestinationsNavigator)
 }

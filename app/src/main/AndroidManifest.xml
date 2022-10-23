@@ -22,19 +22,15 @@
                 android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
-
         <activity
-            android:name=".feature.splash.SplashActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.SOPT.Spalsh">
+            android:theme="@style/Theme.SOPT">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".feature.home.MainActivity"
-            android:exported="true" />
     </application>
 
 </manifest>
