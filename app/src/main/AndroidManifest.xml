@@ -19,7 +19,7 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
-                android:name="org.sopt.official.config.TimberInitializer"
+                android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
 
