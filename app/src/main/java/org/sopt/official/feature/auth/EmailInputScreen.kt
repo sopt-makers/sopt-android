@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import org.sopt.official.config.navigation.AuthNavGraph
-import org.sopt.official.style.SoptTheme
-import org.sopt.official.style.White
+import org.sopt.official.designsystem.style.SoptTheme
+import org.sopt.official.designsystem.style.White
 
 @AuthNavGraph(start = true)
 @Destination("email")
