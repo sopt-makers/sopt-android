@@ -7,7 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.feature.splash.NavGraphs
+import org.sopt.official.feature.NavGraphs
 import org.sopt.official.feature.update.InAppUpdateManager
 import javax.inject.Inject
 
