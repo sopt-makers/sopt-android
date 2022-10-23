@@ -5,6 +5,12 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 
 @RootNavGraph(start = true)
 @NavGraph
+annotation class SplashNavGraph(
+    val start: Boolean = false
+)
+
+@RootNavGraph
+@NavGraph
 annotation class AuthNavGraph(
     val start: Boolean = false
 )
