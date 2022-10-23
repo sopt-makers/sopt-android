@@ -1,4 +1,4 @@
-package org.sopt.official.style
+package org.sopt.official.designsystem.style
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
