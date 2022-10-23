@@ -6,6 +6,7 @@ plugins {
     alias libs.plugins.google.services
     alias libs.plugins.crashlytics
     alias libs.plugins.ktlint
+    alias libs.plugins.ksp
 }
 
 android {
@@ -27,6 +28,13 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
         }
     }
     compileOptions {
@@ -53,6 +61,7 @@ dependencies {
     implementation libs.startup
 
     implementation libs.material
+    implementation libs.bundles.accompanist
     implementation libs.inappupdate
 
     implementation platform(libs.okhttp.bom)
@@ -66,6 +75,9 @@ dependencies {
 
     implementation platform(libs.firebase)
     implementation libs.bundles.firebase
+
+    implementation libs.compose.destination.core
+    ksp libs.compose.destination.ksp
 
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test

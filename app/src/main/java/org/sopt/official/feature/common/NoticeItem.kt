@@ -85,7 +85,7 @@ private fun NoticeItemInformation(
 @Preview(showBackground = true)
 @Composable
 fun PreviewNewNoticeItem() {
-    SoptTheme() {
+    SoptTheme {
         NoticeItem(
             NoticeItemModel(
                 title = "SOPT Notice",
@@ -100,7 +100,7 @@ fun PreviewNewNoticeItem() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewNoticeItem() {
-    SoptTheme() {
+    SoptTheme {
         NoticeItem(
             NoticeItemModel(
                 title = "SOPT Notice",
@@ -115,7 +115,7 @@ fun PreviewNoticeItem() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewMaxSizeTitleNoticeItem() {
-    SoptTheme() {
+    SoptTheme {
         NoticeItem(
             NoticeItemModel(
                 title = "SOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT NoticeSOPT Notice",

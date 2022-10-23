@@ -17,12 +17,30 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import org.sopt.official.config.navigation.SplashNavGraph
+import org.sopt.official.feature.destinations.EmailInputScreenDestination
 import org.sopt.official.style.Blue500
+import org.sopt.official.style.Gray900
 import org.sopt.official.style.SoptTheme
 
+@SplashNavGraph(start = true)
+@Destination("entrypoint")
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navigator: DestinationsNavigator
+) {
     SoptTheme {
+        val systemUiController = rememberSystemUiController()
+        SideEffect {
+            systemUiController.setStatusBarColor(
+                color = Gray900,
+                darkIcons = false
+            )
+        }
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -43,6 +61,10 @@ fun SplashScreen() {
 
             LaunchedEffect(textAnimationState.currentState) {
                 if (textAnimationState.currentState) isTitleAnimationFinished = true
+            }
+            if (remainedAnimationState.isIdle && remainedAnimationState.currentState) {
+                navigator.popBackStack()
+                navigator.navigate(EmailInputScreenDestination.route)
             }
 
             Title(textAnimationState, remainedAnimationState)
@@ -135,5 +157,5 @@ private fun Title(
 @Preview("Splash 화면")
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(navigator = EmptyDestinationsNavigator)
 }

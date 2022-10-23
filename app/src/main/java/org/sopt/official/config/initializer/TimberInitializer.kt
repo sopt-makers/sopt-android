@@ -1,4 +1,4 @@
-package org.sopt.official.config
+package org.sopt.official.config.initializer
 
 import android.content.Context
 import android.util.Log

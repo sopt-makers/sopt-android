@@ -1,12 +1,13 @@
-package org.sopt.official.feature.home
+package org.sopt.official
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.Text
+import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.feature.NavGraphs
 import org.sopt.official.feature.update.InAppUpdateManager
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycle.addObserver(inAppUpdateManager)
         setContent {
-            Text(text = "Hello World!")
+            DestinationsNavHost(navGraph = NavGraphs.root)
         }
     }
 
