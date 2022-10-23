@@ -1,4 +1,4 @@
-package org.sopt.official.feature.common
+package org.sopt.official.feature.notice.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
