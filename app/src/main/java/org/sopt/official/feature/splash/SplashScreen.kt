@@ -52,6 +52,9 @@ fun SplashScreen(
             LaunchedEffect(textAnimationState.currentState) {
                 if (textAnimationState.currentState) isTitleAnimationFinished = true
             }
+            if (remainedAnimationState.isIdle && remainedAnimationState.currentState) {
+                navigator.navigate("auth")
+            }
 
             Title(textAnimationState, remainedAnimationState)
         }
