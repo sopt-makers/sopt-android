@@ -1,0 +1,70 @@
+name: Makers PR Builder
+
+on:
+  pull_request:
+    branches: [ develop, master ]
+
+defaults:
+  run:
+    shell: bash
+    working-directory: .
+
+jobs:
+  build:
+    name: PR Checker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 11
+
+      - name: Change gradlew permissions
+        run: chmod +x ./gradlew
+
+      - name: Access Firebase Service
+        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+
+      - name: Lint Check
+        run: ./gradlew ktlintCheck
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: On Success
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#53A551'
+          SLACK_ICON: https://user-images.githubusercontent.com/59532818/197379133-676094c1-d544-4784-b582-60e061f69d31.png?size=48
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: 'ALL Makers checks have passed ✅🫡'
+          MSG_MINIMAL: true
+          SLACK_USERNAME: Makers Android
+          SLACK_MESSAGE: 'Makers Android PR check 성공 🎉🎉🎉'
+
+      - name: On Failed, Notify in Slack
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#ff0000'
+          SLACK_ICON: https://user-images.githubusercontent.com/59532818/197379133-676094c1-d544-4784-b582-60e061f69d31.png?size=48
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: 'Makers checks have failed ⚠️🚫'
+          MSG_MINIMAL: true
+          SLACK_USERNAME: Makers Android
+          SLACK_MESSAGE: '버그 저리가'
