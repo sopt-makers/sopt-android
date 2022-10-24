@@ -37,7 +37,7 @@ fun NoticeItem(
                 isNewNotice = noticeItemModel.isNewNotice
             )
             Spacer(modifier = Modifier.size(8.dp))
-            NoticeItemInformation(
+            NoticeInformationText(
                 creator = noticeItemModel.creator,
                 createdAt = noticeItemModel.createdAt
             )
@@ -68,18 +68,6 @@ private fun NoticeItemTitle(
             overflow = TextOverflow.Ellipsis
         )
     }
-}
-
-@Composable
-private fun NoticeItemInformation(
-    creator: String,
-    createdAt: String
-) {
-    Text(
-        text = "$creator · $createdAt",
-        style = SoptTheme.typography.caption,
-        color = SoptTheme.colors.onSurface40
-    )
 }
 
 @Preview(showBackground = true)
