@@ -1,7 +1,8 @@
 package org.sopt.official.designsystem.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.LocalContentAlpha
 import androidx.compose.material.LocalContentColor
@@ -11,6 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.style.SoptTheme
 
@@ -38,10 +40,13 @@ fun TopBarIconButton(
     tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     onClick: (() -> Unit)? = null
 ) {
-    Box(
-        modifier = Modifier.clickable { onClick?.invoke() }
+    Row(
+        modifier = Modifier.clickable(
+            onClick = { onClick?.invoke() }
+        )
     ) {
         Icon(
+            modifier = Modifier.padding(8.dp),
             imageVector = imageVector,
             contentDescription = contentDescription,
             tint = tint
