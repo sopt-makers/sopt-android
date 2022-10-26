@@ -20,7 +20,7 @@ gradleplugin = "7.3.1"
 kspplugin = "1.7.20-1.0.7"
 
 dagger-hilt = "2.44"
-flipper = "0.171.1"
+flipper = "0.172.0"
 soloader = "0.10.4"
 okhttp = "4.10.0"
 timber = "5.0.1"
