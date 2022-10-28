@@ -46,13 +46,19 @@ fun PushAlarmScreen(
                 onConfirm = {}
             )
             Part.values()
-                .forEach { part ->
+                .map { part ->
                     PushSelectItem(
                         part,
                         viewModel.isSelected(part)
                     ) { isChecked ->
                         viewModel.onItemCheckedChange(part, isChecked)
                     }
+                }.forEach {
+                    SelectBox(
+                        item = it,
+                        value = it.value,
+                        onCheckedChange = it.onCheckedChange
+                    )
                 }
         }
     }
