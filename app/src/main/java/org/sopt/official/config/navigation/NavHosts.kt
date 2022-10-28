@@ -20,3 +20,9 @@ annotation class AuthNavGraph(
 annotation class HomeNavGraph(
     val start: Boolean = false
 )
+
+@RootNavGraph
+@NavGraph
+annotation class SettingNavGraph(
+    val start: Boolean = false
+)
