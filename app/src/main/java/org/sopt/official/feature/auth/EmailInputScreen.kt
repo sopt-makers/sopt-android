@@ -33,6 +33,7 @@ import org.sopt.official.config.navigation.AuthNavGraph
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.designsystem.style.White
 import org.sopt.official.feature.auth.component.AuthHeader
+import org.sopt.official.feature.destinations.EmailSendScreenDestination
 
 @AuthNavGraph(start = true)
 @Destination("email")
@@ -50,7 +51,10 @@ fun EmailInputScreen(
             )
         }
         Column(modifier = Modifier.fillMaxSize()) {
-            Toolbar(label = "인증하기") {}
+            Toolbar(label = "인증하기") {
+                navigator.popBackStack()
+                navigator.navigate(EmailSendScreenDestination.route)
+            }
             Spacer(modifier = Modifier.height(68.dp))
             AuthHeader(
                 containerModifier = Modifier
