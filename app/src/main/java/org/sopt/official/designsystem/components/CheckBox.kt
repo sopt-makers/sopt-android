@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.style.SoptTheme
 
-
 @Composable
 fun CheckBox(
     containerModifier: Modifier = Modifier.size(48.dp),
