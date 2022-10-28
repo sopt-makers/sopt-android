@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -23,9 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,6 +32,8 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.config.navigation.AuthNavGraph
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.designsystem.style.White
+import org.sopt.official.feature.auth.component.AuthHeader
+import org.sopt.official.feature.destinations.EmailSendScreenDestination
 
 @AuthNavGraph(start = true)
 @Destination("email")
@@ -53,31 +51,19 @@ fun EmailInputScreen(
             )
         }
         Column(modifier = Modifier.fillMaxSize()) {
-            Toolbar(label = "인증하기") {}
-            Spacer(modifier = Modifier.height(68.dp))
-            Column(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(style = SpanStyle(color = SoptTheme.colors.primary)) {
-                            append("이메일")
-                        }
-                        withStyle(style = SpanStyle(color = SoptTheme.colors.onSurface90)) {
-                            append("을 입력해주세요")
-                        }
-                    },
-                    style = SoptTheme.typography.h2
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = "SOPT 지원 시 사용했던 이메일을 입력하면\n" + "회원인증을 할 수 있어요",
-                    style = SoptTheme.typography.b1,
-                    color = SoptTheme.colors.onSurface50
-                )
+            Toolbar(label = "인증하기") {
+                navigator.popBackStack()
+                navigator.navigate(EmailSendScreenDestination.route)
             }
+            Spacer(modifier = Modifier.height(68.dp))
+            AuthHeader(
+                containerModifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                emphasizedTitleLabel = "이메일",
+                extraTitleLabel = "을 입력해주세요",
+                contentLabel = "SOPT 지원 시 사용했던 이메일을 입력하면\n" + "회원인증을 할 수 있어요"
+            )
             Text(
                 text = "SOPT 회원이 아니에요 >",
                 style = SoptTheme.typography.caption,
