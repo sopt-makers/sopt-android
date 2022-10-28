@@ -60,18 +60,20 @@ fun EmailInputScreen(
                     .wrapContentHeight()
                     .padding(horizontal = 16.dp)
             ) {
-                Text(buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = SoptTheme.colors.primary)) {
-                        append("이메일")
-                    }
-                    withStyle(style = SpanStyle(color = SoptTheme.colors.onSurface90)) {
-                        append("을 입력해주세요")
-                    }
-                }, style = SoptTheme.typography.h2)
+                Text(
+                    buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = SoptTheme.colors.primary)) {
+                            append("이메일")
+                        }
+                        withStyle(style = SpanStyle(color = SoptTheme.colors.onSurface90)) {
+                            append("을 입력해주세요")
+                        }
+                    },
+                    style = SoptTheme.typography.h2
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "SOPT 지원 시 사용했던 이메일을 입력하면\n" +
-                            "회원인증을 할 수 있어요",
+                    text = "SOPT 지원 시 사용했던 이메일을 입력하면\n" + "회원인증을 할 수 있어요",
                     style = SoptTheme.typography.b1,
                     color = SoptTheme.colors.onSurface50
                 )
@@ -120,9 +122,7 @@ fun EmailInputScreen(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(
-                        text = "이메일 형식이 올바르지 않습니다",
-                        style = SoptTheme.typography.caption,
-                        color = SoptTheme.colors.error
+                        text = "이메일 형식이 올바르지 않습니다", style = SoptTheme.typography.caption, color = SoptTheme.colors.error
                     )
                 }
             }
