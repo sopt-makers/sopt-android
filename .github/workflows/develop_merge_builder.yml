@@ -57,13 +57,14 @@ jobs:
           SLACK_USERNAME: Makers Android
           SLACK_MESSAGE: '버그 저리가'
 
-      - name: Upload APK
+      - name: On Success
         if: ${{ success() }}
-        uses: MeilCli/slack-upload-file@v1
-        with:
-          slack_token: ${{ secrets.SLACK_BOT_TOKEN }}
-          channels: ${{ secrets.SLACK_CHANNEL_ID }}
-          file_path: 'app/build/outputs/apk/debug/app-debug.apk'
-          file_name: 'Makers.apk'
-          file_type: 'apk'
-          initial_comment: '${{ github.ref }} APK Distributed on Slack'
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_COLOR: '#53A551'
+          SLACK_ICON: https://user-images.githubusercontent.com/59532818/197379133-676094c1-d544-4784-b582-60e061f69d31.png?size=48
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_TITLE: 'ALL Makers checks have passed ✅🫡'
+          MSG_MINIMAL: true
+          SLACK_USERNAME: Makers Android
+          SLACK_MESSAGE: 'Makers Android Merge Check Complete 🎉🎉🎉'
