@@ -11,6 +11,7 @@ class SoptColors(
     background: Color,
     onBackground: Color,
     surface: Color,
+    error: Color,
     onSurface: Color,
     onSurface90: Color,
     onSurface80: Color,
@@ -33,6 +34,8 @@ class SoptColors(
     var onBackground by mutableStateOf(onBackground)
         private set
     var surface by mutableStateOf(surface)
+        private set
+    var error by mutableStateOf(error)
         private set
     var onSurface by mutableStateOf(onSurface)
         private set
@@ -64,6 +67,7 @@ class SoptColors(
         background,
         onBackground,
         surface,
+        error,
         onSurface,
         onSurface90,
         onSurface80,
@@ -84,6 +88,7 @@ class SoptColors(
         background = other.background
         onBackground = other.onBackground
         surface = other.surface
+        error = other.error
         onSurface = other.onSurface
         onSurface90 = other.onSurface90
         onSurface80 = other.onSurface80
@@ -105,6 +110,7 @@ fun soptLightColors(
     background: Color = White,
     onBackground: Color = Black,
     surface: Color = White,
+    error: Color = Red,
     onSurface: Color = Black,
     onSurface90: Color = Gray900,
     onSurface80: Color = Gray800,
@@ -122,6 +128,7 @@ fun soptLightColors(
     background,
     onBackground,
     surface,
+    error,
     onSurface,
     onSurface90,
     onSurface80,
