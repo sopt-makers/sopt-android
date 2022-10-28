@@ -4,7 +4,7 @@ enum class Part(
     val title: String,
     val soptTitle: String,
 ) {
-    ALl("all", "전체 공지"),
+    ALL("all", "전체 공지"),
     PLAN("plan", "기획"),
     DESIGN("design", "디자인"),
     WEB("web", "Web"),

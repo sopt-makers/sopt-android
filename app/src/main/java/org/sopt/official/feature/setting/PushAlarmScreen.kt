@@ -10,8 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -22,11 +20,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.R
 import org.sopt.official.config.navigation.SettingNavGraph
+import org.sopt.official.designsystem.components.CheckBox
 import org.sopt.official.designsystem.components.TopBarIconButton
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.domain.entity.Part
@@ -36,7 +36,8 @@ import org.sopt.official.feature.setting.model.PushSelectItem
 @Destination("push_alarm")
 @Composable
 fun PushAlarmScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: PushAlarmConfigViewModel = hiltViewModel()
 ) {
     SoptTheme {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -44,6 +45,15 @@ fun PushAlarmScreen(
                 onBack = { navigator.popBackStack() },
                 onConfirm = {}
             )
+            Part.values()
+                .forEach { part ->
+                    PushSelectItem(
+                        part,
+                        viewModel.isSelected(part)
+                    ) { isChecked ->
+                        viewModel.onItemCheckedChange(part, isChecked)
+                    }
+                }
         }
     }
 }
@@ -70,15 +80,7 @@ private fun SelectBox(
                 style = SoptTheme.typography.b1,
                 modifier = Modifier.padding(start = 16.dp)
             )
-            Checkbox(
-                checked = value,
-                onCheckedChange = onCheckedChange,
-                colors = CheckboxDefaults.colors(
-                    checkedColor = SoptTheme.colors.primary,
-                    uncheckedColor = SoptTheme.colors.onSurface20,
-                    checkmarkColor = SoptTheme.colors.background,
-                ),
-            )
+            CheckBox(checked = value, onCheckedChange = onCheckedChange)
         }
         Divider(
             modifier = Modifier
