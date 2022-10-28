@@ -31,8 +31,7 @@ fun EmailSendScreen(
                     .padding(horizontal = 16.dp),
                 emphasizedTitleLabel = "인증 메일",
                 extraTitleLabel = "을 발송했어요",
-                contentLabel = "메일 내에서 \'회원가입 계속하기\' 버튼을 눌러\n" +
-                        "인증 절차를 진행해주세요."
+                contentLabel = "메일 내에서 \'회원가입 계속하기\' 버튼을 눌러\n" + "인증 절차를 진행해주세요."
             )
         }
     }

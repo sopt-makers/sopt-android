@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -59,5 +58,4 @@ fun AuthHeaderPreview() {
             contentLabel = "SOPT 지원 시 사용했던 이메일을 입력하면\n" + "회원인증을 할 수 있어요"
         )
     }
-
 }
