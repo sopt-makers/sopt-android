@@ -15,8 +15,13 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -41,6 +46,7 @@ fun EmailInputScreen(
 ) {
     SoptTheme {
         val systemUiController = rememberSystemUiController()
+        var isEmailFieldFocused by remember { mutableStateOf(false) }
         SideEffect {
             systemUiController.setStatusBarColor(
                 color = White, darkIcons = false
@@ -84,7 +90,10 @@ fun EmailInputScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
-                    .height(56.dp),
+                    .height(56.dp)
+                    .onFocusChanged {
+                        isEmailFieldFocused = it.isFocused
+                    },
                 singleLine = true,
                 textStyle = SoptTheme.typography.b1,
                 colors = TextFieldDefaults.textFieldColors(
@@ -98,10 +107,10 @@ fun EmailInputScreen(
                     Text(
                         text = "이메일 입력",
                         style = SoptTheme.typography.b1,
-                        color = SoptTheme.colors.onSurface30
+                        color = if (!isEmailFieldFocused) SoptTheme.colors.onSurface30 else Color.Transparent
                     )
                 },
-                isError = viewModel.isEmailInvalid
+                isError = viewModel.isEmailInvalid,
             )
             if (viewModel.isEmailInvalid) {
                 Row(
