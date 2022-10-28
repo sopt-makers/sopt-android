@@ -24,6 +24,7 @@ dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.173.0"
 soloader = "0.10.4"
 okhttp = "4.10.0"
+retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.7.22-beta"
 
@@ -76,6 +77,8 @@ flipper-network = { module = "com.facebook.flipper:flipper-network-plugin", vers
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
 okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
