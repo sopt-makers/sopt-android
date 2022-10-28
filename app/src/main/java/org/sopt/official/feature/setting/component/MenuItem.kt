@@ -28,6 +28,7 @@ fun MenuItem(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clickable { item.onClick() }
     ) {
         Row(
             modifier = Modifier
@@ -40,11 +41,12 @@ fun MenuItem(
                 text = item.title,
                 style = SoptTheme.typography.b1
             )
-            Image(
-                painter = painterResource(id = item.rightIcon),
-                contentDescription = item.contentDescription,
-                modifier = Modifier.clickable { item.onClick() }
-            )
+            if (item.rightIcon != -1) {
+                Image(
+                    painter = painterResource(id = item.rightIcon),
+                    contentDescription = item.contentDescription,
+                )
+            }
         }
         Divider(
             modifier = Modifier.fillMaxWidth(),
@@ -54,8 +56,10 @@ fun MenuItem(
     }
 }
 
-
-@Preview(showBackground = true)
+@Preview(
+    name = "오른쪽 아이콘이 있는 메뉴",
+    showBackground = true
+)
 @Composable
 fun MenuItemPreview() {
     SoptTheme {
@@ -67,5 +71,19 @@ fun MenuItemPreview() {
             )
         )
     }
+}
 
+@Preview(
+    name = "오른쪽 아이콘이 없는 메뉴",
+    showBackground = true
+)
+@Composable
+fun MenuItemWithoutIconPreview() {
+    SoptTheme {
+        MenuItem(
+            item = SettingItem(
+                title = "알림 설정",
+            )
+        )
+    }
 }

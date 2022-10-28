@@ -7,4 +7,6 @@ data class SettingItem(
     @DrawableRes val rightIcon: Int = -1,
     val onClick: () -> Unit = {},
     val contentDescription: String = ""
-)
+) {
+    fun setOnClick(onClick: () -> Unit) = copy(onClick = onClick)
+}
