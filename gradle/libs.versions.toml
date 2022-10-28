@@ -20,6 +20,7 @@ gradleplugin = "7.3.1"
 kspplugin = "1.7.20-1.0.7"
 
 dagger-hilt = "2.44"
+dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.172.0"
 soloader = "0.10.4"
 okhttp = "4.10.0"
@@ -59,6 +60,7 @@ compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest", version.ref
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 compose-destination-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "compose-destination" }
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
+compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
@@ -101,7 +103,8 @@ compose = [
     "compose-material-icons-extended",
     "compose-material-icons",
     "compose-runtime",
-    "compose-ui-tooling-preview"
+    "compose-ui-tooling-preview",
+    "compose-hilt-navigation"
 ]
 compose-test = ["compose-junit"]
 compose-android-test = ["compose-ui-test"]
