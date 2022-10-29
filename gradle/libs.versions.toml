@@ -40,7 +40,7 @@ ktlint = "11.0.0"
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-serialization-json = { group = "org.jetbrains.kotlin", name = "kotlin-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
