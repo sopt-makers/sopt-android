@@ -1,5 +1,7 @@
 package org.sopt.official.feature.auth
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -9,10 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -35,6 +40,7 @@ import org.sopt.official.designsystem.style.White
 import org.sopt.official.domain.repository.AuthRepository
 import org.sopt.official.domain.usecase.AuthenticateEmailUseCase
 import org.sopt.official.feature.auth.component.AuthHeader
+import org.sopt.official.feature.auth.model.EmailAuthenticationState
 import org.sopt.official.feature.destinations.EmailSendScreenDestination
 import org.sopt.official.feature.destinations.NoticeScreenDestination
 
@@ -43,16 +49,34 @@ import org.sopt.official.feature.destinations.NoticeScreenDestination
 @Composable
 fun EmailInputScreen(
     navigator: DestinationsNavigator,
-    viewModel: AuthViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel(),
+    context: Context = LocalContext.current,
 ) {
     SoptTheme {
         val systemUiController = rememberSystemUiController()
         var isEmailFieldFocused by remember { mutableStateOf(false) }
+        val snackbarHostState = remember { SnackbarHostState() }
+
         SideEffect {
             systemUiController.setStatusBarColor(
                 color = White, darkIcons = false
             )
         }
+
+        LaunchedEffect(viewModel.emailAuthenticationState) {
+            when (viewModel.emailAuthenticationState) {
+                EmailAuthenticationState.SUCCESS -> {
+                    navigator.navigate(EmailSendScreenDestination.route)
+                }
+
+                EmailAuthenticationState.FAIL -> {
+                    Toast.makeText(context, "이메일 인증에 실패했습니다.", Toast.LENGTH_SHORT).show()
+                }
+
+                else -> {}
+            }
+        }
+
         Column(modifier = Modifier.fillMaxSize()) {
             Toolbar(label = "인증하기") {
                 navigator.popBackStack()
