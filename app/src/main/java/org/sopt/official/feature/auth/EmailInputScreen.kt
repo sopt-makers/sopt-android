@@ -32,8 +32,11 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.config.navigation.AuthNavGraph
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.designsystem.style.White
+import org.sopt.official.domain.repository.AuthRepository
+import org.sopt.official.domain.usecase.AuthenticateEmailUseCase
 import org.sopt.official.feature.auth.component.AuthHeader
 import org.sopt.official.feature.destinations.EmailSendScreenDestination
+import org.sopt.official.feature.destinations.NoticeScreenDestination
 
 @AuthNavGraph(start = true)
 @Destination("email")
@@ -53,6 +56,7 @@ fun EmailInputScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             Toolbar(label = "인증하기") {
                 navigator.popBackStack()
+                viewModel.onPressAuthenticate()
                 navigator.navigate(EmailSendScreenDestination.route)
             }
             Spacer(modifier = Modifier.height(68.dp))
@@ -69,7 +73,10 @@ fun EmailInputScreen(
                 style = SoptTheme.typography.caption,
                 modifier = Modifier
                     .padding(16.dp)
-                    .clickable { },
+                    .clickable {
+                        navigator.popBackStack()
+                        navigator.navigate(NoticeScreenDestination.route)
+                    },
                 color = SoptTheme.colors.onSurface40
             )
             TextField(
@@ -134,7 +141,7 @@ private fun Toolbar(
             color = SoptTheme.colors.primary,
             modifier = Modifier
                 .padding(16.dp)
-                .clickable(onClick = onClick)
+                .clickable { onClick() }
         )
     }
 }
@@ -142,5 +149,15 @@ private fun Toolbar(
 @Preview(showBackground = true)
 @Composable
 fun EmailInputScreenPreview() {
-    EmailInputScreen(navigator = EmptyDestinationsNavigator)
+    EmailInputScreen(
+        navigator = EmptyDestinationsNavigator,
+        viewModel = AuthViewModel(
+            AuthenticateEmailUseCase(
+                object : AuthRepository {
+                    override suspend fun authenticateEmail(email: String, clientToken: String) = -1L
+                    override fun saveUserToken(userId: Long) = Unit
+                }
+            )
+        )
+    )
 }
