@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.sopt.official.R
 import org.sopt.official.designsystem.components.SoptTopAppBar
-import org.sopt.official.designsystem.components.TopBarIconButton
+import org.sopt.official.designsystem.components.SoptIconButton
 import org.sopt.official.designsystem.style.Gray200
 import org.sopt.official.designsystem.style.Gray800
 import org.sopt.official.designsystem.style.SoptTheme
@@ -54,7 +54,7 @@ fun NoticeDetailScreen(
                     )
                 },
                 navigationIcon = {
-                    TopBarIconButton(
+                    SoptIconButton(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_back)
                     )
                 }
