@@ -26,6 +26,10 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit { putLong("USER_TOKEN", value) }
         get() = store.getLong("USER_TOKEN", -1L)
 
+    var isEmailVerified: Boolean
+        set(value) = store.edit { putBoolean("IS_EMAIL_VERIFIED", value) }
+        get() = store.getBoolean("IS_EMAIL_VERIFIED", false)
+
     companion object {
         const val DEBUG_FILE_NAME = "sopt_debug"
     }
