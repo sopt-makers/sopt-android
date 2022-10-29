@@ -27,7 +27,7 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.R
 import org.sopt.official.config.navigation.SettingNavGraph
 import org.sopt.official.designsystem.components.CheckBox
-import org.sopt.official.designsystem.components.TopBarIconButton
+import org.sopt.official.designsystem.components.SoptIconButton
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.domain.entity.Part
 import org.sopt.official.feature.setting.model.PushSelectItem
@@ -118,7 +118,7 @@ private fun Toolbar(
                 modifier = Modifier.wrapContentSize(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TopBarIconButton(
+                SoptIconButton(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_back),
                     onClick = onBack
                 )
