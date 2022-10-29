@@ -11,5 +11,4 @@ class SplashViewModel @Inject constructor(
 ) : ViewModel() {
     val isEmailVerified: Boolean
         get() = store.isEmailVerified
-
 }
