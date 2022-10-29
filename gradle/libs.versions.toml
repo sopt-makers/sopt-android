@@ -1,5 +1,7 @@
 [versions]
 kotlin = "1.7.20"
+kotlinx-serialization-json = "1.4.1"
+kotlinx-serialization-converter = "0.8.0"
 compose = "1.3.0"
 corektx = "1.9.0"
 appcompat = "1.5.1"
@@ -12,6 +14,8 @@ compose-compiler = "1.3.2"
 material = "1.7.0"
 accompanist = "0.27.0"
 in-app-update = "2.0.0"
+secret-gradle-plugin = "2.0.1"
+
 junit = "4.13.2"
 androidx-test-junit = "1.1.3"
 androidx-test-espresso = "3.4.0"
@@ -24,6 +28,7 @@ dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.173.0"
 soloader = "0.10.4"
 okhttp = "4.10.0"
+retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.7.22-beta"
 
@@ -35,6 +40,7 @@ ktlint = "11.0.0"
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -43,6 +49,7 @@ startup = { module = "androidx.startup:startup-runtime", version.ref = "startup"
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
+secret-plugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
 
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
@@ -76,6 +83,9 @@ flipper-network = { module = "com.facebook.flipper:flipper-network-plugin", vers
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
 okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+retrofit-kotlin-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "kotlinx-serialization-converter" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
@@ -124,3 +134,5 @@ google-services = { id = "com.google.gms.google-services", version.ref = "google
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
+secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

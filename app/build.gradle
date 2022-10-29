@@ -7,6 +7,8 @@ plugins {
     alias libs.plugins.crashlytics
     alias libs.plugins.ktlint
     alias libs.plugins.ksp
+    alias libs.plugins.secret
+    alias libs.plugins.kotlinx.serialization
 }
 
 android {
@@ -54,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation libs.kotlin.serialization.json
     implementation libs.core.ktx
     implementation libs.bundles.compose
     implementation libs.appcompat
@@ -66,6 +69,8 @@ dependencies {
 
     implementation platform(libs.okhttp.bom)
     implementation libs.bundles.okhttp
+    implementation libs.retrofit
+    implementation libs.retrofit.kotlin.serialization.converter
     implementation libs.timber
 
     implementation libs.bundles.compose
@@ -89,6 +94,12 @@ dependencies {
     debugImplementation(libs.flipper.network.get()) {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
+}
+
+secrets {
+    defaultPropertiesFileName = "secrets.defaults.properties"
+
+    ignoreList.add("sdk.*")
 }
 
 ktlint {
