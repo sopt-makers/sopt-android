@@ -17,6 +17,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -26,12 +27,14 @@ import org.sopt.official.designsystem.style.Blue500
 import org.sopt.official.designsystem.style.Gray900
 import org.sopt.official.designsystem.style.SoptTheme
 import org.sopt.official.feature.destinations.EmailInputScreenDestination
+import org.sopt.official.feature.destinations.NoticeScreenDestination
 
 @SplashNavGraph(start = true)
 @Destination("entrypoint")
 @Composable
 fun SplashScreen(
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     SoptTheme {
         val systemUiController = rememberSystemUiController()
@@ -63,8 +66,13 @@ fun SplashScreen(
                 if (textAnimationState.currentState) isTitleAnimationFinished = true
             }
             if (remainedAnimationState.isIdle && remainedAnimationState.currentState) {
-                navigator.popBackStack()
-                navigator.navigate(EmailInputScreenDestination.route)
+                if (viewModel.isEmailVerified) {
+                    navigator.popBackStack()
+                    navigator.navigate(EmailInputScreenDestination.route)
+                } else {
+                    navigator.popBackStack()
+                    navigator.navigate(NoticeScreenDestination.route)
+                }
             }
 
             Title(textAnimationState, remainedAnimationState)
