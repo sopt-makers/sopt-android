@@ -115,7 +115,7 @@ fun PreviewSoptTopBarTitleWithNavigationButton() {
         SoptTopAppBar(
             title = { Text(text = "hello") },
             navigationIcon = {
-                TopBarIconButton(imageVector = ImageVector.vectorResource(id = R.drawable.ic_back))
+                SoptIconButton(imageVector = ImageVector.vectorResource(id = R.drawable.ic_back))
             }
         )
     }
@@ -128,12 +128,12 @@ fun PreviewSoptTopBarTitleWithNavigationButtonAndActions() {
         SoptTopAppBar(
             title = { Text(text = "hello") },
             navigationIcon = {
-                TopBarIconButton(
+                SoptIconButton(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_back)
                 )
             },
             actions = {
-                TopBarIconButton(
+                SoptIconButton(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_setting)
                 )
             }
@@ -148,7 +148,7 @@ fun PreviewSoptTopBarTitleWithNavigationButtonAndActionText() {
         SoptTopAppBar(
             title = { Text(text = "hello") },
             navigationIcon = {
-                TopBarIconButton(
+                SoptIconButton(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_back)
                 )
             },

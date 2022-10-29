@@ -17,9 +17,9 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.style.SoptTheme
 
 /**
- * TopBar 에서 사용될 Icon Button 입니다.
+ * 앱 디자인 시스템 Icon Button 입니다.
  * Icon에 들어갈 ImageVector 는 24*24로 통일된 크기를 가정합니다.
- * 기존 IconButton 에는 내부적인 padding 이 있어 이를 대체하여 작성하였습니다.
+ * 기존 IconButton 에는 내부적으로 size 를 적용하는 부분이 있어 이를 대체하여 작성하였습니다.
  *
  * @param imageVector [ImageVector] to draw inside this Icon
  *
@@ -34,7 +34,7 @@ import org.sopt.official.designsystem.style.SoptTheme
  * @author jinsu4755
  * */
 @Composable
-fun TopBarIconButton(
+fun SoptIconButton(
     imageVector: ImageVector,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
@@ -58,7 +58,7 @@ fun TopBarIconButton(
 @Composable
 fun PreviewTopBarIconButton() {
     SoptTheme {
-        TopBarIconButton(
+        SoptIconButton(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_back)
         )
     }
