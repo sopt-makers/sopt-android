@@ -35,7 +35,7 @@ compose-destination = "1.7.22-beta"
 
 google-services = "4.3.14"
 crashlytics = "2.9.2"
-firebase = "31.0.2"
+firebase = "31.0.3"
 ktlint = "11.0.0"
 
 [libraries]
