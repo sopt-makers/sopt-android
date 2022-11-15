@@ -22,7 +22,7 @@ androidx-test-junit = "1.1.4"
 androidx-test-espresso = "3.5.0"
 
 gradleplugin = "7.3.1"
-kspplugin = "1.7.20-1.0.8"
+kspplugin = "1.7.21-1.0.8"
 
 dagger-hilt = "2.44.2"
 dagger-hilt-navigation-compose = "1.0.0"
