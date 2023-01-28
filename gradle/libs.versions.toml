@@ -36,7 +36,7 @@ compose-destination = "1.7.22-beta"
 google-services = "4.3.15"
 crashlytics = "2.9.2"
 firebase = "31.2.0"
-ktlint = "11.0.0"
+ktlint = "11.1.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
