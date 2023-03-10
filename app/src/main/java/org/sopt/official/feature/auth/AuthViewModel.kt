@@ -21,8 +21,11 @@ class AuthViewModel @Inject constructor(
         private set
 
     val isEmailInvalid by derivedStateOf {
-        if (email.isNotEmpty()) EMAIL_REGEX.matches(email).not()
-        else false
+        if (email.isNotEmpty()) {
+            EMAIL_REGEX.matches(email).not()
+        } else {
+            false
+        }
     }
 
     var emailAuthenticationState by mutableStateOf(EmailAuthenticationState.NONE)

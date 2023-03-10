@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -55,11 +54,11 @@ fun EmailInputScreen(
     SoptTheme {
         val systemUiController = rememberSystemUiController()
         var isEmailFieldFocused by remember { mutableStateOf(false) }
-        val snackbarHostState = remember { SnackbarHostState() }
 
         SideEffect {
             systemUiController.setStatusBarColor(
-                color = White, darkIcons = false
+                color = White,
+                darkIcons = false
             )
         }
 
@@ -139,7 +138,9 @@ fun EmailInputScreen(
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text(
-                        text = "이메일 형식이 올바르지 않습니다", style = SoptTheme.typography.caption, color = SoptTheme.colors.error
+                        text = "이메일 형식이 올바르지 않습니다",
+                        style = SoptTheme.typography.caption,
+                        color = SoptTheme.colors.error
                     )
                 }
             }
