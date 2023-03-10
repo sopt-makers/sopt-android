@@ -58,6 +58,7 @@ android {
 dependencies {
     implementation libs.kotlin.serialization.json
     implementation libs.core.ktx
+    implementation platform(libs.compose.bom)
     implementation libs.bundles.compose
     implementation libs.appcompat
     implementation libs.lifecycle.viewmodel
@@ -85,6 +86,7 @@ dependencies {
     implementation libs.compose.destination.core
     ksp libs.compose.destination.ksp
 
+    androidTestImplementation platform(libs.compose.bom)
     testImplementation libs.junit
     androidTestImplementation libs.bundles.compose.test
     androidTestImplementation libs.bundles.android.test

@@ -1,16 +1,17 @@
 [versions]
-kotlin = "1.7.20"
-kotlinx-serialization-json = "1.4.1"
+kotlin = "1.8.10"
+kotlinx-serialization-json = "1.5.0"
 kotlinx-serialization-converter = "0.8.0"
 compose = "1.3.1"
 corektx = "1.9.0"
 appcompat = "1.6.1"
 activity = "1.6.1"
-lifecycle = "2.5.1"
+lifecycle = "2.6.0"
 navigation = "2.5.3"
 startup = "1.1.1"
 security = "1.0.0"
-compose-compiler = "1.3.2"
+compose-compiler = "1.4.3"
+compose-bom = "2023.01.00"
 
 material = "1.8.0"
 accompanist = "0.28.0"
@@ -21,8 +22,8 @@ junit = "4.13.2"
 androidx-test-junit = "1.1.5"
 androidx-test-espresso = "3.5.1"
 
-gradleplugin = "7.4.1"
-kspplugin = "1.7.20-1.0.8"
+gradleplugin = "7.4.2"
+kspplugin = "1.8.10-1.0.9"
 
 dagger-hilt = "2.45"
 dagger-hilt-navigation-compose = "1.0.0"
@@ -31,7 +32,7 @@ soloader = "0.10.5"
 okhttp = "4.10.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
-compose-destination = "1.7.22-beta"
+compose-destination = "1.8.36-beta"
 
 google-services = "4.3.15"
 crashlytics = "2.9.4"
@@ -53,20 +54,21 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
 secret-plugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
 
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
 compose-activity = { module = "androidx.activity:activity-compose", version.ref = "activity" }
-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "compose" }
-compose-animation = { module = "androidx.compose.animation:animation", version.ref = "compose" }
-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
-compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose" }
-compose-material-icons = { module = "androidx.compose.material:material-icons-core", version.ref = "compose" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-animation = { module = "androidx.compose.animation:animation" }
+compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-material = { module = "androidx.compose.material:material" }
+compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-material-icons = { module = "androidx.compose.material:material-icons-core" }
 compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-compose-runtime = { module = "androidx.compose.runtime:runtime", version.ref = "compose" }
+compose-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-navigation = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
-compose-junit = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose" }
-compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose" }
-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest" }
+compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 compose-destination-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "compose-destination" }
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
