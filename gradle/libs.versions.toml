@@ -33,6 +33,7 @@ okhttp = "4.10.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.8.36-beta"
+mavericks = "3.0.1"
 
 google-services = "4.3.15"
 crashlytics = "2.9.4"
@@ -93,6 +94,11 @@ retrofit-kotlin-serialization-converter = { group = "com.jakewharton.retrofit", 
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericks" }
+mavericks-compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
+mavericks-navigation = { module = "com.airbnb.android:mavericks-navigation", version.ref = "mavericks" }
+mavericks-mockable = { module = "com.airbnb.android:mavericks-mocking", version.ref = "mavericks" }
+
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-kapt = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
@@ -127,6 +133,7 @@ okhttp = ["okhttp", "okhttp-logging-interceptor"]
 flipper = ["flipper", "soloader"]
 firebase = ["firebase-analytics", "firebase-crashlytics"]
 accompanist = ["accompanist-systemuicontroller"]
+mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin" }
