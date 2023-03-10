@@ -2,7 +2,6 @@ package org.sopt.official.feature.update
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.play.core.appupdate.AppUpdateInfo
@@ -12,6 +11,7 @@ import com.google.android.play.core.install.InstallStateUpdatedListener
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
+import timber.log.Timber
 import javax.inject.Inject
 
 class InAppUpdateManagerImpl @Inject constructor(
@@ -42,7 +42,9 @@ class InAppUpdateManagerImpl @Inject constructor(
                     )
                 ) {
                     launchUpdateFlow(info, AppUpdateType.FLEXIBLE)
-                } else return@addOnSuccessListener
+                } else {
+                    return@addOnSuccessListener
+                }
             }
         }
         inAppUpdateManager.registerListener(this)
@@ -53,8 +55,9 @@ class InAppUpdateManagerImpl @Inject constructor(
         inAppUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             if (currentType == AppUpdateType.FLEXIBLE) {
                 // If the update is downloaded but not installed, notify the user to complete the update.
-                if (info.installStatus() == InstallStatus.DOWNLOADED)
+                if (info.installStatus() == InstallStatus.DOWNLOADED) {
                     onUpdateCompleteListener?.onComplete()
+                }
             } else if (currentType == AppUpdateType.IMMEDIATE) {
                 // for AppUpdateType.IMMEDIATE only, already executing updater
                 if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
@@ -82,7 +85,7 @@ class InAppUpdateManagerImpl @Inject constructor(
         if (requestCode == UPDATE_REQUEST_CODE) {
             if (resultCode != Activity.RESULT_OK) {
                 // If the update is cancelled or fails, you can request to start the update again.
-                Log.e("ERROR", "Update flow failed! Result code: $resultCode")
+                Timber.tag("ERROR").e("Update flow failed! Result code: $resultCode")
             }
         }
     }

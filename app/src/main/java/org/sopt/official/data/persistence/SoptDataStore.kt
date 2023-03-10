@@ -13,14 +13,17 @@ import javax.inject.Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val store = if (BuildConfig.DEBUG) context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
-    else EncryptedSharedPreferences.create(
-        BuildConfig.persistenceStoreName,
-        MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
-        context,
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    private val store = if (BuildConfig.DEBUG) {
+        context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
+    } else {
+        EncryptedSharedPreferences.create(
+            BuildConfig.persistenceStoreName,
+            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
+            context,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
 
     var userId: Long
         set(value) = store.edit { putLong("USER_TOKEN", value) }

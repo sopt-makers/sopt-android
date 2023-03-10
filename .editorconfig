@@ -2,4 +2,4 @@
 max_line_length = 140
 
 [*.{kt, kts}]
-disabled_rules = import-ordering, no-wildcard-imports
+ktlint_disabled_rules = import-ordering, no-wildcard-imports, trailing-comma-on-declaration-site, trailing-comma-on-call-site
