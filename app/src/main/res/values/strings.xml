@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SOPT</string>
+    <string name="default_channel_id">SOPT_MESSAGE</string>
 </resources>
