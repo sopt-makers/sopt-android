@@ -33,7 +33,7 @@ okhttp = "4.10.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.8.36-beta"
-mavericks = "3.0.1"
+mavericks = "3.0.2"
 
 google-services = "4.3.15"
 crashlytics = "2.9.4"
