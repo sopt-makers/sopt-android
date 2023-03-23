@@ -63,6 +63,7 @@ android {
 
 dependencies {
     implementation(libs.kotlin.serialization.json)
+    implementation(libs.kotlin.coroutines.google.play)
     implementation(libs.core.ktx)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

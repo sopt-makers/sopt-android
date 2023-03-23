@@ -12,6 +12,7 @@ buildscript {
         classpath(libs.crashlytics.plugin)
         classpath(libs.ktlint)
         classpath(libs.secret.plugin)
+        classpath(libs.google.services)
     }
 }
 
