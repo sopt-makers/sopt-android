@@ -14,4 +14,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "SOPT"
-include ':app'
+include(":app")
