@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -9,8 +11,12 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.sentry)
 }
 
+val properties = Properties().apply {
+    load(rootProject.file("local.properties").inputStream())
+}
 android {
     namespace = "org.sopt.official"
     compileSdk = 33
@@ -21,6 +27,7 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0.0"
+        manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -91,6 +98,7 @@ dependencies {
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
+    implementation(libs.sentry.compose)
 
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)

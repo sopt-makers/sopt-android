@@ -16,8 +16,24 @@
         android:theme="@style/Theme.SOPT"
         tools:targetApi="31">
         <meta-data
+            android:name="io.sentry.dsn"
+            android:value="${sentryDsn}" />
+        <meta-data
+            android:name="io.sentry.traces.user-interaction.enable"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-screenshot"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.attach-view-hierarchy"
+            android:value="true" />
+        <meta-data
+            android:name="io.sentry.breadcrumbs.user-interaction"
+            android:value="true" />
+        <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="@string/default_channel_id" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
