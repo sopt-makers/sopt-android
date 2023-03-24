@@ -41,6 +41,7 @@ crashlytics = "2.9.4"
 firebase = "31.2.3"
 ktlint = "11.3.1"
 sentry = "3.4.3"
+sentry-android = "6.16.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -114,6 +115,8 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx"
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
+
+sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
 
 [bundles]
 compose = [
