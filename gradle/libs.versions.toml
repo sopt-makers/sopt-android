@@ -2,6 +2,7 @@
 kotlin = "1.8.10"
 kotlinx-serialization-json = "1.5.0"
 kotlinx-serialization-converter = "0.8.0"
+kotlinx-coroutines = "1.6.4"
 compose = "1.3.1"
 corektx = "1.9.0"
 appcompat = "1.6.1"
@@ -44,6 +45,7 @@ ktlint = "11.3.1"
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+kotlin-coroutines-google-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
@@ -108,6 +110,7 @@ crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
@@ -131,7 +134,7 @@ compose-android-test = ["compose-ui-test"]
 android-test = ["androidx-test-junit", "androidx-test-espresso"]
 okhttp = ["okhttp", "okhttp-logging-interceptor"]
 flipper = ["flipper", "soloader"]
-firebase = ["firebase-analytics", "firebase-crashlytics"]
+firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-messaging"]
 accompanist = ["accompanist-systemuicontroller"]
 mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
 
