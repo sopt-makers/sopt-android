@@ -38,7 +38,7 @@ mavericks = "3.0.2"
 
 google-services = "4.3.15"
 crashlytics = "2.9.4"
-firebase = "31.2.3"
+firebase = "31.3.0"
 ktlint = "11.3.1"
 sentry = "3.4.3"
 sentry-android = "6.16.0"
