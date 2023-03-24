@@ -39,8 +39,8 @@ jobs:
       - name: Add Local Properties
         env:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
-          run: |
-            echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
+        run: |
+          echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
