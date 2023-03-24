@@ -40,6 +40,7 @@ google-services = "4.3.15"
 crashlytics = "2.9.4"
 firebase = "31.2.3"
 ktlint = "11.3.1"
+sentry = "3.4.3"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -150,3 +151,4 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }

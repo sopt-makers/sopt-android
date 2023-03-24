@@ -28,6 +28,7 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.secret) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
+    alias(libs.plugins.sentry) apply false
 }
 
 tasks.register("clean", Delete::class) {
