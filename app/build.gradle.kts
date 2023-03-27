@@ -1,16 +1,12 @@
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.dagger.hilt)
+    id("org.sopt.official.application")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
-    alias(libs.plugins.kotlinx.serialization)
     alias(libs.plugins.sentry)
 }
 
@@ -19,14 +15,9 @@ val properties = Properties().apply {
 }
 android {
     namespace = "org.sopt.official"
-    compileSdk = 33
 
     defaultConfig {
         applicationId = "org.sopt.official"
-        minSdk = 28
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0.0"
         manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -52,34 +43,21 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    kotlinOptions {
-        jvmTarget = "11"
+    buildFeatures {
+        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
 }
 
 dependencies {
-    implementation(libs.kotlin.serialization.json)
     implementation(libs.kotlin.coroutines.google.play)
-    implementation(libs.core.ktx)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.appcompat)
-    implementation(libs.lifecycle.viewmodel)
     implementation(libs.startup)
     implementation(libs.security)
 
-    implementation(libs.material)
     implementation(libs.bundles.accompanist)
     implementation(libs.inappupdate)
 
