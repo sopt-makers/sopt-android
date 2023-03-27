@@ -25,9 +25,9 @@ internal fun Project.configureAndroidCommonPlugin() {
 
     val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
     dependencies {
-        "implementation"(libs.findLibrary("androidx.core").get())
-        "implementation"(libs.findLibrary("androidx.appcompat").get())
-        "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel").get())
+        "implementation"(libs.findLibrary("core.ktx").get())
+        "implementation"(libs.findLibrary("appcompat").get())
+        "implementation"(libs.findLibrary("lifecycle.viewmodel").get())
         "implementation"(libs.findLibrary("material").get())
     }
 }
