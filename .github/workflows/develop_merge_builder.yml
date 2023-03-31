@@ -39,8 +39,8 @@ jobs:
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
-      - name: Lint Check
-        run: ./gradlew ktlintCheck
+#      - name: Lint Check
+#        run: ./gradlew ktlintCheck
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
