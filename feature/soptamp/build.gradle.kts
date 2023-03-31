@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     id("org.sopt.official.feature")
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktlint)
 }
 
 val properties = Properties().apply {
@@ -19,7 +20,7 @@ android {
     libraryVariants.all {
         sourceSets {
             getByName(name) {
-                java.srcDir("build/generated/ksp/${name}/kotlin")
+                java.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
     }
@@ -54,5 +55,16 @@ dependencies {
     debugImplementation(libs.bundles.flipper)
     debugImplementation(libs.flipper.network) {
         exclude(group = "com.squareup.okhttp3", module = "okhttp")
+    }
+}
+
+ktlint {
+    android.set(true)
+    debug.set(true)
+    coloredOutput.set(true)
+    verbose.set(true)
+    outputToConsole.set(true)
+    filter {
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
     }
 }

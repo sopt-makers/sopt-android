@@ -11,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.stamp.feature.NavGraphs
 
 @AndroidEntryPoint
-class SoptampActivity: AppCompatActivity() {
+class SoptampActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

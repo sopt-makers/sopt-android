@@ -241,7 +241,7 @@ private val LocalSoptTypography = staticCompositionLocalOf<SoptTypography> {
 * Color에 접근하고 싶을때 SoptTheme.colors.primary 이런식으로 접근하면 됩니다.
 * Typo를 변경하고 싶다면 SoptTheme.typography.h1 이런식으로 접근하면 됩니다.
 * */
-object  SoptTheme {
+object SoptTheme {
     val colors: SoptColors @Composable get() = LocalSoptColors.current
 
     val typography: SoptTypography @Composable get() = LocalSoptTypography.current
