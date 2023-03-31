@@ -43,6 +43,8 @@ retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.8.36-beta"
 mavericks = "3.0.2"
+coil = "2.3.0"
+lottie = "6.0.0"
 
 google-services = "4.3.15"
 crashlytics = "2.9.4"
@@ -50,6 +52,7 @@ firebase = "31.4.0"
 ktlint = "11.3.1"
 sentry = "3.4.3"
 sentry-android = "6.16.0"
+process-pheonix = "2.1.2"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -78,7 +81,8 @@ compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-material = { module = "androidx.compose.material:material" }
-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
+compose-material-three = { module = "androidx.compose.material3:material3" }
+compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 compose-material-icons = { module = "androidx.compose.material:material-icons-core" }
 compose-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
 compose-runtime = { module = "androidx.compose.runtime:runtime" }
@@ -89,8 +93,12 @@ compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview"
 compose-destination-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "compose-destination" }
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
+compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
+
+coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
@@ -130,6 +138,8 @@ ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlin
 
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
 
+process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
+
 [bundles]
 compose = [
     "compose-ui",
@@ -139,11 +149,13 @@ compose = [
     "compose-animation",
     "compose-viewmodel",
     "compose-material",
+    "compose-material-three",
     "compose-material-icons-extended",
     "compose-material-icons",
     "compose-runtime",
     "compose-ui-tooling-preview",
-    "compose-hilt-navigation"
+    "compose-hilt-navigation",
+    "compose-lottie",
 ]
 compose-test = ["compose-junit"]
 compose-android-test = ["compose-ui-test"]

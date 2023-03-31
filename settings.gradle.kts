@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "SOPT"
 include(":app")
+include(":feature:soptamp")

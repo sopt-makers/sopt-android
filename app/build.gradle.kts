@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature:soptamp"))
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
@@ -106,4 +107,8 @@ ktlint {
     coloredOutput.set(true)
     verbose.set(true)
     outputToConsole.set(true)
+    filter {
+        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+        exclude { it.file.name.contains("gradle") }
+    }
 }

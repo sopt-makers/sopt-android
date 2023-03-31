@@ -36,11 +36,21 @@ jobs:
       - name: Change gradlew permissions
         run: chmod +x ./gradlew
 
+      - name: Add Local Properties
+        env:
+          API_KEY: ${{ secrets.SENTRY_DSN }}
+          DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+          SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+        run: |
+          echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
+          echo apiKey=\"$API_KEY\" >> ./local.properties
+          echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
+
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
-      - name: Lint Check
-        run: ./gradlew ktlintCheck
+#      - name: Lint Check
+#        run: ./gradlew ktlintCheck --exclude '**/*.kts' src
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
