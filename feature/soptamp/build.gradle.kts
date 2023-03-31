@@ -4,6 +4,7 @@ plugins {
     id("org.sopt.official.feature")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.secret)
 }
 
 val properties = Properties().apply {
