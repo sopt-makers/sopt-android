@@ -61,6 +61,12 @@ dependencies {
     }
 }
 
+secrets {
+    defaultPropertiesFileName = "secrets.defaults.properties"
+
+    ignoreList.add("sdk.*")
+}
+
 ktlint {
     android.set(true)
     debug.set(true)
