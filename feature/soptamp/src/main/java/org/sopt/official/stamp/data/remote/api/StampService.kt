@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.data.remote.api
+package org.sopt.official.stamp.data.remote.api
 
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

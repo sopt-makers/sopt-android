@@ -25,7 +25,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.sopt.official.stamp.util.ContentUriRequestBody
 import org.sopt.official.stamp.data.local.SoptampDataStore
-import org.sopt.stamp.data.remote.api.StampService
+import org.sopt.official.stamp.data.remote.api.StampService
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
 import org.sopt.stamp.feature.mission.model.ImageModel

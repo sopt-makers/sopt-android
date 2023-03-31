@@ -15,7 +15,7 @@
  */
 package org.sopt.official.stamp.data.mapper // ktlint-disable filename
 
-import org.sopt.stamp.data.error.ErrorData
+import org.sopt.official.stamp.data.error.ErrorData
 import org.sopt.official.stamp.domain.error.Error
 
 internal fun ErrorData.toDomain(): Error = when (this) {

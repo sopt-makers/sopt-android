@@ -20,10 +20,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.stamp.di.constant.Soptamp
-import org.sopt.stamp.data.remote.api.RankService
-import org.sopt.stamp.data.remote.api.SoptampService
-import org.sopt.stamp.data.remote.api.StampService
-import org.sopt.stamp.data.remote.api.UserService
+import org.sopt.official.stamp.data.remote.api.RankService
+import org.sopt.official.stamp.data.remote.api.SoptampService
+import org.sopt.official.stamp.data.remote.api.StampService
+import org.sopt.official.stamp.data.remote.api.UserService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

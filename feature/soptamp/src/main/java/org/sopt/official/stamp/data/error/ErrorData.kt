@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.data.error
+package org.sopt.official.stamp.data.error
 
 sealed class ErrorData(
     override val message: String? = null,

@@ -21,8 +21,8 @@ import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
 import org.sopt.official.stamp.data.remote.model.response.SignUpResponse
-import org.sopt.stamp.data.remote.api.RankService
-import org.sopt.stamp.data.remote.api.UserService
+import org.sopt.official.stamp.data.remote.api.RankService
+import org.sopt.official.stamp.data.remote.api.UserService
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import org.sopt.official.stamp.data.source.UserDataSource
 import retrofit2.HttpException

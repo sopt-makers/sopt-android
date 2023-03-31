@@ -15,7 +15,7 @@
  */
 package org.sopt.official.stamp.data.repository
 
-import org.sopt.stamp.data.error.ErrorData
+import org.sopt.official.stamp.data.error.ErrorData
 import org.sopt.official.stamp.data.mapper.toDomain
 import org.sopt.official.stamp.data.source.RankingDataSource
 import org.sopt.official.stamp.domain.model.Rank

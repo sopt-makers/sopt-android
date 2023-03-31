@@ -15,8 +15,8 @@
  */
 package org.sopt.official.stamp.data.remote.source
 
-import org.sopt.stamp.data.error.ErrorData
-import org.sopt.stamp.data.remote.api.RankService
+import org.sopt.official.stamp.data.error.ErrorData
+import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.mapper.toData
 import org.sopt.official.stamp.data.remote.model.RankData
 import org.sopt.official.stamp.data.source.RankingDataSource
