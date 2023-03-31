@@ -14,8 +14,10 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-        buildConfigField("String", "SOPTAMP_API_KEY", properties["apiKey"] as String)
-        buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", properties["dataStoreKey"] as String)
+        val apiKey = properties["apiKey"] as? String ?: ""
+        val dataStoreKey = properties["dataStoreKey"] as? String ?: ""
+        buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
+        buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
     }
     libraryVariants.all {
         sourceSets {

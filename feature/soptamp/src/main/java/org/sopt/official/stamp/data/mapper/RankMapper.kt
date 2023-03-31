@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.data.mapper // ktlint-disable filename
+package org.sopt.official.stamp.data.mapper // ktlint-disable filename
 
 import org.sopt.official.stamp.data.remote.model.RankData
 import org.sopt.official.stamp.domain.model.Rank
