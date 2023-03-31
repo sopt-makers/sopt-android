@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright 2022 SOPT - Shout Our Passion Together
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+          http://www.apache.org/licenses/LICENSE-2.0
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="15dp"
+    android:height="15dp"
+    android:viewportWidth="15"
+    android:viewportHeight="15">
+  <path
+      android:pathData="M5.656,1.39C6.236,-0.463 8.764,-0.463 9.344,1.39L9.785,2.799C10.045,3.628 10.789,4.189 11.629,4.189H13.057C14.936,4.189 15.717,6.683 14.197,7.828L13.042,8.699C12.362,9.212 12.078,10.12 12.337,10.948L12.779,12.358C13.359,14.211 11.315,15.752 9.795,14.607L8.64,13.736C7.96,13.223 7.04,13.223 6.36,13.736L5.205,14.607C3.685,15.752 1.641,14.211 2.221,12.358L2.663,10.948C2.922,10.12 2.638,9.212 1.958,8.699L0.803,7.828C-0.717,6.683 0.064,4.189 1.943,4.189H3.371C4.211,4.189 4.955,3.628 5.215,2.799L5.656,1.39Z"
+      android:fillColor="#D3D4D5"/>
+</vector>

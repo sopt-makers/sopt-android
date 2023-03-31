@@ -43,6 +43,7 @@
                 android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -52,6 +53,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".stamp.SoptampActivity"
+            android:exported="false" />
+
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">
