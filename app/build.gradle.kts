@@ -1,4 +1,4 @@
-import java.util.Properties
+import java.util.*
 
 plugins {
     id("org.sopt.official.application")
@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
+    id("org.jetbrains.kotlin.android")
 }
 
 val properties = Properties().apply {
@@ -73,6 +74,9 @@ dependencies {
     implementation(libs.bundles.mavericks)
 
     implementation(libs.hilt)
+    implementation("androidx.appcompat:appcompat:1.4.1")
+    implementation("com.google.android.material:material:1.4.+")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     kapt(libs.hilt.kapt)
 
     implementation(platform(libs.firebase))

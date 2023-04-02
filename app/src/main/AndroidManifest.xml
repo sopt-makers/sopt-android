@@ -15,6 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SOPT"
         tools:targetApi="31">
+        <activity
+            android:name=".feature.attendance.AttendanceActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SOPT.Attendance" />
+
         <meta-data
             android:name="io.sentry.dsn"
             android:value="${sentryDsn}" />
@@ -50,6 +55,7 @@
             android:theme="@style/Theme.SOPT">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
