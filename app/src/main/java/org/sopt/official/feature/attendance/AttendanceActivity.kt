@@ -1,17 +1,20 @@
 package org.sopt.official.feature.attendance
 
 import android.annotation.SuppressLint
+import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.databinding.ActivityAttendanceBinding
@@ -21,6 +24,7 @@ import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
+import org.sopt.official.feature.attendance.util.dpToPx
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
@@ -66,7 +70,25 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun initRecyclerView() {
         attendanceAdapter = AttendanceAdapter()
-        binding.recyclerViewAttendanceHistory.adapter = attendanceAdapter
+        binding.recyclerViewAttendanceHistory.run {
+            adapter = attendanceAdapter
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    when (parent.getChildAdapterPosition(view)) {
+                        0 -> {
+                            outRect.set(24.dpToPx(), 32.dpToPx(), 24.dpToPx(), 12.dpToPx())
+                        }
+                        attendanceAdapter.itemCount - 1 -> {
+                            outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 32.dpToPx())
+                        }
+                        else -> {
+                            outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 12.dpToPx())
+                        }
+                    }
+                }
+            })
+        }
     }
 
     private fun observeSoptEvent() {

@@ -45,8 +45,8 @@ class MockAttendanceService : AttendanceService {
             attendancePoint = 0.5
         )
         private val ATTENDANCE_SUMMARY_SEUNGHYEON = AttendanceHistoryResponse.AttendanceSummaryResponse(
-            all = 6,
-            normal = 4,
+            all = 11,
+            normal = 9,
             late = 1,
             abnormal = 1
         )
@@ -80,6 +80,31 @@ class MockAttendanceService : AttendanceService {
                 attendanceState = "출석",
                 eventName = "6차 세미나",
                 date = "5월 8일"
+            ),
+            AttendanceHistoryResponse.AttendanceLogResponse(
+                attendanceState = "출석",
+                eventName = "7차 세미나",
+                date = "5월 15일"
+            ),
+            AttendanceHistoryResponse.AttendanceLogResponse(
+                attendanceState = "출석",
+                eventName = "8차 세미나",
+                date = "5월 22일"
+            ),
+            AttendanceHistoryResponse.AttendanceLogResponse(
+                attendanceState = "출석",
+                eventName = "9차 세미나",
+                date = "5월 29일"
+            ),
+            AttendanceHistoryResponse.AttendanceLogResponse(
+                attendanceState = "출석",
+                eventName = "10차 세미나",
+                date = "6월 5일"
+            ),
+            AttendanceHistoryResponse.AttendanceLogResponse(
+                attendanceState = "출석",
+                eventName = "11차 세미나",
+                date = "6월 12일"
             )
         )
         private val ATTENDANCE_HISTORY =
