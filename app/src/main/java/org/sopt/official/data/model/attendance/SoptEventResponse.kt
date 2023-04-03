@@ -1,8 +1,9 @@
 package org.sopt.official.data.model.attendance
 
+import kotlinx.serialization.Serializable
 import org.sopt.official.domain.entity.attendance.SoptEvent
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class SoptEventResponse(
     val date: String,
     val location: String?,

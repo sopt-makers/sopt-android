@@ -11,9 +11,9 @@
         android:id="@+id/text_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="32기 안드로이드파트 김솝트"
         android:textColor="#989BA0"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="32기 안드로이드파트 김솝트" />
 
     <TextView
         android:id="@+id/text_user_attendance_point"
@@ -21,13 +21,14 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
-        android:text="현재 출석점수는 1점 입니다!"
+        android:bufferType="spannable"
         android:textColor="#FCFCFC"
         android:textSize="20dp"
         app:layout_constraintEnd_toStartOf="@id/image_attendance_point_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_user_info"
-        tools:ignore="SpUsage" />
+        tools:ignore="SpUsage"
+        tools:text="현재 출석점수는 1점 입니다!" />
 
     <ImageView
         android:id="@+id/image_attendance_point_info"

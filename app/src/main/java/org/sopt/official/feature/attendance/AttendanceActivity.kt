@@ -15,13 +15,18 @@ import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.databinding.ActivityAttendanceBinding
+import org.sopt.official.domain.entity.attendance.AttendanceLog
+import org.sopt.official.domain.entity.attendance.AttendanceSummary
+import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
 import org.sopt.official.domain.entity.attendance.SoptEvent
+import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
     private val attendanceViewModel by viewModels<AttendanceViewModel>()
+    private lateinit var attendanceAdapter: AttendanceAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,10 +44,32 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun fetchData() {
-        attendanceViewModel.fetchSoptEvent()
+        attendanceViewModel.run {
+            fetchSoptEvent()
+            fetchAttendanceHistory()
+        }
     }
 
     private fun observeData() {
+        observeSoptEvent()
+        observeAttendanceUserInfo()
+        observeAttendanceSummary()
+        observeAttendanceLog()
+    }
+
+    private fun initToolbar() {
+        binding.toolbar.run {
+            setSupportActionBar(this)
+            setNavigationOnClickListener { this@AttendanceActivity.finish() }
+        }
+    }
+
+    private fun initRecyclerView() {
+        attendanceAdapter = AttendanceAdapter()
+        binding.recyclerViewAttendanceHistory.adapter = attendanceAdapter
+    }
+
+    private fun observeSoptEvent() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 attendanceViewModel.soptEvent.collect {
@@ -57,15 +84,49 @@ class AttendanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun initToolbar() {
-        binding.toolbar.run {
-            setSupportActionBar(this)
-            setNavigationOnClickListener { this@AttendanceActivity.finish() }
+    private fun observeAttendanceUserInfo() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                attendanceViewModel.attendanceUserInfo.collect {
+                    when (it) {
+                        is AttendanceState.Success -> {
+                            updateAttendanceUserInfo(it.data)
+                        }
+                        else -> {}
+                    }
+                }
+            }
         }
     }
 
-    private fun initRecyclerView() {
+    private fun observeAttendanceSummary() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                attendanceViewModel.attendanceSummary.collect {
+                    when (it) {
+                        is AttendanceState.Success -> {
+                            updateAttendanceSummary(it.data)
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
+    }
 
+    private fun observeAttendanceLog() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                attendanceViewModel.attendanceLog.collect {
+                    when (it) {
+                        is AttendanceState.Success -> {
+                            updateAttendanceLog(it.data)
+                        }
+                        else -> {}
+                    }
+                }
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -82,5 +143,17 @@ class AttendanceActivity : AppCompatActivity() {
             layoutInfoEventLocation.isVisible = (soptEvent.location != null)
             textInfoEventLocation.text = soptEvent.location
         }
+    }
+
+    private fun updateAttendanceUserInfo(userInfo: AttendanceUserInfo) {
+        attendanceAdapter.updateUserInfo(userInfo)
+    }
+
+    private fun updateAttendanceSummary(summary: AttendanceSummary) {
+        attendanceAdapter.updateSummary(summary)
+    }
+
+    private fun updateAttendanceLog(log: List<AttendanceLog>) {
+        attendanceAdapter.submitList(log)
     }
 }
