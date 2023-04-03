@@ -1,13 +1,16 @@
 package org.sopt.official.feature.attendance.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Typeface
+import android.net.Uri
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.R
@@ -37,12 +40,22 @@ class UserInfoViewHolder(private val binding: ItemAttendanceHistoryUserInfoBindi
     }
 
     companion object {
+        private const val ATTENDANCE_RULE_URL = "https://sopt.org/rules"
+
         fun create(parent: ViewGroup): UserInfoViewHolder {
             val binding = ItemAttendanceHistoryUserInfoBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
+
+            binding.imageAttendancePointInfo.setOnClickListener {
+                Toast.makeText(parent.context, "제2장 제10조(출석)를 확인해주세요", Toast.LENGTH_SHORT).show()
+                Intent(Intent.ACTION_VIEW, Uri.parse(ATTENDANCE_RULE_URL)).run {
+                    parent.context.startActivity(this)
+                }
+            }
+
             return UserInfoViewHolder(binding)
         }
     }
