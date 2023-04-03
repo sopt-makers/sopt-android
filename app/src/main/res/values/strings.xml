@@ -7,4 +7,5 @@
     <string name="title_attendance_count_late">지각</string>
     <string name="title_attendance_count_abnormal">결석</string>
     <string name="header_attendance_log">나의 출결 현황</string>
+    <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
 </resources>

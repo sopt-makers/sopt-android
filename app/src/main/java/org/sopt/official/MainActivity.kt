@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.sopt.official.feature.attendance.AttendanceActivity
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -67,6 +68,9 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycle.addObserver(inAppUpdateManager)
         setContentView(R.layout.activity_main)
+
+        // Must erase below code before commit
+        startActivity(Intent(this, AttendanceActivity::class.java))
     }
 
     @Deprecated("Deprecated in Java")
