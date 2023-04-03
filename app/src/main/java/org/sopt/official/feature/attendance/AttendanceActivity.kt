@@ -8,6 +8,8 @@ import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -154,12 +156,30 @@ class AttendanceActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateSoptEventComponent(soptEvent: SoptEvent) {
         binding.run {
-            textInfoEventDate.text = soptEvent.date
-            textInfoEventPoint.isVisible = !soptEvent.isAttendancePointAwardedEvent
+            soptEvent.isEventDay.run {
+                layoutInfoEventDate.isVisible = this
+                layoutInfoEventLocation.isVisible = this
+                textInfoEventPoint.isVisible = this
+            }
+            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+            textInfoEventNameLayoutParams.setMargins(0, if (soptEvent.isEventDay) 16.dpToPx() else 0, 0, 0)
+            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
 
-            textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
-            (textInfoEventName.text as Spannable).run {
-                setSpan(StyleSpan(Typeface.BOLD), 4, 4 + soptEvent.eventName.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+            textInfoEventDate.text = soptEvent.date
+            soptEvent.isAttendancePointAwardedEvent?.let { textInfoEventPoint.isVisible = !it }
+
+            when (soptEvent.isEventDay) {
+                true -> {
+                    textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
+                    removeAllSpan(textInfoEventName)
+                    (textInfoEventName.text as Spannable).run {
+                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName?.length ?: 0), Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                    }
+                }
+                false -> {
+                    textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+                    removeAllSpan(textInfoEventName)
+                }
             }
 
             layoutInfoEventLocation.isVisible = (soptEvent.location != null)
@@ -177,5 +197,16 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun updateAttendanceLog(log: List<AttendanceLog>) {
         attendanceAdapter.submitList(log)
+    }
+
+    private fun removeAllSpan(textView: TextView) {
+        val originalText = textView.text
+        (textView.text as Spannable).run {
+            val spansToRemove = this.getSpans(0, this.length, Any::class.java)
+            for (span in spansToRemove) {
+                this.removeSpan(span)
+            }
+        }
+        textView.text = originalText
     }
 }

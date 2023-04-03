@@ -5,10 +5,11 @@ import org.sopt.official.domain.entity.attendance.SoptEvent
 
 @Serializable
 data class SoptEventResponse(
-    val date: String,
-    val location: String?,
-    val eventName: String,
-    val isAttendancePointAwardedEvent: Boolean
+    val isEventDay: Boolean,
+    val date: String? = null,
+    val location: String? = null,
+    val eventName: String? = null,
+    val isAttendancePointAwardedEvent: Boolean? = null
 ) {
-    fun toEntity() = SoptEvent(date, location, eventName, isAttendancePointAwardedEvent)
+    fun toEntity() = SoptEvent(isEventDay, date, location, eventName, isAttendancePointAwardedEvent)
 }
