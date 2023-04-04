@@ -23,7 +23,7 @@ compose-bom = "2023.03.00"
 desugarJdk = "2.0.3"
 
 material = "1.8.0"
-accompanist = "0.30.0"
+accompanist = "0.30.1"
 in-app-update = "2.0.1"
 secret-gradle-plugin = "2.0.1"
 
