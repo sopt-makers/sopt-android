@@ -50,7 +50,7 @@ google-services = "4.3.15"
 crashlytics = "2.9.4"
 firebase = "31.4.0"
 ktlint = "11.3.1"
-sentry = "3.4.3"
+sentry = "3.5.0"
 sentry-android = "6.17.0"
 process-pheonix = "2.1.2"
 
