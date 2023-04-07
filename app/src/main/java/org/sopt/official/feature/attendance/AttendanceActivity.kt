@@ -156,35 +156,76 @@ class AttendanceActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateSoptEventComponent(soptEvent: SoptEvent) {
         binding.run {
-            soptEvent.isEventDay.run {
-                layoutInfoEventDate.isVisible = this
-                layoutInfoEventLocation.isVisible = this
-                textInfoEventPoint.isVisible = this
-            }
-            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-            textInfoEventNameLayoutParams.setMargins(0, if (soptEvent.isEventDay) 16.dpToPx() else 0, 0, 0)
-            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
-
-            textInfoEventDate.text = soptEvent.date
-            soptEvent.isAttendancePointAwardedEvent?.let { textInfoEventPoint.isVisible = !it }
-
-            when (soptEvent.isEventDay) {
-                true -> {
+            when (soptEvent.eventType) {
+                "NO_SESSION" -> {
+                    layoutInfoEventDate.isVisible = false
+                    layoutInfoEventLocation.isVisible = false
+                    textInfoEventPoint.isVisible = false
+                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+                    textInfoEventNameLayoutParams.setMargins(0, 0, 0, 0)
+                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+                    removeAllSpan(textInfoEventName)
+                    textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+                }
+                "HAS_ATTENDANCE" -> {
+                    layoutInfoEventDate.isVisible = true
+                    textInfoEventDate.text = soptEvent.date
+                    layoutInfoEventLocation.isVisible = true
+                    textInfoEventLocation.text = soptEvent.location
+                    textInfoEventPoint.isVisible = false
+                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+                    textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
                     textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
                     removeAllSpan(textInfoEventName)
                     (textInfoEventName.text as Spannable).run {
-                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName?.length ?: 0), Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
                     }
                 }
-                false -> {
-                    textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+                "NO_ATTENDANCE" -> {
+                    layoutInfoEventDate.isVisible = true
+                    textInfoEventDate.text = soptEvent.date
+                    layoutInfoEventLocation.isVisible = true
+                    textInfoEventLocation.text = soptEvent.location
+                    textInfoEventPoint.isVisible = true
+                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+                    textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+                    textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
                     removeAllSpan(textInfoEventName)
+                    (textInfoEventName.text as Spannable).run {
+                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName?.length ?: 0), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                    }
                 }
             }
-
-            layoutInfoEventLocation.isVisible = (soptEvent.location != null)
-            textInfoEventLocation.text = soptEvent.location
         }
+//            soptEvent.eventType.run {
+//                layoutInfoEventDate.isVisible = this
+//                layoutInfoEventLocation.isVisible = this
+//                textInfoEventPoint.isVisible = this
+//            }
+//            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+//            textInfoEventNameLayoutParams.setMargins(0, if (soptEvent.eventType) 16.dpToPx() else 0, 0, 0)
+//            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+//
+//            textInfoEventDate.text = soptEvent.date
+//            soptEvent.isAttendancePointAwardedEvent?.let { textInfoEventPoint.isVisible = !it }
+//
+//            when (soptEvent.eventType) {
+//                true -> {
+//                    textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
+//                    removeAllSpan(textInfoEventName)
+//                    (textInfoEventName.text as Spannable).run {
+//                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName?.length ?: 0), Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+//                    }
+//                }
+//                false -> {
+//                    textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+//                    removeAllSpan(textInfoEventName)
+//                }
+//            }
+//
+//            textInfoEventLocation.text = soptEvent.location
     }
 
     private fun updateAttendanceUserInfo(userInfo: AttendanceUserInfo) {

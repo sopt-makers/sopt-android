@@ -9,7 +9,7 @@ import javax.inject.Inject
 class AttendanceRepositoryImpl @Inject constructor(
     private val attendanceService: AttendanceService
 ) : AttendanceRepository {
-    override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().toEntity() }
+    override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data.toEntity() }
     override suspend fun fetchAttendanceHistory(): Result<AttendanceHistory> =
         runCatching { attendanceService.getAttendanceHistory().toEntity() }
 }
