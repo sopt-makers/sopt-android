@@ -63,6 +63,7 @@ class AttendanceActivity : AppCompatActivity() {
             setSupportActionBar(this)
             setNavigationOnClickListener { this@AttendanceActivity.finish() }
         }
+        supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
     private fun initRecyclerView() {

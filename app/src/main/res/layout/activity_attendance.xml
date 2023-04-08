@@ -26,7 +26,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/look_up_attendance"
+                    android:text="@string/attendance"
                     android:textColor="#FCFCFC"
                     android:textSize="16dp"
                     tools:ignore="SpUsage" />
