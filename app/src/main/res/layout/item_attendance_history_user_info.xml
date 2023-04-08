@@ -12,8 +12,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#989BA0"
+        android:textSize="14dp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="32기 안드로이드파트 김솝트" />
+        tools:text="32기 안드로이드파트 김솝트"
+        tools:ignore="SpUsage" />
 
     <TextView
         android:id="@+id/text_user_attendance_point"

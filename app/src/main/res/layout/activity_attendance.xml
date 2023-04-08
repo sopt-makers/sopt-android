@@ -66,11 +66,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="#989BA0"
+                    android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_info_event_date"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="3월 23일 토요일 14:00 - 18:00" />
+                    tools:text="3월 23일 토요일 14:00 - 18:00"
+                    tools:ignore="SpUsage" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,11 +97,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="#989BA0"
+                    android:textSize="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_info_event_location"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:text="건국대학교 꽥꽥오리관" />
+                    tools:text="건국대학교 꽥꽥오리관"
+                    tools:ignore="SpUsage" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -121,8 +125,10 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/text_not_awarded"
                 android:textColor="#CED1D2"
+                android:textSize="14dp"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/text_info_event_name" />
+                app:layout_constraintTop_toBottomOf="@id/text_info_event_name"
+                tools:ignore="SpUsage" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
