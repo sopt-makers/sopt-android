@@ -6,5 +6,5 @@ import org.sopt.official.data.model.attendance.SoptEventResponse
 
 interface AttendanceService {
     suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse>
-    suspend fun getAttendanceHistory(): AttendanceHistoryResponse
+    suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse>
 }

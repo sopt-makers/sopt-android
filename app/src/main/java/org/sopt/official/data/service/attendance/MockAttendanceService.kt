@@ -11,7 +11,7 @@ class MockAttendanceService : AttendanceService {
         return EVENT_NO_ATTENDANCE
     }
 
-    override suspend fun getAttendanceHistory(): AttendanceHistoryResponse {
+    override suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse> {
         return ATTENDANCE_HISTORY
     }
 
@@ -122,112 +122,42 @@ class MockAttendanceService : AttendanceService {
         private val EVENT_NO_ATTENDANCE: BaseAttendanceResponse<SoptEventResponse> =
             Json.decodeFromString(EVENT_NO_ATTENDANCE_JSON_TEXT)
 
-
-//        private val NOT_EVENT_DAY = SoptEventResponse(isEventDay = false)
-//        private val ATTENDANCE_POINT_AWARDED_EVENT_WITH_LOCATION = SoptEventResponse(
-//            isEventDay = true,
-//            date = "3월 23일 토요일 14:00 - 18:00",
-//            location = "건국대학교 꽥꽥오리관",
-//            eventName = "2차 세미나",
-//            isAttendancePointAwardedEvent = true
-//        )
-//        private val ATTENDANCE_POINT_NOT_AWARDED_EVENT_WITH_LOCATION = SoptEventResponse(
-//            isEventDay = true,
-//            date = "3월 23일 토요일 14:00 - 18:00",
-//            location = "건국대학교 꽥꽥오리관",
-//            eventName = "데모데이",
-//            isAttendancePointAwardedEvent = false
-//        )
-//        private val ATTENDANCE_POINT_AWARDED_EVENT_WITHOUT_LOCATION = SoptEventResponse(
-//            isEventDay = true,
-//            date = "3월 23일 토요일 14:00 - 18:00",
-//            location = null,
-//            eventName = "2차 세미나",
-//            isAttendancePointAwardedEvent = true
-//        )
-//        private val ATTENDANCE_POINT_NOT_AWARDED_EVENT_WITHOUT_LOCATION = SoptEventResponse(
-//            isEventDay = true,
-//            date = "3월 23일 토요일 14:00 - 18:00",
-//            location = null,
-//            eventName = "데모데이",
-//            isAttendancePointAwardedEvent = false
-//        )
-
-        private
-        val USER_INFO_SEUNGHYEON = AttendanceHistoryResponse.AttendanceUserInfoResponse(
-            generation = 30,
-            partName = "안드로이드",
-            userName = "한승현",
-            attendancePoint = 0.5
-        )
-        private val ATTENDANCE_SUMMARY_SEUNGHYEON = AttendanceHistoryResponse.AttendanceSummaryResponse(
-            all = 11,
-            normal = 9,
-            late = 1,
-            abnormal = 1
-        )
-        private val ATTENDANCE_LOG_SEUNGHYEON = listOf(
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "1차 세미나",
-                date = "4월 3일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "지각",
-                eventName = "2차 세미나",
-                date = "4월 10일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "결석",
-                eventName = "3차 세미나",
-                date = "4월 17일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "4차 세미나",
-                date = "4월 24일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "5차 세미나",
-                date = "5월 1일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "6차 세미나",
-                date = "5월 8일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "7차 세미나",
-                date = "5월 15일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "8차 세미나",
-                date = "5월 22일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "9차 세미나",
-                date = "5월 29일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "10차 세미나",
-                date = "6월 5일"
-            ),
-            AttendanceHistoryResponse.AttendanceLogResponse(
-                attendanceState = "출석",
-                eventName = "11차 세미나",
-                date = "6월 12일"
-            )
-        )
-        private val ATTENDANCE_HISTORY =
-            AttendanceHistoryResponse(
-                userInfo = USER_INFO_SEUNGHYEON,
-                attendanceSummary = ATTENDANCE_SUMMARY_SEUNGHYEON,
-                attendanceLog = ATTENDANCE_LOG_SEUNGHYEON
-            )
+        private const val ATTENDANCE_HISTORY_JSON_TEXT = """
+            {
+                "success": true,
+                "message": "전체 출석정보 조회 성공",
+                "data": {
+                    "part": "DESIGN",
+                    "generation": 32,
+                    "name": "김솝트",
+                    "score": 1.0,
+                    "total": {
+                        "total": 3,
+                        "attendance": 2,
+                        "absent": 1,
+                        "tardy": 0
+                    }
+                    "attendances": [
+                        {
+                            "name": "3차 세미나",
+                            "status": "ATTENDANCE",
+                            "date":"4월 22일" 
+                        },
+                        {
+                            "name": "2차 세미나",
+                            "status": "ABSENT",
+                            "date":"4월 15일" 
+                        },
+                        {
+                            "name": "1차 세미나",
+                            "status": "ATTENDANCE",
+                            "date":"4월 8일" 
+                        }
+                    ]
+                }
+            }
+        """
+        private val ATTENDANCE_HISTORY: BaseAttendanceResponse<AttendanceHistoryResponse> =
+            Json.decodeFromString(ATTENDANCE_HISTORY_JSON_TEXT)
     }
 }

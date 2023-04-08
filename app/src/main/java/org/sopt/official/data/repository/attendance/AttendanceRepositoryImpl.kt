@@ -11,5 +11,5 @@ class AttendanceRepositoryImpl @Inject constructor(
 ) : AttendanceRepository {
     override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data.toEntity() }
     override suspend fun fetchAttendanceHistory(): Result<AttendanceHistory> =
-        runCatching { attendanceService.getAttendanceHistory().toEntity() }
+        runCatching { attendanceService.getAttendanceHistory().data.toEntity() }
 }

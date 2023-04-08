@@ -1,5 +1,6 @@
 package org.sopt.official.data.model.attendance
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.official.domain.entity.attendance.AttendanceHistory
 import org.sopt.official.domain.entity.attendance.AttendanceLog
@@ -8,53 +9,56 @@ import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
 
 @Serializable
 data class AttendanceHistoryResponse(
-    val userInfo: AttendanceUserInfoResponse,
-    val attendanceSummary: AttendanceSummaryResponse,
-    val attendanceLog: List<AttendanceLogResponse>
+    val part: String,
+    val generation: Int,
+    val name: String,
+    val score: Double,
+    @SerialName("total")
+    val attendanceCount: AttendanceCountResponse,
+    val attendances: List<AttendanceResponse>
 ) {
     @Serializable
-    data class AttendanceUserInfoResponse(
-        val generation: Int,
-        val partName: String,
-        val userName: String,
-        val attendancePoint: Double
-    ) {
-        fun toEntity() = AttendanceUserInfo(
-            this.generation,
-            this.partName,
-            this.userName,
-            this.attendancePoint
-        )
-    }
-
-    @Serializable
-    data class AttendanceSummaryResponse(
+    data class AttendanceCountResponse(
+        @SerialName("total")
         val all: Int,
+        @SerialName("attendance")
         val normal: Int,
+        @SerialName("tardy")
         val late: Int,
+        @SerialName("absent")
         val abnormal: Int
     ) {
-        fun toEntity() = AttendanceSummary(
-            this.all,
-            this.normal,
-            this.late,
-            this.abnormal
+        fun toEntity(): AttendanceSummary = AttendanceSummary(
+            all = this.all,
+            normal = this.normal,
+            late = this.late,
+            abnormal = this.abnormal
         )
     }
 
     @Serializable
-    data class AttendanceLogResponse(
-        val attendanceState: String,
+    data class AttendanceResponse(
+        @SerialName("name")
         val eventName: String,
+        @SerialName("status")
+        val attendanceState: String,
         val date: String
     ) {
-        fun toEntity() = AttendanceLog(
-            this.attendanceState,
-            this.eventName,
-            this.date
+        fun toEntity(): AttendanceLog = AttendanceLog(
+            attendanceState = this.attendanceState,
+            eventName = this.eventName,
+            date = this.date
         )
     }
 
-    fun toEntity() =
-        AttendanceHistory(this.userInfo.toEntity(), this.attendanceSummary.toEntity(), this.attendanceLog.map { it.toEntity() })
+    fun toEntity(): AttendanceHistory = AttendanceHistory(
+        userInfo = AttendanceUserInfo(
+            generation = this.generation,
+            partName = this.part,
+            userName = this.name,
+            attendancePoint = this.score
+        ),
+        attendanceSummary = this.attendanceCount.toEntity(),
+        attendanceLog = this.attendances.map { it.toEntity() }
+    )
 }

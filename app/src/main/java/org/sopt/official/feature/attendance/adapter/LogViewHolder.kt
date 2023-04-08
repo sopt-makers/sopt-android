@@ -20,15 +20,15 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
 
             textAttendanceState.text = log.attendanceState
             when (log.attendanceState) {
-                "출석" -> {
+                "ATTENDANCE" -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#A7F8BE"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#378F5C")))
                 }
-                "지각" -> {
+                "TARDY" -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFEB80"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#D09600")))
                 }
-                "결석" -> {
+                "ABSENT", "LEAVE_EARLY" -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFD3D3"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#E45656")))
                 }
