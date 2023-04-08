@@ -38,5 +38,4 @@
         app:layout_constraintBottom_toBottomOf="@id/text_user_attendance_point"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/text_user_attendance_point" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">SOPT</string>
     <string name="default_channel_id">SOPT_MESSAGE</string>
-    <string name="look_up_attendance">출석 조회하기</string>
+    <string name="attendance">출석</string>
     <string name="title_attendance_count_all">전체</string>
     <string name="title_attendance_count_normal">출석</string>
     <string name="title_attendance_count_late">지각</string>

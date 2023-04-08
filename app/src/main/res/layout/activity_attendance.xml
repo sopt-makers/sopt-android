@@ -30,9 +30,7 @@
                     android:textColor="#FCFCFC"
                     android:textSize="16dp"
                     tools:ignore="SpUsage" />
-
             </androidx.appcompat.widget.Toolbar>
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -73,7 +71,6 @@
                     app:layout_constraintStart_toEndOf="@id/image_info_event_date"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="3월 23일 토요일 14:00 - 18:00" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -103,7 +100,6 @@
                     app:layout_constraintStart_toEndOf="@id/image_info_event_location"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="건국대학교 꽥꽥오리관" />
-
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
@@ -127,7 +123,6 @@
                 android:textColor="#CED1D2"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/text_info_event_name" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -144,7 +139,5 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/layout_info_event"
             app:layout_constraintVertical_bias="0" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

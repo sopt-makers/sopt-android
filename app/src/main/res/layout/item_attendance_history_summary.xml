@@ -48,7 +48,6 @@
                 app:layout_constraintTop_toBottomOf="@id/text_attendance_all"
                 tools:ignore="SpUsage"
                 tools:text="00회" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -84,7 +83,6 @@
                 app:layout_constraintTop_toBottomOf="@id/text_attendance_normal"
                 tools:ignore="SpUsage"
                 tools:text="00회" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -120,7 +118,6 @@
                 app:layout_constraintTop_toBottomOf="@id/text_attendance_late"
                 tools:ignore="SpUsage"
                 tools:text="00회" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -156,9 +153,6 @@
                 app:layout_constraintTop_toBottomOf="@id/text_attendance_abnormal"
                 tools:ignore="SpUsage"
                 tools:text="00회" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
