@@ -53,7 +53,11 @@ data class AttendanceHistoryResponse(
             generation = this.generation,
             partName = Part.valueOf(this.part).partName,
             userName = this.name,
-            attendancePoint = this.score
+            attendancePoint = if (this.score % 1 == 0.0) {
+                this.score.toInt()
+            } else {
+                this.score
+            }
         ),
         attendanceSummary = this.attendanceCount.toEntity(),
         attendanceLog = this.attendances.map { it.toEntity() }

@@ -4,5 +4,5 @@ data class AttendanceUserInfo(
     val generation: Int,
     val partName: String,
     val userName: String,
-    val attendancePoint: Double
+    val attendancePoint: Number
 )
