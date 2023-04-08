@@ -2,10 +2,7 @@ package org.sopt.official.data.model.attendance
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.domain.entity.attendance.AttendanceHistory
-import org.sopt.official.domain.entity.attendance.AttendanceLog
-import org.sopt.official.domain.entity.attendance.AttendanceSummary
-import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
+import org.sopt.official.domain.entity.attendance.*
 
 @Serializable
 data class AttendanceHistoryResponse(
@@ -45,7 +42,7 @@ data class AttendanceHistoryResponse(
         val date: String
     ) {
         fun toEntity(): AttendanceLog = AttendanceLog(
-            attendanceState = this.attendanceState,
+            attendanceState = AttendanceStatus.valueOf(this.attendanceState).statusKorean,
             eventName = this.eventName,
             date = this.date
         )
@@ -54,7 +51,7 @@ data class AttendanceHistoryResponse(
     fun toEntity(): AttendanceHistory = AttendanceHistory(
         userInfo = AttendanceUserInfo(
             generation = this.generation,
-            partName = this.part,
+            partName = Part.valueOf(this.part).partName,
             userName = this.name,
             attendancePoint = this.score
         ),

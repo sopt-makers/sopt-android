@@ -24,8 +24,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "NO_SESSION",
                     "location": "",
                     "name": "",
-                    "startAt": null,
-                    "endAt": null,
+                    "startAt": "",
+                    "endAt": "",
                     "attendances": []
                 }
             }

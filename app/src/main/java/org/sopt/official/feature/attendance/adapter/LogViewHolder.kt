@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.databinding.ItemAttendanceHistoryLogBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
+import org.sopt.official.domain.entity.attendance.AttendanceStatus
 
 class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(log: AttendanceLog) {
@@ -20,15 +21,15 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
 
             textAttendanceState.text = log.attendanceState
             when (log.attendanceState) {
-                "ATTENDANCE" -> {
+                AttendanceStatus.ATTENDANCE.statusKorean -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#A7F8BE"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#378F5C")))
                 }
-                "TARDY" -> {
+                AttendanceStatus.TARDY.statusKorean -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFEB80"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#D09600")))
                 }
-                "ABSENT", "LEAVE_EARLY" -> {
+                AttendanceStatus.ABSENT.statusKorean, AttendanceStatus.LEAVE_EARLY.statusKorean -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFD3D3"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#E45656")))
                 }
