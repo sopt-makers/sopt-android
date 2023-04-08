@@ -55,9 +55,7 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun observeData() {
         observeSoptEvent()
-        observeAttendanceUserInfo()
-        observeAttendanceSummary()
-        observeAttendanceLog()
+        observeAttendanceHistory()
     }
 
     private fun initToolbar() {
@@ -105,13 +103,15 @@ class AttendanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeAttendanceUserInfo() {
+    private fun observeAttendanceHistory() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.attendanceUserInfo.collect {
+                attendanceViewModel.attendanceHistory.collect {
                     when (it) {
                         is AttendanceState.Success -> {
-                            updateAttendanceUserInfo(it.data)
+                            updateAttendanceUserInfo(it.data.userInfo)
+                            updateAttendanceSummary(it.data.attendanceSummary)
+                            updateAttendanceLog(it.data.attendanceLog)
                         }
                         else -> {}
                     }
@@ -120,82 +120,80 @@ class AttendanceActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeAttendanceSummary() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.attendanceSummary.collect {
-                    when (it) {
-                        is AttendanceState.Success -> {
-                            updateAttendanceSummary(it.data)
-                        }
-                        else -> {}
-                    }
-                }
+    private fun updateSoptEventComponent(soptEvent: SoptEvent) {
+        when (soptEvent.eventType) {
+            EventType.NO_SESSION -> {
+                updateSoptEventComponentWithNoSession()
+            }
+            EventType.HAS_ATTENDANCE -> {
+                updateSoptEventComponentWithHasAttendance(soptEvent)
+            }
+            EventType.NO_ATTENDANCE -> {
+                updateSoptEventComponentWithNoAttendance(soptEvent)
             }
         }
     }
 
-    private fun observeAttendanceLog() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.attendanceLog.collect {
-                    when (it) {
-                        is AttendanceState.Success -> {
-                            updateAttendanceLog(it.data)
-                        }
-                        else -> {}
-                    }
-                }
+    private fun updateSoptEventComponentWithNoSession() {
+        binding.run {
+            layoutInfoEventDate.isVisible = false
+            layoutInfoEventLocation.isVisible = false
+            textInfoEventPoint.isVisible = false
+            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+            textInfoEventNameLayoutParams.setMargins(0, 0, 0, 0)
+            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+            removeAllSpan(textInfoEventName)
+            textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun updateSoptEventComponentWithHasAttendance(soptEvent: SoptEvent) {
+        binding.run {
+            layoutInfoEventDate.isVisible = true
+            textInfoEventDate.text = soptEvent.date
+            layoutInfoEventLocation.isVisible = true
+            textInfoEventLocation.text = soptEvent.location
+            textInfoEventPoint.isVisible = false
+            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+            textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+            removeAllSpan(textInfoEventName)
+            textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
+            (textInfoEventName.text as Spannable).run {
+                setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
     }
 
     @SuppressLint("SetTextI18n")
-    private fun updateSoptEventComponent(soptEvent: SoptEvent) {
+    private fun updateSoptEventComponentWithNoAttendance(soptEvent: SoptEvent) {
         binding.run {
-            when (soptEvent.eventType) {
-                EventType.NO_SESSION -> {
-                    layoutInfoEventDate.isVisible = false
-                    layoutInfoEventLocation.isVisible = false
-                    textInfoEventPoint.isVisible = false
-                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-                    textInfoEventNameLayoutParams.setMargins(0, 0, 0, 0)
-                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
-                    removeAllSpan(textInfoEventName)
-                    textInfoEventName.text = "오늘은 일정이 없는 날이에요"
-                }
-                EventType.HAS_ATTENDANCE -> {
-                    layoutInfoEventDate.isVisible = true
-                    textInfoEventDate.text = soptEvent.date
-                    layoutInfoEventLocation.isVisible = true
-                    textInfoEventLocation.text = soptEvent.location
-                    textInfoEventPoint.isVisible = false
-                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-                    textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
-                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
-                    removeAllSpan(textInfoEventName)
-                    textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
-                    (textInfoEventName.text as Spannable).run {
-                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                }
-                EventType.NO_ATTENDANCE -> {
-                    layoutInfoEventDate.isVisible = true
-                    textInfoEventDate.text = soptEvent.date
-                    layoutInfoEventLocation.isVisible = true
-                    textInfoEventLocation.text = soptEvent.location
-                    textInfoEventPoint.isVisible = true
-                    val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-                    textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
-                    textInfoEventName.layoutParams = textInfoEventNameLayoutParams
-                    removeAllSpan(textInfoEventName)
-                    textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
-                    (textInfoEventName.text as Spannable).run {
-                        setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-                    }
-                }
+            layoutInfoEventDate.isVisible = true
+            textInfoEventDate.text = soptEvent.date
+            layoutInfoEventLocation.isVisible = true
+            textInfoEventLocation.text = soptEvent.location
+            textInfoEventPoint.isVisible = true
+            val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
+            textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+            textInfoEventName.layoutParams = textInfoEventNameLayoutParams
+            removeAllSpan(textInfoEventName)
+            textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
+            (textInfoEventName.text as Spannable).run {
+                setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
         }
+    }
+
+    private fun removeAllSpan(textView: TextView) {
+        val originalText = textView.text
+        (textView.text as Spannable).run {
+            val spansToRemove = this.getSpans(0, this.length, Any::class.java)
+            for (span in spansToRemove) {
+                this.removeSpan(span)
+            }
+        }
+        textView.text = originalText
     }
 
     private fun updateAttendanceUserInfo(userInfo: AttendanceUserInfo) {
@@ -208,16 +206,5 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun updateAttendanceLog(log: List<AttendanceLog>) {
         attendanceAdapter.submitList(log)
-    }
-
-    private fun removeAllSpan(textView: TextView) {
-        val originalText = textView.text
-        (textView.text as Spannable).run {
-            val spansToRemove = this.getSpans(0, this.length, Any::class.java)
-            for (span in spansToRemove) {
-                this.removeSpan(span)
-            }
-        }
-        textView.text = originalText
     }
 }
