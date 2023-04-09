@@ -9,7 +9,7 @@
     <!-- PurpleScale -->
     <color name="purple_100">#8040FF</color>
     <color name="purple_40">#C6A9FF</color>
-    <color name="purple_dim_100">#purpledim100</color>
+    <color name="purple_dim_100">#282039</color>
     <!-- GrayScale -->
     <color name="gray_10">#F7F8FA</color>
     <color name="gray_20">#EEEFF1</color>
