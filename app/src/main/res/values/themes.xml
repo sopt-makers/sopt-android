@@ -17,15 +17,13 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?android:colorBackground</item>
         <!-- Font Theme -->
-        <item name="textAppearanceHeadline1">@style/TextAppearance.SOPT.HeadLine1</item>
-        <item name="textAppearanceHeadline2">@style/TextAppearance.SOPT.HeadLine2</item>
-        <item name="textAppearanceHeadline3">@style/TextAppearance.SOPT.HeadLine3</item>
-        <item name="textAppearanceHeadline4">@style/TextAppearance.SOPT.HeadLine4</item>
-        <item name="textAppearanceHeadline5">@style/TextAppearance.SOPT.HeadLine5</item>
-        <item name="textAppearanceSubtitle1">@style/TextAppearance.SOPT.SubTitle1</item>
-        <item name="textAppearanceSubtitle2">@style/TextAppearance.SOPT.SubTitle2</item>
-        <item name="textAppearanceBody1">@style/TextAppearance.SOPT.Body1</item>
-        <item name="textAppearanceBody2">@style/TextAppearance.SOPT.Body2</item>
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.SOPT.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.SOPT.DisplayMedium</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.SOPT.HeadLineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.SOPT.HeadLineMedium</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.SOPT.Body</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.SOPT.CaptionLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.SOPT.CaptionMedium</item>
     </style>
 
     <style name="Theme.SOPT.Spalsh" type="Theme.SOPT">

@@ -10,57 +10,45 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <style name="TextAppearance.SOPT.HeadLine1">
-        <item name="fontWeight">800</item>
-        <item name="android:textSize">32sp</item>
-        <item name="android:letterSpacing">-0.32</item>
-    </style>
-
-    <style name="TextAppearance.SOPT.HeadLine2">
+    <style name="TextAppearance.SOPT.DisplayLarge">
         <item name="fontWeight">700</item>
         <item name="android:textSize">24sp</item>
-        <item name="android:letterSpacing">-0.24</item>
+        <item name="lineHeight">30sp</item>
     </style>
 
-    <style name="TextAppearance.SOPT.HeadLine3">
+    <style name="TextAppearance.SOPT.DisplayMedium">
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">24sp</item>
+        <item name="lineHeight">30sp</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.HeadLineLarge">
         <item name="fontWeight">700</item>
         <item name="android:textSize">20sp</item>
-        <item name="android:letterSpacing">-0.2</item>
+        <item name="lineHeight">25sp</item>
     </style>
 
-    <style name="TextAppearance.SOPT.HeadLine4">
-        <item name="fontWeight">700</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:letterSpacing">-0.18</item>
-    </style>
-
-    <style name="TextAppearance.SOPT.HeadLine5">
-        <item name="fontWeight">500</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:letterSpacing">-0.18</item>
-    </style>
-
-    <style name="TextAppearance.SOPT.SubTitle1">
+    <style name="TextAppearance.SOPT.HeadLineMedium">
         <item name="fontWeight">700</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">-0.16</item>
+        <item name="lineHeight">20sp</item>
     </style>
 
-    <style name="TextAppearance.SOPT.SubTitle2">
+    <style name="TextAppearance.SOPT.Body">
         <item name="fontWeight">500</item>
         <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">-0.16</item>
+        <item name="lineHeight">20sp</item>
     </style>
 
-    <style name="TextAppearance.SOPT.Body1">
-        <item name="fontWeight">400</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:letterSpacing">-0.16</item>
-    </style>
-
-    <style name="TextAppearance.SOPT.Body2">
+    <style name="TextAppearance.SOPT.CaptionLarge">
         <item name="fontWeight">500</item>
-        <item name="android:textSize">14sp</item>
-        <item name="android:letterSpacing">-0.14</item>
+        <item name="android:textSize">12sp</item>
+        <item name="lineHeight">15sp</item>
+    </style>
+
+    <style name="TextAppearance.SOPT.CaptionMedium">
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">10sp</item>
+        <item name="lineHeight">15sp</item>
     </style>
 </resources>
