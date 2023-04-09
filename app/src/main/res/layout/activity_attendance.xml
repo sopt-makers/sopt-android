@@ -28,7 +28,7 @@
                     android:layout_gravity="center"
                     android:text="@string/attendance"
                     android:textColor="#FCFCFC"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     tools:ignore="SpUsage" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="#989BA0"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_info_event_date"
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textColor="#989BA0"
-                    android:textSize="14dp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/image_info_event_location"
@@ -113,7 +113,7 @@
                 android:layout_marginTop="16dp"
                 android:bufferType="spannable"
                 android:textColor="#FCFCFC"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/layout_info_event_location"
                 tools:ignore="SpUsage"
                 tools:text="오늘은 데모데이 날이에요" />
@@ -125,7 +125,7 @@
                 android:layout_marginTop="24dp"
                 android:text="@string/text_not_awarded"
                 android:textColor="#CED1D2"
-                android:textSize="14dp"
+                android:textSize="14sp"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/text_info_event_name"
                 tools:ignore="SpUsage" />
