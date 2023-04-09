@@ -6,24 +6,34 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <!-- BlueScale -->
-    <color name="blue_100">#C1CDFF</color>
-    <color name="blue_200">#A1B3FF</color>
-    <color name="blue_300">#7F98FF</color>
-    <color name="blue_400">#6380FC</color>
-    <color name="blue_500">#5070F7</color>
-    <color name="blue_600">#2E60F6</color>
+    <!-- PurpleScale -->
+    <color name="purple_100">#8040FF</color>
+    <color name="purple_40">#C6A9FF</color>
+    <color name="purple_dim_100">#282039</color>
     <!-- GrayScale -->
-    <color name="gray_50">#F7F8F9</color>
-    <color name="gray_100">#EFF0F1</color>
-    <color name="gray_200">#E4E5E6</color>
-    <color name="gray_300">#D3D4D5</color>
-    <color name="gray_400">#AEAFB0</color>
-    <color name="gray_500">#8E8F90</color>
-    <color name="gray_600">#666768</color>
-    <color name="gray_700">#535455</color>
-    <color name="gray_800">#353637</color>
-    <color name="gray_900">#151617</color>
+    <color name="gray_10">#F7F8FA</color>
+    <color name="gray_20">#EEEFF1</color>
+    <color name="gray_30">#CED1D2</color>
+    <color name="gray_40">#C0C5C9</color>
+    <color name="gray_60">#989BA0</color>
+    <color name="gray_80">#808388</color>
+    <color name="gray_100">#606265</color>
+    <!-- WhiteScale -->
+    <color name="white_100">#FCFCFC</color>
+    <color name="real_white">#FFFFFF</color>
+    <!-- BlackScale -->
     <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
+    <color name="black_100">#0F1010</color>
+    <color name="black_80">#1C1D1E</color>
+    <color name="black_60">#2C2D2E</color>
+    <color name="black_40">#3C3D40</color>
+    <!-- RedScale -->
+    <color name="sopt_red">#FFD3D3</color>
+    <color name="on_sopt_red">#E45656</color>
+    <!-- GreenScale -->
+    <color name="sopt_green">#A7F8BE</color>
+    <color name="on_sopt_green">#378F5C</color>
+    <!-- YellowScale -->
+    <color name="sopt_yellow">#FFEB80</color>
+    <color name="on_sopt_yellow">#D09600</color>
 </resources>
