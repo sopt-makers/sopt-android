@@ -14,6 +14,6 @@
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.SOPT.Spalsh" type="Theme.SOPT">
-        <item name="android:windowBackground">@color/gray_900</item>
+        <item name="android:windowBackground">@color/gray_10</item>
     </style>
 </resources>
