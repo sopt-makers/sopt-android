@@ -55,7 +55,7 @@ private fun NoticeItemTitle(
     ) {
         if (isNewNotice) {
             Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.icon_new),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_new),
                 contentDescription = "new content icon"
             )
             Spacer(modifier = Modifier.size(8.dp))
