@@ -61,7 +61,8 @@
             android:theme="@style/Theme.SOPT.Attendance" />
         <activity
             android:name=".stamp.SoptampActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.SOPT" />
 
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"

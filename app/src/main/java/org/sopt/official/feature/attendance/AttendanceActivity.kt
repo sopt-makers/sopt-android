@@ -73,13 +73,15 @@ class AttendanceActivity : AppCompatActivity() {
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
-                    when (parent.getChildAdapterPosition(view)) {
+                    when (val index = parent.getChildAdapterPosition(view)) {
                         0 -> {
                             outRect.set(24.dpToPx(), 32.dpToPx(), 24.dpToPx(), 12.dpToPx())
                         }
+
                         attendanceAdapter.itemCount - 1 -> {
                             outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 32.dpToPx())
                         }
+
                         else -> {
                             outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 12.dpToPx())
                         }
@@ -97,6 +99,7 @@ class AttendanceActivity : AppCompatActivity() {
                         is AttendanceState.Success -> {
                             updateSoptEventComponent(it.data)
                         }
+
                         else -> {}
                     }
                 }
@@ -114,6 +117,7 @@ class AttendanceActivity : AppCompatActivity() {
                             updateAttendanceSummary(it.data.attendanceSummary)
                             updateAttendanceLog(it.data.attendanceLog)
                         }
+
                         else -> {}
                     }
                 }
@@ -126,9 +130,11 @@ class AttendanceActivity : AppCompatActivity() {
             EventType.NO_SESSION -> {
                 updateSoptEventComponentWithNoSession()
             }
+
             EventType.HAS_ATTENDANCE -> {
                 updateSoptEventComponentWithHasAttendance(soptEvent)
             }
+
             EventType.NO_ATTENDANCE -> {
                 updateSoptEventComponentWithNoAttendance(soptEvent)
             }

@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    tools:background="#2C2D2E">
+    tools:background="?colorSurface">
 
     <TextView
         android:id="@+id/text_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#989BA0"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="@color/gray_60"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="32기 안드로이드파트 김솝트"
-        tools:ignore="SpUsage" />
+        tools:text="32기 안드로이드파트 김솝트" />
 
     <TextView
         android:id="@+id/text_user_attendance_point"
@@ -24,7 +24,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="10dp"
         android:bufferType="spannable"
-        android:textColor="#FCFCFC"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?colorOnSurface"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@id/image_attendance_point_info"
         app:layout_constraintStart_toStartOf="parent"

@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    tools:background="#2C2D2E">
+    tools:background="?colorSurface">
 
     <TextView
         android:id="@+id/text_attendance_history_log_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/header_attendance_log"
-        android:textColor="#989BA0"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?colorOnSurfaceInverse"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

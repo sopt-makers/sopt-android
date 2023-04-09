@@ -5,44 +5,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    tools:background="#2C2D2E">
+    tools:background="?colorSurface">
 
     <TextView
         android:id="@+id/text_attendance_state"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/rectangle_radius_4"
-        android:backgroundTint="#A7F8BE"
+        android:backgroundTint="@color/sopt_green"
         android:paddingHorizontal="8dp"
         android:paddingVertical="4dp"
         android:text="@string/title_attendance_count_normal"
+        android:textAppearance="?textAppearanceHeadlineMedium"
+        android:textColor="@color/on_sopt_green"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/text_attendance_event_name"
+        style="@style/TextAppearance.SOPT"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="#FCFCFC"
+        android:textColor="?colorOnSurface"
+        android:textFontWeight="600"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/text_attendance_date"
         app:layout_constraintStart_toEndOf="@id/text_attendance_state"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage"
         tools:text="1차 세미나" />
 
     <TextView
         android:id="@+id/text_attendance_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#CED1D2"
+        android:textAppearance="@style/TextAppearance.SOPT"
+        android:textColor="@color/gray_30"
+        android:textFontWeight="400"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
