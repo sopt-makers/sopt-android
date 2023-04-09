@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="@color/gray_60"
+        android:textColor="?colorOnSurfaceInverse"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="32기 안드로이드파트 김솝트" />
@@ -30,7 +30,6 @@
         app:layout_constraintEnd_toStartOf="@id/image_attendance_point_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/text_user_info"
-        tools:ignore="SpUsage"
         tools:text="현재 출석점수는 1점 입니다!" />
 
     <ImageView

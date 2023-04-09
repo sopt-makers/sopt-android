@@ -27,8 +27,7 @@
                     android:layout_gravity="center"
                     android:text="@string/attendance"
                     android:textColor="?colorOnBackground"
-                    android:textSize="16sp"
-                    tools:ignore="SpUsage" />
+                    android:textSize="16sp" />
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -65,7 +64,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/gray_60"
+                    android:textColor="?colorOnSurfaceInverse"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/gray_60"
+                    android:textColor="?colorOnSurfaceInverse"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +114,6 @@
                 android:textColor="?colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintTop_toBottomOf="@id/layout_info_event_location"
-                tools:ignore="SpUsage"
                 tools:text="오늘은 데모데이 날이에요" />
 
             <TextView

@@ -51,6 +51,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="SpUsage"
         tools:text="4월 2일" />
 </androidx.constraintlayout.widget.ConstraintLayout>
