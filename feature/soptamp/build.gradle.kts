@@ -7,18 +7,11 @@ plugins {
     alias(libs.plugins.secret)
 }
 
-val properties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
-}
 android {
     defaultConfig {
         vectorDrawables {
             useSupportLibrary = true
         }
-        val apiKey = properties["apiKey"] as? String ?: ""
-        val dataStoreKey = properties["dataStoreKey"] as? String ?: ""
-        buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
-        buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
     }
     libraryVariants.all {
         sourceSets {

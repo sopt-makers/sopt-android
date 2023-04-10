@@ -18,7 +18,6 @@ android {
 
     defaultConfig {
         applicationId = "org.sopt.official"
-        manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
