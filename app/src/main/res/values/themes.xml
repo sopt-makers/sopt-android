@@ -14,6 +14,9 @@
         <item name="colorOnBackground">@color/real_white</item>
         <item name="colorSurface">@color/black_60</item>
         <item name="colorOnSurface">@color/real_white</item>
+        <item name="colorSurfaceVariant">@color/black_40</item>
+        <item name="colorOnSurfaceInverse">@color/gray_60</item>
+        <item name="colorOnSurfaceVariant">@color/gray_20</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?android:colorBackground</item>
         <!-- Font Theme -->
@@ -21,7 +24,9 @@
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.SOPT.DisplayMedium</item>
         <item name="textAppearanceHeadlineLarge">@style/TextAppearance.SOPT.HeadLineLarge</item>
         <item name="textAppearanceHeadlineMedium">@style/TextAppearance.SOPT.HeadLineMedium</item>
-        <item name="textAppearanceBodyLarge">@style/TextAppearance.SOPT.Body</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.SOPT.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.SOPT.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.SOPT.BodySmall</item>
         <item name="textAppearanceLabelLarge">@style/TextAppearance.SOPT.CaptionLarge</item>
         <item name="textAppearanceLabelMedium">@style/TextAppearance.SOPT.CaptionMedium</item>
     </style>
