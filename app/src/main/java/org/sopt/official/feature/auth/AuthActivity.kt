@@ -25,21 +25,22 @@ class AuthActivity : AppCompatActivity() {
     }
 
     private fun initAnimation() {
-        val zoomInAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_fade_in)
         val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in).apply {
             startOffset = 700
-        }
-        zoomInAnimation.setOnAnimationEndListener {
-            ObjectAnimator.ofFloat(binding.imgSoptLogo, "translationY", -140.dp.toFloat()).apply {
-                duration = 1000
-                interpolator = AnimationUtils.loadInterpolator(this@AuthActivity, android.R.interpolator.fast_out_slow_in)
-            }.start()
-            binding.groupBottomAuth.startAnimation(fadeInAnimation)
         }
         fadeInAnimation.setOnAnimationEndListener {
             binding.groupBottomAuth.isVisible = true
         }
-        binding.imgSoptLogo.startAnimation(zoomInAnimation)
+        ObjectAnimator.ofFloat(
+            binding.imgSoptLogo,
+            "translationY",
+            -140.dp.toFloat()
+        ).apply {
+            duration = 1000
+            startDelay = 700
+            interpolator = AnimationUtils.loadInterpolator(this@AuthActivity, android.R.interpolator.fast_out_slow_in)
+        }.start()
+        binding.groupBottomAuth.startAnimation(fadeInAnimation)
     }
 
     private fun initUi() {
