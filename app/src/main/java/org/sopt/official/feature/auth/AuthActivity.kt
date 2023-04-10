@@ -1,6 +1,7 @@
 package org.sopt.official.feature.auth
 
 import android.animation.ObjectAnimator
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,11 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        initUi()
+        initAnimation()
+    }
+
+    private fun initAnimation() {
         val zoomInAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_zoom_in_fade_in)
         val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in).apply {
             startOffset = 700
@@ -34,5 +40,9 @@ class AuthActivity : AppCompatActivity() {
             binding.groupBottomAuth.isVisible = true
         }
         binding.imgSoptLogo.startAnimation(zoomInAnimation)
+    }
+
+    private fun initUi() {
+        binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }
