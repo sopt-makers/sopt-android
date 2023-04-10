@@ -11,9 +11,9 @@
         <item name="colorOnSecondary">@color/white_100</item>
         <!-- Neutral Key Color -->
         <item name="android:colorBackground">@color/black_100</item>
-        <item name="colorOnBackground">@color/real_white</item>
+        <item name="colorOnBackground">@color/white_100</item>
         <item name="colorSurface">@color/black_60</item>
-        <item name="colorOnSurface">@color/real_white</item>
+        <item name="colorOnSurface">@color/white_100</item>
         <item name="colorSurfaceVariant">@color/black_40</item>
         <item name="colorOnSurfaceInverse">@color/gray_60</item>
         <item name="colorOnSurfaceVariant">@color/gray_20</item>

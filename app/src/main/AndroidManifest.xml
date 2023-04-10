@@ -48,6 +48,13 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.SOPT"></activity>
+        <activity
+            android:name=".stamp.SoptampActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature.auth.AuthActivity"
+            android:exported="true"
             android:theme="@style/Theme.SOPT">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
