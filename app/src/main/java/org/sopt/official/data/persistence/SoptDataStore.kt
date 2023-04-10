@@ -33,7 +33,22 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit { putBoolean("IS_EMAIL_VERIFIED", value) }
         get() = store.getBoolean("IS_EMAIL_VERIFIED", false)
 
+    var accessToken: String
+        set(value) = store.edit { putString(ACCESS_TOKEN, value) }
+        get() = store.getString(ACCESS_TOKEN, "") ?: ""
+
+    var refreshToken: String
+        set(value) = store.edit { putString(REFRESH_TOKEN, value) }
+        get() = store.getString(REFRESH_TOKEN, "") ?: ""
+
+    var playgroundToken: String
+        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value) }
+        get() = store.getString(PLAYGROUND_TOKEN, "") ?: ""
+
     companion object {
         const val DEBUG_FILE_NAME = "sopt_debug"
+        private const val ACCESS_TOKEN = "access_token"
+        private const val REFRESH_TOKEN = "refresh_token"
+        private const val PLAYGROUND_TOKEN = "pg_token"
     }
 }
