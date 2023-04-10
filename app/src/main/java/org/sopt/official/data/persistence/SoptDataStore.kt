@@ -25,14 +25,6 @@ class SoptDataStore @Inject constructor(
         )
     }
 
-    var userId: Long
-        set(value) = store.edit { putLong("USER_TOKEN", value) }
-        get() = store.getLong("USER_TOKEN", -1L)
-
-    var isEmailVerified: Boolean
-        set(value) = store.edit { putBoolean("IS_EMAIL_VERIFIED", value) }
-        get() = store.getBoolean("IS_EMAIL_VERIFIED", false)
-
     var accessToken: String
         set(value) = store.edit { putString(ACCESS_TOKEN, value) }
         get() = store.getString(ACCESS_TOKEN, "") ?: ""

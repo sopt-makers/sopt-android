@@ -50,7 +50,7 @@ import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
-import org.sopt.stamp.feature.mission.MissionsViewModel
+import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.stamp.feature.mission.model.MissionUiModel

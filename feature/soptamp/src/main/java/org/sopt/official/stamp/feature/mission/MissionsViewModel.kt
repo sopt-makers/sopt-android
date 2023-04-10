@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.feature.mission
+package org.sopt.official.stamp.feature.mission
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,7 +26,6 @@ import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.domain.repository.MissionsRepository
-import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.stamp.feature.mission.model.toUiModel
 import javax.inject.Inject
 

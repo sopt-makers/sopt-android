@@ -69,7 +69,7 @@ import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestinati
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.destinations.SettingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
-import org.sopt.stamp.feature.mission.MissionsViewModel
+import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.stamp.feature.mission.model.MissionUiModel
