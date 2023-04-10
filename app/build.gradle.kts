@@ -79,6 +79,7 @@ dependencies {
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)
+    implementation(libs.sopt.auth)
 
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)

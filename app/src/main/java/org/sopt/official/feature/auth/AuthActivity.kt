@@ -7,11 +7,14 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.MainActivity
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
 import org.sopt.official.util.viewBinding
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -45,5 +48,15 @@ class AuthActivity : AppCompatActivity() {
 
     private fun initUi() {
         binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.btnSoptLogin.setOnClickListener {
+            PlaygroundAuth.authorizeWithWebTab(this) {
+                it.onSuccess {
+                    // TODO by Nunu 로그인 로직
+                }.onFailure(Timber::e)
+            }
+        }
+        binding.btnSoptNotMember.setOnClickListener {
+            startActivity(MainActivity.getIntent(this))
+        }
     }
 }

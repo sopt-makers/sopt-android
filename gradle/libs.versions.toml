@@ -53,6 +53,7 @@ ktlint = "11.3.1"
 sentry = "3.5.0"
 sentry-android = "6.17.0"
 process-pheonix = "2.1.2"
+sopt-pgauth = "0.1.2"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -139,6 +140,8 @@ ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlin
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
 
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
+
+sopt-auth = { module = "com.github.sopt-makers:sopt-android-pgauth", version.ref = "sopt-pgauth" }
 
 [bundles]
 compose = [
