@@ -110,12 +110,12 @@ class AttendanceActivity : AppCompatActivity() {
     private fun observeAttendanceHistory() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.attendanceHistory.collect {
-                    when (it) {
+                attendanceViewModel.attendanceHistory.collect { attendanceHistory ->
+                    when (attendanceHistory) {
                         is AttendanceState.Success -> {
-                            updateAttendanceUserInfo(it.data.userInfo)
-                            updateAttendanceSummary(it.data.attendanceSummary)
-                            updateAttendanceLog(it.data.attendanceLog)
+                            updateAttendanceUserInfo(attendanceHistory.data.userInfo)
+                            updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
+                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot { it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean })
                         }
 
                         else -> {}

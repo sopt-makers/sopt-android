@@ -2,10 +2,10 @@
     <string name="app_name">SOPT</string>
     <string name="default_channel_id">SOPT_MESSAGE</string>
     <string name="attendance">출석</string>
-    <string name="title_attendance_count_all">전체</string>
     <string name="title_attendance_count_normal">출석</string>
     <string name="title_attendance_count_late">지각</string>
     <string name="title_attendance_count_abnormal">결석</string>
+    <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
 </resources>

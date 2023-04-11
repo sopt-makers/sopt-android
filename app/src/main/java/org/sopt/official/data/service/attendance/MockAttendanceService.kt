@@ -8,7 +8,7 @@ import org.sopt.official.data.model.attendance.SoptEventResponse
 
 class MockAttendanceService : AttendanceService {
     override suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse> {
-        return EVENT_NO_ATTENDANCE
+        return NOT_EVENT_DAY
     }
 
     override suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse> {
@@ -24,8 +24,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "NO_SESSION",
                     "location": "",
                     "name": "",
-                    "startAt": "",
-                    "endAt": "",
+                    "startDate": "",
+                    "endDate": "",
                     "attendances": []
                 }
             }
@@ -40,8 +40,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "HAS_ATTENDANCE",
                     "location": "건국대학교 경영관",
                     "name": "2차 세미나",
-                    "startAt": "2023-04-06T14:13:51.588149",
-                    "endAt": "2023-04-06T18:13:51.588149",
+                    "startDate": "2023-04-06T14:13:51.588149",
+                    "endDate": "2023-04-06T18:13:51.588149",
                     "attendances": [
                         {
                             "status": "ABSENT"
@@ -63,8 +63,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "HAS_ATTENDANCE",
 		            "location": "건국대학교 경영관",
 		            "name": "2차 세미나",
-		            "startAt": "2023-04-06T14:13:51.588149",
-		            "endAt": "2023-04-06T18:13:51.588149",
+		            "startDate": "2023-04-06T14:13:51.588149",
+		            "endDate": "2023-04-06T18:13:51.588149",
 		            "attendances": [
 		                {
                             "status": "ATTENDANCE",
@@ -88,8 +88,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "HAS_ATTENDANCE",
                     "location": "건국대학교 경영관",
                     "name": "2차 세미나",
-                    "startAt": "2023-04-06T14:13:51.588149",
-                    "endAt": "2023-04-06T18:13:51.588149",
+                    "startDate": "2023-04-06T14:13:51.588149",
+                    "endDate": "2023-04-06T18:13:51.588149",
                     "attendances": [
                         {
                             "status": "ATTENDANCE",
@@ -113,8 +113,8 @@ class MockAttendanceService : AttendanceService {
                     "type": "NO_ATTENDANCE",
                     "location": "건국대학교 경영관",
                     "name": "1차 행사",
-                    "startAt": "2023-04-06T14:13:51.588149",
-                    "endAt": "2023-04-06T18:13:51.588149",
+                    "startDate": "2023-04-06T14:13:51.588149",
+                    "endDate": "2023-04-06T18:13:51.588149",
                     "attendances": []
                 }
             }
@@ -127,31 +127,40 @@ class MockAttendanceService : AttendanceService {
                 "success": true,
                 "message": "전체 출석정보 조회 성공",
                 "data": {
-                    "part": "DESIGN",
+                    "part": "SERVER",
                     "generation": 32,
-                    "name": "김솝트",
+                    "name": "용택",
                     "score": 1.0,
                     "total": {
-                        "total": 3,
-                        "attendance": 2,
+                        "attendance": 1,
                         "absent": 1,
-                        "tardy": 0
+                        "tardy": 1,
+                        "participate": 1
                     }
                     "attendances": [
                         {
-                            "name": "3차 세미나",
-                            "status": "ATTENDANCE",
-                            "date":"4월 22일" 
+                            "attribute": "ETC",
+                            "name": "솝커톤",
+                            "status": "PARTICIPATE",
+                            "date": "5월 16일"
                         },
                         {
-                            "name": "2차 세미나",
+                            "attribute": "SEMINAR",
+                            "name": "서버 2차 세미나",
+                            "status": "ATTENDANCE",
+                            "date": "4월 14일"
+                        },
+                        {
+                            "attribute": "SEMINAR",
+                            "name": "서버 1차 세미나",
                             "status": "ABSENT",
-                            "date":"4월 15일" 
+                            "date": "4월 10일"
                         },
                         {
-                            "name": "1차 세미나",
-                            "status": "ATTENDANCE",
-                            "date":"4월 8일" 
+                            "attribute": "SEMINAR",
+                            "name": "OT",
+                            "status": "TARDY",
+                            "date": "4월 2일"
                         }
                     ]
                 }

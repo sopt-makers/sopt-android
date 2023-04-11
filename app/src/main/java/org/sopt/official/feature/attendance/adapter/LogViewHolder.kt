@@ -29,9 +29,13 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFEB80"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#D09600")))
                 }
-                AttendanceStatus.ABSENT.statusKorean, AttendanceStatus.LEAVE_EARLY.statusKorean -> {
+                AttendanceStatus.ABSENT.statusKorean -> {
                     textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFD3D3"))
                     textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#E45656")))
+                }
+                AttendanceStatus.PARTICIPATE.statusKorean -> {
+                    textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CED1D2"))
+                    textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#606265")))
                 }
                 else -> {
                     throw IllegalArgumentException("Illegal attendanceState argument: ${log.attendanceState}")

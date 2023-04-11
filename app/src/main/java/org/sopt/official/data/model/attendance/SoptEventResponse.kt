@@ -9,17 +9,24 @@ import org.sopt.official.domain.entity.attendance.SoptEvent
 
 @Serializable
 data class SoptEventResponse(
+    @SerialName("type")
     val type: String,
+    @SerialName("location")
     val location: String,
     @SerialName("name")
     val eventName: String,
+    @SerialName("startDate")
     val startAt: String,
+    @SerialName("endDate")
     val endAt: String,
+    @SerialName("attendances")
     val attendances: List<AttendanceResponse>
 ) {
     @Serializable
     data class AttendanceResponse(
+        @SerialName("status")
         val status: String,
+        @SerialName("attendedAt")
         val attendedAt: String = ""
     ) {
         fun toEntity(index: Int): SoptEvent.Attendance {
