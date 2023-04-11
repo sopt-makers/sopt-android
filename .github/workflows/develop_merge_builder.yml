@@ -41,6 +41,7 @@ jobs:
           API_KEY: ${{ secrets.SENTRY_DSN }}
           DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+          SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
         run: |
           echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
           echo apiKey=\"$API_KEY\" >> ./local.properties
