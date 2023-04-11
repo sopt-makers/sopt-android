@@ -7,8 +7,9 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.data.repository.attendance.AttendanceRepositoryImpl
 import org.sopt.official.data.service.attendance.AttendanceService
-import org.sopt.official.data.service.attendance.MockAttendanceService
+import org.sopt.official.di.annotation.OperationRetrofit
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
@@ -21,6 +22,7 @@ abstract class AttendanceBindsModule {
     companion object {
         @Provides
         @Singleton
-        fun provideAttendanceService(): AttendanceService = MockAttendanceService()
+        fun provideAttendanceService(@OperationRetrofit retrofit: Retrofit): AttendanceService =
+            retrofit.create(AttendanceService::class.java)
     }
 }

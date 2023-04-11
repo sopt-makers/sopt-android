@@ -36,7 +36,7 @@ class MockAttendanceService : AttendanceService {
             {
                 "success": true,
                 "message": "세미나 조회 성공",
-                "data": { 
+                "data": {
                     "type": "HAS_ATTENDANCE",
                     "location": "건국대학교 경영관",
                     "name": "2차 세미나",

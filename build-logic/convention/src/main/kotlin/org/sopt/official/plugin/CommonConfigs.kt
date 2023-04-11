@@ -6,8 +6,13 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import java.util.*
 
 internal fun Project.configureAndroidCommonPlugin() {
+    val properties = Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
+
     apply<AndroidKotlinPlugin>()
     apply<KotlinSerializationPlugin>()
     with(plugins) {
@@ -17,6 +22,10 @@ internal fun Project.configureAndroidCommonPlugin() {
     apply<AndroidHiltPlugin>()
 
     extensions.getByType<BaseExtension>().apply {
+        defaultConfig {
+            val devOperationUrl = properties["devOperationApi"] as? String ?: ""
+            buildConfigField("String", "SOPT_DEV_OPERATION_BASE_URL", devOperationUrl)
+        }
         buildFeatures.apply {
             dataBinding.enable = true
             viewBinding = true
