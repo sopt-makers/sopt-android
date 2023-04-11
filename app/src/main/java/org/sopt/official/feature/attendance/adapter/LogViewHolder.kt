@@ -1,10 +1,10 @@
 package org.sopt.official.feature.attendance.adapter
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import org.sopt.official.R
 import org.sopt.official.databinding.ItemAttendanceHistoryLogBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
@@ -22,20 +22,20 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
             textAttendanceState.text = log.attendanceState
             when (log.attendanceState) {
                 AttendanceStatus.ATTENDANCE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#A7F8BE"))
-                    textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#378F5C")))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_green)
+                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_green))
                 }
                 AttendanceStatus.TARDY.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFEB80"))
-                    textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#D09600")))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_yellow)
+                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_yellow))
                 }
                 AttendanceStatus.ABSENT.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#FFD3D3"))
-                    textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#E45656")))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_red)
+                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_red))
                 }
                 AttendanceStatus.PARTICIPATE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#CED1D2"))
-                    textAttendanceState.setTextColor(ColorStateList.valueOf(Color.parseColor("#606265")))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.gray_30)
+                    textAttendanceState.setTextColor(root.context.getColor(R.color.gray_100))
                 }
                 else -> {
                     throw IllegalArgumentException("Illegal attendanceState argument: ${log.attendanceState}")
