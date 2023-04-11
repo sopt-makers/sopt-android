@@ -45,6 +45,7 @@ jobs:
           echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
           echo apiKey=\"$API_KEY\" >> ./local.properties
           echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
+          echo devOperationKey=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
