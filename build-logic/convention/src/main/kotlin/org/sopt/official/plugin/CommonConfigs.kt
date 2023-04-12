@@ -24,7 +24,9 @@ internal fun Project.configureAndroidCommonPlugin() {
     extensions.getByType<BaseExtension>().apply {
         defaultConfig {
             val devOperationUrl = properties["devOperationApi"] as? String ?: ""
+            val operationUrl = properties["operationApi"] as? String ?: ""
             buildConfigField("String", "SOPT_DEV_OPERATION_BASE_URL", devOperationUrl)
+            buildConfigField("String", "SOPT_OPERATION_BASE_URL", operationUrl)
         }
         buildFeatures.apply {
             dataBinding.enable = true

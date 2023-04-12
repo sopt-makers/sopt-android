@@ -42,11 +42,13 @@ jobs:
           DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
+          SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
         run: |
           echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
           echo apiKey=\"$API_KEY\" >> ./local.properties
           echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
           echo devOperationApi=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
+          echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
