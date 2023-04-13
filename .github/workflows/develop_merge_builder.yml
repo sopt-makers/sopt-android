@@ -27,11 +27,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: set up JDK 11
+      - name: set up JDK 17
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: 11
+          java-version: 17
 
       - name: Change gradlew permissions
         run: chmod +x ./gradlew
