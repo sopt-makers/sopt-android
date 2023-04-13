@@ -8,7 +8,7 @@ import org.sopt.official.data.model.attendance.SoptEventResponse
 
 class MockAttendanceService : AttendanceService {
     override suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse> {
-        return NOT_EVENT_DAY
+        return EVENT_NO_ATTENDANCE
     }
 
     override suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse> {
@@ -107,14 +107,16 @@ class MockAttendanceService : AttendanceService {
             Json.decodeFromString(SEMINAR_EVENT_AFTER_END_JSON_TEXT)
         private const val EVENT_NO_ATTENDANCE_JSON_TEXT = """
             {
-            "success": true,
-            "message": "세미나 조회 성공",
-            "data": {
+                "success": true,
+                "message": "세미나 조회 성공",
+                "data": {
+                    "id": 1,
                     "type": "NO_ATTENDANCE",
                     "location": "건국대학교 경영관",
                     "name": "1차 행사",
                     "startDate": "2023-04-06T14:13:51.588149",
                     "endDate": "2023-04-06T18:13:51.588149",
+                    "message": "행사도 참여하고, 출석점수도 받고, 일석이조!",
                     "attendances": []
                 }
             }

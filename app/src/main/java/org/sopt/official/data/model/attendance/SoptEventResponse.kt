@@ -9,6 +9,8 @@ import org.sopt.official.domain.entity.attendance.SoptEvent
 
 @Serializable
 data class SoptEventResponse(
+    @SerialName("id")
+    val id: Int = 1,
     @SerialName("type")
     val type: String,
     @SerialName("location")
@@ -19,6 +21,8 @@ data class SoptEventResponse(
     val startAt: String,
     @SerialName("endDate")
     val endAt: String,
+    @SerialName("message")
+    val message: String = "",
     @SerialName("attendances")
     val attendances: List<AttendanceResponse>
 ) {
@@ -68,10 +72,12 @@ data class SoptEventResponse(
         }
 
         return SoptEvent(
+            id = this.id,
             eventType = EventType.valueOf(this.type),
             date = eventDateTime,
             location = this.location,
             eventName = this.eventName,
+            message = this.message,
             isAttendancePointAwardedEvent = type == "HAS_ATTENDANCE",
             attendances = this.attendances.mapIndexed { index, attendanceResponse -> attendanceResponse.toEntity(index) }
         )

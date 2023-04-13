@@ -10,12 +10,14 @@ import org.sopt.official.domain.entity.attendance.AttendanceHistory
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import org.sopt.official.feature.attendance.model.AttendanceState
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class AttendanceViewModel @Inject constructor(
     private val attendanceRepository: AttendanceRepository
 ) : ViewModel() {
+    private var eventId: Int = 0
     private var _soptEvent = MutableStateFlow<AttendanceState<SoptEvent>>(AttendanceState.Init)
     val soptEvent: StateFlow<AttendanceState<SoptEvent>> get() = _soptEvent
     private var _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
@@ -25,8 +27,13 @@ class AttendanceViewModel @Inject constructor(
         viewModelScope.launch {
             _soptEvent.value = AttendanceState.Loading
             attendanceRepository.fetchSoptEvent()
-                .onSuccess { _soptEvent.value = AttendanceState.Success(it) }
-                .onFailure { _soptEvent.value = AttendanceState.Failure(it) }
+                .onSuccess {
+                    _soptEvent.value = AttendanceState.Success(it)
+                    eventId = it.id
+                }.onFailure {
+                    Timber.e(it)
+                    _soptEvent.value = AttendanceState.Failure(it)
+                }
         }
     }
 
@@ -37,6 +44,7 @@ class AttendanceViewModel @Inject constructor(
                 .onSuccess {
                     _attendanceHistory.value = AttendanceState.Success(it)
                 }.onFailure {
+                    Timber.e(it)
                     _attendanceHistory.value = AttendanceState.Failure(it)
                 }
         }

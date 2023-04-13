@@ -7,11 +7,11 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +19,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import org.sopt.official.R
 import org.sopt.official.databinding.ActivityAttendanceBinding
 import org.sopt.official.domain.entity.attendance.*
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
@@ -30,12 +31,29 @@ class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
     private val attendanceViewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
+    private val menuProvider = (object : MenuProvider {
+        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+            menuInflater.inflate(R.menu.menu_attendance_overview, menu)
+        }
+
+        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+            return when (menuItem.itemId) {
+                R.id.menu_refresh -> {
+                    attendanceViewModel.fetchSoptEvent()
+                    attendanceViewModel.fetchAttendanceHistory()
+                    true
+                }
+                else -> false
+            }
+        }
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        addMenuProvider(menuProvider, this)
         initView()
         fetchData()
         observeData()
@@ -161,7 +179,8 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventDate.text = soptEvent.date
             layoutInfoEventLocation.isVisible = true
             textInfoEventLocation.text = soptEvent.location
-            textInfoEventPoint.isVisible = false
+            textInfoEventPoint.isVisible = (soptEvent.message != "")
+            textInfoEventPoint.text = soptEvent.message
             val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
             textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
             textInfoEventName.layoutParams = textInfoEventNameLayoutParams
@@ -180,7 +199,8 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventDate.text = soptEvent.date
             layoutInfoEventLocation.isVisible = true
             textInfoEventLocation.text = soptEvent.location
-            textInfoEventPoint.isVisible = true
+            textInfoEventPoint.isVisible = (soptEvent.message != "")
+            textInfoEventPoint.text = soptEvent.message
             val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
             textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
             textInfoEventName.layoutParams = textInfoEventNameLayoutParams
@@ -213,5 +233,6 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun updateAttendanceLog(log: List<AttendanceLog>) {
         attendanceAdapter.submitList(log)
+        binding.recyclerViewAttendanceHistory.scrollToPosition(0)
     }
 }
