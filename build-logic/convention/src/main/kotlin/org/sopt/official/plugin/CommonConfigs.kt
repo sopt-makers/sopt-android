@@ -40,6 +40,7 @@ internal fun Project.configureAndroidCommonPlugin() {
         buildFeatures.apply {
             dataBinding.enable = true
             viewBinding = true
+            buildConfig = true
         }
     }
 
