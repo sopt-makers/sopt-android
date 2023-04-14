@@ -8,4 +8,34 @@
     <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
+
+    <!--    메인홈    -->
+    <!--    비회원    -->
+    <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
+    <string name="main_large_block_official_page">SOPT\n공식홈페이지</string>
+    <string name="main_small_block_review">활동후기</string>
+    <string name="main_small_block_faq">FAQ</string>
+    <string name="main_small_block_youtube">YOUTUBE</string>
+    <string name="main_non_member">비회원</string>
+    <string name="main_content_header_description">SOPT 회원이 되 다양한 서비스를 즐겨보세요</string>
+    <!--    회원    -->
+    <string name="main_title_member">%1$d 님,\nSOPT의 열정이 되어주세요!</string>
+    <string name="main_subtitle_non_member">SOPT를 더 알고 싶다면, 둘러보세요</string>
+    <string name="main_subtitle_member">더욱 편리해진 SOPT를 이용해보세요!</string>
+    <string name="main_large_block_attendance_title">SOPT 출석</string>
+    <string name="main_large_block_attendance_description">출석 인증하기</string>
+    <string name="main_large_block_notice_title">SOPT 공지</string>
+    <string name="main_large_block_notice_description">전체공지 확인하기</string>
+    <string name="main_small_block_member">멤버</string>
+    <string name="main_small_block_project">프로젝트</string>
+    <string name="main_small_block_notice">전체 공지</string>
+    <string name="main_small_block_crew">크루</string>
+    <string name="main_small_block_official_page">공식홈페이지</string>
+    <string name="main_no_profile_member">비활동</string>
+    <string name="main_inactive_member">%1$d기 수료</string>
+    <string name="main_active_member">%1$기 활동 중</string>
+    <!--    공통    -->
+    <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
+    <string name="soptamp">SOPT AMP!</string>
+    <string name="new_product">NEW PRODUCT</string>
 </resources>
