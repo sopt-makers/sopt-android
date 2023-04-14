@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    tools:background="?colorSurface">
+
+    <TextView
+        android:id="@+id/text_user_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?colorOnSurfaceInverse"
+        android:textSize="14sp"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="32기 안드로이드파트 김솝트" />
+
+    <TextView
+        android:id="@+id/text_user_attendance_point"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        android:bufferType="spannable"
+        android:textAppearance="?textAppearanceBodyLarge"
+        android:textColor="?colorOnSurface"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toStartOf="@id/image_attendance_point_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_user_info"
+        tools:text="현재 출석점수는 1점 입니다!" />
+
+    <ImageView
+        android:id="@+id/image_attendance_point_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_attendance_point_info"
+        app:layout_constraintBottom_toBottomOf="@id/text_user_attendance_point"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/text_user_attendance_point" />
+</androidx.constraintlayout.widget.ConstraintLayout>

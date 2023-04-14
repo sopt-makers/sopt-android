@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    tools:background="?colorSurface">
+
+    <TextView
+        android:id="@+id/text_attendance_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_radius_4"
+        android:backgroundTint="@color/sopt_green"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:text="@string/title_attendance_count_normal"
+        android:textAppearance="?textAppearanceHeadlineMedium"
+        android:textColor="@color/on_sopt_green"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/text_attendance_event_name"
+        style="@style/TextAppearance.SOPT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?colorOnSurface"
+        android:textFontWeight="600"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/text_attendance_date"
+        app:layout_constraintStart_toEndOf="@id/text_attendance_state"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1차 세미나" />
+
+    <TextView
+        android:id="@+id/text_attendance_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.SOPT"
+        android:textColor="@color/gray_30"
+        android:textFontWeight="400"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="4월 2일" />
+</androidx.constraintlayout.widget.ConstraintLayout>
