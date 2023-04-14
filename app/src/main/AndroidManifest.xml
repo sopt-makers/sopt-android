@@ -16,7 +16,6 @@
         android:theme="@style/Theme.SOPT"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
         <meta-data
             android:name="io.sentry.dsn"
             android:value="${sentryDsn}" />
@@ -56,7 +55,6 @@
             android:theme="@style/Theme.SOPT">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -66,6 +64,9 @@
             android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".stamp.SoptampActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SOPT" />
+        <activity android:name=".feature.main.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
 
