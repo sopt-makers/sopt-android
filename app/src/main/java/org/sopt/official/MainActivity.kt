@@ -1,5 +1,6 @@
 package org.sopt.official
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,16 +9,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.feature.update.InAppUpdateManager
-import javax.inject.Inject
-import android.Manifest
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessaging
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.official.feature.attendance.AttendanceActivity
+import org.sopt.official.feature.update.InAppUpdateManager
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -68,9 +67,6 @@ class MainActivity : AppCompatActivity() {
         }
         lifecycle.addObserver(inAppUpdateManager)
         setContentView(R.layout.activity_main)
-
-        // Must erase below code before commit
-        startActivity(Intent(this, AttendanceActivity::class.java))
     }
 
     @Deprecated("Deprecated in Java")
