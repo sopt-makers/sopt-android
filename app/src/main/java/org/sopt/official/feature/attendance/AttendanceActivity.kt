@@ -53,7 +53,6 @@ class AttendanceActivity : AppCompatActivity() {
         binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        addMenuProvider(menuProvider, this)
         initView()
         fetchData()
         observeData()
@@ -81,6 +80,7 @@ class AttendanceActivity : AppCompatActivity() {
             setSupportActionBar(this)
             setNavigationOnClickListener { this@AttendanceActivity.finish() }
         }
+        addMenuProvider(menuProvider, this)
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
@@ -91,7 +91,7 @@ class AttendanceActivity : AppCompatActivity() {
             addItemDecoration(object : RecyclerView.ItemDecoration() {
                 override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
                     super.getItemOffsets(outRect, view, parent, state)
-                    when (val index = parent.getChildAdapterPosition(view)) {
+                    when (parent.getChildAdapterPosition(view)) {
                         0 -> {
                             outRect.set(24.dpToPx(), 32.dpToPx(), 24.dpToPx(), 12.dpToPx())
                         }
