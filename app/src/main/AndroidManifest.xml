@@ -58,7 +58,7 @@
         <activity
             android:name=".feature.attendance.AttendanceActivity"
             android:exported="false"
-            android:theme="@style/Theme.SOPT.Attendance" />
+            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".stamp.SoptampActivity"
             android:exported="false"

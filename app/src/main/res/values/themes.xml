@@ -35,9 +35,4 @@
         <item name="android:windowBackground">@color/black_80</item>
         <item name="android:statusBarColor">@color/black_80</item>
     </style>
-
-    <style name="Theme.SOPT.Attendance" type="Theme.SOPT">
-        <item name="android:windowBackground">@color/black_100</item>
-        <item name="android:statusBarColor">@color/black_100</item>
-    </style>
 </resources>
