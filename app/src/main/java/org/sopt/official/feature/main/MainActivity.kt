@@ -1,16 +1,33 @@
 package org.sopt.official.feature.main
 
+import android.content.Intent
+import android.net.Uri
+import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.launch
+import org.sopt.official.R
 import org.sopt.official.base.BaseAdapter
 import org.sopt.official.base.BaseViewHolder
 import org.sopt.official.databinding.ActivitySoptMainBinding
-import org.sopt.official.databinding.ItemMainContentBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
+import org.sopt.official.databinding.ItemMainSmallBlockListBinding
+import org.sopt.official.domain.entity.UserState
+import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.main.MainViewModel.SmallBlockItemHolder
-import org.sopt.official.feature.main.MainViewModel.ContentItemHolder
+import org.sopt.official.stamp.SoptampActivity
+import org.sopt.official.util.ui.setVisible
+import org.sopt.official.util.wrapper.getOrEmpty
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -21,8 +38,156 @@ class MainActivity : AppCompatActivity() {
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
 
+    /*
     private val contentAdapter: ContentAdapter?
         get() = binding.recyclerContent.adapter as? ContentAdapter
+
+     */
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivitySoptMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        initUserInfo()
+        initBlock()
+        initContent()
+    }
+
+    private fun initUserInfo() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.title.collect {
+                        binding.title.text = getString(it.first, it.second)
+                    }
+                }
+                launch {
+                    viewModel.generatedTagText.collect {
+                        binding.tagMemberState.text = getString(it.first, it.second)
+                    }
+                }
+                launch {
+                    viewModel.userState.collect {
+                        val state = it.getOrElse(UserState.UNAUTHENTICATED)
+                        binding.tagMemberState.isEnabled = state == UserState.ACTIVE
+                    }
+                }
+                launch {
+                    viewModel.profileImage.collect {
+                        val icon = it.getOrEmpty()
+                    }
+                }
+                launch {
+                    viewModel.generationList.collect {
+                        val generationList: List<Long> = it.getOrEmpty()
+
+                        binding.memberGeneration.generation1.setVisible(generationList.size >= 2)
+                        if (generationList.size >= 2) binding.memberGeneration.generation1.text = generationList[1].toString()
+                        binding.memberGeneration.generation2.setVisible(generationList.size >= 3)
+                        if (generationList.size >= 3) binding.memberGeneration.generation2.text = generationList[2].toString()
+                        binding.memberGeneration.generation3.setVisible(generationList.size >= 4)
+                        if (generationList.size >= 4) binding.memberGeneration.generation3.text = generationList[3].toString()
+                        binding.memberGeneration.generation4.setVisible(generationList.size >= 5)
+                        if (generationList.size >= 5) binding.memberGeneration.generation4.text = generationList[4].toString()
+                        binding.memberGeneration.generation5.setVisible(generationList.size >= 6)
+                        if (generationList.size >= 6) binding.memberGeneration.generation5.text = generationList[5].toString()
+                        binding.memberGeneration.generationAddition.setVisible(generationList.size >= 7)
+                        val additionalGeneration = (generationList.size - 5).toString()
+                        if (generationList.size >= 7) binding.memberGeneration.generationAddition.text =
+                            this@MainActivity.getString(R.string.main_additional_generation, additionalGeneration)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun initBlock() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.blockItem.collect {
+                        val items = it.get()
+                        if (items == null) {
+                            binding.largeBlock.root.setVisible(false)
+                            binding.smallBlock1.root.setVisible(false)
+                            binding.smallBlock2.root.setVisible(false)
+                        } else {
+                            setLargeBlock(items.first)
+                            setSmallBlock(binding.smallBlock1, items.second)
+                            setSmallBlock(binding.smallBlock2, items.third)
+                        }
+                    }
+                }
+                launch {
+                    viewModel.blockList.collect {
+                        smallBlockAdapter?.submitList(it)
+                    }
+                }
+
+            }
+        }
+    }
+
+    private fun initContent() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.userState.collect { userState ->
+                        val isClickable = userState.get()?.let {
+                            it != UserState.UNAUTHENTICATED
+                        } ?: false
+                        if (isClickable) {
+                            val intent = Intent(applicationContext, SoptampActivity::class.java)
+                            binding.contentSoptamp.root.setOnClickListener {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    this@MainActivity.startActivity(intent)
+                                    delay(UI_THROTTLE_TIME)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    private fun setLargeBlock(item: MainViewModel.LargeBlockType) {
+        binding.largeBlock.icon.background = this.getDrawable(item.icon)
+        binding.largeBlock.name.text = this.getText(item.title)
+        binding.largeBlock.description.setVisible(item.description != null)
+        item.description?.let { description ->
+            binding.largeBlock.description.text = this.getText(description)
+        }
+        val intent =
+            if (item.url != null) Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+            else Intent(applicationContext, AttendanceActivity::class.java)
+
+        binding.largeBlock.root.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                this@MainActivity.startActivity(intent)
+                delay(UI_THROTTLE_TIME)
+            }
+        }
+
+    }
+
+    private fun setSmallBlock(view: ItemMainSmallBinding, item: MainViewModel.SmallBlockType) {
+        view.icon.background = this.getDrawable(item.icon)
+        view.title.text = this.getText(item.title)
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+        view.root.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                this@MainActivity.startActivity(intent)
+                delay(UI_THROTTLE_TIME)
+            }
+        }
+    }
+
+    private fun getString(id: Int, args: String?): String {
+        return if (args.isNullOrEmpty()) this.getString(id) else this.getString(id, args)
+    }
 
     private inner class SmallBlockAdapter : BaseAdapter<SmallBlockItemHolder>() {
         override fun getItemViewType(position: Int): Int {
@@ -39,45 +204,54 @@ class MainActivity : AppCompatActivity() {
     }
 
     private inner class SmallBlockViewHolder(parent: ViewGroup) :
-        BaseViewHolder<SmallBlockItemHolder, SmallBlockItemHolder.SmallBlock, ItemMainSmallBinding>(
+        BaseViewHolder<SmallBlockItemHolder, SmallBlockItemHolder.SmallBlock, ItemMainSmallBlockListBinding>(
             parent,
-            ItemMainSmallBinding::inflate
+            ItemMainSmallBlockListBinding::inflate
         ) {
         override fun onBind(item: SmallBlockItemHolder.SmallBlock, position: Int) {
             super.onBind(item, position)
-            binding.icon.background = this@MainActivity.getDrawable(item.icon)
-            binding.title.text = item.name
+            setSmallBlock(binding.itemView, item.item)
         }
     }
 
-    private inner class ContentAdapter : BaseAdapter<ContentItemHolder>() {
-        override fun getItemViewType(position: Int): Int {
-            return when (getItem(position)) {
-                is ContentItemHolder.Content -> ContentViewType.CONTENT
-            }.ordinal
-        }
+/* TODO: 나중에 진짜 recyclerView 사용해서
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ContentItemHolder, *, *> {
-            return when (ContentViewType.values()[viewType]) {
-                ContentViewType.CONTENT -> ContentViewHolder(parent)
-            }
-        }
+private inner class ContentAdapter : BaseAdapter<ContentItemHolder>() {
+    override fun getItemViewType(position: Int): Int {
+        return when (getItem(position)) {
+            is ContentItemHolder.Content -> ContentViewType.CONTENT
+        }.ordinal
     }
 
-    private inner class ContentViewHolder(parent: ViewGroup) :
-        BaseViewHolder<ContentItemHolder, ContentItemHolder.Content, ItemMainContentBinding>(
-            parent,
-            ItemMainContentBinding::inflate
-        ) {
-        override fun onBind(item: ContentItemHolder.Content, position: Int) {
-            super.onBind(item, position)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ContentItemHolder, *, *> {
+        return when (ContentViewType.values()[viewType]) {
+            ContentViewType.CONTENT -> ContentViewHolder(parent)
         }
     }
+}
+
+private inner class ContentViewHolder(parent: ViewGroup) :
+    BaseViewHolder<ContentItemHolder, ContentItemHolder.Content, ItemMainContentBinding>(
+        parent,
+        ItemMainContentBinding::inflate
+    ) {
+    override fun onBind(item: ContentItemHolder.Content, position: Int) {
+        super.onBind(item, position)
+    }
+}
+*/
 
     private enum class SmallBlockViewType {
         SMALL_BLOCK
     }
-    private enum class ContentViewType {
-        CONTENT
+
+/*
+private enum class ContentViewType {
+    CONTENT
+}
+ */
+
+    companion object {
+        private const val UI_THROTTLE_TIME = 1000L
     }
 }
