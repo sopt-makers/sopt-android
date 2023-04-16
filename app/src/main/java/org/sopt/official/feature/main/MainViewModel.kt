@@ -1,13 +1,8 @@
 package org.sopt.official.feature.main
 
-import android.app.Application
-import android.content.Context
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.internal.Contexts.getApplication
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import org.sopt.official.R
@@ -17,6 +12,7 @@ import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.entity.main.MainViewUserInfo
 import org.sopt.official.domain.repository.main.MainViewRepository
 import org.sopt.official.feature.web.WebUrlConstant
+import org.sopt.official.util.computeMothUntilNow
 import org.sopt.official.util.coroutine.stateInLazily
 import org.sopt.official.util.wrapper.NullableWrapper
 import org.sopt.official.util.wrapper.asNullableWrapper
@@ -29,19 +25,20 @@ class MainViewModel @Inject constructor(
     private val mainViewRepository: MainViewRepository,
 ) : ViewModel() {
     private var mainViewResult = MutableStateFlow(NullableWrapper.none<MainViewResult>())
-    val title: StateFlow<Pair<Int, String?>>
+    val title: StateFlow<Triple<Int, String?, String?>>
         get() = mainViewResult
             .map { it.get()?.user ?: MainViewUserInfo() }
             .map {
                 val state = it.status
                 val userName = it.name.getOrEmpty()
+                val period = computeMothUntilNow(it.generationList.get()?.last()?.toInt() ?: 0)
                 when {
-                    userName.isNotEmpty() -> Pair(R.string.main_title_member, userName)
-                    state == UserState.INACTIVE -> Pair(R.string.main_title_inactive_member, null)
-                    else -> Pair(R.string.main_title_non_member, null)
+                    userName.isNotEmpty() -> Triple(R.string.main_title_member, userName, period.toString())
+                    state == UserState.INACTIVE -> Triple(R.string.main_title_inactive_member, null, null)
+                    else -> Triple(R.string.main_title_non_member, null, null)
                 }
             }
-            .stateInLazily(viewModelScope, Pair(R.string.main_title_non_member, null))
+            .stateInLazily(viewModelScope, Triple(R.string.main_title_non_member, null, null))
     val generatedTagText: StateFlow<Pair<Int, String?>>
         get() = mainViewResult
             .map { it.get()?.user ?: MainViewUserInfo() }
@@ -178,5 +175,10 @@ sealed class ContentItemHolder : BaseItemType {
 
         //others
         SOPT_OFFICIAL_YOUTUBE(R.string.main_small_block_youtube, WebUrlConstant.SOPT_OFFICIAL_YOUTUBE, R.drawable.ic_youtube),
+    }
+
+    companion object {
+        private const val EVEN_DATE = ""
+        private const val ODD_DATE = ""
     }
 }

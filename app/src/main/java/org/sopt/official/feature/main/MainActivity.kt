@@ -3,7 +3,6 @@ package org.sopt.official.feature.main
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.base.BaseAdapter
@@ -59,12 +57,12 @@ class MainActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.title.collect {
-                        binding.title.text = getString(it.first, it.second)
+                        binding.title.text = getStringExt(it.first, it.second, it.third)
                     }
                 }
                 launch {
                     viewModel.generatedTagText.collect {
-                        binding.tagMemberState.text = getString(it.first, it.second)
+                        binding.tagMemberState.text = getStringExt(it.first, it.second)
                     }
                 }
                 launch {
@@ -95,7 +93,7 @@ class MainActivity : AppCompatActivity() {
                         binding.memberGeneration.generationAddition.setVisible(generationList.size >= 7)
                         val additionalGeneration = (generationList.size - 5).toString()
                         if (generationList.size >= 7) binding.memberGeneration.generationAddition.text =
-                            this@MainActivity.getString(R.string.main_additional_generation, additionalGeneration)
+                            this@MainActivity.getStringExt(R.string.main_additional_generation, additionalGeneration)
                     }
                 }
             }
@@ -185,8 +183,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getString(id: Int, args: String?): String {
-        return if (args.isNullOrEmpty()) this.getString(id) else this.getString(id, args)
+    private fun getStringExt(id: Int, args1: String?, args2: String?): String {
+        return when {
+            args2 != null -> this.getString(id, args1, args2)
+            args1 != null -> this.getString(id, args1)
+            else -> this.getString(id)
+        }
     }
 
     private inner class SmallBlockAdapter : BaseAdapter<SmallBlockItemHolder>() {
