@@ -14,6 +14,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.App
 import org.sopt.official.BuildConfig
 import org.sopt.official.di.annotation.AppRetrofit
+import org.sopt.official.di.annotation.Auth
 import org.sopt.official.di.annotation.Logging
 import org.sopt.official.di.annotation.OperationRetrofit
 import retrofit2.Converter
@@ -33,9 +34,11 @@ object NetModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        @Logging loggingInterceptor: Interceptor
+        @Logging loggingInterceptor: Interceptor,
+        @Auth authInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
+        .addInterceptor(authInterceptor)
         .addNetworkInterceptor(FlipperOkhttpInterceptor(App.networkFlipperPlugin))
         .build()
 
