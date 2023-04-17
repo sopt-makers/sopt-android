@@ -61,6 +61,4 @@
             app:layout_constraintStart_toStartOf="@+id/btn_sopt_not_member"
             app:layout_constraintTop_toBottomOf="@+id/btn_sopt_not_member" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
