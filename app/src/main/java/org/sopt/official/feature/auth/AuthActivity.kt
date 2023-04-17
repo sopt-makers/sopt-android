@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
-import org.sopt.official.MainActivity
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener

@@ -44,11 +44,6 @@
                 android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".feature.auth.AuthActivity"
             android:exported="true"
@@ -69,7 +64,6 @@
         <activity android:name=".feature.main.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">

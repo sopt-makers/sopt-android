@@ -1,5 +1,6 @@
 package org.sopt.official.feature.main
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -183,7 +184,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getStringExt(id: Int, args1: String?, args2: String?): String {
+    private fun getStringExt(id: Int, args1: String?, args2: String? = null): String {
         return when {
             args2 != null -> this.getString(id, args1, args2)
             args1 != null -> this.getString(id, args1)
@@ -216,44 +217,49 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-/* TODO: 나중에 진짜 recyclerView 사용해서
+    /* TODO: 나중에 진짜 recyclerView 사용해서
 
-private inner class ContentAdapter : BaseAdapter<ContentItemHolder>() {
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is ContentItemHolder.Content -> ContentViewType.CONTENT
-        }.ordinal
-    }
+    private inner class ContentAdapter : BaseAdapter<ContentItemHolder>() {
+        override fun getItemViewType(position: Int): Int {
+            return when (getItem(position)) {
+                is ContentItemHolder.Content -> ContentViewType.CONTENT
+            }.ordinal
+        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ContentItemHolder, *, *> {
-        return when (ContentViewType.values()[viewType]) {
-            ContentViewType.CONTENT -> ContentViewHolder(parent)
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<ContentItemHolder, *, *> {
+            return when (ContentViewType.values()[viewType]) {
+                ContentViewType.CONTENT -> ContentViewHolder(parent)
+            }
         }
     }
-}
 
-private inner class ContentViewHolder(parent: ViewGroup) :
-    BaseViewHolder<ContentItemHolder, ContentItemHolder.Content, ItemMainContentBinding>(
-        parent,
-        ItemMainContentBinding::inflate
-    ) {
-    override fun onBind(item: ContentItemHolder.Content, position: Int) {
-        super.onBind(item, position)
+    private inner class ContentViewHolder(parent: ViewGroup) :
+        BaseViewHolder<ContentItemHolder, ContentItemHolder.Content, ItemMainContentBinding>(
+            parent,
+            ItemMainContentBinding::inflate
+        ) {
+        override fun onBind(item: ContentItemHolder.Content, position: Int) {
+            super.onBind(item, position)
+        }
     }
-}
-*/
+    */
 
     private enum class SmallBlockViewType {
         SMALL_BLOCK
     }
 
-/*
-private enum class ContentViewType {
-    CONTENT
-}
- */
+    /*
+    private enum class ContentViewType {
+        CONTENT
+    }
+     */
 
     companion object {
         private const val UI_THROTTLE_TIME = 1000L
+
+        @JvmStatic
+        fun getIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
     }
 }
