@@ -21,6 +21,7 @@ import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
+import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.toEntity
 import org.sopt.official.util.viewBinding
 
@@ -74,7 +75,7 @@ class AuthActivity : AppCompatActivity() {
 
     private fun initUi() {
         binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.btnSoptLogin.setOnClickListener {
+        binding.btnSoptLogin.setOnSingleClickListener {
             PlaygroundAuth.authorizeWithWebTab(this, isDebug = BuildConfig.DEBUG) {
                 it.onSuccess { token ->
                     lifecycleScope.launch {
