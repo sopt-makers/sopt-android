@@ -2,6 +2,7 @@ package org.sopt.official.data.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.entity.auth.Auth
 import org.sopt.official.domain.entity.auth.Token
 import org.sopt.official.domain.entity.auth.UserStatus
 
@@ -12,7 +13,7 @@ data class AuthResponse(
     @SerialName("playgroundToken") val playgroundToken: String,
     @SerialName("status") val status: String
 ) {
-    fun toEntity() = Pair(
+    fun toEntity() = Auth(
         Token(
             accessToken = accessToken,
             refreshToken = refreshToken,
