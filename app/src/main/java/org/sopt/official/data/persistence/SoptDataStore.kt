@@ -6,6 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig
+import org.sopt.official.domain.entity.auth.UserStatus
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -37,10 +38,15 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit { putString(PLAYGROUND_TOKEN, value) }
         get() = store.getString(PLAYGROUND_TOKEN, "") ?: ""
 
+    var userStatus: String
+        set(value) = store.edit { putString(USER_STATUS, value) }
+        get() = store.getString(USER_STATUS, UserStatus.UNAUTHENTICATED.value) ?: UserStatus.UNAUTHENTICATED.value
+
     companion object {
         const val DEBUG_FILE_NAME = "sopt_debug"
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"
         private const val PLAYGROUND_TOKEN = "pg_token"
+        private const val USER_STATUS = "user_status"
     }
 }
