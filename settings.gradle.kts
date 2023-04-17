@@ -12,8 +12,11 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        maven { setUrl("https://jitpack.io") }
     }
 }
 rootProject.name = "SOPT"
-include(":app")
-include(":feature:soptamp")
+include(
+    ":app",
+    ":feature:soptamp"
+)

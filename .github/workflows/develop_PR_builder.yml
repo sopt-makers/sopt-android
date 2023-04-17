@@ -43,18 +43,28 @@ jobs:
           SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
           SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
           SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
+          DEV_API: ${{ secrets.SENTRY_DSN }}
+          NEW_API: ${{ secrets.SENTRY_DSN }}
+          KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+          KEY_PASSWORD: ${{ secrets.SENTRY_DSN }}
+          STORE_PASSWORD: ${{ secrets.SENTRY_DSN }}
         run: |
           echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
           echo apiKey=\"$API_KEY\" >> ./local.properties
           echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
           echo devOperationApi=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
           echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
+          echo devApi=\"$DEV_API\" >> ./local.properties
+          echo newApi=\"$NEW_API\" >> ./local.properties
+          echo keyAlias=\"KEY_ALIAS\" >> ./local.properties
+          echo keyPassword=\"KEY_PASSWORD\" >> ./local.properties
+          echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
-#      - name: Lint Check
-#        run: ./gradlew ktlintCheck --exclude '**/*.kts' src
+      #      - name: Lint Check
+      #        run: ./gradlew ktlintCheck --exclude '**/*.kts' src
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace

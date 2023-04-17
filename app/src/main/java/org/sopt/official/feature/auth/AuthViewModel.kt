@@ -1,55 +1,32 @@
 package org.sopt.official.feature.auth
 
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import org.sopt.official.domain.usecase.AuthenticateEmailUseCase
-import org.sopt.official.feature.auth.model.EmailAuthenticationState
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import org.sopt.official.domain.entity.auth.Auth
+import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
 import javax.inject.Inject
 
+sealed interface AuthUiEvent {
+    object Success : AuthUiEvent
+    data class Failure(val message: String) : AuthUiEvent
+}
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authEmailUseCase: AuthenticateEmailUseCase
+    private val loginUseCase: LoginUseCase
 ) : ViewModel() {
-    var email by mutableStateOf("")
-        private set
-
-    val isEmailInvalid by derivedStateOf {
-        if (email.isNotEmpty()) {
-            EMAIL_REGEX.matches(email).not()
-        } else {
-            false
-        }
+    private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
+    val uiEvent = _uiEvent.asSharedFlow()
+    suspend fun onLogin(auth: Auth) {
+        loginUseCase(auth)
+        _uiEvent.emit(AuthUiEvent.Success)
     }
 
-    var emailAuthenticationState by mutableStateOf(EmailAuthenticationState.NONE)
-        private set
-
-    fun onChangeEmail(text: String) {
-        email = text
-    }
-
-    fun onPressAuthenticate() {
-        viewModelScope.launch {
-            emailAuthenticationState = EmailAuthenticationState.REQUEST
-            authEmailUseCase(email, "")
-                .fold({
-                    emailAuthenticationState = EmailAuthenticationState.SUCCESS
-                }, {
-                    emailAuthenticationState = EmailAuthenticationState.FAIL
-                    Timber.e(it)
-                })
-        }
-    }
-
-    companion object {
-        private const val EMAIL_REGEX_PATTERN = "^[A-Za-z0-9+_.-]+@(.+)\$"
-        private val EMAIL_REGEX = EMAIL_REGEX_PATTERN.toRegex()
+    suspend fun onFailure(throwable: Throwable) {
+        Timber.e(throwable)
+        _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
     }
 }

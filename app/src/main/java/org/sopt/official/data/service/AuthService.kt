@@ -1,10 +1,20 @@
 package org.sopt.official.data.service
 
-import org.sopt.official.data.model.RequestAuthEmail
-import org.sopt.official.data.model.ResponseAuthEmail
+import org.sopt.official.data.model.request.AuthRequest
+import org.sopt.official.data.model.request.RefreshRequest
+import org.sopt.official.data.model.response.AuthResponse
+import retrofit2.http.Body
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface AuthService {
-    @POST
-    suspend fun authenticateEmail(param: RequestAuthEmail): ResponseAuthEmail
+    @POST("auth/playground")
+    suspend fun authenticate(
+        @Body body: AuthRequest
+    ): AuthResponse
+
+    @PATCH("auth/refresh")
+    suspend fun refresh(
+        @Body body: RefreshRequest
+    ): AuthResponse
 }
