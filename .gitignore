@@ -8,6 +8,8 @@ build/
 
 # Local configuration file (sdk path, etc)
 local.properties
+keystore
+sentry.properties
 
 # Log/OS Files
 *.log

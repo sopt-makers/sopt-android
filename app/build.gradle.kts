@@ -17,9 +17,20 @@ android {
     namespace = "org.sopt.official"
 
     defaultConfig {
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.appVersion.get()
         applicationId = "org.sopt.official"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = properties.getProperty("keyAlias")
+            keyPassword = properties.getProperty("keyPassword")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/releaseKey.jks")
+            storePassword = "soptandroid"
+        }
     }
 
     buildTypes {
@@ -30,6 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     applicationVariants.all {
