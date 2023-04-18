@@ -3,6 +3,7 @@ package org.sopt.official.feature.main
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.viewModels
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,11 +24,14 @@ import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.databinding.ItemMainSmallBlockListBinding
 import org.sopt.official.domain.entity.UserState
+import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.main.MainViewModel.SmallBlockItemHolder
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.ui.setVisible
+import org.sopt.official.util.wrapper.asNullableWrapper
 import org.sopt.official.util.wrapper.getOrEmpty
+import java.io.Serializable
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -158,7 +163,7 @@ class MainActivity : AppCompatActivity() {
                             it != UserState.UNAUTHENTICATED
                         } ?: false
                         if (isClickable) {
-                            val intent = Intent(applicationContext, SoptampActivity::class.java)
+                            val intent = Intent(this@MainActivity, SoptampActivity::class.java)
                             binding.contentSoptamp.root.setOnClickListener {
                                 CoroutineScope(Dispatchers.Main).launch {
                                     this@MainActivity.startActivity(intent)
@@ -181,8 +186,8 @@ class MainActivity : AppCompatActivity() {
             binding.largeBlock.description.text = this.getText(description)
         }
         val intent =
-            if (item.url != null) Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-            else Intent(applicationContext, AttendanceActivity::class.java)
+            if (item.url == null) Intent(this@MainActivity, AttendanceActivity::class.java)
+            else Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
 
         binding.largeBlock.root.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
@@ -196,16 +201,16 @@ class MainActivity : AppCompatActivity() {
     private fun setSmallBlock(view: ItemMainSmallBinding, item: MainViewModel.SmallBlockType) {
         view.icon.background = this.getDrawable(item.icon)
         view.title.text = this.getText(item.title)
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
         view.root.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 this@MainActivity.startActivity(intent)
                 delay(UI_THROTTLE_TIME)
             }
         }
     }
 
-    private fun getStringExt(id: Int, args1: String?, args2: String? = null): String {
+    private fun getStringExt(id: Int, args1: String? = null, args2: String? = null): String {
         return when {
             args2 != null -> this.getString(id, args1, args2)
             args1 != null -> this.getString(id, args1)
