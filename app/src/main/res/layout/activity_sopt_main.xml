@@ -21,12 +21,12 @@
         android:id="@+id/background_mypage"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/oval"
+        android:backgroundTint="@color/black_60"
         app:layout_constraintBottom_toBottomOf="@id/mypage"
         app:layout_constraintEnd_toEndOf="@id/mypage"
         app:layout_constraintStart_toStartOf="@id/mypage"
-        app:layout_constraintTop_toTopOf="@id/mypage"
-        android:background="@drawable/oval"
-        android:backgroundTint="@color/black_60"/>
+        app:layout_constraintTop_toTopOf="@id/mypage" />
 
     <ImageView
         android:id="@+id/mypage"
@@ -42,7 +42,7 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         app:layout_constraintTop_toBottomOf="@id/logo">
 
@@ -86,13 +86,13 @@
 
             <include
                 android:id="@+id/member_generation"
+                layout="@layout/item_main_member_generation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                layout="@layout/item_main_member_generation"
-                app:layout_constraintTop_toTopOf="@id/tag_member_state"
                 app:layout_constraintBottom_toBottomOf="@id/tag_member_state"
-                app:layout_constraintStart_toEndOf="@id/tag_member_state"/>
+                app:layout_constraintStart_toEndOf="@id/tag_member_state"
+                app:layout_constraintTop_toTopOf="@id/tag_member_state" />
 
             <TextView
                 android:id="@+id/subtitle"
@@ -177,15 +177,37 @@
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="content_member_header, content_non_member_header" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+            <include
+                android:id="@+id/content_soptamp"
+                layout="@layout/item_main_content"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="9dp"
+                app:layout_constraintEnd_toStartOf="@id/content_dummy"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />
+
+            <View
+                android:id="@+id/content_dummy"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/content_soptamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/content_soptamp"
+                app:layout_constraintTop_toTopOf="@id/content_soptamp" />
+
+            <!--            TODO: 위의 뷰 추후에 아래 recyclerView 로 대체 필요-->
+
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/recycler_content"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:layout_marginEnd="20dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

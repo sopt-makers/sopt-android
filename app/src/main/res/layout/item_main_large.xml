@@ -29,7 +29,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_notice_title" />
+        tools:text="@string/main_large_block_attendance_title" />
 
     <TextView
         android:id="@+id/description"
@@ -40,5 +40,5 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_notice_description" />
+        tools:text="@string/main_large_block_attendance_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>
