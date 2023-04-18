@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".feature.main.MainActivity">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="20dp"
+        android:src="@drawable/img_logo"
+        app:layout_constraintBottom_toBottomOf="@id/mypage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/mypage" />
+
+    <View
+        android:id="@+id/background_mypage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/oval"
+        android:backgroundTint="@color/black_60"
+        app:layout_constraintBottom_toBottomOf="@id/mypage"
+        app:layout_constraintEnd_toEndOf="@id/mypage"
+        app:layout_constraintStart_toStartOf="@id/mypage"
+        app:layout_constraintTop_toTopOf="@id/mypage" />
+
+    <ImageView
+        android:id="@+id/mypage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/ic_mypage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/logo">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/title"
+                style="@style/TextAppearance.SOPT.DisplayMedium"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white_100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="손혜정 님,\nSOPT의 열정이 되어주세요!" />
+
+            <TextView
+                android:id="@+id/tag_member_state"
+                style="@style/TextAppearance.SOPT.CaptionLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rectangle_radius_15"
+                android:backgroundTint="@color/selector_member_tag_state"
+                android:gravity="center"
+                android:minWidth="82dp"
+                android:paddingStart="6dp"
+                android:paddingTop="4dp"
+                android:paddingEnd="6dp"
+                android:paddingBottom="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                tools:text="@string/main_non_member" />
+
+            <include
+                android:id="@+id/member_generation"
+                layout="@layout/item_main_member_generation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@id/tag_member_state"
+                app:layout_constraintStart_toEndOf="@id/tag_member_state"
+                app:layout_constraintTop_toTopOf="@id/tag_member_state" />
+
+            <TextView
+                android:id="@+id/subtitle"
+                style="@style/TextAppearance.SOPT.HeadLineLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/white_100"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tag_member_state"
+                tools:text="@string/main_subtitle_member" />
+
+            <include
+                android:id="@+id/large_block"
+                layout="@layout/item_main_large"
+                android:layout_width="0dp"
+                android:layout_height="192dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="12dp"
+                app:layout_constraintEnd_toStartOf="@id/small_block_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/subtitle" />
+
+            <include
+                android:id="@+id/small_block_1"
+                layout="@layout/item_main_small"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toTopOf="@id/small_block_2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/large_block"
+                app:layout_constraintTop_toTopOf="@id/large_block" />
+
+            <include
+                android:id="@+id/small_block_2"
+                layout="@layout/item_main_small"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/large_block"
+                app:layout_constraintEnd_toEndOf="@id/small_block_1"
+                app:layout_constraintStart_toStartOf="@id/small_block_1"
+                app:layout_constraintTop_toBottomOf="@id/small_block_1" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/small_block_list"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/large_block" />
+
+            <include
+                android:id="@+id/content_member_header"
+                layout="@layout/item_main_content_member_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/small_block_list" />
+
+            <include
+                android:id="@+id/content_non_member_header"
+                layout="@layout/item_main_content_member_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/small_block_list" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/content_header_barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="content_member_header, content_non_member_header" />
+
+            <include
+                android:id="@+id/content_soptamp"
+                layout="@layout/item_main_content"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="27dp"
+                android:layout_marginEnd="9dp"
+                app:layout_constraintEnd_toStartOf="@id/content_dummy"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />
+
+            <View
+                android:id="@+id/content_dummy"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/content_soptamp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/content_soptamp"
+                app:layout_constraintTop_toTopOf="@id/content_soptamp" />
+
+            <!--            TODO: 위의 뷰 추후에 아래 recyclerView 로 대체 필요-->
+
+            <!--            <androidx.recyclerview.widget.RecyclerView-->
+            <!--                android:id="@+id/recycler_content"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="match_parent"-->
+            <!--                android:layout_marginTop="24dp"-->
+            <!--                android:layout_marginEnd="20dp"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

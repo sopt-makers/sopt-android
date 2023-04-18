@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
-import org.sopt.official.MainActivity
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
@@ -41,14 +41,17 @@ class AuthActivity : AppCompatActivity() {
     private fun collectUiEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
-            .onEach {
-                when (it) {
+            .onEach {event ->
+                when (event) {
                     is AuthUiEvent.Success -> {
-                        startActivity(MainActivity.getIntent(this))
+                        val args = MainActivity.StartArgs(event.userStatus)
+                        intent = MainActivity.getIntent(this)
+                            .putExtra("args", args)
+                        startActivity(intent)
                     }
 
                     is AuthUiEvent.Failure -> {
-                        Snackbar.make(binding.root, it.message, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }.launchIn(lifecycleScope)

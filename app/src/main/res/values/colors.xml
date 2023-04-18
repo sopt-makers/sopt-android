@@ -36,4 +36,14 @@
     <!-- YellowScale -->
     <color name="sopt_yellow">#FFEB80</color>
     <color name="on_sopt_yellow">#D09600</color>
+    <!-- BlackTransParentScale -->
+    <color name="black_40_70">#B33C3D40</color>
+    <color name="black_40_50">#803C3D40</color>
+    <color name="black_40_30">#4D3C3D40</color>
+    <color name="black_40_20">#333C3D40</color>
+    <!-- WhiteTransParentScale -->
+    <color name="white_100_70">#B3FFFFFF</color>
+    <color name="white_100_50">#80FFFFFF</color>
+    <color name="white_100_30">#4DFFFFFF</color>
+    <color name="white_100_20">#33FFFFFF</color>
 </resources>
