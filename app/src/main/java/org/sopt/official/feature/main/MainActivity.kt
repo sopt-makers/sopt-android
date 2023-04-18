@@ -95,11 +95,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 launch {
-                    viewModel.profileImage.collect {
-                        val icon = it.getOrEmpty()
-                    }
-                }
-                launch {
                     viewModel.generationList.collect {
                         val generationList: List<Long> = it.getOrEmpty()
 
