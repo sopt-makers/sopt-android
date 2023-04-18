@@ -118,16 +118,15 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
-                    viewModel.blockItem.collect {
-                        val items = it.get()
-                        if (items == null) {
-                            binding.largeBlock.root.setVisible(false)
-                            binding.smallBlock1.root.setVisible(false)
-                            binding.smallBlock2.root.setVisible(false)
-                        } else {
-                            setLargeBlock(items.first)
-                            setSmallBlock(binding.smallBlock1, items.second)
-                            setSmallBlock(binding.smallBlock2, items.third)
+                    viewModel.blockItem.collect { item ->
+                        val blockItem = item.get()
+                        binding.largeBlock.root.setVisible(blockItem != null)
+                        binding.smallBlock1.root.setVisible(blockItem != null)
+                        binding.smallBlock2.root.setVisible(blockItem != null)
+                        blockItem?.let {
+                            setLargeBlock(it.first)
+                            setSmallBlock(binding.smallBlock1, it.second)
+                            setSmallBlock(binding.smallBlock2, it.third)
                         }
                     }
                 }
@@ -136,7 +135,6 @@ class MainActivity : AppCompatActivity() {
                         smallBlockAdapter?.submitList(it)
                     }
                 }
-
             }
         }
     }
