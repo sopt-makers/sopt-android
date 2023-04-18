@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.*
 import org.sopt.official.R
 import org.sopt.official.base.BaseItemType
 import org.sopt.official.domain.entity.UserState
+import org.sopt.official.domain.entity.auth.UserStatus
+import org.sopt.official.domain.entity.main.MainViewOperationInfo
 import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.entity.main.MainViewUserInfo
 import org.sopt.official.domain.repository.main.MainViewRepository
@@ -17,6 +19,7 @@ import org.sopt.official.util.coroutine.stateInLazily
 import org.sopt.official.util.wrapper.NullableWrapper
 import org.sopt.official.util.wrapper.asNullableWrapper
 import org.sopt.official.util.wrapper.getOrEmpty
+import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,6 +28,7 @@ class MainViewModel @Inject constructor(
     private val mainViewRepository: MainViewRepository,
 ) : ViewModel() {
     private var mainViewResult = MutableStateFlow(NullableWrapper.none<MainViewResult>())
+    val loginStatus = MutableStateFlow(NullableWrapper.none<UserStatus>())
     val title: StateFlow<Triple<Int, String?, String?>>
         get() = mainViewResult
             .map { it.get()?.user ?: MainViewUserInfo() }
@@ -78,7 +82,7 @@ class MainViewModel @Inject constructor(
     val blockItem: StateFlow<NullableWrapper<Triple<LargeBlockType, SmallBlockType, SmallBlockType>>>
         get() = mainViewResult
             .map {
-                val userState = it.get()?.user?.status ?: UserState.UNAUTHENTICATED
+                val userState = it.get()?.user?.status
                 when (userState) {
                     UserState.ACTIVE -> Triple(
                         LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
@@ -90,7 +94,7 @@ class MainViewModel @Inject constructor(
                         SmallBlockType.PLAYGROUNG_MEMBER_URL,
                         SmallBlockType.PLAYGROUNG_PROJECT_URL
                     )
-                    UserState.UNAUTHENTICATED -> Triple(
+                    else -> Triple(
                         LargeBlockType.SOPT_FAQ_URL,
                         SmallBlockType.PLAYGROUNG_MEMBER_URL,
                         SmallBlockType.PLAYGROUNG_PROJECT_URL
@@ -101,11 +105,11 @@ class MainViewModel @Inject constructor(
     val blockList: StateFlow<List<SmallBlockItemHolder>>
         get() = mainViewResult
             .map {
-                val userState = it.get()?.user?.status ?: UserState.UNAUTHENTICATED
+                val userState = it.get()?.user?.status
                 when (userState) {
                     UserState.ACTIVE -> listOf(SmallBlockType.SOPT_FAQ_URL, SmallBlockType.SOPT_OFFICIAL_YOUTUBE)
                     UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_URL, SmallBlockType.PLAYGROUNG_CREW_URL)
-                    UserState.UNAUTHENTICATED -> listOf(SmallBlockType.PLAYGROUNG_CREW_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_URL)
+                    else -> listOf(SmallBlockType.PLAYGROUNG_CREW_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_URL)
                 }
             }
             .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
@@ -117,10 +121,31 @@ class MainViewModel @Inject constructor(
 
     fun getMainView() {
         viewModelScope.launch {
-            mainViewRepository.getMainView()
-                .onSuccess {
-                    mainViewResult.value = it.asNullableWrapper()
-                }.onFailure(Timber::e)
+            launch {
+                loginStatus.collect {
+                    if (it.getOrElse(UserStatus.UNAUTHENTICATED) == UserStatus.UNAUTHENTICATED) {
+                        mainViewRepository.getMainView()
+                            .onSuccess {
+                                mainViewResult.value = it.asNullableWrapper()
+                            }.onFailure {
+                                if (it is HttpException) {
+                                    if (it.code() == 400) {
+                                        mainViewResult.value = MainViewResult(
+                                            MainViewUserInfo(status = UserState.INACTIVE),
+                                            MainViewOperationInfo()
+                                        ).asNullableWrapper()
+                                    }
+                                }
+                                Timber.e(it)
+                            }
+                    } else {
+                        mainViewResult.value = MainViewResult(
+                            MainViewUserInfo(),
+                            MainViewOperationInfo()
+                        ).asNullableWrapper()
+                    }
+                }
+            }
         }
     }
 
