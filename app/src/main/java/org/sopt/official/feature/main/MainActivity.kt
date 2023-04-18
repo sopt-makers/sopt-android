@@ -75,6 +75,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 launch {
+                    viewModel.userState.collect {
+                        val userState = it.get() ?: UserState.UNAUTHENTICATED
+                        binding.subtitle.text = getStringExt(
+                            if (userState == UserState.UNAUTHENTICATED) R.string.main_subtitle_non_member
+                            else R.string.main_subtitle_member
+                        )
+                    }
+                }
+                launch {
                     viewModel.generatedTagText.collect {
                         binding.tagMemberState.text = getStringExt(it.first, it.second)
                     }
