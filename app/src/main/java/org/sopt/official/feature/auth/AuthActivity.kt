@@ -41,14 +41,17 @@ class AuthActivity : AppCompatActivity() {
     private fun collectUiEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
-            .onEach {
-                when (it) {
+            .onEach {event ->
+                when (event) {
                     is AuthUiEvent.Success -> {
-                        startActivity(MainActivity.getIntent(this))
+                        val args = MainActivity.StartArgs(event.userStatus)
+                        intent = MainActivity.getIntent(this)
+                            .putExtra("args", args)
+                        startActivity(intent)
                     }
 
                     is AuthUiEvent.Failure -> {
-                        Snackbar.make(binding.root, it.message, Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
                     }
                 }
             }.launchIn(lifecycleScope)

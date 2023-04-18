@@ -48,9 +48,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivitySoptMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        initStartArgs()
+
         initUserInfo()
         initBlock()
         initContent()
+    }
+
+    private fun initStartArgs() {
+        val startArgs = intent?.let {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                it.getSerializableExtra("args", StartArgs::class.java)
+            } else {
+                it.getSerializableExtra("args") as? StartArgs
+            }
+        }
+        viewModel.loginStatus.value = (startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED).asNullableWrapper()
     }
 
     private fun initUserInfo() {
@@ -253,6 +266,10 @@ class MainActivity : AppCompatActivity() {
         CONTENT
     }
      */
+
+    data class StartArgs(
+        val userStatus: UserStatus
+    ) : Serializable
 
     companion object {
         private const val UI_THROTTLE_TIME = 1000L
