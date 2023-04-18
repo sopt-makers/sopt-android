@@ -6,9 +6,9 @@ import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
-private val DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.mm.dd")
+private val DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd")
 fun getGeneration(generation: Int): LocalDate =
-    LocalDateTime.parse(
+    LocalDate.parse(
         when (generation) {
             32 -> "2023.03.01"
             31 -> "2022.09.01"
@@ -25,7 +25,7 @@ fun getGeneration(generation: Int): LocalDate =
             else -> "2017.03.01"
         },
         DATE_FORMAT
-    ).toLocalDate()
+    )
 
 fun computeMothUntilNow(generation: Int): Int {
     val currentTime = LocalDateTime.now().toLocalDate()
