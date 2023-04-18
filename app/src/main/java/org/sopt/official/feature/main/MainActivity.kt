@@ -119,6 +119,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initBlock() {
+        binding.smallBlockList.apply {
+            adapter = SmallBlockAdapter()
+            layoutManager = LinearLayoutManager(this@MainActivity).apply {
+                orientation = LinearLayoutManager.HORIZONTAL
+            }
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
