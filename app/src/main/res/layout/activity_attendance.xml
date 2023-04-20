@@ -116,6 +116,139 @@
                 app:layout_constraintTop_toBottomOf="@id/layout_info_event_location"
                 tools:text="오늘은 데모데이 날이에요" />
 
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/layout_attendance_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/text_info_event_name">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_80"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress1_empty"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/oval_border_gray40"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress1_check"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="12dp"
+                    android:background="@drawable/oval_fill_white_border_purple40"
+                    android:elevation="4dp"
+                    android:src="@drawable/ic_attendance_check"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_attendance_progress1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:text="@string/attendance_progress_first"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:textColor="@color/attendance_progress_text"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress1_empty" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress2_empty"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/oval_border_gray40"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress2_check"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:background="@drawable/oval_fill_white_border_purple40"
+                    android:src="@drawable/ic_attendance_check"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_attendance_progress2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:text="@string/attendance_progress_second"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:textColor="@color/attendance_progress_text"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress2_empty" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress3_empty"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/oval_border_gray40"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress3_tardy"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/oval_fill_purpledim100_border_purple40"
+                    android:src="@drawable/ic_point"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress3_attendance"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/oval_fill_purpledim100_border_purple40"
+                    android:src="@drawable/ic_attendance_check"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_attendance_progress3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:text="@string/attendance_progress_before"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:textColor="@color/attendance_progress_text"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <TextView
                 android:id="@+id/text_info_event_point"
                 android:layout_width="match_parent"
@@ -140,8 +273,29 @@
             android:backgroundTint="?colorSurface"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btn_attendance"
             app:layout_constraintTop_toBottomOf="@id/layout_info_event"
             app:layout_constraintVertical_bias="0" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_attendance"
+            style="@style/TextAppearance.SOPT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rectangle_radius_10"
+            android:backgroundTint="@color/attendance_button"
+            android:enabled="false"
+            android:paddingVertical="20dp"
+            android:textColor="@color/attendance_button_text"
+            android:textFontWeight="700"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="1차 출석 인증하기" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
