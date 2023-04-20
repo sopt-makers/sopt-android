@@ -3,8 +3,10 @@ package org.sopt.official.feature.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.base.BaseItemType
 import org.sopt.official.domain.entity.UserState
@@ -25,126 +27,104 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val mainViewRepository: MainViewRepository,
+    private val mainViewRepository: MainViewRepository
 ) : ViewModel() {
     private var mainViewResult = MutableStateFlow(NullableWrapper.none<MainViewResult>())
-    val loginStatus = MutableStateFlow(NullableWrapper.none<UserStatus>())
-    val title: StateFlow<Triple<Int, String?, String?>>
-        get() = mainViewResult
-            .map { it.get()?.user ?: MainViewUserInfo() }
-            .map {
-                val state = it.status
-                val userName = it.name.getOrEmpty()
-                val period = computeMothUntilNow(it.generationList.get()?.last()?.toInt() ?: 0)
-                when {
-                    userName.isNotEmpty() -> Triple(R.string.main_title_member, userName, period.toString())
-                    state == UserState.INACTIVE -> Triple(R.string.main_title_inactive_member, null, null)
-                    else -> Triple(R.string.main_title_non_member, null, null)
-                }
+    val title: Flow<Triple<Int, String?, String?>> = mainViewResult
+        .map { it.get()?.user ?: MainViewUserInfo() }
+        .map {
+            val state = it.status
+            val userName = it.name.getOrEmpty()
+            val period = computeMothUntilNow(it.generationList.get()?.last()?.toInt() ?: 0)
+            when {
+                userName.isNotEmpty() -> Triple(R.string.main_title_member, userName, period.toString())
+                state == UserState.INACTIVE -> Triple(R.string.main_title_inactive_member, null, null)
+                else -> Triple(R.string.main_title_non_member, null, null)
             }
-            .stateInLazily(viewModelScope, Triple(R.string.main_title_non_member, null, null))
-    val generatedTagText: StateFlow<Pair<Int, String?>>
-        get() = mainViewResult
-            .map { it.get()?.user ?: MainViewUserInfo() }
-            .map {
-                val state = it.status
-                val generationList = it.generationList.getOrEmpty()
-                val isEmpty = generationList.isEmpty()
-                val lastGeneration = if (!isEmpty) generationList[0].toString() else ""
-                when {
-                    state == UserState.ACTIVE -> Pair(R.string.main_active_member, lastGeneration)
-                    isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_no_profile_member, null)
-                    !isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_inactive_member, lastGeneration)
-                    else -> Pair(R.string.main_non_member, null)
-                }
+        }
+    val generatedTagText: Flow<Pair<Int, String?>> = mainViewResult
+        .map { it.get()?.user ?: MainViewUserInfo() }
+        .map {
+            val state = it.status
+            val generationList = it.generationList.getOrEmpty()
+            val isEmpty = generationList.isEmpty()
+            val lastGeneration = if (!isEmpty) generationList[0].toString() else ""
+            when {
+                state == UserState.ACTIVE -> Pair(R.string.main_active_member, lastGeneration)
+                isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_no_profile_member, null)
+                !isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_inactive_member, lastGeneration)
+                else -> Pair(R.string.main_non_member, null)
             }
-            .stateInLazily(viewModelScope, Pair(R.string.main_title_non_member, null))
-    val userState: StateFlow<NullableWrapper<UserState>>
-        get() = mainViewResult
-            .map { it.get()?.user?.status.asNullableWrapper() }
-            .stateInLazily(viewModelScope)
-    val profileImage: StateFlow<NullableWrapper<String>>
-        get() = mainViewResult
-            .map { it.get()?.user?.profileImage?.get().asNullableWrapper() }
-            .stateInLazily(viewModelScope)
-    val generationList: StateFlow<NullableWrapper<List<Long>>>
-        get() = mainViewResult
-            .map { it.get()?.user?.generationList?.get().asNullableWrapper() }
-            .stateInLazily(viewModelScope)
-    val attendanceScore: StateFlow<NullableWrapper<Double>>
-        get() = mainViewResult
-            .map { it.get()?.operation?.attendanceScore?.get().asNullableWrapper() }
-            .stateInLazily(viewModelScope)
-    val announcement: StateFlow<NullableWrapper<String>>
-        get() = mainViewResult
-            .map { it.get()?.operation?.announcement?.get().asNullableWrapper() }
-            .stateInLazily(viewModelScope)
-    val blockItem: StateFlow<NullableWrapper<Triple<LargeBlockType, SmallBlockType, SmallBlockType>>>
-        get() = mainViewResult
-            .map {
-                val userState = it.get()?.user?.status
-                when (userState) {
-                    UserState.ACTIVE -> Triple(
-                        LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
-                        SmallBlockType.SOPT_REVIEW_URL,
-                        SmallBlockType.SOPT_PROJECT_URL
-                    )
-                    UserState.INACTIVE -> Triple(
-                        LargeBlockType.SOPT_ATTENDENCE,
-                        SmallBlockType.PLAYGROUNG_MEMBER_URL,
-                        SmallBlockType.PLAYGROUNG_PROJECT_URL
-                    )
-                    else -> Triple(
-                        LargeBlockType.SOPT_FAQ_URL,
-                        SmallBlockType.PLAYGROUNG_MEMBER_URL,
-                        SmallBlockType.PLAYGROUNG_PROJECT_URL
-                    )
-                }.asNullableWrapper()
-            }
-            .stateInLazily(viewModelScope)
-    val blockList: StateFlow<List<SmallBlockItemHolder>>
-        get() = mainViewResult
-            .map {
-                val userState = it.get()?.user?.status
-                when (userState) {
-                    UserState.ACTIVE -> listOf(SmallBlockType.SOPT_FAQ_URL, SmallBlockType.SOPT_OFFICIAL_YOUTUBE)
-                    UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_URL, SmallBlockType.PLAYGROUNG_CREW_URL)
-                    else -> listOf(SmallBlockType.PLAYGROUNG_CREW_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_URL)
-                }
-            }
-            .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
-            .stateInLazily(viewModelScope, emptyList())
+        }
+    val userState: Flow<NullableWrapper<UserState>> = mainViewResult
+        .map { it.get()?.user?.status.asNullableWrapper() }
+    val profileImage: Flow<NullableWrapper<String>> = mainViewResult
+        .map { it.get()?.user?.profileImage?.get().asNullableWrapper() }
+    val generationList: Flow<NullableWrapper<List<Long>>> = mainViewResult
+        .map { it.get()?.user?.generationList?.get().asNullableWrapper() }
+    val attendanceScore: Flow<NullableWrapper<Double>> = mainViewResult
+        .map { it.get()?.operation?.attendanceScore?.get().asNullableWrapper() }
+        .stateInLazily(viewModelScope)
+    val announcement: Flow<NullableWrapper<String>> = mainViewResult
+        .map { it.get()?.operation?.announcement?.get().asNullableWrapper() }
+        .stateInLazily(viewModelScope)
+    val blockItem: Flow<NullableWrapper<Triple<LargeBlockType, SmallBlockType, SmallBlockType>>> = mainViewResult
+        .map {
+            val userState = it.get()?.user?.status
+            when (userState) {
+                UserState.ACTIVE -> Triple(
+                    LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
+                    SmallBlockType.SOPT_REVIEW_URL,
+                    SmallBlockType.SOPT_PROJECT_URL
+                )
 
-    init {
-        getMainView()
-    }
+                UserState.INACTIVE -> Triple(
+                    LargeBlockType.SOPT_ATTENDENCE,
+                    SmallBlockType.PLAYGROUNG_MEMBER_URL,
+                    SmallBlockType.PLAYGROUNG_PROJECT_URL
+                )
 
-    fun getMainView() {
+                else -> Triple(
+                    LargeBlockType.SOPT_FAQ_URL,
+                    SmallBlockType.PLAYGROUNG_MEMBER_URL,
+                    SmallBlockType.PLAYGROUNG_PROJECT_URL
+                )
+            }.asNullableWrapper()
+        }
+        .stateInLazily(viewModelScope)
+    val blockList: Flow<List<SmallBlockItemHolder>> = mainViewResult
+        .map {
+            val userState = it.get()?.user?.status
+            when (userState) {
+                UserState.ACTIVE -> listOf(SmallBlockType.SOPT_FAQ_URL, SmallBlockType.SOPT_OFFICIAL_YOUTUBE)
+                UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_URL, SmallBlockType.PLAYGROUNG_CREW_URL)
+                else -> listOf(SmallBlockType.PLAYGROUNG_CREW_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_URL)
+            }
+        }
+        .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
+
+    fun initMainView(userStatus: UserStatus) {
         viewModelScope.launch {
-            launch {
-                loginStatus.collect {
-                    if (it.getOrElse(UserStatus.UNAUTHENTICATED) == UserStatus.UNAUTHENTICATED) {
-                        mainViewRepository.getMainView()
-                            .onSuccess {
-                                mainViewResult.value = it.asNullableWrapper()
-                            }.onFailure {
-                                if (it is HttpException) {
-                                    if (it.code() == 400) {
-                                        mainViewResult.value = MainViewResult(
-                                            MainViewUserInfo(status = UserState.INACTIVE),
-                                            MainViewOperationInfo()
-                                        ).asNullableWrapper()
-                                    }
-                                }
-                                Timber.e(it)
+            if (userStatus != UserStatus.UNAUTHENTICATED) {
+                mainViewRepository.getMainView()
+                    .onSuccess {
+                        mainViewResult.value = it.asNullableWrapper()
+                    }.onFailure { error ->
+                        if (error is HttpException) {
+                            if (error.code() == 400) {
+                                mainViewResult.value = MainViewResult(
+                                    MainViewUserInfo(status = UserState.INACTIVE),
+                                    MainViewOperationInfo()
+                                ).asNullableWrapper()
                             }
-                    } else {
-                        mainViewResult.value = MainViewResult(
-                            MainViewUserInfo(),
-                            MainViewOperationInfo()
-                        ).asNullableWrapper()
+                        }
+                        Timber.e(error)
                     }
-                }
+            } else {
+                mainViewResult.value = MainViewResult(
+                    MainViewUserInfo(),
+                    MainViewOperationInfo()
+                ).asNullableWrapper()
             }
         }
     }
@@ -155,17 +135,22 @@ class MainViewModel @Inject constructor(
         ) : SmallBlockItemHolder()
     }
 
-/*
-sealed class ContentItemHolder : BaseItemType {
-    data class Content(
-        val icon: Int?,
-        val name: String,
-    ) : ContentItemHolder()
-}
+    /*
+    sealed class ContentItemHolder : BaseItemType {
+        data class Content(
+            val icon: Int?,
+            val name: String,
+        ) : ContentItemHolder()
+    }
 
-*/
+    */
 
-    enum class LargeBlockType(val title: Int, val description: Int?, val url: String?, val icon: Int) {
+    enum class LargeBlockType(
+        val title: Int,
+        val description: Int?,
+        val url: String?,
+        val icon: Int
+    ) {
         SOPT_OFFICIAL_PAGE_URL(
             R.string.main_large_block_official_page,
             null,
@@ -195,7 +180,11 @@ sealed class ContentItemHolder : BaseItemType {
 
         //playground
         PLAYGROUNG_MEMBER_URL(R.string.main_small_block_member, WebUrlConstant.PLAYGROUNG_MEMBER_URL, R.drawable.ic_member),
-        PLAYGROUNG_PROJECT_URL(R.string.main_small_block_playground_project, WebUrlConstant.PLAYGROUNG_PROJECT_URL, R.drawable.ic_project),
+        PLAYGROUNG_PROJECT_URL(
+            R.string.main_small_block_playground_project,
+            WebUrlConstant.PLAYGROUNG_PROJECT_URL,
+            R.drawable.ic_project
+        ),
         PLAYGROUNG_CREW_URL(R.string.main_small_block_crew, WebUrlConstant.PLAYGROUNG_CREW_URL, R.drawable.ic_crew),
 
         //others
