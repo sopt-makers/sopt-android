@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rectangle_radius_16"
+        android:backgroundTint="?colorSurface">
+
+        <ImageView
+            android:id="@+id/iv_attendance_code_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/tv_attendance_code_dialog_title"
+            style="@style/TextAppearance.SOPT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textColor="?colorOnSurface"
+            android:textFontWeight="700"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_attendance_code_close"
+            tools:text="1차 출석하기" />
+
+        <TextView
+            android:id="@+id/tv_attendance_code_dialog_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/attendance_dialog_subtitle"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="?colorOnSurfaceInverse"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attendance_code_dialog_title" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="258dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attendance_code_dialog_subtitle">
+
+            <EditText
+                android:id="@+id/et_attendance_code1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edittext_attendance_code"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textColor="?colorPrimaryVariant" />
+
+            <EditText
+                android:id="@+id/et_attendance_code2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edittext_attendance_code"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textColor="?colorPrimaryVariant" />
+
+            <EditText
+                android:id="@+id/et_attendance_code3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edittext_attendance_code"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textColor="?colorPrimaryVariant" />
+
+            <EditText
+                android:id="@+id/et_attendance_code4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edittext_attendance_code"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textColor="?colorPrimaryVariant" />
+
+            <EditText
+                android:id="@+id/et_attendance_code5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:background="@drawable/selector_edittext_attendance_code"
+                android:cursorVisible="false"
+                android:ems="10"
+                android:gravity="center"
+                android:inputType="number"
+                android:maxLength="1"
+                android:textColor="?colorPrimaryVariant" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_attendance_code_dialog_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/attendance_dialog_error"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="@color/on_sopt_red"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_attendance_code_dialog"
+            style="@style/TextAppearance.SOPT"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/rectangle_radius_6"
+            android:backgroundTint="@color/attendance_button"
+            android:enabled="false"
+            android:text="@string/attendance_dialog_button"
+            android:textColor="@color/attendance_button_text"
+            android:textFontWeight="700"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_attendance_code_dialog_error" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

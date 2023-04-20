@@ -8,4 +8,11 @@
     <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
+    <string name="attendance_progress_first">1차 출석</string>
+    <string name="attendance_progress_second">2차 출석</string>
+    <string name="attendance_progress_before">출석 전</string>
+
+    <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
+    <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
+    <string name="attendance_dialog_button">출석하기</string>
 </resources>
