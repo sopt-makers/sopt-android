@@ -29,8 +29,9 @@ class MainViewModel @Inject constructor(
     private val mainViewRepository: MainViewRepository
 ) : ViewModel() {
     private var mainViewResult = MutableStateFlow(NullableWrapper.none<MainViewResult>())
-    val title: Flow<Triple<Int, String?, String?>> = mainViewResult
+    private val user = mainViewResult
         .map { it.get()?.user ?: MainViewUserInfo() }
+    val title: Flow<Triple<Int, String?, String?>> = user
         .map {
             val state = it.status
             val userName = it.name.getOrEmpty()
@@ -41,8 +42,7 @@ class MainViewModel @Inject constructor(
                 else -> Triple(R.string.main_title_non_member, null, null)
             }
         }
-    val generatedTagText: Flow<Pair<Int, String?>> = mainViewResult
-        .map { it.get()?.user ?: MainViewUserInfo() }
+    val generatedTagText: Flow<Pair<Int, String?>> = user
         .map {
             val state = it.status
             val generationList = it.generationList.getOrEmpty()

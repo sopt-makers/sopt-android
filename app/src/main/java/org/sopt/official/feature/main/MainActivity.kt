@@ -67,7 +67,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.title
             .flowWithLifecycle(lifecycle)
             .onEach { (id, arg1, arg2) ->
-                Timber.d("SOPT id $id arg1 $arg1 arg2 $arg2")
                 binding.title.text = getStringExt(id, arg1, arg2)
             }.launchIn(lifecycleScope)
         viewModel.userState
