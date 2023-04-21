@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -17,6 +16,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
@@ -41,17 +41,16 @@ class AuthActivity : AppCompatActivity() {
     private fun collectUiEvent() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
-            .onEach {event ->
+            .onEach { event ->
                 when (event) {
                     is AuthUiEvent.Success -> {
                         val args = MainActivity.StartArgs(event.userStatus)
-                        intent = MainActivity.getIntent(this)
-                            .putExtra("args", args)
-                        startActivity(intent)
+                        startActivity(MainActivity.getIntent(this, args))
                     }
 
                     is AuthUiEvent.Failure -> {
-                        Snackbar.make(binding.root, event.message, Snackbar.LENGTH_SHORT).show()
+                        val args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                        startActivity(MainActivity.getIntent(this, args))
                     }
                 }
             }.launchIn(lifecycleScope)
@@ -92,7 +91,7 @@ class AuthActivity : AppCompatActivity() {
             }
         }
         binding.btnSoptNotMember.setOnClickListener {
-            startActivity(MainActivity.getIntent(this))
+            startActivity(MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)))
         }
     }
 }

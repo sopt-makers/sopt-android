@@ -288,8 +288,9 @@ class MainActivity : AppCompatActivity() {
         private const val UI_THROTTLE_TIME = 1000L
 
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, MainActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("args", args)
         }
     }
 }
