@@ -69,13 +69,13 @@ class MainViewModel @Inject constructor(
         .map {
             val userState = it.get()?.user?.status
             when (userState) {
-                UserState.ACTIVE -> Triple(
+                UserState.UNAUTHENTICATED -> Triple(
                     LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
                     SmallBlockType.SOPT_REVIEW_URL,
                     SmallBlockType.SOPT_PROJECT_URL
                 )
 
-                UserState.INACTIVE -> Triple(
+                UserState.ACTIVE -> Triple(
                     LargeBlockType.SOPT_ATTENDENCE,
                     SmallBlockType.PLAYGROUNG_MEMBER_URL,
                     SmallBlockType.PLAYGROUNG_PROJECT_URL
