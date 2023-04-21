@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="20dp"
-        android:src="@drawable/img_logo"
+        android:src="@drawable/img_logo_small"
         app:layout_constraintBottom_toBottomOf="@id/mypage"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/mypage" />
