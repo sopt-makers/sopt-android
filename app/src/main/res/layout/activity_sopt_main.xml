@@ -40,15 +40,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
+        android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/logo">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:paddingBottom="40dp">
 
             <TextView
                 android:id="@+id/title"
@@ -155,7 +158,7 @@
                 layout="@layout/item_main_content_member_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="46dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/small_block_list" />
@@ -165,7 +168,7 @@
                 layout="@layout/item_main_content_member_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="46dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/small_block_list" />
@@ -182,7 +185,7 @@
                 layout="@layout/item_main_content"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
-                android:layout_marginTop="27dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginEnd="9dp"
                 app:layout_constraintEnd_toStartOf="@id/content_dummy"
                 app:layout_constraintStart_toStartOf="parent"
@@ -209,5 +212,5 @@
             <!--                app:layout_constraintEnd_toEndOf="parent"-->
             <!--                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.core.widget.NestedScrollView>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
