@@ -17,7 +17,6 @@ import org.sopt.official.domain.entity.main.MainViewUserInfo
 import org.sopt.official.domain.repository.main.MainViewRepository
 import org.sopt.official.feature.web.WebUrlConstant
 import org.sopt.official.util.computeMothUntilNow
-import org.sopt.official.util.coroutine.stateInLazily
 import org.sopt.official.util.wrapper.NullableWrapper
 import org.sopt.official.util.wrapper.asNullableWrapper
 import org.sopt.official.util.wrapper.getOrEmpty
@@ -64,10 +63,8 @@ class MainViewModel @Inject constructor(
         .map { it.get()?.user?.generationList?.get().asNullableWrapper() }
     val attendanceScore: Flow<NullableWrapper<Double>> = mainViewResult
         .map { it.get()?.operation?.attendanceScore?.get().asNullableWrapper() }
-        .stateInLazily(viewModelScope)
     val announcement: Flow<NullableWrapper<String>> = mainViewResult
         .map { it.get()?.operation?.announcement?.get().asNullableWrapper() }
-        .stateInLazily(viewModelScope)
     val blockItem: Flow<NullableWrapper<Triple<LargeBlockType, SmallBlockType, SmallBlockType>>> = mainViewResult
         .map {
             val userState = it.get()?.user?.status
@@ -91,7 +88,6 @@ class MainViewModel @Inject constructor(
                 )
             }.asNullableWrapper()
         }
-        .stateInLazily(viewModelScope)
     val blockList: Flow<List<SmallBlockItemHolder>> = mainViewResult
         .map {
             val userState = it.get()?.user?.status
@@ -188,7 +184,7 @@ class MainViewModel @Inject constructor(
         PLAYGROUNG_CREW_URL(R.string.main_small_block_crew, WebUrlConstant.PLAYGROUNG_CREW_URL, R.drawable.ic_crew),
 
         //others
-        SOPT_OFFICIAL_YOUTUBE(R.string.main_small_block_youtube, WebUrlConstant.SOPT_OFFICIAL_YOUTUBE, R.drawable.ic_youtube),
+        SOPT_OFFICIAL_YOUTUBE(R.string.main_small_block_youtube, WebUrlConstant.SOPT_OFFICIAL_YOUTUBE, R.drawable.ic_youtube);
     }
 
     companion object {

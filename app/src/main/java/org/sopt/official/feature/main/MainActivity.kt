@@ -6,19 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
+import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.base.BaseAdapter
 import org.sopt.official.base.BaseViewHolder
@@ -30,10 +26,14 @@ import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.main.MainViewModel.SmallBlockItemHolder
 import org.sopt.official.stamp.SoptampActivity
+import org.sopt.official.util.drawableOf
 import org.sopt.official.util.serializableExtra
+import org.sopt.official.util.setOnSingleClickListener
+import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.getOrEmpty
+import timber.log.Timber
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -54,15 +54,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        initStartArgs()
-
+        initUserStatus()
         initUserInfo()
         initBlock()
-        initContent()
     }
 
-    private fun initStartArgs() {
+    private fun initUserStatus() {
         viewModel.initMainView(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
 
@@ -70,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.title
             .flowWithLifecycle(lifecycle)
             .onEach { (id, arg1, arg2) ->
+                Timber.d("SOPT id $id arg1 $arg1 arg2 $arg2")
                 binding.title.text = getStringExt(id, arg1, arg2)
             }.launchIn(lifecycleScope)
         viewModel.userState
@@ -80,22 +78,19 @@ class MainActivity : AppCompatActivity() {
                     if (userState == UserState.UNAUTHENTICATED) R.string.main_subtitle_non_member
                     else R.string.main_subtitle_member
                 )
-            }.launchIn(lifecycleScope)
-        viewModel.userState
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                val userState = it.get() ?: UserState.UNAUTHENTICATED
-                binding.subtitle.text = getStringExt(
-                    if (userState == UserState.UNAUTHENTICATED) R.string.main_subtitle_non_member
-                    else R.string.main_subtitle_member
-                )
-                val state = it.getOrElse(UserState.UNAUTHENTICATED)
-                binding.tagMemberState.isEnabled = state == UserState.ACTIVE
+                binding.tagMemberState.isEnabled = userState == UserState.ACTIVE
+                val isClickable = userState != UserState.UNAUTHENTICATED
+                if (isClickable) {
+                    val intent = Intent(this@MainActivity, SoptampActivity::class.java)
+                    binding.contentSoptamp.root.setOnSingleClickListener {
+                        this@MainActivity.startActivity(intent)
+                    }
+                }
             }.launchIn(lifecycleScope)
         viewModel.generatedTagText
             .flowWithLifecycle(lifecycle)
-            .onEach {
-                binding.tagMemberState.text = getStringExt(it.first, it.second)
+            .onEach { (id, text) ->
+                binding.tagMemberState.text = getStringExt(id, text)
             }.launchIn(lifecycleScope)
         viewModel.generationList
             .flowWithLifecycle(lifecycle)
@@ -125,87 +120,55 @@ class MainActivity : AppCompatActivity() {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
         }
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.blockItem.collect { item ->
-                        val blockItem = item.get()
-                        binding.largeBlock.root.setVisible(blockItem != null)
-                        binding.smallBlock1.root.setVisible(blockItem != null)
-                        binding.smallBlock2.root.setVisible(blockItem != null)
-                        blockItem?.let {
-                            setLargeBlock(it.first)
-                            setSmallBlock(binding.smallBlock1, it.second)
-                            setSmallBlock(binding.smallBlock2, it.third)
-                        }
-                    }
+        viewModel.blockItem
+            .flowWithLifecycle(lifecycle)
+            .onEach { item ->
+                val blockItem = item.get()
+                binding.largeBlock.root.isVisible = blockItem != null
+                binding.smallBlock1.root.isVisible = blockItem != null
+                binding.smallBlock2.root.isVisible = blockItem != null
+                blockItem?.let { (largeBlock, topSmallBlock, bottomSmallBlock) ->
+                    setLargeBlock(largeBlock)
+                    setSmallBlock(binding.smallBlock1, topSmallBlock)
+                    setSmallBlock(binding.smallBlock2, bottomSmallBlock)
                 }
-                launch {
-                    viewModel.blockList.collect {
-                        smallBlockAdapter?.submitList(it)
-                    }
-                }
-            }
-        }
+            }.launchIn(lifecycleScope)
+        viewModel.blockList
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                smallBlockAdapter?.submitList(it)
+            }.launchIn(lifecycleScope)
     }
-
-    private fun initContent() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.userState.collect { userState ->
-                        val isClickable = userState.get()?.let {
-                            it != UserState.UNAUTHENTICATED
-                        } ?: false
-                        if (isClickable) {
-                            val intent = Intent(this@MainActivity, SoptampActivity::class.java)
-                            binding.contentSoptamp.root.setOnClickListener {
-                                CoroutineScope(Dispatchers.Main).launch {
-                                    this@MainActivity.startActivity(intent)
-                                    delay(UI_THROTTLE_TIME)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
-
 
     private fun setLargeBlock(item: MainViewModel.LargeBlockType) {
-        binding.largeBlock.icon.background = this.getDrawable(item.icon)
-        binding.largeBlock.name.text = this.getText(item.title)
-        binding.largeBlock.description.setVisible(item.description != null)
+        binding.largeBlock.icon.background = drawableOf(item.icon)
+        binding.largeBlock.name.text = stringOf(item.title)
+        binding.largeBlock.description.isVisible = item.description != null
         item.description?.let { description ->
-            binding.largeBlock.description.text = this.getText(description)
+            binding.largeBlock.description.text = stringOf(description)
         }
-        val intent =
-            if (item.url == null) Intent(this@MainActivity, AttendanceActivity::class.java)
-            else Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-
-        binding.largeBlock.root.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
-                this@MainActivity.startActivity(intent)
-                delay(UI_THROTTLE_TIME)
-            }
+        val intent = if (item.url == null) {
+            Intent(this@MainActivity, AttendanceActivity::class.java)
+        } else {
+            Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
         }
-
+        binding.largeBlock.root.setOnSingleClickListener {
+            startActivity(intent)
+        }
     }
 
     private fun setSmallBlock(view: ItemMainSmallBinding, item: MainViewModel.SmallBlockType) {
-        view.icon.background = this.getDrawable(item.icon)
-        view.title.text = this.getText(item.title)
-        view.root.setOnClickListener {
-            lifecycleScope.launch {
+        with(view) {
+            icon.background = drawableOf(item.icon)
+            title.text = stringOf(item.title)
+            root.setOnSingleClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-                this@MainActivity.startActivity(intent)
-                delay(UI_THROTTLE_TIME)
+                startActivity(intent)
             }
         }
     }
 
-    private fun getStringExt(id: Int, args1: String? = null, args2: String? = null): String {
+    private fun getStringExt(@StringRes id: Int, args1: String? = null, args2: String? = null): String {
         return when {
             args2 != null -> this.getString(id, args1, args2)
             args1 != null -> this.getString(id, args1)
@@ -280,8 +243,6 @@ class MainActivity : AppCompatActivity() {
     ) : Serializable
 
     companion object {
-        private const val UI_THROTTLE_TIME = 1000L
-
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
