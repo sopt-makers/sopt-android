@@ -5,15 +5,22 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.AlertDialog
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
+import org.sopt.official.designsystem.AlertDialogPositiveNegative
 import org.sopt.official.domain.entity.UserState
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.main.MainActivity
+import org.sopt.official.feature.mypage.rule.PrivateInfoActivity
+import org.sopt.official.feature.mypage.rule.ServiceRuleActivity
+import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
+import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.util.serializableExtra
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
@@ -65,19 +72,19 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun initClick() {
         binding.iconPrivateInfo.setOnClickListener {
-            // 개인정보약관 뷰 이동
+            this.startActivity(PrivateInfoActivity.getIntent(this))
         }
         binding.iconServiceRule.setOnClickListener {
-            // 서비스 약관 뷰 이동
+            this.startActivity(ServiceRuleActivity.getIntent(this))
         }
         binding.iconSendOpinion.setOnClickListener {
-            // 구글폼 이동
+            // 구글폼 이동 (아직 url X)
         }
         binding.iconAdjustSentence.setOnClickListener {
-            // 한 마디 편집 뷰 이동
+            this.startActivity(AdjustSentenceActivity.getIntent(this))
         }
         binding.iconChangeNickname.setOnClickListener {
-            // 닉네임 변경 뷰 이동
+            this.startActivity(ChangeNickNameActivity.getIntent(this))
         }
         binding.iconResetStamp.setOnClickListener {
             AlertDialogPositiveNegative(this)
