@@ -80,7 +80,13 @@ class MyPageActivity : AppCompatActivity() {
             // 닉네임 변경 뷰 이동
         }
         binding.iconResetStamp.setOnClickListener {
-            // 초기화 얼럿
+            AlertDialogPositiveNegative(this)
+                .setTitle(R.string.mypage_alert_soptamp_reset_title)
+                .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
+                .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
+                    viewModel.resetSoptamp()
+                }
+                .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
         }
         binding.iconLogOut.setOnClickListener {
             viewModel.logOut()
