@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -61,6 +62,7 @@ class AttendanceActivity : AppCompatActivity() {
     private fun initView() {
         initToolbar()
         initRecyclerView()
+        initListener()
     }
 
     private fun fetchData() {
@@ -106,6 +108,12 @@ class AttendanceActivity : AppCompatActivity() {
                     }
                 }
             })
+        }
+    }
+
+    private fun initListener() {
+        binding.btnAttendance.setOnClickListener {
+            AttendanceCodeDialog().show(supportFragmentManager, "attendanceCodeDialog")
         }
     }
 
@@ -169,12 +177,14 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventName.layoutParams = textInfoEventNameLayoutParams
             removeAllSpan(textInfoEventName)
             textInfoEventName.text = "오늘은 일정이 없는 날이에요"
+            layoutAttendanceProgress.isVisible = false
         }
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateSoptEventComponentWithHasAttendance(soptEvent: SoptEvent) {
         binding.run {
+            viewModel = attendanceViewModel
             layoutInfoEventDate.isVisible = true
             textInfoEventDate.text = soptEvent.date
             layoutInfoEventLocation.isVisible = true
@@ -188,6 +198,40 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
             (textInfoEventName.text as Spannable).run {
                 setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+
+            // 여기만 progress바 필요.
+            layoutAttendanceProgress.isVisible = true
+            tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
+            tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
+
+            // 1차 출석, 2차 출석, 결석 상태가 아니면 모두 보라색
+            if (soptEvent.attendances[0].attendedAt != "1차 출석") {
+                attendanceViewModel.setFirstProgressBar(true)
+            } else {
+                attendanceViewModel.setFirstProgressBar(false)
+            }
+            if (soptEvent.attendances[1].attendedAt != "2차 출석") {
+                attendanceViewModel.setSecondProgressBar(true)
+            } else {
+                attendanceViewModel.setSecondProgressBar(false)
+            }
+
+            // tv1과 tv2에 따라서 내용이 변경됨
+            val firstStatus = soptEvent.attendances[0].status.name
+            val secondStatus = soptEvent.attendances[1].status.name
+            if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
+                attendanceViewModel.setThirdProgressBar(true)
+                attendanceViewModel.setThirdProgressBarAttendance(true)
+            } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
+                attendanceViewModel.setThirdProgressBarBeforeAttendance(false)
+                attendanceViewModel.setThirdProgressBar(false)
+            } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
+                attendanceViewModel.setThirdProgressBar(true)
+                attendanceViewModel.setThirdProgressBarAttendance(false)
+            } else {
+                attendanceViewModel.setThirdProgressBarBeforeAttendance(true)
+                attendanceViewModel.setThirdProgressBar(false)
             }
         }
     }
@@ -209,6 +253,7 @@ class AttendanceActivity : AppCompatActivity() {
             (textInfoEventName.text as Spannable).run {
                 setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+            layoutAttendanceProgress.isVisible = false
         }
     }
 

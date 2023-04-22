@@ -4,6 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".feature.attendance.AttendanceActivity">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="org.sopt.official.feature.attendance.AttendanceViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -149,9 +158,8 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="12dp"
                     android:background="@drawable/oval_fill_white_border_purple40"
-                    android:elevation="4dp"
                     android:src="@drawable/ic_attendance_check"
-                    android:visibility="invisible"
+                    android:visibility="@{viewModel.isFirstProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -161,13 +169,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@string/attendance_progress_first"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/attendance_progress_text"
+                    android:textColor="@{viewModel.isFirstProgressBarActive ? @color/purple_40 : @color/gray_100}"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress1_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress1_empty" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress1_empty"
+                    tools:text="@string/attendance_progress_first" />
 
                 <ImageView
                     android:id="@+id/iv_attendance_progress2_empty"
@@ -184,7 +192,7 @@
                     android:layout_height="24dp"
                     android:background="@drawable/oval_fill_white_border_purple40"
                     android:src="@drawable/ic_attendance_check"
-                    android:visibility="invisible"
+                    android:visibility="@{viewModel.isSecondProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -195,22 +203,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@string/attendance_progress_second"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/attendance_progress_text"
+                    android:textColor="@{viewModel.isSecondProgressBarActive ? @color/purple_40 : @color/gray_100}"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress2_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress2_empty" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress2_empty"
+                    tools:text="@string/attendance_progress_second" />
 
-                <ImageView
-                    android:id="@+id/iv_attendance_progress3_empty"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/oval_border_gray40"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
                     android:id="@+id/iv_attendance_progress3_tardy"
@@ -219,7 +219,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/oval_fill_purpledim100_border_purple40"
                     android:src="@drawable/ic_point"
-                    android:visibility="invisible"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -230,7 +230,17 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/oval_fill_purpledim100_border_purple40"
                     android:src="@drawable/ic_attendance_check"
-                    android:visibility="invisible"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/iv_attendance_progress3_empty"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:background="@drawable/oval_border_gray40"
+                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -240,10 +250,26 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@string/attendance_progress_before"
+                    android:text="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? @string/attendance_progress_third_complete : @string/attendance_progress_third_tardy}"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/attendance_progress_text"
+                    android:textColor="?colorPrimaryVariant"
                     android:textSize="12sp"
+                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
+
+                <TextView
+                    android:id="@+id/tv_attendance_progress3_attendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:enabled="false"
+                    android:text="@{viewModel.isThirdProgressBarBeforeAttendance ? @string/attendance_progress_before : @string/attendance_progress_third_absent}"
+                    android:textAppearance="?textAppearanceBodyLarge"
+                    android:textColor="@color/gray_100"
+                    android:textSize="12sp"
+                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
@@ -287,7 +313,6 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/rectangle_radius_10"
             android:backgroundTint="@color/attendance_button"
-            android:enabled="false"
             android:paddingVertical="20dp"
             android:textColor="@color/attendance_button_text"
             android:textFontWeight="700"

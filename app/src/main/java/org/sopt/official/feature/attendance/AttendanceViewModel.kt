@@ -23,6 +23,17 @@ class AttendanceViewModel @Inject constructor(
     private var _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
     val attendanceHistory: StateFlow<AttendanceState<AttendanceHistory>> get() = _attendanceHistory
 
+    private val _isFirstProgressBarActive = MutableStateFlow<Boolean>(false)
+    val isFirstProgressBarActive get() = _isFirstProgressBarActive
+    private val _isSecondProgressBarActive = MutableStateFlow<Boolean>(false)
+    val isSecondProgressBarActive get() = _isSecondProgressBarActive
+    private val _isThirdProgressBarActive = MutableStateFlow<Boolean>(false)
+    val isThirdProgressBarActive get() = _isThirdProgressBarActive
+    private val _isThirdProgressBarAttendance = MutableStateFlow(false)
+    val isThirdProgressBarAttendance get() = _isThirdProgressBarAttendance
+    private val _isThirdProgressBarBeforeAttendance = MutableStateFlow(false)
+    val isThirdProgressBarBeforeAttendance get() = _isThirdProgressBarBeforeAttendance
+
     fun fetchSoptEvent() {
         viewModelScope.launch {
             _soptEvent.value = AttendanceState.Loading
@@ -35,6 +46,26 @@ class AttendanceViewModel @Inject constructor(
                     _soptEvent.value = AttendanceState.Failure(it)
                 }
         }
+    }
+
+    fun setFirstProgressBar(isActive: Boolean) {
+        _isFirstProgressBarActive.value = isActive
+    }
+
+    fun setSecondProgressBar(isActive: Boolean) {
+        _isSecondProgressBarActive.value = isActive
+    }
+
+    fun setThirdProgressBar(isActive: Boolean) {
+        _isThirdProgressBarActive.value = isActive
+    }
+
+    fun setThirdProgressBarAttendance(isAttendance: Boolean) {
+        _isThirdProgressBarAttendance.value = isAttendance
+    }
+
+    fun setThirdProgressBarBeforeAttendance(isBeforeAttendance: Boolean) {
+        _isThirdProgressBarBeforeAttendance.value = isBeforeAttendance
     }
 
     fun fetchAttendanceHistory() {
