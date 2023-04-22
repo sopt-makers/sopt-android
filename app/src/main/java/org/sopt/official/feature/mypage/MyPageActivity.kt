@@ -19,6 +19,7 @@ import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.rule.PrivateInfoActivity
 import org.sopt.official.feature.mypage.rule.ServiceRuleActivity
+import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.util.serializableExtra
@@ -99,7 +100,7 @@ class MyPageActivity : AppCompatActivity() {
             viewModel.logOut()
         }
         binding.iconSignOut.setOnClickListener {
-            viewModel.signOut()
+            this.startActivity(SignOutActivity.getIntent(this))
         }
         binding.iconLogIn.setOnClickListener {
             setResult(ResultCode.LOG_IN.ordinal)
