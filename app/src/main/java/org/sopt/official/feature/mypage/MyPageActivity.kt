@@ -97,7 +97,13 @@ class MyPageActivity : AppCompatActivity() {
                 .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
         }
         binding.iconLogOut.setOnClickListener {
-            viewModel.logOut()
+            AlertDialogPositiveNegative(this)
+                .setTitle(R.string.mypage_alert_log_out_title)
+                .setSubtitle(R.string.mypage_alert_log_out_subtitle)
+                .setPositiveButton(R.string.mypage_alert_log_out_positive) {
+                    viewModel.logOut()
+                }
+                .setNegativeButton(R.string.mypage_alert_log_out_negative)
         }
         binding.iconSignOut.setOnClickListener {
             this.startActivity(SignOutActivity.getIntent(this))
