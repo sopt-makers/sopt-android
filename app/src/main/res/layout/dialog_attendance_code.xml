@@ -53,6 +53,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:orientation="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_attendance_code_dialog_subtitle">
@@ -67,7 +69,7 @@
                 android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="numberSigned"
                 android:maxLength="1"
                 android:textColor="?colorPrimaryVariant" />
 
@@ -82,7 +84,7 @@
                 android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="numberSigned"
                 android:maxLength="1"
                 android:textColor="?colorPrimaryVariant" />
 
@@ -97,7 +99,7 @@
                 android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="numberSigned"
                 android:maxLength="1"
                 android:textColor="?colorPrimaryVariant" />
 
@@ -112,7 +114,7 @@
                 android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="numberSigned"
                 android:maxLength="1"
                 android:textColor="?colorPrimaryVariant" />
 
@@ -126,7 +128,7 @@
                 android:cursorVisible="false"
                 android:ems="10"
                 android:gravity="center"
-                android:inputType="number"
+                android:inputType="numberSigned"
                 android:maxLength="1"
                 android:textColor="?colorPrimaryVariant" />
         </LinearLayout>
