@@ -18,4 +18,8 @@ class MyPageViewModel: ViewModel() {
     fun logOut() {
 
     }
+
+    fun resetSoptamp() {
+
+    }
 }
