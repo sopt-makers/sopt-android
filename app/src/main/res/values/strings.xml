@@ -41,4 +41,19 @@
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT AMP!</string>
     <string name="new_product">NEW PRODUCT</string>
+
+    <!--    mypage    -->
+    <string name="toolbar_mypage">마이페이지</string>
+    <string name="mypage_service_info_title">서비스 이용 방침</string>
+    <string name="mypage_private_info">개인정보 처리 방침</string>
+    <string name="mypage_service_rule">서비스 이용약관</string>
+    <string name="mypage_send_opinion">의견 보내기</string>
+    <string name="mypage_soptamp_setting_title">솝탬프 설정</string>
+    <string name="mypage_adjust_sentence">한 마디 편집</string>
+    <string name="mypage_change_nickname">닉네임 변경</string>
+    <string name="mypage_reset_stamp">스탬프 초기화</string>
+    <string name="mypage_etc_title">기타</string>
+    <string name="mypage_log_out">로그아웃</string>
+    <string name="mypage_sign_out">탈퇴하기</string>
+    <string name="mypage_log_in">로그인</string>
 </resources>
