@@ -72,4 +72,8 @@
     <string name="mypage_log_out">로그아웃</string>
     <string name="mypage_sign_out">탈퇴하기</string>
     <string name="mypage_log_in">로그인</string>
+    <string name="mypage_alert_soptamp_reset_title">미션을 초기화 하실건가요?</string>
+    <string name="mypage_alert_soptamp_reset_subtitle">사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.</string>
+    <string name="mypage_alert_soptamp_reset_positive">초기화</string>
+    <string name="mypage_alert_soptamp_reset_negative">취소</string>
 </resources>
