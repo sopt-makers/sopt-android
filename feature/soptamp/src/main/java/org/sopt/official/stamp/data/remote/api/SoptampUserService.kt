@@ -16,11 +16,13 @@
 package org.sopt.official.stamp.data.remote.api
 
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
+import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface SoptampUserService {
@@ -35,7 +37,6 @@ interface SoptampUserService {
     @PATCH("auth/nickname")
     suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
-    // 탈퇴하기
-    @DELETE("user")
-    suspend fun withdraw()
+    @POST("user/profile-message")
+    suspend fun updateProfileMessage(@Body profileMessage: UpdateProfileMessageRequest)
 }

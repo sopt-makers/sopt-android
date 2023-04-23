@@ -15,11 +15,8 @@
  */
 package org.sopt.official.stamp.data.remote.api
 
-import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
 import org.sopt.official.stamp.data.remote.model.response.RankResponse
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
 
 internal interface RankService {
 
@@ -29,6 +26,3 @@ internal interface RankService {
     @GET("rank/detail")
     suspend fun getRankDetail(): List<RankResponse>
 
-    @POST("rank/profileMessage")
-    suspend fun updateProfileMessage(@Body profileMessage: UpdateProfileMessageRequest)
-}
