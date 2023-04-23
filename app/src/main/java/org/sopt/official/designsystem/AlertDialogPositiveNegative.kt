@@ -1,44 +1,54 @@
 package org.sopt.official.designsystem
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
+import android.os.Bundle
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.StringRes
+import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.widget.ConstraintLayout
 import org.sopt.official.R
+import org.sopt.official.databinding.LayoutDialogNegativePositiveBinding
+import org.sopt.official.feature.attendance.util.dpToPx
+import org.sopt.official.stamp.util.toPx
 
-class AlertDialogPositiveNegative(private val context: Context) {
-    private val builder: AlertDialog.Builder by lazy {
-        AlertDialog.Builder(context).setView(view)
-    }
+class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) {
+    private val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
-    private val view: View by lazy {
-        View.inflate(context, R.layout.layout_dialog_negative_positive, null)
-    }
+    val binding = LayoutDialogNegativePositiveBinding.inflate(LayoutInflater.from(context))
 
     private var dialog: AlertDialog? = null
 
+    init {
+        dialog = builder.setView(binding.root).create()
+    }
+
     fun setTitle(@StringRes titleId: Int): AlertDialogPositiveNegative {
-        view.title.text = context.getText(titleId)
+        binding.title.text = context.getText(titleId)
         return this
     }
 
     fun setTitle(title: CharSequence): AlertDialogPositiveNegative {
-        view.title.text = title
+        binding.title.text = title
         return this
     }
 
     fun setSubtitle(@StringRes subtitleId: Int): AlertDialogPositiveNegative {
-        view.subtitle.text = context.getText(subtitleId)
+        binding.subtitle.text = context.getText(subtitleId)
         return this
     }
 
-    fun setSubtitle(message: CharSequence): AlertDialogPositiveNegative {
-        view.subtitle.text = message
+    fun setSubtitle(subtitle: CharSequence): AlertDialogPositiveNegative {
+        binding.subtitle.text = subtitle
         return this
     }
 
     fun setPositiveButton(@StringRes textId: Int, listener: (view: View) -> (Unit) = { dismiss() }): AlertDialogPositiveNegative {
-        view.positiveButton.apply {
+        binding.positiveButton.apply {
             text = context.getText(textId)
             setOnClickListener(listener)
         }
@@ -46,7 +56,7 @@ class AlertDialogPositiveNegative(private val context: Context) {
     }
 
     fun setPositiveButton(text: CharSequence, listener: (view: View) -> (Unit) = { dismiss() }): AlertDialogPositiveNegative {
-        view.positiveButton.apply {
+        binding.positiveButton.apply {
             this.text = text
             setOnClickListener(listener)
         }
@@ -54,7 +64,7 @@ class AlertDialogPositiveNegative(private val context: Context) {
     }
 
     fun setNegativeButton(@StringRes textId: Int, listener: (view: View) -> (Unit) = { dismiss() }): AlertDialogPositiveNegative {
-        view.negativeButton.apply {
+        binding.negativeButton.apply {
             text = context.getText(textId)
             this.text = text
             setOnClickListener(listener)
@@ -63,19 +73,18 @@ class AlertDialogPositiveNegative(private val context: Context) {
     }
 
     fun setNegativeButton(text: CharSequence, listener: (view: View) -> (Unit) = { dismiss() }): AlertDialogPositiveNegative {
-        view.negativeButton.apply {
+        binding.negativeButton.apply {
             this.text = text
             setOnClickListener(listener)
         }
         return this
     }
 
-    fun create() {
-        dialog = builder.create()
-    }
-
     fun show() {
-        dialog = builder.create()
+        dialog?.window?.setBackgroundDrawable(context.getDrawable(R.drawable.rectangle_radius_10).apply {
+            this?.setTint(context.getColor(R.color.black_60))
+        })
+
         dialog?.show()
     }
 
