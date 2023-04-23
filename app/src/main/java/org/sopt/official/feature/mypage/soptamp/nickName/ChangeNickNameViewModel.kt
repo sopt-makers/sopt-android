@@ -10,4 +10,8 @@ class ChangeNickNameViewModel @Inject constructor() : ViewModel() {
     fun changeNickName() {
         // changeNickName api 콜
     }
+
+    fun validateNickName(string: String) {
+        // validate 체크
+    }
 }
