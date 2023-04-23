@@ -19,7 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.stamp.di.constant.Soptamp
+import org.sopt.official.core.di.AppRetrofit
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.SoptampService
 import org.sopt.official.stamp.data.remote.api.StampService
@@ -33,24 +33,24 @@ internal object RemoteModule {
     @Provides
     @Singleton
     fun provideStampService(
-        @Soptamp retrofit: Retrofit
+        @AppRetrofit retrofit: Retrofit
     ): StampService = retrofit.create(StampService::class.java)
 
     @Provides
     @Singleton
     fun provideSoptampService(
-        @Soptamp retrofit: Retrofit
+        @AppRetrofit retrofit: Retrofit
     ): SoptampService = retrofit.create(SoptampService::class.java)
 
     @Provides
     @Singleton
     fun provideRankingService(
-        @Soptamp retrofit: Retrofit
+        @AppRetrofit retrofit: Retrofit
     ): RankService = retrofit.create(RankService::class.java)
 
     @Provides
     @Singleton
     fun provideUserService(
-        @Soptamp retrofit: Retrofit
+        @AppRetrofit retrofit: Retrofit
     ): UserService = retrofit.create(UserService::class.java)
 }

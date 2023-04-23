@@ -19,10 +19,9 @@ import org.sopt.official.stamp.domain.repository.UserRepository
 import javax.inject.Inject
 
 class WithdrawalUseCase @Inject constructor(
-    private val userRepository: UserRepository,
-    private val userIdUseCase: GetUserIdUseCase
+    private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): Result<Unit> = runCatching {
-        return userRepository.withdraw(userIdUseCase())
+        return userRepository.withdraw()
     }
 }

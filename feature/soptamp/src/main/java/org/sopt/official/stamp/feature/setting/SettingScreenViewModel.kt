@@ -23,7 +23,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.stamp.domain.repository.StampRepository
 import org.sopt.official.stamp.domain.repository.UserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -41,14 +40,13 @@ sealed interface SettingUiState {
 @HiltViewModel
 class SettingScreenViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val stampRepository: StampRepository,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val stampRepository: StampRepository
 ) : ViewModel() {
     private val _uiState = MutableSharedFlow<SettingUiState?>(extraBufferCapacity = 1)
     val uiState = _uiState.asSharedFlow()
     fun onClearAllStamps() {
         viewModelScope.launch {
-            stampRepository.deleteAllStamps(getUserIdUseCase())
+            stampRepository.deleteAllStamps()
                 .onSuccess {
                     _uiState.emit(SettingUiState.Success(SettingScreenAction.CLEAR_ALL_STAMP))
                 }.onFailure {

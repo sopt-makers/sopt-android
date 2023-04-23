@@ -19,66 +19,20 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.stamp.BuildConfig
 import org.sopt.official.stamp.di.constant.Soptamp
 import org.sopt.stamp.di.constant.Constant
 import org.sopt.stamp.di.constant.Strings
-import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object ConfigModule {
-    @Provides
-    @Singleton
-    @Soptamp
-    fun providerLoggingInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
-    }
-
-    @Provides
-    @Singleton
-    @Soptamp
-    fun provideSerializer() = Json {
-        prettyPrint = true
-        isLenient = true
-    }
-
-    @Provides
-    @Singleton
-    @Soptamp
-    fun provideHttpClient(
-        @Soptamp loggingInterceptor: Interceptor
-    ) = OkHttpClient.Builder()
-        .addInterceptor(loggingInterceptor)
-        .build()
-
-    @OptIn(ExperimentalSerializationApi::class)
-    @Provides
-    @Singleton
-    @Soptamp
-    fun provideRetrofit(
-        @Strings(Constant.SOPTAMP_API_KEY) baseUrl: String,
-        @Soptamp client: OkHttpClient,
-        @Soptamp json: Json
-    ): Retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .client(client)
-        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-        .build()
-
     @Provides
     @Singleton
     @Soptamp

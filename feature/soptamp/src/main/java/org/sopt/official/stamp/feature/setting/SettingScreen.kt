@@ -51,7 +51,6 @@ import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.domain.fake.FakeStampRepository
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import org.sopt.official.stamp.feature.destinations.UpdateNicknameScreenDestination
 import org.sopt.official.stamp.feature.destinations.UpdateProfileScreenDestination
 import org.sopt.official.stamp.feature.destinations.WithdrawalScreenDestination
@@ -290,8 +289,7 @@ private fun SettingScreenPreview() {
         navigator = EmptyDestinationsNavigator,
         viewModel = SettingScreenViewModel(
             FakeUserRepository,
-            FakeStampRepository,
-            GetUserIdUseCase(FakeUserRepository)
+            FakeStampRepository
         )
     )
 }

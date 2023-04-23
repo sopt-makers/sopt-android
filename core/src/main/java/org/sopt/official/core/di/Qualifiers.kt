@@ -1,4 +1,4 @@
-package org.sopt.official.di.annotation
+package org.sopt.official.core.di
 
 import javax.inject.Qualifier
 

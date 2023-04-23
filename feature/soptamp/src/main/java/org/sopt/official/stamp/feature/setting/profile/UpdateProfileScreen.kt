@@ -57,7 +57,6 @@ import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import org.sopt.official.stamp.domain.usecase.user.UpdateProfileUseCase
 import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.util.addFocusCleaner
@@ -187,8 +186,7 @@ private fun EditIntroductionScreenPreview() {
         resultNavigator = EmptyResultBackNavigator(),
         viewModel = UpdateProfileViewModel(
             UpdateProfileUseCase(
-                FakeUserRepository,
-                GetUserIdUseCase(FakeUserRepository)
+                FakeUserRepository
             )
         )
     )

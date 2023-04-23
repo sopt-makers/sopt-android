@@ -16,14 +16,12 @@
 package org.sopt.official.stamp.domain.usecase.user
 
 import org.sopt.official.stamp.domain.repository.UserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import javax.inject.Inject
 
 class UpdateProfileUseCase @Inject constructor(
-    private val repository: UserRepository,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val repository: UserRepository
 ) {
     suspend operator fun invoke(introduction: String): Result<Unit> = runCatching {
-        return repository.updateProfileMessage(getUserIdUseCase(), introduction)
+        return repository.updateProfileMessage(introduction)
     }
 }

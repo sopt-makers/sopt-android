@@ -16,14 +16,12 @@
 package org.sopt.official.stamp.domain.usecase.user
 
 import org.sopt.official.stamp.domain.repository.UserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import javax.inject.Inject
 
 class UpdateNicknameUseCase @Inject constructor(
-    private val repository: UserRepository,
-    private val getUserIdUseCase: GetUserIdUseCase
+    private val repository: UserRepository
 ) {
     suspend operator fun invoke(nickname: String) = runCatching {
-        repository.updateNickname(getUserIdUseCase(), nickname)
+        repository.updateNickname(nickname)
     }
 }

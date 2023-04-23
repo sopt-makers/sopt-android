@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.domain.repository.MissionsRepository
@@ -31,10 +32,12 @@ import javax.inject.Inject
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
+    private val dataStore: SoptampDataStore,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
+    val userId = dataStore.userId
 
     fun fetchMissions(filter: String? = null) = viewModelScope.launch {
         _state.value = MissionsState.Loading

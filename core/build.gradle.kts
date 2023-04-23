@@ -5,13 +5,4 @@ plugins {
 
 android {
     namespace = "org.sopt.official.core"
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
 }

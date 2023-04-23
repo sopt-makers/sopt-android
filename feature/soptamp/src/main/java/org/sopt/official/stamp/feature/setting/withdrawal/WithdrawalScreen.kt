@@ -46,7 +46,6 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import org.sopt.official.stamp.domain.usecase.auth.WithdrawalUseCase
 import org.sopt.official.stamp.util.DefaultPreview
 
@@ -137,8 +136,7 @@ private fun WithdrawalScreenPreview() {
         navigator = EmptyDestinationsNavigator,
         viewModel = WithdrawalScreenViewModel(
             WithdrawalUseCase(
-                FakeUserRepository,
-                GetUserIdUseCase(FakeUserRepository)
+                FakeUserRepository
             )
         )
     )
