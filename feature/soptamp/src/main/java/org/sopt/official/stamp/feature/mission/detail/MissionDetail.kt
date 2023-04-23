@@ -103,7 +103,7 @@ fun MissionDetailScreen(
 
     LaunchedEffect(Unit) {
         Timber.d("MissionDetailScreen: $id, $isCompleted, $isMe, $userId")
-        viewModel.initMissionState(id, isCompleted, isMe, userId)
+        viewModel.initMissionState(id, isCompleted, isMe)
     }
     LaunchedEffect(isSuccess, progress) {
         if (progress >= 0.99f && isSuccess) {

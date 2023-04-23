@@ -68,7 +68,6 @@ fun UserMissionListScreen(
     val state by missionsViewModel.state.collectAsState()
 
     missionsViewModel.fetchMissions(
-        userId = args.userId,
         filter = MissionsFilter.COMPLETE_MISSION.title
     )
 
