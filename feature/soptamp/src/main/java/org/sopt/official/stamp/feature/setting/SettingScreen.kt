@@ -53,7 +53,6 @@ import org.sopt.official.stamp.domain.fake.FakeStampRepository
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
 import org.sopt.official.stamp.feature.destinations.UpdateNicknameScreenDestination
 import org.sopt.official.stamp.feature.destinations.UpdateProfileScreenDestination
-import org.sopt.official.stamp.feature.destinations.WithdrawalScreenDestination
 import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.feature.setting.component.section.Section
 import org.sopt.official.stamp.feature.setting.model.SectionUiModel
@@ -211,22 +210,6 @@ fun SettingScreen(
             Spacer(modifier = Modifier.height(16.dp))
             Section(items = logOutSectionItems)
             Spacer(modifier = Modifier.height(24.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                Text(
-                    text = "탈퇴하기",
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .noRippleClickable {
-                            navigator.navigate(WithdrawalScreenDestination)
-                        },
-                    style = SoptTheme.typography.caption1,
-                    color = SoptTheme.colors.onSurface40,
-                    textDecoration = TextDecoration.Underline
-                )
-            }
         }
         if (uiState is SettingUiState.Dialog) {
             AlertDialog(

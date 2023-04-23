@@ -19,7 +19,6 @@ import org.sopt.official.stamp.data.remote.model.response.UserResponse
 
 interface UserDataSource {
     suspend fun checkNickname(nickname: String)
-    suspend fun withdraw()
     suspend fun updateNickname(new: String)
     suspend fun updateProfileMessage(new: String)
     suspend fun getUserInfo(): UserResponse

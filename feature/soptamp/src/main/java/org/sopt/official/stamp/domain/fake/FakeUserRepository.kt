@@ -15,14 +15,16 @@
  */
 package org.sopt.official.stamp.domain.fake
 
+import org.sopt.official.stamp.domain.model.SoptampUser
 import org.sopt.official.stamp.domain.repository.UserRepository
 
 object FakeUserRepository : UserRepository {
+    private val fakeUser = SoptampUser("", 1, "")
+
     override suspend fun checkNickname(nickname: String) = Unit
 
     override suspend fun logout(): Result<Unit> = runCatching {}
-
-    override suspend fun withdraw(): Result<Unit> = runCatching {}
+    override suspend fun getUserInfo(): Result<SoptampUser> = runCatching { fakeUser }
 
     override suspend fun updateProfileMessage(profileMessage: String): Result<Unit> = runCatching {}
 

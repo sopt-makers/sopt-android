@@ -36,6 +36,6 @@ interface SoptampUserService {
     suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
     // 탈퇴하기
-    @DELETE("auth/withdraw")
+    @DELETE("user")
     suspend fun withdraw()
 }

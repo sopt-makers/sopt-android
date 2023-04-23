@@ -21,7 +21,6 @@ import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import org.sopt.official.stamp.data.source.UserDataSource
-import org.sopt.official.stamp.domain.model.SoptampUser
 import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
@@ -31,10 +30,6 @@ internal class RemoteUserDataSource @Inject constructor(
 
     override suspend fun checkNickname(nickname: String) {
         return soptampUserService.checkNickname(nickname)
-    }
-
-    override suspend fun withdraw() {
-        soptampUserService.withdraw()
     }
 
     override suspend fun updateNickname(new: String) {
