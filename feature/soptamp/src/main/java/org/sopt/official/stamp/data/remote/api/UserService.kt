@@ -33,12 +33,6 @@ interface UserService {
     @GET("auth")
     suspend fun checkNickname(@Query("nickname") nickname: String)
 
-    // 이메일 중복검사
-    @GET("auth")
-    suspend fun checkEmail(
-        @Query("email") email: String
-    )
-
     // 로그인
     @POST("user/login")
     suspend fun login(

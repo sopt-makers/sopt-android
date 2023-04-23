@@ -27,8 +27,6 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
 
-    override suspend fun checkEmail(email: String) = remote.checkEmail(email)
-
     override suspend fun login(email: String, password: String): User = remote.login(email, password).toUser()
     override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
 

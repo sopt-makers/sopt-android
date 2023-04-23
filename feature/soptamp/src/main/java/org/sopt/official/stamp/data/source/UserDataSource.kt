@@ -19,7 +19,6 @@ import org.sopt.official.stamp.data.remote.model.response.UserResponse
 
 interface UserDataSource {
     suspend fun checkNickname(nickname: String)
-    suspend fun checkEmail(email: String)
     suspend fun login(email: String, password: String): UserResponse
     suspend fun withdraw(userId: Int)
     suspend fun updatePassword(userId: Int, new: String)

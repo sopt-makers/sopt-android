@@ -35,8 +35,6 @@ internal class RemoteUserDataSource @Inject constructor(
         return userService.checkNickname(nickname)
     }
 
-    override suspend fun checkEmail(email: String) = userService.checkEmail(email)
-
     override suspend fun login(email: String, password: String): UserResponse {
         val response = userService.login(
             LoginRequest(email, password)
