@@ -39,6 +39,7 @@ class RankingViewModel @Inject constructor(
     private val _state: MutableStateFlow<RankingState> = MutableStateFlow(RankingState.Loading)
     val state: StateFlow<RankingState> = _state.asStateFlow()
     var isRefreshing by mutableStateOf(false)
+    val nickname = dataStore.nickname
 
     init {
         fetchRanking()

@@ -60,7 +60,7 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.stamp.feature.mission.model.ImageModel
-import org.sopt.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.feature.ranking.getRankTextColor
@@ -229,7 +229,7 @@ fun MissionDetailPreview() {
         level = MissionLevel.of(2),
         isCompleted = false,
         isMe = true,
-        userId = 1
+        nickname = "Nunu",
     )
     SoptTheme {
         MissionDetailScreen(

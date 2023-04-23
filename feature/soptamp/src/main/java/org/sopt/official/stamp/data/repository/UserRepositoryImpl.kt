@@ -27,7 +27,12 @@ class UserRepositoryImpl @Inject constructor(
     override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
     override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
 
-    override suspend fun getUserInfo() = runCatching { remote.getUserInfo().toDomain() }
+    override suspend fun getUserInfo() = runCatching {
+        remote.getUserInfo().toDomain()
+    }.onSuccess {
+        local.nickname = it.nickname
+        local.profileMessage = it.profileMessage
+    }
 
     override suspend fun updateProfileMessage(profileMessage: String) = runCatching {
         remote.updateProfileMessage(profileMessage)

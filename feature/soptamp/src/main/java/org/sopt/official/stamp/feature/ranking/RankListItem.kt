@@ -142,7 +142,6 @@ fun PreviewRankListItem() {
             RankListItem(
                 item = RankerUiModel(
                     rank = 4,
-                    userId = 1,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 300
@@ -153,7 +152,6 @@ fun PreviewRankListItem() {
             RankListItem(
                 item = RankerUiModel(
                     rank = 10,
-                    userId = 1,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 340
@@ -164,7 +162,6 @@ fun PreviewRankListItem() {
             RankListItem(
                 item = RankerUiModel(
                     rank = 140,
-                    userId = 1,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 945

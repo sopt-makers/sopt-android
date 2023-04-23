@@ -151,7 +151,6 @@ fun PreviewTopRankerList() {
             topRanker = Triple(
                 RankerUiModel(
                     rank = 1,
-                    userId = 1,
                     nickname = "jinsu",
                     description = "일이삼사육칠팔구십일이삼사오육칠팔구십dlfdl",
                     score = 1000
@@ -159,13 +158,11 @@ fun PreviewTopRankerList() {
                 ),
                 RankerUiModel(
                     rank = 2,
-                    userId = 1,
                     nickname = "jinsu",
                     score = 900
                 ),
                 RankerUiModel(
                     rank = 3,
-                    userId = 1,
                     nickname = "jinsu",
                     score = 800
                 )

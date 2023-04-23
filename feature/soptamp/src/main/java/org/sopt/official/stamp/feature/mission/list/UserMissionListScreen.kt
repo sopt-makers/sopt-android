@@ -52,7 +52,7 @@ import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestinati
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.stamp.feature.mission.model.MissionListUiModel
-import org.sopt.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 
@@ -83,11 +83,10 @@ fun UserMissionListScreen(
             }
 
             is MissionsState.Success -> UserMissionListScreen(
-                userId = args.userId,
                 userName = args.nickname,
                 description = args.description,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                isMe = args.userId == missionsViewModel.userId,
+                isMe = args.nickname == missionsViewModel.nickname,
                 onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
                 onClickBack = { resultNavigator.navigateBack() }
             )
@@ -97,7 +96,6 @@ fun UserMissionListScreen(
 
 @Composable
 fun UserMissionListScreen(
-    userId: Int,
     userName: String,
     description: String,
     missionListUiModel: MissionListUiModel,
@@ -129,7 +127,7 @@ fun UserMissionListScreen(
                 missions = missionListUiModel.missionList,
                 onMissionItemClick = { onMissionItemClick(it) },
                 isMe = isMe,
-                userId = userId
+                nickname = userName
             )
         }
     }
@@ -243,7 +241,6 @@ fun PreviewUserMissionListScreen() {
                 )
             ),
             isMe = false,
-            userId = 1
         )
     }
 }

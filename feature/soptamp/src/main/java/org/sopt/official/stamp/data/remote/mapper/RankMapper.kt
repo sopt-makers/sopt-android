@@ -24,7 +24,6 @@ internal fun List<RankResponse>.toData(): List<RankData> = this.map {
 
 internal fun RankResponse.toData(): RankData = RankData(
     rank,
-    userId,
     nickname,
     point,
     profileMessage

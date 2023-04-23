@@ -80,7 +80,7 @@ fun RankingScreen(
                 refreshing = rankingViewModel.isRefreshing,
                 onRefresh = { rankingViewModel.onRefresh() },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
-                userId = (state as RankingState.Success).userId,
+                nickname = rankingViewModel.nickname,
                 onClickBack = { resultNavigator.navigateBack() },
                 onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
             )
@@ -94,7 +94,7 @@ fun RankingScreen(
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
-    userId: Int,
+    nickname: String,
     onClickBack: () -> Unit = {},
     onClickUser: (RankerNavArg) -> Unit = {}
 ) {
@@ -118,7 +118,7 @@ fun RankingScreen(
             ) {
                 coroutineScope.launch {
                     val currentUserIndex = rankingListUiModel.otherRankingList.withIndex()
-                        .find { it.value.userId == userId }
+                        .find { it.value.nickname == nickname }
                         ?.index
                         ?: 0
                     listState.animateScrollToItem(index = currentUserIndex, scrollOffset = scrollOffsetPx)
@@ -151,9 +151,9 @@ fun RankingScreen(
                 items(rankingListUiModel.otherRankingList) { item ->
                     RankListItem(
                         item = item,
-                        isMyRanking = item.userId == userId,
+                        isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
-                            if (userId != ranker.userId) onClickUser(ranker.toArgs())
+                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
                         }
                     )
                 }
@@ -193,7 +193,6 @@ fun PreviewRankingScreen() {
         previewRanking.add(
             RankerUiModel(
                 rank = it + 1,
-                userId = it + 1,
                 nickname = "jinsu",
                 score = 1000 - (it * 10)
             )
@@ -202,7 +201,7 @@ fun PreviewRankingScreen() {
     SoptTheme {
         RankingScreen(
             rankingListUiModel = RankingListUiModel(previewRanking),
-            userId = 6
+            nickname = "",
         )
     }
 }
