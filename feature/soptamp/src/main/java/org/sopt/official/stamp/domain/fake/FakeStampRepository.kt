@@ -24,7 +24,6 @@ object FakeStampRepository : StampRepository {
         id = 1,
         contents = "",
         images = listOf(""),
-        userId = 1,
         missionId = 1
     )
 

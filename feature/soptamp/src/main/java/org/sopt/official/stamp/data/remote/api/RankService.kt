@@ -25,4 +25,5 @@ internal interface RankService {
 
     @GET("rank/detail")
     suspend fun getRankDetail(): List<RankResponse>
+}
 

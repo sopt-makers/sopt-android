@@ -21,6 +21,5 @@ data class Archive(
     val id: Int,
     val contents: String,
     val images: List<String>,
-    val userId: Int,
     val missionId: Int
 )

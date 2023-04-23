@@ -28,7 +28,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 
 interface StampService {
-    @GET("stamp/{missionId}")
+    @GET("stamp/mission/{missionId}")
     suspend fun retrieveStamp(
         @Path("missionId") missionId: Int
     ): StampResponse

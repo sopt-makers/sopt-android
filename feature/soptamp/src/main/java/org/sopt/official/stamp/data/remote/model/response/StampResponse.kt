@@ -15,17 +15,23 @@
  */
 package org.sopt.official.stamp.data.remote.model.response
 
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.official.stamp.domain.model.Archive
 
 @Serializable
 data class StampResponse(
+    @SerialName("createdAt")
     val createdAt: String? = null,
+    @SerialName("updatedAt")
     val updatedAt: String? = null,
+    @SerialName("id")
     val id: Int,
+    @SerialName("contents")
     val contents: String,
+    @SerialName("images")
     val images: List<String>? = null,
-    val userId: Int,
+    @SerialName("missionId")
     val missionId: Int
 ) {
     fun toDomain() = Archive(
@@ -34,7 +40,6 @@ data class StampResponse(
         id = id,
         contents = contents,
         images = images ?: emptyList(),
-        userId = userId,
         missionId = missionId
     )
 }
