@@ -19,7 +19,6 @@ import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.Query
 
@@ -30,12 +29,9 @@ interface UserService {
 
     // 닉네임 변경
     @PATCH("auth/nickname")
-    suspend fun updateNickname(
-        @Header("userId") userId: Int,
-        @Body nickname: UpdateNicknameRequest
-    )
+    suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
     // 탈퇴하기
     @DELETE("auth/withdraw")
-    suspend fun withdraw(@Header("userId") userId: Int)
+    suspend fun withdraw()
 }

@@ -21,7 +21,6 @@ import org.sopt.official.stamp.data.remote.model.response.ModifyStampResponse
 import org.sopt.official.stamp.data.remote.model.response.StampResponse
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -31,14 +30,12 @@ import retrofit2.http.Path
 interface StampService {
     @GET("stamp/{missionId}")
     suspend fun retrieveStamp(
-        @Header("userId") userId: Int,
         @Path("missionId") missionId: Int
     ): StampResponse
 
     @Multipart
     @PUT("stamp/{missionId}")
     suspend fun modifyStamp(
-        @Header("userId") userId: Int,
         @Path("missionId") missionId: Int,
         @Part("stampContent") stampContent: RequestBody,
         @Part imgUrl: List<MultipartBody.Part>? = null
@@ -47,20 +44,14 @@ interface StampService {
     @Multipart
     @POST("stamp/{missionId}")
     suspend fun registerStamp(
-        @Header("userId") userId: Int,
         @Path("missionId") missionId: Int,
         @Part("stampContent") stampContent: RequestBody,
         @Part imgUrl: List<MultipartBody.Part>? = null
     ): StampResponse
 
     @DELETE("stamp/{missionId}")
-    suspend fun deleteStamp(
-        @Header("userId") userId: Int,
-        @Path("missionId") missionId: Int
-    )
+    suspend fun deleteStamp(@Path("missionId") missionId: Int)
 
     @DELETE("stamp/all")
-    suspend fun deleteAllStamps(
-        @Header("userId") userId: Int
-    )
+    suspend fun deleteAllStamps()
 }
