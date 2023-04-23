@@ -19,4 +19,5 @@ import org.sopt.official.stamp.domain.model.Rank
 
 interface RankingRepository {
     suspend fun getRanking(): Result<List<Rank>>
+    suspend fun getRankDetail(nickname: String): Result<Rank>
 }
