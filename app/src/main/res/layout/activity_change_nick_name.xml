@@ -37,6 +37,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/layout_edit_text_background"
+        android:enabled="false"
         android:hint="@string/change_nickname_guide"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
