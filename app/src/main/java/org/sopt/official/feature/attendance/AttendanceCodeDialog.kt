@@ -45,7 +45,12 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initTitle()
         initListener()
+    }
+
+    private fun initTitle() {
+        binding.titleText = "${_title.substring(0,5)}하기"
     }
 
     private fun initListener() {

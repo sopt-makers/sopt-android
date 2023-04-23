@@ -115,8 +115,10 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
-        binding.btnAttendance.setOnClickListener {
-            AttendanceCodeDialog().show(supportFragmentManager, "attendanceCodeDialog")
+        binding.btnAttendance.run {
+            setOnClickListener {
+                AttendanceCodeDialog(this.text.toString()).show(supportFragmentManager, "attendanceCodeDialog")
+            }
         }
     }
 
@@ -144,9 +146,11 @@ class AttendanceActivity : AppCompatActivity() {
                         is AttendanceState.Success -> {
                             updateAttendanceUserInfo(attendanceHistory.data.userInfo)
                             updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
-                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot {
-                                it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean
-                            })
+                            updateAttendanceLog(
+                                attendanceHistory.data.attendanceLog.filterNot {
+                                    it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean
+                                }
+                            )
                         }
 
                         else -> {}
