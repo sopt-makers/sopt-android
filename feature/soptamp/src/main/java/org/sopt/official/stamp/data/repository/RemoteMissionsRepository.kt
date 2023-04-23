@@ -25,8 +25,8 @@ import javax.inject.Inject
 internal class RemoteMissionsRepository @Inject constructor(
     private val remote: MissionsDataSource
 ) : MissionsRepository {
-    override suspend fun getAllMissions(userId: Int): Result<List<Mission>> {
-        val result = remote.getAllMission(userId)
+    override suspend fun getAllMissions(): Result<List<Mission>> {
+        val result = remote.getAllMission()
             .mapCatching { it.toDomain() }
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {
@@ -36,8 +36,8 @@ internal class RemoteMissionsRepository @Inject constructor(
         }
     }
 
-    override suspend fun getCompleteMissions(userId: Int): Result<List<Mission>> {
-        val result = remote.getAllMission(userId)
+    override suspend fun getCompleteMissions(): Result<List<Mission>> {
+        val result = remote.getAllMission()
             .mapCatching {
                 it.filter { mission -> mission.isCompleted }.toDomain()
             }
@@ -49,11 +49,9 @@ internal class RemoteMissionsRepository @Inject constructor(
         }
     }
 
-    override suspend fun getInCompleteMissions(userId: Int): Result<List<Mission>> {
-        val result = remote.getAllMission(userId)
-            .mapCatching {
-                it.filter { mission -> !mission.isCompleted }.toDomain()
-            }
+    override suspend fun getInCompleteMissions(): Result<List<Mission>> {
+        val result = remote.getAllMission()
+            .mapCatching { it.filter { mission -> !mission.isCompleted }.toDomain() }
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {
             Result.failure(exception.toDomain())

@@ -35,7 +35,6 @@ object FakeStampRepository : StampRepository {
     ): Result<Unit> = runCatching { }
 
     override suspend fun getMissionContent(missionId: Int) = runCatching { fakeArchive }
-    override suspend fun getMissionContent(userId: Int, missionId: Int) = runCatching { fakeArchive }
 
     override suspend fun modifyMission(
         missionId: Int,
@@ -45,5 +44,5 @@ object FakeStampRepository : StampRepository {
 
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 
-    override suspend fun deleteAllStamps(userId: Int) = runCatching { }
+    override suspend fun deleteAllStamps(): Result<Unit> = runCatching { }
 }

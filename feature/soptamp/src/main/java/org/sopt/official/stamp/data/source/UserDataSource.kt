@@ -17,7 +17,7 @@ package org.sopt.official.stamp.data.source
 
 interface UserDataSource {
     suspend fun checkNickname(nickname: String)
-    suspend fun withdraw(userId: Int)
-    suspend fun updateNickname(userId: Int, new: String)
-    suspend fun updateProfileMessage(userId: Int, new: String)
+    suspend fun withdraw()
+    suspend fun updateNickname(new: String)
+    suspend fun updateProfileMessage(new: String)
 }

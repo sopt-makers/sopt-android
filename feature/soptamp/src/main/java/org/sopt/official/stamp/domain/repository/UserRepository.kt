@@ -18,10 +18,10 @@ package org.sopt.official.stamp.domain.repository
 interface UserRepository {
     suspend fun checkNickname(nickname: String)
     suspend fun logout(): Result<Unit>
-    suspend fun withdraw(userId: Int): Result<Unit>
-    suspend fun updateProfileMessage(userId: Int, profileMessage: String): Result<Unit>
-    suspend fun updateNickname(userId: Int, nickname: String): Result<Unit>
-    fun updateLocalUserInfo(userId: Int, profileMessage: String)
+    suspend fun withdraw(): Result<Unit>
+    suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
+    suspend fun updateNickname(nickname: String): Result<Unit>
+    fun updateLocalUserInfo(profileMessage: String)
     fun fetchUserId(): Int
     fun getIsOnboardingSeen(): Boolean
     fun updateOnboardingSeen(value: Boolean)

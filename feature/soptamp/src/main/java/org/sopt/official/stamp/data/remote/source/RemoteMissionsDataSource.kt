@@ -26,8 +26,8 @@ import javax.inject.Inject
 internal class RemoteMissionsDataSource @Inject constructor(
     private val soptampService: SoptampService
 ) : MissionsDataSource {
-    override suspend fun getAllMission(userId: Int): Result<List<MissionData>> {
-        val result = kotlin.runCatching { soptampService.getAllMissions(userId).toData() }
+    override suspend fun getAllMission(): Result<List<MissionData>> {
+        val result = kotlin.runCatching { soptampService.getAllMissions().toData() }
         return when (val exception = result.exceptionOrNull()) {
             null -> result
             is UnknownHostException -> return Result.failure(ErrorData.NetworkUnavailable)

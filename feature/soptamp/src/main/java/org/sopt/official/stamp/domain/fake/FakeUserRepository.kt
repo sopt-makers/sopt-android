@@ -15,35 +15,19 @@
  */
 package org.sopt.official.stamp.domain.fake
 
-import org.sopt.official.stamp.domain.model.User
 import org.sopt.official.stamp.domain.repository.UserRepository
 
 object FakeUserRepository : UserRepository {
-    private val fakeUser = User(-1, "", -1, "")
-    override suspend fun signup(
-        nickname: String,
-        email: String,
-        password: String,
-        osType: String,
-        clientToken: String
-    ) = 1
-
     override suspend fun checkNickname(nickname: String) = Unit
-
-    override suspend fun checkEmail(email: String) = Unit
-
-    override suspend fun login(email: String, password: String) = fakeUser
 
     override suspend fun logout(): Result<Unit> = runCatching {}
 
-    override suspend fun withdraw(userId: Int) = runCatching {}
+    override suspend fun withdraw(): Result<Unit> = runCatching {}
 
-    override suspend fun updateProfileMessage(userId: Int, profileMessage: String) = runCatching {}
+    override suspend fun updateProfileMessage(profileMessage: String): Result<Unit> = runCatching {}
 
-    override suspend fun updatePassword(userId: Int, password: String) = runCatching {}
-
-    override suspend fun updateNickname(userId: Int, nickname: String) = runCatching {}
-    override fun updateLocalUserInfo(userId: Int, profileMessage: String) = Unit
+    override suspend fun updateNickname(nickname: String): Result<Unit> = runCatching {}
+    override fun updateLocalUserInfo(profileMessage: String) = Unit
 
     override fun fetchUserId() = 1
     override fun getIsOnboardingSeen() = false

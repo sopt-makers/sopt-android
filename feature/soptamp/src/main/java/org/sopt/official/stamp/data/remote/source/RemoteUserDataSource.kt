@@ -31,15 +31,15 @@ internal class RemoteUserDataSource @Inject constructor(
         return userService.checkNickname(nickname)
     }
 
-    override suspend fun withdraw(userId: Int) {
-        userService.withdraw(userId)
+    override suspend fun withdraw() {
+        userService.withdraw()
     }
 
-    override suspend fun updateNickname(userId: Int, new: String) {
-        userService.updateNickname(userId, UpdateNicknameRequest(new))
+    override suspend fun updateNickname(new: String) {
+        userService.updateNickname(UpdateNicknameRequest(new))
     }
 
-    override suspend fun updateProfileMessage(userId: Int, new: String) {
-        rankService.updateProfileMessage(userId, UpdateProfileMessageRequest(new))
+    override suspend fun updateProfileMessage(new: String) {
+        rankService.updateProfileMessage(UpdateProfileMessageRequest(new))
     }
 }
