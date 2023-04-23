@@ -23,7 +23,7 @@ import org.sopt.official.core.di.AppRetrofit
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.SoptampService
 import org.sopt.official.stamp.data.remote.api.StampService
-import org.sopt.official.stamp.data.remote.api.UserService
+import org.sopt.official.stamp.data.remote.api.SoptampUserService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -52,5 +52,5 @@ internal object RemoteModule {
     @Singleton
     fun provideUserService(
         @AppRetrofit retrofit: Retrofit
-    ): UserService = retrofit.create(UserService::class.java)
+    ): SoptampUserService = retrofit.create(SoptampUserService::class.java)
 }

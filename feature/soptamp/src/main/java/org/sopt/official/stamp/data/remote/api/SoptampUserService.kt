@@ -20,12 +20,12 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
-import retrofit2.http.Query
+import retrofit2.http.Path
 
-interface UserService {
+interface SoptampUserService {
     // 닉네임 중복검사
-    @GET("auth")
-    suspend fun checkNickname(@Query("nickname") nickname: String)
+    @GET("user/nickname/{nickname}")
+    suspend fun checkNickname(@Path("nickname") nickname: String)
 
     // 닉네임 변경
     @PATCH("auth/nickname")
