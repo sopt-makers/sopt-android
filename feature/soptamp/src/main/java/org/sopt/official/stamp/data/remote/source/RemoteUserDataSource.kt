@@ -17,7 +17,6 @@ package org.sopt.official.stamp.data.remote.source
 
 import org.sopt.official.stamp.data.remote.model.request.LoginRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
-import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.UserService
@@ -52,10 +51,6 @@ internal class RemoteUserDataSource @Inject constructor(
 
     override suspend fun withdraw(userId: Int) {
         userService.withdraw(userId)
-    }
-
-    override suspend fun updatePassword(userId: Int, new: String) {
-        userService.updatePassword(userId, UpdatePasswordRequest(new))
     }
 
     override suspend fun updateNickname(userId: Int, new: String) {

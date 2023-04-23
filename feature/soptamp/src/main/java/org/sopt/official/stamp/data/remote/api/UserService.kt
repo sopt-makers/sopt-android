@@ -17,7 +17,6 @@ package org.sopt.official.stamp.data.remote.api
 
 import org.sopt.official.stamp.data.remote.model.request.LoginRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
-import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -38,13 +37,6 @@ interface UserService {
     suspend fun login(
         @Body request: LoginRequest
     ): Response<UserResponse>
-
-    // 비밀번호 변경
-    @PATCH("auth/password")
-    suspend fun updatePassword(
-        @Header("userId") userId: Int,
-        @Body password: UpdatePasswordRequest
-    )
 
     // 닉네임 변경
     @PATCH("auth/nickname")

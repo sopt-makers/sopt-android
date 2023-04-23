@@ -21,7 +21,6 @@ interface UserDataSource {
     suspend fun checkNickname(nickname: String)
     suspend fun login(email: String, password: String): UserResponse
     suspend fun withdraw(userId: Int)
-    suspend fun updatePassword(userId: Int, new: String)
     suspend fun updateNickname(userId: Int, new: String)
     suspend fun updateProfileMessage(userId: Int, new: String)
 }

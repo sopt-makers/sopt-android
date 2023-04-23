@@ -45,13 +45,6 @@ class UserRepositoryImpl @Inject constructor(
         local.profileMessage = profileMessage
     }
 
-    override suspend fun updatePassword(
-        userId: Int,
-        password: String
-    ): Result<Unit> = runCatching {
-        remote.updatePassword(userId, password)
-    }
-
     override suspend fun updateNickname(
         userId: Int,
         nickname: String
