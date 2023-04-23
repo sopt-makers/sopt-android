@@ -80,4 +80,20 @@
     <string name="mypage_alert_log_out_subtitle">정말 로그아웃을 하실 건가요?</string>
     <string name="mypage_alert_log_out_positive">로그아웃</string>
     <string name="mypage_alert_log_out_negative">취소</string>
+
+    <!--    탈퇴하기    -->
+    <string name="toolbar_sign_out">탈퇴하기</string>
+    <string name="sign_out_title">탈퇴 시 유의사항</string>
+    <string name="sign_out_subtitle">회원 탈퇴를 신청하시면 해당 이메일은 즉시 탈퇴 처리됩니다.\n탈퇴 처리 시 계정 내에서 입력했던 정보는 영구적으로 삭제되며, 복구가 어렵습니다.</string>
+    <string name="sign_out_button">탈퇴하기</string>
+
+    <!--    닉네임 변경하기    -->
+    <string name="toolbar_change_nickname">닉네임 변경하기</string>
+    <string name="change_nickname_guide">한글/영문 10자 이하로 입력해주세요.</string>
+    <string name="change_nickname_error">사용 중인 이름입니다.</string>
+    <string name="change_nickname_button">닉네임 변경</string>
+
+    <!--    한 마지 편집하기   -->
+    <string name="toolbar_adjust_sentence">한 마디 편집</string>
+    <string name="adjust_sentence_button">저장</string>
 </resources>

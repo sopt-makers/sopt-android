@@ -4,8 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="310dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/rectangle_radius_10"
-    android:backgroundTint="@color/black_60"
     android:paddingStart="7dp"
     android:paddingTop="26dp"
     android:paddingEnd="7dp"
