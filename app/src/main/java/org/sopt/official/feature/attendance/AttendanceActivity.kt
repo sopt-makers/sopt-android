@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.util.Log
 import android.view.*
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -32,22 +31,25 @@ class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
     private val attendanceViewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
-    private val menuProvider = (object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.menu_attendance_overview, menu)
-        }
+    private val menuProvider = (
+        object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_attendance_overview, menu)
+            }
 
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            return when (menuItem.itemId) {
-                R.id.menu_refresh -> {
-                    attendanceViewModel.fetchSoptEvent()
-                    attendanceViewModel.fetchAttendanceHistory()
-                    true
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_refresh -> {
+                        attendanceViewModel.fetchSoptEvent()
+                        attendanceViewModel.fetchAttendanceHistory()
+                        attendanceViewModel.fetchAttendanceRound()
+                        true
+                    }
+                    else -> false
                 }
-                else -> false
             }
         }
-    })
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +71,7 @@ class AttendanceActivity : AppCompatActivity() {
         attendanceViewModel.run {
             fetchSoptEvent()
             fetchAttendanceHistory()
+            fetchAttendanceRound()
         }
     }
 
@@ -141,7 +144,9 @@ class AttendanceActivity : AppCompatActivity() {
                         is AttendanceState.Success -> {
                             updateAttendanceUserInfo(attendanceHistory.data.userInfo)
                             updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
-                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot { it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean })
+                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot {
+                                it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean
+                            })
                         }
 
                         else -> {}
@@ -200,7 +205,6 @@ class AttendanceActivity : AppCompatActivity() {
                 setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
 
-            // 여기만 progress바 필요.
             layoutAttendanceProgress.isVisible = true
             tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
             tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
@@ -217,7 +221,7 @@ class AttendanceActivity : AppCompatActivity() {
                 attendanceViewModel.setSecondProgressBar(false)
             }
 
-            // tv1과 tv2에 따라서 내용이 변경됨
+            // 첫 번째 동그라미와 두 번째 동그라미에 따라서 내용이 변경됨
             val firstStatus = soptEvent.attendances[0].status.name
             val secondStatus = soptEvent.attendances[1].status.name
             if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
