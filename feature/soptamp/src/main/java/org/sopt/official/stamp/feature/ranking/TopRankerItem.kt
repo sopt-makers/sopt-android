@@ -112,7 +112,6 @@ fun PreviewTopRankerItem() {
         TopRankerItem(
             ranker = RankerUiModel(
                 rank = 1,
-                userId = 1,
                 nickname = "jinsu",
                 score = 1000
             ),

@@ -15,19 +15,15 @@
  */
 package org.sopt.official.stamp.domain.repository
 
-import org.sopt.official.stamp.domain.model.User
+import org.sopt.official.stamp.domain.model.SoptampUser
 
 interface UserRepository {
-    suspend fun signup(nickname: String, email: String, password: String, osType: String, clientToken: String): Int
     suspend fun checkNickname(nickname: String)
-    suspend fun checkEmail(email: String)
-    suspend fun login(email: String, password: String): User
     suspend fun logout(): Result<Unit>
-    suspend fun withdraw(userId: Int): Result<Unit>
-    suspend fun updateProfileMessage(userId: Int, profileMessage: String): Result<Unit>
-    suspend fun updatePassword(userId: Int, password: String): Result<Unit>
-    suspend fun updateNickname(userId: Int, nickname: String): Result<Unit>
-    fun updateLocalUserInfo(userId: Int, profileMessage: String)
+    suspend fun getUserInfo(): Result<SoptampUser>
+    suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
+    suspend fun updateNickname(nickname: String): Result<Unit>
+    fun updateLocalUserInfo(profileMessage: String)
     fun fetchUserId(): Int
     fun getIsOnboardingSeen(): Boolean
     fun updateOnboardingSeen(value: Boolean)

@@ -12,10 +12,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.BuildConfig
 import org.sopt.official.FlipperInitializer
-import org.sopt.official.di.annotation.AppRetrofit
-import org.sopt.official.di.annotation.Auth
-import org.sopt.official.di.annotation.Logging
-import org.sopt.official.di.annotation.OperationRetrofit
+import org.sopt.official.core.di.AppRetrofit
+import org.sopt.official.core.di.Auth
+import org.sopt.official.core.di.Logging
+import org.sopt.official.core.di.OperationRetrofit
 import retrofit2.Converter
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -65,7 +65,6 @@ object NetModule {
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devApi else BuildConfig.newApi)
         .build()
 
-    // TODO by Nunu, IceMan devOperationApi -> OperationApi로 바꿔주세요!
     @OperationRetrofit
     @Provides
     @Singleton

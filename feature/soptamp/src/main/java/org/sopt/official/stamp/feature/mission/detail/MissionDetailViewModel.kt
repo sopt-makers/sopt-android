@@ -81,7 +81,7 @@ class MissionDetailViewModel @Inject constructor(
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
 
-    fun initMissionState(id: Int, isCompleted: Boolean, isMe: Boolean, userId: Int) {
+    fun initMissionState(id: Int, isCompleted: Boolean, isMe: Boolean) {
         viewModelScope.launch {
             uiState.update {
                 it.copy(
@@ -93,7 +93,7 @@ class MissionDetailViewModel @Inject constructor(
                     isMe = isMe
                 )
             }
-            repository.getMissionContent(userId, id)
+            repository.getMissionContent(id)
                 .onSuccess {
                     val option = if (!isMe) {
                         ToolbarIconType.NONE

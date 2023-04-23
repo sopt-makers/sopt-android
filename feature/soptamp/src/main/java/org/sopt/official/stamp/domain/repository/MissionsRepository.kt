@@ -18,7 +18,7 @@ package org.sopt.official.stamp.domain.repository
 import org.sopt.official.stamp.domain.model.Mission
 
 interface MissionsRepository {
-    suspend fun getAllMissions(userId: Int): Result<List<Mission>>
-    suspend fun getCompleteMissions(userId: Int): Result<List<Mission>>
-    suspend fun getInCompleteMissions(userId: Int): Result<List<Mission>>
+    suspend fun getAllMissions(): Result<List<Mission>>
+    suspend fun getCompleteMissions(): Result<List<Mission>>
+    suspend fun getInCompleteMissions(): Result<List<Mission>>
 }

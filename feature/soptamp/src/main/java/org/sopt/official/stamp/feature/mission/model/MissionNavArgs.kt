@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.feature.mission.model
+package org.sopt.official.stamp.feature.mission.model
 
 import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
 import com.ramcosta.composedestinations.navargs.NavTypeSerializer
 import org.sopt.official.stamp.domain.MissionLevel
+import org.sopt.stamp.feature.mission.model.MissionUiModel
 
 data class MissionNavArgs(
     val id: Int,
@@ -25,22 +26,22 @@ data class MissionNavArgs(
     val level: MissionLevel,
     val isCompleted: Boolean,
     val isMe: Boolean,
-    val userId: Int
+    val nickname: String
 )
 
-fun MissionUiModel.toArgs(isMe: Boolean, userId: Int) = MissionNavArgs(
+fun MissionUiModel.toArgs(isMe: Boolean, nickname: String) = MissionNavArgs(
     id = this.id,
     title = this.title,
     level = this.level,
     isCompleted = this.isCompleted,
     isMe = isMe,
-    userId = userId
+    nickname = nickname
 )
 
 @NavTypeSerializer
 class MissionNavArgsSerializer : DestinationsNavTypeSerializer<MissionNavArgs> {
     override fun toRouteString(value: MissionNavArgs): String {
-        return "${value.id}::${value.title}::${value.level}::${value.isCompleted}::${value.isMe}::${value.userId}"
+        return "${value.id}::${value.title}::${value.level}::${value.isCompleted}::${value.isMe}::${value.nickname}"
     }
 
     override fun fromRouteString(routeStr: String): MissionNavArgs {
@@ -51,7 +52,7 @@ class MissionNavArgsSerializer : DestinationsNavTypeSerializer<MissionNavArgs> {
             level = MissionLevel.of(it[2].toInt()),
             isCompleted = it[3].toBoolean(),
             isMe = it[4].toBoolean(),
-            userId = it[5].toInt()
+            nickname = it[5],
         )
     }
 }

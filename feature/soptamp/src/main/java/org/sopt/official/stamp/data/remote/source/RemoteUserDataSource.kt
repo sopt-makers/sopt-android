@@ -15,73 +15,30 @@
  */
 package org.sopt.official.stamp.data.remote.source
 
-import org.sopt.official.stamp.data.remote.model.request.LoginRequest
-import org.sopt.official.stamp.data.remote.model.request.SignUpRequest
+import org.sopt.official.stamp.data.remote.api.SoptampUserService
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
-import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
-import org.sopt.official.stamp.data.remote.model.response.SignUpResponse
-import org.sopt.official.stamp.data.remote.api.RankService
-import org.sopt.official.stamp.data.remote.api.UserService
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import org.sopt.official.stamp.data.source.UserDataSource
-import retrofit2.HttpException
 import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
-    private val userService: UserService,
-    private val rankService: RankService
+    private val soptampUserService: SoptampUserService
 ) : UserDataSource {
-    override suspend fun signup(
-        nickname: String,
-        email: String,
-        password: String,
-        osType: String,
-        clientToken: String
-    ): SignUpResponse {
-        return userService.signup(
-            SignUpRequest(
-                nickname,
-                email,
-                password
-            )
-        )
-    }
 
     override suspend fun checkNickname(nickname: String) {
-        return userService.checkNickname(nickname)
+        return soptampUserService.checkNickname(nickname)
     }
 
-    override suspend fun checkEmail(email: String) = userService.checkEmail(email)
-
-    override suspend fun login(email: String, password: String): UserResponse {
-        val response = userService.login(
-            LoginRequest(email, password)
-        )
-        return if (response.isSuccessful) {
-            UserResponse(
-                response.body()?.userId,
-                response.body()?.message,
-                response.code()
-            )
-        } else {
-            throw HttpException(response)
-        }
+    override suspend fun updateNickname(new: String) {
+        soptampUserService.updateNickname(UpdateNicknameRequest(new))
     }
 
-    override suspend fun withdraw(userId: Int) {
-        userService.withdraw(userId)
+    override suspend fun updateProfileMessage(new: String) {
+        soptampUserService.updateProfileMessage(UpdateProfileMessageRequest(new))
     }
 
-    override suspend fun updatePassword(userId: Int, new: String) {
-        userService.updatePassword(userId, UpdatePasswordRequest(new))
-    }
-
-    override suspend fun updateNickname(userId: Int, new: String) {
-        userService.updateNickname(userId, UpdateNicknameRequest(new))
-    }
-
-    override suspend fun updateProfileMessage(userId: Int, new: String) {
-        rankService.updateProfileMessage(userId, UpdateProfileMessageRequest(new))
+    override suspend fun getUserInfo(): UserResponse {
+        return soptampUserService.getUserInformation()
     }
 }
