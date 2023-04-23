@@ -2,6 +2,7 @@ package org.sopt.official.feature.mypage
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +15,10 @@ import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
 import org.sopt.official.designsystem.AlertDialogPositiveNegative
 import org.sopt.official.domain.entity.UserState
-import org.sopt.official.feature.mypage.rule.PrivateInfoActivity
-import org.sopt.official.feature.mypage.rule.ServiceRuleActivity
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
+import org.sopt.official.feature.web.WebUrlConstant
 import org.sopt.official.util.serializableExtra
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
@@ -69,10 +69,14 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun initClick() {
         binding.iconPrivateInfo.setOnClickListener {
-            this.startActivity(PrivateInfoActivity.getIntent(this))
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))
+            )
         }
         binding.iconServiceRule.setOnClickListener {
-            this.startActivity(ServiceRuleActivity.getIntent(this))
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))
+            )
         }
         binding.iconSendOpinion.setOnClickListener {
             // 구글폼 이동 (아직 url X)

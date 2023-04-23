@@ -21,6 +21,8 @@ object WebUrlConstant {
     //region others
 
     val SOPT_OFFICIAL_YOUTUBE = "https://www.youtube.com/@SOPTMEDIA"
+    val NOTICE_PRIVATE_INFO = "https://florentine-legend-ffc.notion.site/SOPT-0b378275554d4d65a442310e83c7c988"
+    val NOTICE_SERVICE_RULE = "https://florentine-legend-ffc.notion.site/SOPT-69e33dccb59543dd91f5f44ed1250881"
 
     //endregion
 

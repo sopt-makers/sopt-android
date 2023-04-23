@@ -67,12 +67,6 @@
         <activity android:name=".feature.mypage.MyPageActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.rule.PrivateInfoActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.rule.ServiceRuleActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
         <activity android:name=".feature.mypage.signOut.SignOutActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
