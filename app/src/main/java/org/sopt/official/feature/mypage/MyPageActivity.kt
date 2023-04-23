@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.AlertDialog
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,8 +14,6 @@ import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
 import org.sopt.official.designsystem.AlertDialogPositiveNegative
 import org.sopt.official.domain.entity.UserState
-import org.sopt.official.domain.entity.auth.UserStatus
-import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.rule.PrivateInfoActivity
 import org.sopt.official.feature.mypage.rule.ServiceRuleActivity
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
@@ -27,7 +24,6 @@ import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.asNullableWrapper
 import java.io.Serializable
-import java.util.*
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
@@ -51,7 +47,7 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            this.onBackPressedDispatcher.onBackPressed()
         }
     }
 

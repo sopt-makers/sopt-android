@@ -2,9 +2,8 @@ package org.sopt.official.feature.mypage.soptamp.sentence
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.sopt.official.databinding.ActivityAdjustSentenceBinding
-import org.sopt.official.util.viewBinding
+import javax.inject.Inject
 
 @HiltViewModel
-class AdjustSentenceViewModel: ViewModel() {
+class AdjustSentenceViewModel @Inject constructor() : ViewModel() {
 }
