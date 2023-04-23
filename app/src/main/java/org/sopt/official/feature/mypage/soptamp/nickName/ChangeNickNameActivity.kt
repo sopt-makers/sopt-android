@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.databinding.ActivityChangeNickNameBinding
 import org.sopt.official.util.viewBinding
@@ -19,7 +20,8 @@ class ChangeNickNameActivity : AppCompatActivity()  {
         setContentView(binding.root)
 
         initToolbar()
-        initClick()
+        initView()
+        initAction()
     }
 
     private fun initToolbar() {
@@ -28,11 +30,20 @@ class ChangeNickNameActivity : AppCompatActivity()  {
         }
     }
 
-    private fun initClick() {
+    private fun initView() {
+//        binding.errorMessage.setVisible() -> validate 결과에 따라
+//        binding.edittext.backgroundTintList = -> validate 결과에 따라 컬러 변경
+    }
+
+    private fun initAction() {
         binding.confirmButton.setOnClickListener {
             viewModel.changeNickName()
             this.finish()
         }
+        binding.edittext.addTextChangedListener {
+            //api 콜
+        }
+
     }
 
     companion object {
