@@ -128,7 +128,6 @@ class MyPageActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: MyPageActivity.StartArgs) = Intent(context, MyPageActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("args", args)
         }
     }

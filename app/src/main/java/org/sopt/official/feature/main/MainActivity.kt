@@ -261,7 +261,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("args", args)
         }
     }
