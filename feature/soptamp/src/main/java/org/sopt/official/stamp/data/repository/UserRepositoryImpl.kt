@@ -25,14 +25,6 @@ class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
     private val local: SoptampDataStore
 ) : UserRepository {
-    override suspend fun signup(
-        nickname: String,
-        email: String,
-        password: String,
-        osType: String,
-        clientToken: String
-    ): Int = remote.signup(nickname, email, password, osType, clientToken).userId
-
     override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
 
     override suspend fun checkEmail(email: String) = remote.checkEmail(email)

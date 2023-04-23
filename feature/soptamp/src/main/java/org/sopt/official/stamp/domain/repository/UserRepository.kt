@@ -18,7 +18,6 @@ package org.sopt.official.stamp.domain.repository
 import org.sopt.official.stamp.domain.model.User
 
 interface UserRepository {
-    suspend fun signup(nickname: String, email: String, password: String, osType: String, clientToken: String): Int
     suspend fun checkNickname(nickname: String)
     suspend fun checkEmail(email: String)
     suspend fun login(email: String, password: String): User

@@ -16,11 +16,9 @@
 package org.sopt.official.stamp.data.remote.source
 
 import org.sopt.official.stamp.data.remote.model.request.LoginRequest
-import org.sopt.official.stamp.data.remote.model.request.SignUpRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
-import org.sopt.official.stamp.data.remote.model.response.SignUpResponse
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.UserService
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
@@ -32,21 +30,6 @@ internal class RemoteUserDataSource @Inject constructor(
     private val userService: UserService,
     private val rankService: RankService
 ) : UserDataSource {
-    override suspend fun signup(
-        nickname: String,
-        email: String,
-        password: String,
-        osType: String,
-        clientToken: String
-    ): SignUpResponse {
-        return userService.signup(
-            SignUpRequest(
-                nickname,
-                email,
-                password
-            )
-        )
-    }
 
     override suspend fun checkNickname(nickname: String) {
         return userService.checkNickname(nickname)

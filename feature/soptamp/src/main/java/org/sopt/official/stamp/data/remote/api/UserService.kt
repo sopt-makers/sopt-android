@@ -16,10 +16,8 @@
 package org.sopt.official.stamp.data.remote.api
 
 import org.sopt.official.stamp.data.remote.model.request.LoginRequest
-import org.sopt.official.stamp.data.remote.model.request.SignUpRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdatePasswordRequest
-import org.sopt.official.stamp.data.remote.model.response.SignUpResponse
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import retrofit2.Response
 import retrofit2.http.Body
@@ -31,13 +29,6 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserService {
-
-    // 회원가입
-    @POST("user/signup")
-    suspend fun signup(
-        @Body request: SignUpRequest
-    ): SignUpResponse
-
     // 닉네임 중복검사
     @GET("auth")
     suspend fun checkNickname(@Query("nickname") nickname: String)
