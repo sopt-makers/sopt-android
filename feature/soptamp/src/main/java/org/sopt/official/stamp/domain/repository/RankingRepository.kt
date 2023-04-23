@@ -15,9 +15,10 @@
  */
 package org.sopt.official.stamp.domain.repository
 
+import org.sopt.official.stamp.domain.model.OtherMission
 import org.sopt.official.stamp.domain.model.Rank
 
 interface RankingRepository {
     suspend fun getRanking(): Result<List<Rank>>
-    suspend fun getRankDetail(nickname: String): Result<Rank>
+    suspend fun getRankDetail(nickname: String): Result<OtherMission>
 }
