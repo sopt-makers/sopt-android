@@ -6,4 +6,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangeNickNameViewModel @Inject constructor() : ViewModel() {
+
+    fun changeNickName() {
+        // changeNickName api 콜
+    }
 }

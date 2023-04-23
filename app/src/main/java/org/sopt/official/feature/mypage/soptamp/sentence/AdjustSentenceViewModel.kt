@@ -6,4 +6,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AdjustSentenceViewModel @Inject constructor() : ViewModel() {
+
+    fun adjustSentence() {
+        // adjustSentence api 콜
+    }
 }
