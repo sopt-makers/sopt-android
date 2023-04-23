@@ -19,7 +19,9 @@ import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.SoptampUserService
 import org.sopt.official.stamp.data.remote.model.request.UpdateNicknameRequest
 import org.sopt.official.stamp.data.remote.model.request.UpdateProfileMessageRequest
+import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import org.sopt.official.stamp.data.source.UserDataSource
+import org.sopt.official.stamp.domain.model.SoptampUser
 import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
@@ -41,5 +43,9 @@ internal class RemoteUserDataSource @Inject constructor(
 
     override suspend fun updateProfileMessage(new: String) {
         rankService.updateProfileMessage(UpdateProfileMessageRequest(new))
+    }
+
+    override suspend fun getUserInfo(): UserResponse {
+        return soptampUserService.getUserInformation()
     }
 }

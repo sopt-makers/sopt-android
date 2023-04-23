@@ -17,7 +17,6 @@ package org.sopt.official.stamp.data.repository
 
 import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.data.source.UserDataSource
-import org.sopt.official.stamp.domain.model.User
 import org.sopt.official.stamp.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -30,6 +29,8 @@ class UserRepositoryImpl @Inject constructor(
 
     override suspend fun withdraw() = runCatching { remote.withdraw() }
         .onSuccess { local.clear() }
+
+    override suspend fun getUserInfo() = runCatching { remote.getUserInfo().toDomain() }
 
     override suspend fun updateProfileMessage(profileMessage: String) = runCatching {
         remote.updateProfileMessage(profileMessage)

@@ -15,10 +15,13 @@
  */
 package org.sopt.official.stamp.domain.repository
 
+import org.sopt.official.stamp.domain.model.SoptampUser
+
 interface UserRepository {
     suspend fun checkNickname(nickname: String)
     suspend fun logout(): Result<Unit>
     suspend fun withdraw(): Result<Unit>
+    suspend fun getUserInfo(): Result<SoptampUser>
     suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
     suspend fun updateNickname(nickname: String): Result<Unit>
     fun updateLocalUserInfo(profileMessage: String)
