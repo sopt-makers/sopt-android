@@ -10,8 +10,7 @@
         android:id="@+id/layout_app_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?android:colorBackground"
-        app:layout_constraintTop_toTopOf="parent">
+        android:background="?android:colorBackground">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
