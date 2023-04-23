@@ -6,4 +6,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignOutViewModel @Inject constructor() : ViewModel() {
+
+    fun signOut() {
+        // SignOut 기능
+    }
 }
