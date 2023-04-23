@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.databinding.ActivityAdjustSentenceBinding
 import org.sopt.official.feature.mypage.MyPageActivity
@@ -20,12 +21,19 @@ class AdjustSentenceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initToolbar()
+        initView()
         initClick()
     }
 
     private fun initToolbar() {
         binding.toolbar.setNavigationOnClickListener {
             this.onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    private fun initView() {
+        binding.edittext.addTextChangedListener {
+            binding.confirmButton.isEnabled = (it?.length ?: 0) > 0
         }
     }
 
