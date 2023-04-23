@@ -26,8 +26,6 @@ class UserRepositoryImpl @Inject constructor(
     private val local: SoptampDataStore
 ) : UserRepository {
     override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
-
-    override suspend fun login(email: String, password: String): User = remote.login(email, password).toUser()
     override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
 
     override suspend fun withdraw(userId: Int): Result<Unit> = runCatching {
