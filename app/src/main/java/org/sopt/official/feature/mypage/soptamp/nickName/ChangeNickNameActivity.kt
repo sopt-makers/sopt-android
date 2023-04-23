@@ -41,6 +41,7 @@ class ChangeNickNameActivity : AppCompatActivity()  {
             this.finish()
         }
         binding.edittext.addTextChangedListener {
+            binding.confirmButton.isEnabled = (it?.length ?: 0) > 0
             //api 콜
         }
 
