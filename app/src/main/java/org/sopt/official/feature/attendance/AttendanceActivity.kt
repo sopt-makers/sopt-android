@@ -42,7 +42,6 @@ class AttendanceActivity : AppCompatActivity() {
                     R.id.menu_refresh -> {
                         attendanceViewModel.fetchSoptEvent()
                         attendanceViewModel.fetchAttendanceHistory()
-                        attendanceViewModel.fetchAttendanceRound()
                         true
                     }
                     else -> false
@@ -71,7 +70,6 @@ class AttendanceActivity : AppCompatActivity() {
         attendanceViewModel.run {
             fetchSoptEvent()
             fetchAttendanceHistory()
-            fetchAttendanceRound()
         }
     }
 
@@ -212,35 +210,6 @@ class AttendanceActivity : AppCompatActivity() {
             layoutAttendanceProgress.isVisible = true
             tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
             tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
-
-            // 1차 출석, 2차 출석, 결석 상태가 아니면 모두 보라색
-            if (soptEvent.attendances[0].attendedAt != "1차 출석") {
-                attendanceViewModel.setFirstProgressBar(true)
-            } else {
-                attendanceViewModel.setFirstProgressBar(false)
-            }
-            if (soptEvent.attendances[1].attendedAt != "2차 출석") {
-                attendanceViewModel.setSecondProgressBar(true)
-            } else {
-                attendanceViewModel.setSecondProgressBar(false)
-            }
-
-            // 첫 번째 동그라미와 두 번째 동그라미에 따라서 내용이 변경됨
-            val firstStatus = soptEvent.attendances[0].status.name
-            val secondStatus = soptEvent.attendances[1].status.name
-            if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
-                attendanceViewModel.setThirdProgressBar(true)
-                attendanceViewModel.setThirdProgressBarAttendance(true)
-            } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
-                attendanceViewModel.setThirdProgressBarBeforeAttendance(false)
-                attendanceViewModel.setThirdProgressBar(false)
-            } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
-                attendanceViewModel.setThirdProgressBar(true)
-                attendanceViewModel.setThirdProgressBarAttendance(false)
-            } else {
-                attendanceViewModel.setThirdProgressBarBeforeAttendance(true)
-                attendanceViewModel.setThirdProgressBar(false)
-            }
         }
     }
 
