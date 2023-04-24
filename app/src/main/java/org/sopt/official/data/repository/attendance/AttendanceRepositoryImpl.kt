@@ -1,5 +1,7 @@
 package org.sopt.official.data.repository.attendance
 
+import android.content.res.Resources
+import org.sopt.official.R
 import org.sopt.official.data.model.attendance.AttendanceCodeResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.service.attendance.AttendanceService
@@ -21,12 +23,24 @@ class AttendanceRepositoryImpl @Inject constructor(
     }.fold(
         {
             when (it.message) {
-                "[LectureException] : 오늘 세션이 없습니다." -> Result.success(AttendanceButtonType.GONE_BUTTON.attendanceRound)
-                "[LectureException] : 출석 시작 전입니다." -> Result.success(AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound)
-                "[LectureException] : 1차 출석 시작 전입니다." -> Result.success(AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound)
-                "[LectureException] : 2차 출석 시작 전입니다." -> Result.success(AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound)
-                "[LectureException] : 1차 출석이 이미 종료되었습니다." -> Result.success(AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound)
-                "[LectureException] : 2차 출석이 이미 종료되었습니다." -> Result.success(AttendanceButtonType.AFTER_SECOND_ATTENDANCE.attendanceRound)
+                Resources.getSystem().getString(R.string.attendance_error_no_section) -> Result.success(
+                    AttendanceButtonType.GONE_BUTTON.attendanceRound
+                )
+                Resources.getSystem().getString(R.string.attendance_error_before_attendance) -> Result.success(
+                    AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound
+                )
+                Resources.getSystem().getString(R.string.attendance_error_before_first_attendance) -> Result.success(
+                    AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound
+                )
+                Resources.getSystem().getString(R.string.attendance_error_before_second_attendance) -> Result.success(
+                    AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound
+                )
+                Resources.getSystem().getString(R.string.attendance_error_after_first_attendance) -> Result.success(
+                    AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound
+                )
+                Resources.getSystem().getString(R.string.attendance_error_after_second_attendance) -> Result.success(
+                    AttendanceButtonType.AFTER_SECOND_ATTENDANCE.attendanceRound
+                )
                 else -> it.data?.let { data -> Result.success(data.toEntity()) } ?: Result.success(
                     AttendanceButtonType.ERROR.attendanceRound
                 )
