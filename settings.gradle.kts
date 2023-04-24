@@ -20,3 +20,4 @@ include(
     ":app",
     ":feature:soptamp"
 )
+include(":core")

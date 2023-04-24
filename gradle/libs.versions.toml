@@ -38,7 +38,7 @@ dagger-hilt = "2.45"
 dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.189.0"
 soloader = "0.10.5"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.8.36-beta"
@@ -53,7 +53,7 @@ ktlint = "11.3.1"
 sentry = "3.5.0"
 sentry-android = "6.17.0"
 process-pheonix = "2.1.2"
-sopt-pgauth = "0.1.5"
+sopt-pgauth = "0.1.6"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }

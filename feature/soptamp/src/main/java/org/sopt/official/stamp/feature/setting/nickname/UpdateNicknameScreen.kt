@@ -57,7 +57,6 @@ import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.designsystem.style.Red200
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.auth.GetUserIdUseCase
 import org.sopt.official.stamp.domain.usecase.user.CheckNicknameDuplicateUseCase
 import org.sopt.official.stamp.domain.usecase.user.UpdateNicknameUseCase
 import org.sopt.official.stamp.util.DefaultPreview
@@ -191,8 +190,7 @@ private fun UpdateNicknameScreenPreview() {
         viewModel = UpdateNicknameViewModel(
             CheckNicknameDuplicateUseCase(FakeUserRepository),
             UpdateNicknameUseCase(
-                FakeUserRepository,
-                GetUserIdUseCase(FakeUserRepository)
+                FakeUserRepository
             )
         ),
         resultNavigator = EmptyResultBackNavigator()

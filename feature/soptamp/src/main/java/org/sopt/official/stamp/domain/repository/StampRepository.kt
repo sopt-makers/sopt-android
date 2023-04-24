@@ -25,14 +25,7 @@ interface StampRepository {
         content: String
     ): Result<Unit>
 
-    suspend fun getMissionContent(
-        missionId: Int
-    ): Result<Archive>
-
-    suspend fun getMissionContent(
-        userId: Int,
-        missionId: Int
-    ): Result<Archive>
+    suspend fun getMissionContent(missionId: Int): Result<Archive>
 
     suspend fun modifyMission(
         missionId: Int,
@@ -42,5 +35,5 @@ interface StampRepository {
 
     suspend fun deleteMission(missionId: Int): Result<Unit>
 
-    suspend fun deleteAllStamps(userId: Int): Result<Unit>
+    suspend fun deleteAllStamps(): Result<Unit>
 }

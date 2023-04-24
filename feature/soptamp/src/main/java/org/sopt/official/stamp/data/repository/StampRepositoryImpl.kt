@@ -24,7 +24,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.sopt.official.stamp.util.ContentUriRequestBody
-import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.data.remote.api.StampService
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
@@ -34,8 +33,7 @@ import javax.inject.Inject
 class StampRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val service: StampService,
-    private val json: Json,
-    private val dataStore: SoptampDataStore
+    private val json: Json
 ) : StampRepository {
     @Serializable
     private data class Content(
@@ -64,7 +62,6 @@ class StampRepositoryImpl @Inject constructor(
         }
         return runCatching {
             service.registerStamp(
-                userId = dataStore.userId,
                 missionId = missionId,
                 stampContent = contentRequestBody,
                 imgUrl = imageRequestBody
@@ -75,16 +72,6 @@ class StampRepositoryImpl @Inject constructor(
     override suspend fun getMissionContent(missionId: Int): Result<Archive> {
         return runCatching {
             service.retrieveStamp(
-                userId = dataStore.userId,
-                missionId = missionId
-            ).toDomain()
-        }
-    }
-
-    override suspend fun getMissionContent(userId: Int, missionId: Int): Result<Archive> {
-        return runCatching {
-            service.retrieveStamp(
-                userId = userId,
                 missionId = missionId
             ).toDomain()
         }
@@ -111,7 +98,6 @@ class StampRepositoryImpl @Inject constructor(
         }
         return runCatching {
             service.modifyStamp(
-                userId = dataStore.userId,
                 missionId = missionId,
                 stampContent = contentRequestBody,
                 imgUrl = imageRequestBody
@@ -122,13 +108,12 @@ class StampRepositoryImpl @Inject constructor(
     override suspend fun deleteMission(missionId: Int): Result<Unit> {
         return runCatching {
             service.deleteStamp(
-                userId = dataStore.userId,
                 missionId = missionId
             )
         }
     }
 
-    override suspend fun deleteAllStamps(userId: Int): Result<Unit> {
-        return runCatching { service.deleteAllStamps(userId) }
+    override suspend fun deleteAllStamps(): Result<Unit> {
+        return runCatching { service.deleteAllStamps() }
     }
 }

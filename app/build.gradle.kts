@@ -65,6 +65,7 @@ android {
 
 dependencies {
     implementation(project(":feature:soptamp"))
+    implementation(project(":core"))
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
