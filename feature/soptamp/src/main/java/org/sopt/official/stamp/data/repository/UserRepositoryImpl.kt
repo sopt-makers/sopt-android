@@ -24,7 +24,7 @@ class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
     private val local: SoptampDataStore
 ) : UserRepository {
-    override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
+    override suspend fun checkNickname(nickname: String) = runCatching { remote.checkNickname(nickname) }
     override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
 
     override suspend fun getUserInfo() = runCatching {
