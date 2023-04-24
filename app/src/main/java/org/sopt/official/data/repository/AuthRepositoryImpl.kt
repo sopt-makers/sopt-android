@@ -31,4 +31,12 @@ class AuthRepositoryImpl @Inject constructor(
             userStatus = status.value
         }
     }
+
+    override suspend fun withdraw() = runCatching {
+        service.withdraw()
+    }
+
+    override suspend fun logout() = runCatching {
+        dataStore.clear()
+    }
 }
