@@ -5,7 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.databinding.ActivitySignOutBinding
 import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.asNullableWrapper
@@ -21,6 +26,7 @@ class SignOutActivity : AppCompatActivity() {
 
         initToolbar()
         initClick()
+        initRestart()
     }
 
     private fun initToolbar() {
@@ -34,6 +40,20 @@ class SignOutActivity : AppCompatActivity() {
             viewModel.signOut()
             this.finish()
         }
+    }
+
+    private fun initRestart() {
+        viewModel.restartSignal
+            .flowWithLifecycle(lifecycle)
+            .filter { it }
+            .onEach {
+                val intent = packageManager.getLaunchIntentForPackage(packageName)
+                val componentName = intent?.component
+                val mainIntent = Intent.makeRestartActivityTask(componentName)
+                startActivity(mainIntent)
+                System.exit(0)
+            }
+            .launchIn(lifecycleScope)
     }
 
     companion object {

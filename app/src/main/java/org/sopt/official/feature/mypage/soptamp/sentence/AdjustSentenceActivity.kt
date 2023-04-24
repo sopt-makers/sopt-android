@@ -6,7 +6,12 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.databinding.ActivityAdjustSentenceBinding
 import org.sopt.official.feature.mypage.MyPageActivity
 import org.sopt.official.util.viewBinding
@@ -32,6 +37,13 @@ class AdjustSentenceActivity : AppCompatActivity() {
     }
 
     private fun initView() {
+        viewModel.backPressedSignal
+            .flowWithLifecycle(lifecycle)
+            .filter { it }
+            .onEach {
+                this.onBackPressedDispatcher.onBackPressed()
+            }
+            .launchIn(lifecycleScope)
         binding.edittext.addTextChangedListener {
             binding.confirmButton.isEnabled = (it?.length ?: 0) > 0
         }
@@ -39,8 +51,8 @@ class AdjustSentenceActivity : AppCompatActivity() {
 
     private fun initClick() {
         binding.confirmButton.setOnClickListener {
-            viewModel.adjustSentence()
-            this.finish()
+            val text = binding.edittext.text.toString()
+            viewModel.adjustSentence(text)
         }
     }
 

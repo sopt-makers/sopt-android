@@ -1,13 +1,28 @@
 package org.sopt.official.feature.mypage.signOut
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
+import org.sopt.official.domain.repository.AuthRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class SignOutViewModel @Inject constructor() : ViewModel() {
+class SignOutViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
+) : ViewModel() {
+    val restartSignal = MutableStateFlow(false)
 
     fun signOut() {
-        // SignOut 기능
+        viewModelScope.launch {
+            authRepository.withdraw()
+                .onSuccess{
+                    restartSignal.value = true
+                }.onFailure {
+                    Timber.e(it)
+                }
+        }
     }
 }
