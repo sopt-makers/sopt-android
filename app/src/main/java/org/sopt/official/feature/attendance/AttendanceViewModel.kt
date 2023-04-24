@@ -43,6 +43,7 @@ class AttendanceViewModel @Inject constructor(
     val attendanceButtonText get() = _attendanceButtonText
     private val _isAttendanceButtonVisibility = MutableStateFlow(false)
     val isAttendanceButtonVisibility get() = _isAttendanceButtonVisibility
+    private var subLectureId: Long = 0L
 
     fun fetchSoptEvent() {
         viewModelScope.launch {
@@ -51,6 +52,8 @@ class AttendanceViewModel @Inject constructor(
                 .onSuccess {
                     _soptEvent.value = AttendanceState.Success(it)
                     eventId = it.id
+                    setProgressBar(it)
+                    fetchAttendanceRound()
                 }.onFailure {
                     Timber.e(it)
                     _soptEvent.value = AttendanceState.Failure(it)
@@ -58,23 +61,56 @@ class AttendanceViewModel @Inject constructor(
         }
     }
 
-    fun setFirstProgressBar(isActive: Boolean) {
+    private fun setProgressBar(soptEvent: SoptEvent) {
+        val firstProgressText = soptEvent.attendances[0].attendedAt
+        val secondProgressText = soptEvent.attendances[1].attendedAt
+
+        if (firstProgressText != "1차 출석") {
+            setFirstProgressBar(true)
+        } else {
+            setFirstProgressBar(false)
+        }
+
+        if (secondProgressText != "2차 출석") {
+            setSecondProgressBar(true)
+        } else {
+            setSecondProgressBar(false)
+        }
+
+        val firstStatus = soptEvent.attendances[0].status.name
+        val secondStatus = soptEvent.attendances[1].status.name
+        if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
+            setThirdProgressBar(true)
+            setThirdProgressBarAttendance(true)
+        } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
+            setThirdProgressBarBeforeAttendance(false)
+            setThirdProgressBar(false)
+        } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
+            setThirdProgressBar(true)
+            setThirdProgressBarAttendance(false)
+        } else {
+            setThirdProgressBarBeforeAttendance(true)
+            setThirdProgressBar(false)
+        }
+    }
+
+    private fun setFirstProgressBar(isActive: Boolean) {
         _isFirstProgressBarActive.value = isActive
     }
 
-    fun setSecondProgressBar(isActive: Boolean) {
+    private fun setSecondProgressBar(isActive: Boolean) {
         _isSecondProgressBarActive.value = isActive
     }
 
-    fun setThirdProgressBar(isActive: Boolean) {
+    private fun setThirdProgressBar(isActive: Boolean) {
         _isThirdProgressBarActive.value = isActive
     }
 
-    fun setThirdProgressBarAttendance(isAttendance: Boolean) {
+    private fun setThirdProgressBarAttendance(isAttendance: Boolean) {
         _isThirdProgressBarAttendance.value = isAttendance
     }
 
-    fun setThirdProgressBarBeforeAttendance(isBeforeAttendance: Boolean) {
+    private fun setThirdProgressBarBeforeAttendance(isBeforeAttendance: Boolean) {
         _isThirdProgressBarBeforeAttendance.value = isBeforeAttendance
     }
 
@@ -91,30 +127,27 @@ class AttendanceViewModel @Inject constructor(
         }
     }
 
-    fun fetchAttendanceRound() {
-        viewModelScope.launch {
-            _attendanceRound.value = AttendanceState.Loading
-            attendanceRepository.fetchAttendanceRound(eventId.toLong())
-                .onSuccess {
-                    _attendanceRound.value = AttendanceState.Success(it)
-                    when (it.id) {
-                        -1L -> setAttendanceButtonVisibility(false)
-                        0L -> {
-                            setAttendanceButtonText(it.roundText)
-                            setAttendanceButtonVisibility(true)
-                            setAttendanceButtonEnabled(false)
-                        }
-                        else -> {
-                            setAttendanceButtonText(it.roundText)
-                            setAttendanceButtonVisibility(true)
-                            setAttendanceButtonEnabled(true)
-                        }
+    private suspend fun fetchAttendanceRound() {
+        attendanceRepository.fetchAttendanceRound(eventId.toLong())
+            .onSuccess {
+                _attendanceRound.value = AttendanceState.Success(it)
+                subLectureId = it.id
+                when (it.id) {
+                    -1L -> setAttendanceButtonVisibility(false)
+                    0L -> {
+                        setAttendanceButtonText(it.roundText)
+                        setAttendanceButtonVisibility(true)
+                        setAttendanceButtonEnabled(false)
                     }
-                }.onFailure {
-                    Timber.e(it)
-                    _attendanceRound.value = AttendanceState.Failure(it)
+                    else -> {
+                        setAttendanceButtonText(it.roundText)
+                        setAttendanceButtonVisibility(true)
+                        setAttendanceButtonEnabled(true)
+                    }
                 }
-        }
+            }.onFailure {
+                Timber.e(it)
+            }
     }
 
     private fun setAttendanceButtonVisibility(isVisibility: Boolean) {
