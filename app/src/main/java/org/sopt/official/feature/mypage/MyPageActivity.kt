@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
@@ -25,6 +26,7 @@ import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.asNullableWrapper
 import java.io.Serializable
 
+
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
@@ -39,6 +41,7 @@ class MyPageActivity : AppCompatActivity() {
         initToolbar()
         initView()
         initClick()
+        initRestart()
     }
 
     private fun initStartArgs() {
@@ -115,6 +118,20 @@ class MyPageActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
             // Main 에서 requestActivityForResult 필요
         }
+    }
+
+    private fun initRestart() {
+        viewModel.restartSignal
+            .flowWithLifecycle(lifecycle)
+            .filter { it }
+            .onEach {
+                val intent = packageManager.getLaunchIntentForPackage(packageName)
+                val componentName = intent?.component
+                val mainIntent = Intent.makeRestartActivityTask(componentName)
+                startActivity(mainIntent)
+                System.exit(0)
+            }
+            .launchIn(lifecycleScope)
     }
 
     enum class ResultCode {
