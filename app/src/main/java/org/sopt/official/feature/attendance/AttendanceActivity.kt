@@ -118,6 +118,10 @@ class AttendanceActivity : AppCompatActivity() {
                             updateSoptEventComponent(it.data)
                         }
 
+                        is AttendanceState.Failure -> {
+                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
+                        }
+
                         else -> {}
                     }
                 }
@@ -133,7 +137,11 @@ class AttendanceActivity : AppCompatActivity() {
                         is AttendanceState.Success -> {
                             updateAttendanceUserInfo(attendanceHistory.data.userInfo)
                             updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
-                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot { it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean })
+                            updateAttendanceLog(attendanceHistory.data.attendanceLog)
+                        }
+
+                        is AttendanceState.Failure -> {
+                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
                         }
 
                         else -> {}
@@ -231,8 +239,11 @@ class AttendanceActivity : AppCompatActivity() {
         attendanceAdapter.updateSummary(summary)
     }
 
-    private fun updateAttendanceLog(log: List<AttendanceLog>) {
-        attendanceAdapter.submitList(log)
+    private fun updateAttendanceLog(log: List<AttendanceLog?>) {
+        val list = log.toMutableList().apply {
+            repeat(3) { add(0, null) }
+        }
+        attendanceAdapter.submitList(list)
         binding.recyclerViewAttendanceHistory.scrollToPosition(0)
     }
 }

@@ -23,7 +23,7 @@ class AttendanceAdapter : ListAdapter<AttendanceLog, RecyclerView.ViewHolder>(di
     }
 
     override fun getItemCount(): Int {
-        return currentList.size + 3
+        return currentList.size
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -31,7 +31,7 @@ class AttendanceAdapter : ListAdapter<AttendanceLog, RecyclerView.ViewHolder>(di
             is UserInfoViewHolder -> userInfo?.let { holder.onBind(it) }
             is SummaryViewHolder -> summary?.let { holder.onBind(it) }
             is LogHeaderViewHolder -> {}
-            is LogViewHolder -> holder.onBind(currentList[position - 3])
+            is LogViewHolder -> holder.onBind(currentList[position])
             else -> throw IllegalArgumentException("Illegal holder argument: ${holder::class.java.simpleName}")
         }
     }
