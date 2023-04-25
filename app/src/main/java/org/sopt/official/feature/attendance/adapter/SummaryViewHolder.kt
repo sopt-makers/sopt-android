@@ -3,7 +3,6 @@ package org.sopt.official.feature.attendance.adapter
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.databinding.ItemAttendanceHistorySummaryBinding
 import org.sopt.official.domain.entity.attendance.AttendanceSummary
@@ -20,8 +19,6 @@ class SummaryViewHolder(private val binding: ItemAttendanceHistorySummaryBinding
             textAttendanceCountLate.text = "${summary.late}회"
             textAttendanceCountAbnormal.text = "${summary.abnormal}회"
             textAttendanceCountParticipate.text = "${summary.participate}회"
-
-            layoutAttendanceParticipate.isVisible = (summary.participate != 0)
         }
     }
 
