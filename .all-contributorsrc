@@ -41,12 +41,21 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "miinjung",
+      "name": "miing",
+      "avatar_url": "https://avatars.githubusercontent.com/u/39264073?v=4",
+      "profile": "https://github.com/miinjung",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "skipCi": true,
   "repoType": "github",
   "repoHost": "https://github.com",
-  "projectName": "soptamp-android",
+  "projectName": "sopt-android",
   "projectOwner": "sopt-makers"
 }
