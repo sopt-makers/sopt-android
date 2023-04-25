@@ -15,17 +15,17 @@ class AttendanceRepositoryImpl @Inject constructor(
         runCatching { attendanceService.getAttendanceHistory().data!!.toEntity() }
 
     override suspend fun fetchAttendanceRound(lectureId: Long): Result<AttendanceRound> = runCatching {
-        attendanceService.getAttendanceRound(lectureId)
-    }.mapCatching {
-        AttendanceButtonType.of(it.message)
+        attendanceService.getAttendanceRound(lectureId).data?.toEntity() ?: AttendanceButtonType.ERROR.attendanceRound
+    }.recoverCatching {
+        AttendanceButtonType.of(it.message ?: "")
     }
 
     override suspend fun confirmAttendanceCode(
         subLectureId: Long,
         code: String
     ): Result<AttendanceCodeResponse> = runCatching {
-        attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code))
-    }.mapCatching {
-        AttendanceErrorCode.of(it.message) ?: it.data!!
+        attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data ?: AttendanceCodeResponse(-1)
+    }.recoverCatching {
+        AttendanceErrorCode.of(it.message ?: "") ?: AttendanceCodeResponse(-2)
     }
 }
