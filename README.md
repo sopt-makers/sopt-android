@@ -3,7 +3,7 @@
 
 <h1>SOPT</h1> 
 
-**국내 최대 IT 벤처창업동아리, SOPT 공식 앱**
+**국내 최대 IT 벤처창업동아리 SOPT의 공식 Android 앱**
 
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-1.8.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
@@ -15,11 +15,6 @@
 
 <img width="1424" alt="image" src="https://user-images.githubusercontent.com/54518925/234331073-c57f751a-ea09-4fc3-9e42-34caa5d2797b.jpg">
 </div>
-
-<h2> SOPT Official Android App </h2>
-
-SOPT는 IT와 벤처창업에 뜻이 있는 대학생들이 모인
-[국내 최대 규모의 대학생 연합 IT 벤처창업 동아리](https://sopt.org/)입니다.
 
 <h2>Download</h2>
 
