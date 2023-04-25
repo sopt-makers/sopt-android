@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.domain.MissionLevel
-import org.sopt.stamp.feature.mission.model.MissionUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 
 @Composable
 fun MissionComponent(
