@@ -39,6 +39,7 @@ class AttendanceActivity : AppCompatActivity() {
         binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.viewModel = attendanceViewModel
+        binding.lifecycleOwner = this
 
         initView()
         initUiInteraction()
@@ -188,13 +189,25 @@ class AttendanceActivity : AppCompatActivity() {
             attendanceViewModel.setProgressBar(soptEvent)
             when (soptEvent.attendances.size) {
                 1 -> {
-                    tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
+                    tvAttendanceProgress1.text = if (soptEvent.attendances[0].status == AttendanceStatus.ATTENDANCE) {
+                        soptEvent.attendances[0].attendedAt
+                    } else {
+                        "결석"
+                    }
                     tvAttendanceProgress2.text = "2차 출석"
                 }
 
                 2 -> {
-                    tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
-                    tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
+                    tvAttendanceProgress1.text = if(soptEvent.attendances[0].status == AttendanceStatus.ATTENDANCE) {
+                        soptEvent.attendances[0].attendedAt
+                    } else {
+                        "결석"
+                    }
+                    tvAttendanceProgress2.text = if (soptEvent.attendances[1].status == AttendanceStatus.ATTENDANCE) {
+                        soptEvent.attendances[1].attendedAt
+                    } else {
+                        "결석"
+                    }
                 }
 
                 else -> {

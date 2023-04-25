@@ -156,8 +156,11 @@ class AttendanceViewModel @Inject constructor(
             .onSuccess {
                 _attendanceRound.value = AttendanceState.Success(it)
                 subLectureId = it.id
+                Timber.tag("zzzz id").i(it.id.toString())
                 when (it.id) {
-                    -1L -> setAttendanceButtonVisibility(false)
+                    -1L -> {
+                        setAttendanceButtonVisibility(false)
+                    }
                     0L -> {
                         setAttendanceButtonText(it.roundText)
                         setAttendanceButtonVisibility(true)
@@ -170,20 +173,21 @@ class AttendanceViewModel @Inject constructor(
                     }
                 }
             }.onFailure {
+                Timber.tag("zzzz failure").e(it)
                 Timber.e(it)
             }
     }
 
     private fun setAttendanceButtonVisibility(isVisibility: Boolean) {
-        isAttendanceButtonVisibility.value = isVisibility
+        _isAttendanceButtonVisibility.value = isVisibility
     }
 
     private fun setAttendanceButtonEnabled(isEnabled: Boolean) {
-        isAttendanceButtonEnabled.value = isEnabled
+        _isAttendanceButtonEnabled.value = isEnabled
     }
 
     private fun setAttendanceButtonText(text: String) {
-        attendanceButtonText.value = text
+        _attendanceButtonText.value = text
     }
 
     fun checkAttendanceCode(code: String) {
