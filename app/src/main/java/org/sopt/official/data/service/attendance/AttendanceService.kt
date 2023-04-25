@@ -3,6 +3,7 @@ package org.sopt.official.data.service.attendance
 import org.sopt.official.data.model.attendance.*
 import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface AttendanceService {
@@ -17,7 +18,7 @@ interface AttendanceService {
         @Path("lectureId") lectureId: Long
     ): BaseAttendanceResponse<AttendanceRoundResponse>
 
-    @GET("/api/v1/app/attendances/attend")
+    @POST("/api/v1/app/attendances/attend")
     suspend fun confirmAttendanceCode(
         @Body param: RequestAttendanceCode
     ): BaseAttendanceResponse<AttendanceCodeResponse>
