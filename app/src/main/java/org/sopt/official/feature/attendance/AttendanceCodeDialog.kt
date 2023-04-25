@@ -185,13 +185,22 @@ class AttendanceCodeDialog : DialogFragment() {
         }
     }
 
+    override fun dismiss() {
+        attendanceViewModel.initDialogState()
+        super.dismiss()
+    }
+
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
             attendanceViewModel.dialogState.collectLatest {
                 when (it) {
                     is DialogState.Close -> {
                         dismiss()
-                        attendanceViewModel.fetchSoptEvent()
+                        attendanceViewModel.run {
+                            fetchSoptEvent()
+                            initDialogState()
+                            dialogErrorMessage = ""
+                        }
                     }
 
                     is DialogState.Failure -> {

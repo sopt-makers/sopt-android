@@ -49,6 +49,7 @@ class AttendanceViewModel @Inject constructor(
     val isAttendanceButtonVisibility get() = _isAttendanceButtonVisibility
     private var subLectureId: Long = 0L
     var dialogErrorMessage: String = ""
+    private var attendancesSize = 0
 
     fun fetchSoptEvent() {
         viewModelScope.launch {
@@ -57,6 +58,7 @@ class AttendanceViewModel @Inject constructor(
                 .onSuccess {
                     _soptEvent.value = AttendanceState.Success(it)
                     eventId = it.id
+                    attendancesSize = it.attendances.size
                     fetchAttendanceRound()
                 }.onFailure {
                     Timber.e(it)
@@ -167,9 +169,15 @@ class AttendanceViewModel @Inject constructor(
                         setAttendanceButtonEnabled(false)
                     }
                     else -> {
-                        setAttendanceButtonText(it.roundText)
-                        setAttendanceButtonVisibility(true)
-                        setAttendanceButtonEnabled(true)
+                        if (it.roundText.isNotEmpty() && attendancesSize == it.roundText[0].code - '0'.code) {
+                            setAttendanceButtonText(it.roundText.substring(0, 5) + " 종료")
+                            setAttendanceButtonVisibility(true)
+                            setAttendanceButtonEnabled(false)
+                        } else {
+                            setAttendanceButtonText(it.roundText)
+                            setAttendanceButtonVisibility(true)
+                            setAttendanceButtonEnabled(true)
+                        }
                     }
                 }
             }.onFailure {
@@ -197,22 +205,28 @@ class AttendanceViewModel @Inject constructor(
                 .onSuccess {
                     when (it.subLectureId) {
                         -2L -> {
-                            _dialogState.value = DialogState.Failure
                             dialogErrorMessage = "코드가 일치하지 않아요!"
+                            _dialogState.value = DialogState.Failure
                         }
                         -1L -> {
-                            _dialogState.value = DialogState.Failure
                             dialogErrorMessage = "출석 시간 전입니다."
+                            _dialogState.value = DialogState.Failure
                         }
                         0L -> {
-                            _dialogState.value = DialogState.Failure
                             dialogErrorMessage = "출석이 이미 종료되었습니다."
+                            _dialogState.value = DialogState.Failure
                         }
-                        else -> _dialogState.value = DialogState.Close
+                        else -> {
+                            _dialogState.value = DialogState.Close
+                        }
                     }
                 }.onFailure {
                     Timber.e(it)
                 }
         }
+    }
+
+    fun initDialogState() {
+        _dialogState.value = DialogState.Show
     }
 }
