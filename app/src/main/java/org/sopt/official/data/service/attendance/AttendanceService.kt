@@ -6,9 +6,9 @@ import org.sopt.official.data.model.attendance.SoptEventResponse
 import retrofit2.http.GET
 
 interface AttendanceService {
-    @GET("/api/v1/app/lecture")
+    @GET("/api/v1/app/lectures")
     suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse>
 
-    @GET("/api/v1/app/total")
+    @GET("/api/v1/app/members/attendances")
     suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse>
 }

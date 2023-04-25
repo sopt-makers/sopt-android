@@ -8,10 +8,11 @@ import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
 import android.view.*
+import android.view.animation.AnimationUtils
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -31,22 +32,6 @@ class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
     private val attendanceViewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
-    private val menuProvider = (object : MenuProvider {
-        override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-            menuInflater.inflate(R.menu.menu_attendance_overview, menu)
-        }
-
-        override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-            return when (menuItem.itemId) {
-                R.id.menu_refresh -> {
-                    attendanceViewModel.fetchSoptEvent()
-                    attendanceViewModel.fetchAttendanceHistory()
-                    true
-                }
-                else -> false
-            }
-        }
-    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +39,7 @@ class AttendanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initUiInteraction()
         fetchData()
         observeData()
     }
@@ -61,6 +47,16 @@ class AttendanceActivity : AppCompatActivity() {
     private fun initView() {
         initToolbar()
         initRecyclerView()
+    }
+
+    private fun initUiInteraction() {
+        binding.icRefresh.setOnClickListener {
+            it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_rotation))
+            attendanceViewModel.run {
+                fetchSoptEvent()
+                fetchAttendanceHistory()
+            }
+        }
     }
 
     private fun fetchData() {
@@ -80,7 +76,6 @@ class AttendanceActivity : AppCompatActivity() {
             setSupportActionBar(this)
             setNavigationOnClickListener { this@AttendanceActivity.finish() }
         }
-        addMenuProvider(menuProvider, this)
         supportActionBar?.setDisplayShowTitleEnabled(false)
     }
 
@@ -118,6 +113,10 @@ class AttendanceActivity : AppCompatActivity() {
                             updateSoptEventComponent(it.data)
                         }
 
+                        is AttendanceState.Failure -> {
+                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
+                        }
+
                         else -> {}
                     }
                 }
@@ -133,7 +132,11 @@ class AttendanceActivity : AppCompatActivity() {
                         is AttendanceState.Success -> {
                             updateAttendanceUserInfo(attendanceHistory.data.userInfo)
                             updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
-                            updateAttendanceLog(attendanceHistory.data.attendanceLog.filterNot { it.attribute == EventAttribute.ETC && it.attendanceState != AttendanceStatus.PARTICIPATE.statusKorean })
+                            updateAttendanceLog(attendanceHistory.data.attendanceLog)
+                        }
+
+                        is AttendanceState.Failure -> {
+                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
                         }
 
                         else -> {}
@@ -231,8 +234,11 @@ class AttendanceActivity : AppCompatActivity() {
         attendanceAdapter.updateSummary(summary)
     }
 
-    private fun updateAttendanceLog(log: List<AttendanceLog>) {
-        attendanceAdapter.submitList(log)
+    private fun updateAttendanceLog(log: List<AttendanceLog?>) {
+        val list = log.toMutableList().apply {
+            repeat(3) { add(0, null) }
+        }
+        attendanceAdapter.submitList(list)
         binding.recyclerViewAttendanceHistory.scrollToPosition(0)
     }
 }

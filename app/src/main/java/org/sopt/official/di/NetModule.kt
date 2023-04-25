@@ -74,6 +74,6 @@ object NetModule {
     ): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devOperationApi else BuildConfig.devOperationApi)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devOperationApi else BuildConfig.operationApi)
         .build()
 }

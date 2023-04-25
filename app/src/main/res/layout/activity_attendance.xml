@@ -28,6 +28,15 @@
                     android:text="@string/attendance"
                     android:textColor="?colorOnBackground"
                     android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ic_refresh"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="20dp"
+                    android:src="@drawable/ic_refresh" />
+
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
