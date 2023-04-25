@@ -15,4 +15,9 @@ interface AttendanceService {
     suspend fun getAttendanceRound(
         @Path("lectureId") lectureId: Long
     ): BaseAttendanceResponse<AttendanceRoundResponse>
+
+    @GET("/app/attendances/attend")
+    suspend fun confirmAttendanceCode(
+        param: RequestAttendanceCode
+    ): BaseAttendanceResponse<AttendanceCodeResponse>
 }

@@ -11,6 +11,7 @@ import org.sopt.official.domain.entity.attendance.AttendanceRound
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import org.sopt.official.feature.attendance.model.AttendanceState
+import org.sopt.official.feature.attendance.model.DialogState
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -25,6 +26,8 @@ class AttendanceViewModel @Inject constructor(
     val attendanceHistory: StateFlow<AttendanceState<AttendanceHistory>> get() = _attendanceHistory
     private var _attendanceRound = MutableStateFlow<AttendanceState<AttendanceRound>>(AttendanceState.Init)
     val attendanceRound: StateFlow<AttendanceState<AttendanceRound>> get() = _attendanceRound
+    private var _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
+    val dialogState: StateFlow<DialogState> get() = _dialogState
 
     private val _isFirstProgressBarActive = MutableStateFlow<Boolean>(false)
     val isFirstProgressBarActive get() = _isFirstProgressBarActive
@@ -44,6 +47,7 @@ class AttendanceViewModel @Inject constructor(
     private val _isAttendanceButtonVisibility = MutableStateFlow(false)
     val isAttendanceButtonVisibility get() = _isAttendanceButtonVisibility
     private var subLectureId: Long = 0L
+    var dialogErrorMessage: String = ""
 
     fun fetchSoptEvent() {
         viewModelScope.launch {
@@ -153,11 +157,38 @@ class AttendanceViewModel @Inject constructor(
     private fun setAttendanceButtonVisibility(isVisibility: Boolean) {
         isAttendanceButtonVisibility.value = isVisibility
     }
+
     private fun setAttendanceButtonEnabled(isEnabled: Boolean) {
         isAttendanceButtonEnabled.value = isEnabled
     }
 
     private fun setAttendanceButtonText(text: String) {
         attendanceButtonText.value = text
+    }
+
+    fun checkAttendanceCode(code: String) {
+        _dialogState.value = DialogState.Show
+        viewModelScope.launch {
+            attendanceRepository.confirmAttendanceCode(subLectureId, code)
+                .onSuccess {
+                    when (it.subLectureId) {
+                        -2L -> {
+                            _dialogState.value = DialogState.Failure
+                            dialogErrorMessage = "코드가 일치하지 않아요!"
+                        }
+                        -1L -> {
+                            _dialogState.value = DialogState.Failure
+                            dialogErrorMessage = "출석 시간 전입니다."
+                        }
+                        0L -> {
+                            _dialogState.value = DialogState.Failure
+                            dialogErrorMessage = "출석이 이미 종료되었습니다."
+                        }
+                        else -> _dialogState.value = DialogState.Close
+                    }
+                }.onFailure {
+                    Timber.e(it)
+                }
+        }
     }
 }

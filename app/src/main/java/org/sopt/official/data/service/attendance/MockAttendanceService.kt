@@ -2,10 +2,7 @@ package org.sopt.official.data.service.attendance
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import org.sopt.official.data.model.attendance.AttendanceHistoryResponse
-import org.sopt.official.data.model.attendance.AttendanceRoundResponse
-import org.sopt.official.data.model.attendance.BaseAttendanceResponse
-import org.sopt.official.data.model.attendance.SoptEventResponse
+import org.sopt.official.data.model.attendance.*
 
 
 class MockAttendanceService : AttendanceService {
@@ -21,27 +18,22 @@ class MockAttendanceService : AttendanceService {
         return ATTENDANCE_ROUND_ONE
     }
 
+    override suspend fun confirmAttendanceCode(param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse> {
+        return FAIL_ATTENDANCE_BEFORE
+    }
+
     companion object {
         private const val NOT_EVENT_DAY_JSON_TEXT = """
-            {
+             {
                 "success": true,
-                "message": "세미나 조회 성공",
+                "message": "세미나가 없는 날입니다",
                 "data": {
-                    "type": "HAS_ATTENDANCE",
-                    "location": "건국대학교 경영관",
-                    "name": "2차 세미나",
-                    "startDate": "2023-04-06T14:13:51.588149",
-                    "endDate": "2023-04-06T18:13:51.588149",
-                    "attendances": [
-                        {
-                            "status": "ABSENT",
-                            "attendedAt": "2023-04-06T14:13:51.588149"
-                        },
-                        {
-                            "status": "ABSENT",
-                            "attendedAt": "2023-04-06T16:12:04"
-                        }
-                    ]
+                    "type": "NO_SESSION",
+                    "location": "",
+                    "name": "",
+                    "startDate": "",
+                    "endDate": "",
+                    "attendances": []
                 }
             }
         """
@@ -271,5 +263,47 @@ class MockAttendanceService : AttendanceService {
         """
         private val ATTENDANCE_ROUND_ONE: BaseAttendanceResponse<AttendanceRoundResponse> =
             Json.decodeFromString(ATTENDANCE_ROUND_ONE_JSON_TEXT)
+
+        private const val SUCCESS_ATTENDNACE_TEXT = """
+            {
+              "success": true,
+              "message": "출석 성공",
+              "data": {
+                "subLectureId": 17
+              }
+            }
+        """
+        private val SUCCESS_ATTENDANCE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(SUCCESS_ATTENDNACE_TEXT)
+
+        private const val FAIL_ATTENDNACE_WRONG_CODE_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 코드가 일치하지 않아요!",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDNACE_WRONG_CODE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDNACE_WRONG_CODE_TEXT)
+
+        private const val FAIL_ATTENDANCE_BEFORE_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석 시작 전입니다",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDANCE_BEFORE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDANCE_BEFORE_TEXT)
+
+        private const val FAIL_ATTENDANCE_AFTER_TIME_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석 시작 전입니다",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDANCE_AFTER_TIME: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDANCE_AFTER_TIME_TEXT)
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -14,11 +15,16 @@ import android.widget.EditText
 import androidx.core.widget.doAfterTextChanged
 import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.sopt.official.databinding.DialogAttendanceCodeBinding
+import org.sopt.official.feature.attendance.model.DialogState
 
 class AttendanceCodeDialog(title: String) : DialogFragment() {
     private var _binding: DialogAttendanceCodeBinding? = null
     private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
+    private val attendanceViewModel: AttendanceViewModel by activityViewModels()
     private val _title = title
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +53,7 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         initTitle()
         initListener()
+        observeState()
     }
 
     private fun initTitle() {
@@ -158,22 +165,48 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
                 dismiss()
             }
             btnAttendanceCodeDialog.setOnClickListener {
-                // TODO 서버통신 성공이면 dismiss
-                // TODO 서버 통신 실패 시
-                // 숫자 초기화
-                initCodeEditText(etAttendanceCode1)
-                initCodeEditText(etAttendanceCode2)
-                initCodeEditText(etAttendanceCode3)
-                initCodeEditText(etAttendanceCode4)
-                initCodeEditText(etAttendanceCode5)
-                etAttendanceCode5.clearFocus()
-                linearLayout.requestFocus()
+                attendanceViewModel.checkAttendanceCode(
+                    "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}${etAttendanceCode4.text}${etAttendanceCode5.text}"
+                )
+                Log.d("###", "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}${etAttendanceCode4.text}${etAttendanceCode5.text}")
+            }
+        }
+    }
 
-                // 에러 메시지 나타나도록
-                tvAttendanceCodeDialogError.visibility = View.VISIBLE
+    private fun observeState() {
+        lifecycleScope.launch {
+            attendanceViewModel.dialogState.collect {
+                when (it) {
+                    // observing 시켜놓고 state가 close면 dismiss + viewmodel 내에서 상태 변경
+                    is DialogState.Close -> {
+                        dismiss()
+                        // viewModel 상태 변경 -> 데이터 변경해야 하니까
+                        // TODO 여기 질문하기
+                        attendanceViewModel.fetchSoptEvent()
+                    }
+                    // observing에서 error가 떴을 때면 observing 내부에서 error state로
+                    is DialogState.Failure -> {
+                        // 설정한
+                        with(binding) {
+                            // 숫자 초기화
+                            initCodeEditText(etAttendanceCode1)
+                            initCodeEditText(etAttendanceCode2)
+                            initCodeEditText(etAttendanceCode3)
+                            initCodeEditText(etAttendanceCode4)
+                            initCodeEditText(etAttendanceCode5)
+                            etAttendanceCode5.clearFocus()
+                            linearLayout.requestFocus()
 
-                // 키보드 내리기
-                hideKeyboard()
+                            // 에러 메시지 나타나도록
+                            tvAttendanceCodeDialogError.visibility = View.VISIBLE
+                            tvAttendanceCodeDialogError.text = attendanceViewModel.dialogErrorMessage
+
+                            // 키보드 내리기
+                            hideKeyboard()
+                        }
+                    }
+                    else -> {}
+                }
             }
         }
     }
