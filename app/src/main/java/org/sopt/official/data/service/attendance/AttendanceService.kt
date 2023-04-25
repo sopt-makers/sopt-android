@@ -1,6 +1,7 @@
 package org.sopt.official.data.service.attendance
 
 import org.sopt.official.data.model.attendance.*
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -18,6 +19,6 @@ interface AttendanceService {
 
     @GET("/api/v1/app/attendances/attend")
     suspend fun confirmAttendanceCode(
-        param: RequestAttendanceCode
+        @Body param: RequestAttendanceCode
     ): BaseAttendanceResponse<AttendanceCodeResponse>
 }
