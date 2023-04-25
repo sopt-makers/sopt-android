@@ -8,8 +8,8 @@
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-1.8.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
+    <img src="https://img.shields.io/badge/all_contributors-6-orange.svg?style=for-the-badge"/>
+    <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 <br />
 
