@@ -11,20 +11,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.view.children
+import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doBeforeTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sopt.official.databinding.DialogAttendanceCodeBinding
 import org.sopt.official.feature.attendance.model.DialogState
 
-class AttendanceCodeDialog(title: String) : DialogFragment() {
+class AttendanceCodeDialog : DialogFragment() {
     private var _binding: DialogAttendanceCodeBinding? = null
     private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
     private val attendanceViewModel: AttendanceViewModel by activityViewModels()
-    private val _title = title
+    private var title: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +45,11 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = DialogAttendanceCodeBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
@@ -55,8 +62,13 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
         observeState()
     }
 
+    fun setTitle(title: String): AttendanceCodeDialog {
+        this.title = title
+        return this
+    }
+
     private fun initTitle() {
-        binding.titleText = "${_title.substring(0,5)}하기"
+        binding.titleText = "${title.substring(0, 5)}하기"
     }
 
     private fun initListener() {
@@ -75,31 +87,36 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
             // edittext 사이 공간 클릭 시에도 입력란으로 이동
             linearLayout.setOnClickListener {
                 checkedLastInputEditText().requestFocus()
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.showSoftInput(checkedLastInputEditText(), 0)
+                val imm = getSystemService(requireContext(), InputMethodManager::class.java)
+                imm?.showSoftInput(checkedLastInputEditText(), 0)
             }
 
             // back 버튼 클릭
-            clickedKeyEvent(etAttendanceCode1, etAttendanceCode1)
-            clickedKeyEvent(etAttendanceCode2, etAttendanceCode1)
-            clickedKeyEvent(etAttendanceCode3, etAttendanceCode2)
-            clickedKeyEvent(etAttendanceCode4, etAttendanceCode3)
-            clickedKeyEvent(etAttendanceCode5, etAttendanceCode4)
+            etAttendanceCode1.setOnBackKeyListener(etAttendanceCode1)
+            etAttendanceCode2.setOnBackKeyListener(etAttendanceCode1)
+            etAttendanceCode3.setOnBackKeyListener(etAttendanceCode2)
+            etAttendanceCode4.setOnBackKeyListener(etAttendanceCode3)
+            etAttendanceCode5.setOnBackKeyListener(etAttendanceCode4)
 
             // edittext 자동 이동
-            etAttendanceCode1.addTextChangedListener(CustomTextWatcher(etAttendanceCode2, etAttendanceCode1))
-            etAttendanceCode2.addTextChangedListener(CustomTextWatcher(etAttendanceCode3, etAttendanceCode2))
-            etAttendanceCode3.addTextChangedListener(CustomTextWatcher(etAttendanceCode4, etAttendanceCode3))
-            etAttendanceCode4.addTextChangedListener(CustomTextWatcher(etAttendanceCode5, etAttendanceCode4))
+            etAttendanceCode1.addTextChangedListener(
+                beforeTextChanged = { _, _, _, _ ->
+                    binding.tvAttendanceCodeDialogError.visibility = View.GONE
+                },
+                afterTextChanged = {
+                    if (it?.length == 1) {
+                        etAttendanceCode2.requestFocus()
+                        etAttendanceCode1.isEnabled = false
+                    }
+                }
+            )
+            etAttendanceCode2.requestFocusAfterTextChanged(etAttendanceCode3)
+            etAttendanceCode3.requestFocusAfterTextChanged(etAttendanceCode4)
+            etAttendanceCode4.requestFocusAfterTextChanged(etAttendanceCode5)
 
             // 출석하기 버튼 활성화
             etAttendanceCode5.doAfterTextChanged {
                 btnAttendanceCodeDialog.isEnabled = etAttendanceCode5.text.isNotEmpty()
-            }
-
-            // 에러 메세지 visible 변경
-            etAttendanceCode1.doBeforeTextChanged { _, _, _, _ ->
-                tvAttendanceCodeDialogError.visibility = View.GONE
             }
         }
     }
@@ -110,26 +127,24 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
                 checkedLastInputEditText().requestFocus()
                 et.clearFocus()
             }
-            val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(et, 0)
+            val imm = getSystemService(requireContext(), InputMethodManager::class.java)
+            imm?.showSoftInput(et, 0)
         }
     }
 
-    private fun clickedKeyEvent(etNow: EditText, etPre: EditText) {
-        etNow.setOnKeyListener { view, i, keyEvent ->
+    private fun EditText.setOnBackKeyListener(to: EditText) {
+        setOnKeyListener { view, i, keyEvent ->
             if (keyEvent.action != KeyEvent.ACTION_DOWN) {
                 return@setOnKeyListener true
             }
-
-            if (etNow.text.toString().isEmpty() && i == KeyEvent.KEYCODE_DEL) {
-                etPre.isEnabled = true
-
-                etNow.clearFocus()
-                if (etNow == binding.etAttendanceCode1) {
+            if (text.toString().isEmpty() && i == KeyEvent.KEYCODE_DEL) {
+                to.isEnabled = true
+                clearFocus()
+                if (this == binding.etAttendanceCode1) {
                     hideKeyboard()
                 } else {
-                    etPre.text = null
-                    etPre.requestFocus()
+                    to.text = null
+                    to.requestFocus()
                 }
             }
 
@@ -137,20 +152,19 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(view.windowToken, 0)
             }
-
             return@setOnKeyListener false
         }
     }
 
     private fun checkedLastInputEditText(): EditText {
         with(binding) {
-            if (etAttendanceCode1.text.toString().isEmpty()) {
+            if (etAttendanceCode1.text.isEmpty()) {
                 return etAttendanceCode1
-            } else if (etAttendanceCode2.text.toString().isEmpty()) {
+            } else if (etAttendanceCode2.text.isEmpty()) {
                 return etAttendanceCode2
-            } else if (etAttendanceCode3.text.toString().isEmpty()) {
+            } else if (etAttendanceCode3.text.isEmpty()) {
                 return etAttendanceCode3
-            } else if (etAttendanceCode4.text.toString().isEmpty()) {
+            } else if (etAttendanceCode4.text.isEmpty()) {
                 return etAttendanceCode4
             } else {
                 return etAttendanceCode5
@@ -172,22 +186,24 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
     }
 
     private fun observeState() {
-        lifecycleScope.launch {
-            attendanceViewModel.dialogState.collect {
+        viewLifecycleOwner.lifecycleScope.launch {
+            attendanceViewModel.dialogState.collectLatest {
                 when (it) {
                     is DialogState.Close -> {
                         dismiss()
                         attendanceViewModel.fetchSoptEvent()
                     }
+
                     is DialogState.Failure -> {
                         // 설정한
                         with(binding) {
                             // 숫자 초기화
-                            initCodeEditText(etAttendanceCode1)
-                            initCodeEditText(etAttendanceCode2)
-                            initCodeEditText(etAttendanceCode3)
-                            initCodeEditText(etAttendanceCode4)
-                            initCodeEditText(etAttendanceCode5)
+                            binding.linearLayout.children
+                                .forEach { child ->
+                                    if (child is EditText) {
+                                        initCodeEditText(child)
+                                    }
+                                }
                             etAttendanceCode5.clearFocus()
                             linearLayout.requestFocus()
 
@@ -199,6 +215,7 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
                             hideKeyboard()
                         }
                     }
+
                     else -> {}
                 }
             }

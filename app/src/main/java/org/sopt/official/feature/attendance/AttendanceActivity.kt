@@ -14,13 +14,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.core.di.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
 import org.sopt.official.domain.entity.attendance.*
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
@@ -37,6 +38,7 @@ class AttendanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.viewModel = attendanceViewModel
 
         initView()
         initUiInteraction()
@@ -54,10 +56,7 @@ class AttendanceActivity : AppCompatActivity() {
     private fun initUiInteraction() {
         binding.icRefresh.setOnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_rotation))
-            attendanceViewModel.run {
-                fetchSoptEvent()
-                fetchAttendanceHistory()
-            }
+            fetchData()
         }
     }
 
@@ -107,68 +106,50 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun initListener() {
-        binding.btnAttendance.run {
-            setOnClickListener {
-                AttendanceCodeDialog(this.text.toString()).show(supportFragmentManager, "attendanceCodeDialog")
-            }
+        binding.btnAttendance.setOnClickListener {
+            AttendanceCodeDialog()
+                .setTitle(binding.btnAttendance.text.toString())
+                .show(supportFragmentManager, "attendanceCodeDialog")
         }
     }
 
     private fun observeSoptEvent() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.soptEvent.collect {
-                    when (it) {
-                        is AttendanceState.Success -> {
-                            updateSoptEventComponent(it.data)
-                        }
-
-                        is AttendanceState.Failure -> {
-                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> {}
-                    }
+        attendanceViewModel.soptEvent
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                when (it) {
+                    is AttendanceState.Success -> updateSoptEventComponent(it.data)
+                    is AttendanceState.Failure -> toast("문제가 발생했습니다")
+                    else -> {}
                 }
-            }
-        }
+            }.launchIn(lifecycleScope)
     }
 
     private fun observeAttendanceHistory() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                attendanceViewModel.attendanceHistory.collect { attendanceHistory ->
-                    when (attendanceHistory) {
-                        is AttendanceState.Success -> {
-                            updateAttendanceUserInfo(attendanceHistory.data.userInfo)
-                            updateAttendanceSummary(attendanceHistory.data.attendanceSummary)
-                            updateAttendanceLog(attendanceHistory.data.attendanceLog)
-                        }
-
-                        is AttendanceState.Failure -> {
-                            Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
-                        }
-
-                        else -> {}
+        attendanceViewModel.attendanceHistory
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                when (it) {
+                    is AttendanceState.Success -> {
+                        updateAttendanceUserInfo(it.data.userInfo)
+                        updateAttendanceSummary(it.data.attendanceSummary)
+                        updateAttendanceLog(it.data.attendanceLog)
                     }
+
+                    is AttendanceState.Failure -> {
+                        Toast.makeText(this@AttendanceActivity, "문제가 발생했습니다", Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> {}
                 }
-            }
-        }
+            }.launchIn(lifecycleScope)
     }
 
     private fun updateSoptEventComponent(soptEvent: SoptEvent) {
         when (soptEvent.eventType) {
-            EventType.NO_SESSION -> {
-                updateSoptEventComponentWithNoSession()
-            }
-
-            EventType.HAS_ATTENDANCE -> {
-                updateSoptEventComponentWithHasAttendance(soptEvent)
-            }
-
-            EventType.NO_ATTENDANCE -> {
-                updateSoptEventComponentWithNoAttendance(soptEvent)
-            }
+            EventType.NO_SESSION -> updateSoptEventComponentWithNoSession()
+            EventType.HAS_ATTENDANCE -> updateSoptEventComponentWithHasAttendance(soptEvent)
+            EventType.NO_ATTENDANCE -> updateSoptEventComponentWithNoAttendance(soptEvent)
         }
     }
 
@@ -189,7 +170,6 @@ class AttendanceActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun updateSoptEventComponentWithHasAttendance(soptEvent: SoptEvent) {
         binding.run {
-            viewModel = attendanceViewModel
             layoutInfoEventDate.isVisible = true
             textInfoEventDate.text = soptEvent.date
             layoutInfoEventLocation.isVisible = true
@@ -204,7 +184,6 @@ class AttendanceActivity : AppCompatActivity() {
             (textInfoEventName.text as Spannable).run {
                 setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
-
             layoutAttendanceProgress.isVisible = true
             attendanceViewModel.setProgressBar(soptEvent)
             when (soptEvent.attendances.size) {
@@ -212,10 +191,12 @@ class AttendanceActivity : AppCompatActivity() {
                     tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
                     tvAttendanceProgress2.text = "2차 출석"
                 }
+
                 2 -> {
                     tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
                     tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
                 }
+
                 else -> {
                     tvAttendanceProgress1.text = "1차 출석"
                     tvAttendanceProgress2.text = "2차 출석"
@@ -248,10 +229,7 @@ class AttendanceActivity : AppCompatActivity() {
     private fun removeAllSpan(textView: TextView) {
         val originalText = textView.text
         (textView.text as Spannable).run {
-            val spansToRemove = this.getSpans(0, this.length, Any::class.java)
-            for (span in spansToRemove) {
-                this.removeSpan(span)
-            }
+            getSpans(0, this.length, Any::class.java).forEach { this.removeSpan(it) }
         }
         textView.text = originalText
     }
