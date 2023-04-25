@@ -1,0 +1,52 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "l2hyunwoo",
+      "name": "Hyun-Woo Lee",
+      "avatar_url": "https://avatars.githubusercontent.com/u/54518925?v=4",
+      "profile": "http://velog.io/@l2hyunwoo",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "sery270",
+      "name": "Seran Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/59532818?v=4",
+      "profile": "https://github.com/sery270",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "jinsu4755",
+      "name": "Jinsu Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/45380072?v=4",
+      "profile": "http://antilog.tistory.com/",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "hansh0101",
+      "name": "ONE (ICEMAN)",
+      "avatar_url": "https://avatars.githubusercontent.com/u/81508084?v=4",
+      "profile": "https://velog.io/@gxstxdgxs",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "soptamp-android",
+  "projectOwner": "sopt-makers"
+}
