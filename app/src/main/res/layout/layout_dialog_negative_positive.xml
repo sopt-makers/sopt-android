@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    android:paddingStart="7dp"
+    android:paddingTop="26dp"
+    android:paddingEnd="7dp"
+    android:paddingBottom="12dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?textAppearanceHeadlineLarge"
+        android:textColor="@color/white_100"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="title" />
+
+    <TextView
+
+        android:id="@+id/subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="center"
+        android:textAppearance="?textAppearanceBodyMedium"
+        android:textColor="@color/gray_30"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        tools:text="subtitle" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/negative_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/rectangle_radius_10"
+        android:backgroundTint="@color/black_40"
+        android:paddingStart="23dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="21dp"
+        android:paddingBottom="9dp"
+        android:textAppearance="?textAppearanceBodyMedium"
+        android:textColor="@color/gray_60"
+        app:layout_constraintEnd_toStartOf="@id/positive_button"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/subtitle"
+        tools:text="No" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/positive_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:background="@drawable/rectangle_radius_10"
+        android:backgroundTint="@color/purple_100"
+        android:paddingStart="23dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="21dp"
+        android:paddingBottom="9dp"
+        android:textAppearance="?textAppearanceBodyMedium"
+        android:textColor="@color/gray_10"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/negative_button"
+        app:layout_constraintTop_toTopOf="@id/negative_button"
+        tools:text="Yes" />
+</androidx.constraintlayout.widget.ConstraintLayout>

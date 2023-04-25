@@ -21,7 +21,7 @@ import org.sopt.official.stamp.domain.repository.UserRepository
 object FakeUserRepository : UserRepository {
     private val fakeUser = SoptampUser("", 1, "")
 
-    override suspend fun checkNickname(nickname: String) = Unit
+    override suspend fun checkNickname(nickname: String): Result<Unit> = runCatching {}
 
     override suspend fun logout(): Result<Unit> = runCatching {}
     override suspend fun getUserInfo(): Result<SoptampUser> = runCatching { fakeUser }

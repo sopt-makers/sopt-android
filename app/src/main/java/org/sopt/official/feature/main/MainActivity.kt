@@ -13,8 +13,11 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.base.BaseAdapter
 import org.sopt.official.base.BaseViewHolder
@@ -25,6 +28,7 @@ import org.sopt.official.domain.entity.UserState
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.main.MainViewModel.SmallBlockItemHolder
+import org.sopt.official.feature.mypage.MyPageActivity
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.drawableOf
 import org.sopt.official.util.serializableExtra
@@ -54,6 +58,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        initToolbar()
         initUserStatus()
         initUserInfo()
         initBlock()
@@ -61,6 +67,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUserStatus() {
         viewModel.initMainView(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+    }
+
+    private fun initToolbar() {
+        binding.mypage.setOnClickListener {
+            lifecycleScope.launch {
+                val args = viewModel.userState
+                    .map { MyPageActivity.StartArgs(it.getOrElse(UserState.UNAUTHENTICATED)) }
+                    .first()
+                startActivity(MyPageActivity.getIntent(this@MainActivity, args))
+            }
+        }
     }
 
     private fun initUserInfo() {
@@ -244,7 +261,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("args", args)
         }
     }

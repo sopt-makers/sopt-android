@@ -30,6 +30,8 @@
     <!-- RedScale -->
     <color name="sopt_red">#FFD3D3</color>
     <color name="on_sopt_red">#E45656</color>
+    <color name="red_100">#BD372F</color>
+    <color name="reddim">#392020</color>
     <!-- GreenScale -->
     <color name="sopt_green">#A7F8BE</color>
     <color name="on_sopt_green">#378F5C</color>

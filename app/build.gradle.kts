@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)
     implementation(libs.sopt.auth)
+    implementation(libs.process.phoenix)
 
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)

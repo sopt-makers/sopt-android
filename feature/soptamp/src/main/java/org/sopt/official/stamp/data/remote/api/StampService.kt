@@ -53,5 +53,5 @@ interface StampService {
     suspend fun deleteStamp(@Path("missionId") missionId: Int)
 
     @DELETE("stamp/all")
-    suspend fun deleteAllStamps()
+    suspend fun deleteAllStamps(): Result<Unit>
 }
