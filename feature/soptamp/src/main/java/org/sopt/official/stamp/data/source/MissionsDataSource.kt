@@ -18,5 +18,5 @@ package org.sopt.official.stamp.data.source
 import org.sopt.official.stamp.data.remote.model.MissionData
 
 interface MissionsDataSource {
-    suspend fun getAllMission(userId: Int): Result<List<MissionData>>
+    suspend fun getAllMission(): Result<List<MissionData>>
 }

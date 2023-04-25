@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_sopt_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/img_logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/group_bottom_auth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/btn_sopt_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/shape_primary_10"
+            android:paddingVertical="17dp"
+            android:text="SOPT Playground로 로그인"
+            android:textAlignment="center"
+            android:textAppearance="?textAppearanceBodyMedium"
+            android:textColor="?colorOnSurface"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="20dp" />
+
+        <TextView
+            android:id="@+id/btn_sopt_not_member"
+            style="@style/TextAppearance.SOPT"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="SOPT 회원이 아니에요"
+            android:textColor="?colorPrimary"
+            android:textFontWeight="600"
+            android:textSize="12dp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_sopt_login"
+            app:layout_constraintStart_toStartOf="@+id/btn_sopt_login"
+            app:layout_constraintTop_toBottomOf="@+id/btn_sopt_login" />
+
+        <ImageView
+            android:id="@+id/img_sopt_makers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
+            android:src="@drawable/img_sopt_makers"
+            app:layout_constraintEnd_toEndOf="@+id/btn_sopt_not_member"
+            app:layout_constraintStart_toStartOf="@+id/btn_sopt_not_member"
+            app:layout_constraintTop_toBottomOf="@+id/btn_sopt_not_member" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,24 +2,24 @@
 compileSdk = "33"
 minSdk = "28"
 targetSdk = "33"
-appVersion = "1.0.0"
-versionCode = "10000"
+appVersion = "0.9.0"
+versionCode = "9000"
 
 kotlin = "1.8.10"
 kotlinx-serialization-json = "1.5.0"
-kotlinx-serialization-converter = "0.8.0"
+kotlinx-serialization-converter = "1.0.0"
 kotlinx-coroutines = "1.6.4"
 kotlinx-datetime = "0.4.0"
 compose = "1.3.1"
 corektx = "1.10.0"
 appcompat = "1.6.1"
-activity = "1.7.0"
+activity = "1.7.1"
 lifecycle = "2.6.1"
 navigation = "2.5.3"
 startup = "1.1.1"
 security = "1.0.0"
 compose-compiler = "1.4.3"
-compose-bom = "2023.04.00"
+compose-bom = "2023.04.01"
 desugarJdk = "2.0.3"
 
 material = "1.8.0"
@@ -38,7 +38,7 @@ dagger-hilt = "2.45"
 dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.189.0"
 soloader = "0.10.5"
-okhttp = "4.10.0"
+okhttp = "4.11.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.8.36-beta"
@@ -53,6 +53,7 @@ ktlint = "11.3.1"
 sentry = "3.5.0"
 sentry-android = "6.17.0"
 process-pheonix = "2.1.2"
+sopt-pgauth = "0.1.6"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -139,6 +140,8 @@ ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlin
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
 
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
+
+sopt-auth = { module = "com.github.sopt-makers:sopt-android-pgauth", version.ref = "sopt-pgauth" }
 
 [bundles]
 compose = [

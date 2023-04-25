@@ -15,16 +15,11 @@
  */
 package org.sopt.official.stamp.data.source
 
-import org.sopt.official.stamp.data.remote.model.response.SignUpResponse
 import org.sopt.official.stamp.data.remote.model.response.UserResponse
 
 interface UserDataSource {
-    suspend fun signup(nickname: String, email: String, password: String, osType: String, clientToken: String): SignUpResponse
     suspend fun checkNickname(nickname: String)
-    suspend fun checkEmail(email: String)
-    suspend fun login(email: String, password: String): UserResponse
-    suspend fun withdraw(userId: Int)
-    suspend fun updatePassword(userId: Int, new: String)
-    suspend fun updateNickname(userId: Int, new: String)
-    suspend fun updateProfileMessage(userId: Int, new: String)
+    suspend fun updateNickname(new: String)
+    suspend fun updateProfileMessage(new: String)
+    suspend fun getUserInfo(): UserResponse
 }

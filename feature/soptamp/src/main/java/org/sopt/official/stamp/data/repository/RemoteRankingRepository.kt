@@ -17,13 +17,15 @@ package org.sopt.official.stamp.data.repository
 
 import org.sopt.official.stamp.data.error.ErrorData
 import org.sopt.official.stamp.data.mapper.toDomain
+import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.source.RankingDataSource
 import org.sopt.official.stamp.domain.model.Rank
 import org.sopt.official.stamp.domain.repository.RankingRepository
 import javax.inject.Inject
 
 internal class RemoteRankingRepository @Inject constructor(
-    private val remote: RankingDataSource
+    private val remote: RankingDataSource,
+    private val service: RankService
 ) : RankingRepository {
     override suspend fun getRanking(): Result<List<Rank>> {
         val result = remote.getRanking()
@@ -34,5 +36,9 @@ internal class RemoteRankingRepository @Inject constructor(
         } else {
             result
         }
+    }
+
+    override suspend fun getRankDetail(nickname: String) = runCatching {
+        service.getRankDetail(nickname).toEntity()
     }
 }

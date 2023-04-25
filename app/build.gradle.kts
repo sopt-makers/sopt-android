@@ -17,10 +17,20 @@ android {
     namespace = "org.sopt.official"
 
     defaultConfig {
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.appVersion.get()
         applicationId = "org.sopt.official"
-        manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = properties.getProperty("keyAlias")
+            keyPassword = properties.getProperty("keyPassword")
+            storeFile = File("${project.rootDir.absolutePath}/keystore/releaseKey.jks")
+            storePassword = "soptandroid"
+        }
     }
 
     buildTypes {
@@ -31,6 +41,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     applicationVariants.all {
@@ -44,6 +55,7 @@ android {
         }
     }
     buildFeatures {
+        viewBinding = true
         compose = true
     }
     composeOptions {
@@ -53,6 +65,7 @@ android {
 
 dependencies {
     implementation(project(":feature:soptamp"))
+    implementation(project(":core"))
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
@@ -78,6 +91,7 @@ dependencies {
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)
+    implementation(libs.sopt.auth)
 
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)

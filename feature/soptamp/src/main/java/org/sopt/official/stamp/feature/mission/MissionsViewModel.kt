@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.feature.mission
+package org.sopt.official.stamp.feature.mission
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -26,36 +26,31 @@ import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.domain.repository.MissionsRepository
-import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.stamp.feature.mission.model.toUiModel
 import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
-    private val dataStore: SoptampDataStore
+    private val dataStore: SoptampDataStore,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
-    val userId = dataStore.userId
+    val nickname = dataStore.nickname
 
-    fun fetchMissions(
-        userId: Int? = null,
-        filter: String? = null
-    ) = viewModelScope.launch {
+    fun fetchMissions(filter: String? = null) = viewModelScope.launch {
         _state.value = MissionsState.Loading
         fetchMissions(
-            userId = userId ?: dataStore.userId,
             filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION
         )
     }
 
-    private suspend fun fetchMissions(userId: Int, filter: MissionsFilter) {
+    private suspend fun fetchMissions(filter: MissionsFilter) {
         val missions = when (filter) {
-            MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions(userId)
-            MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions(userId)
-            MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions(userId)
+            MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
+            MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions()
+            MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
         }
         missions.mapCatching { it.toUiModel(filter.title) }
             .onSuccess { missions ->

@@ -69,11 +69,11 @@ import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestinati
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.destinations.SettingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
-import org.sopt.stamp.feature.mission.MissionsViewModel
+import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.stamp.feature.mission.model.MissionListUiModel
-import org.sopt.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.stamp.feature.mission.model.MissionUiModel
-import org.sopt.stamp.feature.mission.model.toArgs
+import org.sopt.official.stamp.feature.mission.model.toArgs
 
 @MissionNavGraph(true)
 @Destination("list")
@@ -107,21 +107,20 @@ fun MissionListScreen(
             }
 
             is MissionsState.Success -> MissionListScreen(
-                userId = missionsViewModel.userId,
+                nickname = missionsViewModel.nickname,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
                 onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) },
-                onSettingButtonClick = { navigator.navigate(SettingScreenDestination) }
-            )
+                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) }
+            ) { navigator.navigate(SettingScreenDestination) }
         }
     }
 }
 
 @Composable
 fun MissionListScreen(
-    userId: Int,
+    nickname: String,
     missionListUiModel: MissionListUiModel,
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
@@ -163,7 +162,7 @@ fun MissionListScreen(
                     missions = missionListUiModel.missionList,
                     onMissionItemClick = { onMissionItemClick(it) },
                     isMe = true,
-                    userId = userId
+                    nickname = nickname
                 )
             }
         }
@@ -175,7 +174,7 @@ fun MissionsGridComponent(
     missions: List<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
-    userId: Int
+    nickname: String
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -186,7 +185,7 @@ fun MissionsGridComponent(
             MissionComponent(
                 mission = missionUiModel,
                 onClick = {
-                    onMissionItemClick(missionUiModel.toArgs(isMe, userId))
+                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
                 }
             )
         }
@@ -367,7 +366,7 @@ fun PreviewMissionListScreen() {
     )
     SoptTheme {
         MissionListScreen(
-            userId = 1,
+            nickname = "Nunu",
             missionListUiModel,
             listOf("전체 미션", "완료 미션", "미완료 미션")
         )

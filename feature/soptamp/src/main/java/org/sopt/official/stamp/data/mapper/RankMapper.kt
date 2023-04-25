@@ -24,7 +24,6 @@ internal fun List<RankData>.toDomain(): List<Rank> = this.map {
 
 internal fun RankData.toDomain(): Rank = Rank(
     rank,
-    userId,
     nickname,
     point,
     profileMessage

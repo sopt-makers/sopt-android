@@ -17,7 +17,6 @@ package org.sopt.official.stamp.data.repository
 
 import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.data.source.UserDataSource
-import org.sopt.official.stamp.domain.model.User
 import org.sopt.official.stamp.domain.repository.UserRepository
 import javax.inject.Inject
 
@@ -25,55 +24,30 @@ class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
     private val local: SoptampDataStore
 ) : UserRepository {
-    override suspend fun signup(
-        nickname: String,
-        email: String,
-        password: String,
-        osType: String,
-        clientToken: String
-    ): Int = remote.signup(nickname, email, password, osType, clientToken).userId
-
     override suspend fun checkNickname(nickname: String) = remote.checkNickname(nickname)
-
-    override suspend fun checkEmail(email: String) = remote.checkEmail(email)
-
-    override suspend fun login(email: String, password: String): User = remote.login(email, password).toUser()
     override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
 
-    override suspend fun withdraw(userId: Int): Result<Unit> = runCatching {
-        remote.withdraw(userId)
+    override suspend fun getUserInfo() = runCatching {
+        remote.getUserInfo().toDomain()
     }.onSuccess {
-        local.clear()
+        local.nickname = it.nickname
+        local.profileMessage = it.profileMessage
     }
 
-    override suspend fun updateProfileMessage(
-        userId: Int,
-        profileMessage: String
-    ): Result<Unit> = runCatching {
-        remote.updateProfileMessage(userId, profileMessage)
+    override suspend fun updateProfileMessage(profileMessage: String) = runCatching {
+        remote.updateProfileMessage(profileMessage)
     }.onSuccess {
         local.profileMessage = profileMessage
     }
 
-    override suspend fun updatePassword(
-        userId: Int,
-        password: String
-    ): Result<Unit> = runCatching {
-        remote.updatePassword(userId, password)
-    }
-
-    override suspend fun updateNickname(
-        userId: Int,
-        nickname: String
-    ): Result<Unit> = runCatching {
-        remote.updateNickname(userId, nickname)
+    override suspend fun updateNickname(nickname: String): Result<Unit> = runCatching {
+        remote.updateNickname(nickname)
     }.onSuccess {
         local.nickname = nickname
     }
 
-    override fun updateLocalUserInfo(userId: Int, profileMessage: String) {
+    override fun updateLocalUserInfo(profileMessage: String) {
         local.apply {
-            this.userId = userId
             this.profileMessage = profileMessage
         }
     }
