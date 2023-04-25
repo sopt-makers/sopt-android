@@ -56,6 +56,7 @@ class AttendanceActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initView()
+        initListener()
         fetchData()
         observeData()
     }
@@ -208,6 +209,7 @@ class AttendanceActivity : AppCompatActivity() {
             }
 
             layoutAttendanceProgress.isVisible = true
+            attendanceViewModel.setProgressBar(soptEvent)
             tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
             tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
         }

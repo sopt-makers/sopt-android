@@ -56,7 +56,6 @@ class AttendanceViewModel @Inject constructor(
                 .onSuccess {
                     _soptEvent.value = AttendanceState.Success(it)
                     eventId = it.id
-                    setProgressBar(it)
                     fetchAttendanceRound()
                 }.onFailure {
                     Timber.e(it)
@@ -65,7 +64,7 @@ class AttendanceViewModel @Inject constructor(
         }
     }
 
-    private fun setProgressBar(soptEvent: SoptEvent) {
+    fun setProgressBar(soptEvent: SoptEvent) {
         val firstProgressText = soptEvent.attendances[0].attendedAt
         val secondProgressText = soptEvent.attendances[1].attendedAt
 
