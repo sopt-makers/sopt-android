@@ -7,13 +7,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.databinding.ActivitySignOutBinding
 import org.sopt.official.util.viewBinding
-import org.sopt.official.util.wrapper.asNullableWrapper
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
@@ -45,20 +44,12 @@ class SignOutActivity : AppCompatActivity() {
     private fun initRestart() {
         viewModel.restartSignal
             .flowWithLifecycle(lifecycle)
-            .filter { it }
-            .onEach {
-                val intent = packageManager.getLaunchIntentForPackage(packageName)
-                val componentName = intent?.component
-                val mainIntent = Intent.makeRestartActivityTask(componentName)
-                startActivity(mainIntent)
-                System.exit(0)
-            }
+            .onEach { ProcessPhoenix.triggerRebirth(this) }
             .launchIn(lifecycleScope)
     }
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, SignOutActivity::class.java).apply {
-        }
+        fun getIntent(context: Context) = Intent(context, SignOutActivity::class.java)
     }
 }

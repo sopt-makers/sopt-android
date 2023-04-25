@@ -1,9 +1,9 @@
 package org.sopt.official.feature.mypage
 
-import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.entity.UserState
@@ -20,13 +20,13 @@ class MyPageViewModel @Inject constructor(
 ) : ViewModel() {
     val userState = MutableStateFlow(NullableWrapper.none<UserState>())
 
-    val restartSignal = MutableStateFlow(false)
+    val restartSignal = MutableSharedFlow<Unit>()
 
     fun logOut() {
         viewModelScope.launch {
             authRepository.logout()
-                .onSuccess{
-                    restartSignal.value = true
+                .onSuccess {
+                    restartSignal.emit(Unit)
                 }.onFailure {
                     Timber.e(it)
                 }
@@ -36,7 +36,7 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
-                .onSuccess{
+                .onSuccess {
                 }.onFailure {
                     Timber.e(it)
                 }

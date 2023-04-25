@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material.AlertDialog
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -32,7 +33,7 @@ import java.io.Serializable
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
-    private val args by serializableExtra(MyPageActivity.StartArgs(UserState.UNAUTHENTICATED))
+    private val args by serializableExtra(StartArgs(UserState.UNAUTHENTICATED))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,9 +73,19 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initClick() {
+        binding.textPrivateInfo.setOnClickListener {
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))
+            )
+        }
         binding.iconPrivateInfo.setOnClickListener {
             this.startActivity(
                 Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))
+            )
+        }
+        binding.textServiceRule.setOnClickListener {
+            this.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))
             )
         }
         binding.iconServiceRule.setOnClickListener {
@@ -85,11 +96,27 @@ class MyPageActivity : AppCompatActivity() {
         binding.iconSendOpinion.setOnClickListener {
             // 구글폼 이동 (아직 url X)
         }
+        binding.textAdjustSentence.setOnClickListener {
+            this.startActivity(AdjustSentenceActivity.getIntent(this))
+        }
         binding.iconAdjustSentence.setOnClickListener {
             this.startActivity(AdjustSentenceActivity.getIntent(this))
         }
+        binding.textChangeNickname.setOnClickListener {
+            this.startActivity(ChangeNickNameActivity.getIntent(this))
+        }
         binding.iconChangeNickname.setOnClickListener {
             this.startActivity(ChangeNickNameActivity.getIntent(this))
+        }
+        binding.textResetStamp.setOnClickListener {
+            AlertDialogPositiveNegative(this)
+                .setTitle(R.string.mypage_alert_soptamp_reset_title)
+                .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
+                .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
+                    viewModel.resetSoptamp()
+                }
+                .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
+                .show()
         }
         binding.iconResetStamp.setOnClickListener {
             AlertDialogPositiveNegative(this)
@@ -124,14 +151,7 @@ class MyPageActivity : AppCompatActivity() {
     private fun initRestart() {
         viewModel.restartSignal
             .flowWithLifecycle(lifecycle)
-            .filter { it }
-            .onEach {
-                val intent = packageManager.getLaunchIntentForPackage(packageName)
-                val componentName = intent?.component
-                val mainIntent = Intent.makeRestartActivityTask(componentName)
-                startActivity(mainIntent)
-                System.exit(0)
-            }
+            .onEach { ProcessPhoenix.triggerRebirth(this) }
             .launchIn(lifecycleScope)
     }
 
@@ -145,7 +165,7 @@ class MyPageActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: MyPageActivity.StartArgs) = Intent(context, MyPageActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
         }
     }
