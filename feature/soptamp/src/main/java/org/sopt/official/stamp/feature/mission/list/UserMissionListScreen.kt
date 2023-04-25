@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -51,9 +52,9 @@ import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
-import org.sopt.stamp.feature.mission.model.MissionListUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.stamp.feature.mission.model.MissionUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 
 @MissionNavGraph
@@ -67,9 +68,13 @@ fun UserMissionListScreen(
 ) {
     val state by missionsViewModel.state.collectAsState()
 
-    missionsViewModel.fetchMissions(
-        filter = MissionsFilter.COMPLETE_MISSION.title
-    )
+    LaunchedEffect(Unit) {
+        missionsViewModel.fetchMissions(
+            filter = MissionsFilter.COMPLETE_MISSION.title,
+            nickname = args.nickname,
+            
+        )
+    }
 
     SoptTheme {
         when (state) {
