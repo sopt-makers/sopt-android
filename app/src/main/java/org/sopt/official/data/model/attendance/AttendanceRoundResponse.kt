@@ -11,8 +11,5 @@ data class AttendanceRoundResponse(
     @SerialName("round")
     val round: Int
 ) {
-    fun toEntity(): AttendanceRound = AttendanceRound(
-        this.id,
-        "${round}차 출석 인증하기"
-    )
+    fun toEntity(): AttendanceRound = AttendanceRound(id, "${round}차 출석 인증하기")
 }
