@@ -2,7 +2,7 @@
 compileSdk = "33"
 minSdk = "28"
 targetSdk = "33"
-appVersion = "0.9.0"
+appVersion = "0.9.1"
 versionCode = "9000"
 
 kotlin = "1.8.10"
