@@ -2,22 +2,29 @@ package org.sopt.official.data.service.attendance
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import org.sopt.official.data.model.attendance.AttendanceHistoryResponse
-import org.sopt.official.data.model.attendance.BaseAttendanceResponse
-import org.sopt.official.data.model.attendance.SoptEventResponse
+import org.sopt.official.data.model.attendance.*
+
 
 class MockAttendanceService : AttendanceService {
     override suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse> {
-        return EVENT_NO_ATTENDANCE
+        return NOT_EVENT_DAY
     }
 
     override suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse> {
         return ATTENDANCE_HISTORY
     }
 
+    override suspend fun getAttendanceRound(lectureId: Long): BaseAttendanceResponse<AttendanceRoundResponse> {
+        return ATTENDANCE_ROUND_ONE
+    }
+
+    override suspend fun confirmAttendanceCode(param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse> {
+        return FAIL_ATTENDANCE_BEFORE
+    }
+
     companion object {
         private const val NOT_EVENT_DAY_JSON_TEXT = """
-            {
+             {
                 "success": true,
                 "message": "세미나가 없는 날입니다",
                 "data": {
@@ -170,5 +177,133 @@ class MockAttendanceService : AttendanceService {
         """
         private val ATTENDANCE_HISTORY: BaseAttendanceResponse<AttendanceHistoryResponse> =
             Json.decodeFromString(ATTENDANCE_HISTORY_JSON_TEXT)
+
+        private const val NO_SECTION_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 오늘 세션이 없습니다.",
+              "data": null
+            }
+        """
+        private val NO_SECTION: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(NO_SECTION_JSON_TEXT)
+
+        private const val NO_ATTENDANCE_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 출석 시작 전입니다.",
+              "data": null
+            }
+        """
+        private val NO_ATTENDANCE: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(NO_ATTENDANCE_JSON_TEXT)
+
+        private const val NO_TIME_FIRST_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석 시작 전입니다.",
+              "data": null
+            }
+        """
+        private val NO_TIME_FIRST: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(NO_TIME_FIRST_JSON_TEXT)
+
+        private const val NO_TIME_SECOND_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 2차 출석 시작 전입니다.",
+              "data": null
+            }
+        """
+        private val NO_TIME_SECOND: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(NO_TIME_SECOND_JSON_TEXT)
+
+        private const val AFTER_TIME_FIRST_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석이 이미 종료되었습니다.",
+              "data": null
+            }
+        """
+        private val AFTER_TIME_FIRST: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(AFTER_TIME_FIRST_JSON_TEXT)
+
+        private const val AFTER_TIME_SECOND_JSON_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 2차 출석이 이미 종료되었습니다.",
+              "data": null
+            }
+        """
+        private val AFTER_TIME_SECOND: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(AFTER_TIME_SECOND_JSON_TEXT)
+
+        private const val ATTENDANCE_ROUND_TWO_JSON_TEXT = """
+            {
+              "success": true,
+              "message": "출석 차수 조회 성공",
+              "data": {
+                "id": 16,
+                "round": 2
+              }
+            }
+        """
+        private val ATTENDANCE_ROUND_TWO: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(ATTENDANCE_ROUND_TWO_JSON_TEXT)
+
+        private const val ATTENDANCE_ROUND_ONE_JSON_TEXT = """
+            {
+              "success": true,
+              "message": "출석 차수 조회 성공",
+              "data": {
+                "id": 5,
+                "round": 1
+              }
+            }
+        """
+        private val ATTENDANCE_ROUND_ONE: BaseAttendanceResponse<AttendanceRoundResponse> =
+            Json.decodeFromString(ATTENDANCE_ROUND_ONE_JSON_TEXT)
+
+        private const val SUCCESS_ATTENDNACE_TEXT = """
+            {
+              "success": true,
+              "message": "출석 성공",
+              "data": {
+                "subLectureId": 17
+              }
+            }
+        """
+        private val SUCCESS_ATTENDANCE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(SUCCESS_ATTENDNACE_TEXT)
+
+        private const val FAIL_ATTENDNACE_WRONG_CODE_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 코드가 일치하지 않아요!",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDNACE_WRONG_CODE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDNACE_WRONG_CODE_TEXT)
+
+        private const val FAIL_ATTENDANCE_BEFORE_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석 시작 전입니다",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDANCE_BEFORE: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDANCE_BEFORE_TEXT)
+
+        private const val FAIL_ATTENDANCE_AFTER_TIME_TEXT = """
+            {
+              "success": false,
+              "message": "[LectureException] : 1차 출석 시작 전입니다",
+              "data": null
+            }
+        """
+        private val FAIL_ATTENDANCE_AFTER_TIME: BaseAttendanceResponse<AttendanceCodeResponse> =
+            Json.decodeFromString(FAIL_ATTENDANCE_AFTER_TIME_TEXT)
     }
 }
