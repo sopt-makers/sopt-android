@@ -210,8 +210,20 @@ class AttendanceActivity : AppCompatActivity() {
 
             layoutAttendanceProgress.isVisible = true
             attendanceViewModel.setProgressBar(soptEvent)
-            tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
-            tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
+            when (soptEvent.attendances.size) {
+                1 -> {
+                    tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
+                    tvAttendanceProgress2.text = "2차 출석"
+                }
+                2 -> {
+                    tvAttendanceProgress1.text = soptEvent.attendances[0].attendedAt
+                    tvAttendanceProgress2.text = soptEvent.attendances[1].attendedAt
+                }
+                else -> {
+                    tvAttendanceProgress1.text = "1차 출석"
+                    tvAttendanceProgress2.text = "2차 출석"
+                }
+            }
         }
     }
 

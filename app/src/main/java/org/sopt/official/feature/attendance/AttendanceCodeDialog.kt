@@ -5,7 +5,6 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -168,7 +167,6 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
                 attendanceViewModel.checkAttendanceCode(
                     "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}${etAttendanceCode4.text}${etAttendanceCode5.text}"
                 )
-                Log.d("###", "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}${etAttendanceCode4.text}${etAttendanceCode5.text}")
             }
         }
     }
@@ -177,14 +175,10 @@ class AttendanceCodeDialog(title: String) : DialogFragment() {
         lifecycleScope.launch {
             attendanceViewModel.dialogState.collect {
                 when (it) {
-                    // observing 시켜놓고 state가 close면 dismiss + viewmodel 내에서 상태 변경
                     is DialogState.Close -> {
                         dismiss()
-                        // viewModel 상태 변경 -> 데이터 변경해야 하니까
-                        // TODO 여기 질문하기
                         attendanceViewModel.fetchSoptEvent()
                     }
-                    // observing에서 error가 떴을 때면 observing 내부에서 error state로
                     is DialogState.Failure -> {
                         // 설정한
                         with(binding) {

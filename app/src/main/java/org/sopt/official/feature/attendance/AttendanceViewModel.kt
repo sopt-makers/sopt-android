@@ -1,5 +1,6 @@
 package org.sopt.official.feature.attendance
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -65,35 +66,55 @@ class AttendanceViewModel @Inject constructor(
     }
 
     fun setProgressBar(soptEvent: SoptEvent) {
-        val firstProgressText = soptEvent.attendances[0].attendedAt
-        val secondProgressText = soptEvent.attendances[1].attendedAt
+        when (soptEvent.attendances.size) {
+            0 -> {
+                setThirdProgressBarBeforeAttendance(true) // 출석 전
+                setThirdProgressBar(false)
+            }
+            1 -> {
+                setThirdProgressBarBeforeAttendance(true)
+                setThirdProgressBar(false)
+                val firstProgressText = soptEvent.attendances[0].attendedAt
+                if (firstProgressText != "1차 출석") {
+                    setFirstProgressBar(true)
+                } else {
+                    setFirstProgressBar(false)
+                }
+            }
+            2 -> {
+                val firstProgressText = soptEvent.attendances[0].attendedAt
+                val secondProgressText = soptEvent.attendances[1].attendedAt
 
-        if (firstProgressText != "1차 출석") {
-            setFirstProgressBar(true)
-        } else {
-            setFirstProgressBar(false)
-        }
+                if (firstProgressText != "1차 출석") {
+                    setFirstProgressBar(true)
+                } else {
+                    setFirstProgressBar(false)
+                }
 
-        if (secondProgressText != "2차 출석") {
-            setSecondProgressBar(true)
-        } else {
-            setSecondProgressBar(false)
-        }
+                if (secondProgressText != "2차 출석") {
+                    setSecondProgressBar(true)
+                } else {
+                    setSecondProgressBar(false)
+                }
 
-        val firstStatus = soptEvent.attendances[0].status.name
-        val secondStatus = soptEvent.attendances[1].status.name
-        if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
-            setThirdProgressBar(true)
-            setThirdProgressBarAttendance(true)
-        } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
-            setThirdProgressBarBeforeAttendance(false)
-            setThirdProgressBar(false)
-        } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
-            setThirdProgressBar(true)
-            setThirdProgressBarAttendance(false)
-        } else {
-            setThirdProgressBarBeforeAttendance(true)
-            setThirdProgressBar(false)
+                val firstStatus = soptEvent.attendances[0].status.name
+                val secondStatus = soptEvent.attendances[1].status.name
+                if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
+                    setThirdProgressBar(true)
+                    setThirdProgressBarAttendance(true)
+                } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
+                    // 결석 상태
+                    setThirdProgressBarBeforeAttendance(false)
+                    setThirdProgressBar(false)
+                } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
+                    setThirdProgressBar(true)
+                    setThirdProgressBarAttendance(false)
+                } else {
+                    // 결석 상태
+                    setThirdProgressBarBeforeAttendance(false)
+                    setThirdProgressBar(false)
+                }
+            }
         }
     }
 
