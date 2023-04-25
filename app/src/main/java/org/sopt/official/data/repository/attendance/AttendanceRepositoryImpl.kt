@@ -1,6 +1,5 @@
 package org.sopt.official.data.repository.attendance
 
-import android.content.res.Resources
 import org.sopt.official.R
 import org.sopt.official.data.model.attendance.AttendanceCodeResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
@@ -23,22 +22,22 @@ class AttendanceRepositoryImpl @Inject constructor(
     }.fold(
         {
             when (it.message) {
-                Resources.getSystem().getString(R.string.attendance_error_no_section) -> Result.success(
+                R.string.attendance_error_no_section.toString() -> Result.success(
                     AttendanceButtonType.GONE_BUTTON.attendanceRound
                 )
-                Resources.getSystem().getString(R.string.attendance_error_before_attendance) -> Result.success(
+                R.string.attendance_error_before_attendance.toString() -> Result.success(
                     AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound
                 )
-                Resources.getSystem().getString(R.string.attendance_error_before_first_attendance) -> Result.success(
+                R.string.attendance_error_before_first_attendance.toString() -> Result.success(
                     AttendanceButtonType.BEFORE_FIRST_ATTENDANCE.attendanceRound
                 )
-                Resources.getSystem().getString(R.string.attendance_error_before_second_attendance) -> Result.success(
+                R.string.attendance_error_before_second_attendance.toString() -> Result.success(
                     AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound
                 )
-                Resources.getSystem().getString(R.string.attendance_error_after_first_attendance) -> Result.success(
+                R.string.attendance_error_after_first_attendance.toString() -> Result.success(
                     AttendanceButtonType.BEFORE_SECOND_ATTENDANCE.attendanceRound
                 )
-                Resources.getSystem().getString(R.string.attendance_error_after_second_attendance) -> Result.success(
+                R.string.attendance_error_after_second_attendance.toString() -> Result.success(
                     AttendanceButtonType.AFTER_SECOND_ATTENDANCE.attendanceRound
                 )
                 else -> it.data?.let { data -> Result.success(data.toEntity()) } ?: Result.success(
