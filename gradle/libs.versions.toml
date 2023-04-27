@@ -51,7 +51,7 @@ crashlytics = "2.9.5"
 firebase = "31.5.0"
 ktlint = "11.3.2"
 sentry = "3.5.0"
-sentry-android = "6.17.0"
+sentry-android = "6.18.0"
 process-pheonix = "2.1.2"
 sopt-pgauth = "0.1.7"
 
