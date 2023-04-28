@@ -1,10 +1,12 @@
 package org.sopt.official.data.repository.attendance
 
+import org.json.JSONObject
 import org.sopt.official.data.model.attendance.AttendanceCodeResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.service.attendance.AttendanceService
 import org.sopt.official.domain.entity.attendance.*
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
+import retrofit2.HttpException
 import javax.inject.Inject
 
 class AttendanceRepositoryImpl @Inject constructor(
@@ -16,8 +18,16 @@ class AttendanceRepositoryImpl @Inject constructor(
 
     override suspend fun fetchAttendanceRound(lectureId: Long): Result<AttendanceRound> = runCatching {
         attendanceService.getAttendanceRound(lectureId).data?.toEntity() ?: AttendanceButtonType.ERROR.attendanceRound
-    }.recoverCatching {
-        AttendanceButtonType.of(it.message ?: "")
+    }.recoverCatching { cause ->
+        when (cause) {
+            is HttpException -> {
+                val errorBody = cause.response()?.errorBody()?.string()
+                val jsonObject = errorBody?.let { JSONObject(it) }
+                val message = jsonObject?.getString("message")
+                AttendanceButtonType.of(message ?: "")
+            }
+            else -> { AttendanceRound(-2, "") }
+        }
     }
 
     override suspend fun confirmAttendanceCode(
@@ -25,7 +35,15 @@ class AttendanceRepositoryImpl @Inject constructor(
         code: String
     ): Result<AttendanceCodeResponse> = runCatching {
         attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data ?: AttendanceCodeResponse(-1)
-    }.recoverCatching {
-        AttendanceErrorCode.of(it.message ?: "") ?: AttendanceCodeResponse(-2)
+    }.recoverCatching { cause ->
+        when (cause) {
+            is HttpException -> {
+                val errorBody = cause.response()?.errorBody()?.string()
+                val jsonObject = errorBody?.let { JSONObject(it) }
+                val message = jsonObject?.getString("message")
+                AttendanceErrorCode.of(message ?: "") ?: AttendanceCodeResponse(-2)
+            }
+            else -> { AttendanceCodeResponse(-2) }
+        }
     }
 }
