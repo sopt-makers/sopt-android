@@ -39,7 +39,6 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
@@ -74,50 +73,52 @@ fun OnboardingScreen(
 ) {
     val pageState = rememberPagerState()
     val onboardingPages = OnBoardingPageUiModel.values()
-    SoptColumn(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Toolbar(
-            modifier = Modifier.padding(bottom = 10.dp),
-            title = {
-                Text(
-                    text = "가이드",
-                    style = SoptTheme.typography.h2,
-                    modifier = Modifier.padding(start = 4.dp),
-                    color = SoptTheme.colors.onSurface
-                )
-            },
-            onBack = { navigator.popBackStack() }
-        )
-        HorizontalPager(
-            modifier = Modifier.fillMaxWidth(),
-            pageCount = onboardingPages.size,
-            state = pageState
+    SoptTheme {
+        SoptColumn(
+            modifier = Modifier
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            OnboardingPage(
-                image = onboardingPages[pageState.currentPage].image,
-                title = onboardingPages[pageState.currentPage].title,
-                content = onboardingPages[pageState.currentPage].content
+            Toolbar(
+                modifier = Modifier.padding(bottom = 10.dp),
+                title = {
+                    Text(
+                        text = "가이드",
+                        style = SoptTheme.typography.h2,
+                        modifier = Modifier.padding(start = 4.dp),
+                        color = SoptTheme.colors.onSurface
+                    )
+                },
+                onBack = { navigator.popBackStack() }
+            )
+            HorizontalPager(
+                modifier = Modifier.fillMaxWidth(),
+                pageCount = onboardingPages.size,
+                state = pageState
+            ) {
+                OnboardingPage(
+                    image = onboardingPages[pageState.currentPage].image,
+                    title = onboardingPages[pageState.currentPage].title,
+                    content = onboardingPages[pageState.currentPage].content
+                )
+            }
+            Spacer(modifier = Modifier.size(28.dp))
+            PageIndicator(
+                numberOfPages = onboardingPages.size,
+                selectedPage = pageState.currentPage,
+                defaultRadius = 4.dp,
+                defaultColor = SoptTheme.colors.purple300,
+                selectedColor = SoptTheme.colors.purple200,
+                selectedLength = 20.dp,
+                space = 10.dp,
+                animationDurationInMillis = 100
+            )
+            Spacer(modifier = Modifier.size(80.dp))
+            OnboardingButton(
+                isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
+                onClick = { navigator.popBackStack() }
             )
         }
-        Spacer(modifier = Modifier.size(28.dp))
-        PageIndicator(
-            numberOfPages = onboardingPages.size,
-            selectedPage = pageState.currentPage,
-            defaultRadius = 4.dp,
-            defaultColor = SoptTheme.colors.purple300,
-            selectedColor = SoptTheme.colors.purple200,
-            selectedLength = 20.dp,
-            space = 10.dp,
-            animationDurationInMillis = 100
-        )
-        Spacer(modifier = Modifier.size(80.dp))
-        OnboardingButton(
-            isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
-            onClick = { navigator.popBackStack() }
-        )
     }
 }
 
