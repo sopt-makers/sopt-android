@@ -34,10 +34,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
+import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
+import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.util.DefaultPreview
 
 private enum class OnBoardingPageUiModel(
     @DrawableRes val image: Int,
@@ -72,10 +76,21 @@ fun OnboardingScreen(
     val onboardingPages = OnBoardingPageUiModel.values()
     SoptColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 69.dp),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Toolbar(
+            modifier = Modifier.padding(bottom = 10.dp),
+            title = {
+                Text(
+                    text = "가이드",
+                    style = SoptTheme.typography.h2,
+                    modifier = Modifier.padding(start = 4.dp),
+                    color = SoptTheme.colors.onSurface
+                )
+            },
+            onBack = { navigator.popBackStack() }
+        )
         HorizontalPager(
             modifier = Modifier.fillMaxWidth(),
             pageCount = onboardingPages.size,
@@ -98,7 +113,7 @@ fun OnboardingScreen(
             space = 10.dp,
             animationDurationInMillis = 100
         )
-        Spacer(modifier = Modifier.size(52.dp))
+        Spacer(modifier = Modifier.size(80.dp))
         OnboardingButton(
             isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
             onClick = { navigator.popBackStack() }
@@ -127,5 +142,13 @@ fun OnboardingButton(
             style = SoptTheme.typography.h2,
             modifier = Modifier.padding(vertical = 8.dp)
         )
+    }
+}
+
+@DefaultPreview
+@Composable
+private fun OnboardingScreenPreview() {
+    SoptTheme {
+        OnboardingScreen(navigator = EmptyDestinationsNavigator)
     }
 }
