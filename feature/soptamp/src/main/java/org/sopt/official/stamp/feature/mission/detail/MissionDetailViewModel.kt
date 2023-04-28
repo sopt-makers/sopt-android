@@ -118,7 +118,7 @@ class MissionDetailViewModel @Inject constructor(
                     uiState.update { result }
                 }.onFailure { error ->
                     Timber.e(error)
-                    if (error is HttpException) {
+                    if (error is HttpException && error.code() != 400) {
                         uiState.update {
                             it.copy(isLoading = false, isError = true, error = error)
                         }

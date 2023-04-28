@@ -35,6 +35,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -84,8 +85,12 @@ fun MissionListScreen(
     resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>
 ) {
     val state by missionsViewModel.state.collectAsState()
+    val nickname by missionsViewModel.nickname.collectAsState()
 
-    missionsViewModel.fetchMissions()
+    LaunchedEffect(Unit) {
+        missionsViewModel.initUser()
+        missionsViewModel.fetchMissions()
+    }
 
     resultRecipient.onNavResult { result ->
         when (result) {
@@ -107,7 +112,7 @@ fun MissionListScreen(
             }
 
             is MissionsState.Success -> MissionListScreen(
-                nickname = missionsViewModel.nickname,
+                nickname = nickname,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
