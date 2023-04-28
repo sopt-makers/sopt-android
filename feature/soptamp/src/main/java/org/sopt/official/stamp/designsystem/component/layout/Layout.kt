@@ -39,8 +39,8 @@ fun SoptColumn(
 ) {
     Column(
         modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(SoptTheme.colors.white),
+            .background(SoptTheme.colors.white)
+            .padding(horizontal = 20.dp),
         verticalArrangement,
         horizontalAlignment,
         content = content
