@@ -75,7 +75,7 @@ fun MissionDetailScreen(
     resultNavigator: ResultBackNavigator<Boolean>,
     viewModel: MissionDetailViewModel = hiltViewModel()
 ) {
-    val (id, title, level, isCompleted, isMe, userId) = args
+    val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsState("")
     val imageModel by viewModel.imageModel.collectAsState(ImageModel.Empty)
     val isSuccess by viewModel.isSuccess.collectAsState(false)
@@ -101,9 +101,8 @@ fun MissionDetailScreen(
         isPlaying = isSuccess
     )
 
-    LaunchedEffect(Unit) {
-        Timber.d("MissionDetailScreen: $id, $isCompleted, $isMe, $userId")
-        viewModel.initMissionState(id, isCompleted, isMe)
+    LaunchedEffect(id, isCompleted, isMe, nickname) {
+        viewModel.initMissionState(id, isCompleted, isMe, nickname)
     }
     LaunchedEffect(isSuccess, progress) {
         if (progress >= 0.99f && isSuccess) {

@@ -27,7 +27,7 @@ class SoptDataStore @Inject constructor(
     }
 
     fun clear() {
-        store.edit().clear().apply()
+        store.edit().clear().commit()
     }
 
     var accessToken: String

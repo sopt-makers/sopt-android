@@ -22,25 +22,35 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.domain.repository.MissionsRepository
 import org.sopt.official.stamp.domain.repository.RankingRepository
+import org.sopt.official.stamp.domain.repository.UserRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
     private val rankingRepository: RankingRepository,
-    private val dataStore: SoptampDataStore,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
-    val nickname = dataStore.nickname
+    private val _nickname = MutableStateFlow("")
+    val nickname = _nickname.asStateFlow()
+
+    fun initUser() {
+        viewModelScope.launch {
+            userRepository.getUserInfo()
+                .onSuccess { _nickname.value = it.nickname }
+                .onFailure(Timber::e)
+        }
+    }
 
     fun fetchMissions(
         filter: String? = null,

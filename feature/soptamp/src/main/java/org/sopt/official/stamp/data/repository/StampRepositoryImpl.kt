@@ -69,10 +69,14 @@ class StampRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMissionContent(missionId: Int): Result<Archive> {
+    override suspend fun getMissionContent(
+        missionId: Int,
+        nickname: String
+    ): Result<Archive> {
         return runCatching {
             service.retrieveStamp(
-                missionId = missionId
+                missionId = missionId,
+                nickname = nickname
             ).toDomain()
         }
     }

@@ -67,12 +67,12 @@ fun UserMissionListScreen(
     navigator: DestinationsNavigator
 ) {
     val state by missionsViewModel.state.collectAsState()
+    val nickname by missionsViewModel.nickname.collectAsState()
 
     LaunchedEffect(Unit) {
         missionsViewModel.fetchMissions(
             filter = MissionsFilter.COMPLETE_MISSION.title,
             nickname = args.nickname,
-            
         )
     }
 
@@ -91,7 +91,7 @@ fun UserMissionListScreen(
                 userName = args.nickname,
                 description = args.description,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                isMe = args.nickname == missionsViewModel.nickname,
+                isMe = args.nickname == nickname,
                 onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
                 onClickBack = { resultNavigator.navigateBack() }
             )
