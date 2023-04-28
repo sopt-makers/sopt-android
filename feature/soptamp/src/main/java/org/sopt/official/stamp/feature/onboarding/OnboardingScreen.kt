@@ -17,7 +17,6 @@ package org.sopt.official.stamp.feature.onboarding
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -33,7 +32,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.config.navigation.MissionNavGraph
+import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 private enum class OnBoardingPageUiModel(
@@ -59,13 +62,15 @@ private enum class OnBoardingPageUiModel(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
+@MissionNavGraph
+@Destination("onboarding")
 @Composable
 fun OnboardingScreen(
-    onClickStart: () -> Unit = {}
+    navigator: DestinationsNavigator
 ) {
     val pageState = rememberPagerState()
     val onboardingPages = OnBoardingPageUiModel.values()
-    Column(
+    SoptColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = 69.dp),
@@ -96,7 +101,7 @@ fun OnboardingScreen(
         Spacer(modifier = Modifier.size(52.dp))
         OnboardingButton(
             isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
-            onClick = { onClickStart() }
+            onClick = { navigator.popBackStack() }
         )
     }
 }
@@ -117,7 +122,7 @@ fun OnboardingButton(
         shape = RoundedCornerShape(10.dp)
     ) {
         Text(
-            text = "시작하기",
+            text = "확인",
             color = SoptTheme.colors.white,
             style = SoptTheme.typography.h2,
             modifier = Modifier.padding(vertical = 8.dp)

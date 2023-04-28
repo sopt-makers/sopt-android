@@ -66,8 +66,8 @@ import org.sopt.official.stamp.domain.MissionLevel
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
+import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
-import org.sopt.official.stamp.feature.destinations.SettingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
@@ -112,8 +112,9 @@ fun MissionListScreen(
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
                 onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) }
-            ) { navigator.navigate(SettingScreenDestination) }
+                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) },
+                onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
+            )
         }
     }
 }
@@ -126,7 +127,7 @@ fun MissionListScreen(
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onFloatingButtonClick: () -> Unit = {},
-    onSettingButtonClick: () -> Unit = {}
+    onOnboadingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -134,7 +135,7 @@ fun MissionListScreen(
                 title = missionListUiModel.title,
                 menuTexts = menuTexts,
                 onMenuClick = { onMenuClick(it) },
-                onSettingButtonClick = { onSettingButtonClick() }
+                onOnboadingButtonClick = { onOnboadingButtonClick() }
             )
         },
         floatingActionButton = {
@@ -217,7 +218,7 @@ fun MissionListHeader(
     title: String,
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
-    onSettingButtonClick: () -> Unit = {}
+    onOnboadingButtonClick: () -> Unit = {}
 ) {
     var currentText by remember { mutableStateOf(title) }
     SoptTopAppBar(
@@ -233,9 +234,9 @@ fun MissionListHeader(
         },
         actions = {
             SoptampIconButton(
-                imageVector = ImageVector.vectorResource(id = R.drawable.setting)
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide)
             ) {
-                onSettingButtonClick()
+                onOnboadingButtonClick()
             }
         }
     )
