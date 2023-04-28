@@ -7,4 +7,8 @@ import kotlinx.serialization.Serializable
 data class AttendanceCodeResponse(
     @SerialName("subLectureId")
     val subLectureId: Long
-)
+) {
+    companion object {
+        val ERROR = AttendanceCodeResponse(-2)
+    }
+}

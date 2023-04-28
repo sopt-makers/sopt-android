@@ -26,7 +26,8 @@ class AttendanceRepositoryImpl @Inject constructor(
                 val message = jsonObject?.getString("message")
                 AttendanceButtonType.of(message ?: "")
             }
-            else -> { AttendanceRound(-2, "") }
+
+            else -> AttendanceRound.ERROR
         }
     }
 
@@ -43,7 +44,8 @@ class AttendanceRepositoryImpl @Inject constructor(
                 val message = jsonObject?.getString("message")
                 AttendanceErrorCode.of(message ?: "") ?: AttendanceCodeResponse(-2)
             }
-            else -> { AttendanceCodeResponse(-2) }
+
+            else -> AttendanceCodeResponse.ERROR
         }
     }
 }
