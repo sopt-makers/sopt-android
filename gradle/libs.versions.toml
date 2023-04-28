@@ -34,7 +34,7 @@ androidx-test-espresso = "3.5.1"
 gradleplugin = "7.4.2"
 kspplugin = "1.8.10-1.0.9"
 
-dagger-hilt = "2.45"
+dagger-hilt = "2.46"
 dagger-hilt-navigation-compose = "1.0.0"
 flipper = "0.190.0"
 soloader = "0.10.5"
