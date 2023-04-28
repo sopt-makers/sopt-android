@@ -1,16 +1,24 @@
 package org.sopt.official.data.repository.attendance
 
-import org.json.JSONObject
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.contentOrNull
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 import org.sopt.official.data.model.attendance.AttendanceCodeResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.service.attendance.AttendanceService
-import org.sopt.official.domain.entity.attendance.*
+import org.sopt.official.domain.entity.attendance.AttendanceButtonType
+import org.sopt.official.domain.entity.attendance.AttendanceErrorCode
+import org.sopt.official.domain.entity.attendance.AttendanceHistory
+import org.sopt.official.domain.entity.attendance.AttendanceRound
+import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import retrofit2.HttpException
 import javax.inject.Inject
 
 class AttendanceRepositoryImpl @Inject constructor(
-    private val attendanceService: AttendanceService
+    private val attendanceService: AttendanceService,
+    private val json: Json
 ) : AttendanceRepository {
     override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data!!.toEntity() }
     override suspend fun fetchAttendanceHistory(): Result<AttendanceHistory> =
@@ -21,10 +29,14 @@ class AttendanceRepositoryImpl @Inject constructor(
     }.recoverCatching { cause ->
         when (cause) {
             is HttpException -> {
-                val errorBody = cause.response()?.errorBody()?.string()
-                val jsonObject = errorBody?.let { JSONObject(it) }
-                val message = jsonObject?.getString("message")
-                AttendanceButtonType.of(message ?: "")
+                val errorBodyString = cause.response()?.errorBody()?.string()
+                if (errorBodyString != null) {
+                    val errorBody = json.parseToJsonElement(errorBodyString).jsonObject
+                    val message = errorBody["message"]?.jsonPrimitive?.contentOrNull
+                    AttendanceButtonType.of(message ?: "")
+                } else {
+                    AttendanceRound.ERROR
+                }
             }
 
             else -> AttendanceRound.ERROR
@@ -39,10 +51,14 @@ class AttendanceRepositoryImpl @Inject constructor(
     }.recoverCatching { cause ->
         when (cause) {
             is HttpException -> {
-                val errorBody = cause.response()?.errorBody()?.string()
-                val jsonObject = errorBody?.let { JSONObject(it) }
-                val message = jsonObject?.getString("message")
-                AttendanceErrorCode.of(message ?: "") ?: AttendanceCodeResponse(-2)
+                val errorBodyString = cause.response()?.errorBody()?.string()
+                if (errorBodyString != null) {
+                    val errorBody = json.parseToJsonElement(errorBodyString).jsonObject
+                    val message = errorBody["message"]?.jsonPrimitive?.contentOrNull
+                    AttendanceErrorCode.of(message ?: "") ?: AttendanceCodeResponse.ERROR
+                } else {
+                    AttendanceCodeResponse.ERROR
+                }
             }
 
             else -> AttendanceCodeResponse.ERROR
