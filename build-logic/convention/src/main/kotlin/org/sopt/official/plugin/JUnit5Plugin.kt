@@ -15,6 +15,7 @@ class JUnit5Plugin : Plugin<Project> {
 
         dependencies {
             "testImplementation"(libs.findBundle("junit5.test").get())
+            "testImplementation"(libs.findLibrary("truth").get())
             "androidTestImplementation"(libs.findLibrary("junit5").get())
         }
     }
