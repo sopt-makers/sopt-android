@@ -36,5 +36,9 @@ gradlePlugin {
             id = "org.sopt.official.serialization"
             implementationClass = "org.sopt.official.plugin.KotlinSerializationPlugin"
         }
+        create("junit5") {
+            id = "org.sopt.official.junit5"
+            implementationClass = "org.sopt.official.plugin.JUnit5Plugin"
+        }
     }
 }
