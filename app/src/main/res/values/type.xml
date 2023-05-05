@@ -3,7 +3,7 @@
 
     <style name="TextAppearance.SOPT" parent="">
         <item name="android:fontFamily">@font/sopt_font</item>
-        <item name="fontWeight">400</item>
+        <item name="android:textFontWeight">400</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:textStyle">normal</item>
@@ -11,55 +11,55 @@
     </style>
 
     <style name="TextAppearance.SOPT.DisplayLarge">
-        <item name="fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textSize">24dp</item>
         <item name="lineHeight">30dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.DisplayMedium">
-        <item name="fontWeight">500</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textSize">24dp</item>
         <item name="lineHeight">30dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.HeadLineLarge">
-        <item name="fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textSize">20dp</item>
         <item name="lineHeight">25dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.HeadLineMedium">
-        <item name="fontFamily">@font/suit_bold</item>
+        <item name="android:textFontWeight">700</item>
         <item name="android:textSize">16dp</item>
         <item name="lineHeight">20dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.BodyLarge">
-        <item name="fontWeight">500</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textSize">16dp</item>
         <item name="lineHeight">20dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.BodyMedium">
-        <item name="fontWeight">400</item>
+        <item name="android:textFontWeight">400</item>
         <item name="android:textSize">14dp</item>
         <item name="lineHeight">18dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.BodySmall">
-        <item name="fontWeight">400</item>
+        <item name="android:textFontWeight">400</item>
         <item name="android:textSize">12dp</item>
         <item name="lineHeight">15dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.CaptionLarge">
-        <item name="fontWeight">500</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textSize">12dp</item>
         <item name="lineHeight">15dp</item>
     </style>
 
     <style name="TextAppearance.SOPT.CaptionMedium">
-        <item name="fontWeight">500</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textSize">10dp</item>
         <item name="lineHeight">15dp</item>
     </style>
