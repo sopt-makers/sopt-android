@@ -35,7 +35,7 @@ junit5-jupiter = "5.9.3"
 truth = "1.1.3"
 
 gradleplugin = "7.4.2"
-kspplugin = "1.8.10-1.0.9"
+kspplugin = "1.8.21-1.0.11"
 
 dagger-hilt = "2.46"
 dagger-hilt-navigation-compose = "1.0.0"
