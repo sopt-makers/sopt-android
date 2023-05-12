@@ -34,7 +34,7 @@ junit5-plugin = "1.9.3.0"
 junit5-jupiter = "5.9.3"
 truth = "1.1.3"
 
-gradleplugin = "7.4.2"
+gradleplugin = "8.0.1"
 kspplugin = "1.8.10-1.0.9"
 
 dagger-hilt = "2.46"
