@@ -1,8 +1,6 @@
 package org.sopt.official.data.persistence
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.os.Build
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
@@ -54,7 +52,9 @@ class SoptDataStore @Inject constructor(
     }
 
     fun clear() {
-        store.edit().clear().commit()
+        store.edit(true) {
+            clear()
+        }
     }
 
     var accessToken: String
