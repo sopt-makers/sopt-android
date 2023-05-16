@@ -7,6 +7,8 @@ import androidx.security.crypto.MasterKeys
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig
 import org.sopt.official.domain.entity.auth.UserStatus
+import timber.log.Timber
+import java.security.KeyStore
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,9 +16,16 @@ import javax.inject.Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
-    private val store = if (BuildConfig.DEBUG) {
-        context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
-    } else {
+    private val store = try {
+        createSharedPreference(!BuildConfig.DEBUG)
+    } catch (e: Exception) {
+        Timber.e(e)
+        deleteMasterKeyEntry()
+        deleteEncryptedPreference()
+        createSharedPreference(!BuildConfig.DEBUG)
+    }
+
+    private fun createSharedPreference(isEncrypted: Boolean) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
             BuildConfig.persistenceStoreName,
             MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
@@ -24,10 +33,28 @@ class SoptDataStore @Inject constructor(
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
+    } else {
+        context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
+    }
+
+    /**
+     * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
+     */
+    private fun deleteMasterKeyEntry() {
+        KeyStore.getInstance("AndroidKeyStore").apply {
+            load(null)
+            deleteEntry(KEY_ALIAS_AUTH)
+        }
+    }
+
+    private fun deleteEncryptedPreference() {
+        context.deleteSharedPreferences(BuildConfig.persistenceStoreName)
     }
 
     fun clear() {
-        store.edit().clear().commit()
+        store.edit(true) {
+            clear()
+        }
     }
 
     var accessToken: String
@@ -52,5 +79,6 @@ class SoptDataStore @Inject constructor(
         private const val REFRESH_TOKEN = "refresh_token"
         private const val PLAYGROUND_TOKEN = "pg_token"
         private const val USER_STATUS = "user_status"
+        private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
     }
 }
