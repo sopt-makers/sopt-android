@@ -11,7 +11,7 @@ import org.sopt.official.util.getGenerationStartDate
 class KotlinxDateTimeTest {
 
     @Test
-    @DisplayName("getGeneration 함수 파라메터에 SOPT 기수(1~32)를 넣게 되면 해당 기수의 시작 날짜를 반환한다")
+    @DisplayName("SOPT 기수(1~32)를 입력하면 해당 기수의 시작 날짜를 반환한다")
     fun testGetGeneration() {
         // given
         val generation = 32
@@ -25,10 +25,10 @@ class KotlinxDateTimeTest {
     }
 
     @Test
-    @DisplayName("computeMothUntilNow 함수 파라메터에 SOPT 기수(1~32)를 넣게 되면 해당 기수의 시작 날짜부터 2023-05-17까지의 개월 수를 반환한다")
+    @DisplayName("SOPT 기수(1~32)를 입력하면 해당 기수의 시작 날짜부터 입력한 날짜까지의 개월 수를 반환한다")
     fun testComputeMothUntilNow() {
         // given
-        val generation = 32
+        val generation = 32 // 32기 시작 날짜: 2023-03-01
         val expectMonth = 2
 
         // when
