@@ -1,14 +1,12 @@
 package org.sopt.official
 
 import com.google.common.truth.Truth.assertThat
-import kotlinx.datetime.toLocalDate
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.sopt.official.util.getGeneration
 
 class JsonObjectTest {
     @Test
@@ -26,18 +24,5 @@ class JsonObjectTest {
 
         // then
         assertThat(message).isEqualTo("1차 출석이 이미 종료되었습니다.")
-    }
-
-    @Test
-    fun testGetGeneration() {
-        // given
-        val generation = 32
-        val expectedDate = "2023-03-01".toLocalDate()
-
-        // when
-        val actualDate = getGeneration(generation)
-
-        // then
-        assertThat(actualDate).isEqualTo(expectedDate)
     }
 }

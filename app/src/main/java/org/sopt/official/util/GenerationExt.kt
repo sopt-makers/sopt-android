@@ -9,11 +9,13 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDate
 import kotlinx.datetime.toLocalDateTime
 
+const val BASE_DATE = "2007-03-01"
+
 fun getGeneration(generation: Int): LocalDate {
-    val baseDate = "2007-03-01".toLocalDate()
+    val baseLocalDate = BASE_DATE.toLocalDate()
     val monthsBetweenGenerations = 6
-    val monthsToTake = (generation - 0) * monthsBetweenGenerations
-    return baseDate.plus(monthsToTake, DateTimeUnit.MONTH)
+    val monthsToTake = generation * monthsBetweenGenerations
+    return baseLocalDate.plus(monthsToTake, DateTimeUnit.MONTH)
 }
 
 fun computeMothUntilNow(generation: Int): Int {
