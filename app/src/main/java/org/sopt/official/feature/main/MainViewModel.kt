@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
 import org.sopt.official.R
 import org.sopt.official.base.BaseItemType
 import org.sopt.official.domain.entity.UserState
@@ -16,7 +17,10 @@ import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.entity.main.MainViewUserInfo
 import org.sopt.official.domain.repository.main.MainViewRepository
 import org.sopt.official.feature.web.WebUrlConstant
-import org.sopt.official.util.computeMothUntilNow
+import org.sopt.official.util.calculateDurationOfGeneration
+import org.sopt.official.util.calculateGenerationStartDate
+import org.sopt.official.util.systemNow
+import org.sopt.official.util.toDefaultLocalDate
 import org.sopt.official.util.wrapper.NullableWrapper
 import org.sopt.official.util.wrapper.asNullableWrapper
 import org.sopt.official.util.wrapper.getOrEmpty
@@ -35,7 +39,10 @@ class MainViewModel @Inject constructor(
         .map {
             val state = it.status
             val userName = it.name.getOrEmpty()
-            val period = computeMothUntilNow(it.generationList.get()?.last()?.toInt() ?: 0)
+            val generation = it.generationList.get()?.last()?.toInt() ?: 0
+            val startDate = calculateGenerationStartDate(generation)
+            val currentDate = Instant.systemNow().toDefaultLocalDate()
+            val period = calculateDurationOfGeneration(startDate, currentDate)
             when {
                 userName.isNotEmpty() -> Triple(R.string.main_title_member, userName, period.toString())
                 state == UserState.INACTIVE -> Triple(R.string.main_title_inactive_member, null, null)

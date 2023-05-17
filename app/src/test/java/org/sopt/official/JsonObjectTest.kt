@@ -21,7 +21,7 @@ class JsonObjectTest {
 
         // when
         val message = Json.parseToJsonElement(json).jsonObject["message"]?.jsonPrimitive?.contentOrNull
-        
+
         // then
         assertThat(message).isEqualTo("1차 출석이 이미 종료되었습니다.")
     }
