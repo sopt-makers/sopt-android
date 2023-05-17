@@ -40,16 +40,16 @@ class KotlinxDateTimeTest {
     companion object {
         @JvmStatic
         fun generationStartDateList() = listOf(
-                Arguments.of(30, "2022-03-01".toLocalDate()),
-                Arguments.of(31, "2022-09-01".toLocalDate()),
-                Arguments.of(32, "2023-03-01".toLocalDate())
+            Arguments.of(30, "2022-03-01".toLocalDate()),
+            Arguments.of(31, "2022-09-01".toLocalDate()),
+            Arguments.of(32, "2023-03-01".toLocalDate())
         )
 
         @JvmStatic
         fun generationLastMonthList() = listOf(
-                Arguments.of(30, 14),
-                Arguments.of(31, 8),
-                Arguments.of(32, 2)
+            Arguments.of(30, 14),
+            Arguments.of(31, 8),
+            Arguments.of(32, 2)
         )
     }
 }
