@@ -1,4 +1,4 @@
-package org.sopt.official.sharedpreference.fake
+package org.sopt.official.datastore.fake
 
 import java.io.InputStream
 import java.io.OutputStream

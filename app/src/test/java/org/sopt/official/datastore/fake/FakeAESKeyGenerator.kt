@@ -1,4 +1,4 @@
-package org.sopt.official.sharedpreference.fake
+package org.sopt.official.datastore.fake
 
 import java.security.SecureRandom
 import java.security.spec.AlgorithmParameterSpec
