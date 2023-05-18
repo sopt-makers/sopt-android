@@ -6,6 +6,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig
+import org.sopt.official.core.di.LocalStore
 import org.sopt.official.domain.entity.auth.UserStatus
 import timber.log.Timber
 import java.security.KeyStore
@@ -14,24 +15,36 @@ import javax.inject.Singleton
 
 @Singleton
 class SoptDataStore @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @LocalStore private val fileName: String,
+    masterKey: MasterKey,
 ) {
     private val store = try {
-        createSharedPreference(!BuildConfig.DEBUG)
+        createSharedPreference(
+            !BuildConfig.DEBUG,
+            fileName,
+            masterKey
+        )
     } catch (e: Exception) {
         Timber.e(e)
         deleteMasterKeyEntry()
         deleteEncryptedPreference()
-        createSharedPreference(!BuildConfig.DEBUG)
+        createSharedPreference(
+            !BuildConfig.DEBUG,
+            fileName,
+            masterKey
+        )
     }
 
-    private fun createSharedPreference(isEncrypted: Boolean) = if (isEncrypted) {
+    private fun createSharedPreference(
+        isEncrypted: Boolean,
+        fileName: String,
+        masterKey: MasterKey
+    ) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
             context,
-            BuildConfig.persistenceStoreName,
-            MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build(),
+            fileName,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
