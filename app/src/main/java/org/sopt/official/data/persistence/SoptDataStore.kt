@@ -3,7 +3,7 @@ package org.sopt.official.data.persistence
 import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig
 import org.sopt.official.domain.entity.auth.UserStatus
@@ -27,9 +27,11 @@ class SoptDataStore @Inject constructor(
 
     private fun createSharedPreference(isEncrypted: Boolean) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
-            BuildConfig.persistenceStoreName,
-            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
             context,
+            BuildConfig.persistenceStoreName,
+            MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
+                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+                .build(),
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
@@ -41,7 +43,7 @@ class SoptDataStore @Inject constructor(
      * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
      */
     private fun deleteMasterKeyEntry() {
-        KeyStore.getInstance("AndroidKeyStore").apply {
+        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
             load(null)
             deleteEntry(KEY_ALIAS_AUTH)
         }
@@ -80,5 +82,6 @@ class SoptDataStore @Inject constructor(
         private const val PLAYGROUND_TOKEN = "pg_token"
         private const val USER_STATUS = "user_status"
         private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
     }
 }
