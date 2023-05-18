@@ -40,5 +40,9 @@ gradlePlugin {
             id = "org.sopt.official.junit5"
             implementationClass = "org.sopt.official.plugin.JUnit5Plugin"
         }
+        create("android-test") {
+            id = "org.sopt.official.test"
+            implementationClass = "org.sopt.official.plugin.AndroidTestPlugin"
+        }
     }
 }

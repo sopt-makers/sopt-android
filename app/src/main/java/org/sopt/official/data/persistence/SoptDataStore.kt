@@ -3,9 +3,10 @@ package org.sopt.official.data.persistence
 import android.content.Context
 import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
+import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig
+import org.sopt.official.core.di.LocalStore
 import org.sopt.official.domain.entity.auth.UserStatus
 import timber.log.Timber
 import java.security.KeyStore
@@ -14,22 +15,36 @@ import javax.inject.Singleton
 
 @Singleton
 class SoptDataStore @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    @LocalStore private val fileName: String,
+    masterKey: MasterKey,
 ) {
     private val store = try {
-        createSharedPreference(!BuildConfig.DEBUG)
+        createSharedPreference(
+            !BuildConfig.DEBUG,
+            fileName,
+            masterKey
+        )
     } catch (e: Exception) {
         Timber.e(e)
         deleteMasterKeyEntry()
         deleteEncryptedPreference()
-        createSharedPreference(!BuildConfig.DEBUG)
+        createSharedPreference(
+            !BuildConfig.DEBUG,
+            fileName,
+            masterKey
+        )
     }
 
-    private fun createSharedPreference(isEncrypted: Boolean) = if (isEncrypted) {
+    private fun createSharedPreference(
+        isEncrypted: Boolean,
+        fileName: String,
+        masterKey: MasterKey
+    ) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
-            BuildConfig.persistenceStoreName,
-            MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC),
             context,
+            fileName,
+            masterKey,
             EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
             EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
@@ -41,7 +56,7 @@ class SoptDataStore @Inject constructor(
      * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
      */
     private fun deleteMasterKeyEntry() {
-        KeyStore.getInstance("AndroidKeyStore").apply {
+        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
             load(null)
             deleteEntry(KEY_ALIAS_AUTH)
         }
@@ -80,5 +95,6 @@ class SoptDataStore @Inject constructor(
         private const val PLAYGROUND_TOKEN = "pg_token"
         private const val USER_STATUS = "user_status"
         private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
+        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
     }
 }

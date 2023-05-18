@@ -2,7 +2,7 @@ import java.util.*
 
 plugins {
     id("org.sopt.official.application")
-    id("org.sopt.official.junit5")
+    id("org.sopt.official.test")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
