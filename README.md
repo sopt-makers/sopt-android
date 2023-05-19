@@ -7,11 +7,11 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-1.8.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
-    <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section 
+    <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
     <img src="https://img.shields.io/badge/all_contributors-8-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
-<br />
+<br />  
 
 <img width="1424" alt="image" src="https://user-images.githubusercontent.com/54518925/234331073-c57f751a-ea09-4fc3-9e42-34caa5d2797b.jpg">
 </div>
