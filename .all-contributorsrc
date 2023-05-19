@@ -12,7 +12,12 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/54518925?v=4",
       "profile": "http://velog.io/@l2hyunwoo",
       "contributions": [
-        "code"
+        "code",
+        "infra",
+        "maintenance",
+        "test",
+        "review",
+        "projectManagement"
       ]
     },
     {
