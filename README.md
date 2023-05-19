@@ -7,11 +7,11 @@
 
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-1.8.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
-    <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section 
+    <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
     <img src="https://img.shields.io/badge/all_contributors-8-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
-<br />
+<br />  
 
 <img width="1424" alt="image" src="https://user-images.githubusercontent.com/54518925/234331073-c57f751a-ea09-4fc3-9e42-34caa5d2797b.jpg">
 </div>
@@ -49,7 +49,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://velog.io/@gxstxdgxs"><img src="https://avatars.githubusercontent.com/u/81508084?v=4?s=100" width="100px;" alt="ONE (ICEMAN)"/><br /><sub><b>ONE (ICEMAN)</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=hansh0101" title="Code">💻</a> <a href="#maintenance-hansh0101" title="Maintenance">🚧</a> <a href="https://github.com/sopt-makers/sopt-android/pulls?q=is%3Apr+reviewed-by%3Ahansh0101" title="Reviewed Pull Requests">👀</a> <a href="#projectManagement-hansh0101" title="Project Management">📆</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/miinjung"><img src="https://avatars.githubusercontent.com/u/39264073?v=4?s=100" width="100px;" alt="miing"/><br /><sub><b>miing</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=miinjung" title="Code">💻</a> <a href="#maintenance-miinjung" title="Maintenance">🚧</a> <a href="https://github.com/sopt-makers/sopt-android/pulls?q=is%3Apr+reviewed-by%3Amiinjung" title="Reviewed Pull Requests">👀</a> <a href="#projectManagement-miinjung" title="Project Management">📆</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/hjh1161514"><img src="https://avatars.githubusercontent.com/u/61824695?v=4?s=100" width="100px;" alt="Jung Hwa Jin"/><br /><sub><b>Jung Hwa Jin</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=hjh1161514" title="Code">💻</a> <a href="#maintenance-hjh1161514" title="Maintenance">🚧</a> <a href="https://github.com/sopt-makers/sopt-android/pulls?q=is%3Apr+reviewed-by%3Ahjh1161514" title="Reviewed Pull Requests">👀</a> <a href="#projectManagement-hjh1161514" title="Project Management">📆</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/KwakEuiJin"><img src="https://avatars.githubusercontent.com/u/93872496?v=4?s=100" width="100px;" alt="KwakEuiJin"/><br /><sub><b>KwakEuiJin</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=KwakEuiJin" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/KwakEuiJin"><img src="https://avatars.githubusercontent.com/u/93872496?v=4?s=100" width="100px;" alt="KwakEuiJin"/><br /><sub><b>KwakEuiJin</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=KwakEuiJin" title="Code">💻</a> <a href="https://github.com/sopt-makers/sopt-android/commits?author=KwakEuiJin" title="Tests">⚠️</a></td>
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.instagram.com/lv3isn/"><img src="https://avatars.githubusercontent.com/u/108331578?v=4?s=100" width="100px;" alt="Giovanni Junseo Kim"/><br /><sub><b>Giovanni Junseo Kim</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=giovannijunseokim" title="Code">💻</a></td>
