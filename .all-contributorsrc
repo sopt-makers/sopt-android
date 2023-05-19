@@ -35,7 +35,11 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/45380072?v=4",
       "profile": "http://antilog.tistory.com/",
       "contributions": [
-        "code"
+        "code",
+        "maintenance",
+        "review",
+        "projectManagement",
+        "infra"
       ]
     },
     {
