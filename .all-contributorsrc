@@ -68,7 +68,10 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/61824695?v=4",
       "profile": "https://github.com/hjh1161514",
       "contributions": [
-        "code"
+        "code",
+        "maintenance",
+        "review",
+        "projectManagement"
       ]
     },
     {
