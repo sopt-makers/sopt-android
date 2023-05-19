@@ -58,7 +58,7 @@ object NetModule {
     @Singleton
     fun provideAppRetrofit(
         client: OkHttpClient,
-        converter: Converter.Factory,
+        converter: Converter.Factory
     ): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
@@ -70,7 +70,7 @@ object NetModule {
     @Singleton
     fun provideOperationRetrofit(
         client: OkHttpClient,
-        converter: Converter.Factory,
+        converter: Converter.Factory
     ): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
