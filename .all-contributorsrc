@@ -13,7 +13,11 @@
       "profile": "http://velog.io/@l2hyunwoo",
       "contributions": [
         "code",
-        "infra"
+        "infra",
+        "maintenance",
+        "test",
+        "review",
+        "projectManagement"
       ]
     },
     {
