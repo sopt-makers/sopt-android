@@ -53,7 +53,10 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/39264073?v=4",
       "profile": "https://github.com/miinjung",
       "contributions": [
-        "code"
+        "code",
+        "maintenance",
+        "review",
+        "projectManagement"
       ]
     },
     {
