@@ -14,6 +14,10 @@ class AndroidTestPlugin: Plugin<Project> {
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
         extensions.getByType<BaseExtension>().apply {
+            defaultConfig {
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+            }
+
             testOptions {
                 unitTests {
                     isIncludeAndroidResources = true
@@ -25,6 +29,7 @@ class AndroidTestPlugin: Plugin<Project> {
             "testImplementation"(libs.findLibrary("junit").get())
             "testImplementation"(libs.findLibrary("truth").get())
             "testImplementation"(libs.findLibrary("robolectric").get())
+            "androidTestImplementation"(libs.findBundle("androidx.android.test").get())
         }
     }
 }

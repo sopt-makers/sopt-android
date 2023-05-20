@@ -33,6 +33,8 @@ junit5-plugin = "1.9.3.0"
 junit5-jupiter = "5.9.3"
 truth = "1.1.3"
 robolectric = "4.10.3"
+androidx-uiautomator = "2.3.0-alpha03"
+androidx-test = "1.5.0"
 
 gradleplugin = "8.0.2"
 kspplugin = "1.8.21-1.0.11"
@@ -114,6 +116,10 @@ junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.re
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
+
 flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
 flipper-noop = { module = "com.facebook.flipper:flipper-noop", version.ref = "flipper" }
 soloader = { module = "com.facebook.soloader:soloader", version.ref = "soloader" }
@@ -180,6 +186,7 @@ firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-messaging"]
 accompanist = ["accompanist-systemuicontroller"]
 mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
 junit5-test = ["junit5", "junit5-engine", "junit5-params", "junit5-vintage"]
+androidx-android-test = ["androidx-test-runner", "androidx-test-rules", "androidx-uiautomator"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin" }
