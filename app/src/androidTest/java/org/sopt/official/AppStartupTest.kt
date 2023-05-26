@@ -3,25 +3,22 @@ package org.sopt.official
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
-import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
+import com.google.common.truth.Truth.assertThat
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Test
 
 private const val LAUNCH_TIMEOUT = 5000L
 private const val SOPT_APP = "org.sopt.official"
 
-@RunWith(AndroidJUnit4::class)
 class AppStartupTest {
     private lateinit var device: UiDevice
 
-    @Before
+    @BeforeEach
     fun setInitScreen() {
         // UiDevice 초기화
         device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
@@ -31,7 +28,7 @@ class AppStartupTest {
 
         // Wait for launcher
         val launcherPackage: String = device.launcherPackageName
-        assertThat(launcherPackage, notNullValue())
+        assertThat(launcherPackage).isNotNull()
         device.wait(
             Until.hasObject(By.pkg(launcherPackage).depth(0)),
             LAUNCH_TIMEOUT
@@ -55,7 +52,8 @@ class AppStartupTest {
     }
 
     @Test
-    fun 비회원인_경우_비회원_버튼을_클릭하여_홈화면으로_간다() {
+    @DisplayName("비회원인_경우_비회원_버튼을_클릭하여_홈화면으로_간다")
+    fun notMemberOfSopt_press_passing_button_should_go_main_screen() {
         // 비회원 버튼 클릭
         val button = device.findObject(
             By.text("SOPT 회원이 아니에요").clazz("android.widget.TextView")

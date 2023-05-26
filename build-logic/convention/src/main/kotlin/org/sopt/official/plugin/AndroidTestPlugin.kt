@@ -16,12 +16,17 @@ class AndroidTestPlugin: Plugin<Project> {
         extensions.getByType<BaseExtension>().apply {
             defaultConfig {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
             }
 
             testOptions {
                 unitTests {
                     isIncludeAndroidResources = true
                 }
+            }
+
+            packagingOptions {
+                resources.excludes.add("META-INF/LICENSE*")
             }
         }
 
