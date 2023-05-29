@@ -16,6 +16,9 @@ class JUnit5Plugin : Plugin<Project> {
         dependencies {
             "testImplementation"(libs.findBundle("junit5.test").get())
             "androidTestImplementation"(libs.findLibrary("junit5").get())
+            "androidTestImplementation"(libs.findLibrary("junit5.params").get())
+            "androidTestImplementation"(libs.findLibrary("junit5.android.test.core").get())
+            "androidTestRuntimeOnly"(libs.findLibrary("junit5.android.test.runner").get())
         }
     }
 }

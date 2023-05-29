@@ -14,17 +14,27 @@ class AndroidTestPlugin: Plugin<Project> {
         val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
         extensions.getByType<BaseExtension>().apply {
+            defaultConfig {
+                testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+                testInstrumentationRunnerArguments["runnerBuilder"] = "de.mannodermaus.junit5.AndroidJUnit5Builder"
+            }
+
             testOptions {
                 unitTests {
                     isIncludeAndroidResources = true
                 }
             }
+
+            packagingOptions {
+                resources.excludes.add("META-INF/LICENSE*")
+            }
         }
 
         dependencies {
             "testImplementation"(libs.findLibrary("junit").get())
-            "testImplementation"(libs.findLibrary("truth").get())
+            "debugImplementation"(libs.findLibrary("truth").get())
             "testImplementation"(libs.findLibrary("robolectric").get())
+            "androidTestImplementation"(libs.findBundle("androidx.android.test").get())
         }
     }
 }
