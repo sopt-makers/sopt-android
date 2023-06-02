@@ -97,6 +97,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "taeheeL",
+      "name": "HaeTi",
+      "avatar_url": "https://avatars.githubusercontent.com/u/98825364?v=4",
+      "profile": "https://github.com/taeheeL",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -104,5 +113,6 @@
   "repoType": "github",
   "repoHost": "https://github.com",
   "projectName": "sopt-android",
-  "projectOwner": "sopt-makers"
+  "projectOwner": "sopt-makers",
+  "commitType": "docs"
 }

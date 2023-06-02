@@ -6,9 +6,9 @@
 **국내 최대 IT 벤처창업동아리 SOPT의 공식 Android 앱**
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Kotlin-1.8.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Kotlin-1.8.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-    <img src="https://img.shields.io/badge/all_contributors-8-orange.svg?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/all_contributors-9-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 <br />  
@@ -53,6 +53,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.instagram.com/lv3isn/"><img src="https://avatars.githubusercontent.com/u/108331578?v=4?s=100" width="100px;" alt="Giovanni Junseo Kim"/><br /><sub><b>Giovanni Junseo Kim</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=giovannijunseokim" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/taeheeL"><img src="https://avatars.githubusercontent.com/u/98825364?v=4?s=100" width="100px;" alt="HaeTi"/><br /><sub><b>HaeTi</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=taeheeL" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
