@@ -18,8 +18,10 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -80,6 +82,16 @@ class MissionDetailViewModel @Inject constructor(
     val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
+
+    private val submitEvent = MutableSharedFlow<Unit>()
+
+    init {
+        viewModelScope.launch {
+            submitEvent.debounce(500).collect {
+                handleSubmit()
+            }
+        }
+    }
 
     fun initMissionState(
         id: Int,
@@ -170,6 +182,12 @@ class MissionDetailViewModel @Inject constructor(
     }
 
     fun onSubmit() {
+        viewModelScope.launch {
+            submitEvent.emit(Unit)
+        }
+    }
+
+    private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
             Timber.d("MissionDetailViewModel onSubmit() $currentState")
