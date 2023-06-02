@@ -83,11 +83,11 @@ class MissionDetailViewModel @Inject constructor(
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
 
-    private val submitFlow = MutableSharedFlow<Unit>()
+    private val submitEvent = MutableSharedFlow<Unit>()
 
     init {
         viewModelScope.launch {
-            submitFlow.debounce(500).collect {
+            submitEvent.debounce(500).collect {
                 handleSubmit()
             }
         }
@@ -183,7 +183,7 @@ class MissionDetailViewModel @Inject constructor(
 
     fun onSubmit() {
         viewModelScope.launch {
-            submitFlow.emit(Unit)
+            submitEvent.emit(Unit)
         }
     }
 
