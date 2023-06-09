@@ -49,7 +49,7 @@ timber = "5.0.1"
 compose-destination = "1.8.41-beta"
 mavericks = "3.0.3"
 coil = "2.4.0"
-lottie = "6.0.0"
+lottie = "6.0.1"
 
 google-services = "4.3.15"
 crashlytics = "2.9.5"
