@@ -28,12 +28,12 @@ class AndroidKotlinPlugin : Plugin<Project> {
 
             compileOptions {
                 isCoreLibraryDesugaringEnabled = true
-                sourceCompatibility = JavaVersion.VERSION_11
-                targetCompatibility = JavaVersion.VERSION_11
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
             }
 
             (this as ExtensionAware).configure<KotlinJvmOptions> {
-                jvmTarget = "11"
+                jvmTarget = "17"
             }
         }
 
