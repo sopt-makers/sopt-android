@@ -3,6 +3,7 @@ package org.sopt.official.feature.mypage.signOut
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.reactivex.rxjava3.processors.BehaviorProcessor
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.repository.AuthRepository
@@ -13,13 +14,13 @@ import javax.inject.Inject
 class SignOutViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    val restartSignal = MutableStateFlow(false)
+    val restartSignal = BehaviorProcessor.createDefault(false)
 
     fun signOut() {
         viewModelScope.launch {
             authRepository.withdraw()
                 .onSuccess{
-                    restartSignal.value = true
+                    restartSignal.onNext(true)
                 }.onFailure {
                     Timber.e(it)
                 }
