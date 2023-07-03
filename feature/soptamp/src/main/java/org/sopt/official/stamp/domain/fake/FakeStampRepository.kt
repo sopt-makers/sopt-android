@@ -33,7 +33,7 @@ object FakeStampRepository : StampRepository {
         content: String
     ): Result<Unit> = runCatching { }
 
-    override suspend fun getMissionContent(missionId: Int) = runCatching { fakeArchive }
+    override suspend fun getMissionContent(missionId: Int, nickname: String) = runCatching { fakeArchive }
 
     override suspend fun modifyMission(
         missionId: Int,

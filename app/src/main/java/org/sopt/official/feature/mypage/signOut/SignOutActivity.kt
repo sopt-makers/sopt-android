@@ -19,6 +19,7 @@ import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.ui.throttleUi
 import org.sopt.official.util.viewBinding
+import com.jakewharton.processphoenix.ProcessPhoenix
 import org.sopt.official.util.wrapper.asNullableWrapper
 
 @AndroidEntryPoint
@@ -64,11 +65,7 @@ class SignOutActivity : AppCompatActivity() {
             .onBackpressureLatest()
             .subscribeBy(createDisposable,
                 onNext = {
-                    val intent = packageManager.getLaunchIntentForPackage(packageName)
-                    val componentName = intent?.component
-                    val mainIntent = Intent.makeRestartActivityTask(componentName)
-                    startActivity(mainIntent)
-                    System.exit(0)
+                    ProcessPhoenix.triggerRebirth(this)
                 })
     }
 
@@ -80,7 +77,6 @@ class SignOutActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, SignOutActivity::class.java).apply {
-        }
+        fun getIntent(context: Context) = Intent(context, SignOutActivity::class.java)
     }
 }

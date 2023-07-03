@@ -27,7 +27,7 @@ object NetModule {
     @Provides
     @Singleton
     fun providerLoggingInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
-        level = HttpLoggingInterceptor.Level.BODY
+        level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
     }
 
     @Provides
@@ -74,6 +74,6 @@ object NetModule {
     ): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devOperationApi else BuildConfig.devOperationApi)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devOperationApi else BuildConfig.operationApi)
         .build()
 }

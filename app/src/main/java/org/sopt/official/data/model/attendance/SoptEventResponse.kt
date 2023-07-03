@@ -34,13 +34,14 @@ data class SoptEventResponse(
         val attendedAt: String = ""
     ) {
         fun toEntity(index: Int): SoptEvent.Attendance {
-            val attendedAtTime = if (attendedAt != "") {
+            val attendedAtTime = if (this.status == "ATTENDANCE") {
                 attendedAt.toLocalDateTime().run {
-                    "${this.hour}:${this.minute}"
+                    "${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}"
                 }
             } else {
                 "${index + 1}차 출석"
             }
+
             return SoptEvent.Attendance(
                 AttendanceStatus.valueOf(this.status),
                 attendedAtTime

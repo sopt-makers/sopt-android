@@ -35,6 +35,7 @@ import androidx.compose.material.FabPosition
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -66,13 +67,13 @@ import org.sopt.official.stamp.domain.MissionLevel
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
+import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
-import org.sopt.official.stamp.feature.destinations.SettingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
-import org.sopt.stamp.feature.mission.model.MissionListUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.stamp.feature.mission.model.MissionUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.mission.model.toArgs
 
 @MissionNavGraph(true)
@@ -84,8 +85,12 @@ fun MissionListScreen(
     resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>
 ) {
     val state by missionsViewModel.state.collectAsState()
+    val nickname by missionsViewModel.nickname.collectAsState()
 
-    missionsViewModel.fetchMissions()
+    LaunchedEffect(Unit) {
+        missionsViewModel.initUser()
+        missionsViewModel.fetchMissions()
+    }
 
     resultRecipient.onNavResult { result ->
         when (result) {
@@ -107,13 +112,14 @@ fun MissionListScreen(
             }
 
             is MissionsState.Success -> MissionListScreen(
-                nickname = missionsViewModel.nickname,
+                nickname = nickname,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
                 onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) }
-            ) { navigator.navigate(SettingScreenDestination) }
+                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) },
+                onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
+            )
         }
     }
 }
@@ -126,7 +132,7 @@ fun MissionListScreen(
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onFloatingButtonClick: () -> Unit = {},
-    onSettingButtonClick: () -> Unit = {}
+    onOnboadingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -134,7 +140,7 @@ fun MissionListScreen(
                 title = missionListUiModel.title,
                 menuTexts = menuTexts,
                 onMenuClick = { onMenuClick(it) },
-                onSettingButtonClick = { onSettingButtonClick() }
+                onOnboadingButtonClick = { onOnboadingButtonClick() }
             )
         },
         floatingActionButton = {
@@ -217,7 +223,7 @@ fun MissionListHeader(
     title: String,
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
-    onSettingButtonClick: () -> Unit = {}
+    onOnboadingButtonClick: () -> Unit = {}
 ) {
     var currentText by remember { mutableStateOf(title) }
     SoptTopAppBar(
@@ -233,9 +239,9 @@ fun MissionListHeader(
         },
         actions = {
             SoptampIconButton(
-                imageVector = ImageVector.vectorResource(id = R.drawable.setting)
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide)
             ) {
-                onSettingButtonClick()
+                onOnboadingButtonClick()
             }
         }
     )

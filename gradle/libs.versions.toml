@@ -2,62 +2,67 @@
 compileSdk = "33"
 minSdk = "28"
 targetSdk = "33"
-appVersion = "0.9.0"
-versionCode = "9000"
+appVersion = "1.0.1"
+versionCode = "10001"
 
-kotlin = "1.8.10"
-kotlinx-serialization-json = "1.5.0"
+kotlin = "1.8.21"
+kotlinx-serialization-json = "1.5.1"
 kotlinx-serialization-converter = "1.0.0"
-kotlinx-coroutines = "1.6.4"
+kotlinx-coroutines = "1.7.1"
 kotlinx-datetime = "0.4.0"
-compose = "1.3.1"
-corektx = "1.10.0"
+corektx = "1.10.1"
 appcompat = "1.6.1"
-activity = "1.7.1"
+activity = "1.7.2"
 lifecycle = "2.6.1"
-navigation = "2.5.3"
+navigation = "2.6.0"
 startup = "1.1.1"
-security = "1.0.0"
-compose-compiler = "1.4.3"
-compose-bom = "2023.04.01"
+security = "1.1.0-alpha06"
+compose-compiler = "1.4.7"
+compose-bom = "2023.06.01"
 desugarJdk = "2.0.3"
 rxjava = "3.1.6"
 rxkotlin = "3.0.1"
 rxbinding = "4.0.0"
 rxandroid = "3.0.2"
 
-material = "1.8.0"
+material = "1.9.0"
 accompanist = "0.30.1"
-in-app-update = "2.0.1"
+in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
 
 junit = "4.13.2"
 androidx-test-junit = "1.1.5"
 androidx-test-espresso = "3.5.1"
+junit5-plugin = "1.9.3.0"
+junit5-jupiter = "5.9.3"
+truth = "1.1.5"
+robolectric = "4.10.3"
+androidx-uiautomator = "2.3.0-alpha03"
+androidx-test = "1.5.2"
 
-gradleplugin = "7.4.2"
-kspplugin = "1.8.10-1.0.9"
+gradleplugin = "8.0.2"
+kspplugin = "1.8.21-1.0.11"
 
-dagger-hilt = "2.45"
+dagger-hilt = "2.46.1"
 dagger-hilt-navigation-compose = "1.0.0"
-flipper = "0.189.0"
+flipper = "0.201.0"
 soloader = "0.10.5"
 okhttp = "4.11.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
-compose-destination = "1.8.36-beta"
-mavericks = "3.0.2"
-coil = "2.3.0"
-lottie = "6.0.0"
+compose-destination = "1.8.41-beta"
+mavericks = "3.0.3"
+coil = "2.4.0"
+lottie = "6.0.1"
 
 google-services = "4.3.15"
-crashlytics = "2.9.5"
-firebase = "31.5.0"
-ktlint = "11.3.1"
-sentry = "3.5.0"
-sentry-android = "6.17.0"
+crashlytics = "2.9.6"
+firebase = "32.1.1"
+ktlint = "11.4.1"
+sentry = "3.11.1"
+sentry-android = "6.24.0"
 process-pheonix = "2.1.2"
-sopt-pgauth = "0.1.6"
+sopt-pgauth = "0.1.7"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -108,6 +113,18 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
 androidx-test-espresso = { module = "androidx.test.espresso:espresso-core", version.ref = "androidx-test-espresso" }
+junit5 = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5-jupiter" }
+junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5-jupiter" }
+junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5-jupiter" }
+junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-jupiter" }
+junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core", version = "1.3.0" }
+junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.3.0" }
+truth = { module = "com.google.truth:truth", version.ref = "truth" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
+androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
 
 flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
 flipper-noop = { module = "com.facebook.flipper:flipper-noop", version.ref = "flipper" }
@@ -131,6 +148,8 @@ mavericks-mockable = { module = "com.airbnb.android:mavericks-mocking", version.
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-kapt = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
+hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
+hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt" }
 
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
@@ -177,6 +196,8 @@ flipper = ["flipper", "soloader"]
 firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-messaging"]
 accompanist = ["accompanist-systemuicontroller"]
 mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
+junit5-test = ["junit5", "junit5-engine", "junit5-params", "junit5-vintage"]
+androidx-android-test = ["androidx-test-runner", "androidx-test-rules", "androidx-uiautomator"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "gradleplugin" }
@@ -191,3 +212,4 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
+junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }

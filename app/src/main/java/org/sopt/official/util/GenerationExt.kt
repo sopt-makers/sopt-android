@@ -1,36 +1,23 @@
 package org.sopt.official.util
 
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.Period
-import java.time.format.DateTimeFormatter
-import java.util.Date
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.periodUntil
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDate
 
-private val DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-fun getGeneration(generation: Int): LocalDate =
-    LocalDate.parse(
-        when (generation) {
-            32 -> "2023.03.01"
-            31 -> "2022.09.01"
-            30 -> "2022.03.01"
-            29 -> "2021.09.01"
-            28 -> "2021.03.01"
-            27 -> "2020.09.01"
-            26 -> "2020.03.01"
-            25 -> "2019.09.01"
-            24 -> "2019.03.01"
-            23 -> "2018.09.01"
-            22 -> "2018.03.01"
-            21 -> "2017.09.01"
-            else -> "2017.03.01"
-        },
-        DATE_FORMAT
-    )
+private const val BASE_DATE = "2007-03-01"
 
-fun computeMothUntilNow(generation: Int): Int {
-    val currentTime = LocalDateTime.now().toLocalDate()
-    val generationDate = getGeneration(generation)
+fun calculateGenerationStartDate(
+    generation: Int,
+    period: Int = 6,
+    from: LocalDate = BASE_DATE.toLocalDate()
+): LocalDate {
+    val monthsToTake = generation * period
+    return from.plus(monthsToTake, DateTimeUnit.MONTH)
+}
 
-    val diff = Period.between(generationDate, currentTime)
+fun calculateDurationOfGeneration(start: LocalDate, end: LocalDate): Int {
+    val diff = start.periodUntil(end)
     return diff.months + diff.years * 12
 }

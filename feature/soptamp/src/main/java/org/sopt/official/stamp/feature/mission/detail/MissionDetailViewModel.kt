@@ -18,8 +18,10 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -81,7 +83,22 @@ class MissionDetailViewModel @Inject constructor(
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
 
-    fun initMissionState(id: Int, isCompleted: Boolean, isMe: Boolean) {
+    private val submitEvent = MutableSharedFlow<Unit>()
+
+    init {
+        viewModelScope.launch {
+            submitEvent.debounce(500).collect {
+                handleSubmit()
+            }
+        }
+    }
+
+    fun initMissionState(
+        id: Int,
+        isCompleted: Boolean,
+        isMe: Boolean,
+        nickname: String
+    ) {
         viewModelScope.launch {
             uiState.update {
                 it.copy(
@@ -93,7 +110,7 @@ class MissionDetailViewModel @Inject constructor(
                     isMe = isMe
                 )
             }
-            repository.getMissionContent(id)
+            repository.getMissionContent(id, nickname)
                 .onSuccess {
                     val option = if (!isMe) {
                         ToolbarIconType.NONE
@@ -113,7 +130,7 @@ class MissionDetailViewModel @Inject constructor(
                     uiState.update { result }
                 }.onFailure { error ->
                     Timber.e(error)
-                    if (error is HttpException) {
+                    if (error is HttpException && error.code() != 400) {
                         uiState.update {
                             it.copy(isLoading = false, isError = true, error = error)
                         }
@@ -165,6 +182,12 @@ class MissionDetailViewModel @Inject constructor(
     }
 
     fun onSubmit() {
+        viewModelScope.launch {
+            submitEvent.emit(Unit)
+        }
+    }
+
+    private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
             Timber.d("MissionDetailViewModel onSubmit() $currentState")

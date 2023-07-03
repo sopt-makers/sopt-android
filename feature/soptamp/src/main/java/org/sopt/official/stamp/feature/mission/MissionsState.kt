@@ -16,7 +16,7 @@
 package org.sopt.official.stamp.feature.mission
 
 import org.sopt.official.stamp.domain.error.Error
-import org.sopt.stamp.feature.mission.model.MissionListUiModel
+import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 
 sealed class MissionsState {
     object Loading : MissionsState()

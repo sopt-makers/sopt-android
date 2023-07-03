@@ -41,6 +41,22 @@
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT AMP!</string>
     <string name="new_product">NEW PRODUCT</string>
+    <string name="attendance_progress_first">1차 출석</string>
+    <string name="attendance_progress_second">2차 출석</string>
+    <string name="attendance_progress_before">출석 전</string>
+    <string name="attendance_progress_third_complete">출석완료!</string>
+    <string name="attendance_progress_third_tardy">지각</string>
+    <string name="attendance_progress_third_absent">결석</string>
+    <!-- 출석 기능 -->
+    <string name="attendance_error_no_section">[LectureException] : 오늘 세션이 없습니다.</string>
+    <string name="attendance_error_before_attendance">[LectureException] : 출석 시작 전입니다.</string>
+    <string name="attendance_error_before_first_attendance">[LectureException] : 1차 출석 시작 전입니다.</string>
+    <string name="attendance_error_before_second_attendance">[LectureException] : 2차 출석 시작 전입니다.</string>
+    <string name="attendance_error_after_first_attendance">[LectureException] : 1차 출석이 이미 종료되었습니다.</string>
+    <string name="attendance_error_after_second_attendance">[LectureException] : 2차 출석이 이미 종료되었습니다.</string>
+    <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
+    <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
+    <string name="attendance_dialog_button">출석하기</string>
 
     <!--    mypage    -->
     <string name="toolbar_mypage">마이페이지</string>

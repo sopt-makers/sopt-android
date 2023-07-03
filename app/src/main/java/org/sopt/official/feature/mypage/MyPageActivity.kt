@@ -29,16 +29,11 @@ import org.sopt.official.util.wrapper.asNullableWrapper
 import java.io.Serializable
 
 
-/**
- * repeatWhen 추가.
- * rxLifecycle 적용.
- */
-
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
-    private val args by serializableExtra(MyPageActivity.StartArgs(UserState.UNAUTHENTICATED))
+    private val args by serializableExtra(StartArgs(UserState.UNAUTHENTICATED))
 
     private val createDisposable = CompositeDisposable()
 

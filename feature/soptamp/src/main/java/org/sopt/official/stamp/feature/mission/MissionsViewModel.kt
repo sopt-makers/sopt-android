@@ -22,48 +22,87 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.data.local.SoptampDataStore
 import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.domain.model.MissionsFilter
 import org.sopt.official.stamp.domain.repository.MissionsRepository
-import org.sopt.stamp.feature.mission.model.toUiModel
+import org.sopt.official.stamp.domain.repository.RankingRepository
+import org.sopt.official.stamp.domain.repository.UserRepository
+import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
+import org.sopt.official.stamp.feature.mission.model.toUiModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
-    private val dataStore: SoptampDataStore,
+    private val rankingRepository: RankingRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
-    val nickname = dataStore.nickname
+    private val _nickname = MutableStateFlow("")
+    val nickname = _nickname.asStateFlow()
 
-    fun fetchMissions(filter: String? = null) = viewModelScope.launch {
+    fun initUser() {
+        viewModelScope.launch {
+            userRepository.getUserInfo()
+                .onSuccess { _nickname.value = it.nickname }
+                .onFailure(Timber::e)
+        }
+    }
+
+    fun fetchMissions(
+        filter: String? = null,
+        nickname: String = ""
+    ) = viewModelScope.launch {
         _state.value = MissionsState.Loading
         fetchMissions(
-            filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION
+            filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION,
+            nickname = nickname
         )
     }
 
-    private suspend fun fetchMissions(filter: MissionsFilter) {
-        val missions = when (filter) {
-            MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
-            MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions()
-            MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
-        }
-        missions.mapCatching { it.toUiModel(filter.title) }
-            .onSuccess { missions ->
-                _state.value = MissionsState.Success(missions)
+    private suspend fun fetchMissions(
+        filter: MissionsFilter,
+        nickname: String,
+    ) {
+        if (nickname.isEmpty()) {
+            val missions = when (filter) {
+                MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
+                MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions()
+                MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
             }
-            .onFailure { throwable ->
-                when (throwable) {
-                    is Error.NetworkUnavailable -> {
-                        _state.value = MissionsState.Failure(throwable)
-                    }
-
-                    else -> throw throwable
+            missions.mapCatching { it.toUiModel(filter.title) }
+                .onSuccess { missions ->
+                    _state.value = MissionsState.Success(missions)
                 }
-            }
+                .onFailure { throwable ->
+                    when (throwable) {
+                        is Error.NetworkUnavailable -> {
+                            _state.value = MissionsState.Failure(throwable)
+                        }
+
+                        else -> throw throwable
+                    }
+                }
+            return
+        }
+        viewModelScope.launch {
+            rankingRepository.getRankDetail(nickname)
+                .onSuccess {
+                    val missions = it.userMissions
+                        .map { mission -> mission.toUiModel() }
+                    _state.value = MissionsState.Success(MissionListUiModel(filter.title, missions))
+                }.onFailure { throwable ->
+                    when (throwable) {
+                        is Error.NetworkUnavailable -> {
+                            _state.value = MissionsState.Failure(throwable)
+                        }
+
+                        else -> throw throwable
+                    }
+                }
+        }
     }
 }

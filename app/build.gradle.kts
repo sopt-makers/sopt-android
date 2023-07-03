@@ -2,6 +2,7 @@ import java.util.*
 
 plugins {
     id("org.sopt.official.application")
+    id("org.sopt.official.test")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
@@ -97,12 +98,12 @@ dependencies {
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)
     implementation(libs.sopt.auth)
+    implementation(libs.process.phoenix)
 
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
-    testImplementation(libs.junit)
     androidTestImplementation(libs.bundles.compose.test)
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)

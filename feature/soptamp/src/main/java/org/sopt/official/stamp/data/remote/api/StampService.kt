@@ -26,11 +26,13 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface StampService {
-    @GET("stamp/mission/{missionId}")
+    @GET("stamp")
     suspend fun retrieveStamp(
-        @Path("missionId") missionId: Int
+        @Query("missionId") missionId: Int,
+        @Query("nickname") nickname: String,
     ): StampResponse
 
     @Multipart
