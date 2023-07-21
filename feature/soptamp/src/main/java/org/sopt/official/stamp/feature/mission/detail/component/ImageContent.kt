@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -52,9 +53,8 @@ fun ImageContent(
             onChangeImage(ImageModel.Local(it))
         }
     }
-    val pageCount = remember(imageModel) { imageModel.size }
 
-    HorizontalPager(pageCount) { page ->
+    HorizontalPager(imageModel.size) { page ->
         Box(
             modifier = Modifier
                 .fillMaxWidth()
