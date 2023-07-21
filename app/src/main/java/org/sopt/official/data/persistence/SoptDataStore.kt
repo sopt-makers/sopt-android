@@ -72,10 +72,6 @@ class SoptDataStore @Inject constructor(
         }
     }
 
-    fun clear() {
-        store.edit().clear().apply()
-    }
-
     var accessToken: String
         set(value) = store.edit { putString(ACCESS_TOKEN, value) }
         get() = store.getString(ACCESS_TOKEN, "") ?: ""
