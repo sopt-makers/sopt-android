@@ -4,7 +4,6 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.sopt.official.data.model.attendance.*
 
-
 class MockAttendanceService : AttendanceService {
     override suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse> {
         return NOT_EVENT_DAY

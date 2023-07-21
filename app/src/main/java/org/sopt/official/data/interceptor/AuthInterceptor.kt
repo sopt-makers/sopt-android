@@ -20,7 +20,6 @@ class AuthInterceptor @Inject constructor(
         return chain.proceed(authRequest)
     }
 
-
     private fun isAccessTokenUsed(originalRequest: Request) =
         when {
             originalRequest.url.encodedPath.contains("playground") -> false

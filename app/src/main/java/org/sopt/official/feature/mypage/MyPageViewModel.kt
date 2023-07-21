@@ -24,7 +24,7 @@ class MyPageViewModel @Inject constructor(
     fun logOut() {
         viewModelScope.launch {
             authRepository.logout()
-                .onSuccess{
+                .onSuccess {
                     restartSignal.onNext(true)
                 }.onFailure {
                     Timber.e(it)
@@ -35,7 +35,7 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
-                .onSuccess{
+                .onSuccess {
                 }.onFailure {
                     Timber.e(it)
                 }

@@ -18,7 +18,7 @@ class SignOutViewModel @Inject constructor(
     fun signOut() {
         viewModelScope.launch {
             authRepository.withdraw()
-                .onSuccess{
+                .onSuccess {
                     restartSignal.onNext(true)
                 }.onFailure {
                     Timber.e(it)

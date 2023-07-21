@@ -47,38 +47,47 @@ class ChangeNickNameActivity : AppCompatActivity() {
             .filter { it }
             .subscribeOnIo()
             .observeOnMain()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.onBackPressedDispatcher.onBackPressed()
-                })
+                }
+            )
         viewModel.isValidNickName
             .distinctUntilChanged()
             .map {
                 val visible = !it
                 val backgroundColor = this.getDrawable(
-                    if (it) R.drawable.layout_edit_text_background
-                    else R.drawable.layout_edit_text_error_background
+                    if (it) {
+                        R.drawable.layout_edit_text_background
+                    } else {
+                        R.drawable.layout_edit_text_error_background
+                    }
                 )
 
                 Pair(visible, backgroundColor)
             }
             .subscribeOnIo()
             .observeOnMain()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = { (visible, color) ->
                     binding.errorMessage.setVisible(visible)
                     binding.edittext.background = color
-                })
+                }
+            )
     }
 
     private fun initAction() {
         binding.confirmButton.clicks()
             .throttleUi()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     viewModel.changeNickName()
-                })
+                }
+            )
         binding.edittext.textChanges()
             .throttleUi()
             .distinctUntilChanged()
@@ -87,11 +96,13 @@ class ChangeNickNameActivity : AppCompatActivity() {
             }
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = { (text, isEnable) ->
                     viewModel.nickName.onNext(text)
                     binding.confirmButton.isEnabled = isEnable
-                })
+                }
+            )
     }
 
     companion object {

@@ -31,22 +31,28 @@ class ChangeNickNameViewModel @Inject constructor(
         viewModelScope.launch {
             nickName.first("")
                 .subscribeOnIo()
-                .subscribeBy(createDisposable,
+                .subscribeBy(
+                    createDisposable,
                     onSuccess = {
                         backPressedSignal.onNext(true)
-                    })
+                    }
+                )
         }
     }
 
     fun validateNickName() {
         nickName.first("")
             .subscribeOnIo()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onSuccess = {
-                    if (it.isBlank()) isValidNickName.onNext(true)
-                    else checkNickName(it)
-                })
-
+                    if (it.isBlank()) {
+                        isValidNickName.onNext(true)
+                    } else {
+                        checkNickName(it)
+                    }
+                }
+            )
     }
 
     private fun checkNickName(nickName: String) {

@@ -6,7 +6,6 @@ import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
-
 fun <T : Any> Observable<T>.subscribeOnIo() = this.subscribeOn(Schedulers.io())
 
 fun <T : Any> Observable<T>.observeOnMain() = this.observeOn(AndroidSchedulers.mainThread())

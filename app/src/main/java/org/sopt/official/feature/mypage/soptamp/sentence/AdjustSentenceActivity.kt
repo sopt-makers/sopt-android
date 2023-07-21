@@ -46,20 +46,24 @@ class AdjustSentenceActivity : AppCompatActivity() {
             .subscribeOnIo()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.onBackPressedDispatcher.onBackPressed()
-                })
+                }
+            )
         binding.edittext.textChanges()
             .throttleUi()
             .map { it.isNotEmpty() }
             .distinctUntilChanged()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     binding.confirmButton.isEnabled = it
-                })
+                }
+            )
     }
 
     private fun initClick() {
@@ -68,10 +72,12 @@ class AdjustSentenceActivity : AppCompatActivity() {
             .map { binding.edittext.text.toString() }
             .distinctUntilChanged()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     viewModel.adjustSentence(it)
-                })
+                }
+            )
     }
 
     override fun onDestroy() {

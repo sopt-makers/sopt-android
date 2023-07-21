@@ -28,7 +28,6 @@ import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.asNullableWrapper
 import java.io.Serializable
 
-
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
@@ -57,10 +56,12 @@ class MyPageActivity : AppCompatActivity() {
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.onBackPressedDispatcher.onBackPressed()
-                })
+                }
+            )
     }
 
     private fun initView() {
@@ -70,7 +71,8 @@ class MyPageActivity : AppCompatActivity() {
             .subscribeOnIo()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     binding.containerSoptampInfo.setVisible(it)
                     binding.textLogIn.setVisible(!it)
@@ -79,7 +81,8 @@ class MyPageActivity : AppCompatActivity() {
                     binding.iconLogOut.setVisible(it)
                     binding.textSignOut.setVisible(it)
                     binding.iconSignOut.setVisible(it)
-                })
+                }
+            )
     }
 
     private fun initClick() {
@@ -87,52 +90,63 @@ class MyPageActivity : AppCompatActivity() {
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.startActivity(
                         Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))
                     )
-                })
+                }
+            )
 
         binding.iconServiceRule.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.startActivity(
                         Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))
                     )
-                })
+                }
+            )
         binding.iconSendOpinion.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     // 구글폼 이동 (아직 url X)
-                })
+                }
+            )
         binding.iconAdjustSentence.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.startActivity(AdjustSentenceActivity.getIntent(this))
-                })
+                }
+            )
         binding.iconChangeNickname.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.startActivity(ChangeNickNameActivity.getIntent(this))
-                })
+                }
+            )
         binding.iconResetStamp.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     AlertDialogPositiveNegative(this)
                         .setTitle(R.string.mypage_alert_soptamp_reset_title)
@@ -142,12 +156,14 @@ class MyPageActivity : AppCompatActivity() {
                         }
                         .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
                         .show()
-                })
+                }
+            )
         binding.iconLogOut.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     AlertDialogPositiveNegative(this)
                         .setTitle(R.string.mypage_alert_log_out_title)
@@ -157,25 +173,30 @@ class MyPageActivity : AppCompatActivity() {
                         }
                         .setNegativeButton(R.string.mypage_alert_log_out_negative)
                         .show()
-                })
+                }
+            )
         binding.iconSignOut.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     this.startActivity(SignOutActivity.getIntent(this))
-                })
+                }
+            )
         binding.iconLogIn.clicks()
             .throttleUi()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     setResult(ResultCode.LOG_IN.ordinal)
                     onBackPressedDispatcher.onBackPressed()
                     // Main 에서 requestActivityForResult 필요
-                })
+                }
+            )
     }
 
     private fun initRestart() {
@@ -185,14 +206,16 @@ class MyPageActivity : AppCompatActivity() {
             .subscribeOnIo()
             .observeOnMain()
             .onBackpressureLatest()
-            .subscribeBy(createDisposable,
+            .subscribeBy(
+                createDisposable,
                 onNext = {
                     val intent = packageManager.getLaunchIntentForPackage(packageName)
                     val componentName = intent?.component
                     val mainIntent = Intent.makeRestartActivityTask(componentName)
                     startActivity(mainIntent)
                     System.exit(0)
-                })
+                }
+            )
     }
 
     override fun onDestroy() {
