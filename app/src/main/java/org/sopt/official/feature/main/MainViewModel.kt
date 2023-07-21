@@ -181,7 +181,7 @@ class MainViewModel @Inject constructor(
         SOPT_PROJECT_URL(R.string.main_large_block_official_page, WebUrlConstant.SOPT_PROJECT_URL, R.drawable.ic_project),
         SOPT_FAQ_URL(R.string.main_small_block_faq, WebUrlConstant.SOPT_FAQ_URL, R.drawable.ic_faq),
 
-        //playground
+        // playground
         PLAYGROUNG_MEMBER_URL(R.string.main_small_block_member, WebUrlConstant.PLAYGROUNG_MEMBER_URL, R.drawable.ic_member),
         PLAYGROUNG_PROJECT_URL(
             R.string.main_small_block_playground_project,
@@ -190,7 +190,7 @@ class MainViewModel @Inject constructor(
         ),
         PLAYGROUNG_CREW_URL(R.string.main_small_block_crew, WebUrlConstant.PLAYGROUNG_CREW_URL, R.drawable.ic_crew),
 
-        //others
+        // others
         SOPT_OFFICIAL_YOUTUBE(R.string.main_small_block_youtube, WebUrlConstant.SOPT_OFFICIAL_YOUTUBE, R.drawable.ic_youtube);
     }
 

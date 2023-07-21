@@ -1,10 +1,8 @@
 package org.sopt.official.data.repository
 
-import org.sopt.official.data.model.request.AuthRequest
 import org.sopt.official.data.model.request.RefreshRequest
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
-import org.sopt.official.domain.entity.auth.Auth
 import org.sopt.official.domain.entity.auth.Token
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.repository.AuthRepository

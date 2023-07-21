@@ -3,8 +3,8 @@ package org.sopt.official.feature.mypage
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
+import io.reactivex.rxjava3.processors.BehaviorProcessor
+import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.entity.UserState
 import org.sopt.official.domain.repository.AuthRepository
@@ -18,15 +18,14 @@ class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
-    val userState = MutableStateFlow(NullableWrapper.none<UserState>())
-
-    val restartSignal = MutableSharedFlow<Unit>()
+    val userState = BehaviorProcessor.createDefault(NullableWrapper.none<UserState>())
+    val restartSignal = PublishSubject.create<Boolean>()
 
     fun logOut() {
         viewModelScope.launch {
             authRepository.logout()
                 .onSuccess {
-                    restartSignal.emit(Unit)
+                    restartSignal.onNext(true)
                 }.onFailure {
                     Timber.e(it)
                 }

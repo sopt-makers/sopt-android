@@ -82,6 +82,11 @@ dependencies {
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.timber)
 
+    implementation(libs.rxjava)
+    implementation(libs.rxandroid)
+    implementation(libs.rxkotlin)
+    implementation(libs.rxbinding)
+
     implementation(libs.bundles.compose)
 
     implementation(libs.bundles.mavericks)

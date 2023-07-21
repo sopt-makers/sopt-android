@@ -23,5 +23,5 @@ fun <ValueType : Any> ValueType?.asNullableWrapper(): NullableWrapper<ValueType>
 fun NullableWrapper<String>.getOrEmpty(): String = getOrElse("")
 fun <ValueType : Any> NullableWrapper<List<ValueType>>.getOrEmpty(): List<ValueType> = getOrElse(emptyList())
 
-fun NullableWrapper<Boolean>.getOrFlase() : Boolean = getOrElse(false)
-fun NullableWrapper<Boolean>.getOrTrue() : Boolean = getOrElse(true)
+fun NullableWrapper<Boolean>.getOrFlase(): Boolean = getOrElse(false)
+fun NullableWrapper<Boolean>.getOrTrue(): Boolean = getOrElse(true)

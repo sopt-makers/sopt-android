@@ -5,5 +5,5 @@ import retrofit2.http.GET
 
 interface MainViewService {
     @GET("user/main")
-    suspend fun getMainView() : MainViewResponse
+    suspend fun getMainView(): MainViewResponse
 }

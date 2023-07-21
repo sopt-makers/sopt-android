@@ -198,7 +198,7 @@ class AttendanceActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    tvAttendanceProgress1.text = if(soptEvent.attendances[0].status == AttendanceStatus.ATTENDANCE) {
+                    tvAttendanceProgress1.text = if (soptEvent.attendances[0].status == AttendanceStatus.ATTENDANCE) {
                         soptEvent.attendances[0].attendedAt
                     } else {
                         "결석"

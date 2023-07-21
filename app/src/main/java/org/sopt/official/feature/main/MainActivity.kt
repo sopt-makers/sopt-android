@@ -37,7 +37,6 @@ import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
 import org.sopt.official.util.wrapper.getOrEmpty
-import timber.log.Timber
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -91,8 +90,11 @@ class MainActivity : AppCompatActivity() {
             .onEach {
                 val userState = it.get() ?: UserState.UNAUTHENTICATED
                 binding.subtitle.text = getStringExt(
-                    if (userState == UserState.UNAUTHENTICATED) R.string.main_subtitle_non_member
-                    else R.string.main_subtitle_member
+                    if (userState == UserState.UNAUTHENTICATED) {
+                        R.string.main_subtitle_non_member
+                    } else {
+                        R.string.main_subtitle_member
+                    }
                 )
                 binding.tagMemberState.isEnabled = userState == UserState.ACTIVE
                 val isClickable = userState != UserState.UNAUTHENTICATED
@@ -124,8 +126,10 @@ class MainActivity : AppCompatActivity() {
                 if (generationList.size >= 6) binding.memberGeneration.generation5.text = generationList[5].toString()
                 binding.memberGeneration.generationAddition.setVisible(generationList.size >= 7)
                 val additionalGeneration = (generationList.size - 5).toString()
-                if (generationList.size >= 7) binding.memberGeneration.generationAddition.text =
-                    this@MainActivity.getStringExt(R.string.main_additional_generation, additionalGeneration)
+                if (generationList.size >= 7) {
+                    binding.memberGeneration.generationAddition.text =
+                        this@MainActivity.getStringExt(R.string.main_additional_generation, additionalGeneration)
+                }
             }.launchIn(lifecycleScope)
     }
 
@@ -261,7 +265,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("args", args)
         }
     }

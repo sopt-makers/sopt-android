@@ -32,12 +32,18 @@ object WebUrlConstant {
     private const val PLAYGROUNG_BASE_URL = "https://playground.sopt.org"
 
     fun toSoptUrl(url: String): String =
-        if (url.isNotEmpty()) "${SOPT_BASE_URL}/${url}"
-        else SOPT_BASE_URL
+        if (url.isNotEmpty()) {
+            "$SOPT_BASE_URL/$url"
+        } else {
+            SOPT_BASE_URL
+        }
 
     fun toPlaygroundUrl(url: String): String =
-        if (url.isNotEmpty()) "${PLAYGROUNG_BASE_URL}/${url}"
-        else PLAYGROUNG_BASE_URL
+        if (url.isNotEmpty()) {
+            "$PLAYGROUNG_BASE_URL/$url"
+        } else {
+            PLAYGROUNG_BASE_URL
+        }
 
     //endregion
 }

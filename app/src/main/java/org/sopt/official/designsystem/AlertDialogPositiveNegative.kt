@@ -1,20 +1,13 @@
 package org.sopt.official.designsystem
 
 import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Context
-import android.os.Bundle
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.widget.ConstraintLayout
 import org.sopt.official.R
 import org.sopt.official.databinding.LayoutDialogNegativePositiveBinding
-import org.sopt.official.feature.attendance.util.dpToPx
-import org.sopt.official.stamp.util.toPx
 
 class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) {
     private val builder: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -81,9 +74,11 @@ class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) 
     }
 
     fun show() {
-        dialog?.window?.setBackgroundDrawable(context.getDrawable(R.drawable.rectangle_radius_10).apply {
-            this?.setTint(context.getColor(R.color.black_60))
-        })
+        dialog?.window?.setBackgroundDrawable(
+            context.getDrawable(R.drawable.rectangle_radius_10).apply {
+                this?.setTint(context.getColor(R.color.black_60))
+            }
+        )
 
         dialog?.show()
     }

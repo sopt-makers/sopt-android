@@ -17,11 +17,8 @@ package org.sopt.official.stamp.feature.setting
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -33,7 +30,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jakewharton.processphoenix.ProcessPhoenix
@@ -45,7 +41,6 @@ import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.Access300
 import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.SoptTheme
@@ -53,9 +48,9 @@ import org.sopt.official.stamp.domain.fake.FakeStampRepository
 import org.sopt.official.stamp.domain.fake.FakeUserRepository
 import org.sopt.official.stamp.feature.destinations.UpdateNicknameScreenDestination
 import org.sopt.official.stamp.feature.destinations.UpdateProfileScreenDestination
-import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.feature.setting.component.section.Section
 import org.sopt.official.stamp.feature.setting.model.SectionUiModel
+import org.sopt.official.stamp.util.DefaultPreview
 
 @SettingNavGraph(true)
 @Destination("menu")

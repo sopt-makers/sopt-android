@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class MainViewRepositoryImpl @Inject constructor(
     private val mainViewService: MainViewService,
-): MainViewRepository {
+) : MainViewRepository {
     override suspend fun getMainView(): Result<MainViewResult> {
         return runCatching {
             mainViewService.getMainView().toEntity()
