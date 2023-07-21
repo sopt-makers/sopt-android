@@ -35,6 +35,7 @@ truth = "1.1.5"
 robolectric = "4.10.3"
 androidx-uiautomator = "2.3.0-alpha03"
 androidx-test = "1.5.2"
+androidx-test-rules = "1.5.0"
 
 gradleplugin = "8.0.2"
 kspplugin = "1.9.0-1.0.11"
@@ -46,7 +47,7 @@ soloader = "0.10.5"
 okhttp = "4.11.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
-compose-destination = "1.9.50"
+compose-destination = "1.9.42-beta"
 mavericks = "3.0.5"
 coil = "2.4.0"
 lottie = "6.1.0"
@@ -120,7 +121,7 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 
 androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
-androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test" }
+androidx-test-rules = { module = "androidx.test:rules", version.ref = "androidx-test-rules" }
 
 flipper = { module = "com.facebook.flipper:flipper", version.ref = "flipper" }
 flipper-noop = { module = "com.facebook.flipper:flipper-noop", version.ref = "flipper" }

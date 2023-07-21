@@ -71,8 +71,8 @@ private enum class OnBoardingPageUiModel(
 fun OnboardingScreen(
     navigator: DestinationsNavigator
 ) {
-    val pageState = rememberPagerState()
     val onboardingPages = OnBoardingPageUiModel.values()
+    val pageState = rememberPagerState { onboardingPages.size }
     SoptTheme {
         SoptColumn(
             modifier = Modifier
@@ -93,7 +93,6 @@ fun OnboardingScreen(
             )
             HorizontalPager(
                 modifier = Modifier.fillMaxWidth(),
-                pageCount = onboardingPages.size,
                 state = pageState
             ) {
                 OnboardingPage(
