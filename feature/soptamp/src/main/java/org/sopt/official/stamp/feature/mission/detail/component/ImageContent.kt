@@ -53,9 +53,8 @@ fun ImageContent(
             onChangeImage(ImageModel.Local(it))
         }
     }
-    val pagerState = rememberPagerState { imageModel.size }
 
-    HorizontalPager(pagerState) { page ->
+    HorizontalPager(imageModel.size) { page ->
         Box(
             modifier = Modifier
                 .fillMaxWidth()

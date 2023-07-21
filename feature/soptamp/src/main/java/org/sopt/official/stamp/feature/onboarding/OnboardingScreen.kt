@@ -72,7 +72,7 @@ fun OnboardingScreen(
     navigator: DestinationsNavigator
 ) {
     val onboardingPages = OnBoardingPageUiModel.values()
-    val pageState = rememberPagerState { onboardingPages.size }
+    val pageState = rememberPagerState()
     SoptTheme {
         SoptColumn(
             modifier = Modifier
@@ -93,7 +93,8 @@ fun OnboardingScreen(
             )
             HorizontalPager(
                 modifier = Modifier.fillMaxWidth(),
-                state = pageState
+                state = pageState,
+                pageCount = onboardingPages.size
             ) {
                 OnboardingPage(
                     image = onboardingPages[pageState.currentPage].image,
