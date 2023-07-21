@@ -38,7 +38,7 @@ androidx-test = "1.5.2"
 androidx-test-rules = "1.5.0"
 
 gradleplugin = "8.0.2"
-kspplugin = "1.9.0-1.0.11"
+kspplugin = "1.9.0-1.0.12"
 
 dagger-hilt = "2.47"
 dagger-hilt-navigation-compose = "1.0.0"
