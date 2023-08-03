@@ -57,7 +57,7 @@ coil = "2.4.0"
 lottie = "6.1.0"
 
 google-services = "4.3.15"
-crashlytics = "2.9.7"
+crashlytics = "2.9.8"
 firebase = "32.2.0"
 ktlint = "11.5.0"
 sentry = "3.11.1"
