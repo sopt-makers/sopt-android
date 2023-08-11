@@ -48,13 +48,14 @@ fun ImageContent(
     isEditable: Boolean
 ) {
     val isImageEmpty = remember(imageModel) { imageModel.isEmpty() }
+    val pagerState = rememberPagerState { imageModel.size }
     val photoPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
         if (it.isNotEmpty()) {
             onChangeImage(ImageModel.Local(it))
         }
     }
 
-    HorizontalPager(imageModel.size) { page ->
+    HorizontalPager(state = pagerState) { page ->
         Box(
             modifier = Modifier
                 .fillMaxWidth()
