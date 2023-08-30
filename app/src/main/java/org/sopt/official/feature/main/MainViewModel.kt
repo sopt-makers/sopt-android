@@ -133,9 +133,7 @@ class MainViewModel @Inject constructor(
     }
 
     sealed class SmallBlockItemHolder : BaseItemType {
-        data class SmallBlock(
-            val item: SmallBlockType,
-        ) : SmallBlockItemHolder()
+        data class SmallBlock(val item: SmallBlockType) : SmallBlockItemHolder()
     }
 
     /*
