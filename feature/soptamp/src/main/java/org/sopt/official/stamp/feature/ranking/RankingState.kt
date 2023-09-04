@@ -18,9 +18,9 @@ package org.sopt.official.stamp.feature.ranking
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 
 sealed class RankingState {
-    object Loading : RankingState()
+    data object Loading : RankingState()
 
     data class Success(val uiModel: RankingListUiModel, val nickname: String) : RankingState()
 
-    object Failure : RankingState()
+    data object Failure : RankingState()
 }

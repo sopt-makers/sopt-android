@@ -19,7 +19,7 @@ import org.sopt.official.stamp.domain.error.Error
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 
 sealed class MissionsState {
-    object Loading : MissionsState()
+    data object Loading : MissionsState()
 
     data class Success(val missionListUiModel: MissionListUiModel) : MissionsState()
 
