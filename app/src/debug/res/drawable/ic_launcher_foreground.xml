@@ -1,0 +1,4 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@drawable/ic_launcher_foreground_copy" />
+  <item android:drawable="@drawable/ic_launcher_foreground_debug" android:gravity="center"/>
+</layer-list>
