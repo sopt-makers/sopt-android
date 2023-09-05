@@ -49,6 +49,7 @@ internal fun Project.configureAndroidCommonPlugin() {
         "implementation"(libs.findLibrary("core.ktx").get())
         "implementation"(libs.findLibrary("appcompat").get())
         "implementation"(libs.findLibrary("lifecycle.viewmodel").get())
+        "implementation"(libs.findLibrary("lifecycle.runtime").get())
         "implementation"(libs.findLibrary("material").get())
     }
 }
