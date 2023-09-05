@@ -88,6 +88,10 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit { putString(USER_STATUS, value) }
         get() = store.getString(USER_STATUS, UserStatus.UNAUTHENTICATED.value) ?: UserStatus.UNAUTHENTICATED.value
 
+    var pushToken: String
+        set(value) = store.edit { putString(PUSH_TOKEN, value) }
+        get() = store.getString(PUSH_TOKEN, "") ?: ""
+
     companion object {
         const val DEBUG_FILE_NAME = "sopt_debug"
         private const val ACCESS_TOKEN = "access_token"
@@ -96,5 +100,6 @@ class SoptDataStore @Inject constructor(
         private const val USER_STATUS = "user_status"
         private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+        private const val PUSH_TOKEN = "push_token"
     }
 }
