@@ -1,4 +1,4 @@
-package org.sopt.official.di.attendance
+package org.sopt.official.di
 
 import dagger.Binds
 import dagger.Module
@@ -14,7 +14,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class AttendanceBindsModule {
+abstract class AttendanceModule {
     @Binds
     @Singleton
     abstract fun bindAttendanceRepository(attendanceRepositoryImpl: AttendanceRepositoryImpl): AttendanceRepository

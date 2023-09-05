@@ -20,6 +20,10 @@ security = "1.1.0-alpha06"
 customtab = "1.6.0"
 compose-compiler = "1.5.3"
 compose-bom = "2023.10.00"
+workmanager = "2.8.1"
+workmanager-hilt = "1.0.0"
+compose-glance = "1.0.0-rc01"
+compose-glance-viewer = "0.2.2"
 desugarJdk = "2.0.3"
 rxjava = "3.1.8"
 rxkotlin = "3.0.1"
@@ -84,6 +88,7 @@ startup = { module = "androidx.startup:startup-runtime", version.ref = "startup"
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
+workmanager = { module = "androidx.work:work-runtime-ktx", version.ref = "workmanager" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
@@ -109,6 +114,8 @@ compose-destination-core = { module = "io.github.raamcosta.compose-destinations:
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+compose-glance = { module = "androidx.glance:glance-appwidget", version.ref = "compose-glance" }
+compose-glance-viewer = { module = "com.google.android.glance.tools:appwidget-viewer", version.ref = "compose-glance-viewer" }
 
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
@@ -153,6 +160,7 @@ mavericks-mockable = { module = "com.airbnb.android:mavericks-mocking", version.
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-ksp = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
+hilt-workmanager = { module = "androidx.hilt:hilt-work", version.ref = "workmanager-hilt" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
 hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt" }
 

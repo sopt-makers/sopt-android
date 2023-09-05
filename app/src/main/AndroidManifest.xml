@@ -48,6 +48,10 @@
             android:exported="false"
             tools:node="merge">
             <meta-data
+                android:name="androidx.work.impl.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
+            <meta-data
                 android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
@@ -117,6 +121,18 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <receiver
+            android:name="org.sopt.official.widget.AttendanceWidgetReceiver"
+            android:exported="false">
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_provider" />
+        </receiver>
     </application>
 
 </manifest>

@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.startup)
     implementation(libs.security)
+    implementation(libs.workmanager)
 
     implementation(libs.bundles.accompanist)
     implementation(libs.inappupdate)
@@ -109,9 +110,10 @@ dependencies {
     implementation(libs.rxbinding)
 
     implementation(libs.bundles.compose)
-
+    implementation(libs.compose.glance)
     implementation(libs.bundles.mavericks)
 
+    implementation(libs.hilt.workmanager)
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)
@@ -124,6 +126,7 @@ dependencies {
     androidTestImplementation(libs.bundles.compose.test)
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
+    debugImplementation(libs.compose.glance.viewer)
 
     debugImplementation(libs.bundles.flipper)
     releaseImplementation(libs.flipper.noop)

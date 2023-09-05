@@ -1,4 +1,4 @@
-package org.sopt.official.designsystem
+package org.sopt.official.component
 
 import android.app.AlertDialog
 import android.content.Context
