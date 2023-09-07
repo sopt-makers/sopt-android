@@ -78,9 +78,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":feature:soptamp"))
-    implementation(project(":core"))
-    implementation(project(":feature:auth"))
+    implementation(projects.feature.soptamp)
+    implementation(projects.core)
+    implementation(projects.feature.auth)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
