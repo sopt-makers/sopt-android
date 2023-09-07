@@ -21,3 +21,4 @@ include(
     ":feature:soptamp"
 )
 include(":core")
+include(":feature:auth")

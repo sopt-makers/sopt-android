@@ -17,6 +17,7 @@ lifecycle = "2.6.2"
 navigation = "2.7.2"
 startup = "1.1.1"
 security = "1.1.0-alpha06"
+customtab = "1.5.0"
 compose-compiler = "1.5.3"
 compose-bom = "2023.09.00"
 desugarJdk = "2.0.3"
@@ -81,6 +82,7 @@ lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", versi
 startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
+customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
