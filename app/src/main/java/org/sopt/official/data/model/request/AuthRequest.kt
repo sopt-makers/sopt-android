@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AuthRequest(
-    @SerialName("code") val code: String
+    @SerialName("code") val code: String,
+    @SerialName("pushToken") val pushToken: String
 )

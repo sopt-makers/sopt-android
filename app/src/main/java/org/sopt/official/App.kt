@@ -19,6 +19,7 @@ import javax.inject.Inject
 class App : Application() {
     @Inject
     lateinit var dataStore: SoptDataStore
+
     override fun onCreate() {
         super.onCreate()
         initFlipper()
