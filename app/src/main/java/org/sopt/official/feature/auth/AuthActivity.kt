@@ -15,20 +15,32 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
 import org.sopt.official.R
+import org.sopt.official.auth.PlaygroundAuth
+import org.sopt.official.auth.data.PlaygroundAuthDatasource
+import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.data.model.request.AuthRequest
+import org.sopt.official.data.persistence.SoptDataStore
+import org.sopt.official.data.service.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.main.MainActivity
-import org.sopt.official.playground.auth.PlaygroundAuth
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
 import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.toEntity
 import org.sopt.official.util.viewBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityAuthBinding::inflate)
     private val viewModel by viewModels<AuthViewModel>()
+
+    @Inject
+    lateinit var authService: AuthService
+
+    @Inject
+    lateinit var dataStore: SoptDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +82,10 @@ class AuthActivity : AppCompatActivity() {
         ).apply {
             duration = 1000
             startDelay = 700
-            interpolator = AnimationUtils.loadInterpolator(this@AuthActivity, android.R.interpolator.fast_out_slow_in)
+            interpolator = AnimationUtils.loadInterpolator(
+                this@AuthActivity,
+                android.R.interpolator.fast_out_slow_in
+            )
         }.start()
         binding.groupBottomAuth.startAnimation(fadeInAnimation)
     }
@@ -78,7 +93,19 @@ class AuthActivity : AppCompatActivity() {
     private fun initUi() {
         binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         binding.btnSoptLogin.setOnSingleClickListener {
-            PlaygroundAuth.authorizeWithWebTab(this, isDebug = BuildConfig.DEBUG) {
+            PlaygroundAuth.authorizeWithWebTab(
+                context = this,
+                isDebug = BuildConfig.DEBUG,
+                authDataSource = object : PlaygroundAuthDatasource {
+                    override suspend fun oauth(code: String): Result<OAuthToken> {
+                        return kotlin.runCatching {
+                            authService
+                                .authenticate(AuthRequest(code, dataStore.pushToken))
+                                .toOAuthToken()
+                        }
+                    }
+                }
+            ) {
                 it.onSuccess { token ->
                     lifecycleScope.launch {
                         viewModel.onLogin(token.toEntity())
@@ -91,7 +118,12 @@ class AuthActivity : AppCompatActivity() {
             }
         }
         binding.btnSoptNotMember.setOnClickListener {
-            startActivity(MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)))
+            startActivity(
+                MainActivity.getIntent(
+                    this,
+                    MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                )
+            )
         }
     }
 }

@@ -30,7 +30,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(projects.core)
     implementation(libs.kotlin.datetime)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
