@@ -16,7 +16,7 @@
 package org.sopt.official.stamp.feature.ranking.model
 
 class RankingListUiModel private constructor(
-    val topRankingList: Triple<RankerUiModel, RankerUiModel, RankerUiModel>,
+    val topRankingList: RankerModel,
     val otherRankingList: List<RankerUiModel>
 ) {
 
@@ -50,14 +50,14 @@ class RankingListUiModel private constructor(
             )
         }
 
-        private fun List<RankerUiModel>.getTopRanking(): Triple<RankerUiModel, RankerUiModel, RankerUiModel> {
+        private fun List<RankerUiModel>.getTopRanking(): RankerModel {
             val topRankPartition = this.partition { it.isTopRank() }.first.toMutableList()
             if (topRankPartition.size != RankerUiModel.STANDARD_TOP_RANK) {
                 repeat(RankerUiModel.STANDARD_TOP_RANK - topRankPartition.size) {
                     topRankPartition.add(RankerUiModel.DEFAULT_RANK)
                 }
             }
-            return Triple(
+            return RankerModel(
                 topRankPartition[0],
                 topRankPartition[1],
                 topRankPartition[2]
