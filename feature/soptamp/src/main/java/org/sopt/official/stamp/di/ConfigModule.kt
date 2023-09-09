@@ -26,8 +26,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.stamp.BuildConfig
 import org.sopt.official.stamp.di.constant.Soptamp
-import org.sopt.stamp.di.constant.Constant
-import org.sopt.stamp.di.constant.Strings
+import org.sopt.official.stamp.di.constant.Constant
+import org.sopt.official.stamp.di.constant.Strings
 import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Singleton
