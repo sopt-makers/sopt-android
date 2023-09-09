@@ -45,7 +45,7 @@ enum class ToolbarIconType(
     companion object {
         @Composable
         fun getResourceFrom(type: ToolbarIconType) = painterResource(
-            values().find { it.name == type.name }?.resId
+            entries.find { it.name == type.name }?.resId
                 ?: throw IllegalArgumentException("There's no icon in this class. Icon: ${type.name}")
         )
     }

@@ -64,7 +64,7 @@ import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.util.DefaultPreview
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 
 @MissionNavGraph
 @Destination("detail")

@@ -12,6 +12,6 @@ fun <T : Any> Maybe<T>.observeOnMain() = this.observeOn(AndroidSchedulers.mainTh
 
 fun <T : Any> Maybe<T>.subscribeBy(
     onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onComplete: () -> Unit = { Unit },
+    onComplete: () -> Unit = { },
     onNext: (T) -> Unit
 ): Disposable = subscribe(onNext, onError, onComplete)

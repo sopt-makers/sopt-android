@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject

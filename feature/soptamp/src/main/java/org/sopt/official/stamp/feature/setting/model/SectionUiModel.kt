@@ -50,5 +50,5 @@ sealed interface SectionUiModel {
     ) : SectionUiModel
 
     @Immutable
-    object Spacer : SectionUiModel
+    data object Spacer : SectionUiModel
 }

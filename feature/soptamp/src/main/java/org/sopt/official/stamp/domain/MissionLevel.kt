@@ -28,9 +28,7 @@ class MissionLevel private constructor(
 
         other as MissionLevel
 
-        if (value != other.value) return false
-
-        return true
+        return value == other.value
     }
 
     override fun hashCode(): Int {

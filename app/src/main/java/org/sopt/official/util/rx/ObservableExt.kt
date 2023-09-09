@@ -12,6 +12,6 @@ fun <T : Any> Observable<T>.observeOnMain() = this.observeOn(AndroidSchedulers.m
 
 fun <T : Any> Observable<T>.subscribeBy(
     onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onComplete: () -> Unit = { Unit },
+    onComplete: () -> Unit = { },
     onNext: (T) -> Unit
 ): Disposable = subscribe(onNext, onError, onComplete)

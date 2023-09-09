@@ -34,7 +34,7 @@ sealed interface SettingUiState {
     data class Success(val action: SettingScreenAction) : SettingUiState
     data class Failure(val throwable: Throwable) : SettingUiState
     data class Dialog(val action: SettingScreenAction) : SettingUiState
-    object Init : SettingUiState
+    data object Init : SettingUiState
 }
 
 @HiltViewModel

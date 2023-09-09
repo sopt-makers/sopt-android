@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

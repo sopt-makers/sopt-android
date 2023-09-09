@@ -12,6 +12,7 @@ import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityChangeNickNameBinding
+import org.sopt.official.util.drawableOf
 import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
@@ -57,7 +58,7 @@ class ChangeNickNameActivity : AppCompatActivity() {
             .distinctUntilChanged()
             .map {
                 val visible = !it
-                val backgroundColor = this.getDrawable(
+                val backgroundColor = drawableOf(
                     if (it) {
                         R.drawable.layout_edit_text_background
                     } else {
@@ -107,7 +108,8 @@ class ChangeNickNameActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, ChangeNickNameActivity::class.java).apply {
-        }
+        fun getIntent(context: Context) =
+            Intent(context, ChangeNickNameActivity::class.java).apply {
+            }
     }
 }

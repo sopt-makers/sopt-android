@@ -71,7 +71,7 @@ private enum class OnBoardingPageUiModel(
 fun OnboardingScreen(
     navigator: DestinationsNavigator
 ) {
-    val onboardingPages = OnBoardingPageUiModel.values()
+    val onboardingPages = OnBoardingPageUiModel.entries.toTypedArray()
     val pageState = rememberPagerState { onboardingPages.size }
     SoptTheme {
         SoptColumn(

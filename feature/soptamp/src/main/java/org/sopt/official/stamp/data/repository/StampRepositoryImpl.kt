@@ -27,7 +27,7 @@ import org.sopt.official.stamp.util.ContentUriRequestBody
 import org.sopt.official.stamp.data.remote.api.StampService
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 import javax.inject.Inject
 
 class StampRepositoryImpl @Inject constructor(

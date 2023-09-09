@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.stamp.feature.mission.model
+package org.sopt.official.stamp.feature.mission.model
 
 import android.net.Uri
 
@@ -28,7 +28,7 @@ sealed interface ImageModel {
         override val size = uri.size
     }
 
-    object Empty : ImageModel {
+    data object Empty : ImageModel {
         override fun isEmpty() = true
         override val size = 1
     }

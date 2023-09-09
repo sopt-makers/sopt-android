@@ -13,6 +13,6 @@ fun <T : Any> Flowable<T>.observeOnMain() = this.observeOn(AndroidSchedulers.mai
 fun <T : Any> Flowable<T>.subscribeBy(
     compositeDisposable: CompositeDisposable,
     onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onComplete: () -> Unit = { Unit },
+    onComplete: () -> Unit = { },
     onNext: (T) -> Unit
 ) = compositeDisposable.add(subscribe(onNext, onError, onComplete))

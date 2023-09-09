@@ -17,7 +17,7 @@ package org.sopt.official.stamp.domain.fake
 
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 
 object FakeStampRepository : StampRepository {
     private val fakeArchive = Archive(

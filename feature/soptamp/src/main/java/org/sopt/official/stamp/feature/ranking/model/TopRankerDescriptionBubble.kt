@@ -52,7 +52,7 @@ enum class TopRankerDescriptionBubble(
     }
 
     companion object {
-        fun findBubbleByRank(rank: Int): TopRankerDescriptionBubble = values().find { it.hasRankOf(rank) }
+        fun findBubbleByRank(rank: Int): TopRankerDescriptionBubble = entries.find { it.hasRankOf(rank) }
             ?: throw IllegalStateException("$rank 는 상위 3위에 포함된 랭킹이 아닙니다.")
     }
 }
