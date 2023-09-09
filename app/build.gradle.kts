@@ -105,9 +105,6 @@ dependencies {
 
     implementation(libs.bundles.mavericks)
 
-    implementation(libs.hilt)
-    kapt(libs.hilt.kapt)
-
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.sentry.compose)

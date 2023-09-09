@@ -149,7 +149,7 @@ mavericks-navigation = { module = "com.airbnb.android:mavericks-navigation", ver
 mavericks-mockable = { module = "com.airbnb.android:mavericks-mocking", version.ref = "mavericks" }
 
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
-hilt-kapt = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
+hilt-ksp = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
 hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
 hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt" }
