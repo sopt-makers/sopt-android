@@ -5,7 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.databinding.ItemAttendanceHistoryLogHeaderBinding
 
-class LogHeaderViewHolder(private val binding: ItemAttendanceHistoryLogHeaderBinding) : RecyclerView.ViewHolder(binding.root) {
+class LogHeaderViewHolder(
+    binding: ItemAttendanceHistoryLogHeaderBinding
+) : RecyclerView.ViewHolder(binding.root) {
     companion object {
         fun create(parent: ViewGroup): LogHeaderViewHolder {
             val binding = ItemAttendanceHistoryLogHeaderBinding.inflate(

@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
@@ -18,7 +19,6 @@ import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.web.WebUrlConstant
-import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.serializableExtra
@@ -212,8 +212,7 @@ class MyPageActivity : AppCompatActivity() {
                     val intent = packageManager.getLaunchIntentForPackage(packageName)
                     val componentName = intent?.component
                     val mainIntent = Intent.makeRestartActivityTask(componentName)
-                    startActivity(mainIntent)
-                    System.exit(0)
+                    ProcessPhoenix.triggerRebirth(this, mainIntent)
                 }
             )
     }

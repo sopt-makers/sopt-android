@@ -29,11 +29,11 @@ class AttendanceViewModel @Inject constructor(
     private var _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
     val dialogState: StateFlow<DialogState> get() = _dialogState
 
-    private val _isFirstProgressBarActive = MutableStateFlow<Boolean>(false)
+    private val _isFirstProgressBarActive = MutableStateFlow(false)
     val isFirstProgressBarActive get() = _isFirstProgressBarActive
-    private val _isSecondProgressBarActive = MutableStateFlow<Boolean>(false)
+    private val _isSecondProgressBarActive = MutableStateFlow(false)
     val isSecondProgressBarActive get() = _isSecondProgressBarActive
-    private val _isThirdProgressBarActive = MutableStateFlow<Boolean>(false)
+    private val _isThirdProgressBarActive = MutableStateFlow(false)
     val isThirdProgressBarActive get() = _isThirdProgressBarActive
     private val _isThirdProgressBarAttendance = MutableStateFlow(false)
     val isThirdProgressBarAttendance get() = _isThirdProgressBarAttendance

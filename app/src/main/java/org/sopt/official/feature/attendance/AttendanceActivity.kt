@@ -7,7 +7,8 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.Spanned
 import android.text.style.StyleSpan
-import android.view.*
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import android.widget.Toast
@@ -23,10 +24,15 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
 import org.sopt.official.core.di.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
-import org.sopt.official.domain.entity.attendance.*
+import org.sopt.official.domain.entity.attendance.AttendanceLog
+import org.sopt.official.domain.entity.attendance.AttendanceStatus
+import org.sopt.official.domain.entity.attendance.AttendanceSummary
+import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
+import org.sopt.official.domain.entity.attendance.EventType
+import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.feature.attendance.util.dpToPx
+import org.sopt.official.util.dp
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
@@ -90,15 +96,15 @@ class AttendanceActivity : AppCompatActivity() {
                     super.getItemOffsets(outRect, view, parent, state)
                     when (parent.getChildAdapterPosition(view)) {
                         0 -> {
-                            outRect.set(24.dpToPx(), 32.dpToPx(), 24.dpToPx(), 12.dpToPx())
+                            outRect.set(24.dp, 32.dp, 24.dp, 12.dp)
                         }
 
                         attendanceAdapter.itemCount - 1 -> {
-                            outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 32.dpToPx())
+                            outRect.set(24, 12.dp, 24.dp, 32.dp)
                         }
 
                         else -> {
-                            outRect.set(24.dpToPx(), 12.dpToPx(), 24.dpToPx(), 12.dpToPx())
+                            outRect.set(24.dp, 12.dp, 24.dp, 12.dp)
                         }
                     }
                 }
@@ -178,7 +184,7 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventPoint.isVisible = (soptEvent.message != "")
             textInfoEventPoint.text = soptEvent.message
             val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-            textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+            textInfoEventNameLayoutParams.setMargins(0, 16.dp, 0, 0)
             textInfoEventName.layoutParams = textInfoEventNameLayoutParams
             removeAllSpan(textInfoEventName)
             textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"
@@ -228,7 +234,7 @@ class AttendanceActivity : AppCompatActivity() {
             textInfoEventPoint.isVisible = (soptEvent.message != "")
             textInfoEventPoint.text = soptEvent.message
             val textInfoEventNameLayoutParams = textInfoEventName.layoutParams as ViewGroup.MarginLayoutParams
-            textInfoEventNameLayoutParams.setMargins(0, 16.dpToPx(), 0, 0)
+            textInfoEventNameLayoutParams.setMargins(0, 16.dp, 0, 0)
             textInfoEventName.layoutParams = textInfoEventNameLayoutParams
             removeAllSpan(textInfoEventName)
             textInfoEventName.text = "오늘은 ${soptEvent.eventName} 날이에요"

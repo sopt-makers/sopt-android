@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     id("org.sopt.official.feature")
     alias(libs.plugins.ksp)

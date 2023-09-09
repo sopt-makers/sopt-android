@@ -5,17 +5,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.flow.filter
 import org.sopt.official.databinding.ActivitySignOutBinding
-import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.ui.throttleUi
 import org.sopt.official.util.viewBinding
-import com.jakewharton.processphoenix.ProcessPhoenix
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
