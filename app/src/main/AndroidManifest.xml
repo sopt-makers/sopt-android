@@ -44,6 +44,7 @@
                 android:name="org.sopt.official.config.initializer.TimberInitializer"
                 android:value="androidx.startup" />
         </provider>
+
         <activity
             android:name=".feature.auth.AuthActivity"
             android:exported="true"
@@ -61,21 +62,29 @@
             android:name=".stamp.SoptampActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.main.MainActivity"
+        <activity
+            android:name=".feature.main.MainActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.MyPageActivity"
+        <activity
+            android:name=".feature.mypage.MyPageActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.signOut.SignOutActivity"
+        <activity
+            android:name=".feature.mypage.signOut.SignOutActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.soptamp.nickName.ChangeNickNameActivity"
+        <activity
+            android:name=".feature.mypage.soptamp.nickName.ChangeNickNameActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
-        <activity android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
+        <activity
+            android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
+        <activity
+            android:name=".auth.AuthCodeHandlerActivity"
+            android:exported="true" />
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">
