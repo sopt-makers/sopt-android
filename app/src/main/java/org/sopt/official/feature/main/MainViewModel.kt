@@ -17,7 +17,7 @@ import org.sopt.official.domain.entity.main.MainUrl
 import org.sopt.official.domain.entity.main.MainViewOperationInfo
 import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.entity.main.MainViewUserInfo
-import org.sopt.official.domain.entity.main.GenerationInfo
+import org.sopt.official.domain.entity.main.UserActiveGeneration
 import org.sopt.official.domain.repository.main.MainViewRepository
 import org.sopt.official.feature.web.WebUrlConstant
 import org.sopt.official.util.calculateDurationOfGeneration
@@ -52,17 +52,17 @@ class MainViewModel @Inject constructor(
                 else -> MainTitle(R.string.main_title_non_member, null, null)
             }
         }
-    val generatedTagText: Flow<GenerationInfo> = user
+    val generatedTagText: Flow<UserActiveGeneration> = user
         .map {
             val state = it.status
             val generationList = it.generationList.getOrEmpty()
             val isEmpty = generationList.isEmpty()
             val lastGeneration = if (!isEmpty) generationList[0].toString() else ""
             when {
-                state == UserState.ACTIVE -> GenerationInfo(R.string.main_active_member, lastGeneration)
-                isEmpty && state == UserState.INACTIVE -> GenerationInfo(R.string.main_no_profile_member, null)
-                !isEmpty && state == UserState.INACTIVE -> GenerationInfo(R.string.main_inactive_member, lastGeneration)
-                else -> GenerationInfo(R.string.main_non_member, null)
+                state == UserState.ACTIVE -> UserActiveGeneration(R.string.main_active_member, lastGeneration)
+                isEmpty && state == UserState.INACTIVE -> UserActiveGeneration(R.string.main_no_profile_member, null)
+                !isEmpty && state == UserState.INACTIVE -> UserActiveGeneration(R.string.main_inactive_member, lastGeneration)
+                else -> UserActiveGeneration(R.string.main_non_member, null)
             }
         }
     val userState: Flow<NullableWrapper<UserState>> = mainViewResult

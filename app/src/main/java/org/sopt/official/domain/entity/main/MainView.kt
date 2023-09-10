@@ -33,7 +33,7 @@ data class MainUrl(
     val rightBottomSmallBlockUrl: MainViewModel.SmallBlockType
 )
 
-data class GenerationInfo(
+data class UserActiveGeneration(
     val latestGeneration: Int,
     val lastGeneration: String?
 )
