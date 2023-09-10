@@ -114,7 +114,7 @@ proguard/
 # Keystore files
 
 # Google Services (e.g. APIs or Firebase)
-app/google-services.json
+google-services.json
 
 # Android Patch
 

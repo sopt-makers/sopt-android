@@ -28,9 +28,9 @@ data class MainTitle(
 )
 
 data class MainUrl(
-    val url1: MainViewModel.LargeBlockType,
-    val url2: MainViewModel.SmallBlockType,
-    val url3: MainViewModel.SmallBlockType
+    val leftLargeBlockUrl: MainViewModel.LargeBlockType,
+    val rightTopSmallBlockUrl: MainViewModel.SmallBlockType,
+    val rightBottomSmallBlockUrl: MainViewModel.SmallBlockType
 )
 
 data class GenerationInfo(
