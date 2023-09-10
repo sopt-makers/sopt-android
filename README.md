@@ -8,7 +8,7 @@
 <p align="center">
     <img src="https://img.shields.io/badge/Kotlin-1.8.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-    <img src="https://img.shields.io/badge/all_contributors-9-orange.svg?style=for-the-badge"/>
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 <br />  
@@ -54,6 +54,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://www.instagram.com/lv3isn/"><img src="https://avatars.githubusercontent.com/u/108331578?v=4?s=100" width="100px;" alt="Giovanni Junseo Kim"/><br /><sub><b>Giovanni Junseo Kim</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=giovannijunseokim" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/taeheeL"><img src="https://avatars.githubusercontent.com/u/98825364?v=4?s=100" width="100px;" alt="HaeTi"/><br /><sub><b>HaeTi</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=taeheeL" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kimdahyee"><img src="https://avatars.githubusercontent.com/u/63586451?v=4?s=100" width="100px;" alt="kimdahyee._."/><br /><sub><b>kimdahyee._.</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=kimdahyee" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
