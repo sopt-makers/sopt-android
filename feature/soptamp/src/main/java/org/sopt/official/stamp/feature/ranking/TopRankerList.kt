@@ -44,12 +44,13 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.ranking.model.RankersUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.TopRankerDescriptionBubble
 
 @Composable
 fun TopRankerList(
-    topRanker: Triple<RankerUiModel, RankerUiModel, RankerUiModel>,
+    topRanker: RankersUiModel,
     onClickTopRankerBubble: (RankerUiModel) -> Unit = {}
 ) {
     Column(
@@ -148,7 +149,7 @@ fun TopRankDescriptionBubble(
 fun PreviewTopRankerList() {
     SoptTheme {
         TopRankerList(
-            topRanker = Triple(
+            topRanker = RankersUiModel(
                 RankerUiModel(
                     rank = 1,
                     nickname = "jinsu",

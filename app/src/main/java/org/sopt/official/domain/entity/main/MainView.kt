@@ -1,6 +1,7 @@
 package org.sopt.official.domain.entity.main
 
 import org.sopt.official.domain.entity.UserState
+import org.sopt.official.feature.main.MainViewModel
 import org.sopt.official.util.wrapper.NullableWrapper
 
 data class MainViewResult(
@@ -18,4 +19,21 @@ data class MainViewUserInfo(
 data class MainViewOperationInfo(
     val attendanceScore: NullableWrapper<Double> = NullableWrapper.none(),
     val announcement: NullableWrapper<String> = NullableWrapper.none(),
+)
+
+data class MainTitle(
+    val title: Int,
+    val userName: String?,
+    val period: String?
+)
+
+data class MainUrl(
+    val leftLargeBlockUrl: MainViewModel.LargeBlockType,
+    val rightTopSmallBlockUrl: MainViewModel.SmallBlockType,
+    val rightBottomSmallBlockUrl: MainViewModel.SmallBlockType
+)
+
+data class UserActiveGeneration(
+    val latestGeneration: Int,
+    val lastGeneration: String?
 )

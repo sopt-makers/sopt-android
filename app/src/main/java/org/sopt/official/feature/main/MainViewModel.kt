@@ -12,9 +12,12 @@ import org.sopt.official.R
 import org.sopt.official.base.BaseItemType
 import org.sopt.official.domain.entity.UserState
 import org.sopt.official.domain.entity.auth.UserStatus
+import org.sopt.official.domain.entity.main.MainTitle
+import org.sopt.official.domain.entity.main.MainUrl
 import org.sopt.official.domain.entity.main.MainViewOperationInfo
 import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.entity.main.MainViewUserInfo
+import org.sopt.official.domain.entity.main.UserActiveGeneration
 import org.sopt.official.domain.repository.main.MainViewRepository
 import org.sopt.official.feature.web.WebUrlConstant
 import org.sopt.official.util.calculateDurationOfGeneration
@@ -35,7 +38,7 @@ class MainViewModel @Inject constructor(
     private var mainViewResult = MutableStateFlow(NullableWrapper.none<MainViewResult>())
     private val user = mainViewResult
         .map { it.get()?.user ?: MainViewUserInfo() }
-    val title: Flow<Triple<Int, String?, String?>> = user
+    val title: Flow<MainTitle> = user
         .map {
             val state = it.status
             val userName = it.name.getOrEmpty()
@@ -44,22 +47,22 @@ class MainViewModel @Inject constructor(
             val currentDate = Instant.systemNow().toDefaultLocalDate()
             val period = calculateDurationOfGeneration(startDate, currentDate)
             when {
-                userName.isNotEmpty() -> Triple(R.string.main_title_member, userName, period.toString())
-                state == UserState.INACTIVE -> Triple(R.string.main_title_inactive_member, null, null)
-                else -> Triple(R.string.main_title_non_member, null, null)
+                userName.isNotEmpty() -> MainTitle(R.string.main_title_member, userName, period.toString())
+                state == UserState.INACTIVE -> MainTitle(R.string.main_title_inactive_member, null, null)
+                else -> MainTitle(R.string.main_title_non_member, null, null)
             }
         }
-    val generatedTagText: Flow<Pair<Int, String?>> = user
+    val generatedTagText: Flow<UserActiveGeneration> = user
         .map {
             val state = it.status
             val generationList = it.generationList.getOrEmpty()
             val isEmpty = generationList.isEmpty()
             val lastGeneration = if (!isEmpty) generationList[0].toString() else ""
             when {
-                state == UserState.ACTIVE -> Pair(R.string.main_active_member, lastGeneration)
-                isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_no_profile_member, null)
-                !isEmpty && state == UserState.INACTIVE -> Pair(R.string.main_inactive_member, lastGeneration)
-                else -> Pair(R.string.main_non_member, null)
+                state == UserState.ACTIVE -> UserActiveGeneration(R.string.main_active_member, lastGeneration)
+                isEmpty && state == UserState.INACTIVE -> UserActiveGeneration(R.string.main_no_profile_member, null)
+                !isEmpty && state == UserState.INACTIVE -> UserActiveGeneration(R.string.main_inactive_member, lastGeneration)
+                else -> UserActiveGeneration(R.string.main_non_member, null)
             }
         }
     val userState: Flow<NullableWrapper<UserState>> = mainViewResult
@@ -72,23 +75,23 @@ class MainViewModel @Inject constructor(
         .map { it.get()?.operation?.attendanceScore?.get().asNullableWrapper() }
     val announcement: Flow<NullableWrapper<String>> = mainViewResult
         .map { it.get()?.operation?.announcement?.get().asNullableWrapper() }
-    val blockItem: Flow<NullableWrapper<Triple<LargeBlockType, SmallBlockType, SmallBlockType>>> = mainViewResult
+    val blockItem: Flow<NullableWrapper<MainUrl>> = mainViewResult
         .map {
             val userState = it.get()?.user?.status
             when (userState) {
-                UserState.UNAUTHENTICATED -> Triple(
+                UserState.UNAUTHENTICATED -> MainUrl(
                     LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
                     SmallBlockType.SOPT_REVIEW_URL,
                     SmallBlockType.SOPT_PROJECT_URL
                 )
 
-                UserState.ACTIVE -> Triple(
+                UserState.ACTIVE -> MainUrl(
                     LargeBlockType.SOPT_ATTENDENCE,
                     SmallBlockType.PLAYGROUNG_MEMBER_URL,
                     SmallBlockType.PLAYGROUNG_PROJECT_URL
                 )
 
-                else -> Triple(
+                else -> MainUrl(
                     LargeBlockType.SOPT_FAQ_URL,
                     SmallBlockType.PLAYGROUNG_MEMBER_URL,
                     SmallBlockType.PLAYGROUNG_PROJECT_URL
@@ -174,22 +177,50 @@ class MainViewModel @Inject constructor(
 
     enum class SmallBlockType(val title: Int, val url: String, val icon: Int) {
         // sopt
-        SOPT_OFFICIAL_PAGE_URL(R.string.main_small_block_official_page, WebUrlConstant.SOPT_OFFICIAL_PAGE_URL, R.drawable.ic_homepage),
-        SOPT_REVIEW_URL(R.string.main_small_block_review, WebUrlConstant.SOPT_REVIEW_URL, R.drawable.ic_review),
-        SOPT_PROJECT_URL(R.string.main_large_block_official_page, WebUrlConstant.SOPT_PROJECT_URL, R.drawable.ic_project),
-        SOPT_FAQ_URL(R.string.main_small_block_faq, WebUrlConstant.SOPT_FAQ_URL, R.drawable.ic_faq),
+        SOPT_OFFICIAL_PAGE_URL(
+            R.string.main_small_block_official_page,
+            WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
+            R.drawable.ic_homepage
+        ),
+        SOPT_REVIEW_URL(
+            R.string.main_small_block_review,
+            WebUrlConstant.SOPT_REVIEW_URL,
+            R.drawable.ic_review
+        ),
+        SOPT_PROJECT_URL(
+            R.string.main_large_block_official_page,
+            WebUrlConstant.SOPT_PROJECT_URL,
+            R.drawable.ic_project
+        ),
+        SOPT_FAQ_URL(
+            R.string.main_small_block_faq,
+            WebUrlConstant.SOPT_FAQ_URL,
+            R.drawable.ic_faq
+        ),
 
         // playground
-        PLAYGROUNG_MEMBER_URL(R.string.main_small_block_member, WebUrlConstant.PLAYGROUNG_MEMBER_URL, R.drawable.ic_member),
+        PLAYGROUNG_MEMBER_URL(
+            R.string.main_small_block_member,
+            WebUrlConstant.PLAYGROUNG_MEMBER_URL,
+            R.drawable.ic_member
+        ),
         PLAYGROUNG_PROJECT_URL(
             R.string.main_small_block_playground_project,
             WebUrlConstant.PLAYGROUNG_PROJECT_URL,
             R.drawable.ic_project
         ),
-        PLAYGROUNG_CREW_URL(R.string.main_small_block_crew, WebUrlConstant.PLAYGROUNG_CREW_URL, R.drawable.ic_crew),
+        PLAYGROUNG_CREW_URL(
+            R.string.main_small_block_crew,
+            WebUrlConstant.PLAYGROUNG_CREW_URL,
+            R.drawable.ic_crew
+        ),
 
         // others
-        SOPT_OFFICIAL_YOUTUBE(R.string.main_small_block_youtube, WebUrlConstant.SOPT_OFFICIAL_YOUTUBE, R.drawable.ic_youtube);
+        SOPT_OFFICIAL_YOUTUBE(
+            R.string.main_small_block_youtube,
+            WebUrlConstant.SOPT_OFFICIAL_YOUTUBE,
+            R.drawable.ic_youtube
+        );
     }
 
     companion object {
