@@ -23,6 +23,7 @@ class App : Application(), Configuration.Provider {
 
     @Inject
     lateinit var dataStore: SoptDataStore
+
     @Inject
     lateinit var workerFactory: HiltWorkerFactory
 
