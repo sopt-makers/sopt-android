@@ -19,6 +19,7 @@ import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.web.WebUrlConstant
+import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.serializableExtra

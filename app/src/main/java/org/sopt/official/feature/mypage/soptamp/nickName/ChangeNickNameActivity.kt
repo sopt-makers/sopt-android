@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityChangeNickNameBinding
 import org.sopt.official.util.drawableOf
+import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.ui.setVisible

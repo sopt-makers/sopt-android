@@ -10,6 +10,7 @@ import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.databinding.ActivitySignOutBinding
+import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.ui.throttleUi
