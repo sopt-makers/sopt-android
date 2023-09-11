@@ -40,7 +40,7 @@ class ChangeNickNameViewModel @Inject constructor(
         }
     }
 
-    fun validateNickName() {
+    private fun validateNickName() {
         nickName.first("")
             .subscribeOnIo()
             .subscribeBy(

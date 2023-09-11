@@ -14,6 +14,6 @@ enum class AttendanceErrorCode(
     );
 
     companion object {
-        fun of(message: String) = values().find { it.messages.contains(message) }?.attendanceErrorCode
+        fun of(message: String) = entries.find { it.messages.contains(message) }?.attendanceErrorCode
     }
 }

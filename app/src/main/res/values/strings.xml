@@ -16,9 +16,7 @@
     <string name="main_small_block_review">활동후기</string>
     <string name="main_small_block_faq">FAQ</string>
     <string name="main_small_block_youtube">YOUTUBE</string>
-    <string name="main_small_block_sopt_project">프로젝트</string>
     <string name="main_non_member">비회원</string>
-    <string name="main_content_header_description">SOPT 회원이 되 다양한 서비스를 즐겨보세요</string>
     <!--    회원    -->
     <string name="main_title_member">%1$s 님은\nSOPT와 %2$s개월 째</string>
     <string name="main_title_inactive_member">안녕하세요,\nSOPT에 오신 것을 환영합니다!</string>
@@ -30,7 +28,6 @@
     <string name="main_large_block_faq_description">SOPT 문의하기</string>
     <string name="main_small_block_member">멤버</string>
     <string name="main_small_block_playground_project">프로젝트</string>
-    <string name="main_small_block_notice">전체 공지</string>
     <string name="main_small_block_crew">크루</string>
     <string name="main_small_block_official_page">공식홈페이지</string>
     <string name="main_no_profile_member">비활동</string>
@@ -40,7 +37,6 @@
     <!--    공통    -->
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT AMP!</string>
-    <string name="new_product">NEW PRODUCT</string>
     <string name="attendance_progress_first">1차 출석</string>
     <string name="attendance_progress_second">2차 출석</string>
     <string name="attendance_progress_before">출석 전</string>
@@ -48,12 +44,6 @@
     <string name="attendance_progress_third_tardy">지각</string>
     <string name="attendance_progress_third_absent">결석</string>
     <!-- 출석 기능 -->
-    <string name="attendance_error_no_section">[LectureException] : 오늘 세션이 없습니다.</string>
-    <string name="attendance_error_before_attendance">[LectureException] : 출석 시작 전입니다.</string>
-    <string name="attendance_error_before_first_attendance">[LectureException] : 1차 출석 시작 전입니다.</string>
-    <string name="attendance_error_before_second_attendance">[LectureException] : 2차 출석 시작 전입니다.</string>
-    <string name="attendance_error_after_first_attendance">[LectureException] : 1차 출석이 이미 종료되었습니다.</string>
-    <string name="attendance_error_after_second_attendance">[LectureException] : 2차 출석이 이미 종료되었습니다.</string>
     <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
     <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
     <string name="attendance_dialog_button">출석하기</string>

@@ -11,7 +11,7 @@ enum class UpdateCriteria(
 
     companion object {
         private fun of(priority: Int): UpdateCriteria {
-            return values().find { it.priority == priority } ?: throw IllegalStateException("Unknown priority: $priority")
+            return entries.find { it.priority == priority } ?: throw IllegalStateException("Unknown priority: $priority")
         }
 
         private fun UpdateCriteria.stalenessDayOf(type: Int) = if (type == AppUpdateType.IMMEDIATE) {

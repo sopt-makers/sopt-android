@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<SmallBlockItemHolder, *, *> {
-            return when (SmallBlockViewType.values()[viewType]) {
+            return when (SmallBlockViewType.entries[viewType]) {
                 SmallBlockViewType.SMALL_BLOCK -> SmallBlockViewHolder(parent)
             }
         }

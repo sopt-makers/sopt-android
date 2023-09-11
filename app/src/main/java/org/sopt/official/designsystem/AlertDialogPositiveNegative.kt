@@ -8,6 +8,7 @@ import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import org.sopt.official.R
 import org.sopt.official.databinding.LayoutDialogNegativePositiveBinding
+import org.sopt.official.util.drawableOf
 
 class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) {
     private val builder: AlertDialog.Builder = AlertDialog.Builder(context)
@@ -75,7 +76,7 @@ class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) 
 
     fun show() {
         dialog?.window?.setBackgroundDrawable(
-            context.getDrawable(R.drawable.rectangle_radius_10).apply {
+            context.drawableOf(R.drawable.rectangle_radius_10).apply {
                 this?.setTint(context.getColor(R.color.black_60))
             }
         )

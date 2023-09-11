@@ -52,7 +52,7 @@ enum class Stamp(
         val defaultStarColor: Color
             @Composable get() = SoptTheme.colors.onSurface30
 
-        fun findStampByLevel(level: MissionLevel): Stamp = values().find {
+        fun findStampByLevel(level: MissionLevel): Stamp = entries.find {
             it.hasStampLevel(level)
         } ?: throw IllegalArgumentException("$level 에 해당하는 Stamp 가 없습니다.")
     }

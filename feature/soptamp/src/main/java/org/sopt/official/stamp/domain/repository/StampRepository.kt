@@ -16,7 +16,7 @@
 package org.sopt.official.stamp.domain.repository
 
 import org.sopt.official.stamp.domain.model.Archive
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 
 interface StampRepository {
     suspend fun completeMission(

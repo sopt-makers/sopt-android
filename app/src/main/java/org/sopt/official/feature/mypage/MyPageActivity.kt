@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
@@ -212,8 +213,7 @@ class MyPageActivity : AppCompatActivity() {
                     val intent = packageManager.getLaunchIntentForPackage(packageName)
                     val componentName = intent?.component
                     val mainIntent = Intent.makeRestartActivityTask(componentName)
-                    startActivity(mainIntent)
-                    System.exit(0)
+                    ProcessPhoenix.triggerRebirth(this, mainIntent)
                 }
             )
     }
@@ -234,7 +234,7 @@ class MyPageActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: MyPageActivity.StartArgs) = Intent(context, MyPageActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
         }
     }

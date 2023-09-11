@@ -31,13 +31,5 @@
         <item name="textAppearanceLabelMedium">@style/TextAppearance.SOPT.CaptionMedium</item>
     </style>
 
-    <style name="Theme.SOPT.Spalsh" type="Theme.SOPT">
-        <item name="android:windowBackground">@color/black_80</item>
-        <item name="android:statusBarColor">@color/black_80</item>
-    </style>
-
     <!--  AlertDialog  -->
-    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
-    </style>
 </resources>

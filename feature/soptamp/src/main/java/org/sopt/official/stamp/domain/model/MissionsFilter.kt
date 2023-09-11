@@ -25,8 +25,8 @@ enum class MissionsFilter(
     fun hasTitle(title: String) = (title == this.title)
 
     companion object {
-        fun getTitleOfMissionsList(): List<String> = values().map { it.title }
-        fun findFilterOf(title: String) = values().find { it.hasTitle(title) }
+        fun getTitleOfMissionsList(): List<String> = entries.map { it.title }
+        fun findFilterOf(title: String) = entries.find { it.hasTitle(title) }
             ?: throw IllegalArgumentException("$title 에 해당하는 필터가 없습니다.")
     }
 }

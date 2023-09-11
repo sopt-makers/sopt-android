@@ -19,5 +19,7 @@ sealed class Error(
     override val message: String? = null,
     override val cause: Throwable? = null
 ) : Exception(message, cause) {
-    data object NetworkUnavailable : Error()
+    data object NetworkUnavailable : Error() {
+        private fun readResolve(): Any = "NetworkUnavailable"
+    }
 }

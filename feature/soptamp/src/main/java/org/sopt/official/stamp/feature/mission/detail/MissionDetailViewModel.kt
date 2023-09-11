@@ -18,6 +18,7 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -29,7 +30,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.domain.model.Archive
 import org.sopt.official.stamp.domain.repository.StampRepository
-import org.sopt.stamp.feature.mission.model.ImageModel
+import org.sopt.official.stamp.feature.mission.model.ImageModel
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,6 +60,7 @@ data class PostUiState(
     }
 }
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
     private val repository: StampRepository

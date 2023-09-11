@@ -17,7 +17,7 @@ enum class AttendanceButtonType(
     ERROR(AttendanceRound(-2, ""), listOf());
 
     companion object {
-        fun of(message: String) = values().find { it.messages.contains(message) }?.attendanceRound
+        fun of(message: String) = entries.find { it.messages.contains(message) }?.attendanceRound
             ?: ERROR.attendanceRound
     }
 }
