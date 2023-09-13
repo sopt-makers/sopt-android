@@ -1,3 +1,4 @@
+import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.*
 
 plugins {
@@ -9,6 +10,7 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
+    alias(libs.plugins.app.distribution)
 }
 
 val properties = Properties().apply {
@@ -47,6 +49,10 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
+            firebaseAppDistribution {
+                artifactType = "APK"
+                groups = "app-team"
+            }
         }
         release {
             isMinifyEnabled = true
