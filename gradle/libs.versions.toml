@@ -53,7 +53,7 @@ okhttp = "4.11.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
 compose-destination = "1.9.53"
-mavericks = "3.0.6"
+mavericks = "3.0.7"
 coil = "2.4.0"
 lottie = "6.1.0"
 
