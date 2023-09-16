@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
 
     <application
         android:name=".App"
@@ -84,7 +87,20 @@
             android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".auth.AuthCodeHandlerActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="app" />
+                <data android:host="org.sopt.makers.android" />
+                <data android:pathPattern="/oauth2redirect" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">
