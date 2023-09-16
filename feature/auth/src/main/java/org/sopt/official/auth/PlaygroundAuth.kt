@@ -42,7 +42,6 @@ object PlaygroundAuth {
         state: String,
         resultReceiver: ResultReceiver
     ) {
-        PlaygroundLog.i("uri: $uri state: $state resultReceiver: $resultReceiver")
         AuthIntentFactory.authIntentWithAuthTab(
             context = context,
             uri = uri,
