@@ -15,18 +15,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white_100"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@id/title"
+        app:layout_constraintTop_toTopOf="@id/cl_title"
+        app:layout_constraintBottom_toBottomOf="@id/cl_title"
         app:layout_constraintStart_toStartOf="parent"
         tools:background="@drawable/ic_member" />
 
-    <TextView
-        android:id="@+id/title"
-        style="@style/TextAppearance.SOPT.BodyLarge"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white_100"
-        tools:text="@string/main_small_block_member" />
+        android:layout_marginStart="4dp"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/title"
+            style="@style/TextAppearance.SOPT.BodyLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white_100"
+            android:layout_marginBottom="2dp"
+            app:layout_goneMarginBottom="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/description_small"
+            tools:text="@string/main_small_block_member" />
+
+        <TextView
+            android:id="@+id/description_small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_30"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/title"
+            tools:text="궁금한 사람 찾아보기"
+            tools:visibility="gone"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

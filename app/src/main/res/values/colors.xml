@@ -29,6 +29,7 @@
     <color name="black_40">#3C3D40</color>
     <!-- RedScale -->
     <color name="sopt_red">#FFD3D3</color>
+    <color name="main_color">#FF6E1D</color> <!-- todo kdh 이름 변경 필요 -->
     <color name="on_sopt_red">#E45656</color>
     <color name="red_100">#BD372F</color>
     <color name="reddim">#392020</color>

@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">SOPT</string>
     <string name="default_channel_id">SOPT_MESSAGE</string>
-    <string name="attendance">출석</string>
-    <string name="title_attendance_count_normal">출석</string>
-    <string name="title_attendance_count_late">지각</string>
-    <string name="title_attendance_count_abnormal">결석</string>
-    <string name="title_attendance_count_participate">참여</string>
-    <string name="header_attendance_log">나의 출결 현황</string>
-    <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
+    <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
+    <string name="soptamp">SOPT AMP!</string>
 
     <!--    메인홈    -->
     <!--    비회원    -->
@@ -34,16 +29,60 @@
     <string name="main_inactive_member">%1$s기 수료</string>
     <string name="main_active_member">%1$s기 활동 중</string>
     <string name="main_additional_generation">+%1$s</string>
-    <!--    공통    -->
-    <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
-    <string name="soptamp">SOPT AMP!</string>
+
+    <!-- todo kdh -->
+    <!-- 비회원 -->
+    <string name="main_nonmember_large_block_official_page">SOPT\n공식홈페이지</string>
+    <string name="main_nonmember_small_block_review">활동 후기</string>
+    <string name="main_nonmember_small_block_review_description">진짜 후기가\n궁금하다면?</string>
+    <string name="main_nonmember_small_block_project">프로젝트</string>
+    <string name="main_nonmember_small_block_project_description">SOPT에서\n탄생한 프로젝트</string>
+    <string name="main_nonmember_small_block_instagram">Instagram</string>
+    <string name="main_nonmember_small_block_instagram_description">SOPT 소식 빠르게 확인하기</string>
+    <string name="main_nonmember_small_block_youtube">Youtube</string>
+    <string name="main_nonmember_small_block_youtube_description">SOPT 활동 구경하기</string>
+    <string name="main_nonmember_small_block_faq">FAQ</string>
+    <string name="main_nonmember_small_block_faq_description">자주 묻는 질문</string>
+
+    <!-- 활동 -->
+    <string name="main_active_large_block_attendance">출석하기</string>
+    <string name="main_active_large_block_attendance_description">아 맞다, 출석!</string>
+    <string name="main_active_small_block_crew">모임/스터디</string>
+    <string name="main_active_small_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_active_small_block_member">멤버</string>
+    <string name="main_active_small_block_member_description">궁금한 사람 찾아보기</string>
+    <string name="main_active_small_block_project">프로젝트</string>
+    <string name="main_active_small_block_project_description">역대 프로젝트 모아보기</string>
+    <string name="main_active_small_block_official_page">공식홈페이지</string>
+    <string name="main_active_small_block_official_page_description">솝트 홈페이지 바로보기</string>
+
+    <!-- 비활동 -->
+    <string name="main_inactive_large_block_crew">모임/스터디</string>
+    <string name="main_inactive_large_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_inactive_small_block_member">멤버</string>
+    <string name="main_inactive_small_block_member_description">궁금한 사람 찾아보기</string>
+    <string name="main_inactive_small_block_project">프로젝트</string>
+    <string name="main_inactive_small_block_project_description">지난 프로젝트 보기</string>
+    <string name="main_inactive_small_block_official_page">공식홈페이지</string>
+    <string name="main_inactive_small_block_instagram">Instagram</string>
+    <string name="main_inactive_small_block_youtube">Youtube</string>
+    <!-- todo kdh -->
+
+
+    <!--    출석    -->
+    <string name="attendance">출석</string>
+    <string name="title_attendance_count_normal">출석</string>
+    <string name="title_attendance_count_late">지각</string>
+    <string name="title_attendance_count_abnormal">결석</string>
+    <string name="title_attendance_count_participate">참여</string>
+    <string name="header_attendance_log">나의 출결 현황</string>
+    <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
     <string name="attendance_progress_first">1차 출석</string>
     <string name="attendance_progress_second">2차 출석</string>
     <string name="attendance_progress_before">출석 전</string>
     <string name="attendance_progress_third_complete">출석완료!</string>
     <string name="attendance_progress_third_tardy">지각</string>
     <string name="attendance_progress_third_absent">결석</string>
-    <!-- 출석 기능 -->
     <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
     <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
     <string name="attendance_dialog_button">출석하기</string>

@@ -196,19 +196,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLargeBlock(item: MainViewModel.LargeBlockType) {
-        binding.largeBlock.icon.background = drawableOf(item.icon)
-        binding.largeBlock.name.text = stringOf(item.title)
-        binding.largeBlock.description.isVisible = item.description != null
-        item.description?.let { description ->
-            binding.largeBlock.description.text = stringOf(description)
-        }
-        val intent = if (item.url == null) {
-            Intent(this@MainActivity, AttendanceActivity::class.java)
-        } else {
-            Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-        }
-        binding.largeBlock.root.setOnSingleClickListener {
-            startActivity(intent)
+        with(binding) {
+            largeBlock.icon.background = drawableOf(item.icon)
+            largeBlock.name.text = stringOf(item.title)
+            largeBlock.description.text = item.description?.let { stringOf(it) }
+            largeBlock.description.isVisible = item.description != null
+            item.description?.let { description ->
+                largeBlock.description.text = stringOf(description)
+            }
+            val intent = if (item.url == null) {
+                Intent(this@MainActivity, AttendanceActivity::class.java)
+            } else {
+                Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+            }
+            largeBlock.root.setOnSingleClickListener {
+                startActivity(intent)
+            }
         }
     }
 
@@ -216,6 +219,7 @@ class MainActivity : AppCompatActivity() {
         with(view) {
             icon.background = drawableOf(item.icon)
             title.text = stringOf(item.title)
+//            descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)

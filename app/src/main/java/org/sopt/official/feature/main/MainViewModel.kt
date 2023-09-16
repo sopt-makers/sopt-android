@@ -79,22 +79,23 @@ class MainViewModel @Inject constructor(
         .map {
             val userState = it.get()?.user?.status
             when (userState) {
+                // 비회원
                 UserState.UNAUTHENTICATED -> MainUrl(
                     LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
-                    SmallBlockType.SOPT_REVIEW_URL,
-                    SmallBlockType.SOPT_PROJECT_URL
+                    SmallBlockType.SOPT_REVIEW_NONMEMBER_URL,
+                    SmallBlockType.SOPT_PROJECT_NONMEMBER_URL
                 )
 
                 UserState.ACTIVE -> MainUrl(
                     LargeBlockType.SOPT_ATTENDENCE,
-                    SmallBlockType.PLAYGROUNG_MEMBER_URL,
-                    SmallBlockType.PLAYGROUNG_PROJECT_URL
+                    SmallBlockType.SOPT_CREW_ACTIVE_URL,
+                    SmallBlockType.SOPT_MEMBER_ACTIVE_URL
                 )
 
                 else -> MainUrl(
-                    LargeBlockType.SOPT_FAQ_URL,
-                    SmallBlockType.PLAYGROUNG_MEMBER_URL,
-                    SmallBlockType.PLAYGROUNG_PROJECT_URL
+                    LargeBlockType.SOPT_CREW_URL,
+                    SmallBlockType.SOPT_MEMBER_INACTIVE_URL,
+                    SmallBlockType.SOPT_PROJECT_INACTIVE_URL
                 )
             }.asNullableWrapper()
         }
@@ -102,9 +103,9 @@ class MainViewModel @Inject constructor(
         .map {
             val userState = it.get()?.user?.status
             when (userState) {
-                UserState.ACTIVE -> listOf(SmallBlockType.SOPT_FAQ_URL, SmallBlockType.SOPT_OFFICIAL_YOUTUBE)
-                UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_URL, SmallBlockType.PLAYGROUNG_CREW_URL)
-                else -> listOf(SmallBlockType.PLAYGROUNG_CREW_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_URL)
+                UserState.ACTIVE -> listOf(SmallBlockType.SOPT_PROJECT_ACTIVE_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_ACTIVE_URL)
+                UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_INACTIVE_URL, SmallBlockType.SOPT_INSTAGRAM_INACTIVE_URL, SmallBlockType.SOPT_YOUTUBE_INACTIVE_URL)
+                else -> listOf(SmallBlockType.SOPT_INSTAGRAM_NONMEMBER_URL, SmallBlockType.SOPT_YOUTUBE_NONMEMBER_URL, SmallBlockType.SOPT_FAQ_NONMEMBER_URL)
             }
         }
         .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
@@ -139,16 +140,6 @@ class MainViewModel @Inject constructor(
         data class SmallBlock(val item: SmallBlockType) : SmallBlockItemHolder()
     }
 
-    /*
-    sealed class ContentItemHolder : BaseItemType {
-        data class Content(
-            val icon: Int?,
-            val name: String,
-        ) : ContentItemHolder()
-    }
-
-    */
-
     enum class LargeBlockType(
         val title: Int,
         val description: Int?,
@@ -156,68 +147,117 @@ class MainViewModel @Inject constructor(
         val icon: Int
     ) {
         SOPT_OFFICIAL_PAGE_URL(
-            R.string.main_large_block_official_page,
+            R.string.main_nonmember_large_block_official_page,
             null,
             WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
-            R.drawable.ic_homepage
+            R.drawable.ic_homepage_white100
         ),
         SOPT_ATTENDENCE(
-            R.string.main_large_block_attendance_title,
-            R.string.main_large_block_attendance_description,
+            R.string.main_active_large_block_attendance,
+            R.string.main_active_large_block_attendance_description,
             null,
-            R.drawable.ic_review
+            R.drawable.ic_attendance
         ),
-        SOPT_FAQ_URL(
-            R.string.main_large_block_faq_title,
-            R.string.main_large_block_faq_description,
+        SOPT_CREW_URL(
+            R.string.main_inactive_large_block_crew,
+            R.string.main_inactive_large_block_crew_description,
             WebUrlConstant.SOPT_FAQ_URL,
-            R.drawable.ic_faq
+            R.drawable.ic_crew_white100
         ),
     }
 
-    enum class SmallBlockType(val title: Int, val url: String, val icon: Int) {
-        // sopt
-        SOPT_OFFICIAL_PAGE_URL(
-            R.string.main_small_block_official_page,
-            WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
-            R.drawable.ic_homepage
-        ),
-        SOPT_REVIEW_URL(
-            R.string.main_small_block_review,
+    enum class SmallBlockType(
+        val title: Int,
+        val description: Int?,
+        val url: String,
+        val icon: Int
+    ) {
+        // 비회원
+        SOPT_REVIEW_NONMEMBER_URL(
+            R.string.main_nonmember_small_block_review,
+            R.string.main_nonmember_small_block_review_description,
             WebUrlConstant.SOPT_REVIEW_URL,
             R.drawable.ic_review
         ),
-        SOPT_PROJECT_URL(
-            R.string.main_large_block_official_page,
+        SOPT_PROJECT_NONMEMBER_URL(
+            R.string.main_nonmember_small_block_project,
+            R.string.main_nonmember_small_block_project_description,
             WebUrlConstant.SOPT_PROJECT_URL,
             R.drawable.ic_project
         ),
-        SOPT_FAQ_URL(
-            R.string.main_small_block_faq,
+        SOPT_INSTAGRAM_NONMEMBER_URL(
+            R.string.main_nonmember_small_block_instagram,
+            R.string.main_nonmember_small_block_instagram_description,
+            WebUrlConstant.SOPT_REVIEW_URL, // todo kdh 변경 필요
+            R.drawable.ic_review // todo kdh 변경 필요
+        ),
+        SOPT_YOUTUBE_NONMEMBER_URL(
+            R.string.main_nonmember_small_block_youtube,
+            R.string.main_nonmember_small_block_youtube_description,
+            WebUrlConstant.SOPT_OFFICIAL_YOUTUBE,
+            R.drawable.ic_youtube
+        ),
+        SOPT_FAQ_NONMEMBER_URL(
+            R.string.main_nonmember_small_block_faq,
+            R.string.main_nonmember_small_block_faq_description,
             WebUrlConstant.SOPT_FAQ_URL,
             R.drawable.ic_faq
         ),
 
-        // playground
-        PLAYGROUNG_MEMBER_URL(
-            R.string.main_small_block_member,
-            WebUrlConstant.PLAYGROUNG_MEMBER_URL,
-            R.drawable.ic_member
+        //활동
+        SOPT_CREW_ACTIVE_URL(
+            R.string.main_active_small_block_crew,
+            R.string.main_active_small_block_crew_description,
+            WebUrlConstant.SOPT_REVIEW_URL, // todo kdh 변경 필요
+            R.drawable.ic_crew_white100
         ),
-        PLAYGROUNG_PROJECT_URL(
-            R.string.main_small_block_playground_project,
-            WebUrlConstant.PLAYGROUNG_PROJECT_URL,
+        SOPT_MEMBER_ACTIVE_URL(
+            R.string.main_active_small_block_member,
+            R.string.main_active_small_block_member_description,
+            WebUrlConstant.SOPT_REVIEW_URL,
+            R.drawable.ic_member_white100
+        ),
+        SOPT_PROJECT_ACTIVE_URL(
+            R.string.main_active_small_block_project,
+            R.string.main_active_small_block_project_description,
+            WebUrlConstant.SOPT_REVIEW_URL,
             R.drawable.ic_project
         ),
-        PLAYGROUNG_CREW_URL(
-            R.string.main_small_block_crew,
-            WebUrlConstant.PLAYGROUNG_CREW_URL,
-            R.drawable.ic_crew
+        SOPT_OFFICIAL_PAGE_ACTIVE_URL(
+            R.string.main_active_small_block_official_page,
+            R.string.main_active_small_block_official_page_description,
+            WebUrlConstant.SOPT_REVIEW_URL,
+            R.drawable.ic_homepage_white100
         ),
 
-        // others
-        SOPT_OFFICIAL_YOUTUBE(
-            R.string.main_small_block_youtube,
+        // 비활동
+        SOPT_MEMBER_INACTIVE_URL(
+            R.string.main_inactive_small_block_member,
+            R.string.main_inactive_small_block_member_description,
+            WebUrlConstant.SOPT_REVIEW_URL, // todo 수정 필요
+            R.drawable.ic_member_white100
+        ),
+        SOPT_PROJECT_INACTIVE_URL(
+            R.string.main_inactive_small_block_project,
+            R.string.main_inactive_small_block_project_description,
+            WebUrlConstant.SOPT_PROJECT_URL,
+            R.drawable.ic_project
+        ),
+        SOPT_OFFICIAL_PAGE_INACTIVE_URL(
+            R.string.main_inactive_small_block_official_page,
+            null,
+            WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
+            R.drawable.ic_homepage_white100
+        ),
+        SOPT_INSTAGRAM_INACTIVE_URL(
+            R.string.main_inactive_small_block_instagram,
+            null,
+            WebUrlConstant.SOPT_REVIEW_URL, // todo 수정 필요
+            R.drawable.ic_review // todo 수정 필요
+        ),
+        SOPT_YOUTUBE_INACTIVE_URL(
+            R.string.main_inactive_small_block_youtube,
+            null,
             WebUrlConstant.SOPT_OFFICIAL_YOUTUBE,
             R.drawable.ic_youtube
         );
