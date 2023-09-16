@@ -10,6 +10,7 @@ import org.sopt.official.auth.data.PlaygroundApiManager
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.data.RemotePlaygroundAuthDatasource
 import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.auth.utils.PlaygroundLog
 import org.sopt.official.auth.utils.PlaygroundUriProvider
 
 object PlaygroundAuth {
@@ -41,6 +42,7 @@ object PlaygroundAuth {
         state: String,
         resultReceiver: ResultReceiver
     ) {
+        PlaygroundLog.i("uri: $uri state: $state resultReceiver: $resultReceiver")
         AuthIntentFactory.authIntentWithAuthTab(
             context = context,
             uri = uri,
