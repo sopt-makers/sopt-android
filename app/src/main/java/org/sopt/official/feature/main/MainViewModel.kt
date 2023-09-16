@@ -150,7 +150,7 @@ class MainViewModel @Inject constructor(
             R.string.main_nonmember_large_block_official_page,
             null,
             WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
-            R.drawable.ic_homepage_white100
+            R.drawable.ic_homepage_orange
         ),
         SOPT_ATTENDENCE(
             R.string.main_active_large_block_attendance,
@@ -162,7 +162,7 @@ class MainViewModel @Inject constructor(
             R.string.main_inactive_large_block_crew,
             R.string.main_inactive_large_block_crew_description,
             WebUrlConstant.SOPT_FAQ_URL,
-            R.drawable.ic_crew_white100
+            R.drawable.ic_crew_orange
         ),
     }
 
@@ -188,8 +188,8 @@ class MainViewModel @Inject constructor(
         SOPT_INSTAGRAM_NONMEMBER_URL(
             R.string.main_nonmember_small_block_instagram,
             R.string.main_nonmember_small_block_instagram_description,
-            WebUrlConstant.SOPT_REVIEW_URL, // todo kdh 변경 필요
-            R.drawable.ic_review // todo kdh 변경 필요
+            WebUrlConstant.SOPT_INSTAGRAM,
+            R.drawable.ic_instagram
         ),
         SOPT_YOUTUBE_NONMEMBER_URL(
             R.string.main_nonmember_small_block_youtube,
@@ -208,25 +208,25 @@ class MainViewModel @Inject constructor(
         SOPT_CREW_ACTIVE_URL(
             R.string.main_active_small_block_crew,
             R.string.main_active_small_block_crew_description,
-            WebUrlConstant.SOPT_REVIEW_URL, // todo kdh 변경 필요
+            WebUrlConstant.PLAYGROUNG_CREW_URL,
             R.drawable.ic_crew_white100
         ),
         SOPT_MEMBER_ACTIVE_URL(
             R.string.main_active_small_block_member,
             R.string.main_active_small_block_member_description,
-            WebUrlConstant.SOPT_REVIEW_URL,
+            WebUrlConstant.PLAYGROUNG_MEMBER_URL,
             R.drawable.ic_member_white100
         ),
         SOPT_PROJECT_ACTIVE_URL(
             R.string.main_active_small_block_project,
             R.string.main_active_small_block_project_description,
-            WebUrlConstant.SOPT_REVIEW_URL,
+            WebUrlConstant.PLAYGROUNG_PROJECT_URL,
             R.drawable.ic_project
         ),
         SOPT_OFFICIAL_PAGE_ACTIVE_URL(
             R.string.main_active_small_block_official_page,
             R.string.main_active_small_block_official_page_description,
-            WebUrlConstant.SOPT_REVIEW_URL,
+            WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
             R.drawable.ic_homepage_white100
         ),
 
@@ -234,13 +234,13 @@ class MainViewModel @Inject constructor(
         SOPT_MEMBER_INACTIVE_URL(
             R.string.main_inactive_small_block_member,
             R.string.main_inactive_small_block_member_description,
-            WebUrlConstant.SOPT_REVIEW_URL, // todo 수정 필요
+            WebUrlConstant.PLAYGROUNG_MEMBER_URL,
             R.drawable.ic_member_white100
         ),
         SOPT_PROJECT_INACTIVE_URL(
             R.string.main_inactive_small_block_project,
             R.string.main_inactive_small_block_project_description,
-            WebUrlConstant.SOPT_PROJECT_URL,
+            WebUrlConstant.PLAYGROUNG_PROJECT_URL,
             R.drawable.ic_project
         ),
         SOPT_OFFICIAL_PAGE_INACTIVE_URL(
@@ -252,8 +252,8 @@ class MainViewModel @Inject constructor(
         SOPT_INSTAGRAM_INACTIVE_URL(
             R.string.main_inactive_small_block_instagram,
             null,
-            WebUrlConstant.SOPT_REVIEW_URL, // todo 수정 필요
-            R.drawable.ic_review // todo 수정 필요
+            WebUrlConstant.SOPT_INSTAGRAM,
+            R.drawable.ic_instagram
         ),
         SOPT_YOUTUBE_INACTIVE_URL(
             R.string.main_inactive_small_block_youtube,

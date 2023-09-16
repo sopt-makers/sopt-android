@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -219,7 +220,8 @@ class MainActivity : AppCompatActivity() {
         with(view) {
             icon.background = drawableOf(item.icon)
             title.text = stringOf(item.title)
-//            descriptionSmall.text = item.description?.let { stringOf(it) }
+            descriptionSmall.isVisible = item.description != null
+            descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
@@ -290,12 +292,6 @@ class MainActivity : AppCompatActivity() {
     private enum class SmallBlockViewType {
         SMALL_BLOCK
     }
-
-    /*
-    private enum class ContentViewType {
-        CONTENT
-    }
-     */
 
     data class StartArgs(
         val userStatus: UserStatus

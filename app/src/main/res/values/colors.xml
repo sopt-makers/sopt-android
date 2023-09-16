@@ -27,12 +27,14 @@
     <color name="black_80">#1C1D1E</color>
     <color name="black_60">#2C2D2E</color>
     <color name="black_40">#3C3D40</color>
+
     <!-- RedScale -->
     <color name="sopt_red">#FFD3D3</color>
-    <color name="main_color">#FF6E1D</color> <!-- todo kdh 이름 변경 필요 -->
     <color name="on_sopt_red">#E45656</color>
     <color name="red_100">#BD372F</color>
     <color name="reddim">#392020</color>
+    <!-- OrangeScale -->
+    <color name="orange_100">#FF6E1D</color>
     <!-- GreenScale -->
     <color name="sopt_green">#A7F8BE</color>
     <color name="on_sopt_green">#378F5C</color>

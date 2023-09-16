@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="@id/cl_title"
         app:layout_constraintBottom_toBottomOf="@id/cl_title"
         app:layout_constraintStart_toStartOf="parent"
-        tools:background="@drawable/ic_member" />
+        tools:background="@drawable/ic_member_orange" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_title"
