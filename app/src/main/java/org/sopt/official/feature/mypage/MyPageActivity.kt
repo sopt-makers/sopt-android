@@ -56,8 +56,18 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        binding.icBack.setOnSingleClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        binding.includeAppBarBackArrow.apply {
+            textViewTitle.text = getString(R.string.toolbar_mypage)
+            toolbar.clicks()
+                .throttleUi()
+                .observeOnMain()
+                .onBackpressureLatest()
+                .subscribeBy(
+                    createDisposable,
+                    onNext = {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                )
         }
     }
 
