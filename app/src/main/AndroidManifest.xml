@@ -103,7 +103,9 @@
                 <data android:pathPattern="/oauth2redirect" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".feature.notification.NotificationHistoryActivity"
+            android:exported="false" />
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">

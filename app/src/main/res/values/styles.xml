@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="chip_notification_filter" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipCornerRadius">4dp</item>
+        <item name="chipEndPadding">4dp</item>
+        <item name="chipStartPadding">4dp</item>
+        <item name="textEndPadding">4dp</item>
+        <item name="textStartPadding">4dp</item>
+        <item name="iconEndPadding">0dp</item>
+        <item name="chipIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="rippleColor">@null</item>
+        <item name="chipBackgroundColor">@color/selector_notification_filter_chip_background</item>
+
+        <item name="android:fontFamily">@font/sopt_font</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/selector_notification_filter_text</item>
+        <item name="android:textFontWeight">600</item>
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>

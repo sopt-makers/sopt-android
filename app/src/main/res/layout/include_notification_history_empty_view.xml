@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="124dp"
+        android:layout_height="124dp"
+        android:layout_gravity="center"
+        android:src="@drawable/icon_notification_history_empty_view" />
+
+    <TextView
+        style="@style/TextAppearance.SOPT.HeadLineLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_gravity="center"
+        android:layout_marginTop="24dp"
+        android:text="@string/notification_history_empty_view"
+        android:textColor="@color/gray_30"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@id/textView_receivedTime"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</LinearLayout>
+

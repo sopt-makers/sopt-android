@@ -108,4 +108,13 @@
     <!--    한 마디 편집하기   -->
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
     <string name="adjust_sentence_button">저장</string>
+
+    <!--     알림   -->
+    <string name="toolbar_notification">알림</string>
+    <string name="toolbar_notification_read_all">모두 읽음</string>
+    <string name="toolbar_notification_filter_all">전체 알림</string>
+    <string name="toolbar_notification_filter_notice">공지</string>
+    <string name="toolbar_notification_filter_news">소식</string>
+    <string name="notification_history_empty_view">아직 도착한 알림이 없어요.</string>
+
 </resources>
