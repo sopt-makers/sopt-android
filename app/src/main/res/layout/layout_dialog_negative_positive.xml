@@ -20,10 +20,11 @@
         tools:text="title" />
 
     <TextView
-
         android:id="@+id/subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="132dp"
+        android:minHeight="81dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:textAppearance="?textAppearanceBodyMedium"

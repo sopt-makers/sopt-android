@@ -100,12 +100,13 @@
     <string name="sign_out_button">탈퇴하기</string>
 
     <!--    닉네임 변경하기    -->
-    <string name="toolbar_change_nickname">닉네임 변경하기</string>
+    <string name="toolbar_change_nickname">닉네임 변경</string>
     <string name="change_nickname_guide">한글/영문 10자 이하로 입력해주세요.</string>
     <string name="change_nickname_error">사용 중인 이름입니다.</string>
     <string name="change_nickname_button">닉네임 변경</string>
 
-    <!--    한 마지 편집하기   -->
+    <!--    한 마디 편집하기   -->
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
+    <string name="adjust_sentence_hint">한글/영문 10자 이하로 입력해주세요.</string>
     <string name="adjust_sentence_button">저장</string>
 </resources>

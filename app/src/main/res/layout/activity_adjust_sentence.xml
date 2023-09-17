@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -42,11 +43,14 @@
         android:paddingBottom="16dp"
         android:textAppearance="?textAppearanceBodyLarge"
         android:textColor="@color/white_100"
+        android:hint="@string/adjust_sentence_hint"
+        android:textColorHint="@color/gray_100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_app_bar" />
+        app:layout_constraintTop_toBottomOf="@id/layout_app_bar"
+        tools:enabled="false"/>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/confirm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,11 +59,13 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/rectangle_radius_10"
         android:backgroundTint="@color/selector_button_state"
+        android:textColor="@color/selector_button_text_color_state"
         android:enabled="false"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
         android:paddingEnd="20dp"
         android:paddingBottom="16dp"
+        tools:enabled="true"
         android:text="@string/adjust_sentence_button"
         android:textAppearance="?textAppearanceHeadlineMedium"
         app:layout_constraintEnd_toEndOf="parent"

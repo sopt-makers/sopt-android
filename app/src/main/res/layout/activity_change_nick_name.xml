@@ -42,6 +42,7 @@
         android:paddingTop="16dp"
         android:paddingEnd="20dp"
         android:paddingBottom="16dp"
+        tools:enabled="false"
         android:textAppearance="?textAppearanceBodyLarge"
         android:textColor="@color/white_100"
         app:layout_constraintEnd_toEndOf="parent"
@@ -61,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/edittext"
         tools:visibility="visible" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/confirm_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -69,10 +70,9 @@
         android:layout_marginTop="52dp"
         android:background="@drawable/rectangle_radius_10"
         android:backgroundTint="@color/selector_button_state"
-        android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="16dp"
+        android:textColor="@color/selector_button_text_color_state"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp"
         android:text="@string/change_nickname_button"
         android:textAppearance="?textAppearanceHeadlineMedium"
         app:layout_constraintEnd_toEndOf="@id/edittext"
