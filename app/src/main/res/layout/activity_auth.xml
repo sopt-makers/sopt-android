@@ -28,12 +28,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
-            android:background="@drawable/shape_primary_10"
+            android:background="@drawable/shape_white100_10"
             android:paddingVertical="17dp"
             android:text="SOPT Playground로 로그인"
             android:textAlignment="center"
             android:textAppearance="?textAppearanceBodyMedium"
-            android:textColor="?colorOnSurface"
+            android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="20dp" />
 
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:text="SOPT 회원이 아니에요"
-            android:textColor="?colorPrimary"
+            android:textColor="@color/white_100"
             android:textFontWeight="600"
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="@+id/btn_sopt_login"

@@ -38,7 +38,7 @@
             app:layout_goneMarginBottom="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/description_small"
-            tools:text="@string/main_small_block_member" />
+            tools:text="@string/main_active_small_block_member" />
 
         <TextView
             android:id="@+id/description_small"

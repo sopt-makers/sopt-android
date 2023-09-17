@@ -17,7 +17,7 @@
         android:backgroundTint="@color/white_100"
         app:layout_constraintBottom_toTopOf="@id/name"
         app:layout_constraintStart_toStartOf="parent"
-        tools:background="@drawable/ic_attendance" />
+        tools:background="@drawable/ic_attendance_orange" />
 
     <TextView
         android:id="@+id/name"
@@ -29,7 +29,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_attendance_title" />
+        tools:text="@string/main_active_large_block_attendance" />
 
     <TextView
         android:id="@+id/description"
@@ -40,5 +40,5 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_attendance_description" />
+        tools:text="@string/main_active_large_block_attendance_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

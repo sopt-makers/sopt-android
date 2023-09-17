@@ -156,7 +156,7 @@ class MainViewModel @Inject constructor(
             R.string.main_active_large_block_attendance,
             R.string.main_active_large_block_attendance_description,
             null,
-            R.drawable.ic_attendance
+            R.drawable.ic_attendance_orange
         ),
         SOPT_CREW_URL(
             R.string.main_inactive_large_block_crew,
