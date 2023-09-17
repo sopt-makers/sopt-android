@@ -107,6 +107,5 @@
 
     <!--    한 마디 편집하기   -->
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
-    <string name="adjust_sentence_hint">한글/영문 10자 이하로 입력해주세요.</string>
     <string name="adjust_sentence_button">저장</string>
 </resources>
