@@ -54,7 +54,7 @@
         android:layout_marginTop="52dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/selector_button_enable"
+        android:backgroundTint="@color/selector_button_state"
         android:enabled="false"
         android:paddingStart="20dp"
         android:paddingTop="16dp"

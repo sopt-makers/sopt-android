@@ -185,7 +185,6 @@ class MainActivity : AppCompatActivity() {
                 binding.smallBlock2.root.isVisible = blockItem != null
                 blockItem?.let { (largeBlock, topSmallBlock, bottomSmallBlock) ->
                     setLargeBlock(largeBlock)
-                    Log.d("MY TAG", "kdh log largeblock: ${largeBlock.icon}")
                     setSmallBlock(binding.smallBlock1, topSmallBlock)
                     setSmallBlock(binding.smallBlock2, bottomSmallBlock)
                 }
@@ -200,7 +199,6 @@ class MainActivity : AppCompatActivity() {
     private fun setLargeBlock(item: MainViewModel.LargeBlockType) {
         with(binding) {
             largeBlock.icon.background = drawableOf(item.icon)
-            Log.d("MY TAG", "kdh log setlargeblock: ${item.icon}")
             largeBlock.name.text = stringOf(item.title)
             largeBlock.description.text = item.description?.let { stringOf(it) }
             largeBlock.description.isVisible = item.description != null

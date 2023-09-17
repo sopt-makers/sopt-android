@@ -53,20 +53,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/confirm_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="52dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/selector_button_enable"
-        android:paddingStart="20dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="16dp"
+        android:backgroundTint="@color/white_100"
+        android:textColor="@color/black_100"
+        android:paddingVertical="16dp"
+        android:paddingHorizontal="20dp"
         android:text="@string/sign_out_button"
         android:textAppearance="?textAppearanceHeadlineMedium"
         app:layout_constraintBottom_toBottomOf="parent"

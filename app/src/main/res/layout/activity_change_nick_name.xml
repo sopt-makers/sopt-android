@@ -68,7 +68,7 @@
         android:enabled="false"
         android:layout_marginTop="52dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/selector_button_enable"
+        android:backgroundTint="@color/selector_button_state"
         android:paddingStart="20dp"
         android:paddingTop="16dp"
         android:paddingEnd="20dp"
