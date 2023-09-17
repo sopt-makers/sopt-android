@@ -32,17 +32,17 @@
 
     <!-- todo kdh -->
     <!-- 비회원 -->
-    <string name="main_nonmember_large_block_official_page">SOPT\n공식홈페이지</string>
-    <string name="main_nonmember_small_block_review">활동 후기</string>
-    <string name="main_nonmember_small_block_review_description">진짜 후기가\n궁금하다면?</string>
-    <string name="main_nonmember_small_block_project">프로젝트</string>
-    <string name="main_nonmember_small_block_project_description">SOPT에서\n탄생한 프로젝트</string>
-    <string name="main_nonmember_small_block_instagram">Instagram</string>
-    <string name="main_nonmember_small_block_instagram_description">SOPT 소식 빠르게 확인하기</string>
-    <string name="main_nonmember_small_block_youtube">Youtube</string>
-    <string name="main_nonmember_small_block_youtube_description">SOPT 활동 구경하기</string>
-    <string name="main_nonmember_small_block_faq">FAQ</string>
-    <string name="main_nonmember_small_block_faq_description">자주 묻는 질문</string>
+    <string name="main_unauthenticated_large_block_official_page">SOPT\n공식홈페이지</string>
+    <string name="main_unauthenticated_small_block_review">활동 후기</string>
+    <string name="main_unauthenticated_small_block_review_description">진짜 후기가\n궁금하다면?</string>
+    <string name="main_unauthenticated_small_block_project">프로젝트</string>
+    <string name="main_unauthenticated_small_block_project_description">SOPT에서\n탄생한 프로젝트</string>
+    <string name="main_unauthenticated_small_block_instagram">Instagram</string>
+    <string name="main_unauthenticated_small_block_instagram_description">SOPT 소식 빠르게 확인하기</string>
+    <string name="main_unauthenticated_small_block_youtube">Youtube</string>
+    <string name="main_unauthenticated_small_block_youtube_description">SOPT 활동 구경하기</string>
+    <string name="main_unauthenticated_small_block_faq">FAQ</string>
+    <string name="main_unauthenticated_small_block_faq_description">자주 묻는 질문</string>
 
     <!-- 활동 -->
     <string name="main_active_large_block_attendance">출석하기</string>

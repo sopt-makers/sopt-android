@@ -82,8 +82,8 @@ class MainViewModel @Inject constructor(
                 // 비회원
                 UserState.UNAUTHENTICATED -> MainUrl(
                     LargeBlockType.SOPT_OFFICIAL_PAGE_URL,
-                    SmallBlockType.SOPT_REVIEW_NONMEMBER_URL,
-                    SmallBlockType.SOPT_PROJECT_NONMEMBER_URL
+                    SmallBlockType.SOPT_REVIEW_AUTHENTICATED_URL,
+                    SmallBlockType.SOPT_PROJECT_AUTHENTICATED_URL
                 )
 
                 UserState.ACTIVE -> MainUrl(
@@ -105,7 +105,7 @@ class MainViewModel @Inject constructor(
             when (userState) {
                 UserState.ACTIVE -> listOf(SmallBlockType.SOPT_PROJECT_ACTIVE_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_ACTIVE_URL)
                 UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_INACTIVE_URL, SmallBlockType.SOPT_INSTAGRAM_INACTIVE_URL, SmallBlockType.SOPT_YOUTUBE_INACTIVE_URL)
-                else -> listOf(SmallBlockType.SOPT_INSTAGRAM_NONMEMBER_URL, SmallBlockType.SOPT_YOUTUBE_NONMEMBER_URL, SmallBlockType.SOPT_FAQ_NONMEMBER_URL)
+                else -> listOf(SmallBlockType.SOPT_INSTAGRAM_AUTHENTICATED_URL, SmallBlockType.SOPT_YOUTUBE_AUTHENTICATED_URL, SmallBlockType.SOPT_FAQ_AUTHENTICATED_URL)
             }
         }
         .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
@@ -147,7 +147,7 @@ class MainViewModel @Inject constructor(
         val icon: Int
     ) {
         SOPT_OFFICIAL_PAGE_URL(
-            R.string.main_nonmember_large_block_official_page,
+            R.string.main_unauthenticated_large_block_official_page,
             null,
             WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
             R.drawable.ic_homepage_orange
@@ -161,7 +161,7 @@ class MainViewModel @Inject constructor(
         SOPT_CREW_URL(
             R.string.main_inactive_large_block_crew,
             R.string.main_inactive_large_block_crew_description,
-            WebUrlConstant.SOPT_FAQ_URL,
+            WebUrlConstant.PLAYGROUNG_CREW_URL,
             R.drawable.ic_crew_orange
         ),
     }
@@ -173,33 +173,33 @@ class MainViewModel @Inject constructor(
         val icon: Int
     ) {
         // 비회원
-        SOPT_REVIEW_NONMEMBER_URL(
-            R.string.main_nonmember_small_block_review,
-            R.string.main_nonmember_small_block_review_description,
+        SOPT_REVIEW_AUTHENTICATED_URL(
+            R.string.main_unauthenticated_small_block_review,
+            R.string.main_unauthenticated_small_block_review_description,
             WebUrlConstant.SOPT_REVIEW_URL,
             R.drawable.ic_review
         ),
-        SOPT_PROJECT_NONMEMBER_URL(
-            R.string.main_nonmember_small_block_project,
-            R.string.main_nonmember_small_block_project_description,
+        SOPT_PROJECT_AUTHENTICATED_URL(
+            R.string.main_unauthenticated_small_block_project,
+            R.string.main_unauthenticated_small_block_project_description,
             WebUrlConstant.SOPT_PROJECT_URL,
             R.drawable.ic_project
         ),
-        SOPT_INSTAGRAM_NONMEMBER_URL(
-            R.string.main_nonmember_small_block_instagram,
-            R.string.main_nonmember_small_block_instagram_description,
+        SOPT_INSTAGRAM_AUTHENTICATED_URL(
+            R.string.main_unauthenticated_small_block_instagram,
+            R.string.main_unauthenticated_small_block_instagram_description,
             WebUrlConstant.SOPT_INSTAGRAM,
             R.drawable.ic_instagram
         ),
-        SOPT_YOUTUBE_NONMEMBER_URL(
-            R.string.main_nonmember_small_block_youtube,
-            R.string.main_nonmember_small_block_youtube_description,
+        SOPT_YOUTUBE_AUTHENTICATED_URL(
+            R.string.main_unauthenticated_small_block_youtube,
+            R.string.main_unauthenticated_small_block_youtube_description,
             WebUrlConstant.SOPT_OFFICIAL_YOUTUBE,
             R.drawable.ic_youtube
         ),
-        SOPT_FAQ_NONMEMBER_URL(
-            R.string.main_nonmember_small_block_faq,
-            R.string.main_nonmember_small_block_faq_description,
+        SOPT_FAQ_AUTHENTICATED_URL(
+            R.string.main_unauthenticated_small_block_faq,
+            R.string.main_unauthenticated_small_block_faq_description,
             WebUrlConstant.SOPT_FAQ_URL,
             R.drawable.ic_faq
         ),
