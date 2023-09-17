@@ -47,9 +47,6 @@ class MainViewModel @Inject constructor(
             val startDate = calculateGenerationStartDate(generation)
             val currentDate = Instant.systemNow().toDefaultLocalDate()
             val period = calculateDurationOfGeneration(startDate, currentDate)
-            /**
-             * todo kdh 서버 연결 예정
-             */
             when {
                 userName.isNotEmpty() -> MainTitle(R.string.main_title_member, userName, period.toString())
                 state == UserState.INACTIVE -> MainTitle(R.string.main_title_inactive_member, null, null)
