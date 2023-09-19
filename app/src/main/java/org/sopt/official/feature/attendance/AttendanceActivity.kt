@@ -100,7 +100,7 @@ class AttendanceActivity : AppCompatActivity() {
                         }
 
                         attendanceAdapter.itemCount - 1 -> {
-                            outRect.set(24, 12.dp, 24.dp, 32.dp)
+                            outRect.set(24.dp, 12.dp, 24.dp, 32.dp)
                         }
 
                         else -> {
