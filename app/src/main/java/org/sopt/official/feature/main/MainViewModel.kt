@@ -1,6 +1,5 @@
 package org.sopt.official.feature.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,6 +12,7 @@ import org.sopt.official.R
 import org.sopt.official.base.BaseItemType
 import org.sopt.official.domain.entity.UserState
 import org.sopt.official.domain.entity.auth.UserStatus
+import org.sopt.official.domain.entity.main.MainDescriptionViewResult
 import org.sopt.official.domain.entity.main.MainTitle
 import org.sopt.official.domain.entity.main.MainUrl
 import org.sopt.official.domain.entity.main.MainViewOperationInfo
@@ -110,6 +110,7 @@ class MainViewModel @Inject constructor(
             }
         }
         .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
+    val description = MutableStateFlow(NullableWrapper.none<MainDescriptionViewResult>())
 
     fun initMainView(userStatus: UserStatus) {
         viewModelScope.launch {
@@ -117,7 +118,8 @@ class MainViewModel @Inject constructor(
                 mainViewRepository.getMainView()
                     .onSuccess {
                         mainViewResult.value = it.asNullableWrapper()
-                    }.onFailure { error ->
+                    }
+                    .onFailure { error ->
                         if (error is HttpException) {
                             if (error.code() == 400) {
                                 mainViewResult.value = MainViewResult(
@@ -133,6 +135,17 @@ class MainViewModel @Inject constructor(
                     MainViewUserInfo(),
                     MainViewOperationInfo()
                 ).asNullableWrapper()
+            }
+        }
+    }
+
+    fun initMainDescription(userStatus: UserStatus) {
+        viewModelScope.launch {
+            if (userStatus != UserStatus.UNAUTHENTICATED) {
+                mainViewRepository.getMainDescription()
+                    .onSuccess {
+                        description.value = it.asNullableWrapper()
+                    }
             }
         }
     }

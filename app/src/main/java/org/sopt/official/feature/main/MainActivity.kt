@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -102,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUserStatus() {
         viewModel.initMainView(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
 
     private fun initToolbar() {
@@ -121,17 +121,16 @@ class MainActivity : AppCompatActivity() {
             .onEach { (id, arg1, arg2) ->
                 binding.title.text = getStringExt(id, arg1, arg2)
             }.launchIn(lifecycleScope)
+        viewModel.description
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                binding.subtitle.text = it.get()?.topDescription ?: this@MainActivity.getString(R.string.main_subtitle_non_member)
+                binding.bottomDescription.text = it.get()?.bottomDescription ?: this@MainActivity.getString(R.string.main_content_header)
+            }.launchIn(lifecycleScope)
         viewModel.userState
             .flowWithLifecycle(lifecycle)
             .onEach {
                 val userState = it.get() ?: UserState.UNAUTHENTICATED
-                binding.subtitle.text = getStringExt(
-                    if (userState == UserState.UNAUTHENTICATED) {
-                        R.string.main_subtitle_non_member
-                    } else {
-                        R.string.main_subtitle_member
-                    }
-                )
                 binding.tagMemberState.isEnabled = userState == UserState.ACTIVE
                 val isClickable = userState != UserState.UNAUTHENTICATED
                 if (isClickable) {

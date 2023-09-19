@@ -1,6 +1,7 @@
 package org.sopt.official.data.repository.main
 
 import org.sopt.official.data.service.main.MainViewService
+import org.sopt.official.domain.entity.main.MainDescriptionViewResult
 import org.sopt.official.domain.entity.main.MainViewResult
 import org.sopt.official.domain.repository.main.MainViewRepository
 import javax.inject.Inject
@@ -11,6 +12,12 @@ class MainViewRepositoryImpl @Inject constructor(
     override suspend fun getMainView(): Result<MainViewResult> {
         return runCatching {
             mainViewService.getMainView().toEntity()
+        }
+    }
+
+    override suspend fun getMainDescription(): Result<MainDescriptionViewResult> {
+        return runCatching {
+            mainViewService.getMainDescription().toEntity()
         }
     }
 }
