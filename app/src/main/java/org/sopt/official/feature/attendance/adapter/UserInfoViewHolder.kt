@@ -29,7 +29,7 @@ class UserInfoViewHolder(private val binding: ItemAttendanceHistoryUserInfoBindi
             textUserAttendancePoint.text = "현재 출석점수는 ${userInfo.attendancePoint}점 입니다!"
             (textUserAttendancePoint.text as Spannable).run {
                 setSpan(
-                    (ForegroundColorSpan(ContextCompat.getColor(textUserAttendancePoint.context, R.color.purple_40))),
+                    (ForegroundColorSpan(ContextCompat.getColor(textUserAttendancePoint.context, R.color.orange_100))),
                     9,
                     9 + "${userInfo.attendancePoint}".length + 1,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
