@@ -119,7 +119,9 @@ class MyPageActivity : AppCompatActivity() {
             .subscribeBy(
                 createDisposable,
                 onNext = {
-                    // 구글폼 이동 (아직 url X)
+                    this.startActivity(
+                        Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_GOOGLE_FORM))
+                    )
                 }
             )
         binding.iconAdjustSentence.clicks()

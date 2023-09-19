@@ -15,6 +15,7 @@ object WebUrlConstant {
         "https://florentine-legend-ffc.notion.site/SOPT-0b378275554d4d65a442310e83c7c988"
     const val NOTICE_SERVICE_RULE =
         "https://florentine-legend-ffc.notion.site/SOPT-69e33dccb59543dd91f5f44ed1250881"
+    const val OPINION_GOOGLE_FORM = "https://forms.gle/mB59JD4F1FpKiXBAA"
 
     private const val SOPT_BASE_URL = "https://sopt.org"
     private const val PLAYGROUNG_BASE_URL = "https://playground.sopt.org"
