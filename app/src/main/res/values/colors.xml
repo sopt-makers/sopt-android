@@ -31,6 +31,7 @@
     <color name="sopt_red">#6A3232</color>
     <color name="on_sopt_red">#FFD3D3</color>
     <color name="red_100">#BD372F</color>
+    <color name="sub_red">#E45656</color>
     <color name="reddim">#392020</color>
     <!-- OrangeScale -->
     <color name="orange_100">#FF6E1D</color>

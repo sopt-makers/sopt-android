@@ -35,7 +35,6 @@
             style="@style/TextAppearance.SOPT"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:text="@{titleText}"
             android:textColor="?colorOnSurface"
             android:textFontWeight="700"
@@ -62,8 +61,7 @@
             android:id="@+id/linearLayout"
             android:layout_width="258dp"
             android:layout_height="60dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="22dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:orientation="horizontal"
@@ -83,7 +81,7 @@
                 android:gravity="center"
                 android:inputType="numberSigned"
                 android:maxLength="1"
-                android:textColor="?colorPrimaryVariant" />
+                android:textColor="@color/gray_20" />
 
             <EditText
                 android:id="@+id/et_attendance_code2"
@@ -98,7 +96,7 @@
                 android:gravity="center"
                 android:inputType="numberSigned"
                 android:maxLength="1"
-                android:textColor="?colorPrimaryVariant" />
+                android:textColor="@color/gray_20" />
 
             <EditText
                 android:id="@+id/et_attendance_code3"
@@ -113,7 +111,7 @@
                 android:gravity="center"
                 android:inputType="numberSigned"
                 android:maxLength="1"
-                android:textColor="?colorPrimaryVariant" />
+                android:textColor="@color/gray_20" />
 
             <EditText
                 android:id="@+id/et_attendance_code4"
@@ -128,7 +126,7 @@
                 android:gravity="center"
                 android:inputType="numberSigned"
                 android:maxLength="1"
-                android:textColor="?colorPrimaryVariant" />
+                android:textColor="@color/gray_20" />
 
             <EditText
                 android:id="@+id/et_attendance_code5"
@@ -142,16 +140,16 @@
                 android:gravity="center"
                 android:inputType="numberSigned"
                 android:maxLength="1"
-                android:textColor="?colorPrimaryVariant" />
+                android:textColor="@color/gray_20" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_attendance_code_dialog_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="18dp"
             android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="@color/on_sopt_red"
+            android:textColor="@color/sub_red"
             android:textSize="14sp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
