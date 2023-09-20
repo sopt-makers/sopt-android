@@ -1,6 +1,5 @@
 package org.sopt.official.stamp.data.remote.model.response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.official.stamp.domain.model.OtherMission

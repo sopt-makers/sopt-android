@@ -105,8 +105,16 @@ class MainViewModel @Inject constructor(
             val userState = it.get()?.user?.status
             when (userState) {
                 UserState.ACTIVE -> listOf(SmallBlockType.SOPT_PROJECT_ACTIVE_URL, SmallBlockType.SOPT_OFFICIAL_PAGE_ACTIVE_URL)
-                UserState.INACTIVE -> listOf(SmallBlockType.SOPT_OFFICIAL_PAGE_INACTIVE_URL, SmallBlockType.SOPT_INSTAGRAM_INACTIVE_URL, SmallBlockType.SOPT_YOUTUBE_INACTIVE_URL)
-                else -> listOf(SmallBlockType.SOPT_INSTAGRAM_AUTHENTICATED_URL, SmallBlockType.SOPT_YOUTUBE_AUTHENTICATED_URL, SmallBlockType.SOPT_FAQ_AUTHENTICATED_URL)
+                UserState.INACTIVE -> listOf(
+                    SmallBlockType.SOPT_OFFICIAL_PAGE_INACTIVE_URL,
+                    SmallBlockType.SOPT_INSTAGRAM_INACTIVE_URL,
+                    SmallBlockType.SOPT_YOUTUBE_INACTIVE_URL
+                )
+                else -> listOf(
+                    SmallBlockType.SOPT_INSTAGRAM_AUTHENTICATED_URL,
+                    SmallBlockType.SOPT_YOUTUBE_AUTHENTICATED_URL,
+                    SmallBlockType.SOPT_FAQ_AUTHENTICATED_URL
+                )
             }
         }
         .map { list -> list.map { SmallBlockItemHolder.SmallBlock(it) } }
@@ -218,7 +226,7 @@ class MainViewModel @Inject constructor(
             R.drawable.ic_faq
         ),
 
-        //활동
+        // 활동
         SOPT_CREW_ACTIVE_URL(
             R.string.main_active_small_block_crew,
             R.string.main_active_small_block_crew_description,
