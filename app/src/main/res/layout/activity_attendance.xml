@@ -144,13 +144,46 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_info_event_point">
 
                 <View
+                    android:id="@+id/line_first_to_second"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:background="@color/gray_80"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
                     app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
                     app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+                <View
+                    android:id="@+id/line_first_to_second_active"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/white_100"
+                    android:visibility="@{viewModel.isFirstToSecondLineActive ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+                <View
+                    android:id="@+id/line_second_to_third"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_80"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
+
+                <View
+                    android:id="@+id/line_second_to_third_active_active"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/white_100"
+                    android:visibility="@{viewModel.isSecondToThirdLineActive ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
 
                 <ImageView
                     android:id="@+id/iv_attendance_progress1_empty"

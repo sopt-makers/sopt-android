@@ -1,5 +1,7 @@
 package org.sopt.official.feature.attendance
 
+import android.R
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -18,9 +20,12 @@ import org.sopt.official.feature.attendance.model.DialogState
 import timber.log.Timber
 import javax.inject.Inject
 
+
 data class ProgressBarState(
     val isFirstProgressBarActive: Boolean = false,
+    val isFirstToSecondLineActive: Boolean = false,
     val isSecondProgressBarActive: Boolean = false,
+    val isSecondToThirdLineActive: Boolean = false,
     val isThirdProgressBarActive: Boolean = false,
     val isThirdProgressBarAttendance: Boolean = false,
     val isThirdProgressBarBeforeAttendance: Boolean = false
@@ -48,7 +53,9 @@ class AttendanceViewModel @Inject constructor(
 
     private val progressBarState = MutableLiveData(ProgressBarState())
     val isFirstProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isFirstProgressBarActive }
+    val isFirstToSecondLineActive: LiveData<Boolean> = progressBarState.map { it.isFirstToSecondLineActive }
     val isSecondProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isSecondProgressBarActive }
+    val isSecondToThirdLineActive: LiveData<Boolean> = progressBarState.map { it.isSecondToThirdLineActive }
     val isThirdProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarActive }
     val isThirdProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarAttendance }
     val isThirdProgressBarBeforeAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarBeforeAttendance }
@@ -85,34 +92,53 @@ class AttendanceViewModel @Inject constructor(
 
     fun setProgressBar(soptEvent: SoptEvent) {
         when (soptEvent.attendances.size) {
+            // 출석 전
             0 -> {
-                setThirdProgressBarBeforeAttendance(true) // 출석 전
+                setThirdProgressBarBeforeAttendance(true)
                 setThirdProgressBar(false)
             }
+            // 1차 출석 시작 ~ 2차 출석 시작 전
             1 -> {
                 setThirdProgressBarBeforeAttendance(true)
                 setThirdProgressBar(false)
                 val firstProgressText = soptEvent.attendances[0].attendedAt
                 if (firstProgressText != FIRST_ATTENDANCE_TEXT) {
+                    // 1차 출석이 출석
                     setFirstProgressBar(true)
+                    setFirstToSecondLine(true)
                 } else {
+                    // 1차 출석이 결석
                     setFirstProgressBar(false)
+                    setFirstToSecondLine(true)
                 }
             }
+            // 2차 출석 시작 ~
             2 -> {
                 val firstProgressText = soptEvent.attendances[0].attendedAt
                 val secondProgressText = soptEvent.attendances[1].attendedAt
 
+                Log.d("####hj", firstProgressText)
+                Log.d("####hj", secondProgressText)
+
+
                 if (firstProgressText != FIRST_ATTENDANCE_TEXT) {
+                    // 1차 출석이 출석
                     setFirstProgressBar(true)
+                    setFirstToSecondLine(true)
                 } else {
+                    // 1차 출석이 결석
                     setFirstProgressBar(false)
+                    setFirstToSecondLine(true)
                 }
 
                 if (secondProgressText != SECOND_ATTENDANCE_TEXT) {
+                    // 2차 출석이 출석
                     setSecondProgressBar(true)
+                    setSecondToThirdLine(true)
                 } else {
+                    // 2차 출석이 결석
                     setSecondProgressBar(false)
+                    setSecondToThirdLine(true)
                 }
 
                 val firstStatus = soptEvent.attendances[0].status.name
@@ -148,8 +174,16 @@ class AttendanceViewModel @Inject constructor(
         setProgressBarState { copy(isFirstProgressBarActive = isActive) }
     }
 
+    private fun setFirstToSecondLine(isActive: Boolean) {
+        setProgressBarState { copy(isFirstToSecondLineActive = isActive) }
+    }
+
     private fun setSecondProgressBar(isActive: Boolean) {
         setProgressBarState { copy(isSecondProgressBarActive = isActive) }
+    }
+
+    private fun setSecondToThirdLine(isActive: Boolean) {
+        setProgressBarState { copy(isSecondToThirdLineActive = isActive) }
     }
 
     private fun setThirdProgressBar(isActive: Boolean) {
