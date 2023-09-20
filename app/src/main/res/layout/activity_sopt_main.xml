@@ -77,10 +77,9 @@
                 android:backgroundTint="@color/selector_member_tag_state"
                 android:gravity="center"
                 android:minWidth="82dp"
-                android:paddingStart="6dp"
-                android:paddingTop="4dp"
-                android:paddingEnd="6dp"
-                android:paddingBottom="4dp"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="4dp"
+                android:textColor="@color/selector_member_tag_text_state"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -153,32 +152,16 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/large_block" />
 
-            <include
-                android:id="@+id/content_member_header"
-                layout="@layout/item_main_content_member_header"
+            <TextView
+                android:id="@+id/bottom_description"
+                style="@style/TextAppearance.SOPT.HeadLineLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="46dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/small_block_list" />
-
-            <include
-                android:id="@+id/content_non_member_header"
-                layout="@layout/item_main_content_member_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="46dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/small_block_list" />
-
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/content_header_barrier"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="content_member_header, content_non_member_header" />
+                app:layout_constraintTop_toBottomOf="@id/small_block_list"
+                tools:text="@string/main_content_header" />
 
             <include
                 android:id="@+id/content_soptamp"
@@ -189,7 +172,7 @@
                 android:layout_marginEnd="9dp"
                 app:layout_constraintEnd_toStartOf="@id/content_dummy"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />
+                app:layout_constraintTop_toBottomOf="@id/bottom_description" />
 
             <View
                 android:id="@+id/content_dummy"

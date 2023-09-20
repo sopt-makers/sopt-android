@@ -1,6 +1,58 @@
 <resources>
     <string name="app_name">SOPT</string>
     <string name="default_channel_id">SOPT_MESSAGE</string>
+    <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
+    <string name="soptamp">SOPT AMP!</string>
+
+    <!--    메인홈    -->
+    <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
+    <string name="main_non_member">비회원</string>
+    <string name="main_title_member">%1$s 님은\nSOPT와 %2$s개월 째</string>
+    <string name="main_title_inactive_member">안녕하세요,\nSOPT에 오신 것을 환영합니다!</string>
+    <string name="main_subtitle_non_member">SOPT를 더 알고 싶다면, 둘러보세요</string>
+    <string name="main_subtitle_member">더욱 편리해진 SOPT를 이용해보세요!</string>
+    <string name="main_no_profile_member">비활동</string>
+    <string name="main_inactive_member">%1$s기 수료</string>
+    <string name="main_active_member">%1$s기 활동 중</string>
+    <string name="main_additional_generation">+%1$s</string>
+
+    <!-- 비회원 -->
+    <string name="main_unauthenticated_large_block_official_page">SOPT\n공식홈페이지</string>
+    <string name="main_unauthenticated_small_block_review">활동 후기</string>
+    <string name="main_unauthenticated_small_block_review_description">진짜 후기가\n궁금하다면?</string>
+    <string name="main_unauthenticated_small_block_project">프로젝트</string>
+    <string name="main_unauthenticated_small_block_project_description">SOPT에서\n탄생한 프로젝트</string>
+    <string name="main_unauthenticated_small_block_instagram">Instagram</string>
+    <string name="main_unauthenticated_small_block_instagram_description">SOPT 소식 빠르게 확인하기</string>
+    <string name="main_unauthenticated_small_block_youtube">Youtube</string>
+    <string name="main_unauthenticated_small_block_youtube_description">SOPT 활동 구경하기</string>
+    <string name="main_unauthenticated_small_block_faq">FAQ</string>
+    <string name="main_unauthenticated_small_block_faq_description">자주 묻는 질문</string>
+
+    <!-- 활동 -->
+    <string name="main_active_large_block_attendance">출석하기</string>
+    <string name="main_active_large_block_attendance_description">아 맞다, 출석!</string>
+    <string name="main_active_small_block_crew">모임/스터디</string>
+    <string name="main_active_small_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_active_small_block_member">멤버</string>
+    <string name="main_active_small_block_member_description">궁금한 사람 찾아보기</string>
+    <string name="main_active_small_block_project">프로젝트</string>
+    <string name="main_active_small_block_project_description">역대 프로젝트 모아보기</string>
+    <string name="main_active_small_block_official_page">공식홈페이지</string>
+    <string name="main_active_small_block_official_page_description">솝트 홈페이지 바로보기</string>
+
+    <!-- 비활동 -->
+    <string name="main_inactive_large_block_crew">모임/스터디</string>
+    <string name="main_inactive_large_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_inactive_small_block_member">멤버</string>
+    <string name="main_inactive_small_block_member_description">궁금한 사람 찾아보기</string>
+    <string name="main_inactive_small_block_project">프로젝트</string>
+    <string name="main_inactive_small_block_project_description">지난 프로젝트 보기</string>
+    <string name="main_inactive_small_block_official_page">공식홈페이지</string>
+    <string name="main_inactive_small_block_instagram">Instagram</string>
+    <string name="main_inactive_small_block_youtube">Youtube</string>
+
+    <!--    출석    -->
     <string name="attendance">출석</string>
     <string name="title_attendance_count_normal">출석</string>
     <string name="title_attendance_count_late">지각</string>
@@ -8,42 +60,12 @@
     <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
-
-    <!--    메인홈    -->
-    <!--    비회원    -->
-    <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
-    <string name="main_large_block_official_page">SOPT\n공식홈페이지</string>
-    <string name="main_small_block_review">활동후기</string>
-    <string name="main_small_block_faq">FAQ</string>
-    <string name="main_small_block_youtube">YOUTUBE</string>
-    <string name="main_non_member">비회원</string>
-    <!--    회원    -->
-    <string name="main_title_member">%1$s 님은\nSOPT와 %2$s개월 째</string>
-    <string name="main_title_inactive_member">안녕하세요,\nSOPT에 오신 것을 환영합니다!</string>
-    <string name="main_subtitle_non_member">SOPT를 더 알고 싶다면, 둘러보세요</string>
-    <string name="main_subtitle_member">더욱 편리해진 SOPT를 이용해보세요!</string>
-    <string name="main_large_block_attendance_title">SOPT 출석</string>
-    <string name="main_large_block_attendance_description">출석 인증하기</string>
-    <string name="main_large_block_faq_title">FAQ</string>
-    <string name="main_large_block_faq_description">SOPT 문의하기</string>
-    <string name="main_small_block_member">멤버</string>
-    <string name="main_small_block_playground_project">프로젝트</string>
-    <string name="main_small_block_crew">크루</string>
-    <string name="main_small_block_official_page">공식홈페이지</string>
-    <string name="main_no_profile_member">비활동</string>
-    <string name="main_inactive_member">%1$s기 수료</string>
-    <string name="main_active_member">%1$s기 활동 중</string>
-    <string name="main_additional_generation">+%1$s</string>
-    <!--    공통    -->
-    <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
-    <string name="soptamp">SOPT AMP!</string>
     <string name="attendance_progress_first">1차 출석</string>
     <string name="attendance_progress_second">2차 출석</string>
     <string name="attendance_progress_before">출석 전</string>
     <string name="attendance_progress_third_complete">출석완료!</string>
     <string name="attendance_progress_third_tardy">지각</string>
     <string name="attendance_progress_third_absent">결석</string>
-    <!-- 출석 기능 -->
     <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
     <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
     <string name="attendance_dialog_button">출석하기</string>
@@ -78,12 +100,12 @@
     <string name="sign_out_button">탈퇴하기</string>
 
     <!--    닉네임 변경하기    -->
-    <string name="toolbar_change_nickname">닉네임 변경하기</string>
+    <string name="toolbar_change_nickname">닉네임 변경</string>
     <string name="change_nickname_guide">한글/영문 10자 이하로 입력해주세요.</string>
     <string name="change_nickname_error">사용 중인 이름입니다.</string>
     <string name="change_nickname_button">닉네임 변경</string>
 
-    <!--    한 마지 편집하기   -->
+    <!--    한 마디 편집하기   -->
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
     <string name="adjust_sentence_button">저장</string>
 </resources>

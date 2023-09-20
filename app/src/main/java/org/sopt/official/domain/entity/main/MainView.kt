@@ -37,3 +37,8 @@ data class UserActiveGeneration(
     val latestGeneration: Int,
     val lastGeneration: String?
 )
+
+data class MainDescriptionViewResult(
+    val topDescription: String,
+    val bottomDescription: String
+)

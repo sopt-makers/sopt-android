@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rectangle_radius_15"
-    android:backgroundTint="@color/purple_100"
+    android:backgroundTint="@color/black_60"
     android:paddingStart="16dp"
     android:paddingBottom="12dp">
 
@@ -14,10 +14,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:backgroundTint="@color/white_100"
         app:layout_constraintBottom_toTopOf="@id/name"
         app:layout_constraintStart_toStartOf="parent"
-        tools:background="@drawable/ic_attendance" />
+        tools:background="@drawable/ic_attendance_orange" />
 
     <TextView
         android:id="@+id/name"
@@ -29,7 +28,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_attendance_title" />
+        tools:text="@string/main_active_large_block_attendance" />
 
     <TextView
         android:id="@+id/description"
@@ -40,5 +39,5 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="@string/main_large_block_attendance_description" />
+        tools:text="@string/main_active_large_block_attendance_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

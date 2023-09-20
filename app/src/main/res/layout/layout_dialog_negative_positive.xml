@@ -20,10 +20,11 @@
         tools:text="title" />
 
     <TextView
-
         android:id="@+id/subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="132dp"
+        android:minHeight="81dp"
         android:layout_marginTop="4dp"
         android:gravity="center"
         android:textAppearance="?textAppearanceBodyMedium"
@@ -43,7 +44,7 @@
         android:paddingEnd="21dp"
         android:paddingBottom="9dp"
         android:textAppearance="?textAppearanceBodyMedium"
-        android:textColor="@color/gray_60"
+        android:textColor="@color/white_100"
         app:layout_constraintEnd_toStartOf="@id/positive_button"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/subtitle"
@@ -55,13 +56,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="6dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/purple_100"
+        android:backgroundTint="@color/white_100"
         android:paddingStart="23dp"
         android:paddingTop="9dp"
         android:paddingEnd="21dp"
         android:paddingBottom="9dp"
         android:textAppearance="?textAppearanceBodyMedium"
-        android:textColor="@color/gray_10"
+        android:textColor="@color/black_100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/negative_button"
         app:layout_constraintTop_toTopOf="@id/negative_button"

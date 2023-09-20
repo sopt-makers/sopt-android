@@ -101,6 +101,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initUserStatus() {
         viewModel.initMainView(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
 
     private fun initToolbar() {
@@ -120,17 +121,16 @@ class MainActivity : AppCompatActivity() {
             .onEach { (id, arg1, arg2) ->
                 binding.title.text = getStringExt(id, arg1, arg2)
             }.launchIn(lifecycleScope)
+        viewModel.description
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                binding.subtitle.text = it.get()?.topDescription ?: this@MainActivity.getString(R.string.main_subtitle_non_member)
+                binding.bottomDescription.text = it.get()?.bottomDescription ?: this@MainActivity.getString(R.string.main_content_header)
+            }.launchIn(lifecycleScope)
         viewModel.userState
             .flowWithLifecycle(lifecycle)
             .onEach {
                 val userState = it.get() ?: UserState.UNAUTHENTICATED
-                binding.subtitle.text = getStringExt(
-                    if (userState == UserState.UNAUTHENTICATED) {
-                        R.string.main_subtitle_non_member
-                    } else {
-                        R.string.main_subtitle_member
-                    }
-                )
                 binding.tagMemberState.isEnabled = userState == UserState.ACTIVE
                 val isClickable = userState != UserState.UNAUTHENTICATED
                 if (isClickable) {
@@ -196,19 +196,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setLargeBlock(item: MainViewModel.LargeBlockType) {
-        binding.largeBlock.icon.background = drawableOf(item.icon)
-        binding.largeBlock.name.text = stringOf(item.title)
-        binding.largeBlock.description.isVisible = item.description != null
-        item.description?.let { description ->
-            binding.largeBlock.description.text = stringOf(description)
-        }
-        val intent = if (item.url == null) {
-            Intent(this@MainActivity, AttendanceActivity::class.java)
-        } else {
-            Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
-        }
-        binding.largeBlock.root.setOnSingleClickListener {
-            startActivity(intent)
+        with(binding) {
+            largeBlock.icon.background = drawableOf(item.icon)
+            largeBlock.name.text = stringOf(item.title)
+            largeBlock.description.text = item.description?.let { stringOf(it) }
+            largeBlock.description.isVisible = item.description != null
+            item.description?.let { description ->
+                largeBlock.description.text = stringOf(description)
+            }
+            val intent = if (item.url == null) {
+                Intent(this@MainActivity, AttendanceActivity::class.java)
+            } else {
+                Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+            }
+            largeBlock.root.setOnSingleClickListener {
+                startActivity(intent)
+            }
         }
     }
 
@@ -216,6 +219,8 @@ class MainActivity : AppCompatActivity() {
         with(view) {
             icon.background = drawableOf(item.icon)
             title.text = stringOf(item.title)
+            descriptionSmall.isVisible = item.description != null
+            descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
@@ -286,12 +291,6 @@ class MainActivity : AppCompatActivity() {
     private enum class SmallBlockViewType {
         SMALL_BLOCK
     }
-
-    /*
-    private enum class ContentViewType {
-        CONTENT
-    }
-     */
 
     data class StartArgs(
         val userStatus: UserStatus

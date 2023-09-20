@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rectangle_radius_15"
-    android:backgroundTint="@color/white_100"
+    android:backgroundTint="@color/black_60"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingStart="9dp"
@@ -27,5 +26,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/soptamp"
-        android:textColor="@color/black_100" />
+        android:textColor="@color/white_100" />
 </LinearLayout>
