@@ -58,6 +58,7 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
+import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
@@ -144,9 +145,11 @@ fun MissionListScreen(
             )
         },
         floatingActionButton = {
-            SoptampFloatingButton(
-                text = "랭킹 보기",
-                onClick = { onFloatingButtonClick() }
+            SoptampSegmentedFloatingButton(
+                option1 = "전체 랭킹",
+                option2 = "33기 랭킹",
+                onClickFirstOption = { onFloatingButtonClick() },
+                onClickSecondOption = { onFloatingButtonClick() }
             )
         },
         floatingActionButtonPosition = FabPosition.Center
