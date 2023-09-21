@@ -144,13 +144,46 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_info_event_point">
 
                 <View
+                    android:id="@+id/line_first_to_second"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:background="@color/gray_80"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
                     app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
                     app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+                <View
+                    android:id="@+id/line_first_to_second_active"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/white_100"
+                    android:visibility="@{viewModel.isFirstToSecondLineActive ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+                <View
+                    android:id="@+id/line_second_to_third"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/gray_80"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
+
+                <View
+                    android:id="@+id/line_second_to_third_active_active"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:background="@color/white_100"
+                    android:visibility="@{viewModel.isSecondToThirdLineActive ? View.VISIBLE : View.INVISIBLE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
 
                 <ImageView
                     android:id="@+id/iv_attendance_progress1_empty"
@@ -167,7 +200,7 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="12dp"
                     android:background="@drawable/oval_fill_white_border_gray60"
-                    android:src="@drawable/ic_attendance_check_gray"
+                    android:src="@{viewModel.isFirstProgressBarAttendance ? @drawable/ic_attendance_check_gray : @drawable/ic_attendance_close_gray}"
                     android:visibility="@{viewModel.isFirstProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -200,7 +233,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:background="@drawable/oval_fill_white_border_gray60"
-                    android:src="@drawable/ic_attendance_check_gray"
+                    android:src="@{viewModel.isSecondProgressBarAttendance ? @drawable/ic_attendance_check_gray : @drawable/ic_attendance_close_gray}"
                     android:visibility="@{viewModel.isSecondProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -228,7 +261,7 @@
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/oval_fill_black60_border_white100"
                     android:src="@drawable/ic_point"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? View.INVISIBLE : View.VISIBLE}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -238,8 +271,8 @@
                     android:layout_height="24dp"
                     android:layout_marginEnd="12dp"
                     android:background="@drawable/oval_fill_black60_border_white100"
-                    android:src="@drawable/ic_attendacne_check_white"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? View.VISIBLE : View.INVISIBLE}"
+                    android:src="@{viewModel.isThirdProgressBarBeforeAttendance ? @drawable/ic_attendacne_check_white : @drawable/ic_attendance_close_white}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -259,11 +292,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarAttendance ? @string/attendance_progress_third_complete : @string/attendance_progress_third_tardy}"
+                    android:text="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy ? @string/attendance_progress_third_tardy : @string/attendance_progress_third_complete}"
                     android:textAppearance="?textAppearanceBodyLarge"
                     android:textColor="@color/white_100"
                     android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
@@ -274,11 +307,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@{viewModel.isThirdProgressBarBeforeAttendance ? @string/attendance_progress_before : @string/attendance_progress_third_absent}"
+                    android:text="@{viewModel.isThirdProgressBarActive ? @string/attendance_progress_third_absent : @string/attendance_progress_before}"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/gray_100"
+                    android:textColor="@{viewModel.isThirdProgressBarActive ? @color/white_100 : @color/gray_100}"
                     android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.INVISIBLE : View.VISIBLE}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
