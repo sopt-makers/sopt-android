@@ -210,6 +210,7 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
+            isCurrent = false,
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
         )
