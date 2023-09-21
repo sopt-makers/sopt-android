@@ -68,7 +68,7 @@ class MyPageActivity : AppCompatActivity() {
     private fun initView() {
         viewModel.userState
             .distinctUntilChanged()
-            .map { it.get() == UserState.UNAUTHENTICATED }
+            .map { it.get() != UserState.UNAUTHENTICATED }
             .subscribeOnIo()
             .observeOnMain()
             .onBackpressureLatest()
