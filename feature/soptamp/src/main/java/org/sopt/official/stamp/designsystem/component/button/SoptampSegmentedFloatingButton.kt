@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -57,7 +58,7 @@ fun SoptampSegmentedFloatingButton(
                     SoptTheme.colors.purple300,
                     shape = RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp)
                 )
-                .clipToBounds()
+                .clip(RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp))
                 .clickable(onClick = onClickFirstOption)
                 .padding(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -81,7 +82,7 @@ fun SoptampSegmentedFloatingButton(
                     SoptTheme.colors.pink300,
                     shape = RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp)
                 )
-                .clipToBounds()
+                .clip(RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp))
                 .clickable(onClick = onClickSecondOption)
                 .padding(top = 12.dp, bottom = 12.dp, start = 5.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
