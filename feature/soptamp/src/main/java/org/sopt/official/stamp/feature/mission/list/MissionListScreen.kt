@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -154,7 +155,8 @@ fun MissionListScreen(
                 option1 = "전체 랭킹",
                 option2 = "33기 랭킹",
                 onClickFirstOption = onAllRankingButtonClick,
-                onClickSecondOption = onCurrentRankingButtonClick,
+                onClickSecondOption = onCurrentRankingButtonClick
+            )
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
@@ -271,7 +273,7 @@ fun DropDownMenuButton(
     onMenuClick: (String) -> Unit = {}
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(0) }
     Box {
         SoptampIconButton(
             imageVector = if (isMenuExpanded) {
