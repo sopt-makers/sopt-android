@@ -26,7 +26,7 @@ internal interface RankService {
     suspend fun getRanking(): List<RankResponse>
 
     @GET("rank/current")
-    suspend fun getCurrentRanking: List<RankResponse>
+    suspend fun getCurrentRanking(): List<RankResponse>
 
     @GET("rank/detail")
     suspend fun getRankDetail(@Query("nickname") nickname: String): RankDetailResponse
