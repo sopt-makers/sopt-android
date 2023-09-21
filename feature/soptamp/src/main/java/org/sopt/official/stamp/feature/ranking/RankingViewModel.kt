@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.stamp.data.local.SoptampDataStore
+import org.sopt.official.stamp.domain.model.RankFetchType
 import org.sopt.official.stamp.domain.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
@@ -41,21 +42,18 @@ class RankingViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
     val nickname = dataStore.nickname
 
-    init {
-        fetchRanking()
-    }
-
-    fun onRefresh() {
+    fun onRefresh(isCurrent: Boolean) {
         viewModelScope.launch {
             isRefreshing = true
-            fetchRanking()
+            fetchRanking(isCurrent)
         }
     }
 
-    fun fetchRanking() = viewModelScope.launch {
+    fun fetchRanking(isCurrent: Boolean) = viewModelScope.launch {
         _state.value = RankingState.Loading
-        rankingRepository.getRanking()
-            .mapCatching { it.toUiModel() }
+        rankingRepository.getRanking(
+            if (isCurrent) RankFetchType.Term() else RankFetchType.All
+        ).mapCatching { it.toUiModel() }
             .onSuccess { ranking ->
                 if (isRefreshing) {
                     isRefreshing = false

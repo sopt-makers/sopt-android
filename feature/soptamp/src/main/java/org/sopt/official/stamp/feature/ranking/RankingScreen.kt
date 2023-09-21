@@ -30,6 +30,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,21 +65,26 @@ import org.sopt.official.stamp.util.toPx
 @Destination("ranking")
 @Composable
 fun RankingScreen(
+    isCurrent: Boolean,
     rankingViewModel: RankingViewModel = hiltViewModel(),
     resultNavigator: ResultBackNavigator<Boolean>,
     navigator: DestinationsNavigator
 ) {
     val state by rankingViewModel.state.collectAsState()
+    LaunchedEffect(true) {
+        rankingViewModel.fetchRanking(isCurrent)
+    }
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
             RankingState.Failure -> SingleOptionDialog {
-                rankingViewModel.fetchRanking()
+                rankingViewModel.fetchRanking(isCurrent)
             }
 
             is RankingState.Success -> RankingScreen(
+                isCurrent = isCurrent,
                 refreshing = rankingViewModel.isRefreshing,
-                onRefresh = { rankingViewModel.onRefresh() },
+                onRefresh = { rankingViewModel.onRefresh(isCurrent) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
                 nickname = rankingViewModel.nickname,
                 onClickBack = { resultNavigator.navigateBack() },
@@ -91,6 +97,7 @@ fun RankingScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RankingScreen(
+    isCurrent: Boolean,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
@@ -108,7 +115,7 @@ fun RankingScreen(
     Scaffold(
         topBar = {
             RankingHeader(
-                title = "랭킹",
+                title = if (isCurrent) "33기 랭킹" else "전체 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
@@ -121,7 +128,10 @@ fun RankingScreen(
                         .find { it.value.nickname == nickname }
                         ?.index
                         ?: 0
-                    listState.animateScrollToItem(index = currentUserIndex, scrollOffset = scrollOffsetPx)
+                    listState.animateScrollToItem(
+                        index = currentUserIndex,
+                        scrollOffset = scrollOffsetPx
+                    )
                 }
             }
         },
@@ -200,6 +210,7 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
+            isCurrent = false,
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
         )

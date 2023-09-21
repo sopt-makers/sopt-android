@@ -27,13 +27,20 @@ internal class RemoteRankingDataSource @Inject constructor(
     private val rankService: RankService
 ) : RankingDataSource {
     override suspend fun getRanking(): Result<List<RankData>> {
-        val result = kotlin.runCatching {
+        return runCatching {
             rankService.getRanking().toData()
-        }
-        return when (val exception = result.exceptionOrNull()) {
-            null -> result
-            is UnknownHostException -> Result.failure(ErrorData.NetworkUnavailable)
-            else -> Result.failure(exception)
-        }
+        }.validate()
+    }
+
+    override suspend fun getCurrentTermRanking(): Result<List<RankData>> {
+        return runCatching {
+            rankService.getCurrentRanking().toData()
+        }.validate()
+    }
+
+    private fun Result<List<RankData>>.validate() = when (val exception = exceptionOrNull()) {
+        null -> this
+        is UnknownHostException -> Result.failure(ErrorData.NetworkUnavailable)
+        else -> Result.failure(exception)
     }
 }

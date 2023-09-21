@@ -38,6 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -56,8 +57,8 @@ import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
-import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
+import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
@@ -116,8 +117,13 @@ fun MissionListScreen(
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
-                onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) },
+                onMissionItemClick = { item ->
+                    navigator.navigate(
+                        MissionDetailScreenDestination(item)
+                    )
+                },
+                onAllRankingButtonClick = { navigator.navigate(RankingScreenDestination(false)) },
+                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination(true)) },
                 onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
             )
         }
@@ -131,7 +137,8 @@ fun MissionListScreen(
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
-    onFloatingButtonClick: () -> Unit = {},
+    onAllRankingButtonClick: () -> Unit = {},
+    onCurrentRankingButtonClick: () -> Unit = {},
     onOnboadingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
@@ -144,9 +151,11 @@ fun MissionListScreen(
             )
         },
         floatingActionButton = {
-            SoptampFloatingButton(
-                text = "랭킹 보기",
-                onClick = { onFloatingButtonClick() }
+            SoptampSegmentedFloatingButton(
+                option1 = "전체 랭킹",
+                option2 = "33기 랭킹",
+                onClickFirstOption = onAllRankingButtonClick,
+                onClickSecondOption = onCurrentRankingButtonClick
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -264,7 +273,7 @@ fun DropDownMenuButton(
     onMenuClick: (String) -> Unit = {}
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(0) }
     Box {
         SoptampIconButton(
             imageVector = if (isMenuExpanded) {

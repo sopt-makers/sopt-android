@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
 fun SoptampFloatingButton(
@@ -50,4 +51,12 @@ fun SoptampFloatingButton(
         shape = RoundedCornerShape(46.dp),
         backgroundColor = SoptTheme.colors.purple300
     )
+}
+
+@DefaultPreview
+@Composable
+private fun SoptampFloatingButtonPreview() {
+    SoptTheme {
+        SoptampFloatingButton(text = "랭킹 보기") { }
+    }
 }

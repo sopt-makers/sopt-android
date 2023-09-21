@@ -17,8 +17,9 @@ package org.sopt.official.stamp.domain.repository
 
 import org.sopt.official.stamp.domain.model.OtherMission
 import org.sopt.official.stamp.domain.model.Rank
+import org.sopt.official.stamp.domain.model.RankFetchType
 
 interface RankingRepository {
-    suspend fun getRanking(): Result<List<Rank>>
+    suspend fun getRanking(type: RankFetchType): Result<List<Rank>>
     suspend fun getRankDetail(nickname: String): Result<OtherMission>
 }
