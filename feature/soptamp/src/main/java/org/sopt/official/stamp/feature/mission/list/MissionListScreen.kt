@@ -56,7 +56,6 @@ import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
-import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
@@ -117,8 +116,13 @@ fun MissionListScreen(
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
-                onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onFloatingButtonClick = { navigator.navigate(RankingScreenDestination) },
+                onMissionItemClick = { item ->
+                    navigator.navigate(
+                        MissionDetailScreenDestination(item)
+                    )
+                },
+                onAllRankingButtonClick = { navigator.navigate(RankingScreenDestination(false)) },
+                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination(true)) },
                 onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
             )
         }
@@ -132,7 +136,8 @@ fun MissionListScreen(
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
-    onFloatingButtonClick: () -> Unit = {},
+    onAllRankingButtonClick: () -> Unit = {},
+    onCurrentRankingButtonClick: () -> Unit = {},
     onOnboadingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
@@ -148,9 +153,8 @@ fun MissionListScreen(
             SoptampSegmentedFloatingButton(
                 option1 = "전체 랭킹",
                 option2 = "33기 랭킹",
-                onClickFirstOption = { onFloatingButtonClick() },
-                onClickSecondOption = { onFloatingButtonClick() }
-            )
+                onClickFirstOption = onAllRankingButtonClick,
+                onClickSecondOption = onCurrentRankingButtonClick,
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->

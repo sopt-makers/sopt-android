@@ -21,3 +21,18 @@ data class Rank(
     val point: Int,
     val profileMessage: String?
 )
+
+sealed interface RankFetchType {
+    data object All : RankFetchType
+
+    /*
+     * 당장은 현재 기수만 가져오고 있지만
+     * 이후 확장을 할 때 기수 별로 가져올 수 있기 때문에
+     * 현재 기수 가져오기를 data class로 기수 값을 넣어서 사용할 수 있게 한다
+     */
+    data class Term(val value: Int = CURRENT) : RankFetchType
+
+    companion object {
+        private const val CURRENT: Int = 33
+    }
+}

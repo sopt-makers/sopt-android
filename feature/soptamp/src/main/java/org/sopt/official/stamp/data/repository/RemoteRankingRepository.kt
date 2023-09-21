@@ -20,6 +20,7 @@ import org.sopt.official.stamp.data.mapper.toDomain
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.source.RankingDataSource
 import org.sopt.official.stamp.domain.model.Rank
+import org.sopt.official.stamp.domain.model.RankFetchType
 import org.sopt.official.stamp.domain.repository.RankingRepository
 import javax.inject.Inject
 
@@ -27,9 +28,11 @@ internal class RemoteRankingRepository @Inject constructor(
     private val remote: RankingDataSource,
     private val service: RankService
 ) : RankingRepository {
-    override suspend fun getRanking(): Result<List<Rank>> {
-        val result = remote.getRanking()
-            .mapCatching { it.toDomain() }
+    override suspend fun getRanking(type: RankFetchType): Result<List<Rank>> {
+        val result = when (type) {
+            is RankFetchType.All -> remote.getRanking()
+            is RankFetchType.Term -> remote.getCurrentTermRanking()
+        }.mapCatching { it.toDomain() }
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {
             Result.failure(exception.toDomain())
