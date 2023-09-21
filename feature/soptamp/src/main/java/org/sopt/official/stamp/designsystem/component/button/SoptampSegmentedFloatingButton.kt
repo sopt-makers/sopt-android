@@ -57,9 +57,9 @@ fun SoptampSegmentedFloatingButton(
                     SoptTheme.colors.purple300,
                     shape = RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp)
                 )
+                .clipToBounds()
                 .clickable(onClick = onClickFirstOption)
-                .padding(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp)
-                .clipToBounds(),
+                .padding(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -81,6 +81,7 @@ fun SoptampSegmentedFloatingButton(
                     SoptTheme.colors.pink300,
                     shape = RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp)
                 )
+                .clipToBounds()
                 .clickable(onClick = onClickSecondOption)
                 .padding(top = 12.dp, bottom = 12.dp, start = 5.dp, end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
