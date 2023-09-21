@@ -82,6 +82,7 @@ fun RankingScreen(
             }
 
             is RankingState.Success -> RankingScreen(
+                isCurrent = isCurrent,
                 refreshing = rankingViewModel.isRefreshing,
                 onRefresh = { rankingViewModel.onRefresh(isCurrent) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
@@ -96,6 +97,7 @@ fun RankingScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RankingScreen(
+    isCurrent: Boolean,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
@@ -113,7 +115,7 @@ fun RankingScreen(
     Scaffold(
         topBar = {
             RankingHeader(
-                title = "랭킹",
+                title = if (isCurrent) "33기 랭킹" else "전체 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
