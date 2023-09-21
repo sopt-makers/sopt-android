@@ -296,7 +296,7 @@
                     android:textAppearance="?textAppearanceBodyLarge"
                     android:textColor="@color/white_100"
                     android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarBeforeAttendance ? View.VISIBLE : View.INVISIBLE}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.VISIBLE : View.INVISIBLE}"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
@@ -307,11 +307,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:enabled="false"
-                    android:text="@{viewModel.isThirdProgressBarBeforeAttendance ? @string/attendance_progress_before : @string/attendance_progress_third_absent}"
+                    android:text="@{viewModel.isThirdProgressBarActive ? @string/attendance_progress_third_absent : @string/attendance_progress_before}"
                     android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@{viewModel.isThirdProgressBarBeforeAttendance ? @color/gray_100 : @color/white_100}"
+                    android:textColor="@{viewModel.isThirdProgressBarActive ? @color/white_100 : @color/gray_100}"
                     android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarBeforeAttendance ? View.INVISIBLE : View.VISIBLE}"
+                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.INVISIBLE : View.VISIBLE}"
                     app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
                     app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />

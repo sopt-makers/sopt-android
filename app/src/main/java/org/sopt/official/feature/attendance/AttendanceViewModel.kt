@@ -29,7 +29,8 @@ data class ProgressBarState(
     val isThirdProgressBarActive: Boolean = false,
     val isThirdProgressBarAttendance: Boolean = false,
     val isThirdProgressBarTardy: Boolean = false,
-    val isThirdProgressBarBeforeAttendance: Boolean = false
+    val isThirdProgressBarBeforeAttendance: Boolean = false,
+    val isThirdProgressBarAbsent: Boolean = false,
 )
 
 data class AttendanceButtonState(
@@ -98,6 +99,7 @@ class AttendanceViewModel @Inject constructor(
         when (soptEvent.attendances.size) {
             // 출석 전
             0 -> {
+                setFirstToSecondLine(false)
                 setThirdProgressBarBeforeAttendance(true)
                 setThirdProgressBar(false)
             }
