@@ -1,6 +1,5 @@
 package org.sopt.official.feature.attendance
 
-import android.R
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -20,14 +19,16 @@ import org.sopt.official.feature.attendance.model.DialogState
 import timber.log.Timber
 import javax.inject.Inject
 
-
 data class ProgressBarState(
     val isFirstProgressBarActive: Boolean = false,
+    val isFirstProgressBarAttendance: Boolean = false,
     val isFirstToSecondLineActive: Boolean = false,
     val isSecondProgressBarActive: Boolean = false,
+    val isSecondProgressBarAttendance: Boolean = false,
     val isSecondToThirdLineActive: Boolean = false,
     val isThirdProgressBarActive: Boolean = false,
     val isThirdProgressBarAttendance: Boolean = false,
+    val isThirdProgressBarTardy: Boolean = false,
     val isThirdProgressBarBeforeAttendance: Boolean = false
 )
 
@@ -53,11 +54,14 @@ class AttendanceViewModel @Inject constructor(
 
     private val progressBarState = MutableLiveData(ProgressBarState())
     val isFirstProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isFirstProgressBarActive }
+    var isFirstProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isFirstProgressBarAttendance }
     val isFirstToSecondLineActive: LiveData<Boolean> = progressBarState.map { it.isFirstToSecondLineActive }
     val isSecondProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isSecondProgressBarActive }
+    var isSecondProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isSecondProgressBarAttendance }
     val isSecondToThirdLineActive: LiveData<Boolean> = progressBarState.map { it.isSecondToThirdLineActive }
     val isThirdProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarActive }
     val isThirdProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarAttendance }
+    val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
     val isThirdProgressBarBeforeAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarBeforeAttendance }
 
     private val attendanceButtonState = MutableLiveData(AttendanceButtonState())
@@ -106,10 +110,12 @@ class AttendanceViewModel @Inject constructor(
                     // 1차 출석이 출석
                     setFirstProgressBar(true)
                     setFirstToSecondLine(true)
+                    setFirstProgressBarAttendance(true)
                 } else {
                     // 1차 출석이 결석
-                    setFirstProgressBar(false)
+                    setFirstProgressBar(true)
                     setFirstToSecondLine(true)
+                    setFirstProgressBarAttendance(false)
                 }
             }
             // 2차 출석 시작 ~
@@ -120,43 +126,54 @@ class AttendanceViewModel @Inject constructor(
                 Log.d("####hj", firstProgressText)
                 Log.d("####hj", secondProgressText)
 
-
                 if (firstProgressText != FIRST_ATTENDANCE_TEXT) {
                     // 1차 출석이 출석
                     setFirstProgressBar(true)
                     setFirstToSecondLine(true)
+                    setFirstProgressBarAttendance(true)
                 } else {
                     // 1차 출석이 결석
-                    setFirstProgressBar(false)
+                    setFirstProgressBar(true)
                     setFirstToSecondLine(true)
+                    setFirstProgressBarAttendance(false)
                 }
 
                 if (secondProgressText != SECOND_ATTENDANCE_TEXT) {
                     // 2차 출석이 출석
                     setSecondProgressBar(true)
                     setSecondToThirdLine(true)
+                    setSecondProgressBarAttendance(true)
                 } else {
                     // 2차 출석이 결석
-                    setSecondProgressBar(false)
+                    setSecondProgressBar(true)
                     setSecondToThirdLine(true)
+                    setSecondProgressBarAttendance(false)
                 }
 
                 val firstStatus = soptEvent.attendances[0].status.name
                 val secondStatus = soptEvent.attendances[1].status.name
                 if (firstStatus == "ATTENDANCE" && secondStatus == "ATTENDANCE") {
+                    // 마지막 progress가 출석
                     setThirdProgressBar(true)
                     setThirdProgressBarAttendance(true)
+                    setThirdProgressBarBeforeAttendance(true)
+                    setThirdProgressBarTardy(false)
                 } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
-                    // 결석 상태
+                    // 마지막 progress가 결석
                     setThirdProgressBarBeforeAttendance(false)
-                    setThirdProgressBar(false)
-                } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
                     setThirdProgressBar(true)
-                    setThirdProgressBarAttendance(false)
+                    setThirdProgressBarTardy(false)
+                } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
+                    // 마지막 progress가 지각
+                    setThirdProgressBarBeforeAttendance(true)
+                    setThirdProgressBar(true)
+                    setThirdProgressBarTardy(true)
+                    setThirdProgressBarAttendance(true)
                 } else {
-                    // 결석 상태
+                    // 마지막 progress가 결석
                     setThirdProgressBarBeforeAttendance(false)
-                    setThirdProgressBar(false)
+                    setThirdProgressBar(true)
+                    setThirdProgressBarTardy(false)
                 }
             }
         }
@@ -174,12 +191,20 @@ class AttendanceViewModel @Inject constructor(
         setProgressBarState { copy(isFirstProgressBarActive = isActive) }
     }
 
+    private fun setFirstProgressBarAttendance(isActive: Boolean) {
+        setProgressBarState { copy(isFirstProgressBarAttendance = isActive) }
+    }
+
     private fun setFirstToSecondLine(isActive: Boolean) {
         setProgressBarState { copy(isFirstToSecondLineActive = isActive) }
     }
 
     private fun setSecondProgressBar(isActive: Boolean) {
         setProgressBarState { copy(isSecondProgressBarActive = isActive) }
+    }
+
+    private fun setSecondProgressBarAttendance(isActive: Boolean) {
+        setProgressBarState { copy(isSecondProgressBarAttendance = isActive) }
     }
 
     private fun setSecondToThirdLine(isActive: Boolean) {
@@ -192,6 +217,10 @@ class AttendanceViewModel @Inject constructor(
 
     private fun setThirdProgressBarAttendance(isAttendance: Boolean) {
         setProgressBarState { copy(isThirdProgressBarAttendance = isAttendance) }
+    }
+
+    private fun setThirdProgressBarTardy(isTardy: Boolean) {
+        setProgressBarState { copy(isThirdProgressBarTardy = isTardy) }
     }
 
     private fun setThirdProgressBarBeforeAttendance(isBeforeAttendance: Boolean) {
@@ -221,11 +250,13 @@ class AttendanceViewModel @Inject constructor(
                     -1L -> {
                         setAttendanceButtonVisibility(false)
                     }
+
                     0L -> {
                         setAttendanceButtonText(it.roundText)
                         setAttendanceButtonVisibility(true)
                         setAttendanceButtonEnabled(false)
                     }
+
                     else -> {
                         if (it.roundText.isNotEmpty() && attendancesSize == it.roundText[0].code - '0'.code) {
                             setAttendanceButtonText(it.roundText.substring(0, 5) + " 종료")
@@ -265,12 +296,15 @@ class AttendanceViewModel @Inject constructor(
                         -2L -> {
                             showDialog("코드가 일치하지 않아요!")
                         }
+
                         -1L -> {
                             showDialog("출석 시간 전입니다.")
                         }
+
                         0L -> {
                             showDialog("출석이 이미 종료되었습니다.")
                         }
+
                         else -> {
                             _dialogState.value = DialogState.Close
                         }
