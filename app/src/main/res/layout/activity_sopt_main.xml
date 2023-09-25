@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feature.main.MainActivity">
+    tools:context=".feature.home.HomeActivity">
 
     <ImageView
         android:id="@+id/logo"
@@ -58,8 +58,8 @@
                 style="@style/TextAppearance.SOPT.DisplayMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/white_100"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
@@ -72,12 +72,12 @@
                 style="@style/TextAppearance.SOPT.CaptionLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/rectangle_radius_15"
                 android:backgroundTint="@color/selector_member_tag_state"
                 android:gravity="center"
                 android:minWidth="82dp"
-                android:layout_marginStart="20dp"
                 android:paddingHorizontal="6dp"
                 android:paddingVertical="4dp"
                 android:textColor="@color/selector_member_tag_text_state"
@@ -102,8 +102,8 @@
                 style="@style/TextAppearance.SOPT.HeadLineLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="16dp"
                 android:textColor="@color/white_100"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -117,9 +117,9 @@
                 layout="@layout/item_main_large"
                 android:layout_width="0dp"
                 android:layout_height="192dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginStart="20dp"
                 app:layout_constraintEnd_toStartOf="@id/small_block_1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/subtitle" />
@@ -164,8 +164,8 @@
                 style="@style/TextAppearance.SOPT.HeadLineLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="46dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="46dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/small_block_list"
@@ -176,9 +176,9 @@
                 layout="@layout/item_main_content"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="9dp"
-                android:layout_marginStart="20dp"
                 app:layout_constraintEnd_toStartOf="@id/content_dummy"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bottom_description" />
@@ -191,18 +191,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/content_soptamp"
                 app:layout_constraintTop_toTopOf="@id/content_soptamp" />
-
-            <!--            TODO: 위의 뷰 추후에 아래 recyclerView 로 대체 필요-->
-
-            <!--            <androidx.recyclerview.widget.RecyclerView-->
-            <!--                android:id="@+id/recycler_content"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="match_parent"-->
-            <!--                android:layout_marginTop="24dp"-->
-            <!--                android:layout_marginEnd="20dp"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintEnd_toEndOf="parent"-->
-            <!--                app:layout_constraintTop_toBottomOf="@id/content_header_barrier" />-->
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

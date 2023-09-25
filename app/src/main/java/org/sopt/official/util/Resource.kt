@@ -8,6 +8,10 @@ import androidx.fragment.app.Fragment
 
 fun Context.stringOf(@StringRes id: Int) = getString(id)
 
+fun Context.stringOf(@StringRes id: Int, arg1: String) = getString(id, arg1)
+
+fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, args)
+
 fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
 
 fun Fragment.stringOf(@StringRes id: Int) = requireContext().stringOf(id)

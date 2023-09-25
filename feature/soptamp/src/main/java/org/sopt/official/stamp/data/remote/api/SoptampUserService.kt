@@ -22,7 +22,6 @@ import org.sopt.official.stamp.data.remote.model.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
-import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface SoptampUserService {

@@ -14,7 +14,8 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
 import org.sopt.official.designsystem.AlertDialogPositiveNegative
-import org.sopt.official.domain.entity.UserState
+import org.sopt.official.domain.entity.UserActiveState
+import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
@@ -23,17 +24,17 @@ import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.serializableExtra
+import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.ui.throttleUi
 import org.sopt.official.util.viewBinding
-import org.sopt.official.util.wrapper.asNullableWrapper
 import java.io.Serializable
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
-    private val args by serializableExtra(StartArgs(UserState.UNAUTHENTICATED))
+    private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
 
     private val createDisposable = CompositeDisposable()
 
@@ -49,26 +50,22 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initStartArgs() {
-        viewModel.userState.onNext(args?.userState.asNullableWrapper())
+        args?.userActiveState?.let {
+            viewModel.userActiveState.onNext(MyPageUiState.User(it))
+        }
     }
 
     private fun initToolbar() {
-        binding.toolbar.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.onBackPressedDispatcher.onBackPressed()
-                }
-            )
+        binding.icBack.setOnSingleClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun initView() {
-        viewModel.userState
+        viewModel.userActiveState
             .distinctUntilChanged()
-            .map { it.get() != UserState.UNAUTHENTICATED }
+            .filter { it is MyPageUiState.User }
+            .map { (it as MyPageUiState.User).activeState != UserActiveState.UNAUTHENTICATED }
             .subscribeOnIo()
             .observeOnMain()
             .onBackpressureLatest()
@@ -197,7 +194,6 @@ class MyPageActivity : AppCompatActivity() {
                 onNext = {
                     setResult(ResultCode.LOG_IN.ordinal)
                     onBackPressedDispatcher.onBackPressed()
-                    // Main 에서 requestActivityForResult 필요
                 }
             )
     }
@@ -231,13 +227,14 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-        val userState: UserState
+        val userActiveState: UserActiveState
     ) : Serializable
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
-            putExtra("args", args)
-        }
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, MyPageActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }

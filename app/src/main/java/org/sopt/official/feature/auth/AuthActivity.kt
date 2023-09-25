@@ -23,7 +23,7 @@ import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.domain.entity.auth.UserStatus
-import org.sopt.official.feature.main.MainActivity
+import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
 import org.sopt.official.util.setOnSingleClickListener
@@ -56,13 +56,11 @@ class AuthActivity : AppCompatActivity() {
             .onEach { event ->
                 when (event) {
                     is AuthUiEvent.Success -> {
-                        val args = MainActivity.StartArgs(event.userStatus)
-                        startActivity(MainActivity.getIntent(this, args))
+                        startActivity(HomeActivity.getIntent(this, event.userStatus))
                     }
 
                     is AuthUiEvent.Failure -> {
-                        val args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
-                        startActivity(MainActivity.getIntent(this, args))
+                        startActivity(HomeActivity.getIntent(this, UserStatus.UNAUTHENTICATED))
                     }
                 }
             }.launchIn(lifecycleScope)
@@ -117,13 +115,8 @@ class AuthActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.btnSoptNotMember.setOnClickListener {
-            startActivity(
-                MainActivity.getIntent(
-                    this,
-                    MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
-                )
-            )
+        binding.btnSoptNotMember.setOnSingleClickListener {
+            startActivity(HomeActivity.getIntent(this, UserStatus.UNAUTHENTICATED))
         }
     }
 }

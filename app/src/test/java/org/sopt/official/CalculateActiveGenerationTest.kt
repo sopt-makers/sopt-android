@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource
 import org.sopt.official.util.calculateDurationOfGeneration
 import org.sopt.official.util.calculateGenerationStartDate
 
-class KotlinxDateTimeTest {
+class CalculateActiveGenerationTest {
 
     @ParameterizedTest
     @MethodSource("generationStartDateList")
@@ -42,14 +42,15 @@ class KotlinxDateTimeTest {
         fun generationStartDateList() = listOf(
             Arguments.of(30, "2022-03-01".toLocalDate()),
             Arguments.of(31, "2022-09-01".toLocalDate()),
-            Arguments.of(32, "2023-03-01".toLocalDate())
+            Arguments.of(32, "2023-03-01".toLocalDate()),
+            Arguments.of(33, "2023-09-01".toLocalDate())
         )
 
         @JvmStatic
         fun generationLastMonthList() = listOf(
             Arguments.of(30, 14),
             Arguments.of(31, 8),
-            Arguments.of(32, 2)
+            Arguments.of(32, 2),
         )
     }
 }
