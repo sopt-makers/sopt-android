@@ -1,6 +1,6 @@
 package org.sopt.official.domain.entity
 
-enum class UserState {
+enum class UserActiveState {
     ACTIVE,
     INACTIVE,
     UNAUTHENTICATED

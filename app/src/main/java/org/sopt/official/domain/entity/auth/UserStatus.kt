@@ -8,6 +8,7 @@ enum class UserStatus(
     UNAUTHENTICATED("UNAUTHENTICATED");
 
     companion object {
-        fun of(value: String) = entries.find { it.value == value } ?: throw IllegalArgumentException("Invalid user status: $value")
+        fun of(value: String) = entries.find { it.value == value }
+            ?: throw IllegalArgumentException("Invalid user status: $value")
     }
 }

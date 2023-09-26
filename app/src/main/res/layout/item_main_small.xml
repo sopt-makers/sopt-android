@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/background"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="218dp"
+    android:layout_height="90dp"
     android:background="@drawable/rectangle_radius_15"
     android:backgroundTint="@color/black_60"
-    android:paddingStart="16dp"
+    android:paddingHorizontal="16dp"
     android:paddingBottom="12dp">
 
     <ImageView
@@ -15,9 +15,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/white_100"
-        app:layout_constraintTop_toTopOf="@id/cl_title"
         app:layout_constraintBottom_toBottomOf="@id/cl_title"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/cl_title"
         tools:background="@drawable/ic_member_orange" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,19 +25,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/icon">
 
         <TextView
             android:id="@+id/title"
             style="@style/TextAppearance.SOPT.BodyLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white_100"
             android:layout_marginBottom="2dp"
-            app:layout_goneMarginBottom="0dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:textAppearance="?textAppearanceHeadlineMedium"
+            android:textColor="@color/white_100"
             app:layout_constraintBottom_toTopOf="@id/description_small"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_goneMarginBottom="0dp"
             tools:text="@string/main_active_small_block_member" />
 
         <TextView
@@ -49,7 +50,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@id/title"
             tools:text="궁금한 사람 찾아보기"
-            tools:visibility="gone"/>
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
