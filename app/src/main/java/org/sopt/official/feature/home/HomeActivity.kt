@@ -193,23 +193,23 @@ class HomeActivity : AppCompatActivity() {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
         }
-        viewModel.blockItem
+        viewModel.mainMenuContents
             .flowWithLifecycle(lifecycle)
             .onEach { item ->
                 item.let { (largeBlock, topSmallBlock, bottomSmallBlock) ->
-                    setLargeBlock(largeBlock)
-                    setSmallBlock(binding.smallBlock1, topSmallBlock)
-                    setSmallBlock(binding.smallBlock2, bottomSmallBlock)
+                    setCTAContent(largeBlock)
+                    setMainMenuContent(binding.smallBlock1, topSmallBlock)
+                    setMainMenuContent(binding.smallBlock2, bottomSmallBlock)
                 }
             }.launchIn(lifecycleScope)
-        viewModel.blockList
+        viewModel.subMenuContents
             .flowWithLifecycle(lifecycle)
             .onEach {
                 smallBlockAdapter?.submitList(it)
             }.launchIn(lifecycleScope)
     }
 
-    private fun setLargeBlock(item: HomeCTAType) {
+    private fun setCTAContent(item: HomeCTAType) {
         with(binding) {
             largeBlock.icon.background = drawableOf(item.icon)
             largeBlock.name.text = stringOf(item.title)
@@ -229,7 +229,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setSmallBlock(view: ItemMainSmallBinding, item: HomeMenuType) {
+    private fun setMainMenuContent(view: ItemMainSmallBinding, item: HomeMenuType) {
         with(view) {
             icon.background = drawableOf(item.icon)
             title.text = stringOf(item.title)

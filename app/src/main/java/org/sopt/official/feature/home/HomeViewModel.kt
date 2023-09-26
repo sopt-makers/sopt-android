@@ -56,7 +56,6 @@ class HomeViewModel @Inject constructor(
             val startDate = calculateGenerationStartDate(generation)
             val currentDate = Instant.systemNow().toDefaultLocalDate()
             val period = calculateDurationOfGeneration(startDate, currentDate)
-            Timber.d("SOPT generation: $generation, startDate: $startDate, currentDate: $currentDate, period: $period")
             when {
                 userName?.isNotEmpty() == true -> UserUiState.User(
                     R.string.main_title_member,
@@ -96,7 +95,7 @@ class HomeViewModel @Inject constructor(
                 else -> UserActiveGeneration(R.string.main_non_member, null)
             }
         }
-    val blockItem: Flow<SoptMainContentUrl> = homeUiState
+    val mainMenuContents: Flow<SoptMainContentUrl> = homeUiState
         .map {
             when (it.user.activeState) {
                 UserActiveState.UNAUTHENTICATED -> SoptMainContentUrl(
@@ -118,7 +117,7 @@ class HomeViewModel @Inject constructor(
                 )
             }
         }
-    val blockList = homeUiState
+    val subMenuContents = homeUiState
         .map {
             when (it.user.activeState) {
                 UserActiveState.ACTIVE -> listOf(
