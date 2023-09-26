@@ -1,13 +1,15 @@
 package org.sopt.official.feature.home.model
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import org.sopt.official.R
 import org.sopt.official.feature.web.WebUrlConstant
 
 enum class HomeCTAType(
-    val title: Int,
-    val description: Int?,
+    @StringRes val title: Int,
+    @StringRes val description: Int?,
     val url: String?,
-    val icon: Int
+    @DrawableRes val icon: Int
 ) {
     SOPT_OFFICIAL_PAGE_URL(
         R.string.main_unauthenticated_large_block_official_page,
