@@ -9,5 +9,5 @@ interface MainViewService {
     suspend fun getMainView(): MainViewResponse
 
     @GET("description/main")
-    suspend fun getMainDescription() : DescriptionViewResponse
+    suspend fun getMainDescription(): DescriptionViewResponse
 }

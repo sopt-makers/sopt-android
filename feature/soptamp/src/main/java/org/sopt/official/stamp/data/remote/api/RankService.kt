@@ -31,4 +31,3 @@ internal interface RankService {
     @GET("rank/detail")
     suspend fun getRankDetail(@Query("nickname") nickname: String): RankDetailResponse
 }
-

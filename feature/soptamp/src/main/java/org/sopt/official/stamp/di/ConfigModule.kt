@@ -85,4 +85,3 @@ object ConfigModule {
         context.deleteSharedPreferences(BuildConfig.persistenceStoreName)
     }
 }
-
