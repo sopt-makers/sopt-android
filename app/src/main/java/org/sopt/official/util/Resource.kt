@@ -10,7 +10,7 @@ fun Context.stringOf(@StringRes id: Int) = getString(id)
 
 fun Context.stringOf(@StringRes id: Int, arg1: String) = getString(id, arg1)
 
-fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, args)
+fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, *args)
 
 fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
 

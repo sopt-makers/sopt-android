@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.core.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemMainSmallBinding
+import org.sopt.official.databinding.ItemMainSmallBlockListBinding
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.util.drawableOf
 import org.sopt.official.util.setOnSingleClickListener
@@ -21,11 +22,11 @@ class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder
     )
 ) {
     class ViewHolder(
-        private val binding: ItemMainSmallBinding
+        private val binding: ItemMainSmallBlockListBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun onBind(item: HomeMenuType) {
             val context = binding.root.context
-            with(binding) {
+            with(binding.itemView) {
                 icon.background = context.drawableOf(item.icon)
                 title.text = context.stringOf(item.title)
                 descriptionSmall.isVisible = item.description != null
@@ -40,7 +41,7 @@ class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return ViewHolder(ItemMainSmallBinding.inflate(inflater))
+        return ViewHolder(ItemMainSmallBlockListBinding.inflate(inflater))
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

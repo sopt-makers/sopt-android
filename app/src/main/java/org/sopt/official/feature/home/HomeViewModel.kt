@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -45,6 +46,7 @@ class HomeViewModel @Inject constructor(
         .map { it.user.activeState }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UserActiveState.UNAUTHENTICATED)
     val generationList: Flow<SoptActiveGeneration?> = homeUiState
+        .filterNotNull()
         .map { it.user.generationList }
     val title = user
         .map {
@@ -54,6 +56,7 @@ class HomeViewModel @Inject constructor(
             val startDate = calculateGenerationStartDate(generation)
             val currentDate = Instant.systemNow().toDefaultLocalDate()
             val period = calculateDurationOfGeneration(startDate, currentDate)
+            Timber.d("SOPT generation: $generation, startDate: $startDate, currentDate: $currentDate, period: $period")
             when {
                 userName?.isNotEmpty() == true -> UserUiState.User(
                     R.string.main_title_member,
@@ -73,19 +76,19 @@ class HomeViewModel @Inject constructor(
             val state = it.activeState
             val generationList = it.generationList
             val isEmpty = generationList?.isEmpty
-            val lastGeneration = if (!isEmpty!!) generationList.first.toString() else ""
+            val lastGeneration = if (isEmpty != true) generationList?.first.toString() else ""
             when {
                 state == UserActiveState.ACTIVE -> UserActiveGeneration(
                     R.string.main_active_member,
                     lastGeneration
                 )
 
-                isEmpty && state == UserActiveState.INACTIVE -> UserActiveGeneration(
+                isEmpty == true && state == UserActiveState.INACTIVE -> UserActiveGeneration(
                     R.string.main_no_profile_member,
                     null
                 )
 
-                !isEmpty && state == UserActiveState.INACTIVE -> UserActiveGeneration(
+                isEmpty != true && state == UserActiveState.INACTIVE -> UserActiveGeneration(
                     R.string.main_inactive_member,
                     lastGeneration
                 )
