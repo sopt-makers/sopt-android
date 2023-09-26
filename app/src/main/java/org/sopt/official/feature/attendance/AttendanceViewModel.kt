@@ -1,11 +1,11 @@
 package org.sopt.official.feature.attendance
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import org.sopt.official.core.lifecycle.combineWith
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -67,6 +67,14 @@ class AttendanceViewModel @Inject constructor(
     val isThirdProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarAttendance }
     val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
     val isThirdProgressBarBeforeAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarBeforeAttendance }
+    val isThirdProgressBarVisible =
+        isThirdProgressBarActive.combineWith(isThirdProgressBarTardy) { isThirdProgressBarActive, isThirdProgressBarTardy ->
+            isThirdProgressBarActive == true && isThirdProgressBarTardy == true
+        }
+    val isThirdProgressBarActiveAndBeforeAttendance =
+        isThirdProgressBarActive.combineWith(isThirdProgressBarBeforeAttendance) { isThirdProgressBarActive, isThirdProgressBarBeforeAttendance ->
+            isThirdProgressBarActive == true && isThirdProgressBarBeforeAttendance == true
+        }
 
     private val attendanceButtonState = MutableLiveData(AttendanceButtonState())
     val isAttendanceButtonEnabled: LiveData<Boolean> = attendanceButtonState.map { it.isAttendanceButtonEnabled }
@@ -77,7 +85,16 @@ class AttendanceViewModel @Inject constructor(
     var dialogErrorMessage: String = ""
     private var attendancesSize = 0
 
-    fun initTitle(title: String) {
+    init {
+        fetchData()
+    }
+
+    fun fetchData() {
+        fetchSoptEvent()
+        fetchAttendanceHistory()
+    }
+
+    fun initDialogTitle(title: String) {
         _title.value = title
     }
 

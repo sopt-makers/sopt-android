@@ -32,7 +32,6 @@ class AttendanceCodeDialog : DialogFragment() {
     private var _binding: DialogAttendanceCodeBinding? = null
     private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
     private val viewModel: AttendanceViewModel by activityViewModels()
-    private var title: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,7 +66,7 @@ class AttendanceCodeDialog : DialogFragment() {
     }
 
     fun setTitle(title: String): AttendanceCodeDialog {
-        this.title = title
+        viewModel.initDialogTitle(title)
         return this
     }
 
