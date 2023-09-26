@@ -186,7 +186,7 @@ class AttendanceCodeDialog : DialogFragment() {
             btnAttendanceCodeDialog.setOnClickListener {
                 viewModel.checkAttendanceCode(
                     "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}" +
-                            "${etAttendanceCode4.text}${etAttendanceCode5.text}"
+                        "${etAttendanceCode4.text}${etAttendanceCode5.text}"
                 )
             }
         }

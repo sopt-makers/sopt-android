@@ -71,8 +71,8 @@ class AttendanceViewModel @Inject constructor(
         isThirdProgressBarActive.combineWith(isThirdProgressBarTardy) { isThirdProgressBarActive, isThirdProgressBarTardy ->
             isThirdProgressBarActive == true && isThirdProgressBarTardy == true
         }
-    val isThirdProgressBarActiveAndBeforeAttendance =
-        isThirdProgressBarActive.combineWith(isThirdProgressBarBeforeAttendance) { isThirdProgressBarActive, isThirdProgressBarBeforeAttendance ->
+    val isThirdProgressBarActiveAndBeforeAttendance = isThirdProgressBarActive
+        .combineWith(isThirdProgressBarBeforeAttendance) { isThirdProgressBarActive, isThirdProgressBarBeforeAttendance ->
             isThirdProgressBarActive == true && isThirdProgressBarBeforeAttendance == true
         }
 
