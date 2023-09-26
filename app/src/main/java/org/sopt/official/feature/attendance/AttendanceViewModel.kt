@@ -47,13 +47,13 @@ class AttendanceViewModel @Inject constructor(
     private var eventId: Int = 0
     private val _title: MutableStateFlow<String> = MutableStateFlow("")
     val title = _title.asStateFlow()
-    private var _soptEvent = MutableStateFlow<AttendanceState<SoptEvent>>(AttendanceState.Init)
+    private val _soptEvent = MutableStateFlow<AttendanceState<SoptEvent>>(AttendanceState.Init)
     val soptEvent: StateFlow<AttendanceState<SoptEvent>> get() = _soptEvent
-    private var _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
+    private val _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
     val attendanceHistory: StateFlow<AttendanceState<AttendanceHistory>> get() = _attendanceHistory
-    private var _attendanceRound = MutableStateFlow<AttendanceState<AttendanceRound>>(AttendanceState.Init)
+    private val _attendanceRound = MutableStateFlow<AttendanceState<AttendanceRound>>(AttendanceState.Init)
     val attendanceRound: StateFlow<AttendanceState<AttendanceRound>> get() = _attendanceRound
-    private var _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
+    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
     val dialogState: StateFlow<DialogState> get() = _dialogState
 
     private val progressBarState = MutableLiveData(ProgressBarState())
@@ -65,16 +65,11 @@ class AttendanceViewModel @Inject constructor(
     val isSecondToThirdLineActive: LiveData<Boolean> = progressBarState.map { it.isSecondToThirdLineActive }
     val isThirdProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarActive }
     val isThirdProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarAttendance }
-    val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
+    private val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
     val isThirdProgressBarBeforeAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarBeforeAttendance }
-    val isThirdProgressBarVisible =
-        isThirdProgressBarActive.combineWith(isThirdProgressBarTardy) { isThirdProgressBarActive, isThirdProgressBarTardy ->
-            isThirdProgressBarActive == true && isThirdProgressBarTardy == true
-        }
-    val isThirdProgressBarActiveAndBeforeAttendance = isThirdProgressBarActive
-        .combineWith(isThirdProgressBarBeforeAttendance) { isThirdProgressBarActive, isThirdProgressBarBeforeAttendance ->
-            isThirdProgressBarActive == true && isThirdProgressBarBeforeAttendance == true
-        }
+    val isThirdProgressBarVisible = progressBarState.map { it.isThirdProgressBarActive && it.isThirdProgressBarTardy }
+    val isThirdProgressBarActiveAndBeforeAttendance =
+        progressBarState.map { it.isThirdProgressBarActive && it.isThirdProgressBarBeforeAttendance }
 
     private val attendanceButtonState = MutableLiveData(AttendanceButtonState())
     val isAttendanceButtonEnabled: LiveData<Boolean> = attendanceButtonState.map { it.isAttendanceButtonEnabled }
