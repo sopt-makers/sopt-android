@@ -17,16 +17,21 @@ import androidx.core.widget.addTextChangedListener
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.sopt.official.core.lifecycle.viewLifeCycle
+import org.sopt.official.core.lifecycle.viewLifeCycleScope
 import org.sopt.official.databinding.DialogAttendanceCodeBinding
 import org.sopt.official.feature.attendance.model.DialogState
 
 class AttendanceCodeDialog : DialogFragment() {
     private var _binding: DialogAttendanceCodeBinding? = null
     private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
-    private val attendanceViewModel: AttendanceViewModel by activityViewModels()
+    private val viewModel: AttendanceViewModel by activityViewModels()
     private var title: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +56,6 @@ class AttendanceCodeDialog : DialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = DialogAttendanceCodeBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -68,7 +72,10 @@ class AttendanceCodeDialog : DialogFragment() {
     }
 
     private fun initTitle() {
-        binding.titleText = "${title.substring(0, 5)}하기"
+        viewModel.title
+            .flowWithLifecycle(viewLifeCycle)
+            .onEach { binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기" }
+            .launchIn(viewLifeCycleScope)
     }
 
     private fun initListener() {
@@ -178,26 +185,26 @@ class AttendanceCodeDialog : DialogFragment() {
                 dismiss()
             }
             btnAttendanceCodeDialog.setOnClickListener {
-                attendanceViewModel.checkAttendanceCode(
+                viewModel.checkAttendanceCode(
                     "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}" +
-                        "${etAttendanceCode4.text}${etAttendanceCode5.text}"
+                            "${etAttendanceCode4.text}${etAttendanceCode5.text}"
                 )
             }
         }
     }
 
     override fun dismiss() {
-        attendanceViewModel.initDialogState()
+        viewModel.initDialogState()
         super.dismiss()
     }
 
     private fun observeState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            attendanceViewModel.dialogState.collectLatest {
+            viewModel.dialogState.collectLatest {
                 when (it) {
                     is DialogState.Close -> {
                         dismiss()
-                        attendanceViewModel.run {
+                        viewModel.run {
                             fetchSoptEvent()
                             initDialogState()
                             dialogErrorMessage = ""
@@ -219,7 +226,7 @@ class AttendanceCodeDialog : DialogFragment() {
 
                             // 에러 메시지 나타나도록
                             tvAttendanceCodeDialogError.visibility = View.VISIBLE
-                            tvAttendanceCodeDialogError.text = attendanceViewModel.dialogErrorMessage
+                            tvAttendanceCodeDialogError.text = viewModel.dialogErrorMessage
 
                             // 키보드 내리기
                             hideKeyboard()
