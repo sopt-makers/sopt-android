@@ -4,9 +4,11 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Rect
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -16,6 +18,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,6 +36,7 @@ import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.MyPageActivity
 import org.sopt.official.stamp.SoptampActivity
+import org.sopt.official.util.dp
 import org.sopt.official.util.drawableOf
 import org.sopt.official.util.serializableExtra
 import org.sopt.official.util.setOnSingleClickListener
@@ -179,6 +183,12 @@ class HomeActivity : AppCompatActivity() {
     private fun initBlock() {
         binding.smallBlockList.apply {
             adapter = SmallBlockAdapter()
+            addItemDecoration(object : RecyclerView.ItemDecoration() {
+                override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+                    super.getItemOffsets(outRect, view, parent, state)
+                    outRect.set(0.dp, 0.dp, 12.dp, 0.dp)
+                }
+            })
             layoutManager = LinearLayoutManager(this@HomeActivity).apply {
                 orientation = LinearLayoutManager.HORIZONTAL
             }
