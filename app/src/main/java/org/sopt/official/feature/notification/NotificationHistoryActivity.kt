@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
-import org.sopt.official.data.model.notification.response.NotificationHistoryItem
+import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.databinding.ActivityNotificationHistoryBinding
 import org.sopt.official.util.viewBinding
 
@@ -37,7 +37,7 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     }
 
     private fun initRecyclerView() {
-        binding.recyclerViewNotificationHistory.adapter = NotificationHistoryRecyclerViewAdapter(viewModel.notificationHistoryList.value.list, this)
+        binding.recyclerViewNotificationHistory.adapter = NotificationHistoryRecyclerViewAdapter(viewModel.notificationHistoryList.value, this)
     }
 
     private fun initClickListeners() {
@@ -58,7 +58,7 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
 
     private fun initStateFlowValues() {
         viewModel.notificationHistoryList.flowWithLifecycle(lifecycle)
-            .onEach { setTextViewReadAllVisibility(it.list.isNotEmpty()) }
+            .onEach { setTextViewReadAllVisibility(it.isNotEmpty()) }
             .launchIn(lifecycleScope)
 
         viewModel.updateEntireNotificationReadingState.flowWithLifecycle(lifecycle)
@@ -74,7 +74,7 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         }
     }
 
-    override fun onClickNotificationHistoryItem(item: NotificationHistoryItem) {
+    override fun onClickNotificationHistoryItem(item: NotificationHistoryItemResponse) {
         when (item.type) {
 
         }

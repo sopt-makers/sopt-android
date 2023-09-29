@@ -1,5 +1,6 @@
 package org.sopt.official.data.repository.notfication
 
+import org.sopt.official.data.mapper.NotificationHistoryItemMapper
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
@@ -8,12 +9,15 @@ import org.sopt.official.data.model.notification.response.NotificationReadingSta
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UnreadNotificationExistenceResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
+import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.repository.notification.NotificationRepository
 import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
     private val service: NotificationService
 ) : NotificationRepository {
+
+    private val notificationHistoryMapper = NotificationHistoryItemMapper()
 
     override suspend fun registerToken(pushToken: String): Result<UpdatePushTokenResponse> {
         return runCatching {
@@ -39,9 +43,9 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override suspend fun getNotificationHistory(
         page: Int
-    ): Result<NotificationHistoryItemResponse> {
+    ): Result<List<NotificationHistoryItem>> {
         return runCatching {
-            service.getNotificationHistory(page)
+            service.getNotificationHistory(page).map(notificationHistoryMapper::toNotificationHistoryItem)
         }
     }
 

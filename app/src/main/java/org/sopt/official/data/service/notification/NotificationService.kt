@@ -31,7 +31,7 @@ interface NotificationService {
     @GET("notification")
     suspend fun getNotificationHistory(
         @Query("page") page: Int
-    ): NotificationHistoryItemResponse
+    ): ArrayList<NotificationHistoryItemResponse>
 
     @GET("notification/main")
     suspend fun getUnreadNotificationExistence(

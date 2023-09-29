@@ -3,11 +3,11 @@ package org.sopt.official.feature.notification
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.official.data.model.notification.response.NotificationHistoryItem
+import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 
 class NotificationHistoryRecyclerViewAdapter(
-    private var notificationList: List<NotificationHistoryItem>,
+    private var notificationList: List<NotificationHistoryItemResponse>,
     private val clickListener: NotificationHistoryItemClickListener
 ) : RecyclerView.Adapter<NotificationHistoryRecyclerViewAdapter.NotificationHistoryViewHolder>() {
 
@@ -39,7 +39,7 @@ class NotificationHistoryRecyclerViewAdapter(
         private val viewBinding: ItemNotificationHistoryBinding
     ): RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun bind(item: NotificationHistoryItem) {
+        fun bind(item: NotificationHistoryItemResponse) {
             viewBinding.apply {
                 textViewTitle.text = item.title
                 textViewContent.text = item.content

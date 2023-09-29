@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
@@ -19,8 +18,8 @@ class NotificationHistoryViewModel @Inject constructor(
     private val updateEntireNotificationReadingStateUseCase: UpdateEntireNotificationReadingStateUseCase
 ) : ViewModel() {
 
-    private val _notificationHistoryList = MutableStateFlow(NotificationHistoryItemResponse(arrayListOf()))
-    val notificationHistoryList: StateFlow<NotificationHistoryItemResponse> get() = _notificationHistoryList
+    private val _notificationHistoryList = MutableStateFlow<ArrayList<NotificationHistoryItemResponse>>(arrayListOf())
+    val notificationHistoryList = _notificationHistoryList.asStateFlow()
 
     private val _updateEntireNotificationReadingState = MutableStateFlow(false)
     val updateEntireNotificationReadingState = _updateEntireNotificationReadingState.asStateFlow()
