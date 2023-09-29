@@ -6,7 +6,7 @@ import javax.inject.Inject
 class DeletePushTokenUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke(): Result<Unit> {
-        return notificationRepository.deleteToken()
+    suspend operator fun invoke(pushToken: String): Result<Unit> {
+        return notificationRepository.deleteToken(pushToken)
     }
 }

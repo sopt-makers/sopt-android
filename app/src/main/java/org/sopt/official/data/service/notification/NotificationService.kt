@@ -2,6 +2,7 @@ package org.sopt.official.data.service.notification
 
 import org.sopt.official.data.model.attendance.*
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
+import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
@@ -17,11 +18,13 @@ import retrofit2.http.Query
 interface NotificationService {
     @POST("user/push-token")
     suspend fun registerToken(
-        @Path("token") token: String
-    )
+        @Body body: UpdatePushTokenRequest
+    ): Result<Unit>
 
     @DELETE("user/push-token")
-    suspend fun deleteToken()
+    suspend fun deleteToken(
+        @Body body: UpdatePushTokenRequest
+    ): Result<Unit>
 
 
     @GET("notification")
@@ -32,6 +35,7 @@ interface NotificationService {
     @GET("notification/main")
     suspend fun getUnreadNotificationExistence(
     ): UnreadNotificationExistenceResponse
+
 
     @PATCH("notification/{notificationId}")
     suspend fun updateNotificationReadingState(

@@ -1,6 +1,7 @@
 package org.sopt.official.data.repository.notfication
 
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
+import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
@@ -15,13 +16,21 @@ class NotificationRepositoryImpl @Inject constructor(
 
     override suspend fun registerToken(pushToken: String): Result<Unit> {
         return runCatching {
-            service.registerToken(pushToken)
+            service.registerToken(
+                UpdatePushTokenRequest(
+                    pushToken = pushToken
+                )
+            )
         }
     }
 
-    override suspend fun deleteToken(): Result<Unit> {
+    override suspend fun deleteToken(pushToken: String): Result<Unit> {
         return runCatching {
-            service.deleteToken()
+            service.deleteToken(
+                UpdatePushTokenRequest(
+                    pushToken = pushToken
+                )
+            )
         }
     }
 
@@ -60,11 +69,16 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateNotificationSubscription(
-        notificationSubscriptionRequest: NotificationSubscriptionRequest
+        isSubscribed: Boolean
     ): Result<NotificationSubscriptionResponse> {
         return runCatching {
-            service.updateNotificationSubscription(notificationSubscriptionRequest)
+            service.updateNotificationSubscription(
+                NotificationSubscriptionRequest(
+                    allOptIn = isSubscribed,
+                    partOptIn = isSubscribed,
+                    newsOptIn = isSubscribed
+                )
+            )
         }
     }
-
 }

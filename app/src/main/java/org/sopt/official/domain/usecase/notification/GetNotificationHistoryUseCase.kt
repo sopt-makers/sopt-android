@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetNotificationHistoryUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke(page: Int): Result<List<NotificationHistoryItemResponse>> {
+    suspend operator fun invoke(page: Int): Result<NotificationHistoryItemResponse> {
         return notificationRepository.getNotificationHistory(page)
     }
 }
