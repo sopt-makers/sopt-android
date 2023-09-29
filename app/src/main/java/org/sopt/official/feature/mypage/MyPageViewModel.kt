@@ -5,8 +5,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.repository.AuthRepository
+import org.sopt.official.domain.usecase.notification.GetNotificationSubscriptionUseCase
+import org.sopt.official.domain.usecase.notification.UpdateNotificationSubscriptionUseCase
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.stamp.domain.repository.StampRepository
 import timber.log.Timber
@@ -16,9 +20,15 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
+    private val getNotificationSubscriptionUseCase: GetNotificationSubscriptionUseCase,
+    private val updateNotificationSubscriptionUseCase: UpdateNotificationSubscriptionUseCase,
 ) : ViewModel() {
+
     val userActiveState = BehaviorProcessor.createDefault<MyPageUiState>(MyPageUiState.UnInitialized)
     val restartSignal = PublishSubject.create<Boolean>()
+
+    private val _notificationSubscriptionState = MutableStateFlow(false)
+    val notificationSubscriptionState: StateFlow<Boolean> get() = _notificationSubscriptionState
 
     fun logOut() {
         viewModelScope.launch {
@@ -38,6 +48,22 @@ class MyPageViewModel @Inject constructor(
                 }.onFailure {
                     Timber.e(it)
                 }
+        }
+    }
+
+    fun getNotificationSubscription() {
+        viewModelScope.launch {
+            getNotificationSubscriptionUseCase.invoke()
+                .onSuccess { _notificationSubscriptionState.value = it.isOptIn }
+                .onFailure { Timber.e("getNotificationSubscription: ", it) }
+        }
+    }
+
+    fun updateNotificationSubscription(isSubscribed: Boolean) {
+        viewModelScope.launch {
+            updateNotificationSubscriptionUseCase.invoke(isSubscribed)
+                .onSuccess { _notificationSubscriptionState.value = it.isOptIn }
+                .onFailure { Timber.e("updateNotificationSubscription: ", it) }
         }
     }
 }

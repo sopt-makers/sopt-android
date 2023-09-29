@@ -6,11 +6,15 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
 import org.sopt.official.designsystem.AlertDialogPositiveNegative
@@ -47,6 +51,11 @@ class MyPageActivity : AppCompatActivity() {
         initView()
         initClick()
         initRestart()
+
+        // TODO: 로그인 상태 아닐때 제외해줄 기능 처리 필요
+        initStateFlowValues()
+        initNotificationClickListener()
+        viewModel.getNotificationSubscription()
     }
 
     private fun initStartArgs() {
@@ -81,14 +90,15 @@ class MyPageActivity : AppCompatActivity() {
             .onBackpressureLatest()
             .subscribeBy(
                 createDisposable,
-                onNext = {
-                    binding.containerSoptampInfo.setVisible(it)
-                    binding.textLogIn.setVisible(!it)
-                    binding.iconLogIn.setVisible(!it)
-                    binding.textLogOut.setVisible(it)
-                    binding.iconLogOut.setVisible(it)
-                    binding.textSignOut.setVisible(it)
-                    binding.iconSignOut.setVisible(it)
+                onNext = { isAuthenticated ->
+                    binding.containerNotificationSetting.setVisible(isAuthenticated)
+                    binding.containerSoptampInfo.setVisible(isAuthenticated)
+                    binding.textLogIn.setVisible(!isAuthenticated)
+                    binding.iconLogIn.setVisible(!isAuthenticated)
+                    binding.textLogOut.setVisible(isAuthenticated)
+                    binding.iconLogOut.setVisible(isAuthenticated)
+                    binding.textSignOut.setVisible(isAuthenticated)
+                    binding.iconSignOut.setVisible(isAuthenticated)
                 }
             )
     }
@@ -224,6 +234,18 @@ class MyPageActivity : AppCompatActivity() {
                     ProcessPhoenix.triggerRebirth(this, mainIntent)
                 }
             )
+    }
+
+    private fun initStateFlowValues() {
+        viewModel.notificationSubscriptionState.flowWithLifecycle(lifecycle)
+            .onEach { binding.switchNotification.isChecked = it }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun initNotificationClickListener() {
+        binding.switchNotification.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.updateNotificationSubscription(isChecked)
+        }
     }
 
     override fun onDestroy() {

@@ -76,6 +76,8 @@
     <string name="mypage_private_info">개인정보 처리 방침</string>
     <string name="mypage_service_rule">서비스 이용약관</string>
     <string name="mypage_send_opinion">의견 보내기</string>
+    <string name="mypage_notification_setting">알림 설정</string>
+    <string name="mypage_notification">알림</string>
     <string name="mypage_soptamp_setting_title">솝탬프 설정</string>
     <string name="mypage_adjust_sentence">한 마디 편집</string>
     <string name="mypage_change_nickname">닉네임 변경</string>
