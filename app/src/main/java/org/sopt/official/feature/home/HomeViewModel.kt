@@ -2,6 +2,7 @@ package org.sopt.official.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,6 +22,7 @@ import org.sopt.official.domain.entity.home.SoptActiveRecord
 import org.sopt.official.domain.entity.home.SoptUser
 import org.sopt.official.domain.entity.home.User
 import org.sopt.official.domain.repository.home.HomeRepository
+import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.SoptMainContentUrl
@@ -36,8 +38,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mainViewRepository: HomeRepository
+    private val mainViewRepository: HomeRepository,
+    private val registerPushTokenUseCase: RegisterPushTokenUseCase
 ) : ViewModel() {
+
     private val homeUiState = MutableStateFlow(SoptUser())
     private val user = homeUiState.map { it.user }
     private val _description = MutableStateFlow(HomeSection())
@@ -171,6 +175,18 @@ class HomeViewModel @Inject constructor(
                     .onSuccess {
                         _description.value = it
                     }
+            }
+        }
+    }
+
+    fun registerPushToken(userStatus: UserStatus) {
+        if (userStatus == UserStatus.UNAUTHENTICATED) return
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isComplete) {
+                viewModelScope.launch {
+                    registerPushTokenUseCase.invoke(task.result)
+                        .onFailure { Timber.e(it) }
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UnreadNotificationExistenceResponse
+import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import org.sopt.official.domain.repository.notification.NotificationRepository
 import javax.inject.Inject
 
@@ -14,20 +15,22 @@ class NotificationRepositoryImpl @Inject constructor(
     private val service: NotificationService
 ) : NotificationRepository {
 
-    override suspend fun registerToken(pushToken: String): Result<Unit> {
+    override suspend fun registerToken(pushToken: String): Result<UpdatePushTokenResponse> {
         return runCatching {
             service.registerToken(
                 UpdatePushTokenRequest(
+                    platform = "Android",
                     pushToken = pushToken
                 )
             )
         }
     }
 
-    override suspend fun deleteToken(pushToken: String): Result<Unit> {
+    override suspend fun deleteToken(pushToken: String): Result<UpdatePushTokenResponse> {
         return runCatching {
             service.deleteToken(
                 UpdatePushTokenRequest(
+                    platform = "Android",
                     pushToken = pushToken
                 )
             )

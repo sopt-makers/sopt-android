@@ -4,11 +4,12 @@ import org.sopt.official.data.model.notification.response.NotificationHistoryIte
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UnreadNotificationExistenceResponse
+import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 
 interface NotificationRepository {
 
-    suspend fun registerToken(pushToken: String): Result<Unit>
-    suspend fun deleteToken(pushToken: String): Result<Unit>
+    suspend fun registerToken(pushToken: String): Result<UpdatePushTokenResponse>
+    suspend fun deleteToken(pushToken: String): Result<UpdatePushTokenResponse>
 
     suspend fun getNotificationHistory(
         page: Int

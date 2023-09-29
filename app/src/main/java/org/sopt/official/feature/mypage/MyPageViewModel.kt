@@ -2,6 +2,7 @@ package org.sopt.official.feature.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.repository.AuthRepository
 import org.sopt.official.domain.usecase.notification.GetNotificationSubscriptionUseCase
+import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.domain.usecase.notification.UpdateNotificationSubscriptionUseCase
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.stamp.domain.repository.StampRepository
@@ -20,6 +22,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
+    private val registerPushTokenUseCase: RegisterPushTokenUseCase,
     private val getNotificationSubscriptionUseCase: GetNotificationSubscriptionUseCase,
     private val updateNotificationSubscriptionUseCase: UpdateNotificationSubscriptionUseCase,
 ) : ViewModel() {
@@ -62,8 +65,22 @@ class MyPageViewModel @Inject constructor(
     fun updateNotificationSubscription(isSubscribed: Boolean) {
         viewModelScope.launch {
             updateNotificationSubscriptionUseCase.invoke(isSubscribed)
-                .onSuccess { _notificationSubscriptionState.value = it.isOptIn }
+                .onSuccess {
+                    if (it.isOptIn) registerPushToken()
+                    _notificationSubscriptionState.value = it.isOptIn
+                }
                 .onFailure { Timber.e("updateNotificationSubscription: ", it) }
+        }
+    }
+    
+    private fun registerPushToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+            if (task.isComplete) {
+                viewModelScope.launch {
+                    registerPushTokenUseCase.invoke(task.result)
+                        .onFailure { Timber.e(it) }
+                }
+            }
         }
     }
 }

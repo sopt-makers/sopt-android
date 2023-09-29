@@ -102,6 +102,7 @@ class HomeActivity : AppCompatActivity() {
     private fun initUserStatus() {
         viewModel.initHomeUi(args ?: UserStatus.UNAUTHENTICATED)
         viewModel.initMainDescription(args ?: UserStatus.UNAUTHENTICATED)
+        viewModel.registerPushToken(args ?: UserStatus.UNAUTHENTICATED)
     }
 
     private fun initToolbar() {
