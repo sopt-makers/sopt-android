@@ -35,6 +35,7 @@
         android:layout_gravity="center_vertical|end"
         android:layout_marginEnd="4dp"
         android:src="@drawable/icon_notification"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/mypage"
         app:layout_constraintEnd_toStartOf="@id/mypage"
         app:layout_constraintTop_toTopOf="@id/mypage" />
@@ -47,7 +48,7 @@
         android:layout_marginEnd="10dp"
         android:background="@drawable/oval"
         android:backgroundTint="@color/orange_100"
-        android:visibility="invisible"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/imageView_notificationHistory"
         app:layout_constraintTop_toTopOf="@id/imageView_notificationHistory" />
 

@@ -37,6 +37,7 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.MyPageActivity
+import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.dp
 import org.sopt.official.util.drawableOf
@@ -97,6 +98,13 @@ class HomeActivity : AppCompatActivity() {
         initUserStatus()
         initUserInfo()
         initBlock()
+
+        initNotificationBadgeVisibility()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getUnreadNotificationExistence()
     }
 
     private fun initUserStatus() {
@@ -151,6 +159,13 @@ class HomeActivity : AppCompatActivity() {
                         tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.value))
                         this@HomeActivity.startActivity(intent)
                     }
+                }
+
+                val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
+                binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
+                binding.imageViewNotificationHistory.setOnClickListener {
+                    val intent = Intent(this, NotificationHistoryActivity::class.java)
+                    startActivity(intent)
                 }
             }.launchIn(lifecycleScope)
         viewModel.generatedTagText
@@ -255,6 +270,13 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
+    }
+
+    private fun initNotificationBadgeVisibility() {
+        if (viewModel.userActiveState.value == UserActiveState.UNAUTHENTICATED) return
+        viewModel.isUnreadNotificationExist.flowWithLifecycle(lifecycle)
+            .onEach { binding.imageViewNotificationBadge.visibility = if (it) View.VISIBLE else View.GONE }
+            .launchIn(lifecycleScope)
     }
 
     companion object {
