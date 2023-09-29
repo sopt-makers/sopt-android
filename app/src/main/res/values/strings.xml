@@ -118,5 +118,5 @@
     <string name="toolbar_notification_filter_notice">공지</string>
     <string name="toolbar_notification_filter_news">소식</string>
     <string name="notification_history_empty_view">아직 도착한 알림이 없어요.</string>
-
+    <string name="notification_history_news_detail">바로가기</string>
 </resources>
