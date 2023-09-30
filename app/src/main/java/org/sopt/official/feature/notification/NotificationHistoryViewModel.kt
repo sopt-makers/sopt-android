@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
+import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.usecase.notification.GetNotificationHistoryUseCase
 import org.sopt.official.domain.usecase.notification.UpdateEntireNotificationReadingStateUseCase
 import timber.log.Timber
@@ -18,11 +18,12 @@ class NotificationHistoryViewModel @Inject constructor(
     private val updateEntireNotificationReadingStateUseCase: UpdateEntireNotificationReadingStateUseCase
 ) : ViewModel() {
 
-    private val _notificationHistoryList = MutableStateFlow<ArrayList<NotificationHistoryItemResponse>>(arrayListOf())
+    private val _notificationHistoryList = MutableStateFlow<List<NotificationHistoryItem>>(arrayListOf())
     val notificationHistoryList = _notificationHistoryList.asStateFlow()
 
-    private val _updateEntireNotificationReadingState = MutableStateFlow(false)
-    val updateEntireNotificationReadingState = _updateEntireNotificationReadingState.asStateFlow()
+    init {
+        getNotificationHistory(0)
+    }
 
     fun getNotificationHistory(page: Int) {
         viewModelScope.launch {
@@ -32,10 +33,24 @@ class NotificationHistoryViewModel @Inject constructor(
         }
     }
 
+    fun updateNotificationReadingState(position: Int) {
+        val newNotificationList = _notificationHistoryList.value
+        newNotificationList[position].isRead = true
+        _notificationHistoryList.value = newNotificationList
+    }
+
     fun updateEntireNotificationReadingState() {
         viewModelScope.launch {
             updateEntireNotificationReadingStateUseCase.invoke()
-                .onSuccess { Timber.d("updateEntireNotificationReadingStateUseCase: ", it) }
+                .onSuccess {
+                    val newNotificationList = _notificationHistoryList.value
+                    for (notification in newNotificationList) {
+                        notification.isRead = true
+                    }
+                    _notificationHistoryList.value = newNotificationList
+//                    _updateEntireNotificationReadingState.value = true
+                    Timber.d("updateEntireNotificationReadingStateUseCase: ", it)
+                }
                 .onFailure { Timber.e("updateEntireNotificationReadingStateUseCase: ", it) }
         }
     }

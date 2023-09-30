@@ -1,5 +1,6 @@
 package org.sopt.official.feature.notification
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
-import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.databinding.ActivityNotificationHistoryBinding
 import org.sopt.official.util.viewBinding
 
@@ -20,6 +20,8 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
     private val viewModel by viewModels<NotificationHistoryViewModel>()
 
+    private lateinit var notificationHistoryAdapter: NotificationHistoryListViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -28,8 +30,6 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         initRecyclerView()
         initClickListeners()
         initStateFlowValues()
-
-        viewModel.getNotificationHistory(0)
     }
 
     private fun initToolbar() {
@@ -37,7 +37,8 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     }
 
     private fun initRecyclerView() {
-        binding.recyclerViewNotificationHistory.adapter = NotificationHistoryRecyclerViewAdapter(viewModel.notificationHistoryList.value, this)
+        notificationHistoryAdapter = NotificationHistoryListViewAdapter(this@NotificationHistoryActivity)
+        binding.recyclerViewNotificationHistory.adapter = notificationHistoryAdapter
     }
 
     private fun initClickListeners() {
@@ -58,13 +59,19 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
 
     private fun initStateFlowValues() {
         viewModel.notificationHistoryList.flowWithLifecycle(lifecycle)
-            .onEach { setTextViewReadAllVisibility(it.isNotEmpty()) }
-            .launchIn(lifecycleScope)
-
-        viewModel.updateEntireNotificationReadingState.flowWithLifecycle(lifecycle)
             .onEach {
+                setEmptyViewVisibility(it.isEmpty())
+                setTextViewReadAllVisibility(it.isNotEmpty())
+                notificationHistoryAdapter.submitList(it)
+            }
+            .launchIn(lifecycleScope)
+    }
 
-            }.launchIn(lifecycleScope)
+    private fun setEmptyViewVisibility(isVisible: Boolean) {
+        binding.includeNotificationHistoryEmptyView.root.visibility = when (isVisible) {
+            true -> View.VISIBLE
+            false -> View.GONE
+        }
     }
 
     private fun setTextViewReadAllVisibility(isVisible: Boolean) {
@@ -74,9 +81,22 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         }
     }
 
-    override fun onClickNotificationHistoryItem(item: NotificationHistoryItemResponse) {
-        when (item.type) {
-
+    override fun onClickNotificationHistoryItem(position: Int) {
+        viewModel.updateNotificationReadingState(position)
+        val clickedNotification = viewModel.notificationHistoryList.value[position]
+        Intent(this, NotificationDetailActivity::class.java).run {
+            putExtra(ID, clickedNotification.id)
+            putExtra(TITLE, clickedNotification.title)
+            putExtra(CONTENT, clickedNotification.content)
+            putExtra(TYPE, clickedNotification.type)
+            startActivity(this)
         }
+    }
+
+    companion object {
+        const val ID = "id"
+        const val TITLE = "title"
+        const val CONTENT = "content"
+        const val TYPE = "type"
     }
 }
