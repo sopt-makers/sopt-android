@@ -3,11 +3,14 @@ package org.sopt.official.feature.auth
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -49,12 +52,30 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (dataStore.accessToken.isNotEmpty()) {
-            startActivity(HomeActivity.getIntent(this, UserStatus.valueOf(dataStore.userStatus)))
+            startActivity(HomeActivity.getIntent(this, HomeActivity.StartArgs(
+                UserStatus.valueOf(dataStore.userStatus)
+            )))
         }
         setContentView(binding.root)
+        initNotificationChannel()
+
         initUi()
         initAnimation()
         collectUiEvent()
+    }
+
+    private fun initNotificationChannel() {
+        NotificationChannel(
+            getString(R.string.toolbar_notification_filter_all),
+            getString(R.string.toolbar_notification_filter_all),
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            setSound(null, null)
+            enableLights(false)
+            enableVibration(false)
+            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
+        }
     }
 
     private fun collectUiEvent() {
@@ -123,7 +144,9 @@ class AuthActivity : AppCompatActivity() {
             }
         }
         binding.btnSoptNotMember.setOnSingleClickListener {
-            startActivity(HomeActivity.getIntent(this, UserStatus.UNAUTHENTICATED))
+            startActivity(HomeActivity.getIntent(this, HomeActivity.StartArgs(
+                UserStatus.UNAUTHENTICATED
+            )))
         }
     }
 
