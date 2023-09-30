@@ -5,7 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class NotificationSubscriptionRequest(
-    @SerialName("allOptIn") val allOptIn: Boolean? = null,
-    @SerialName("partOptIn") val partOptIn: Boolean? = null,
-    @SerialName("newsOptIn") val newsOptIn: Boolean? = null
+    @SerialName("isOptIn") val isOptIn: Boolean? = null,
 )

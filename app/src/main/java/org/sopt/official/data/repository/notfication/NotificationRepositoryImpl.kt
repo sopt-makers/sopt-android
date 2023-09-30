@@ -81,9 +81,7 @@ class NotificationRepositoryImpl @Inject constructor(
         return runCatching {
             service.updateNotificationSubscription(
                 NotificationSubscriptionRequest(
-                    allOptIn = isSubscribed,
-                    partOptIn = isSubscribed,
-                    newsOptIn = isSubscribed
+                    isOptIn = isSubscribed
                 )
             )
         }
