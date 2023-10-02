@@ -19,10 +19,13 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
@@ -43,9 +46,6 @@ import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
-import com.amplitude.android.Amplitude
-import com.amplitude.android.Configuration
-import org.sopt.official.BuildConfig
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
