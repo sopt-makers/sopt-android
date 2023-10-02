@@ -15,7 +15,7 @@ import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.stringOf
 
 class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder>(
-    org.sopt.official.common.view.ItemDiffCallback(
+    ItemDiffCallback(
         onContentsTheSame = { old, new -> old.title == new.title },
         onItemsTheSame = { old, new -> old == new }
     )
