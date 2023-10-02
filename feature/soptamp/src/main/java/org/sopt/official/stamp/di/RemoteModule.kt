@@ -19,7 +19,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.core.di.AppRetrofit
+import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.stamp.data.remote.api.RankService
 import org.sopt.official.stamp.data.remote.api.SoptampService
 import org.sopt.official.stamp.data.remote.api.StampService

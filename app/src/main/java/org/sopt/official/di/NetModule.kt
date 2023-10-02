@@ -12,10 +12,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.BuildConfig
 import org.sopt.official.FlipperInitializer
-import org.sopt.official.core.di.AppRetrofit
-import org.sopt.official.core.di.Auth
-import org.sopt.official.core.di.Logging
-import org.sopt.official.core.di.OperationRetrofit
+import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.Auth
+import org.sopt.official.common.di.Logging
+import org.sopt.official.common.di.OperationRetrofit
 import retrofit2.Converter
 import retrofit2.Retrofit
 import javax.inject.Singleton

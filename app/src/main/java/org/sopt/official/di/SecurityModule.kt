@@ -8,7 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.BuildConfig
-import org.sopt.official.core.di.LocalStore
+import org.sopt.official.common.di.LocalStore
 import javax.inject.Singleton
 
 @Module

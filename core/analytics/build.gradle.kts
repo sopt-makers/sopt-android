@@ -4,5 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "org.sopt.official.core"
+    namespace = "org.sopt.official.analytics"
+}
+
+dependencies {
+    implementation(libs.amplitude.android)
 }

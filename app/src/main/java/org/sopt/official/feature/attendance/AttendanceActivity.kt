@@ -22,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
-import org.sopt.official.core.di.toast
+import org.sopt.official.common.di.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus

@@ -19,6 +19,7 @@ rootProject.name = "SOPT"
 include(
     ":app",
     ":feature:soptamp",
-    ":core",
+    ":core:common",
     ":feature:auth"
 )
+include(":core:analytics")

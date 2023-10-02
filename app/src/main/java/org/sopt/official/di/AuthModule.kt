@@ -5,8 +5,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
-import org.sopt.official.core.di.AppRetrofit
-import org.sopt.official.core.di.Auth
+import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.Auth
 import org.sopt.official.data.interceptor.AuthInterceptor
 import org.sopt.official.data.repository.AuthRepositoryImpl
 import org.sopt.official.data.service.AuthService
