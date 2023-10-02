@@ -43,12 +43,29 @@ import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
+import com.amplitude.android.Amplitude
+import com.amplitude.android.Configuration
+import org.sopt.official.BuildConfig
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySoptMainBinding::inflate)
     private val viewModel by viewModels<HomeViewModel>()
     private val args by serializableExtra(UserStatus.UNAUTHENTICATED)
+
+    private val amplitude by lazy {
+        val apiKey = if (BuildConfig.DEBUG) {
+            BuildConfig.devAmplitudeKey
+        } else {
+            BuildConfig.amplitudeKey
+        }
+        Amplitude(
+            Configuration(
+                apiKey = apiKey,
+                context = applicationContext
+            )
+        )
+    }
 
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
@@ -85,6 +102,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        amplitude.track(eventType = "view_apphome", eventProperties = mapOf("view_type" to args?.value))
 
         requestNotificationPermission()
         initToolbar()
@@ -100,6 +118,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
+            amplitude.track(eventType = "click_mypage", eventProperties = mapOf("view_type" to args?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
@@ -140,6 +159,7 @@ class HomeActivity : AppCompatActivity() {
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
                     binding.contentSoptamp.root.setOnSingleClickListener {
+                        amplitude.track(eventType = "click_soptamp", eventProperties = mapOf("view_type" to args?.value))
                         this@HomeActivity.startActivity(intent)
                     }
                 }
@@ -224,6 +244,7 @@ class HomeActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             }
             largeBlock.root.setOnSingleClickListener {
+                amplitude.track(eventType = item.clickEventType, eventProperties = mapOf("view_type" to args?.value))
                 startActivity(intent)
             }
         }
@@ -236,6 +257,7 @@ class HomeActivity : AppCompatActivity() {
             descriptionSmall.isVisible = item.description != null
             descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
+                amplitude.track(eventType = item.clickEventType, eventProperties = mapOf("view_type" to args?.value))
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
             }

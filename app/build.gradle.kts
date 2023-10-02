@@ -116,6 +116,8 @@ dependencies {
     implementation(libs.sentry.compose)
     implementation(libs.process.phoenix)
 
+    implementation(libs.amplitude.android)
+
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)
 
