@@ -1,4 +1,4 @@
-package org.sopt.official.core.di
+package org.sopt.official.common.di
 
 import javax.inject.Qualifier
 

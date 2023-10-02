@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "org.sopt.official.core"
+    namespace = "org.sopt.official.common"
 }

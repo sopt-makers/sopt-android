@@ -46,6 +46,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.EventType
+import org.sopt.official.stamp.LocalTracker
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
@@ -112,6 +114,10 @@ fun RankingScreen(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val scrollOffsetPx = (-257).dp.toPx()
+    val tracker = LocalTracker.current
+    LaunchedEffect(true) {
+        tracker.track(EventType.VIEW, if (isCurrent) "nowranking" else "allranking")
+    }
     Scaffold(
         topBar = {
             RankingHeader(
@@ -123,6 +129,7 @@ fun RankingScreen(
             SoptampFloatingButton(
                 text = "내 랭킹 보기"
             ) {
+                tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
                 coroutineScope.launch {
                     val currentUserIndex = rankingListUiModel.otherRankingList.withIndex()
                         .find { it.value.nickname == nickname }

@@ -29,6 +29,8 @@ internal fun Project.configureAndroidCommonPlugin() {
             val baseUrl = properties["newApi"] as? String ?: ""
             val devOperationUrl = properties["devOperationApi"] as? String ?: ""
             val operationUrl = properties["operationApi"] as? String ?: ""
+            val devAmplitudeKey = properties["devAmplitudeKey"] as? String ?: ""
+            val amplitudeKey = properties["amplitudeKey"] as? String ?: ""
             manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
@@ -36,6 +38,8 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "SOPT_BASE_URL", baseUrl)
             buildConfigField("String", "SOPT_DEV_OPERATION_BASE_URL", devOperationUrl)
             buildConfigField("String", "SOPT_OPERATION_BASE_URL", operationUrl)
+            buildConfigField("String", "DEV_AMPLITUDE_KEY", devAmplitudeKey)
+            buildConfigField("String", "AMPLITUDE_KEY", amplitudeKey)
         }
         buildFeatures.apply {
             dataBinding.enable = true

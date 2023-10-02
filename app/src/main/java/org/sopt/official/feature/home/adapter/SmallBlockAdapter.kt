@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.official.core.view.ItemDiffCallback
+import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemMainSmallBlockListBinding
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.util.drawableOf

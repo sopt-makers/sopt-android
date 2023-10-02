@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.core.di.AppRetrofit
+import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.repository.home.DefaultHomeRepository
 import org.sopt.official.data.service.home.HomeService
 import org.sopt.official.domain.repository.home.HomeRepository

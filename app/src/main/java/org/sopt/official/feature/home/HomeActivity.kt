@@ -24,6 +24,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.R
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.UserActiveState
@@ -43,6 +45,7 @@ import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -50,6 +53,8 @@ class HomeActivity : AppCompatActivity() {
     private val viewModel by viewModels<HomeViewModel>()
     private val args by serializableExtra(UserStatus.UNAUTHENTICATED)
 
+    @Inject
+    lateinit var tracker: AmplitudeTracker
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
 
@@ -85,6 +90,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.value))
 
         requestNotificationPermission()
         initToolbar()
@@ -100,6 +106,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
+            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
@@ -140,6 +147,7 @@ class HomeActivity : AppCompatActivity() {
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
                     binding.contentSoptamp.root.setOnSingleClickListener {
+                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.value))
                         this@HomeActivity.startActivity(intent)
                     }
                 }
@@ -224,6 +232,7 @@ class HomeActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             }
             largeBlock.root.setOnSingleClickListener {
+                tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.value))
                 startActivity(intent)
             }
         }
@@ -236,6 +245,9 @@ class HomeActivity : AppCompatActivity() {
             descriptionSmall.isVisible = item.description != null
             descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
+                tracker.track(
+                    type = EventType.CLICK, name = item.clickEventName, properties = mapOf("view_type" to args?.value)
+                )
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
             }
