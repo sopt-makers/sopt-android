@@ -29,6 +29,7 @@ android {
 
 dependencies {
     implementation(projects.core.common)
+    implementation(projects.core.analytics)
     implementation(libs.kotlin.datetime)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

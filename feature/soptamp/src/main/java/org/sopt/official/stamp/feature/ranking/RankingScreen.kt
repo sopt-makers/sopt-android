@@ -46,6 +46,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.EventType
+import org.sopt.official.stamp.LocalTracker
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
@@ -71,9 +73,6 @@ fun RankingScreen(
     navigator: DestinationsNavigator
 ) {
     val state by rankingViewModel.state.collectAsState()
-    LaunchedEffect(true) {
-        rankingViewModel.fetchRanking(isCurrent)
-    }
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
@@ -112,6 +111,10 @@ fun RankingScreen(
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
     val scrollOffsetPx = (-257).dp.toPx()
+    val tracker = LocalTracker.current
+    LaunchedEffect(true) {
+        tracker.track(EventType.VIEW, if (isCurrent) "nowranking" else "allranking")
+    }
     Scaffold(
         topBar = {
             RankingHeader(

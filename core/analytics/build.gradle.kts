@@ -9,4 +9,5 @@ android {
 
 dependencies {
     implementation(libs.amplitude.android)
+    implementation(libs.timber)
 }
