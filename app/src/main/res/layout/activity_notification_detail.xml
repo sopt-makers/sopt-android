@@ -18,6 +18,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
+        android:paddingBottom="160dp"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,7 +41,7 @@
             app:layout_constraintTop_toBottomOf="@id/include_appBarBackArrow">
 
             <TextView
-                android:id="@+id/textView_title"
+                android:id="@+id/textView_notificationTitle"
                 style="@style/TextAppearance.SOPT.HeadLineLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -52,6 +55,7 @@
                 android:background="@color/black_40" />
 
             <TextView
+                android:id="@+id/textView_notificationContent"
                 style="@style/TextAppearance.SOPT.BodyLarge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
