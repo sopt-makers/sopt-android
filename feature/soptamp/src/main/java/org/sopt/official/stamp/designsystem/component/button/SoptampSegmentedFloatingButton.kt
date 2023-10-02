@@ -19,7 +19,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -30,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
@@ -52,6 +55,8 @@ fun SoptampSegmentedFloatingButton(
     ) {
         Row(
             modifier = Modifier
+                .width(134.dp)
+                .height(54.dp)
                 .weight(1f)
                 .background(
                     SoptTheme.colors.purple300,
@@ -59,7 +64,7 @@ fun SoptampSegmentedFloatingButton(
                 )
                 .clip(RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp))
                 .clickable(onClick = onClickFirstOption)
-                .padding(top = 12.dp, bottom = 12.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -71,11 +76,14 @@ fun SoptampSegmentedFloatingButton(
             Text(
                 text = option1,
                 color = Color.White,
-                style = SoptTheme.typography.h2
+                style = SoptTheme.typography.h2,
+                fontSize = 18.sp
             )
         }
         Row(
             modifier = Modifier
+                .width(134.dp)
+                .height(54.dp)
                 .weight(1f)
                 .background(
                     SoptTheme.colors.pink300,
@@ -83,7 +91,7 @@ fun SoptampSegmentedFloatingButton(
                 )
                 .clip(RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp))
                 .clickable(onClick = onClickSecondOption)
-                .padding(top = 12.dp, bottom = 12.dp, start = 5.dp, end = 16.dp),
+                .padding(top = 12.dp, bottom = 12.dp, start = 5.dp, end = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
@@ -95,7 +103,8 @@ fun SoptampSegmentedFloatingButton(
             Text(
                 text = option2,
                 color = Color.White,
-                style = SoptTheme.typography.h2
+                style = SoptTheme.typography.h2,
+                fontSize = 18.sp
             )
         }
     }
