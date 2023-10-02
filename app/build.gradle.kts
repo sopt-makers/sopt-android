@@ -86,6 +86,7 @@ android {
 dependencies {
     implementation(projects.feature.soptamp)
     implementation(projects.core.common)
+    implementation(projects.core.analytics)
     implementation(projects.feature.auth)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))

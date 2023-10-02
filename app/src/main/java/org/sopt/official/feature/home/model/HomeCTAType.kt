@@ -10,27 +10,27 @@ enum class HomeCTAType(
     @StringRes val description: Int?,
     val url: String?,
     @DrawableRes val icon: Int,
-    val clickEventType: String
+    val clickEventName: String
 ) {
     SOPT_OFFICIAL_PAGE_URL(
         R.string.main_unauthenticated_large_block_official_page,
         null,
         WebUrlConstant.SOPT_OFFICIAL_PAGE_URL,
         R.drawable.ic_homepage_orange,
-        "click_homepage"
+        "homepage"
     ),
     SOPT_ATTENDANCE(
         R.string.main_active_large_block_attendance,
         R.string.main_active_large_block_attendance_description,
         null,
         R.drawable.ic_attendance_orange,
-        "click_attendance"
+        "attendance"
     ),
     SOPT_CREW_URL(
         R.string.main_inactive_large_block_crew,
         R.string.main_inactive_large_block_crew_description,
         WebUrlConstant.PLAYGROUNG_CREW_URL,
         R.drawable.ic_crew_orange,
-        "click_group"
+        "group"
     ),
 }

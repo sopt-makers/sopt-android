@@ -23,7 +23,7 @@ class AmplitudeTracker @Inject constructor(
     fun track(
         type: EventType,
         name: String,
-        properties: Map<String, String> = emptyMap()
+        properties: Map<String, Any?> = emptyMap()
     ) {
         amplitude.track(eventType = "${type.prefix}_$name", eventProperties = properties)
     }
