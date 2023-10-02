@@ -73,6 +73,9 @@ fun RankingScreen(
     navigator: DestinationsNavigator
 ) {
     val state by rankingViewModel.state.collectAsState()
+    LaunchedEffect(true) {
+        rankingViewModel.fetchRanking(isCurrent)
+    }
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
@@ -126,6 +129,7 @@ fun RankingScreen(
             SoptampFloatingButton(
                 text = "내 랭킹 보기"
             ) {
+                tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
                 coroutineScope.launch {
                     val currentUserIndex = rankingListUiModel.otherRankingList.withIndex()
                         .find { it.value.nickname == nickname }
