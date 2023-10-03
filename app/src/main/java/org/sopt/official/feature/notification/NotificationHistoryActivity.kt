@@ -84,19 +84,14 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     override fun onClickNotificationHistoryItem(position: Int) {
         viewModel.updateNotificationReadingState(position)
         val clickedNotification = viewModel.notificationHistoryList.value[position]
+
         Intent(this, NotificationDetailActivity::class.java).run {
-            putExtra(ID, clickedNotification.notificationId)
-            putExtra(TITLE, clickedNotification.title)
-            putExtra(CONTENT, clickedNotification.content)
-            putExtra(CATEGORY, clickedNotification.category)
+            putExtra(NOTIFICATION_ID, clickedNotification.notificationId)
             startActivity(this)
         }
     }
 
     companion object {
-        const val ID = "id"
-        const val TITLE = "title"
-        const val CONTENT = "content"
-        const val CATEGORY = "category"
+        const val NOTIFICATION_ID = "notificationId"
     }
 }

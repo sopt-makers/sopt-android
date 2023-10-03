@@ -1,17 +1,20 @@
 package org.sopt.official.feature.notification
 
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
-import org.sopt.official.config.messaging.RemoteMessageType
+import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.CONTENT
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.ID
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.TITLE
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.CATEGORY
+import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.NOTIFICATION_ID
 import org.sopt.official.util.viewBinding
 
 @AndroidEntryPoint
@@ -20,36 +23,39 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
-    private val id: Int by lazy {
-        intent.getIntExtra(ID, 0)
-    }
-    private val title: String? by lazy {
-        intent.getStringExtra(TITLE)
-    }
-    private val content: String? by lazy {
-        intent.getStringExtra(CONTENT)
-    }
-    private val type: String? by lazy {
-        intent.getStringExtra(CATEGORY)
+    private val notificationId: Int by lazy {
+        intent.getIntExtra(NOTIFICATION_ID, 0)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if (id != 0) viewModel.updateNotificationReadingState(id)
-        initNotificationDetail()
+        binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
+        viewModel.getNotificationDetail(notificationId)
+
+        initStateFlowValues()
         initClickListeners()
     }
 
-    private fun initNotificationDetail() {
+    private fun initStateFlowValues() {
+        viewModel.apply {
+            notificationDetail.flowWithLifecycle(lifecycle)
+                .onEach { it?.let { notification -> initNotificationDetail(notification) } }
+                .launchIn(lifecycleScope)
+        }
+    }
+
+    private fun initNotificationDetail(notification: NotificationDetailResponse) {
         binding.apply {
-            includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
-            textViewNotificationTitle.text = title
-            textViewNotificationContent.text = content
-            linearLayoutNewsDetailButton.visibility = when (type) {
-                RemoteMessageType.NOTICE.name -> View.GONE
-                else -> View.VISIBLE
+            textViewNotificationTitle.text = notification.title
+            textViewNotificationContent.text = notification.content
+            linearLayoutNewsDetailButton.visibility = when (
+                notification.deepLink.isNullOrBlank()
+                && notification.webLink.isNullOrBlank()
+            ) {
+                true -> View.GONE
+                false -> View.VISIBLE
             }
         }
     }
@@ -65,7 +71,9 @@ class NotificationDetailActivity : AppCompatActivity() {
         binding.apply {
             when (it) {
                 includeAppBarBackArrow.toolbar -> onBackPressed()
-                linearLayoutNewsDetailButton -> {} // TODO: Set intent to link.
+                linearLayoutNewsDetailButton -> viewModel.notificationDetail.value?.let {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.webLink)))
+                }
             }
         }
     }

@@ -3,6 +3,7 @@ package org.sopt.official.data.service.notification
 import org.sopt.official.data.model.attendance.*
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
+import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
@@ -31,6 +32,11 @@ interface NotificationService {
     suspend fun getNotificationHistory(
         @Query("page") page: Int
     ): ArrayList<NotificationHistoryItemResponse>
+
+    @GET("notification/{notificationId}")
+    suspend fun getNotificationDetail(
+        @Path("notificationId") notificationId: Int
+    ): NotificationDetailResponse
 
 
     @PATCH("notification/{notificationId}")

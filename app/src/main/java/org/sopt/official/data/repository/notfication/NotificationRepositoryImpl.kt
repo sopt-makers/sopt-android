@@ -3,6 +3,7 @@ package org.sopt.official.data.repository.notfication
 import org.sopt.official.data.mapper.NotificationHistoryItemMapper
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
+import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
@@ -44,6 +45,14 @@ class NotificationRepositoryImpl @Inject constructor(
     ): Result<List<NotificationHistoryItem>> {
         return runCatching {
             service.getNotificationHistory(page).map(notificationHistoryMapper::toNotificationHistoryItem)
+        }
+    }
+
+    override suspend fun getNotificationDetail(
+        notificationId: Int
+    ): Result<NotificationDetailResponse> {
+        return runCatching {
+            service.getNotificationDetail(notificationId)
         }
     }
 
