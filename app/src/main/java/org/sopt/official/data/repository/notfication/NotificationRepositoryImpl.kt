@@ -3,11 +3,9 @@ package org.sopt.official.data.repository.notfication
 import org.sopt.official.data.mapper.NotificationHistoryItemMapper
 import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
-import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
-import org.sopt.official.data.model.notification.response.UnreadNotificationExistenceResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.repository.notification.NotificationRepository
@@ -46,12 +44,6 @@ class NotificationRepositoryImpl @Inject constructor(
     ): Result<List<NotificationHistoryItem>> {
         return runCatching {
             service.getNotificationHistory(page).map(notificationHistoryMapper::toNotificationHistoryItem)
-        }
-    }
-
-    override suspend fun getUnreadNotificationExistence(): Result<UnreadNotificationExistenceResponse> {
-        return runCatching {
-            service.getUnreadNotificationExistence()
         }
     }
 

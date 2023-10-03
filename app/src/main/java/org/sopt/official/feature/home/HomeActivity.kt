@@ -98,13 +98,6 @@ class HomeActivity : AppCompatActivity() {
         initUserStatus()
         initUserInfo()
         initBlock()
-
-        initNotificationBadgeVisibility()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getUnreadNotificationExistence()
     }
 
     private fun initUserStatus() {
@@ -168,6 +161,9 @@ class HomeActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             }.launchIn(lifecycleScope)
+        viewModel.isAllNotificationsConfirm.flowWithLifecycle(lifecycle)
+            .onEach { binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE }
+            .launchIn(lifecycleScope)
         viewModel.generatedTagText
             .flowWithLifecycle(lifecycle)
             .onEach { (id, text) ->
@@ -270,13 +266,6 @@ class HomeActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         }
-    }
-
-    private fun initNotificationBadgeVisibility() {
-        if (viewModel.userActiveState.value == UserActiveState.UNAUTHENTICATED) return
-        viewModel.isUnreadNotificationExist.flowWithLifecycle(lifecycle)
-            .onEach { binding.imageViewNotificationBadge.visibility = if (it) View.VISIBLE else View.GONE }
-            .launchIn(lifecycleScope)
     }
 
     companion object {

@@ -6,7 +6,6 @@ import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
-import org.sopt.official.data.model.notification.response.UnreadNotificationExistenceResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -32,10 +31,6 @@ interface NotificationService {
     suspend fun getNotificationHistory(
         @Query("page") page: Int
     ): ArrayList<NotificationHistoryItemResponse>
-
-    @GET("notification/main")
-    suspend fun getUnreadNotificationExistence(
-    ): UnreadNotificationExistenceResponse
 
 
     @PATCH("notification/{notificationId}")

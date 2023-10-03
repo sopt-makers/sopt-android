@@ -23,7 +23,6 @@ import org.sopt.official.domain.entity.home.SoptActiveRecord
 import org.sopt.official.domain.entity.home.SoptUser
 import org.sopt.official.domain.entity.home.User
 import org.sopt.official.domain.repository.home.HomeRepository
-import org.sopt.official.domain.usecase.notification.GetUnreadNotificationExistenceUseCase
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
@@ -42,20 +41,17 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val mainViewRepository: HomeRepository,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,
-    private val getUnreadNotificationExistenceUseCase: GetUnreadNotificationExistenceUseCase
 ) : ViewModel() {
 
     private val homeUiState = MutableStateFlow(SoptUser())
     private val user = homeUiState.map { it.user }
-
-    private val _isUnreadNotificationExist = MutableStateFlow(false)
-    val isUnreadNotificationExist = _isUnreadNotificationExist.asStateFlow()
 
     private val _description = MutableStateFlow(HomeSection())
     val description = _description.asStateFlow()
     val userActiveState = homeUiState
         .map { it.user.activeState }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), UserActiveState.UNAUTHENTICATED)
+    val isAllNotificationsConfirm: Flow<Boolean> = homeUiState.map { it.isAllConfirm }
     val generationList: Flow<SoptActiveGeneration?> = homeUiState
         .filterNotNull()
         .map { it.user.generationList }
@@ -161,7 +157,8 @@ class HomeViewModel @Inject constructor(
                         if (error is HttpException && error.code() == 400) {
                             homeUiState.value = SoptUser(
                                 User(activeState = UserActiveState.INACTIVE),
-                                SoptActiveRecord()
+                                SoptActiveRecord(),
+                                false
                             )
                         }
                         Timber.e(error)
@@ -195,23 +192,6 @@ class HomeViewModel @Inject constructor(
                         .onFailure { Timber.e(it) }
                 }
             }
-        }
-    }
-
-
-    fun getUnreadNotificationExistence() {
-        viewModelScope.launch {
-            val userState = user.map { it.activeState }.first()
-            if (userState == UserActiveState.UNAUTHENTICATED) return@launch
-
-            getUnreadNotificationExistenceUseCase.invoke()
-                .onSuccess {
-                    _isUnreadNotificationExist.value = it.exists
-                }
-                .onFailure {
-                    _isUnreadNotificationExist.value = false
-                    Timber.e(it)
-                }
         }
     }
 }
