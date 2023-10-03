@@ -6,14 +6,13 @@ import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 class NotificationHistoryItemMapper {
     fun toNotificationHistoryItem(responseItem: NotificationHistoryItemResponse): NotificationHistoryItem {
         return NotificationHistoryItem(
-            id = responseItem.id,
+            notificationId = responseItem.notificationId,
             userId = responseItem.userId,
             title = responseItem.title,
             content = responseItem.content,
-            type = responseItem.type,
+            category = responseItem.category,
             isRead = responseItem.isRead,
-            createdAt = responseItem.createdAt,
-            updatedAt = responseItem.updatedAt
+            createdAt = responseItem.createdAt
         )
     }
 }

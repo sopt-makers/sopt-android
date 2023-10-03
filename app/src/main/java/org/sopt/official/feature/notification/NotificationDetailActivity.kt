@@ -11,7 +11,7 @@ import org.sopt.official.databinding.ActivityNotificationDetailBinding
 import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.CONTENT
 import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.ID
 import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.TITLE
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.TYPE
+import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.CATEGORY
 import org.sopt.official.util.viewBinding
 
 @AndroidEntryPoint
@@ -30,7 +30,7 @@ class NotificationDetailActivity : AppCompatActivity() {
         intent.getStringExtra(CONTENT)
     }
     private val type: String? by lazy {
-        intent.getStringExtra(TYPE)
+        intent.getStringExtra(CATEGORY)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -85,10 +85,10 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         viewModel.updateNotificationReadingState(position)
         val clickedNotification = viewModel.notificationHistoryList.value[position]
         Intent(this, NotificationDetailActivity::class.java).run {
-            putExtra(ID, clickedNotification.id)
+            putExtra(ID, clickedNotification.notificationId)
             putExtra(TITLE, clickedNotification.title)
             putExtra(CONTENT, clickedNotification.content)
-            putExtra(TYPE, clickedNotification.type)
+            putExtra(CATEGORY, clickedNotification.category)
             startActivity(this)
         }
     }
@@ -97,6 +97,6 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         const val ID = "id"
         const val TITLE = "title"
         const val CONTENT = "content"
-        const val TYPE = "type"
+        const val CATEGORY = "category"
     }
 }
