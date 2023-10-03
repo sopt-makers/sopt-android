@@ -257,7 +257,6 @@ class AttendanceViewModel @Inject constructor(
             .onSuccess {
                 _attendanceRound.value = AttendanceState.Success(it)
                 subLectureId = it.id
-                Timber.tag("zzzz id").i(it.id.toString())
                 when (it.id) {
                     -1L -> {
                         setAttendanceButtonVisibility(false)
@@ -282,7 +281,6 @@ class AttendanceViewModel @Inject constructor(
                     }
                 }
             }.onFailure {
-                Timber.tag("zzzz failure").e(it)
                 Timber.e(it)
             }
     }
