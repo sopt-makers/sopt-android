@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import org.sopt.official.core.lifecycle.combineWith
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -240,7 +239,7 @@ class AttendanceViewModel @Inject constructor(
         setProgressBarState { copy(isThirdProgressBarBeforeAttendance = isBeforeAttendance) }
     }
 
-    fun fetchAttendanceHistory() {
+    private fun fetchAttendanceHistory() {
         viewModelScope.launch {
             _attendanceHistory.value = AttendanceState.Loading
             attendanceRepository.fetchAttendanceHistory()
