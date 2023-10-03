@@ -38,7 +38,7 @@ interface NotificationService {
         @Path("notificationId") notificationId: Int
     ): NotificationReadingStateResponse
 
-    @PATCH("notification/0")
+    @PATCH("notification")
     suspend fun updateEntireNotificationReadingState(
     ): NotificationReadingStateResponse
 
