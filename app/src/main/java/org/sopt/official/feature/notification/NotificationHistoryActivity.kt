@@ -1,15 +1,14 @@
 package org.sopt.official.feature.notification
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.flowWithLifecycle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityNotificationHistoryBinding
 import org.sopt.official.util.viewBinding
@@ -20,7 +19,8 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
     private val viewModel by viewModels<NotificationHistoryViewModel>()
 
-    private lateinit var notificationHistoryAdapter: NotificationHistoryListViewAdapter
+    private val notificationHistoryAdapter
+        get() = binding.recyclerViewNotificationHistory.adapter as NotificationHistoryListViewAdapter?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +37,7 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     }
 
     private fun initRecyclerView() {
-        notificationHistoryAdapter = NotificationHistoryListViewAdapter(this@NotificationHistoryActivity)
-        binding.recyclerViewNotificationHistory.adapter = notificationHistoryAdapter
+        binding.recyclerViewNotificationHistory.adapter = NotificationHistoryListViewAdapter(this@NotificationHistoryActivity)
     }
 
     private fun initClickListeners() {
@@ -52,19 +51,22 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
         binding.apply {
             when (it) {
                 includeAppBarBackArrow.toolbar -> onBackPressedDispatcher.onBackPressed()
-                textViewReadAll -> viewModel.updateEntireNotificationReadingState()
+                textViewReadAll -> {
+                    viewModel.updateEntireNotificationReadingState()
+                    notificationHistoryAdapter?.updateEntireNotificationReadingState()
+                }
             }
         }
     }
 
     private fun initStateFlowValues() {
-        viewModel.notificationHistoryList.flowWithLifecycle(lifecycle)
-            .onEach {
+        lifecycleScope.launch {
+            viewModel.notificationHistoryList.collectLatest {
                 setEmptyViewVisibility(it.isEmpty())
                 setTextViewReadAllVisibility(it.isNotEmpty())
-                notificationHistoryAdapter.submitList(it)
+                notificationHistoryAdapter?.submitList(it)
             }
-            .launchIn(lifecycleScope)
+        }
     }
 
     private fun setEmptyViewVisibility(isVisible: Boolean) {
@@ -82,7 +84,7 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     }
 
     override fun onClickNotificationHistoryItem(position: Int) {
-        viewModel.updateNotificationReadingState(position)
+        notificationHistoryAdapter?.updateNotificationReadingState(position)
         val clickedNotification = viewModel.notificationHistoryList.value[position]
 
         Intent(this, NotificationDetailActivity::class.java).run {

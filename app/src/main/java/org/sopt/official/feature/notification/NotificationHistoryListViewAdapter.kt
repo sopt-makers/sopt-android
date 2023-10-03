@@ -13,9 +13,8 @@ import org.sopt.official.util.drawableOf
 class NotificationHistoryListViewAdapter(
     private val clickListener: NotificationHistoryItemClickListener
 ) : ListAdapter<NotificationHistoryItem, NotificationHistoryListViewAdapter.ViewHolder>(
-
     ItemDiffCallback(
-        onContentsTheSame = { old, new -> old.title == new.title },
+        onContentsTheSame = { old, new -> old.notificationId == new.notificationId },
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
@@ -46,6 +45,16 @@ class NotificationHistoryListViewAdapter(
         val newList = currentList.toMutableList()
         newList[position].isRead = true
         submitList(newList)
+        notifyItemChanged(position)
+    }
+
+    fun updateEntireNotificationReadingState() {
+        val newList = currentList.toMutableList()
+        for (notification in newList) {
+            notification.isRead = true
+        }
+        submitList(newList)
+        notifyItemRangeChanged(0, newList.size)
     }
 
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
@@ -19,7 +20,7 @@ class NotificationHistoryViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _notificationHistoryList = MutableStateFlow<List<NotificationHistoryItem>>(arrayListOf())
-    val notificationHistoryList = _notificationHistoryList.asStateFlow()
+    val notificationHistoryList: StateFlow<List<NotificationHistoryItem>> get() = _notificationHistoryList.asStateFlow()
 
     init {
         getNotificationHistory(0)
@@ -33,12 +34,6 @@ class NotificationHistoryViewModel @Inject constructor(
         }
     }
 
-    fun updateNotificationReadingState(position: Int) {
-        val newNotificationList = _notificationHistoryList.value
-        newNotificationList[position].isRead = true
-        _notificationHistoryList.value = newNotificationList
-    }
-
     fun updateEntireNotificationReadingState() {
         viewModelScope.launch {
             updateEntireNotificationReadingStateUseCase.invoke()
@@ -48,8 +43,6 @@ class NotificationHistoryViewModel @Inject constructor(
                         notification.isRead = true
                     }
                     _notificationHistoryList.value = newNotificationList
-//                    _updateEntireNotificationReadingState.value = true
-                    Timber.d("updateEntireNotificationReadingStateUseCase: ", it)
                 }
                 .onFailure { Timber.e("updateEntireNotificationReadingStateUseCase: ", it) }
         }
