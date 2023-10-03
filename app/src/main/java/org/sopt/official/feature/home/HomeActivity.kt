@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.UserActiveState
@@ -47,12 +48,13 @@ import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
 import javax.inject.Inject
+import java.io.Serializable
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySoptMainBinding::inflate)
     private val viewModel by viewModels<HomeViewModel>()
-    private val args by serializableExtra(UserStatus.UNAUTHENTICATED)
+    private val args by serializableExtra(StartArgs(UserStatus.UNAUTHENTICATED))
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -93,6 +95,7 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.value))
 
+        initIntentData()
         requestNotificationPermission()
         initToolbar()
         initUserStatus()
@@ -100,10 +103,28 @@ class HomeActivity : AppCompatActivity() {
         initBlock()
     }
 
+    private fun initIntentData() {
+
+        args?.remoteMessageEventType?.let {
+            if (it.isBlank()) return
+            when (RemoteMessageLinkType.of(it)) {
+                RemoteMessageLinkType.WEB_LINK -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args?.remoteMessageEventLink))
+                    startActivity(intent)
+                }
+//                RemoteMessageLinkType.DEEP_LINK -> {} TODO: 딥링크 정의된 후 구현 예정
+                else -> {
+                    val intent = Intent(this, NotificationHistoryActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
     private fun initUserStatus() {
-        viewModel.initHomeUi(args ?: UserStatus.UNAUTHENTICATED)
-        viewModel.initMainDescription(args ?: UserStatus.UNAUTHENTICATED)
-        viewModel.registerPushToken(args ?: UserStatus.UNAUTHENTICATED)
+        viewModel.initHomeUi(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        viewModel.registerPushToken(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
 
     private fun initToolbar() {
@@ -268,9 +289,15 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    data class StartArgs(
+        val userStatus: UserStatus,
+        val remoteMessageEventType: String = "",
+        val remoteMessageEventLink: String = "",
+    ) : Serializable
+
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: UserStatus) =
+        fun getIntent(context: Context, args: StartArgs) =
             Intent(context, HomeActivity::class.java).apply {
                 putExtra("args", args)
             }

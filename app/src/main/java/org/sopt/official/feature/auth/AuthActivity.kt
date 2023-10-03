@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
@@ -23,6 +24,8 @@ import org.sopt.official.R
 import org.sopt.official.auth.PlaygroundAuth
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_LINK
+import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE
 import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.AuthRequest
 import org.sopt.official.data.persistence.SoptDataStore
@@ -52,9 +55,7 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (dataStore.accessToken.isNotEmpty()) {
-            startActivity(HomeActivity.getIntent(this, HomeActivity.StartArgs(
-                UserStatus.valueOf(dataStore.userStatus)
-            )))
+            onNewIntent(intent)
         }
         setContentView(binding.root)
         initNotificationChannel()
@@ -62,6 +63,29 @@ class AuthActivity : AppCompatActivity() {
         initUi()
         initAnimation()
         collectUiEvent()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        intent?.let {
+            val remoteMessageEventType = it.getStringExtra(REMOTE_MESSAGE_EVENT_TYPE) ?: ""
+            val remoteMessageEventLink = it.getStringExtra(REMOTE_MESSAGE_EVENT_LINK) ?: ""
+
+            if (
+                dataStore.userStatus.isNotBlank()
+                && dataStore.userStatus != UserStatus.UNAUTHENTICATED.name
+                && remoteMessageEventType.isNotBlank()
+            ) {
+                startActivity(HomeActivity.getIntent(this,
+                    HomeActivity.StartArgs(
+                        UserStatus.of(dataStore.userStatus),
+                        remoteMessageEventType,
+                        remoteMessageEventLink
+                    )
+                ))
+            }
+        }
     }
 
     private fun initNotificationChannel() {
@@ -82,13 +106,21 @@ class AuthActivity : AppCompatActivity() {
         viewModel.uiEvent
             .flowWithLifecycle(lifecycle)
             .onEach { event ->
+                val remoteMessageEventType = intent.getStringExtra(REMOTE_MESSAGE_EVENT_TYPE) ?: ""
+                val remoteMessageEventLink = intent.getStringExtra(REMOTE_MESSAGE_EVENT_LINK) ?: ""
                 when (event) {
                     is AuthUiEvent.Success -> {
-                        startActivity(HomeActivity.getIntent(this, event.userStatus))
+                        startActivity(HomeActivity.getIntent(this,
+                            HomeActivity.StartArgs(
+                                event.userStatus,
+                                remoteMessageEventType,
+                                remoteMessageEventLink
+                            )
+                        ))
                     }
 
                     is AuthUiEvent.Failure -> {
-                        startActivity(HomeActivity.getIntent(this, UserStatus.UNAUTHENTICATED))
+                        startActivity(HomeActivity.getIntent(this, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED)))
                     }
                 }
             }.launchIn(lifecycleScope)
