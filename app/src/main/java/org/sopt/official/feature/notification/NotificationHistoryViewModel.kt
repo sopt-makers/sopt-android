@@ -3,6 +3,7 @@ package org.sopt.official.feature.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,14 +23,24 @@ class NotificationHistoryViewModel @Inject constructor(
     private val _notificationHistoryList = MutableStateFlow<List<NotificationHistoryItem>>(arrayListOf())
     val notificationHistoryList: StateFlow<List<NotificationHistoryItem>> get() = _notificationHistoryList.asStateFlow()
 
+    private var currentPaginationIndex = 0
+    private var notificationHistoryJob: Job? = null
+
     init {
-        getNotificationHistory(0)
+        getNotificationHistory()
     }
 
-    fun getNotificationHistory(page: Int) {
-        viewModelScope.launch {
-            getNotificationHistoryUseCase.invoke(page)
-                .onSuccess { _notificationHistoryList.value = it }
+    fun getNotificationHistory() {
+        notificationHistoryJob?.let {
+            if (it.isActive || !it.isCompleted) return
+        }
+
+        notificationHistoryJob = viewModelScope.launch {
+            getNotificationHistoryUseCase.invoke(currentPaginationIndex)
+                .onSuccess {
+                    _notificationHistoryList.value = _notificationHistoryList.value.plus(it)
+                    currentPaginationIndex++
+                }
                 .onFailure { Timber.e(it) }
         }
     }
@@ -44,7 +55,7 @@ class NotificationHistoryViewModel @Inject constructor(
                     }
                     _notificationHistoryList.value = newNotificationList
                 }
-                .onFailure { Timber.e("updateEntireNotificationReadingStateUseCase: ", it) }
+                .onFailure { Timber.e(it) }
         }
     }
 }

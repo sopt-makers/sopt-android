@@ -57,6 +57,11 @@ class NotificationHistoryListViewAdapter(
         notifyItemRangeChanged(0, newList.size)
     }
 
+    fun updateNotificationHistoryList(newList: List<NotificationHistoryItem>) {
+        submitList(newList)
+        notifyDataSetChanged()
+    }
+
 
     inner class ViewHolder(
         private val viewBinding: ItemNotificationHistoryBinding
