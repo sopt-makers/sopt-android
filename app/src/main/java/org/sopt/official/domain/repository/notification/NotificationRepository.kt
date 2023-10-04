@@ -2,7 +2,6 @@ package org.sopt.official.domain.repository.notification
 
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
-import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 
@@ -22,9 +21,4 @@ interface NotificationRepository {
         notificationId: Int
     ): Result<NotificationReadingStateResponse>
     suspend fun updateEntireNotificationReadingState(): Result<NotificationReadingStateResponse>
-
-    suspend fun getNotificationSubscription(): Result<NotificationSubscriptionResponse>
-    suspend fun updateNotificationSubscription(
-        isSubscribed: Boolean
-    ): Result<NotificationSubscriptionResponse>
 }

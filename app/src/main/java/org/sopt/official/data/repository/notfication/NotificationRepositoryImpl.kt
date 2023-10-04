@@ -1,12 +1,10 @@
 package org.sopt.official.data.repository.notfication
 
 import org.sopt.official.data.mapper.NotificationHistoryItemMapper
-import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
-import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.repository.notification.NotificationRepository
@@ -67,24 +65,6 @@ class NotificationRepositoryImpl @Inject constructor(
     override suspend fun updateEntireNotificationReadingState(): Result<NotificationReadingStateResponse> {
         return runCatching {
             service.updateEntireNotificationReadingState()
-        }
-    }
-
-    override suspend fun getNotificationSubscription(): Result<NotificationSubscriptionResponse> {
-        return runCatching {
-            service.getNotificationSubscription()
-        }
-    }
-
-    override suspend fun updateNotificationSubscription(
-        isSubscribed: Boolean
-    ): Result<NotificationSubscriptionResponse> {
-        return runCatching {
-            service.updateNotificationSubscription(
-                NotificationSubscriptionRequest(
-                    isOptIn = isSubscribed
-                )
-            )
         }
     }
 }

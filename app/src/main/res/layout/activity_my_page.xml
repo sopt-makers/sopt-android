@@ -148,10 +148,15 @@
                 android:textAppearance="?textAppearanceBodyLarge"
                 android:textColor="?colorOnBackground" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_notification"
+            <ImageView
+                android:id="@+id/imageView_notification"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_arrow_right"
+                android:backgroundTint="@color/gray_80"
+                app:layout_constraintBottom_toBottomOf="@id/text_send_opinion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/text_send_opinion" />
         </LinearLayout>
     </LinearLayout>
 

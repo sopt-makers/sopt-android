@@ -77,7 +77,7 @@
     <string name="mypage_service_rule">서비스 이용약관</string>
     <string name="mypage_send_opinion">의견 보내기</string>
     <string name="mypage_notification_setting">알림 설정</string>
-    <string name="mypage_notification">알림</string>
+    <string name="mypage_notification">알림 설정하기</string>
     <string name="mypage_soptamp_setting_title">솝탬프 설정</string>
     <string name="mypage_adjust_sentence">한 마디 편집</string>
     <string name="mypage_change_nickname">닉네임 변경</string>
@@ -111,7 +111,7 @@
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
     <string name="adjust_sentence_button">저장</string>
 
-    <!--     알림   -->
+    <!--    알림   -->
     <string name="toolbar_notification">알림</string>
     <string name="toolbar_notification_read_all">모두 읽음</string>
     <string name="toolbar_notification_filter_all">전체 알림</string>

@@ -4,17 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
 import org.sopt.official.databinding.ActivityMyPageBinding
 import org.sopt.official.designsystem.AlertDialogPositiveNegative
@@ -28,7 +25,6 @@ import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.serializableExtra
-import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.ui.throttleUi
 import org.sopt.official.util.viewBinding
@@ -52,10 +48,7 @@ class MyPageActivity : AppCompatActivity() {
         initClick()
         initRestart()
 
-        // TODO: 로그인 상태 아닐때 제외해줄 기능 처리 필요
-        initStateFlowValues()
-        initNotificationClickListener()
-        viewModel.getNotificationSubscription()
+        initNotificationSettingClickListener()
     }
 
     private fun initStartArgs() {
@@ -236,15 +229,13 @@ class MyPageActivity : AppCompatActivity() {
             )
     }
 
-    private fun initStateFlowValues() {
-        viewModel.notificationSubscriptionState.flowWithLifecycle(lifecycle)
-            .onEach { binding.switchNotification.isChecked = it }
-            .launchIn(lifecycleScope)
-    }
-
-    private fun initNotificationClickListener() {
-        binding.switchNotification.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.updateNotificationSubscription(isChecked)
+    private fun initNotificationSettingClickListener() {
+        binding.linearLayoutNotificationSettingContainer.setOnClickListener {
+            Intent().apply {
+                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                startActivity(this)
+            }
         }
     }
 

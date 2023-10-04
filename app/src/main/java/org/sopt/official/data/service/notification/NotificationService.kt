@@ -1,12 +1,10 @@
 package org.sopt.official.data.service.notification
 
 import org.sopt.official.data.model.attendance.*
-import org.sopt.official.data.model.notification.request.NotificationSubscriptionRequest
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
 import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
-import org.sopt.official.data.model.notification.response.NotificationSubscriptionResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -47,14 +45,4 @@ interface NotificationService {
     @PATCH("notification")
     suspend fun updateEntireNotificationReadingState(
     ): NotificationReadingStateResponse
-
-
-    @GET("user/opt-in")
-    suspend fun getNotificationSubscription(
-    ): NotificationSubscriptionResponse
-
-    @PATCH("user/opt-in")
-    suspend fun updateNotificationSubscription(
-        @Body body: NotificationSubscriptionRequest
-    ): NotificationSubscriptionResponse
 }
