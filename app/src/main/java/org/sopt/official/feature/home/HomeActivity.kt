@@ -103,8 +103,12 @@ class HomeActivity : AppCompatActivity() {
         initBlock()
     }
 
-    private fun initIntentData() {
+    override fun onResume() {
+        super.onResume()
+        viewModel.initHomeUi(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+    }
 
+    private fun initIntentData() {
         args?.remoteMessageEventType?.let {
             if (it.isBlank()) return
             when (RemoteMessageLinkType.of(it)) {
@@ -122,7 +126,6 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUserStatus() {
-        viewModel.initHomeUi(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
         viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
         viewModel.registerPushToken(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
