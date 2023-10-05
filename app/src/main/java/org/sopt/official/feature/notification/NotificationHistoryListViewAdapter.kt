@@ -1,5 +1,8 @@
 package org.sopt.official.feature.notification
 
+import android.icu.text.DateFormat
+import android.icu.text.SimpleDateFormat
+import android.icu.util.TimeZone
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -9,6 +12,8 @@ import org.sopt.official.core.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.util.drawableOf
+import java.util.Date
+import java.util.Locale
 
 class NotificationHistoryListViewAdapter(
     private val clickListener: NotificationHistoryItemClickListener
@@ -71,12 +76,38 @@ class NotificationHistoryListViewAdapter(
             viewBinding.apply {
                 textViewTitle.text = item.title
                 textViewContent.text = item.content
-                textViewReceivedTime.text = item.createdAt
+                textViewReceivedTime.text = item.createdAt.convertToTimesAgo()
                 constraintLayoutBackground.background = when (item.isRead) {
                     true -> root.context.drawableOf(R.color.black_100)
                     false -> root.context.drawableOf(R.color.black_80)
                 }
             }
         }
+
+        private fun String.convertToTimesAgo(): String {
+            val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREA)
+            dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
+
+            val currentDate = Date()
+            val receivedDate = dateFormat.parse(this)
+            val diffInMillis = currentDate.time - receivedDate.time
+
+            val diffInDays = diffInMillis / ONE_DAY_IN_MILLISECONDS
+            val diffInHours = diffInMillis / ONE_HOUR_IN_MILLISECONDS
+            val diffInMinutes = diffInMillis / ONE_MINUTE_IN_MILLISECONDS
+
+            return when {
+                diffInDays >= 1 -> "${diffInDays}일 전"
+                diffInHours >= 1 ->"${diffInHours}시간 전"
+                diffInMinutes >= 1 ->"${diffInMinutes}분 전"
+                else -> "방금"
+            }
+        }
+    }
+
+    companion object {
+        const val ONE_DAY_IN_MILLISECONDS = 86400000L
+        const val ONE_HOUR_IN_MILLISECONDS = 3600000L
+        const val ONE_MINUTE_IN_MILLISECONDS = 60000L
     }
 }
