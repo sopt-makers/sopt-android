@@ -52,7 +52,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
         val body = receivedData["content"] ?: ""
         val webLink = receivedData["webLink"] ?: ""
         val deepLink = receivedData["deepLink"] ?: ""
-        Timber.tag("SOPT").e("onMessageReceived - title: %s", title)
 
         val notificationId = System.currentTimeMillis().toInt()
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
@@ -78,15 +77,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(notificationId, notificationBuilder.build())
-
-        Timber.e("onMessageReceived: %s", remoteMessage)
-        Timber.e("onMessageReceived - notification: " + remoteMessage.notification)
-        Timber.e("onMessageReceived - notification title: " + remoteMessage.notification?.title)
-        Timber.e("onMessageReceived - notification body: " + remoteMessage.notification?.body)
-        Timber.e("onMessageReceived - data: " + remoteMessage.data)
-        Timber.e("onMessageReceived - data entries: " + remoteMessage.data.entries)
-        Timber.d("SOPT", "----------------------------")
-        Timber.d("SOPT", "received message: $remoteMessage")
     }
 
     private fun NotificationCompat.Builder.setNotificationContentIntent(
