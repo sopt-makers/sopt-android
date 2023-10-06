@@ -1,7 +1,9 @@
 package org.sopt.official.data.repository
 
 import org.sopt.official.common.di.Auth
+import org.sopt.official.data.model.request.LogOutRequest
 import org.sopt.official.data.model.request.RefreshRequest
+import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.domain.entity.auth.Token
@@ -36,7 +38,14 @@ class AuthRepositoryImpl @Inject constructor(
         service.withdraw()
     }
 
-    override suspend fun logout() = runCatching {
-        dataStore.clear()
+    override suspend fun logout(
+        pushToken: String
+    ): Result<LogOutResponse> = runCatching {
+        service.logOut(
+            LogOutRequest(
+                platform = "Android",
+                pushToken = pushToken
+            )
+        )
     }
 }
