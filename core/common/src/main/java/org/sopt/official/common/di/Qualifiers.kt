@@ -8,11 +8,11 @@ annotation class Logging
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class Auth(val needed: Boolean)
+annotation class Auth(val needed: Boolean = true)
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class AppRetrofit(val authNeeded: Boolean)
+annotation class AppRetrofit(val authNeeded: Boolean = true)
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

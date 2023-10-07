@@ -35,12 +35,13 @@ class SoptAuthenticator @Inject constructor(
                 dataStore.accessToken = it.accessToken
                 dataStore.playgroundToken = it.playgroundToken
             }.onFailure {
+                dataStore.clear()
                 Timber.e(it)
                 ProcessPhoenix.triggerRebirth(context, AuthActivity.newInstance(context))
             }.getOrThrow()
 
             return response.request.newBuilder()
-                .header("refreshToken", newTokens.accessToken)
+                .header("Authorization", newTokens.accessToken)
                 .build()
         }
         return null

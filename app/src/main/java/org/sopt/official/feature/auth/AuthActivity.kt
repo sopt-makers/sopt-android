@@ -20,6 +20,7 @@ import org.sopt.official.R
 import org.sopt.official.auth.PlaygroundAuth
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.AuthRequest
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
@@ -38,6 +39,7 @@ class AuthActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityAuthBinding::inflate)
     private val viewModel by viewModels<AuthViewModel>()
 
+    @Auth
     @Inject
     lateinit var authService: AuthService
 
@@ -46,6 +48,9 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (dataStore.accessToken.isNotEmpty()) {
+            startActivity(HomeActivity.getIntent(this, UserStatus.valueOf(dataStore.userStatus)))
+        }
         setContentView(binding.root)
         initUi()
         initAnimation()

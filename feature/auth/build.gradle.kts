@@ -9,6 +9,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
     implementation(libs.customtab)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)

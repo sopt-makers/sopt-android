@@ -16,11 +16,11 @@ import javax.inject.Singleton
 object HomeModule {
     @Provides
     @Singleton
-    fun provideMainViewService(
-        @AppRetrofit retrofit: Retrofit
+    fun provideHomeService(
+        @AppRetrofit(true) retrofit: Retrofit
     ): HomeService = retrofit.create(HomeService::class.java)
 
     @Provides
     @Singleton
-    fun provideMainRepository(repository: DefaultHomeRepository): HomeRepository = repository
+    fun provideHomeRepository(repository: DefaultHomeRepository): HomeRepository = repository
 }
