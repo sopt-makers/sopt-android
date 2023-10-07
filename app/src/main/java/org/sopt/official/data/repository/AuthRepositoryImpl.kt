@@ -1,5 +1,6 @@
 package org.sopt.official.data.repository
 
+import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.RefreshRequest
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
@@ -9,11 +10,12 @@ import org.sopt.official.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val service: AuthService,
+    @Auth(true) private val service: AuthService,
+    @Auth(false) private val noneAuthService: AuthService,
     private val dataStore: SoptDataStore
 ) : AuthRepository {
     override suspend fun refresh(token: String) = runCatching {
-        service.refresh(RefreshRequest(token)).toEntity()
+        noneAuthService.refresh(RefreshRequest(token)).toEntity()
     }
 
     override fun save(token: Token) {

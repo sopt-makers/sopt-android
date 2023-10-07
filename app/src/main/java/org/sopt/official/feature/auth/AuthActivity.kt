@@ -1,6 +1,8 @@
 package org.sopt.official.feature.auth
 
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
@@ -117,6 +119,13 @@ class AuthActivity : AppCompatActivity() {
         }
         binding.btnSoptNotMember.setOnSingleClickListener {
             startActivity(HomeActivity.getIntent(this, UserStatus.UNAUTHENTICATED))
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun newInstance(context: Context) = Intent(context, AuthActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
     }
 }

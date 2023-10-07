@@ -33,24 +33,24 @@ internal object RemoteModule {
     @Provides
     @Singleton
     fun provideStampService(
-        @AppRetrofit retrofit: Retrofit
+        @AppRetrofit(true) retrofit: Retrofit
     ): StampService = retrofit.create(StampService::class.java)
 
     @Provides
     @Singleton
     fun provideSoptampService(
-        @AppRetrofit retrofit: Retrofit
+        @AppRetrofit(true) retrofit: Retrofit
     ): SoptampService = retrofit.create(SoptampService::class.java)
 
     @Provides
     @Singleton
     fun provideRankingService(
-        @AppRetrofit retrofit: Retrofit
+        @AppRetrofit(true) retrofit: Retrofit
     ): RankService = retrofit.create(RankService::class.java)
 
     @Provides
     @Singleton
     fun provideUserService(
-        @AppRetrofit retrofit: Retrofit
+        @AppRetrofit(true) retrofit: Retrofit
     ): SoptampUserService = retrofit.create(SoptampUserService::class.java)
 }
