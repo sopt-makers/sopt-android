@@ -33,10 +33,10 @@ object NetModule {
 
     @Provides
     @Singleton
-    @Auth(true)
+    @Auth
     fun provideOkHttpClient(
         @Logging loggingInterceptor: Interceptor,
-        @Auth(true) authInterceptor: Interceptor,
+        @Auth authInterceptor: Interceptor,
         authenticator: SoptAuthenticator
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
@@ -71,7 +71,7 @@ object NetModule {
     @Provides
     @Singleton
     fun provideAppRetrofit(
-        @Auth(true) client: OkHttpClient,
+        @Auth client: OkHttpClient,
         converter: Converter.Factory
     ): Retrofit = Retrofit.Builder()
         .client(client)

@@ -19,7 +19,7 @@ import javax.inject.Singleton
 object AuthModule {
     @Provides
     @Singleton
-    @Auth(true)
+    @Auth
     fun provideAuthService(@AppRetrofit(true) retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
 
     @Provides
@@ -33,6 +33,6 @@ object AuthModule {
 
     @Provides
     @Singleton
-    @Auth(true)
+    @Auth
     fun provideAuthInterceptor(interceptor: AuthInterceptor): Interceptor = interceptor
 }
