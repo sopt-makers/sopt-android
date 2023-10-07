@@ -10,7 +10,7 @@ import org.sopt.official.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    @Auth(true) private val service: AuthService,
+    @Auth private val service: AuthService,
     @Auth(false) private val noneAuthService: AuthService,
     private val dataStore: SoptDataStore
 ) : AuthRepository {

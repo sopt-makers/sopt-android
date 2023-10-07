@@ -17,7 +17,7 @@ object HomeModule {
     @Provides
     @Singleton
     fun provideHomeService(
-        @AppRetrofit(true) retrofit: Retrofit
+        @AppRetrofit retrofit: Retrofit
     ): HomeService = retrofit.create(HomeService::class.java)
 
     @Provides

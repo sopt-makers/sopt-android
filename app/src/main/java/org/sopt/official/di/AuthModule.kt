@@ -20,7 +20,7 @@ object AuthModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthService(@AppRetrofit(true) retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
+    fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
 
     @Provides
     @Singleton

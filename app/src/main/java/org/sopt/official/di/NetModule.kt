@@ -67,7 +67,7 @@ object NetModule {
     fun provideKotlinSerializationConverter(json: Json): Converter.Factory =
         json.asConverterFactory("application/json".toMediaType())
 
-    @AppRetrofit(true)
+    @AppRetrofit
     @Provides
     @Singleton
     fun provideAppRetrofit(
