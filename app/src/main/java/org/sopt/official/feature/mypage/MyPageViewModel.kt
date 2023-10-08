@@ -16,12 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
+    private val dataStore: SoptDataStore,
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
-
-    @Inject
-    lateinit var dataStore: SoptDataStore
 
     val userActiveState = BehaviorProcessor.createDefault<MyPageUiState>(MyPageUiState.UnInitialized)
     val restartSignal = PublishSubject.create<Boolean>()
