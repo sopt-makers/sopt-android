@@ -93,7 +93,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.value))
+        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.userStatus?.value))
 
         initIntentData()
         requestNotificationPermission()
@@ -132,7 +132,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
-            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.value))
+            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
@@ -173,7 +173,7 @@ class HomeActivity : AppCompatActivity() {
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
                     binding.contentSoptamp.root.setOnSingleClickListener {
-                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.value))
+                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
                         this@HomeActivity.startActivity(intent)
                     }
                 }
@@ -268,7 +268,7 @@ class HomeActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             }
             largeBlock.root.setOnSingleClickListener {
-                tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.value))
+                tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.userStatus?.value))
                 startActivity(intent)
             }
         }
@@ -284,7 +284,7 @@ class HomeActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = item.clickEventName,
-                    properties = mapOf("view_type" to args?.value)
+                    properties = mapOf("view_type" to args?.userStatus?.value)
                 )
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)

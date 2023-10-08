@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.R
-import org.sopt.official.core.view.ItemDiffCallback
+import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.util.drawableOf
