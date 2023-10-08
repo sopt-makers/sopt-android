@@ -1,5 +1,6 @@
 package org.sopt.official.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,11 +24,11 @@ object NotificationModule {
         return retrofit.create(NotificationService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideNotificationRepository(
-        repository: NotificationRepositoryImpl
-    ): NotificationRepository {
-        return repository
+    @Module
+    @InstallIn(SingletonComponent::class)
+    interface Binder {
+        @Binds
+        @Singleton
+        fun bindNotificationRepository(repository: NotificationRepositoryImpl): NotificationRepository
     }
 }

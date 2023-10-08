@@ -25,7 +25,6 @@ interface NotificationService {
         @Body body: UpdatePushTokenRequest
     ): UpdatePushTokenResponse
 
-
     @GET("notification")
     suspend fun getNotificationHistory(
         @Query("page") page: Int
@@ -36,13 +35,11 @@ interface NotificationService {
         @Path("notificationId") notificationId: Long
     ): NotificationDetailResponse
 
-
     @PATCH("notification/{notificationId}")
     suspend fun updateNotificationReadingState(
         @Path("notificationId") notificationId: Long
     ): NotificationReadingStateResponse
 
     @PATCH("notification")
-    suspend fun updateEntireNotificationReadingState(
-    ): NotificationReadingStateResponse
+    suspend fun updateEntireNotificationReadingState(): NotificationReadingStateResponse
 }

@@ -51,8 +51,8 @@ class NotificationDetailActivity : AppCompatActivity() {
             textViewNotificationTitle.text = notification.title
             textViewNotificationContent.text = notification.content
             linearLayoutNewsDetailButton.visibility = when (
-                notification.deepLink.isNullOrBlank()
-                && notification.webLink.isNullOrBlank()
+                notification.deepLink.isNullOrBlank() &&
+                    notification.webLink.isNullOrBlank()
             ) {
                 true -> View.GONE
                 false -> View.VISIBLE

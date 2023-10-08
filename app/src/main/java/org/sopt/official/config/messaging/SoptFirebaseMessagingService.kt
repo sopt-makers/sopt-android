@@ -32,7 +32,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
-
     override fun onNewToken(token: String) {
         if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
         scope.launch {
@@ -82,7 +81,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
         link: String,
         notificationId: Int
     ): NotificationCompat.Builder {
-
         val intent = Intent(this@SoptFirebaseMessagingService, AuthActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra(REMOTE_MESSAGE_EVENT_TYPE, remoteMessageLinkType.name)
@@ -96,7 +94,9 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
                 intent,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-                } else PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                } else {
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                }
             )
         )
     }

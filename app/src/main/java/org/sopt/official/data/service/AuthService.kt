@@ -25,7 +25,7 @@ interface AuthService {
     @DELETE("user")
     suspend fun withdraw()
 
-    @HTTP(method = "DELETE", path="user/logout", hasBody = true)
+    @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
     suspend fun logOut(
         @Body body: LogOutRequest
     ): LogOutResponse

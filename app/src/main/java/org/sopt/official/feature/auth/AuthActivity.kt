@@ -72,17 +72,20 @@ class AuthActivity : AppCompatActivity() {
             val remoteMessageEventLink = it.getStringExtra(REMOTE_MESSAGE_EVENT_LINK) ?: ""
 
             if (
-                dataStore.userStatus.isNotBlank()
-                && dataStore.userStatus != UserStatus.UNAUTHENTICATED.name
-                && remoteMessageEventType.isNotBlank()
+                dataStore.userStatus.isNotBlank() &&
+                dataStore.userStatus != UserStatus.UNAUTHENTICATED.name &&
+                remoteMessageEventType.isNotBlank()
             ) {
-                startActivity(HomeActivity.getIntent(this,
-                    HomeActivity.StartArgs(
-                        UserStatus.of(dataStore.userStatus),
-                        remoteMessageEventType,
-                        remoteMessageEventLink
+                startActivity(
+                    HomeActivity.getIntent(
+                        this,
+                        HomeActivity.StartArgs(
+                            UserStatus.of(dataStore.userStatus),
+                            remoteMessageEventType,
+                            remoteMessageEventLink
+                        )
                     )
-                ))
+                )
             }
         }
     }
@@ -109,13 +112,16 @@ class AuthActivity : AppCompatActivity() {
                 val remoteMessageEventLink = intent.getStringExtra(REMOTE_MESSAGE_EVENT_LINK) ?: ""
                 when (event) {
                     is AuthUiEvent.Success -> {
-                        startActivity(HomeActivity.getIntent(this,
-                            HomeActivity.StartArgs(
-                                event.userStatus,
-                                remoteMessageEventType,
-                                remoteMessageEventLink
+                        startActivity(
+                            HomeActivity.getIntent(
+                                this,
+                                HomeActivity.StartArgs(
+                                    event.userStatus,
+                                    remoteMessageEventType,
+                                    remoteMessageEventLink
+                                )
                             )
-                        ))
+                        )
                     }
 
                     is AuthUiEvent.Failure -> {
@@ -175,9 +181,14 @@ class AuthActivity : AppCompatActivity() {
             }
         }
         binding.btnSoptNotMember.setOnSingleClickListener {
-            startActivity(HomeActivity.getIntent(this, HomeActivity.StartArgs(
-                UserStatus.UNAUTHENTICATED
-            )))
+            startActivity(
+                HomeActivity.getIntent(
+                    this,
+                    HomeActivity.StartArgs(
+                        UserStatus.UNAUTHENTICATED
+                    )
+                )
+            )
         }
     }
 

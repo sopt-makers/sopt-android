@@ -67,7 +67,6 @@ class NotificationHistoryListViewAdapter(
         notifyDataSetChanged()
     }
 
-
     inner class ViewHolder(
         private val viewBinding: ItemNotificationHistoryBinding
     ) : RecyclerView.ViewHolder(viewBinding.root) {
@@ -98,8 +97,8 @@ class NotificationHistoryListViewAdapter(
 
             return when {
                 diffInDays >= 1 -> "${diffInDays}일 전"
-                diffInHours >= 1 ->"${diffInHours}시간 전"
-                diffInMinutes >= 1 ->"${diffInMinutes}분 전"
+                diffInHours >= 1 -> "${diffInHours}시간 전"
+                diffInMinutes >= 1 -> "${diffInMinutes}분 전"
                 else -> "방금"
             }
         }

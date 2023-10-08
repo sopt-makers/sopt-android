@@ -16,7 +16,6 @@ import org.sopt.official.R
 import org.sopt.official.databinding.ActivityNotificationHistoryBinding
 import org.sopt.official.util.viewBinding
 
-
 @AndroidEntryPoint
 class NotificationHistoryActivity : AppCompatActivity() {
 
