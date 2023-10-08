@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -83,24 +84,10 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
     private fun initStateFlowValues() {
         lifecycleScope.launch {
             viewModel.notificationHistoryList.collectLatest {
-                setEmptyViewVisibility(it.isEmpty())
-                setTextViewReadAllVisibility(it.isNotEmpty())
+                binding.textViewReadAll.isVisible = it.isNotEmpty()
+                binding.includeNotificationHistoryEmptyView.root.isVisible = it.isEmpty()
                 notificationHistoryAdapter?.updateNotificationHistoryList(it)
             }
-        }
-    }
-
-    private fun setEmptyViewVisibility(isVisible: Boolean) {
-        binding.includeNotificationHistoryEmptyView.root.visibility = when (isVisible) {
-            true -> View.VISIBLE
-            false -> View.GONE
-        }
-    }
-
-    private fun setTextViewReadAllVisibility(isVisible: Boolean) {
-        binding.textViewReadAll.visibility = when (isVisible) {
-            true -> View.VISIBLE
-            false -> View.GONE
         }
     }
 
