@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class UpdatePushTokenRequest(
-    @SerialName("platform") val platform: String,
-    @SerialName("pushToken") val pushToken: String
+    @SerialName("platform")
+    val platform: String,
+    @SerialName("pushToken")
+    val pushToken: String
 )
