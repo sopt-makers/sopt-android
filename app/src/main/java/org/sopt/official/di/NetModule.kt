@@ -16,6 +16,7 @@ import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
+import org.sopt.official.data.authenticator.SoptAuthenticator
 import retrofit2.Converter
 import retrofit2.Retrofit
 import javax.inject.Singleton
@@ -32,12 +33,25 @@ object NetModule {
 
     @Provides
     @Singleton
+    @Auth
     fun provideOkHttpClient(
         @Logging loggingInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
+        authenticator: SoptAuthenticator
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)
+        .authenticator(authenticator)
+        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
+        .build()
+
+    @Provides
+    @Singleton
+    @Auth(false)
+    fun provideNonAuthOkHttpClient(
+        @Logging loggingInterceptor: Interceptor,
+    ): OkHttpClient = OkHttpClient.Builder()
+        .addInterceptor(loggingInterceptor)
         .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
 
@@ -57,7 +71,19 @@ object NetModule {
     @Provides
     @Singleton
     fun provideAppRetrofit(
-        client: OkHttpClient,
+        @Auth client: OkHttpClient,
+        converter: Converter.Factory
+    ): Retrofit = Retrofit.Builder()
+        .client(client)
+        .addConverterFactory(converter)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.devApi else BuildConfig.newApi)
+        .build()
+
+    @AppRetrofit(false)
+    @Provides
+    @Singleton
+    fun provideNoneAuthAppRetrofit(
+        @Auth(false) client: OkHttpClient,
         converter: Converter.Factory
     ): Retrofit = Retrofit.Builder()
         .client(client)
@@ -69,7 +95,7 @@ object NetModule {
     @Provides
     @Singleton
     fun provideOperationRetrofit(
-        client: OkHttpClient,
+        @Auth client: OkHttpClient,
         converter: Converter.Factory
     ): Retrofit = Retrofit.Builder()
         .client(client)

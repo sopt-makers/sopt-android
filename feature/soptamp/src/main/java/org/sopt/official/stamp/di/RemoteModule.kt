@@ -51,6 +51,6 @@ internal object RemoteModule {
     @Provides
     @Singleton
     fun provideUserService(
-        @AppRetrofit retrofit: Retrofit
+        @AppRetrofit(true) retrofit: Retrofit
     ): SoptampUserService = retrofit.create(SoptampUserService::class.java)
 }

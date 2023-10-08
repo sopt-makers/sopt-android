@@ -246,7 +246,9 @@ class HomeActivity : AppCompatActivity() {
             descriptionSmall.text = item.description?.let { stringOf(it) }
             root.setOnSingleClickListener {
                 tracker.track(
-                    type = EventType.CLICK, name = item.clickEventName, properties = mapOf("view_type" to args?.value)
+                    type = EventType.CLICK,
+                    name = item.clickEventName,
+                    properties = mapOf("view_type" to args?.value)
                 )
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
