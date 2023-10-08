@@ -111,7 +111,7 @@ class HomeActivity : AppCompatActivity() {
     private fun initIntentData() {
         args?.remoteMessageEventType?.let {
             if (it.isBlank()) return
-            when (RemoteMessageLinkType.of(it)) {
+            when (RemoteMessageLinkType.valueOf(it)) {
                 RemoteMessageLinkType.WEB_LINK -> {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args?.remoteMessageEventLink))
                     startActivity(intent)
