@@ -47,7 +47,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNotificationDetail(
-        notificationId: Int
+        notificationId: Long
     ): Result<NotificationDetailResponse> {
         return runCatching {
             service.getNotificationDetail(notificationId)
@@ -55,7 +55,7 @@ class NotificationRepositoryImpl @Inject constructor(
     }
 
     override suspend fun updateNotificationReadingState(
-        notificationId: Int
+        notificationId: Long
     ): Result<NotificationReadingStateResponse> {
         return runCatching {
             service.updateNotificationReadingState(notificationId)

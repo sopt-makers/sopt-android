@@ -7,7 +7,7 @@ import javax.inject.Inject
 class UpdateNotificationReadingStateUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke(notificationId: Int): Result<NotificationReadingStateResponse> {
+    suspend operator fun invoke(notificationId: Long): Result<NotificationReadingStateResponse> {
         return notificationRepository.updateNotificationReadingState(notificationId)
     }
 }

@@ -33,13 +33,13 @@ interface NotificationService {
 
     @GET("notification/{notificationId}")
     suspend fun getNotificationDetail(
-        @Path("notificationId") notificationId: Int
+        @Path("notificationId") notificationId: Long
     ): NotificationDetailResponse
 
 
     @PATCH("notification/{notificationId}")
     suspend fun updateNotificationReadingState(
-        @Path("notificationId") notificationId: Int
+        @Path("notificationId") notificationId: Long
     ): NotificationReadingStateResponse
 
     @PATCH("notification")

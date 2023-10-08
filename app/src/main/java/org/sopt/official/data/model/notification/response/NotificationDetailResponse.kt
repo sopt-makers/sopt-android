@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotificationDetailResponse(
     @SerialName("notificationId")
-    val notificationId: Int,
+    val notificationId: Long,
     @SerialName("userId")
     val userId: Int,
     @SerialName("title")

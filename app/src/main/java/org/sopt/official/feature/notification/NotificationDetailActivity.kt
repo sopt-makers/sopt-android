@@ -23,8 +23,8 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
-    private val notificationId: Int by lazy {
-        intent.getIntExtra(NOTIFICATION_ID, 0)
+    private val notificationId: Long by lazy {
+        intent.getLongExtra(NOTIFICATION_ID, 0L)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
