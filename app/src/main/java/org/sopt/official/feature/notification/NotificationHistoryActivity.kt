@@ -18,7 +18,7 @@ import org.sopt.official.util.viewBinding
 
 
 @AndroidEntryPoint
-class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItemClickListener {
+class NotificationHistoryActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
     private val viewModel by viewModels<NotificationHistoryViewModel>()
@@ -45,8 +45,18 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
 
     private fun initRecyclerView() {
         binding.recyclerViewNotificationHistory.apply {
-            adapter = NotificationHistoryListViewAdapter(this@NotificationHistoryActivity)
+            adapter = NotificationHistoryListViewAdapter(notificationHistoryItemClickListener)
             addOnScrollListener(scrollListener)
+        }
+    }
+
+    private val notificationHistoryItemClickListener = NotificationHistoryItemClickListener { position ->
+        notificationHistoryAdapter?.updateNotificationReadingState(position)
+        val clickedNotification = viewModel.notificationHistoryList.value[position]
+
+        Intent(this@NotificationHistoryActivity, NotificationDetailActivity::class.java).run {
+            putExtra(NOTIFICATION_ID, clickedNotification.notificationId)
+            startActivity(this)
         }
     }
 
@@ -88,16 +98,6 @@ class NotificationHistoryActivity : AppCompatActivity(), NotificationHistoryItem
                 binding.includeNotificationHistoryEmptyView.root.isVisible = it.isEmpty()
                 notificationHistoryAdapter?.updateNotificationHistoryList(it)
             }
-        }
-    }
-
-    override fun onClickNotificationHistoryItem(position: Int) {
-        notificationHistoryAdapter?.updateNotificationReadingState(position)
-        val clickedNotification = viewModel.notificationHistoryList.value[position]
-
-        Intent(this, NotificationDetailActivity::class.java).run {
-            putExtra(NOTIFICATION_ID, clickedNotification.notificationId)
-            startActivity(this)
         }
     }
 

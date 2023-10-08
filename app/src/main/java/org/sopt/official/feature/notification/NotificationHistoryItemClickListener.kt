@@ -1,5 +1,5 @@
 package org.sopt.official.feature.notification
 
-interface NotificationHistoryItemClickListener {
+fun interface NotificationHistoryItemClickListener {
     fun onClickNotificationHistoryItem(position: Int)
 }
