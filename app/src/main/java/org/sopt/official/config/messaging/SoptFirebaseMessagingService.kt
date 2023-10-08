@@ -18,7 +18,6 @@ import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.auth.AuthActivity
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -32,7 +31,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
 
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
-    private val channelId = "SOPT"
 
 
     override fun onNewToken(token: String) {
@@ -54,7 +52,7 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
         val deepLink = receivedData["deepLink"] ?: ""
 
         val notificationId = System.currentTimeMillis().toInt()
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body))
@@ -104,6 +102,7 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     companion object {
+        const val NOTIFICATION_CHANNEL_ID = "SOPT"
         const val REMOTE_MESSAGE_EVENT_TYPE = "REMOTE_MESSAGE_EVENT_TYPE"
         const val REMOTE_MESSAGE_EVENT_LINK = "REMOTE_MESSAGE_EVENT_LINK"
     }
