@@ -181,6 +181,7 @@ class HomeActivity : AppCompatActivity() {
                 val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
                 binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
                 binding.imageViewNotificationHistory.setOnClickListener {
+                    tracker.track(type = EventType.CLICK, name = "alarm", properties = mapOf("view_type" to args?.userStatus?.value))
                     val intent = Intent(this, NotificationHistoryActivity::class.java)
                     startActivity(intent)
                 }
