@@ -4,9 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthRequest(
-    @SerialName("code")
-    val code: String,
-    @SerialName("pushToken")
-    val pushToken: String
+data class LogOutRequest(
+    @SerialName("platform") val platform: String,
+    @SerialName("pushToken") val pushToken: String
 )

@@ -1,12 +1,12 @@
-package org.sopt.official.data.model.request
+package org.sopt.official.data.model.notification.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthRequest(
-    @SerialName("code")
-    val code: String,
+data class UpdatePushTokenRequest(
+    @SerialName("platform")
+    val platform: String,
     @SerialName("pushToken")
     val pushToken: String
 )

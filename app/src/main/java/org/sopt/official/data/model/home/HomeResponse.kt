@@ -14,11 +14,14 @@ data class HomeResponse(
     val user: HomeUserResponse,
     @SerialName("operation")
     val operation: HomeOperationResponse,
+    @SerialName("isAllConfirm")
+    val isAllConfirm: Boolean
 ) {
 
     fun toEntity(): SoptUser = SoptUser(
         user = this.user.toEntity(),
         operation = this.operation.toEntity(),
+        isAllConfirm = this.isAllConfirm
     )
 
     @Serializable

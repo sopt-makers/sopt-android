@@ -6,34 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
+    <include
+        android:id="@+id/include_appBarBackArrow"
+        layout="@layout/include_app_bar_back_arrow"
         android:layout_width="match_parent"
-        android:layout_height="?actionBarSize">
-
-        <ImageView
-            android:id="@+id/ic_back"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/btn_arrow_left"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/toolbar_mypage"
-            android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="?colorOnBackground"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_height="wrap_content" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_service_info"
@@ -125,6 +102,63 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/text_send_opinion" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/container_notification_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="vertical"
+        android:background="@drawable/rectangle_radius_10"
+        android:backgroundTint="@color/black_80"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:paddingVertical="16dp">
+
+        <TextView
+            android:id="@+id/title_notification_setting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/mypage_notification_setting"
+            android:textAppearance="?textAppearanceCaption"
+            android:textColor="@color/gray_80"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout_notificationSettingContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="17dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_notification_setting">
+
+            <TextView
+                android:id="@+id/text_notification"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp"
+                android:layout_weight="1"
+                android:text="@string/mypage_notification"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textColor="?colorOnBackground" />
+
+            <ImageView
+                android:id="@+id/imageView_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/btn_arrow_right"
+                android:backgroundTint="@color/gray_80"
+                app:layout_constraintBottom_toBottomOf="@id/text_send_opinion"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/text_send_opinion" />
+        </LinearLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/container_soptamp_info"
@@ -319,5 +353,4 @@
             app:layout_constraintTop_toTopOf="@id/text_log_in" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </LinearLayout>

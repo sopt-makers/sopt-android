@@ -5,6 +5,7 @@ import org.sopt.official.domain.entity.UserActiveState
 data class SoptUser(
     val user: User = User(),
     val operation: SoptActiveRecord = SoptActiveRecord(),
+    val isAllConfirm: Boolean = false
 )
 
 data class User(

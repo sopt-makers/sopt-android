@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
@@ -24,7 +25,6 @@ import org.sopt.official.util.rx.observeOnMain
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import org.sopt.official.util.serializableExtra
-import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.ui.throttleUi
 import org.sopt.official.util.viewBinding
@@ -47,6 +47,8 @@ class MyPageActivity : AppCompatActivity() {
         initView()
         initClick()
         initRestart()
+
+        initNotificationSettingClickListener()
     }
 
     private fun initStartArgs() {
@@ -56,8 +58,18 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initToolbar() {
-        binding.icBack.setOnSingleClickListener {
-            onBackPressedDispatcher.onBackPressed()
+        binding.includeAppBarBackArrow.apply {
+            textViewTitle.text = getString(R.string.toolbar_mypage)
+            toolbar.clicks()
+                .throttleUi()
+                .observeOnMain()
+                .onBackpressureLatest()
+                .subscribeBy(
+                    createDisposable,
+                    onNext = {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+                )
         }
     }
 
@@ -71,14 +83,15 @@ class MyPageActivity : AppCompatActivity() {
             .onBackpressureLatest()
             .subscribeBy(
                 createDisposable,
-                onNext = {
-                    binding.containerSoptampInfo.setVisible(it)
-                    binding.textLogIn.setVisible(!it)
-                    binding.iconLogIn.setVisible(!it)
-                    binding.textLogOut.setVisible(it)
-                    binding.iconLogOut.setVisible(it)
-                    binding.textSignOut.setVisible(it)
-                    binding.iconSignOut.setVisible(it)
+                onNext = { isAuthenticated ->
+                    binding.containerNotificationSetting.setVisible(isAuthenticated)
+                    binding.containerSoptampInfo.setVisible(isAuthenticated)
+                    binding.textLogIn.setVisible(!isAuthenticated)
+                    binding.iconLogIn.setVisible(!isAuthenticated)
+                    binding.textLogOut.setVisible(isAuthenticated)
+                    binding.iconLogOut.setVisible(isAuthenticated)
+                    binding.textSignOut.setVisible(isAuthenticated)
+                    binding.iconSignOut.setVisible(isAuthenticated)
                 }
             )
     }
@@ -214,6 +227,16 @@ class MyPageActivity : AppCompatActivity() {
                     ProcessPhoenix.triggerRebirth(this, mainIntent)
                 }
             )
+    }
+
+    private fun initNotificationSettingClickListener() {
+        binding.linearLayoutNotificationSettingContainer.setOnClickListener {
+            Intent().apply {
+                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                startActivity(this)
+            }
+        }
     }
 
     override fun onDestroy() {

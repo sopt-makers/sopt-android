@@ -26,6 +26,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.UserActiveState
@@ -37,6 +38,7 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.MyPageActivity
+import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.dp
 import org.sopt.official.util.drawableOf
@@ -46,12 +48,13 @@ import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
 import javax.inject.Inject
+import java.io.Serializable
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySoptMainBinding::inflate)
     private val viewModel by viewModels<HomeViewModel>()
-    private val args by serializableExtra(UserStatus.UNAUTHENTICATED)
+    private val args by serializableExtra(StartArgs(UserStatus.UNAUTHENTICATED))
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -90,8 +93,9 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.value))
+        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.userStatus?.value))
 
+        initIntentData()
         requestNotificationPermission()
         initToolbar()
         initUserStatus()
@@ -99,14 +103,36 @@ class HomeActivity : AppCompatActivity() {
         initBlock()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.initHomeUi(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+    }
+
+    private fun initIntentData() {
+        args?.remoteMessageEventType?.let {
+            if (it.isBlank()) return
+            when (RemoteMessageLinkType.valueOf(it)) {
+                RemoteMessageLinkType.WEB_LINK -> {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args?.remoteMessageEventLink))
+                    startActivity(intent)
+                }
+//                RemoteMessageLinkType.DEEP_LINK -> {} TODO: 딥링크 정의된 후 구현 예정
+                else -> {
+                    val intent = Intent(this, NotificationHistoryActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+    }
+
     private fun initUserStatus() {
-        viewModel.initHomeUi(args ?: UserStatus.UNAUTHENTICATED)
-        viewModel.initMainDescription(args ?: UserStatus.UNAUTHENTICATED)
+        viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        viewModel.registerPushToken(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
     }
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
-            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.value))
+            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
@@ -147,11 +173,21 @@ class HomeActivity : AppCompatActivity() {
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
                     binding.contentSoptamp.root.setOnSingleClickListener {
-                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.value))
+                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
                         this@HomeActivity.startActivity(intent)
                     }
                 }
+
+                val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
+                binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
+                binding.imageViewNotificationHistory.setOnClickListener {
+                    val intent = Intent(this, NotificationHistoryActivity::class.java)
+                    startActivity(intent)
+                }
             }.launchIn(lifecycleScope)
+        viewModel.isAllNotificationsConfirm.flowWithLifecycle(lifecycle)
+            .onEach { binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE }
+            .launchIn(lifecycleScope)
         viewModel.generatedTagText
             .flowWithLifecycle(lifecycle)
             .onEach { (id, text) ->
@@ -232,7 +268,7 @@ class HomeActivity : AppCompatActivity() {
                 Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
             }
             largeBlock.root.setOnSingleClickListener {
-                tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.value))
+                tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.userStatus?.value))
                 startActivity(intent)
             }
         }
@@ -248,7 +284,7 @@ class HomeActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = item.clickEventName,
-                    properties = mapOf("view_type" to args?.value)
+                    properties = mapOf("view_type" to args?.userStatus?.value)
                 )
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                 startActivity(intent)
@@ -256,9 +292,15 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    data class StartArgs(
+        val userStatus: UserStatus,
+        val remoteMessageEventType: String = "",
+        val remoteMessageEventLink: String = "",
+    ) : Serializable
+
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: UserStatus) =
+        fun getIntent(context: Context, args: StartArgs) =
             Intent(context, HomeActivity::class.java).apply {
                 putExtra("args", args)
             }

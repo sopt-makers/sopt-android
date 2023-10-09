@@ -29,6 +29,30 @@
         app:layout_constraintTop_toTopOf="@id/mypage" />
 
     <ImageView
+        android:id="@+id/imageView_notificationHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginEnd="4dp"
+        android:src="@drawable/icon_notification"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/mypage"
+        app:layout_constraintEnd_toStartOf="@id/mypage"
+        app:layout_constraintTop_toTopOf="@id/mypage" />
+
+    <ImageView
+        android:id="@+id/imageView_notificationBadge"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/oval"
+        android:backgroundTint="@color/orange_100"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@id/imageView_notificationHistory"
+        app:layout_constraintTop_toTopOf="@id/imageView_notificationHistory" />
+
+    <ImageView
         android:id="@+id/mypage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
