@@ -11,4 +11,5 @@ interface AuthRepository {
     fun save(status: UserStatus)
     suspend fun withdraw(): Result<Unit>
     suspend fun logout(pushToken: String): Result<LogOutResponse>
+    suspend fun clearLocalData()
 }

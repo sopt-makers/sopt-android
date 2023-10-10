@@ -8,7 +8,6 @@ import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.domain.repository.AuthRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.stamp.domain.repository.StampRepository
@@ -17,7 +16,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val dataStore: SoptDataStore,
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
@@ -32,7 +30,7 @@ class MyPageViewModel @Inject constructor(
             }.onSuccess {
                 authRepository.logout(it)
                     .onSuccess {
-                        dataStore.clear()
+                        authRepository.clearLocalData()
                         restartSignal.onNext(true)
                     }.onFailure { error -> Timber.e(error) }
             }.onFailure {

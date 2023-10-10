@@ -40,4 +40,8 @@ class AuthRepositoryImpl @Inject constructor(
             )
         )
     }
+
+    override suspend fun clearLocalData() {
+        localAuthDataSource.clear()
+    }
 }

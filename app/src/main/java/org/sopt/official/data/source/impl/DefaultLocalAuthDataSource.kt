@@ -22,4 +22,8 @@ class DefaultLocalAuthDataSource @Inject constructor(
             userStatus = status.value
         }
     }
+
+    override fun clear() {
+        dataStore.clear()
+    }
 }
