@@ -11,7 +11,9 @@ import org.sopt.official.common.di.Auth
 import org.sopt.official.data.interceptor.AuthInterceptor
 import org.sopt.official.data.repository.AuthRepositoryImpl
 import org.sopt.official.data.service.AuthService
+import org.sopt.official.data.source.api.auth.LocalAuthDataSource
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
+import org.sopt.official.data.source.impl.DefaultLocalAuthDataSource
 import org.sopt.official.data.source.impl.DefaultRemoteAuthDataSource
 import org.sopt.official.domain.repository.AuthRepository
 import retrofit2.Retrofit
@@ -45,5 +47,9 @@ object AuthModule {
         @Binds
         @Singleton
         fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource
+
+        @Binds
+        @Singleton
+        fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
     }
 }
