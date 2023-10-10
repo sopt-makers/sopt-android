@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.domain.repository.AuthRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
@@ -26,17 +27,16 @@ class MyPageViewModel @Inject constructor(
 
     fun logOut() {
         viewModelScope.launch {
-            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-                if (task.isComplete) {
-                    viewModelScope.launch {
-                        authRepository.logout(task.result)
-                            .onSuccess {
-                                dataStore.clear()
-                                restartSignal.onNext(true)
-                            }
-                            .onFailure { Timber.e(it) }
-                    }
-                }
+            runCatching {
+                FirebaseMessaging.getInstance().token.await()
+            }.onSuccess {
+                authRepository.logout(it)
+                    .onSuccess {
+                        dataStore.clear()
+                        restartSignal.onNext(true)
+                    }.onFailure { error -> Timber.e(error) }
+            }.onFailure {
+                Timber.e(it)
             }
         }
     }
@@ -44,7 +44,6 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
-                .onSuccess {}
                 .onFailure { Timber.e(it) }
         }
     }
