@@ -36,23 +36,15 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)
-    implementation(libs.security)
     implementation(libs.bundles.accompanist)
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.bundles.okhttp)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.timber)
+    implementation(libs.retrofit)
     implementation(libs.coil.compose)
     implementation(libs.process.phoenix)
     testImplementation(libs.junit)
     androidTestImplementation(libs.bundles.compose.test)
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
-    debugImplementation(libs.bundles.flipper)
-    debugImplementation(libs.flipper.network) {
-        exclude(group = "com.squareup.okhttp3", module = "okhttp")
-    }
 }
 
 secrets {
