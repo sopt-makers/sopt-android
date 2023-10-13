@@ -25,9 +25,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.data.local.SoptampDataStore
-import org.sopt.official.stamp.domain.model.RankFetchType
-import org.sopt.official.stamp.domain.repository.RankingRepository
+import org.sopt.official.domain.soptamp.model.RankFetchType
+import org.sopt.official.domain.soptamp.repository.RankingRepository
+import org.sopt.official.domain.soptamp.user.GetNicknameUseCase
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
 import javax.inject.Inject
@@ -35,12 +35,12 @@ import javax.inject.Inject
 @HiltViewModel
 class RankingViewModel @Inject constructor(
     private val rankingRepository: RankingRepository,
-    private val dataStore: SoptampDataStore
+    private val getNicknameUseCase: GetNicknameUseCase
 ) : ViewModel() {
     private val _state: MutableStateFlow<RankingState> = MutableStateFlow(RankingState.Loading)
     val state: StateFlow<RankingState> = _state.asStateFlow()
     var isRefreshing by mutableStateOf(false)
-    val nickname = dataStore.nickname
+    val nickname = getNicknameUseCase()
 
     fun onRefresh(isCurrent: Boolean) {
         viewModelScope.launch {
@@ -65,6 +65,6 @@ class RankingViewModel @Inject constructor(
     }
 
     private fun onSuccessStateChange(ranking: RankingListUiModel) {
-        _state.value = RankingState.Success(ranking, dataStore.nickname)
+        _state.value = RankingState.Success(ranking, getNicknameUseCase())
     }
 }

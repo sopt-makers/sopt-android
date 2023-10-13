@@ -24,7 +24,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.domain.usecase.user.UpdateProfileUseCase
+import org.sopt.official.domain.soptamp.user.UpdateProfileUseCase
 import javax.inject.Inject
 
 data class EditIntroductionUiState(

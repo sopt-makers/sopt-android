@@ -50,14 +50,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import org.sopt.official.domain.soptamp.fake.FakeUserRepository
+import org.sopt.official.domain.soptamp.user.UpdateProfileUseCase
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.user.UpdateProfileUseCase
 import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.util.addFocusCleaner
 

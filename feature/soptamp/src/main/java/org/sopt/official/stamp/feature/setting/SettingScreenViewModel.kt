@@ -21,8 +21,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.domain.repository.StampRepository
-import org.sopt.official.stamp.domain.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.domain.soptamp.repository.UserRepository
 import timber.log.Timber
 import javax.inject.Inject
 

@@ -22,15 +22,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.domain.error.Error
-import org.sopt.official.stamp.domain.model.MissionsFilter
-import org.sopt.official.stamp.domain.repository.MissionsRepository
-import org.sopt.official.stamp.domain.repository.RankingRepository
-import org.sopt.official.stamp.domain.repository.UserRepository
+import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.domain.soptamp.model.MissionsFilter
+import org.sopt.official.domain.soptamp.repository.MissionsRepository
+import org.sopt.official.domain.soptamp.repository.RankingRepository
+import org.sopt.official.domain.soptamp.repository.UserRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(

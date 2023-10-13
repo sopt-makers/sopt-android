@@ -17,7 +17,7 @@ package org.sopt.official.stamp.feature.mission.model
 
 import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
 import com.ramcosta.composedestinations.navargs.NavTypeSerializer
-import org.sopt.official.stamp.domain.MissionLevel
+import org.sopt.official.domain.soptamp.MissionLevel
 
 data class MissionNavArgs(
     val id: Int,

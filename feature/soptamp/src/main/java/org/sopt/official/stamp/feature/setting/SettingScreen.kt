@@ -36,6 +36,8 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import org.sopt.official.domain.soptamp.fake.FakeStampRepository
+import org.sopt.official.domain.soptamp.fake.FakeUserRepository
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
@@ -44,8 +46,6 @@ import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.style.Access300
 import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.domain.fake.FakeStampRepository
-import org.sopt.official.stamp.domain.fake.FakeUserRepository
 import org.sopt.official.stamp.feature.destinations.UpdateNicknameScreenDestination
 import org.sopt.official.stamp.feature.destinations.UpdateProfileScreenDestination
 import org.sopt.official.stamp.feature.setting.component.section.Section

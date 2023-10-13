@@ -15,11 +15,19 @@
  */
 package org.sopt.official.stamp.feature.mission.model
 
-import org.sopt.official.stamp.domain.MissionLevel
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.model.OtherMission
 
 data class MissionUiModel(
     val id: Int,
     val title: String,
     val level: MissionLevel,
     val isCompleted: Boolean
+)
+
+fun OtherMission.Mission.toUiModel(): MissionUiModel = MissionUiModel(
+    id = this.id,
+    title = this.title,
+    level = MissionLevel.of(this.level),
+    isCompleted = this.display,
 )

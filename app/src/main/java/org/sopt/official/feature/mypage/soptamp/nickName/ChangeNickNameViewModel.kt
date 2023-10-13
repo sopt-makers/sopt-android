@@ -7,7 +7,7 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.domain.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.UserRepository
 import org.sopt.official.util.rx.subscribeBy
 import org.sopt.official.util.rx.subscribeOnIo
 import timber.log.Timber

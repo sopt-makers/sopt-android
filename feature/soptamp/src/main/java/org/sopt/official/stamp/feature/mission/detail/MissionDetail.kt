@@ -45,6 +45,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.fake.FakeStampRepository
+import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
@@ -53,8 +56,6 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.domain.MissionLevel
-import org.sopt.official.stamp.domain.fake.FakeStampRepository
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
@@ -64,7 +65,6 @@ import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.util.DefaultPreview
-import org.sopt.official.stamp.feature.mission.model.ImageModel
 
 @MissionNavGraph
 @Destination("detail")

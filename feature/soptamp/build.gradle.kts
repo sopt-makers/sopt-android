@@ -28,6 +28,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.domain.soptamp)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(libs.kotlin.datetime)

@@ -9,8 +9,8 @@ import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.domain.repository.AuthRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
-import org.sopt.official.stamp.domain.repository.StampRepository
 import timber.log.Timber
 import javax.inject.Inject
 
