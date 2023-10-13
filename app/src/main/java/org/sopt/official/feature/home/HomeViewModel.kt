@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.Instant
 import org.sopt.official.R
 import org.sopt.official.domain.entity.UserActiveState
@@ -39,7 +39,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mainViewRepository: HomeRepository,
+    private val homeRepository: HomeRepository,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,
 ) : ViewModel() {
 
@@ -149,7 +149,7 @@ class HomeViewModel @Inject constructor(
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
-                mainViewRepository.getMainView()
+                homeRepository.getMainView()
                     .onSuccess {
                         homeUiState.value = it
                     }
@@ -175,7 +175,7 @@ class HomeViewModel @Inject constructor(
     fun initMainDescription(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
-                mainViewRepository.getMainDescription()
+                homeRepository.getMainDescription()
                     .onSuccess {
                         _description.value = it
                     }
@@ -185,13 +185,13 @@ class HomeViewModel @Inject constructor(
 
     fun registerPushToken(userStatus: UserStatus) {
         if (userStatus == UserStatus.UNAUTHENTICATED) return
-        FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
-            if (task.isComplete) {
-                viewModelScope.launch {
-                    registerPushTokenUseCase.invoke(task.result)
-                        .onFailure { Timber.e(it) }
-                }
-            }
+        viewModelScope.launch {
+            runCatching {
+                FirebaseMessaging.getInstance().token.await()
+            }.onSuccess {
+                registerPushTokenUseCase(it)
+                    .onFailure(Timber::e)
+            }.onFailure(Timber::e)
         }
     }
 }
