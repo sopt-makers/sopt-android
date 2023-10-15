@@ -1,6 +1,5 @@
 package org.sopt.official.feature.attendance
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.entity.attendance.AttendanceHistory
 import org.sopt.official.domain.entity.attendance.AttendanceRound
@@ -44,13 +44,15 @@ class AttendanceViewModel @Inject constructor(
     private val attendanceRepository: AttendanceRepository
 ) : ViewModel() {
     private var eventId: Int = 0
-    private var _soptEvent = MutableStateFlow<AttendanceState<SoptEvent>>(AttendanceState.Init)
+    private val _title: MutableStateFlow<String> = MutableStateFlow("")
+    val title = _title.asStateFlow()
+    private val _soptEvent = MutableStateFlow<AttendanceState<SoptEvent>>(AttendanceState.Init)
     val soptEvent: StateFlow<AttendanceState<SoptEvent>> get() = _soptEvent
-    private var _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
+    private val _attendanceHistory = MutableStateFlow<AttendanceState<AttendanceHistory>>(AttendanceState.Init)
     val attendanceHistory: StateFlow<AttendanceState<AttendanceHistory>> get() = _attendanceHistory
-    private var _attendanceRound = MutableStateFlow<AttendanceState<AttendanceRound>>(AttendanceState.Init)
+    private val _attendanceRound = MutableStateFlow<AttendanceState<AttendanceRound>>(AttendanceState.Init)
     val attendanceRound: StateFlow<AttendanceState<AttendanceRound>> get() = _attendanceRound
-    private var _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
+    private val _dialogState = MutableStateFlow<DialogState>(DialogState.Show)
     val dialogState: StateFlow<DialogState> get() = _dialogState
 
     private val progressBarState = MutableLiveData(ProgressBarState())
@@ -62,8 +64,11 @@ class AttendanceViewModel @Inject constructor(
     val isSecondToThirdLineActive: LiveData<Boolean> = progressBarState.map { it.isSecondToThirdLineActive }
     val isThirdProgressBarActive: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarActive }
     val isThirdProgressBarAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarAttendance }
-    val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
+    private val isThirdProgressBarTardy: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarTardy }
     val isThirdProgressBarBeforeAttendance: LiveData<Boolean> = progressBarState.map { it.isThirdProgressBarBeforeAttendance }
+    val isThirdProgressBarVisible = progressBarState.map { it.isThirdProgressBarActive && it.isThirdProgressBarTardy }
+    val isThirdProgressBarActiveAndBeforeAttendance =
+        progressBarState.map { it.isThirdProgressBarActive && it.isThirdProgressBarBeforeAttendance }
 
     private val attendanceButtonState = MutableLiveData(AttendanceButtonState())
     val isAttendanceButtonEnabled: LiveData<Boolean> = attendanceButtonState.map { it.isAttendanceButtonEnabled }
@@ -74,9 +79,17 @@ class AttendanceViewModel @Inject constructor(
     var dialogErrorMessage: String = ""
     private var attendancesSize = 0
 
-    companion object {
-        private const val FIRST_ATTENDANCE_TEXT = "1차 출석"
-        private const val SECOND_ATTENDANCE_TEXT = "2차 출석"
+    init {
+        fetchData()
+    }
+
+    fun fetchData() {
+        fetchSoptEvent()
+        fetchAttendanceHistory()
+    }
+
+    fun initDialogTitle(title: String) {
+        _title.value = title
     }
 
     fun fetchSoptEvent() {
@@ -124,9 +137,6 @@ class AttendanceViewModel @Inject constructor(
             2 -> {
                 val firstProgressText = soptEvent.attendances[0].attendedAt
                 val secondProgressText = soptEvent.attendances[1].attendedAt
-
-                Log.d("####hj", firstProgressText)
-                Log.d("####hj", secondProgressText)
 
                 if (firstProgressText != FIRST_ATTENDANCE_TEXT) {
                     // 1차 출석이 출석
@@ -229,7 +239,7 @@ class AttendanceViewModel @Inject constructor(
         setProgressBarState { copy(isThirdProgressBarBeforeAttendance = isBeforeAttendance) }
     }
 
-    fun fetchAttendanceHistory() {
+    private fun fetchAttendanceHistory() {
         viewModelScope.launch {
             _attendanceHistory.value = AttendanceState.Loading
             attendanceRepository.fetchAttendanceHistory()
@@ -247,7 +257,6 @@ class AttendanceViewModel @Inject constructor(
             .onSuccess {
                 _attendanceRound.value = AttendanceState.Success(it)
                 subLectureId = it.id
-                Timber.tag("zzzz id").i(it.id.toString())
                 when (it.id) {
                     -1L -> {
                         setAttendanceButtonVisibility(false)
@@ -272,7 +281,6 @@ class AttendanceViewModel @Inject constructor(
                     }
                 }
             }.onFailure {
-                Timber.tag("zzzz failure").e(it)
                 Timber.e(it)
             }
     }
@@ -295,21 +303,10 @@ class AttendanceViewModel @Inject constructor(
             attendanceRepository.confirmAttendanceCode(subLectureId, code)
                 .onSuccess {
                     when (it.subLectureId) {
-                        -2L -> {
-                            showDialog("코드가 일치하지 않아요!")
-                        }
-
-                        -1L -> {
-                            showDialog("출석 시간 전입니다.")
-                        }
-
-                        0L -> {
-                            showDialog("출석이 이미 종료되었습니다.")
-                        }
-
-                        else -> {
-                            _dialogState.value = DialogState.Close
-                        }
+                        -2L -> showDialog("코드가 일치하지 않아요!")
+                        -1L -> showDialog("출석 시간 전입니다.")
+                        0L -> showDialog("출석이 이미 종료되었습니다.")
+                        else -> _dialogState.value = DialogState.Close
                     }
                 }.onFailure {
                     Timber.e(it)
@@ -324,5 +321,10 @@ class AttendanceViewModel @Inject constructor(
     private fun showDialog(message: String) {
         dialogErrorMessage = message
         _dialogState.value = DialogState.Failure
+    }
+
+    companion object {
+        private const val FIRST_ATTENDANCE_TEXT = "1차 출석"
+        private const val SECOND_ATTENDANCE_TEXT = "2차 출석"
     }
 }

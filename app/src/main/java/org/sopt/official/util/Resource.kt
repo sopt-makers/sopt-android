@@ -1,6 +1,7 @@
 package org.sopt.official.util
 
 import android.content.Context
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.content.res.AppCompatResources
@@ -14,6 +15,10 @@ fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, *a
 
 fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
 
+fun Context.colorOf(@ColorRes id: Int) = getColor(id)
+
 fun Fragment.stringOf(@StringRes id: Int) = requireContext().stringOf(id)
 
 fun Fragment.drawableOf(@DrawableRes id: Int) = requireContext().drawableOf(id)
+
+fun Fragment.colorOf(@ColorRes id: Int) = requireContext().getColor(id)

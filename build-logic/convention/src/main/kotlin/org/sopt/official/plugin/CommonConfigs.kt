@@ -16,7 +16,6 @@ internal fun Project.configureAndroidCommonPlugin() {
     apply<AndroidKotlinPlugin>()
     apply<KotlinSerializationPlugin>()
     with(plugins) {
-        apply("kotlin-kapt")
         apply("kotlin-parcelize")
     }
     apply<AndroidHiltPlugin>()
@@ -42,7 +41,6 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "AMPLITUDE_KEY", amplitudeKey)
         }
         buildFeatures.apply {
-            dataBinding.enable = true
             viewBinding = true
             buildConfig = true
         }

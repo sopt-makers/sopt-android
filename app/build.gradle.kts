@@ -75,7 +75,6 @@ android {
         }
     }
     buildFeatures {
-        viewBinding = true
         compose = true
     }
     composeOptions {
@@ -118,6 +117,7 @@ dependencies {
     implementation(libs.process.phoenix)
 
     implementation(libs.compose.destination.core)
+    implementation(libs.androidx.lifecycle.process)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))

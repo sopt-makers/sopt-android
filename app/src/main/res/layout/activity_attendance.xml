@@ -1,371 +1,339 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".feature.attendance.AttendanceActivity">
 
-    <data>
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/layout_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?android:colorBackground"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <import type="android.view.View" />
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:navigationIcon="@drawable/ic_attendance_arrow_left_white">
 
-        <variable
-            name="viewModel"
-            type="org.sopt.official.feature.attendance.AttendanceViewModel" />
-    </data>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/attendance"
+                android:textColor="?colorOnBackground"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/ic_refresh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_refresh" />
+
+        </androidx.appcompat.widget.Toolbar>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_info_event"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/layout_app_bar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?android:colorBackground"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:navigationIcon="@drawable/ic_attendance_arrow_left_white">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/attendance"
-                    android:textColor="?colorOnBackground"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/ic_refresh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_refresh" />
-
-            </androidx.appcompat.widget.Toolbar>
-        </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/rectangle_radius_16"
+        android:backgroundTint="@color/black_80"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="32dp"
+        app:layout_constraintTop_toBottomOf="@id/layout_app_bar">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/layout_info_event"
+            android:id="@+id/layout_info_event_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="16dp"
-            android:background="@drawable/rectangle_radius_16"
-            android:backgroundTint="@color/black_80"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="32dp"
-            app:layout_constraintTop_toBottomOf="@id/layout_app_bar">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_info_event_date"
-                android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/image_info_event_date"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/image_info_event_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_attendance_event_date"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/text_info_event_date"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="?colorOnSurfaceInverse"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/image_info_event_date"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="3월 23일 토요일 14:00 - 18:00" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_info_event_location"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@id/layout_info_event_date">
-
-                <ImageView
-                    android:id="@+id/image_info_event_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_attendance_event_location"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/text_info_event_location"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="?colorOnSurfaceInverse"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/image_info_event_location"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="건국대학교 꽥꽥오리관" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/text_info_event_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:bufferType="spannable"
-                android:textAppearance="?textAppearanceBodyLarge"
-                android:textColor="?colorOnSurface"
-                android:textSize="18sp"
-                app:layout_constraintTop_toBottomOf="@id/layout_info_event_location"
-                tools:text="오늘은 데모데이 날이에요" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/layout_attendance_progress"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="24dp"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:src="@drawable/ic_attendance_event_date"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_info_event_point">
-
-                <View
-                    android:id="@+id/line_first_to_second"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_80"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
-
-                <View
-                    android:id="@+id/line_first_to_second_active"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/white_100"
-                    android:visibility="@{viewModel.isFirstToSecondLineActive ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
-
-                <View
-                    android:id="@+id/line_second_to_third"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/gray_80"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
-
-                <View
-                    android:id="@+id/line_second_to_third_active_active"
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:background="@color/white_100"
-                    android:visibility="@{viewModel.isSecondToThirdLineActive ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress1_empty"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/oval_border_gray40"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress1_check"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginStart="12dp"
-                    android:background="@drawable/oval_fill_white_border_gray60"
-                    android:src="@{viewModel.isFirstProgressBarAttendance ? @drawable/ic_attendance_check_gray : @drawable/ic_attendance_close_gray}"
-                    android:visibility="@{viewModel.isFirstProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_attendance_progress1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:enabled="false"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@{viewModel.isFirstProgressBarActive ? @color/white_100 : @color/gray_100}"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress1_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress1_empty"
-                    tools:text="@string/attendance_progress_first" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress2_empty"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/oval_border_gray40"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress2_check"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="@drawable/oval_fill_white_border_gray60"
-                    android:src="@{viewModel.isSecondProgressBarAttendance ? @drawable/ic_attendance_check_gray : @drawable/ic_attendance_close_gray}"
-                    android:visibility="@{viewModel.isSecondProgressBarActive ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_attendance_progress2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:enabled="false"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@{viewModel.isSecondProgressBarActive ? @color/white_100 : @color/gray_100}"
-                    android:textSize="12sp"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress2_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress2_empty"
-                    tools:text="@string/attendance_progress_second" />
-
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress3_tardy"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/oval_fill_black60_border_white100"
-                    android:src="@drawable/ic_point"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress3_attendance"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/oval_fill_black60_border_white100"
-                    android:src="@{viewModel.isThirdProgressBarBeforeAttendance ? @drawable/ic_attendacne_check_white : @drawable/ic_attendance_close_white}"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy ? View.INVISIBLE : View.VISIBLE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <ImageView
-                    android:id="@+id/iv_attendance_progress3_empty"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/oval_border_gray40"
-                    android:visibility="@{viewModel.isThirdProgressBarActive ? View.INVISIBLE : View.VISIBLE}"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tv_attendance_progress3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:enabled="false"
-                    android:text="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarTardy ? @string/attendance_progress_third_tardy : @string/attendance_progress_third_complete}"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@color/white_100"
-                    android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.VISIBLE : View.INVISIBLE}"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
-
-                <TextView
-                    android:id="@+id/tv_attendance_progress3_attendance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:enabled="false"
-                    android:text="@{viewModel.isThirdProgressBarActive ? @string/attendance_progress_third_absent : @string/attendance_progress_before}"
-                    android:textAppearance="?textAppearanceBodyLarge"
-                    android:textColor="@{viewModel.isThirdProgressBarActive ? @color/white_100 : @color/gray_100}"
-                    android:textSize="12sp"
-                    android:visibility="@{viewModel.isThirdProgressBarActive &amp;&amp; viewModel.isThirdProgressBarBeforeAttendance ? View.INVISIBLE : View.VISIBLE}"
-                    app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/text_info_event_point"
-                android:layout_width="match_parent"
+                android:id="@+id/text_info_event_date"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="@string/text_not_awarded"
+                android:layout_marginStart="4dp"
                 android:textAppearance="?textAppearanceBodyLarge"
-                android:textColor="@color/gray_30"
+                android:textColor="?colorOnSurfaceInverse"
                 android:textSize="14sp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/text_info_event_name" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_info_event_date"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="3월 23일 토요일 14:00 - 18:00" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_attendance_history"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_info_event_location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rectangle_radius_16"
-            android:backgroundTint="@color/black_80"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@id/btn_attendance"
-            app:layout_constraintTop_toBottomOf="@id/layout_info_event"
-            app:layout_constraintVertical_bias="0" />
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/layout_info_event_date">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_attendance"
-            style="@style/TextAppearance.SOPT"
-            android:layout_width="0dp"
+            <ImageView
+                android:id="@+id/image_info_event_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_attendance_event_location"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/text_info_event_location"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textColor="?colorOnSurfaceInverse"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/image_info_event_location"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="건국대학교 꽥꽥오리관" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/text_info_event_name"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/rectangle_radius_10"
-            android:backgroundTint="@color/attendance_button"
-            android:enabled="@{viewModel.isAttendanceButtonEnabled}"
-            android:paddingVertical="20dp"
-            android:text="@{viewModel.attendanceButtonText}"
-            android:textColor="@color/attendance_button_text"
-            android:textFontWeight="700"
+            android:layout_marginTop="16dp"
+            android:bufferType="spannable"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="?colorOnSurface"
             android:textSize="18sp"
-            android:visibility="@{viewModel.isAttendanceButtonVisibility ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_info_event_location"
+            tools:text="오늘은 데모데이 날이에요" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_attendance_progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="1차 출석 인증하기" />
+            app:layout_constraintTop_toBottomOf="@+id/text_info_event_point">
 
+            <View
+                android:id="@+id/line_first_to_second"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray_80"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+            <View
+                android:id="@+id/line_first_to_second_active"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white_100"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress1_empty" />
+
+            <View
+                android:id="@+id/line_second_to_third"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/gray_80"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
+
+            <View
+                android:id="@+id/line_second_to_third_active"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="@color/white_100"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintEnd_toStartOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintStart_toEndOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintTop_toTopOf="@+id/iv_attendance_progress2_empty" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress1_empty"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/oval_border_gray40"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress1_check"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/oval_fill_white_border_gray60"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_attendance_progress1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:enabled="false"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress1_empty"
+                app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress1_empty"
+                tools:text="@string/attendance_progress_first" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress2_empty"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/oval_border_gray40"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress2_check"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/oval_fill_white_border_gray60"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_attendance_progress2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:enabled="false"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress2_empty"
+                app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress2_empty"
+                tools:text="@string/attendance_progress_second" />
+
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress3_tardy"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/oval_fill_black60_border_white100"
+                android:src="@drawable/ic_point"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress3_attendance"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/oval_fill_black60_border_white100"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_attendance_progress3_empty"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/oval_border_gray40"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_attendance_progress3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:enabled="false"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textColor="@color/white_100"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
+
+            <TextView
+                android:id="@+id/tv_attendance_progress3_attendance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:enabled="false"
+                android:textAppearance="?textAppearanceBodyLarge"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintStart_toStartOf="@+id/iv_attendance_progress3_empty"
+                app:layout_constraintTop_toBottomOf="@+id/iv_attendance_progress3_empty" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/text_info_event_point"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/text_not_awarded"
+            android:textAppearance="?textAppearanceBodyLarge"
+            android:textColor="@color/gray_30"
+            android:textSize="14sp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/text_info_event_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</layout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_attendance_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rectangle_radius_16"
+        android:backgroundTint="@color/black_80"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@id/btn_attendance"
+        app:layout_constraintTop_toBottomOf="@id/layout_info_event"
+        app:layout_constraintVertical_bias="0" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_attendance"
+        style="@style/TextAppearance.SOPT"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/rectangle_radius_10"
+        android:backgroundTint="@color/attendance_button"
+        android:paddingVertical="20dp"
+        android:textColor="@color/attendance_button_text"
+        android:textFontWeight="700"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="1차 출석 인증하기" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

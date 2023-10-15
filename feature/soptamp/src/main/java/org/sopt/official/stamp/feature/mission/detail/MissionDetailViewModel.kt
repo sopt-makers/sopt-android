@@ -192,7 +192,6 @@ class MissionDetailViewModel @Inject constructor(
     private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
-            Timber.d("MissionDetailViewModel onSubmit() $currentState")
             val (id, imageUri, content) = currentState
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)

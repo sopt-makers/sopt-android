@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -32,26 +33,91 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
+import org.sopt.official.util.colorOf
 import org.sopt.official.util.dp
+import org.sopt.official.util.stringOf
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
-    private val attendanceViewModel by viewModels<AttendanceViewModel>()
+    private val viewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAttendanceBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.viewModel = attendanceViewModel
-        binding.lifecycleOwner = this
 
         initView()
         initUiInteraction()
         initListener()
-        fetchData()
         observeData()
+        observeProgressState()
+    }
+
+    private fun observeProgressState() {
+        viewModel.isFirstToSecondLineActive.observe(this) {
+            binding.lineFirstToSecondActive.isInvisible = !it
+        }
+        viewModel.isSecondToThirdLineActive.observe(this) {
+            binding.lineSecondToThirdActive.isInvisible = !it
+        }
+        viewModel.isFirstProgressBarAttendance.observe(this) {
+            binding.ivAttendanceProgress1Check.setImageResource(
+                if (it) R.drawable.ic_attendance_check_gray else R.drawable.ic_attendance_close_gray
+            )
+        }
+        viewModel.isFirstProgressBarActive.observe(this) {
+            binding.ivAttendanceProgress1Check.isInvisible = !it
+            binding.tvAttendanceProgress1.setTextColor(
+                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+            )
+        }
+        viewModel.isSecondProgressBarAttendance.observe(this) {
+            binding.ivAttendanceProgress2Check.setImageResource(
+                if (it) R.drawable.ic_attendance_check_gray else R.drawable.ic_attendance_close_gray
+            )
+        }
+        viewModel.isSecondProgressBarActive.observe(this) {
+            binding.ivAttendanceProgress2Check.isInvisible = !it
+            binding.tvAttendanceProgress2.setTextColor(
+                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+            )
+        }
+        viewModel.isThirdProgressBarVisible.observe(this) {
+            binding.ivAttendanceProgress3Tardy.isInvisible = !it
+            binding.ivAttendanceProgress3Attendance.isInvisible = it
+            binding.tvAttendanceProgress3.text = stringOf(
+                if (it) R.string.attendance_progress_third_tardy else R.string.attendance_progress_third_complete
+            )
+        }
+        viewModel.isThirdProgressBarActive.observe(this) {
+            binding.ivAttendanceProgress3Empty.isInvisible = it
+            binding.tvAttendanceProgress3Attendance.text = stringOf(
+                if (it) R.string.attendance_progress_third_absent else R.string.attendance_progress_before
+            )
+            binding.tvAttendanceProgress3Attendance.setTextColor(
+                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+            )
+        }
+        viewModel.isThirdProgressBarBeforeAttendance.observe(this) {
+            binding.ivAttendanceProgress3Attendance.setImageResource(
+                if (it) R.drawable.ic_attendacne_check_white else R.drawable.ic_attendance_close_white
+            )
+        }
+        viewModel.isThirdProgressBarActiveAndBeforeAttendance.observe(this) {
+            binding.tvAttendanceProgress3.isInvisible = !it
+            binding.tvAttendanceProgress3Attendance.isInvisible = it
+        }
+        viewModel.isAttendanceButtonEnabled.observe(this) {
+            binding.btnAttendance.isEnabled = it
+        }
+        viewModel.attendanceButtonText.observe(this) {
+            binding.btnAttendance.text = it
+        }
+        viewModel.isAttendanceButtonVisibility.observe(this) {
+            binding.btnAttendance.isVisible = it
+        }
     }
 
     private fun initView() {
@@ -63,14 +129,7 @@ class AttendanceActivity : AppCompatActivity() {
     private fun initUiInteraction() {
         binding.icRefresh.setOnClickListener {
             it.startAnimation(AnimationUtils.loadAnimation(this, R.anim.anim_rotation))
-            fetchData()
-        }
-    }
-
-    private fun fetchData() {
-        attendanceViewModel.run {
-            fetchSoptEvent()
-            fetchAttendanceHistory()
+            viewModel.fetchData()
         }
     }
 
@@ -121,7 +180,7 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun observeSoptEvent() {
-        attendanceViewModel.soptEvent
+        viewModel.soptEvent
             .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
@@ -133,7 +192,7 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun observeAttendanceHistory() {
-        attendanceViewModel.attendanceHistory
+        viewModel.attendanceHistory
             .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
@@ -192,7 +251,7 @@ class AttendanceActivity : AppCompatActivity() {
                 setSpan(StyleSpan(Typeface.BOLD), 4, 4 + (soptEvent.eventName.length), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
             layoutAttendanceProgress.isVisible = true
-            attendanceViewModel.setProgressBar(soptEvent)
+            viewModel.setProgressBar(soptEvent)
             when (soptEvent.attendances.size) {
                 1 -> {
                     tvAttendanceProgress1.text = if (soptEvent.attendances[0].status == AttendanceStatus.ATTENDANCE) {
