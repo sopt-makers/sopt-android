@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +24,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.official.core.lifecycle.viewLifeCycle
-import org.sopt.official.core.lifecycle.viewLifeCycleScope
 import org.sopt.official.databinding.DialogAttendanceCodeBinding
 import org.sopt.official.feature.attendance.model.DialogState
 
@@ -32,6 +31,7 @@ class AttendanceCodeDialog : DialogFragment() {
     private var _binding: DialogAttendanceCodeBinding? = null
     private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
     private val viewModel: AttendanceViewModel by activityViewModels()
+    private lateinit var dialogTitle: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,15 +66,16 @@ class AttendanceCodeDialog : DialogFragment() {
     }
 
     fun setTitle(title: String): AttendanceCodeDialog {
-        viewModel.initDialogTitle(title)
+        dialogTitle = title
         return this
     }
 
     private fun initTitle() {
+        viewModel.initDialogTitle(dialogTitle)
         viewModel.title
-            .flowWithLifecycle(viewLifeCycle)
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기" }
-            .launchIn(viewLifeCycleScope)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun initListener() {
@@ -193,7 +194,7 @@ class AttendanceCodeDialog : DialogFragment() {
     }
 
     override fun dismiss() {
-        viewModel.initDialogState()
+         viewModel.initDialogState()
         super.dismiss()
     }
 
