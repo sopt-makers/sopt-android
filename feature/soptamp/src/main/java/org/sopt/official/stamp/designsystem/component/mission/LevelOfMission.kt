@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.domain.MissionLevel
+import org.sopt.official.domain.soptamp.MissionLevel
 
 @Composable
 fun LevelOfMission(stamp: Stamp, spaceSize: Dp) {

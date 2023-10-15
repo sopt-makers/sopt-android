@@ -83,7 +83,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.domain.soptamp)
     implementation(projects.feature.soptamp)
+    implementation(projects.data.soptamp)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.feature.auth)

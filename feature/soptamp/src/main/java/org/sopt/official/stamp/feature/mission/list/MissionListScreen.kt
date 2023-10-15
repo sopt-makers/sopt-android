@@ -64,9 +64,9 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.domain.MissionLevel
-import org.sopt.official.stamp.domain.error.Error
-import org.sopt.official.stamp.domain.model.MissionsFilter
+import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination

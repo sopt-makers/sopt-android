@@ -15,6 +15,7 @@
  */
 package org.sopt.official.stamp.feature.mission.detail.component
 
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.feature.mission.model.ImageModel
+import org.sopt.official.domain.soptamp.model.ImageModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -51,7 +52,7 @@ fun ImageContent(
     val pagerState = rememberPagerState { imageModel.size }
     val photoPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
         if (it.isNotEmpty()) {
-            onChangeImage(ImageModel.Local(it))
+            onChangeImage(ImageModel.Local(it.map { uri -> uri.toString() }))
         }
     }
 
@@ -91,7 +92,7 @@ fun ImageContent(
                     when (imageModel) {
                         is ImageModel.Local -> {
                             AsyncImage(
-                                model = imageModel.uri[page],
+                                model = Uri.parse(imageModel.uri[page]),
                                 contentDescription = "",
                                 modifier = Modifier
                                     .fillMaxSize()

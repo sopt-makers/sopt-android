@@ -23,3 +23,5 @@ include(
     ":core:common",
     ":feature:auth"
 )
+include(":data:soptamp")
+include(":domain:soptamp")

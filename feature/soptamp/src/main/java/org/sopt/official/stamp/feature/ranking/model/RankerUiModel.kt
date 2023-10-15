@@ -15,7 +15,7 @@
  */
 package org.sopt.official.stamp.feature.ranking.model
 
-import org.sopt.official.stamp.domain.model.Rank
+import org.sopt.official.domain.soptamp.model.Rank
 
 data class RankerUiModel(
     val rank: Int,

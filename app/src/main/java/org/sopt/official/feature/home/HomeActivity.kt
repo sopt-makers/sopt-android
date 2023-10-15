@@ -116,7 +116,7 @@ class HomeActivity : AppCompatActivity() {
                     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args?.remoteMessageEventLink))
                     startActivity(intent)
                 }
-//                RemoteMessageLinkType.DEEP_LINK -> {} TODO: 딥링크 정의된 후 구현 예정
+                // RemoteMessageLinkType.DEEP_LINK -> {} TODO: 딥링크 정의된 후 구현 예정
                 else -> {
                     val intent = Intent(this, NotificationHistoryActivity::class.java)
                     startActivity(intent)

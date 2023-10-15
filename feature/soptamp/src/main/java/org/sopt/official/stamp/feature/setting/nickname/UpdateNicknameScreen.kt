@@ -49,6 +49,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import org.sopt.official.domain.soptamp.fake.FakeUserRepository
+import org.sopt.official.domain.soptamp.user.CheckNicknameDuplicateUseCase
+import org.sopt.official.domain.soptamp.user.UpdateNicknameUseCase
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
@@ -56,9 +59,6 @@ import org.sopt.official.stamp.designsystem.style.Gray50
 import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.designsystem.style.Red200
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.domain.fake.FakeUserRepository
-import org.sopt.official.stamp.domain.usecase.user.CheckNicknameDuplicateUseCase
-import org.sopt.official.stamp.domain.usecase.user.UpdateNicknameUseCase
 import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.util.addFocusCleaner
 

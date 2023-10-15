@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
-import org.sopt.official.stamp.domain.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.UserRepository
 import timber.log.Timber
 import javax.inject.Inject
 

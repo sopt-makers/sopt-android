@@ -15,8 +15,8 @@
  */
 package org.sopt.official.stamp.feature.mission.model
 
-import org.sopt.official.stamp.domain.MissionLevel
-import org.sopt.official.stamp.domain.model.Mission
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.model.Mission
 
 data class MissionListUiModel(
     val title: String,
