@@ -67,6 +67,7 @@ sentry = "3.13.0"
 sentry-android = "6.31.0"
 process-pheonix = "2.1.2"
 amplitude = "1.11.2"
+spotless = "6.18.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -220,3 +221,4 @@ kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", vers
 sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
