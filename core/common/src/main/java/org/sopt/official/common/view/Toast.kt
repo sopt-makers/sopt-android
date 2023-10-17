@@ -13,10 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.sopt.official.domain.entity
+package org.sopt.official.common.view
 
-enum class UserActiveState {
-    ACTIVE,
-    INACTIVE,
-    UNAUTHENTICATED
+import android.content.Context
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+
+fun Context.toast(message: String) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Fragment.toast(message: String) {
+    requireContext().toast(message)
 }
