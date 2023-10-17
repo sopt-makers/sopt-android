@@ -1,3 +1,5 @@
+import com.diffplug.gradle.spotless.SpotlessExtension
+
 buildscript {
     repositories {
         google()
@@ -30,6 +32,31 @@ plugins {
     alias(libs.plugins.sentry) apply false
     alias(libs.plugins.junit5) apply false
     alias(libs.plugins.app.distribution) apply false
+    alias(libs.plugins.spotless) apply false
+}
+
+subprojects {
+    apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
+
+    extensions.configure<SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("$buildDir/**/*.kt")
+            licenseHeaderFile(rootProject.file("spotless/spotless.license.kt"))
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+        format("kts") {
+            target("**/*.kts")
+            targetExclude("$buildDir/**/*.kts")
+            licenseHeaderFile(rootProject.file("spotless/spotless.license.kt"), "(^(?![\\/ ]\\*).*$)")
+        }
+        format("xml") {
+            target("**/*.xml")
+            targetExclude("**/build/**/*.xml")
+            licenseHeaderFile(rootProject.file("spotless/spotless.license.xml"), "(<[^!?])")
+        }
+    }
 }
 
 tasks.register("clean", Delete::class) {
