@@ -60,7 +60,7 @@ lottie = "6.1.0"
 
 google-services = "4.4.0"
 crashlytics = "2.9.9"
-firebase = "32.4.0"
+firebase = "32.4.1"
 app-distribution = "4.0.1"
 ktlint = "11.6.1"
 sentry = "3.14.0"
