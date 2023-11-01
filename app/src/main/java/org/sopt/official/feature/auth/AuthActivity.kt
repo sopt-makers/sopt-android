@@ -51,7 +51,7 @@ import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE
 import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.AuthRequest
-import org.sopt.official.data.persistence.SoptDataStore
+import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.domain.entity.auth.UserStatus

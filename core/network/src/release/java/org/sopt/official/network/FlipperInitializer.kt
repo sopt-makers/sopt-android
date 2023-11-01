@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2023 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.request
+package org.sopt.official.network
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import android.app.Application
+import okhttp3.OkHttpClient
 
-//@Serializable
-//data class RefreshRequest(
-//    @SerialName("refreshToken")
-//    val token: String
-//)
+object FlipperInitializer {
+    fun init(app: Application) {}
+    fun addFlipperNetworkPlugin(builder: OkHttpClient.Builder) = builder
+}

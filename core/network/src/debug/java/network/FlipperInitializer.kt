@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2023 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.request
+package org.sopt.official.network
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import android.app.Application
+import okhttp3.OkHttpClient
 
-//@Serializable
-//data class RefreshRequest(
-//    @SerialName("refreshToken")
-//    val token: String
-//)
+import android.app.Application
+import com.facebook.flipper.android.AndroidFlipperClient
+import com.facebook.flipper.plugins.inspector.DescriptorMapping
+import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
+import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
+import com.facebook.soloader.SoLoader
+import okhttp3.OkHttpClient
+
+object FlipperInitializer {
+    private val flipperNetworkPlugin = NetworkFlipperPlugin()
+
+    fun init(app: Application) {
+        SoLoader.init(app, false)
+        val client = AndroidFlipperClient.getInstance(app)
+        client.addPlugin(InspectorFlipperPlugin(app, DescriptorMapping.withDefaults()))
+        client.addPlugin(flipperNetworkPlugin)
+        client.start()
+    }
+
+    fun addFlipperNetworkPlugin(builder: OkHttpClient.Builder): OkHttpClient.Builder {
+        return builder.addNetworkInterceptor(FlipperOkhttpInterceptor(flipperNetworkPlugin))
+    }
+}

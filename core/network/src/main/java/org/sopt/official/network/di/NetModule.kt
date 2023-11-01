@@ -39,7 +39,7 @@ import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
-//import org.sopt.official.network.FlipperInitializer
+import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.authenticator.SoptAuthenticator
 import retrofit2.Converter
 import retrofit2.Retrofit
@@ -48,6 +48,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object NetModule {
+
     @Logging
     @Provides
     @Singleton
@@ -66,7 +67,7 @@ object NetModule {
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)
         .authenticator(authenticator)
-//        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
+        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
 
     @Provides
@@ -76,7 +77,7 @@ object NetModule {
         @Logging loggingInterceptor: Interceptor,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-//        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
+        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
 
     @Provides

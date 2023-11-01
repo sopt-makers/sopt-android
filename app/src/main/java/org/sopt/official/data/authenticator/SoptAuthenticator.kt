@@ -33,7 +33,6 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.sopt.official.common.di.Auth
-import org.sopt.official.data.model.request.RefreshRequest
 import org.sopt.official.data.persistence. SoptDataStore
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.feature.auth.AuthActivity

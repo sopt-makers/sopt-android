@@ -24,6 +24,7 @@
  */
 package org.sopt.official.di
 
+import android.app.Application
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -35,16 +36,15 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.BuildConfig
-import org.sopt.official.FlipperInitializer
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
+import org.sopt.official.network.authenticator.SoptAuthenticator
 //import org.sopt.official.data.authenticator.SoptAuthenticator
 import retrofit2.Converter
 import retrofit2.Retrofit
-import javax.inject.Singleton
-
+//import javax.inject.Singleton
 //@InstallIn(SingletonComponent::class)
 //@Module
 //object NetModule {
