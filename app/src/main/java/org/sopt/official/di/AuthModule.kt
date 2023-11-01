@@ -32,7 +32,7 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
-import org.sopt.official.data.interceptor.AuthInterceptor
+import org.sopt.official.network.interceptor.AuthInterceptor
 import org.sopt.official.data.repository.AuthRepositoryImpl
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.data.source.api.auth.LocalAuthDataSource
@@ -63,10 +63,10 @@ object AuthModule {
         @Singleton
         fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
 
-        @Binds
-        @Singleton
-        @Auth
-        fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
+//        @Binds
+//        @Singleton
+//        @Auth
+//        fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
 
         @Binds
         @Singleton
