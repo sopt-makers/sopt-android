@@ -63,11 +63,6 @@ object AuthModule {
         @Singleton
         fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
 
-//        @Binds
-//        @Singleton
-//        @Auth
-//        fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
-
         @Binds
         @Singleton
         fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource

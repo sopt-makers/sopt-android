@@ -53,21 +53,9 @@ object AuthModule {
     @Module
     @InstallIn(SingletonComponent::class)
     interface Binder {
-//        @Binds
-//        @Singleton
-//        fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
-
         @Binds
         @Singleton
         @Auth
         fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
-
-//        @Binds
-//        @Singleton
-//        fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource
-//
-//        @Binds
-//        @Singleton
-//        fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
     }
 }
