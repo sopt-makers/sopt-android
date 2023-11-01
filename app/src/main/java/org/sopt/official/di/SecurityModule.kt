@@ -35,19 +35,19 @@ import org.sopt.official.BuildConfig
 import org.sopt.official.common.di.LocalStore
 import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object SecurityModule {
-    @Provides
-    @Singleton
-    fun provideMasterKey(
-        @ApplicationContext context: Context
-    ): MasterKey = MasterKey.Builder(context)
-        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-        .build()
-
-    @Provides
-    @Singleton
-    @LocalStore
-    fun provideSoptDataStoreName(): String = BuildConfig.persistenceStoreName
-}
+//@Module
+//@InstallIn(SingletonComponent::class)
+//object SecurityModule {
+//    @Provides
+//    @Singleton
+//    fun provideMasterKey(
+//        @ApplicationContext context: Context
+//    ): MasterKey = MasterKey.Builder(context)
+//        .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+//        .build()
+//
+//    @Provides
+//    @Singleton
+//    @LocalStore
+//    fun provideSoptDataStoreName(): String = BuildConfig.persistenceStoreName
+//}

@@ -35,7 +35,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.official.data.persistence.SoptDataStore
+//import org.sopt.official.data.persistence.SoptDataStore
+import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import javax.inject.Inject
 

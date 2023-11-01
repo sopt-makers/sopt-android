@@ -25,13 +25,13 @@
 package org.sopt.official.data.repository
 
 import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.model.request.RefreshRequest
 import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.source.api.auth.LocalAuthDataSource
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
 import org.sopt.official.domain.entity.auth.Token
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.repository.AuthRepository
+import org.sopt.official.network.model.RefreshRequest
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(

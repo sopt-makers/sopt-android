@@ -25,9 +25,9 @@
 package org.sopt.official.data.source.api.auth
 
 import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.model.request.RefreshRequest
 import org.sopt.official.data.model.response.AuthResponse
 import org.sopt.official.data.model.response.LogOutResponse
+import org.sopt.official.network.model.RefreshRequest
 
 interface RemoteAuthDataSource {
     suspend fun refresh(token: RefreshRequest): AuthResponse

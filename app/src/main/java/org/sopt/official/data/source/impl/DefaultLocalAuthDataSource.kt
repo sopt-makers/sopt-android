@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.source.impl
 
-import org.sopt.official.data.persistence.SoptDataStore
+import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.data.source.api.auth.LocalAuthDataSource
 import org.sopt.official.domain.entity.auth.Token
 import org.sopt.official.domain.entity.auth.UserStatus
