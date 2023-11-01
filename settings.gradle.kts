@@ -21,7 +21,8 @@ include(
     ":feature:soptamp",
     ":core:analytics",
     ":core:common",
-    ":feature:auth"
+    ":feature:auth",
+    ":core:network"
 )
 include(":data:soptamp")
 include(":domain:soptamp")
