@@ -109,7 +109,7 @@ class SoptDataStore @Inject constructor(
 
     var userStatus: String
         set(value) = store.edit { putString(USER_STATUS, value) }
-        get() = store.getString(USER_STATUS, UserStatus.UNAUTHENTICATED.value) ?: UserStatus.UNAUTHENTICATED.value
+        get() = store.getString(USER_STATUS, UNAUTHENTICATED) ?: UNAUTHENTICATED
 
     var pushToken: String
         set(value) = store.edit { putString(PUSH_TOKEN, value) }
@@ -124,18 +124,7 @@ class SoptDataStore @Inject constructor(
         private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"
         private const val PUSH_TOKEN = "push_token"
+        private const val UNAUTHENTICATED="UNAUTHENTICATED"
 
-        enum class UserStatus(
-            val value: String
-        ) {
-            ACTIVE("ACTIVE"),
-            INACTIVE("INACTIVE"),
-            UNAUTHENTICATED("UNAUTHENTICATED");
-
-            companion object {
-                fun of(value: String) = entries.find { it.value == value }
-                    ?: throw IllegalArgumentException("Invalid user status: $value")
-            }
-        }
     }
 }

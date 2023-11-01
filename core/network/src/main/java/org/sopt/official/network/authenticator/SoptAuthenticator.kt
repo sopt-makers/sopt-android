@@ -25,6 +25,8 @@
 package org.sopt.official.network.authenticator
 
 import android.content.Context
+import android.content.Intent
+import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -43,7 +45,8 @@ import javax.inject.Singleton
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     @Auth(false) private val service: AuthService,
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    private val providesIntent: ProvidesIntents
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
@@ -59,7 +62,7 @@ class SoptAuthenticator @Inject constructor(
             }.onFailure {
                 dataStore.clear()
                 Timber.e(it)
-//                ProcessPhoenix.triggerRebirth(context, AuthActivity.newInstance(context))
+                ProcessPhoenix.triggerRebirth(context, providesIntent.getAuthActivityIntent())
             }.getOrThrow()
 
             return response.request.newBuilder()
@@ -68,4 +71,8 @@ class SoptAuthenticator @Inject constructor(
         }
         return null
     }
+}
+
+interface ProvidesIntents {
+    fun getAuthActivityIntent(): Intent
 }

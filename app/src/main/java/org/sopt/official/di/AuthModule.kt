@@ -38,6 +38,8 @@ import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
 import org.sopt.official.data.source.impl.DefaultLocalAuthDataSource
 import org.sopt.official.data.source.impl.DefaultRemoteAuthDataSource
 import org.sopt.official.domain.repository.AuthRepository
+import org.sopt.official.feature.auth.ProvidesIntent
+import org.sopt.official.network.authenticator.ProvidesIntents
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -68,5 +70,9 @@ object AuthModule {
         @Binds
         @Singleton
         fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
+
+        @Binds
+        @Singleton
+        fun bindIntent(providesIntents: ProvidesIntent): ProvidesIntents
     }
 }
