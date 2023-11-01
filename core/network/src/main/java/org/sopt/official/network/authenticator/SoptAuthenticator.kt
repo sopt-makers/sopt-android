@@ -25,7 +25,6 @@
 package org.sopt.official.network.authenticator
 
 import android.content.Context
-import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
@@ -33,8 +32,8 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.sopt.official.common.di.Auth
+import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
-import org.sopt.official.network.model.RefreshRequest
 import org.sopt.official.network.service.AuthService
 import timber.log.Timber
 import javax.inject.Inject

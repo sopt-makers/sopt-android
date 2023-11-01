@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.network.model
+package org.sopt.official.network.model.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

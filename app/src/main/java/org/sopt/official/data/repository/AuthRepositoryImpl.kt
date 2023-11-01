@@ -31,7 +31,7 @@ import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
 import org.sopt.official.domain.entity.auth.Token
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.repository.AuthRepository
-import org.sopt.official.network.model.RefreshRequest
+import org.sopt.official.network.model.request.RefreshRequest
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(

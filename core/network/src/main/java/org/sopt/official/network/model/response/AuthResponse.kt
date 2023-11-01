@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.network.model
+package org.sopt.official.network.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -33,7 +33,4 @@ data class AuthResponse(
     @SerialName("refreshToken") val refreshToken: String,
     @SerialName("playgroundToken") val playgroundToken: String,
     @SerialName("status") val status: String
-) {
-
-}
-
+)

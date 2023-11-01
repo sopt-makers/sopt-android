@@ -31,7 +31,7 @@ import org.sopt.official.data.model.response.AuthResponse
 import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
-import org.sopt.official.network.model.RefreshRequest
+import org.sopt.official.network.model.request.RefreshRequest
 import javax.inject.Inject
 
 class DefaultRemoteAuthDataSource @Inject constructor(

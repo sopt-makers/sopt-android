@@ -71,8 +71,8 @@ import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.stringOf
 import org.sopt.official.util.ui.setVisible
 import org.sopt.official.util.viewBinding
-import javax.inject.Inject
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {

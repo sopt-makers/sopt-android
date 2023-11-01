@@ -1,6 +1,6 @@
 package org.sopt.official.data.mapper
 
-import org.sopt.official.network.model.AuthResponse
+import org.sopt.official.network.model.response.AuthResponse
 
 fun toAuthResponse(responseItem: AuthResponse): org.sopt.official.data.model.response.AuthResponse {
     return org.sopt.official.data.model.response.AuthResponse(
