@@ -48,7 +48,7 @@ kspplugin = "1.9.10-1.0.13"
 
 dagger-hilt = "2.48.1"
 dagger-hilt-navigation-compose = "1.1.0"
-flipper = "0.235.0"
+flipper = "0.236.0"
 soloader = "0.10.5"
 okhttp = "4.12.0"
 retrofit = "2.9.0"
