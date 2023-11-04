@@ -116,8 +116,8 @@ class AuthActivity : AppCompatActivity() {
 
     private fun initNotificationChannel() {
         NotificationChannel(
-            getString(R.string.toolbar_notification_filter_all),
-            getString(R.string.toolbar_notification_filter_all),
+            getString(R.string.toolbar_notification),
+            getString(R.string.toolbar_notification),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             setSound(null, null)
