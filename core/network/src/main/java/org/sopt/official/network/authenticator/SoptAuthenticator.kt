@@ -25,7 +25,6 @@
 package org.sopt.official.network.authenticator
 
 import android.content.Context
-import android.content.Intent
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.runBlocking
@@ -34,9 +33,10 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.navigator.NavigatorProvides
 import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
-import org.sopt.official.network.service.AuthService
+import org.sopt.official.network.service.RefreshService
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -44,9 +44,9 @@ import javax.inject.Singleton
 @Singleton
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
-    @Auth(false) private val service: AuthService,
+    @Auth(false) private val service: RefreshService,
     @ApplicationContext private val context: Context,
-    private val providesIntent: ProvidesIntents
+    private val providesIntent: NavigatorProvides
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
@@ -71,8 +71,4 @@ class SoptAuthenticator @Inject constructor(
         }
         return null
     }
-}
-
-interface ProvidesIntents {
-    fun getAuthActivityIntent(): Intent
 }

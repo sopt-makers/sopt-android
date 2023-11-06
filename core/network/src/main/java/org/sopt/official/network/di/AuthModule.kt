@@ -33,7 +33,7 @@ import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import org.sopt.official.network.interceptor.AuthInterceptor
-import org.sopt.official.network.service.AuthService
+import org.sopt.official.network.service.RefreshService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -43,12 +43,12 @@ object AuthModule {
     @Provides
     @Singleton
     @Auth
-    fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
+    fun provideAuthService(@AppRetrofit retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
 
     @Provides
     @Singleton
     @Auth(false)
-    fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
+    fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
 
     @Module
     @InstallIn(SingletonComponent::class)

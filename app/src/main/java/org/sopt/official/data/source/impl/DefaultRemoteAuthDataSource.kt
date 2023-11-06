@@ -32,14 +32,15 @@ import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
 import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.service.RefreshService
 import javax.inject.Inject
 
 class DefaultRemoteAuthDataSource @Inject constructor(
     @Auth private val service: AuthService,
-    @Auth(false) private val noneAuthService: org.sopt.official.network.service.AuthService,
+    @Auth(false) private val noneRefreshService: RefreshService,
 ) : RemoteAuthDataSource {
     override suspend fun refresh(token: RefreshRequest): AuthResponse {
-        return toAuthResponse(noneAuthService.refresh(token))
+        return toAuthResponse(noneRefreshService.refresh(token))
     }
 
     override suspend fun withdraw() {

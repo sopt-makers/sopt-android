@@ -66,6 +66,6 @@ class App : Application() {
     }
 
     private fun initFlipper() {
-        FlipperInitializer
+        FlipperInitializer.init(this)
     }
 }
