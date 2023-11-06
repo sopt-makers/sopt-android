@@ -25,9 +25,8 @@
 package org.sopt.official.data.source.impl
 
 import org.sopt.official.common.di.Auth
-import org.sopt.official.data.mapper.toAuthResponse
 import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.model.response.AuthResponse
+import org.sopt.official.network.model.response.AuthResponse
 import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
@@ -40,7 +39,7 @@ class DefaultRemoteAuthDataSource @Inject constructor(
     @Auth(false) private val noneRefreshService: RefreshService,
 ) : RemoteAuthDataSource {
     override suspend fun refresh(token: RefreshRequest): AuthResponse {
-        return toAuthResponse(noneRefreshService.refresh(token))
+        return noneRefreshService.refresh(token)
     }
 
     override suspend fun withdraw() {

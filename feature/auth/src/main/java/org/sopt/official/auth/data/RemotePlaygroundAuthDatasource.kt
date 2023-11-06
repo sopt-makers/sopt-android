@@ -27,7 +27,7 @@ package org.sopt.official.auth.data
 import org.sopt.official.auth.PlaygroundError
 import org.sopt.official.auth.data.remote.AuthService
 import org.sopt.official.auth.data.remote.model.request.RequestToken
-import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.common.di.Auth
 import java.net.UnknownHostException
 

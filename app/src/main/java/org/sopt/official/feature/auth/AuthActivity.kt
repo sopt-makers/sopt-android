@@ -46,7 +46,7 @@ import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.auth.PlaygroundAuth
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
-import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.common.di.Auth
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_LINK
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE

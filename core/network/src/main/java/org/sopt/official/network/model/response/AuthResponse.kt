@@ -33,4 +33,12 @@ data class AuthResponse(
     @SerialName("refreshToken") val refreshToken: String,
     @SerialName("playgroundToken") val playgroundToken: String,
     @SerialName("status") val status: String
-)
+) {
+
+    fun toOAuthToken() = OAuthToken(
+        accessToken = accessToken,
+        refreshToken = refreshToken,
+        playgroundToken = playgroundToken,
+        status = status
+    )
+}

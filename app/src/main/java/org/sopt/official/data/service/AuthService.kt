@@ -26,7 +26,7 @@ package org.sopt.official.data.service
 
 import org.sopt.official.data.model.request.AuthRequest
 import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.model.response.AuthResponse
+import org.sopt.official.network.model.response.AuthResponse
 import org.sopt.official.data.model.response.LogOutResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE

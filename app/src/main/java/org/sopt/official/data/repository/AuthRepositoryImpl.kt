@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.repository
 
+import org.sopt.official.data.mapper.AuthMapper
 import org.sopt.official.data.model.request.LogOutRequest
 import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.source.api.auth.LocalAuthDataSource
@@ -39,7 +40,7 @@ class AuthRepositoryImpl @Inject constructor(
     private val localAuthDataSource: LocalAuthDataSource,
 ) : AuthRepository {
     override suspend fun refresh(token: String) = runCatching {
-        remoteAuthDataSource.refresh(RefreshRequest(token)).toEntity()
+        AuthMapper().toEntity(remoteAuthDataSource.refresh(RefreshRequest(token)))
     }
 
     override fun save(token: Token) {
