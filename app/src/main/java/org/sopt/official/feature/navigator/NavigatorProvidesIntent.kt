@@ -12,5 +12,4 @@ class NavigatorProvidesIntent @Inject constructor(
 ) : NavigatorProvides {
     override fun getAuthActivityIntent(): Intent =
         AuthActivity.newInstance(context)
-
 }

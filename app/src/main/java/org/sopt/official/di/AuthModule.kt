@@ -49,11 +49,6 @@ object AuthModule {
     @Auth
     fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
 
-    @Provides
-    @Singleton
-    @Auth(false)
-    fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
-
     @Module
     @InstallIn(SingletonComponent::class)
     interface Binder {
@@ -68,6 +63,5 @@ object AuthModule {
         @Binds
         @Singleton
         fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
-
     }
 }

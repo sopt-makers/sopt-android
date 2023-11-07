@@ -36,10 +36,10 @@ import javax.inject.Inject
 
 class DefaultRemoteAuthDataSource @Inject constructor(
     @Auth private val service: AuthService,
-    @Auth(false) private val noneRefreshService: RefreshService,
+    @Auth(false) private val refreshService: RefreshService,
 ) : RemoteAuthDataSource {
     override suspend fun refresh(token: RefreshRequest): AuthResponse {
-        return noneRefreshService.refresh(token)
+        return refreshService.refresh(token)
     }
 
     override suspend fun withdraw() {

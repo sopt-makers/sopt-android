@@ -42,11 +42,6 @@ import javax.inject.Singleton
 object AuthModule {
     @Provides
     @Singleton
-    @Auth
-    fun provideAuthService(@AppRetrofit retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
-
-    @Provides
-    @Singleton
     @Auth(false)
     fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
 

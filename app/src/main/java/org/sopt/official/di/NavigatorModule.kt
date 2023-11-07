@@ -10,8 +10,8 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NavigatorModule {
+interface NavigationModule {
     @Binds
     @Singleton
-    fun bindIntent(navigatorProvidesIntent: NavigatorProvidesIntent): NavigatorProvides
+    fun bindNavigatorIntent(navigatorProvidesIntent: NavigatorProvidesIntent): NavigatorProvides
 }
