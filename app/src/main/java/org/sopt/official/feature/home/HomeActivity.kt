@@ -328,6 +328,7 @@ class HomeActivity : AppCompatActivity() {
         fun getIntent(context: Context, args: StartArgs) =
             Intent(context, HomeActivity::class.java).apply {
                 putExtra("args", args)
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             }
     }
 }
