@@ -32,7 +32,7 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import org.sopt.official.common.navigator.NavigatorProvides
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshService
@@ -45,7 +45,7 @@ class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     private val refreshService: RefreshService,
     @ApplicationContext private val context: Context,
-    private val navigatorProvides: NavigatorProvides
+    private val navigatorProvides: NavigatorProvider
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {

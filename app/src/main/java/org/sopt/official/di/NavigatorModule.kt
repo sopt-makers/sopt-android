@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.common.navigator.NavigatorProvides
-import org.sopt.official.feature.navigator.NavigatorProvidesIntent
+import org.sopt.official.common.navigator.NavigatorProvider
+import org.sopt.official.feature.navigator.NavigatorProviderIntent
 import javax.inject.Singleton
 
 @Module
@@ -13,5 +13,5 @@ import javax.inject.Singleton
 interface NavigationModule {
     @Binds
     @Singleton
-    fun bindNavigatorIntent(navigatorProvidesIntent: NavigatorProvidesIntent): NavigatorProvides
+    fun bindNavigatorIntent(navigatorProviderIntent: NavigatorProviderIntent): NavigatorProvider
 }
