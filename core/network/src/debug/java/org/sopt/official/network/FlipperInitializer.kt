@@ -27,14 +27,12 @@ package org.sopt.official.network
 import android.app.Application
 import okhttp3.OkHttpClient
 
-import android.app.Application
 import com.facebook.flipper.android.AndroidFlipperClient
 import com.facebook.flipper.plugins.inspector.DescriptorMapping
 import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
 import com.facebook.flipper.plugins.network.FlipperOkhttpInterceptor
 import com.facebook.flipper.plugins.network.NetworkFlipperPlugin
 import com.facebook.soloader.SoLoader
-import okhttp3.OkHttpClient
 
 object FlipperInitializer {
     private val flipperNetworkPlugin = NetworkFlipperPlugin()
