@@ -41,14 +41,14 @@ subprojects {
     extensions.configure<SpotlessExtension> {
         kotlin {
             target("**/*.kt")
-            targetExclude("$buildDir/**/*.kt")
+            targetExclude("${layout.buildDirectory}/**/*.kt")
             licenseHeaderFile(rootProject.file("spotless/spotless.license.kt"))
             trimTrailingWhitespace()
             endWithNewline()
         }
         format("kts") {
             target("**/*.kts")
-            targetExclude("$buildDir/**/*.kts")
+            targetExclude("${layout.buildDirectory}/**/*.kts")
             licenseHeaderFile(rootProject.file("spotless/spotless.license.kt"), "(^(?![\\/ ]\\*).*$)")
         }
         format("xml") {
