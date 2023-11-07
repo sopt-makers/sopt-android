@@ -44,7 +44,7 @@ import javax.inject.Singleton
 @Singleton
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
-    @Auth(false) private val service: RefreshService,
+    private val service: RefreshService,
     @ApplicationContext private val context: Context,
     private val navigatorProvides: NavigatorProvides
 ) : Authenticator {
