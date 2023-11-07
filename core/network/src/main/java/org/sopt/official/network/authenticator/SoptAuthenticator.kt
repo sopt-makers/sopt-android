@@ -46,7 +46,7 @@ class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     @Auth(false) private val service: RefreshService,
     @ApplicationContext private val context: Context,
-    private val providesIntent: NavigatorProvides
+    private val navigatorProvides: NavigatorProvides
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
@@ -62,7 +62,7 @@ class SoptAuthenticator @Inject constructor(
             }.onFailure {
                 dataStore.clear()
                 Timber.e(it)
-                ProcessPhoenix.triggerRebirth(context, providesIntent.getAuthActivityIntent())
+                ProcessPhoenix.triggerRebirth(context, navigatorProvides.getAuthActivityIntent())
             }.getOrThrow()
 
             return response.request.newBuilder()
