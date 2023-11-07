@@ -32,7 +32,6 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
-import org.sopt.official.common.di.Auth
 import org.sopt.official.common.navigator.NavigatorProvides
 import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
@@ -44,7 +43,7 @@ import javax.inject.Singleton
 @Singleton
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
-    private val service: RefreshService,
+    private val refreshService: RefreshService,
     @ApplicationContext private val context: Context,
     private val navigatorProvides: NavigatorProvides
 ) : Authenticator {
@@ -53,7 +52,7 @@ class SoptAuthenticator @Inject constructor(
             val refreshToken = dataStore.refreshToken
             val newTokens = runCatching {
                 runBlocking {
-                    service.refresh(RefreshRequest(refreshToken))
+                    refreshService.refresh(RefreshRequest(refreshToken))
                 }
             }.onSuccess {
                 dataStore.refreshToken = it.refreshToken
