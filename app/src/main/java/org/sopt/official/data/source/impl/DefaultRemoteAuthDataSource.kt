@@ -26,26 +26,27 @@ package org.sopt.official.data.source.impl
 
 import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.model.request.RefreshRequest
-import org.sopt.official.data.model.response.AuthResponse
+import org.sopt.official.network.model.response.AuthResponse
 import org.sopt.official.data.model.response.LogOutResponse
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
+import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.service.RefreshService
 import javax.inject.Inject
 
 class DefaultRemoteAuthDataSource @Inject constructor(
-    @Auth private val service: AuthService,
-    @Auth(false) private val noneAuthService: AuthService,
+    @Auth private val authService: AuthService,
+    private val refreshService: RefreshService,
 ) : RemoteAuthDataSource {
     override suspend fun refresh(token: RefreshRequest): AuthResponse {
-        return noneAuthService.refresh(token)
+        return refreshService.refresh(token)
     }
 
     override suspend fun withdraw() {
-        service.withdraw()
+        authService.withdraw()
     }
 
     override suspend fun logout(request: LogOutRequest): LogOutResponse {
-        return service.logOut(request)
+        return authService.logOut(request)
     }
 }

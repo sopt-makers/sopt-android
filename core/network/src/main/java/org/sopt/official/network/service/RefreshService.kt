@@ -22,15 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.network.service
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
+
 import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.model.response.AuthResponse
+import retrofit2.http.Body
+import retrofit2.http.PATCH
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+interface RefreshService {
+    @PATCH("auth/refresh")
+    suspend fun refresh(
+        @Body body: RefreshRequest
+    ): AuthResponse
 }

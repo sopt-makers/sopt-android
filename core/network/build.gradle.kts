@@ -22,15 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
+plugins {
+    id("org.sopt.official.feature")
+}
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+android {
+    namespace = "org.sopt.official.network"
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+}
+
+dependencies {
+    implementation(projects.core.common)
+    implementation(libs.security)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.kotlin.serialization.converter)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.process.phoenix)
+    implementation(libs.timber)
+    debugImplementation(libs.bundles.flipper)
+    releaseImplementation(libs.flipper.noop)
+    debugImplementation(libs.flipper.network) {
+        exclude(group = "com.squareup.okhttp3", module = "okhttp")
+    }
 }

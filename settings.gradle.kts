@@ -18,10 +18,11 @@ dependencyResolutionManagement {
 rootProject.name = "SOPT"
 include(
     ":app",
-    ":feature:soptamp",
+    ":domain:soptamp",
+    ":data:soptamp",
+    ":core:network",
     ":core:analytics",
     ":core:common",
-    ":feature:auth"
+    ":feature:auth",
+    ":feature:soptamp"
 )
-include(":data:soptamp")
-include(":domain:soptamp")

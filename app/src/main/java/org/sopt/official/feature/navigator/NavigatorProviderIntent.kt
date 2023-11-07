@@ -22,15 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.feature.navigator
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+import android.content.Context
+import android.content.Intent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import org.sopt.official.common.navigator.NavigatorProvider
+import org.sopt.official.feature.auth.AuthActivity
+import javax.inject.Inject
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+class NavigatorProviderIntent @Inject constructor(
+    @ApplicationContext private val context: Context
+) : NavigatorProvider {
+    override fun getAuthActivityIntent(): Intent =
+        AuthActivity.newInstance(context)
 }

@@ -112,6 +112,7 @@ dependencies {
     implementation(projects.data.soptamp)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
+    implementation(projects.core.network)
     implementation(projects.feature.auth)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))

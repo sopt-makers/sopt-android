@@ -22,15 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.network.model.response
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+@Serializable
+data class AuthResponse(
+    @SerialName("accessToken") val accessToken: String,
+    @SerialName("refreshToken") val refreshToken: String,
+    @SerialName("playgroundToken") val playgroundToken: String,
+    @SerialName("status") val status: String
+) {
+
+    fun toOAuthToken() = OAuthToken(
+        accessToken = accessToken,
+        refreshToken = refreshToken,
+        playgroundToken = playgroundToken,
+        status = status
+    )
 }

@@ -22,15 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.network.interceptor
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+import okhttp3.Interceptor
+import okhttp3.Request
+import okhttp3.Response
+import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+class AuthInterceptor @Inject constructor(
+    private val dataStore: SoptDataStore
+) : Interceptor {
+    // TODO By Nunu 401 Refresh Logic 추가
+    override fun intercept(chain: Interceptor.Chain): Response {
+        val originalRequest = chain.request()
+        val authRequest = if (isAccessTokenUsed(originalRequest)) {
+            originalRequest.newBuilder().addHeader("Authorization", dataStore.accessToken).build()
+        } else {
+            originalRequest
+        }
+        return chain.proceed(authRequest)
+    }
+
+    private fun isAccessTokenUsed(originalRequest: Request) =
+        when {
+            originalRequest.url.encodedPath.contains("playground") -> false
+            originalRequest.url.encodedPath.contains("availability") -> false
+            else -> true
+        }
 }

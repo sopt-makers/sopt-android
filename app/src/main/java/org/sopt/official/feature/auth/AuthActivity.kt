@@ -25,10 +25,10 @@
 package org.sopt.official.feature.auth
 
 import android.animation.ObjectAnimator
-import android.content.Context
-import android.content.Intent
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
@@ -46,16 +46,16 @@ import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.auth.PlaygroundAuth
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
-import org.sopt.official.auth.data.remote.model.response.OAuthToken
+import org.sopt.official.network.model.response.OAuthToken
+import org.sopt.official.common.di.Auth
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_LINK
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE
-import org.sopt.official.common.di.Auth
 import org.sopt.official.data.model.request.AuthRequest
-import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.data.service.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
 import org.sopt.official.util.setOnSingleClickListener

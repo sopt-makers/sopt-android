@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.network.di
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
+import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.Auth
+import org.sopt.official.network.interceptor.AuthInterceptor
+import org.sopt.official.network.service.RefreshService
+import retrofit2.Retrofit
+import javax.inject.Singleton
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+@InstallIn(SingletonComponent::class)
+@Module
+object AuthModule {
+    @Provides
+    @Singleton
+    fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
+
+    @Module
+    @InstallIn(SingletonComponent::class)
+    interface Binder {
+        @Binds
+        @Singleton
+        @Auth
+        fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
+    }
 }
