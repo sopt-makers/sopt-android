@@ -22,18 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.repository
+package domain.repository
 
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.domain.entity.auth.Auth
-import org.sopt.official.domain.entity.auth.Token
-import org.sopt.official.domain.entity.auth.UserStatus
+import domain.model.Auth
+import domain.model.LogOut
+import domain.model.Token
+import domain.model.UserStatus
+
 
 interface AuthRepository {
     suspend fun refresh(token: String): Result<Auth>
     fun save(token: Token)
     fun save(status: UserStatus)
     suspend fun withdraw(): Result<Unit>
-    suspend fun logout(pushToken: String): Result<LogOutResponse>
+    suspend fun logout(pushToken: String): Result<LogOut>
     suspend fun clearLocalData()
 }

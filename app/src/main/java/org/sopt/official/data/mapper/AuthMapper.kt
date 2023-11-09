@@ -24,9 +24,9 @@
  */
 package org.sopt.official.data.mapper
 
-import org.sopt.official.domain.entity.auth.Auth
-import org.sopt.official.domain.entity.auth.Token
-import org.sopt.official.domain.entity.auth.UserStatus
+import domain.model.Auth
+import domain.model.Token
+import domain.model.UserStatus
 import org.sopt.official.network.model.response.AuthResponse
 
 class AuthMapper {

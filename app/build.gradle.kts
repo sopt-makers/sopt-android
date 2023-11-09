@@ -108,6 +108,7 @@ android {
 
 dependencies {
     implementation(projects.domain.soptamp)
+    implementation(projects.domain.mypage)
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
     implementation(projects.core.common)

@@ -24,8 +24,8 @@
  */
 package org.sopt.official.domain.usecase
 
-import org.sopt.official.domain.entity.auth.Auth
-import org.sopt.official.domain.repository.AuthRepository
+import domain.model.Auth
+import domain.repository.AuthRepository
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(

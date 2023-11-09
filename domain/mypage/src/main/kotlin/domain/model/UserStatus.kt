@@ -22,10 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.auth
+package domain.model
 
-data class Token(
-    val accessToken: String,
-    val refreshToken: String,
-    val playgroundToken: String
-)
+enum class UserStatus(
+    val value: String
+) {
+    ACTIVE("ACTIVE"),
+    INACTIVE("INACTIVE"),
+    UNAUTHENTICATED("UNAUTHENTICATED");
+
+    companion object {
+        fun of(value: String) = entries.find { it.value == value }
+            ?: throw IllegalArgumentException("Invalid user status: $value")
+    }
+}

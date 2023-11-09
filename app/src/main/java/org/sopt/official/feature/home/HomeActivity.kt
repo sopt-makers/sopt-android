@@ -54,7 +54,7 @@ import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.UserActiveState
-import org.sopt.official.domain.entity.auth.UserStatus
+import domain.model.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
@@ -156,7 +156,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
-            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
+            tracker.track(type = EventType.CLICK, name = "domain", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))

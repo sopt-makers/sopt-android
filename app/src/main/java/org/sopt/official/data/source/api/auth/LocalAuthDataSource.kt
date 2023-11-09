@@ -24,8 +24,8 @@
  */
 package org.sopt.official.data.source.api.auth
 
-import org.sopt.official.domain.entity.auth.Token
-import org.sopt.official.domain.entity.auth.UserStatus
+import domain.model.Token
+import domain.model.UserStatus
 
 interface LocalAuthDataSource {
     fun save(token: Token)

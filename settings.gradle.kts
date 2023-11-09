@@ -24,5 +24,6 @@ include(
     ":core:analytics",
     ":core:common",
     ":feature:auth",
-    ":feature:soptamp"
+    ":feature:soptamp",
+    ":domain:mypage"
 )
