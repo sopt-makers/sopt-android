@@ -22,16 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.repository
+package org.sopt.official.data.mypage.repository
 
-import org.sopt.official.data.mapper.AuthMapper
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.data.source.api.auth.LocalAuthDataSource
-import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
+import org.sopt.official.data.mypage.remote.model.request.LogOutRequest
+import org.sopt.official.data.mypage.source.LocalAuthDataSource
+import org.sopt.official.data.mypage.source.RemoteAuthDataSource
 import domain.model.Token
 import domain.model.UserStatus
 import domain.repository.AuthRepository
 import domain.model.LogOut
+import org.sopt.official.data.mypage.remote.mapper.AuthMapper
 import org.sopt.official.network.model.request.RefreshRequest
 import javax.inject.Inject
 

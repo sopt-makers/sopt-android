@@ -50,8 +50,8 @@ import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.common.di.Auth
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_LINK
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE
-import org.sopt.official.data.model.request.AuthRequest
-import org.sopt.official.data.service.AuthService
+import org.sopt.official.data.mypage.remote.model.request.AuthRequest
+import org.sopt.official.data.mypage.remote.api.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
 import domain.model.UserStatus
 import org.sopt.official.feature.home.HomeActivity

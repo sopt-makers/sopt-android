@@ -22,13 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.data.mypage.remote.source
 
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.official.common.di.Auth
+import org.sopt.official.data.mypage.remote.api.AuthService
+import org.sopt.official.data.mypage.remote.model.request.LogOutRequest
+import org.sopt.official.network.model.response.AuthResponse
+import org.sopt.official.data.mypage.remote.model.response.LogOutResponse
+import org.sopt.official.data.mypage.source.RemoteAuthDataSource
+import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.service.RefreshService
+import javax.inject.Inject
 
-interface LocalAuthDataSource {
-    fun save(token: Token)
-    fun save(status: UserStatus)
-    fun clear()
+class DefaultRemoteAuthDataSource @Inject constructor(
+    @Auth private val authService: AuthService,
+    private val refreshService: RefreshService,
+) : RemoteAuthDataSource {
+    override suspend fun refresh(token: RefreshRequest): AuthResponse {
+        return refreshService.refresh(token)
+    }
+
+    override suspend fun withdraw() {
+        authService.withdraw()
+    }
+
+    override suspend fun logout(request: LogOutRequest): LogOutResponse {
+        return authService.logOut(request)
+    }
 }

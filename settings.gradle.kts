@@ -27,3 +27,4 @@ include(
     ":feature:soptamp",
     ":domain:mypage"
 )
+include(":data:mypage")

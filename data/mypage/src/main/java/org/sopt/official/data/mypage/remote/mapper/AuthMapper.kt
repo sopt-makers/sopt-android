@@ -22,20 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.response
+package org.sopt.official.data.mypage.remote.mapper
 
-import domain.model.LogOut
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import domain.model.Auth
+import domain.model.Token
+import domain.model.UserStatus
+import org.sopt.official.network.model.response.AuthResponse
 
-@Serializable
-data class LogOutResponse(
-    @SerialName("success")
-    val success: Boolean,
-    @SerialName("message")
-    val message: String
-){
-    fun toEntity() = LogOut(
-        success, message
+class AuthMapper {
+    fun toEntity(responseItem:AuthResponse) = Auth(
+        Token(
+            accessToken = responseItem.accessToken,
+            refreshToken = responseItem.refreshToken,
+            playgroundToken = responseItem.playgroundToken
+        ),
+        UserStatus.of(responseItem.status)
     )
 }

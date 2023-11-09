@@ -22,13 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.request
+package org.sopt.official.data.mypage.remote.model.request
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LogOutRequest(
-    @SerialName("platform") val platform: String,
-    @SerialName("pushToken") val pushToken: String
+data class AuthRequest(
+    @SerialName("code")
+    val code: String,
+    @SerialName("pushToken")
+    val pushToken: String
 )

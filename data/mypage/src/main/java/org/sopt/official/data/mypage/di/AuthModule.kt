@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.di
+package org.sopt.official.data.mypage.di
 
 import dagger.Binds
 import dagger.Module
@@ -31,12 +31,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
-import org.sopt.official.data.repository.AuthRepositoryImpl
-import org.sopt.official.data.service.AuthService
-import org.sopt.official.data.source.api.auth.LocalAuthDataSource
-import org.sopt.official.data.source.api.auth.RemoteAuthDataSource
-import org.sopt.official.data.source.impl.DefaultLocalAuthDataSource
-import org.sopt.official.data.source.impl.DefaultRemoteAuthDataSource
+import org.sopt.official.data.mypage.repository.AuthRepositoryImpl
+import org.sopt.official.data.mypage.remote.api.AuthService
+import org.sopt.official.data.mypage.source.LocalAuthDataSource
+import org.sopt.official.data.mypage.source.RemoteAuthDataSource
+import org.sopt.official.data.mypage.local.DefaultLocalAuthDataSource
+import org.sopt.official.data.mypage.remote.source.DefaultRemoteAuthDataSource
 import domain.repository.AuthRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton

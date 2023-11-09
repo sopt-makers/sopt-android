@@ -22,10 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.impl
+package org.sopt.official.data.mypage.local
 
 import org.sopt.official.network.persistence.SoptDataStore
-import org.sopt.official.data.source.api.auth.LocalAuthDataSource
+import org.sopt.official.data.mypage.source.LocalAuthDataSource
 import domain.model.Token
 import domain.model.UserStatus
 import javax.inject.Inject

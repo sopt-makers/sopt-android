@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.mapper
+package org.sopt.official.data.mypage.remote.api
 
-import domain.model.Auth
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.official.data.mypage.remote.model.request.AuthRequest
+import org.sopt.official.data.mypage.remote.model.request.LogOutRequest
 import org.sopt.official.network.model.response.AuthResponse
+import org.sopt.official.data.mypage.remote.model.response.LogOutResponse
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.HTTP
+import retrofit2.http.POST
 
-class AuthMapper {
-    fun toEntity(responseItem:AuthResponse) = Auth(
-        Token(
-            accessToken = responseItem.accessToken,
-            refreshToken = responseItem.refreshToken,
-            playgroundToken = responseItem.playgroundToken
-        ),
-        UserStatus.of(responseItem.status)
-    )
+interface AuthService {
+    @POST("auth/playground")
+    suspend fun authenticate(
+        @Body body: AuthRequest
+    ): AuthResponse
+
+    @DELETE("user")
+    suspend fun withdraw()
+
+    @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
+    suspend fun logOut(
+        @Body body: LogOutRequest
+    ): LogOutResponse
 }

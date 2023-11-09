@@ -111,6 +111,7 @@ dependencies {
     implementation(projects.domain.mypage)
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
+    implementation(projects.data.mypage)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)

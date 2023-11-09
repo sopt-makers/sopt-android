@@ -22,28 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.service
+package org.sopt.official.data.mypage.remote.model.request
 
-import org.sopt.official.data.model.request.AuthRequest
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.HTTP
-import retrofit2.http.POST
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface AuthService {
-    @POST("auth/playground")
-    suspend fun authenticate(
-        @Body body: AuthRequest
-    ): AuthResponse
-
-    @DELETE("user")
-    suspend fun withdraw()
-
-    @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
-    suspend fun logOut(
-        @Body body: LogOutRequest
-    ): LogOutResponse
-}
+@Serializable
+data class LogOutRequest(
+    @SerialName("platform") val platform: String,
+    @SerialName("pushToken") val pushToken: String
+)

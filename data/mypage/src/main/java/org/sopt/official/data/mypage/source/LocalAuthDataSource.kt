@@ -22,15 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.source.api.auth
+package org.sopt.official.data.mypage.source
 
-import org.sopt.official.data.model.request.LogOutRequest
-import org.sopt.official.network.model.response.AuthResponse
-import org.sopt.official.data.model.response.LogOutResponse
-import org.sopt.official.network.model.request.RefreshRequest
+import domain.model.Token
+import domain.model.UserStatus
 
-interface RemoteAuthDataSource {
-    suspend fun refresh(token: RefreshRequest): AuthResponse
-    suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+interface LocalAuthDataSource {
+    fun save(token: Token)
+    fun save(status: UserStatus)
+    fun clear()
 }

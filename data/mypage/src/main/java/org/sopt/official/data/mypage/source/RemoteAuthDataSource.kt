@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2023 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.request
+package org.sopt.official.data.mypage.source
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import org.sopt.official.data.mypage.remote.model.request.LogOutRequest
+import org.sopt.official.data.mypage.remote.model.response.LogOutResponse
+import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.model.response.AuthResponse
 
-@Serializable
-data class AuthRequest(
-    @SerialName("code")
-    val code: String,
-    @SerialName("pushToken")
-    val pushToken: String
-)
+
+interface RemoteAuthDataSource {
+    suspend fun refresh(token: RefreshRequest): AuthResponse
+    suspend fun withdraw()
+    suspend fun logout(request: LogOutRequest): LogOutResponse
+}
