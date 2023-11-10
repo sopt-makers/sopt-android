@@ -36,6 +36,7 @@ import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
+import org.sopt.official.type.SoptColors
 import java.util.Date
 import java.util.Locale
 
@@ -101,8 +102,8 @@ class NotificationHistoryListViewAdapter(
                 textViewContent.text = item.content
                 textViewReceivedTime.text = item.createdAt.convertToTimesAgo()
                 constraintLayoutBackground.background = when (item.isRead) {
-                    true -> root.context.drawableOf(R.color.black_100)
-                    false -> root.context.drawableOf(R.color.black_80)
+                    true -> root.context.drawableOf(SoptColors.black_100)
+                    false -> root.context.drawableOf(SoptColors.black_80)
                 }
             }
         }

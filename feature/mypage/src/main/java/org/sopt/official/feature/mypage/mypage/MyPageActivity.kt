@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.rx.observeOnMain
 import org.sopt.official.common.util.rx.subscribeBy
 import org.sopt.official.common.util.rx.subscribeOnIo
@@ -53,6 +54,7 @@ import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
@@ -61,6 +63,9 @@ class MyPageActivity : AppCompatActivity() {
     private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
 
     private val createDisposable = CompositeDisposable()
+
+    @Inject
+    lateinit var navigatorProvider: NavigatorProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -245,10 +250,7 @@ class MyPageActivity : AppCompatActivity() {
             .subscribeBy(
                 createDisposable,
                 onNext = {
-                    val intent = packageManager.getLaunchIntentForPackage(packageName)
-                    val componentName = intent?.component
-                    val mainIntent = Intent.makeRestartActivityTask(componentName)
-                    ProcessPhoenix.triggerRebirth(this, mainIntent)
+                    ProcessPhoenix.triggerRebirth(this, navigatorProvider.getAuthActivityIntent())
                 }
             )
     }

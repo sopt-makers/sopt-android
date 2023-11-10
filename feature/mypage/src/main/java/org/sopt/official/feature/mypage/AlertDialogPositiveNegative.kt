@@ -33,7 +33,6 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import org.sopt.official.common.util.drawableOf
 import org.sopt.official.feature.mypage.databinding.LayoutDialogNegativePositiveBinding
 
-
 class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) {
     private val builder: AlertDialog.Builder = AlertDialog.Builder(context)
 
@@ -65,7 +64,10 @@ class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) 
         return this
     }
 
-    fun setPositiveButton(@StringRes textId: Int, listener: (view: View) -> (Unit) = { dismiss() }): AlertDialogPositiveNegative {
+    fun setPositiveButton(
+        @StringRes textId: Int,
+        listener: (view: View) -> (Unit) = { dismiss() }
+    ): AlertDialogPositiveNegative {
         binding.positiveButton.apply {
             text = context.getText(textId)
             setOnClickListener(listener)

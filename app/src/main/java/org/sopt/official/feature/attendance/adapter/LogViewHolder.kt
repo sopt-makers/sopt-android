@@ -28,10 +28,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.official.R
 import org.sopt.official.databinding.ItemAttendanceHistoryLogBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
+import org.sopt.official.type.SoptColors
 
 class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : RecyclerView.ViewHolder(binding.root) {
     fun onBind(log: AttendanceLog) {
@@ -46,21 +46,25 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
             textAttendanceState.text = log.attendanceState
             when (log.attendanceState) {
                 AttendanceStatus.ATTENDANCE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_green)
-                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_green))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_green)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_green))
                 }
+
                 AttendanceStatus.TARDY.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_yellow)
-                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_yellow))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_yellow)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_yellow))
                 }
+
                 AttendanceStatus.ABSENT.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.sopt_red)
-                    textAttendanceState.setTextColor(root.context.getColor(R.color.on_sopt_red))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_red)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_red))
                 }
+
                 AttendanceStatus.PARTICIPATE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, R.color.gray_30)
-                    textAttendanceState.setTextColor(root.context.getColor(R.color.gray_100))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.gray_30)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.gray_100))
                 }
+
                 else -> {
                     throw IllegalArgumentException("Illegal attendanceState argument: ${log.attendanceState}")
                 }
