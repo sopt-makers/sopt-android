@@ -156,7 +156,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         binding.mypage.setOnClickListener {
-            tracker.track(type = EventType.CLICK, name = "domain", properties = mapOf("view_type" to args?.userStatus?.value))
+            tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
                     MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
