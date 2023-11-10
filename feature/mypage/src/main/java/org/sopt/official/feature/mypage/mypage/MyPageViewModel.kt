@@ -32,7 +32,7 @@ import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.officiail.domain.mypage.repository.AuthRepository
+import repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber

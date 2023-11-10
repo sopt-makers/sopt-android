@@ -25,9 +25,9 @@
 package org.sopt.official.feature
 
 import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.officiail.domain.mypage.model.Auth
-import org.sopt.officiail.domain.mypage.model.Token
-import org.sopt.officiail.domain.mypage.model.UserStatus
+import model.Auth
+import model.Token
+import model.UserStatus
 
 fun OAuthToken.toEntity() = Auth(
     Token(

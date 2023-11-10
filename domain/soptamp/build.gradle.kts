@@ -35,4 +35,5 @@ java {
 
 dependencies {
     implementation(libs.javax.inject)
+    implementation(projects.domain.mypage)
 }

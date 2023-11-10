@@ -39,7 +39,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.network.persistence.SoptDataStore
-import org.sopt.officiail.domain.mypage.model.UserStatus
+import model.UserStatus
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.auth.AuthActivity
 import javax.inject.Inject

@@ -24,8 +24,8 @@
  */
 package org.sopt.official.domain.soptamp.fake
 
-import org.sopt.official.domain.soptamp.model.SoptampUser
-import org.sopt.official.domain.soptamp.repository.UserRepository
+import org.sopt.officiail.domain.mypage.model.SoptampUser
+import org.sopt.officiail.domain.mypage.repository.UserRepository
 
 object FakeUserRepository : UserRepository {
     override val nickname: String = ""

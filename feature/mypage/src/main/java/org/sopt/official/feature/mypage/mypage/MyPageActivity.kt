@@ -36,7 +36,7 @@ import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.sopt.officiail.domain.mypage.model.UserActiveState
+import model.UserActiveState
 import org.sopt.official.common.util.rx.observeOnMain
 import org.sopt.official.common.util.rx.subscribeBy
 import org.sopt.official.common.util.rx.subscribeOnIo

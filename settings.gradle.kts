@@ -29,3 +29,5 @@ include(
     ":feature:soptamp",
     ":feature:mypage",
 )
+include(":core:auth")
+include(":core:authimpl")

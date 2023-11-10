@@ -115,6 +115,8 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
+    implementation(projects.core.auth)
+    implementation(projects.core.authimpl)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(libs.kotlin.coroutines.google.play)

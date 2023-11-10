@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
-import org.sopt.official.domain.soptamp.user.GetNicknameUseCase
+import org.sopt.officiail.domain.mypage.user.GetNicknameUseCase
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
 import javax.inject.Inject

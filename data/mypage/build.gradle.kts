@@ -9,10 +9,13 @@ android {
 
 dependencies {
     implementation(projects.domain.mypage)
+    implementation(projects.domain.soptamp)
     implementation(projects.core.network)
     implementation(projects.core.common)
+    implementation(projects.core.auth)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
+
 }

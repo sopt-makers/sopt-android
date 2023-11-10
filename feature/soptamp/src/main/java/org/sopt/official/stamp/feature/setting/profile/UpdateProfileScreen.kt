@@ -60,7 +60,7 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import org.sopt.official.domain.soptamp.fake.FakeUserRepository
-import org.sopt.official.domain.soptamp.user.UpdateProfileUseCase
+import org.sopt.officiail.domain.mypage.user.UpdateProfileUseCase
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar

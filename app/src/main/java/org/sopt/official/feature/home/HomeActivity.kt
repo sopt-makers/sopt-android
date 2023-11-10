@@ -47,8 +47,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.officiail.domain.mypage.model.UserActiveState
-import org.sopt.officiail.domain.mypage.model.UserStatus
+import model.UserActiveState
+import model.UserStatus
 import org.sopt.official.R
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
