@@ -15,8 +15,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.timber)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.bundles.android.test)
 
     implementation(libs.rxjava)
     implementation(libs.rxandroid)
