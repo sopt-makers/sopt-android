@@ -23,11 +23,11 @@ include(
     ":core:network",
     ":core:analytics",
     ":core:common",
+    ":core:auth",
+    ":core:authimpl",
     ":data:soptamp",
     ":data:mypage",
     ":feature:auth",
     ":feature:soptamp",
     ":feature:mypage",
 )
-include(":core:auth")
-include(":core:authimpl")
