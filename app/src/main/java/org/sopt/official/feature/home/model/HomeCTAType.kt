@@ -27,7 +27,7 @@ package org.sopt.official.feature.home.model
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import org.sopt.official.R
-import org.sopt.official.feature.web.WebUrlConstant
+import org.sopt.official.feature.mypage.web.WebUrlConstant
 
 enum class HomeCTAType(
     @StringRes val title: Int,

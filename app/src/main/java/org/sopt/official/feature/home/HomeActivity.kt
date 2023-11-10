@@ -53,7 +53,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
-import org.sopt.official.domain.entity.UserActiveState
+import domain.model.UserActiveState
 import domain.model.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -61,16 +61,16 @@ import org.sopt.official.feature.home.adapter.SmallBlockAdapter
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
-import org.sopt.official.feature.mypage.MyPageActivity
+import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
-import org.sopt.official.util.dp
-import org.sopt.official.util.drawableOf
+import org.sopt.official.feature.mypage.util.dp
+import org.sopt.official.feature.mypage.util.drawableOf
 import org.sopt.official.util.serializableExtra
 import org.sopt.official.util.setOnSingleClickListener
-import org.sopt.official.util.stringOf
-import org.sopt.official.util.ui.setVisible
-import org.sopt.official.util.viewBinding
+import org.sopt.official.feature.mypage.util.stringOf
+import org.sopt.official.feature.mypage.util.ui.setVisible
+import org.sopt.official.feature.mypage.util.viewBinding
 import java.io.Serializable
 import javax.inject.Inject
 

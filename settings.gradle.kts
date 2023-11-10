@@ -25,6 +25,7 @@ include(
     ":core:common",
     ":feature:auth",
     ":feature:soptamp",
-    ":domain:mypage"
+    ":domain:mypage",
+    ":data:mypage"
 )
-include(":data:mypage")
+include(":feature:mypage")

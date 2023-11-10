@@ -27,6 +27,7 @@ package org.sopt.official.util.ui
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
+import org.sopt.official.feature.mypage.util.ui.UxConstant
 import java.util.concurrent.TimeUnit
 
 object UxConstant {

@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.datetime.Instant
 import org.sopt.official.R
-import org.sopt.official.domain.entity.UserActiveState
+import domain.model.UserActiveState
 import domain.model.UserStatus
 import org.sopt.official.domain.entity.home.HomeSection
 import org.sopt.official.domain.entity.home.SoptActiveGeneration

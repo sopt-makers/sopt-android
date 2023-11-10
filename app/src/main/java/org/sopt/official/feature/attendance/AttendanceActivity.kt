@@ -57,9 +57,9 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.util.colorOf
-import org.sopt.official.util.dp
-import org.sopt.official.util.stringOf
+import org.sopt.official.feature.mypage.util.colorOf
+import org.sopt.official.feature.mypage.util.dp
+import org.sopt.official.feature.mypage.util.stringOf
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {

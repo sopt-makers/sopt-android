@@ -56,11 +56,11 @@ import org.sopt.official.databinding.ActivityAuthBinding
 import domain.model.UserStatus
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.persistence.SoptDataStore
-import org.sopt.official.util.dp
+import org.sopt.official.feature.mypage.util.dp
 import org.sopt.official.util.setOnAnimationEndListener
 import org.sopt.official.util.setOnSingleClickListener
 import org.sopt.official.util.toEntity
-import org.sopt.official.util.viewBinding
+import org.sopt.official.feature.mypage.util.viewBinding
 import javax.inject.Inject
 
 @AndroidEntryPoint

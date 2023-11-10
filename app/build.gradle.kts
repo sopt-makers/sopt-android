@@ -116,6 +116,7 @@ dependencies {
     implementation(projects.core.analytics)
     implementation(projects.core.network)
     implementation(projects.feature.auth)
+    implementation(projects.feature.mypage)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
