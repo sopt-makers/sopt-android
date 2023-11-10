@@ -68,6 +68,7 @@ sentry-android = "6.33.1"
 process-pheonix = "2.1.2"
 amplitude = "1.12.1"
 spotless = "6.22.0"
+org-jetbrains-kotlin-jvm = "1.9.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -79,6 +80,7 @@ kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutine
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 
+activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
@@ -222,3 +224,4 @@ sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }

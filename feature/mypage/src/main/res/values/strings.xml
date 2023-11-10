@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2022-2023 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<resources>
+    <!--    mypage    -->
+    <string name="toolbar_mypage">마이페이지</string>
+    <string name="mypage_service_info_title">서비스 이용 방침</string>
+    <string name="mypage_private_info">개인정보 처리 방침</string>
+    <string name="mypage_service_rule">서비스 이용약관</string>
+    <string name="mypage_send_opinion">의견 보내기</string>
+    <string name="mypage_notification_setting">알림 설정</string>
+    <string name="mypage_notification">알림 설정하기</string>
+    <string name="mypage_soptamp_setting_title">솝탬프 설정</string>
+    <string name="mypage_adjust_sentence">한 마디 편집</string>
+    <string name="mypage_change_nickname">닉네임 변경</string>
+    <string name="mypage_reset_stamp">스탬프 초기화</string>
+    <string name="mypage_etc_title">기타</string>
+    <string name="mypage_log_out">로그아웃</string>
+    <string name="mypage_sign_out">탈퇴하기</string>
+    <string name="mypage_log_in">로그인</string>
+    <string name="mypage_alert_soptamp_reset_title">미션을 초기화 하실건가요?</string>
+    <string name="mypage_alert_soptamp_reset_subtitle">사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.</string>
+    <string name="mypage_alert_soptamp_reset_positive">초기화</string>
+    <string name="mypage_alert_soptamp_reset_negative">취소</string>
+    <string name="mypage_alert_log_out_title">로그아웃</string>
+    <string name="mypage_alert_log_out_subtitle">정말 로그아웃을 하실 건가요?</string>
+    <string name="mypage_alert_log_out_positive">로그아웃</string>
+    <string name="mypage_alert_log_out_negative">취소</string>
+
+    <!--    탈퇴하기    -->
+    <string name="toolbar_sign_out">탈퇴하기</string>
+    <string name="sign_out_title">탈퇴 시 유의사항</string>
+    <string name="sign_out_subtitle">회원 탈퇴를 신청하시면 해당 이메일은 즉시 탈퇴 처리됩니다.\n탈퇴 처리 시 계정 내에서 입력했던 정보는 영구적으로 삭제되며, 복구가 어렵습니다.</string>
+    <string name="sign_out_button">탈퇴하기</string>
+
+    <!--    닉네임 변경하기    -->
+    <string name="toolbar_change_nickname">닉네임 변경</string>
+    <string name="change_nickname_guide">한글/영문 10자 이하로 입력해주세요.</string>
+    <string name="change_nickname_error">사용 중인 이름입니다.</string>
+    <string name="change_nickname_button">닉네임 변경</string>
+
+    <!--    한 마디 편집하기   -->
+    <string name="toolbar_adjust_sentence">한 마디 편집</string>
+    <string name="adjust_sentence_button">저장</string>
+</resources>

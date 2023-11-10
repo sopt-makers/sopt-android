@@ -47,6 +47,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.common.util.colorOf
+import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
@@ -57,9 +60,7 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.util.colorOf
-import org.sopt.official.util.dp
-import org.sopt.official.util.stringOf
+import org.sopt.official.type.SoptColors
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
@@ -94,7 +95,7 @@ class AttendanceActivity : AppCompatActivity() {
         viewModel.isFirstProgressBarActive.observe(this) {
             binding.ivAttendanceProgress1Check.isInvisible = !it
             binding.tvAttendanceProgress1.setTextColor(
-                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
             )
         }
         viewModel.isSecondProgressBarAttendance.observe(this) {
@@ -105,7 +106,7 @@ class AttendanceActivity : AppCompatActivity() {
         viewModel.isSecondProgressBarActive.observe(this) {
             binding.ivAttendanceProgress2Check.isInvisible = !it
             binding.tvAttendanceProgress2.setTextColor(
-                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
             )
         }
         viewModel.isThirdProgressBarVisible.observe(this) {
@@ -121,7 +122,7 @@ class AttendanceActivity : AppCompatActivity() {
                 if (it) R.string.attendance_progress_third_absent else R.string.attendance_progress_before
             )
             binding.tvAttendanceProgress3Attendance.setTextColor(
-                if (it) colorOf(R.color.white_100) else colorOf(R.color.gray_100)
+                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
             )
         }
         viewModel.isThirdProgressBarBeforeAttendance.observe(this) {

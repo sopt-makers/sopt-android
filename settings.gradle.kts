@@ -18,11 +18,17 @@ dependencyResolutionManagement {
 rootProject.name = "SOPT"
 include(
     ":app",
-    ":domain:soptamp",
-    ":data:soptamp",
     ":core:network",
     ":core:analytics",
+    ":core:auth",
+    ":core:authimpl",
     ":core:common",
+    ":core:designsystem",
+    ":data:mypage",
+    ":data:soptamp",
+    ":domain:mypage",
+    ":domain:soptamp",
     ":feature:auth",
-    ":feature:soptamp"
+    ":feature:mypage",
+    ":feature:soptamp",
 )

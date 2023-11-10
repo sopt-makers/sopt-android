@@ -107,13 +107,19 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designsystem)
     implementation(projects.domain.soptamp)
+    implementation(projects.domain.mypage)
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
+    implementation(projects.data.mypage)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
+    implementation(projects.core.auth)
+    implementation(projects.core.authimpl)
     implementation(projects.feature.auth)
+    implementation(projects.feature.mypage)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)

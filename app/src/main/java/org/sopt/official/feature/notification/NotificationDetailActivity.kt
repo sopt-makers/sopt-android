@@ -26,20 +26,20 @@ package org.sopt.official.feature.notification
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
 import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.NOTIFICATION_ID
-import org.sopt.official.util.viewBinding
 
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {

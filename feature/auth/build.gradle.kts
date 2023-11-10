@@ -35,6 +35,7 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.network)
+    implementation(projects.core.designsystem)
     implementation(libs.customtab)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)

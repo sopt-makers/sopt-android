@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2022-2023 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<resources>
+    <!-- Material Theme -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <!-- PurpleScale -->
+    <color name="purple_100">#8040FF</color>
+    <color name="purple_40">#C6A9FF</color>
+    <color name="purple_dim_100">#282039</color>
+    <!-- GrayScale -->
+    <color name="gray_10">#F7F8FA</color>
+    <color name="gray_20">#EEEFF1</color>
+    <color name="gray_30">#CED1D2</color>
+    <color name="gray_40">#C0C5C9</color>
+    <color name="gray_60">#989BA0</color>
+    <color name="gray_80">#808388</color>
+    <color name="gray_100">#606265</color>
+    <!-- WhiteScale -->
+    <color name="white_100">#FCFCFC</color>
+    <color name="real_white">#FFFFFF</color>
+    <!-- BlackScale -->
+    <color name="black">#000000</color>
+    <color name="black_100">#0F1010</color>
+    <color name="black_80">#1C1D1E</color>
+    <color name="black_60">#2C2D2E</color>
+    <color name="black_40">#3C3D40</color>
+
+    <color name="black_80_opacity_80">#1C1D1ECC</color>
+
+    <!-- RedScale -->
+    <color name="sopt_red">#6A3232</color>
+    <color name="on_sopt_red">#FFD3D3</color>
+    <color name="red_100">#BD372F</color>
+    <color name="sub_red">#E45656</color>
+    <color name="reddim">#392020</color>
+    <!-- OrangeScale -->
+    <color name="orange_100">#FF6E1D</color>
+    <!-- GreenScale -->
+    <color name="sopt_green">#3A5141</color>
+    <color name="on_sopt_green">#A7F8BE</color>
+    <!-- YellowScale -->
+    <color name="sopt_yellow">#91864C</color>
+    <color name="on_sopt_yellow">#FFEB80</color>
+    <!-- BlackTransParentScale -->
+    <color name="black_40_70">#B33C3D40</color>
+    <color name="black_40_50">#803C3D40</color>
+    <color name="black_40_30">#4D3C3D40</color>
+    <color name="black_40_20">#333C3D40</color>
+    <!-- WhiteTransParentScale -->
+    <color name="white_100_70">#B3FFFFFF</color>
+    <color name="white_100_50">#80FFFFFF</color>
+    <color name="white_100_30">#4DFFFFFF</color>
+    <color name="white_100_20">#33FFFFFF</color>
+</resources>
