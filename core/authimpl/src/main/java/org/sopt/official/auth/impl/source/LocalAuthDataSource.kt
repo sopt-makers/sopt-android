@@ -22,18 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.source
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+interface LocalAuthDataSource {
+    fun save(token: Token)
+    fun save(status: UserStatus)
+    fun clear()
+}

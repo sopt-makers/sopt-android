@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.model.request
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
+@Serializable
+data class AuthRequest(
+    @SerialName("code")
+    val code: String,
+    @SerialName("pushToken")
+    val pushToken: String
 )

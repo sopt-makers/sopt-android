@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "org.sopt.official.core.authimpl"
+    namespace = "org.sopt.official.auth.impl"
 }
 
 dependencies {

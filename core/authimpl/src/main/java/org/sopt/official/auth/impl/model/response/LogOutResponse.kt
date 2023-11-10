@@ -22,18 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.model.response
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.model.LogOut
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+@Serializable
+data class LogOutResponse(
+    @SerialName("success")
+    val success: Boolean,
+    @SerialName("message")
+    val message: String
+){
+    fun toEntity() = LogOut(
+        success, message
+    )
+}

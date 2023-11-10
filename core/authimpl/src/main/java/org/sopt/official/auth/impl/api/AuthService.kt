@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.api
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.impl.model.request.AuthRequest
+import org.sopt.official.auth.impl.model.response.LogOutRequest
+import org.sopt.official.auth.impl.model.response.LogOutResponse
+import org.sopt.official.network.model.response.AuthResponse
+import retrofit2.http.Body
+import retrofit2.http.DELETE
+import retrofit2.http.HTTP
+import retrofit2.http.POST
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+interface AuthService {
+    @POST("auth/playground")
+    suspend fun authenticate(
+        @Body body: AuthRequest
+    ): AuthResponse
+
+    @DELETE("user")
+    suspend fun withdraw()
+
+    @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
+    suspend fun logOut(
+        @Body body: LogOutRequest
+    ): LogOutResponse
+}

@@ -22,18 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.local
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.impl.source.LocalAuthDataSource
+import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+class DefaultLocalAuthDataSource @Inject constructor(
+    private val dataStore: SoptDataStore
+) : LocalAuthDataSource {
+    override fun save(token: Token) {
+        dataStore.apply {
+            accessToken = token.accessToken
+            refreshToken = token.refreshToken
+            playgroundToken = token.playgroundToken
+        }
+    }
+
+    override fun save(status: UserStatus) {
+        dataStore.apply {
+            userStatus = status.value
+        }
+    }
+
+    override fun clear() {
+        dataStore.clear()
+    }
+}

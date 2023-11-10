@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.rxjava3.processors.PublishProcessor
 import kotlinx.coroutines.launch
-import repository.AuthRepository
+import org.sopt.official.auth.repository.AuthRepository
 import timber.log.Timber
 import javax.inject.Inject
 

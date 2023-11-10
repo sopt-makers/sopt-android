@@ -22,18 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.source
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.impl.model.response.LogOutRequest
+import org.sopt.official.auth.impl.model.response.LogOutResponse
+import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.model.response.AuthResponse
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+
+interface RemoteAuthDataSource {
+    suspend fun refresh(token: RefreshRequest): AuthResponse
+    suspend fun withdraw()
+    suspend fun logout(request: LogOutRequest): LogOutResponse
+}

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.repository
 
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.auth.model.Auth
+import org.sopt.official.auth.model.LogOut
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+
+interface AuthRepository {
+    suspend fun refresh(token: String): Result<Auth>
+    fun save(token: Token)
+    fun save(status: UserStatus)
+    suspend fun withdraw(): Result<Unit>
+    suspend fun logout(pushToken: String): Result<LogOut>
+    suspend fun clearLocalData()
+}

@@ -22,18 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.mapper
 
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.network.model.response.AuthResponse
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+class AuthMapper {
+    fun toEntity(responseItem:AuthResponse) = Auth(
+        Token(
+            accessToken = responseItem.accessToken,
+            refreshToken = responseItem.refreshToken,
+            playgroundToken = responseItem.playgroundToken
+        ),
+        UserStatus.of(responseItem.status)
+    )
+}

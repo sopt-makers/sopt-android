@@ -22,18 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth
+package org.sopt.official.auth.impl.remote
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.di.Auth
+import org.sopt.official.auth.impl.api.AuthService
+import org.sopt.official.auth.impl.model.response.LogOutRequest
+import org.sopt.official.auth.impl.model.response.LogOutResponse
+import org.sopt.official.auth.impl.source.RemoteAuthDataSource
+import org.sopt.official.network.model.response.AuthResponse
+import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.service.RefreshService
+import javax.inject.Inject
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+class DefaultRemoteAuthDataSource @Inject constructor(
+    @Auth private val authService: AuthService,
+    private val refreshService: RefreshService,
+) : RemoteAuthDataSource {
+    override suspend fun refresh(token: RefreshRequest): AuthResponse {
+        return refreshService.refresh(token)
+    }
+
+    override suspend fun withdraw() {
+        authService.withdraw()
+    }
+
+    override suspend fun logout(request: LogOutRequest): LogOutResponse {
+        return authService.logOut(request)
+    }
+}

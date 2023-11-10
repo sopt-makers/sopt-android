@@ -42,7 +42,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import model.UserStatus
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.auth.PlaygroundAuth
@@ -54,8 +54,8 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_LINK
 import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion.REMOTE_MESSAGE_EVENT_TYPE
-import org.sopt.official.core.authimpl.api.AuthService
-import org.sopt.official.core.authimpl.model.request.AuthRequest
+import org.sopt.official.auth.impl.api.AuthService
+import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
