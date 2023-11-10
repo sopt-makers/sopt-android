@@ -33,7 +33,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.officiail.domain.mypage.user.UpdateProfileUseCase
+import org.sopt.official.domain.mypage.user.UpdateProfileUseCase
 import javax.inject.Inject
 
 data class EditIntroductionUiState(

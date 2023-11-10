@@ -36,8 +36,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.officiail.domain.mypage.user.CheckNicknameDuplicateUseCase
-import org.sopt.officiail.domain.mypage.user.UpdateNicknameUseCase
+import org.sopt.official.domain.mypage.user.CheckNicknameDuplicateUseCase
+import org.sopt.official.domain.mypage.user.UpdateNicknameUseCase
 import retrofit2.HttpException
 import javax.inject.Inject
 

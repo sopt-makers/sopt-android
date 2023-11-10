@@ -22,15 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.officiail.domain.mypage.user
+package org.sopt.official.domain.mypage.model
 
-import org.sopt.officiail.domain.mypage.repository.UserRepository
-import javax.inject.Inject
-
-class UpdateNicknameUseCase @Inject constructor(
-    private val repository: UserRepository
-) {
-    suspend operator fun invoke(nickname: String) = runCatching {
-        repository.updateNickname(nickname)
-    }
-}
+data class SoptampUser(
+    val nickname: String,
+    val points: Int,
+    val profileMessage: String,
+)

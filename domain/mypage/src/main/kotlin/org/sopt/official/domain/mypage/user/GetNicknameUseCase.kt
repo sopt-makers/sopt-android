@@ -22,19 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.officiail.domain.mypage.repository
+package org.sopt.official.domain.mypage.user
 
-import org.sopt.officiail.domain.mypage.model.SoptampUser
+import org.sopt.official.domain.mypage.repository.UserRepository
+import javax.inject.Inject
 
-interface UserRepository {
-    val nickname: String
-    suspend fun checkNickname(nickname: String): Result<Unit>
-    suspend fun logout(): Result<Unit>
-    suspend fun getUserInfo(): Result<SoptampUser>
-    suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
-    suspend fun updateNickname(nickname: String): Result<Unit>
-    fun updateLocalUserInfo(profileMessage: String)
-    fun fetchUserId(): Int
-    fun getIsOnboardingSeen(): Boolean
-    fun updateOnboardingSeen(value: Boolean)
+class GetNicknameUseCase @Inject constructor(
+    private val repository: UserRepository
+) {
+    operator fun invoke() = repository.nickname
 }

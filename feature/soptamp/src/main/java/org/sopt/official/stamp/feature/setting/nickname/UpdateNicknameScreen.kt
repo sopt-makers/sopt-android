@@ -59,8 +59,8 @@ import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import org.sopt.official.domain.soptamp.fake.FakeUserRepository
-import org.sopt.officiail.domain.mypage.user.CheckNicknameDuplicateUseCase
-import org.sopt.officiail.domain.mypage.user.UpdateNicknameUseCase
+import org.sopt.official.domain.mypage.user.CheckNicknameDuplicateUseCase
+import org.sopt.official.domain.mypage.user.UpdateNicknameUseCase
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar

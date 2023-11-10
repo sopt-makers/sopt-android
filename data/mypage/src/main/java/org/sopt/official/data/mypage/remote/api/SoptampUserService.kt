@@ -35,17 +35,17 @@ import retrofit2.http.Path
 
 interface SoptampUserService {
     // 닉네임 중복검사
-    @GET("org/sopt/officiail/domain/mypage/user/nickname/{nickname}")
+    @GET("org/sopt/official/domain/mypage/user/nickname/{nickname}")
     suspend fun checkNickname(@Path("nickname") nickname: String)
 
-    @GET("org/sopt/officiail/domain/mypage/user/soptamp")
+    @GET("org/sopt/official/domain/mypage/user/soptamp")
     suspend fun getUserInformation(): UserResponse
 
     // 닉네임 변경
-    @PATCH("org/sopt/officiail/domain/mypage/user/nickname")
+    @PATCH("org/sopt/official/domain/mypage/user/nickname")
     suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
-    @PATCH("org/sopt/officiail/domain/mypage/user/profile-message")
+    @PATCH("org/sopt/official/domain/mypage/user/profile-message")
     suspend fun updateProfileMessage(
         @Body profileMessage: UpdateProfileMessageRequest
     ): UpdateProfileMessageResponse

@@ -22,13 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.officiail.domain.mypage.user
+package org.sopt.official.domain.mypage.user
 
-import org.sopt.officiail.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.mypage.repository.UserRepository
 import javax.inject.Inject
 
-class GetNicknameUseCase @Inject constructor(
+class UpdateNicknameUseCase @Inject constructor(
     private val repository: UserRepository
 ) {
-    operator fun invoke() = repository.nickname
+    suspend operator fun invoke(nickname: String) = runCatching {
+        repository.updateNickname(nickname)
+    }
 }

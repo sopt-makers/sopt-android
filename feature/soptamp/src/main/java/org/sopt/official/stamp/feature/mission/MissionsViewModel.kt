@@ -35,7 +35,7 @@ import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
 import org.sopt.official.domain.soptamp.repository.RankingRepository
-import org.sopt.officiail.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber

@@ -22,15 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.officiail.domain.mypage.user
+package org.sopt.official.domain.mypage.repository
 
-import org.sopt.officiail.domain.mypage.repository.UserRepository
-import javax.inject.Inject
+import org.sopt.official.domain.mypage.model.SoptampUser
 
-class CheckNicknameDuplicateUseCase @Inject constructor(
-    private val userRepository: UserRepository
-) {
-    suspend operator fun invoke(nickname: String) = runCatching {
-        userRepository.checkNickname(nickname)
-    }
+interface UserRepository {
+    val nickname: String
+    suspend fun checkNickname(nickname: String): Result<Unit>
+    suspend fun logout(): Result<Unit>
+    suspend fun getUserInfo(): Result<SoptampUser>
+    suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
+    suspend fun updateNickname(nickname: String): Result<Unit>
+    fun updateLocalUserInfo(profileMessage: String)
+    fun fetchUserId(): Int
+    fun getIsOnboardingSeen(): Boolean
+    fun updateOnboardingSeen(value: Boolean)
 }

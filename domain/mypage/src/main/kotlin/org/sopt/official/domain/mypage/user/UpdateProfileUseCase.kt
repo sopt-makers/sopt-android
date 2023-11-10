@@ -22,9 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.officiail.domain.mypage.user
+package org.sopt.official.domain.mypage.user
 
-import org.sopt.officiail.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.mypage.repository.UserRepository
 import javax.inject.Inject
 
 class UpdateProfileUseCase @Inject constructor(

@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.mypage.repository
 
-import org.sopt.officiail.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.data.mypage.local.SoptampDataStore
 import javax.inject.Inject
 
