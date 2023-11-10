@@ -53,10 +53,10 @@ import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.SoptMainContentUrl
 import org.sopt.official.feature.home.model.UserActiveGeneration
 import org.sopt.official.feature.home.model.UserUiState
-import org.sopt.official.util.calculateDurationOfGeneration
-import org.sopt.official.util.calculateGenerationStartDate
-import org.sopt.official.util.systemNow
-import org.sopt.official.util.toDefaultLocalDate
+import org.sopt.official.common.util.calculateDurationOfGeneration
+import org.sopt.official.common.util.calculateGenerationStartDate
+import org.sopt.official.common.util.systemNow
+import org.sopt.official.common.util.toDefaultLocalDate
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject

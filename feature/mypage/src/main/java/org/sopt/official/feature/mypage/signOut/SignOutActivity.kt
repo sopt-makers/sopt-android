@@ -33,12 +33,12 @@ import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import org.sopt.official.common.util.rx.observeOnMain
+import org.sopt.official.common.util.rx.subscribeBy
+import org.sopt.official.common.util.rx.subscribeOnIo
+import org.sopt.official.common.util.ui.throttleUi
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.databinding.ActivitySignOutBinding
-import org.sopt.official.feature.mypage.util.rx.observeOnMain
-import org.sopt.official.feature.mypage.util.rx.subscribeBy
-import org.sopt.official.feature.mypage.util.rx.subscribeOnIo
-import org.sopt.official.feature.mypage.util.ui.throttleUi
-import org.sopt.official.feature.mypage.util.viewBinding
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {

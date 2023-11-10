@@ -22,20 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util
+package org.sopt.official.common.util
 
-import android.view.animation.Animation
+import android.view.View
 
-inline fun Animation.setOnAnimationEndListener(
-    crossinline onAnimationEnd: (animation: Animation?) -> Unit
+inline fun View.setOnSingleClickListener(
+    delay: Long = 500L,
+    crossinline block: (View) -> Unit
 ) {
-    setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation?) = Unit
-
-        override fun onAnimationEnd(animation: Animation?) {
-            onAnimationEnd(animation)
+    var previousClickedTime = 0L
+    setOnClickListener { view ->
+        val clickedTime = System.currentTimeMillis()
+        if (clickedTime - previousClickedTime >= delay) {
+            block(view)
+            previousClickedTime = clickedTime
         }
-
-        override fun onAnimationRepeat(animation: Animation?) = Unit
-    })
+    }
 }

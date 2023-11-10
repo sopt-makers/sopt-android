@@ -31,9 +31,9 @@ import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.processors.BehaviorProcessor
 import io.reactivex.rxjava3.subjects.PublishSubject
 import kotlinx.coroutines.launch
+import org.sopt.official.common.util.rx.subscribeBy
+import org.sopt.official.common.util.rx.subscribeOnIo
 import org.sopt.official.domain.soptamp.repository.UserRepository
-import org.sopt.official.feature.mypage.util.rx.subscribeBy
-import org.sopt.official.feature.mypage.util.rx.subscribeOnIo
 import timber.log.Timber
 import javax.inject.Inject
 

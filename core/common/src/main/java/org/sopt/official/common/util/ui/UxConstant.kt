@@ -22,21 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.util.rx
+package org.sopt.official.common.util.ui
 
+import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
+import io.reactivex.rxjava3.core.Observable
+import java.util.concurrent.TimeUnit
 
-fun <T : Any> Flowable<T>.subscribeOnIo() = this.subscribeOn(Schedulers.io())
+object UxConstant {
+    const val UI_REACTION_TIME = 300L
+}
 
-fun <T : Any> Flowable<T>.observeOnMain() = this.observeOn(AndroidSchedulers.mainThread())
-
-fun <T : Any> Flowable<T>.subscribeBy(
-    compositeDisposable: CompositeDisposable,
-    onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onComplete: () -> Unit = { },
-    onNext: (T) -> Unit
-) = compositeDisposable.add(subscribe(onNext, onError, onComplete))
+fun <T : Any> Observable<T>.throttleUi(interval: Long = UxConstant.UI_REACTION_TIME): Flowable<T> = this
+    .toFlowable(BackpressureStrategy.DROP)
+    .throttleFirst(interval, TimeUnit.MILLISECONDS)

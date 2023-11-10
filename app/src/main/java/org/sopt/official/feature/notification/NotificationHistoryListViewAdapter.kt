@@ -32,10 +32,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.R
+import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
-import org.sopt.official.feature.mypage.util.drawableOf
 import java.util.Date
 import java.util.Locale
 

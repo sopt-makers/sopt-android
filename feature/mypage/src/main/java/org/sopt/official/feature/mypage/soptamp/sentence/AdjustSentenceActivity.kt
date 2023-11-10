@@ -34,12 +34,12 @@ import com.jakewharton.rxbinding4.widget.textChanges
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import org.sopt.official.common.util.rx.observeOnMain
+import org.sopt.official.common.util.rx.subscribeBy
+import org.sopt.official.common.util.rx.subscribeOnIo
+import org.sopt.official.common.util.ui.throttleUi
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBinding
-import org.sopt.official.feature.mypage.util.rx.observeOnMain
-import org.sopt.official.feature.mypage.util.rx.subscribeBy
-import org.sopt.official.feature.mypage.util.rx.subscribeOnIo
-import org.sopt.official.feature.mypage.util.ui.throttleUi
-import org.sopt.official.feature.mypage.util.viewBinding
 
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {

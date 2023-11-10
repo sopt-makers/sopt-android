@@ -30,8 +30,9 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.StringRes
 import androidx.constraintlayout.widget.ConstraintLayout
+import org.sopt.official.common.util.drawableOf
 import org.sopt.official.feature.mypage.databinding.LayoutDialogNegativePositiveBinding
-import org.sopt.official.feature.mypage.util.drawableOf
+
 
 class AlertDialogPositiveNegative(context: Context) : ConstraintLayout(context) {
     private val builder: AlertDialog.Builder = AlertDialog.Builder(context)

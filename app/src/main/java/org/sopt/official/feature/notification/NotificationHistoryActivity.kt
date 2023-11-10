@@ -37,8 +37,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sopt.official.R
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityNotificationHistoryBinding
-import org.sopt.official.feature.mypage.util.viewBinding
 
 @AndroidEntryPoint
 class NotificationHistoryActivity : AppCompatActivity() {

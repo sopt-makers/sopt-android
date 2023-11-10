@@ -22,27 +22,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.util
+package org.sopt.official.common.util
 
-import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.Fragment
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.periodUntil
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDate
 
-fun Context.stringOf(@StringRes id: Int) = getString(id)
+private const val BASE_DATE = "2007-03-01"
 
-fun Context.stringOf(@StringRes id: Int, arg1: String) = getString(id, arg1)
+fun calculateGenerationStartDate(
+    generation: Int,
+    period: Int = 6,
+    from: LocalDate = BASE_DATE.toLocalDate()
+): LocalDate {
+    val monthsToTake = generation * period
+    return from.plus(monthsToTake, DateTimeUnit.MONTH)
+}
 
-fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, *args)
-
-fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
-
-fun Context.colorOf(@ColorRes id: Int) = getColor(id)
-
-fun Fragment.stringOf(@StringRes id: Int) = requireContext().stringOf(id)
-
-fun Fragment.drawableOf(@DrawableRes id: Int) = requireContext().drawableOf(id)
-
-fun Fragment.colorOf(@ColorRes id: Int) = requireContext().getColor(id)
+fun calculateDurationOfGeneration(start: LocalDate, end: LocalDate): Int {
+    val diff = start.periodUntil(end)
+    return diff.months + diff.years * 12
+}

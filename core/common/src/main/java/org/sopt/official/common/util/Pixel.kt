@@ -22,18 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util
+package org.sopt.official.common.util
 
-import org.sopt.official.network.model.response.OAuthToken
-import org.sopt.officiail.domain.mypage.model.Auth
-import org.sopt.officiail.domain.mypage.model.Token
-import org.sopt.officiail.domain.mypage.model.UserStatus
+import android.content.res.Resources
 
-fun OAuthToken.toEntity() = Auth(
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken,
-        playgroundToken = playgroundToken
-    ),
-    status = UserStatus.valueOf(status)
-)
+val Int.dp
+    get() = this * Resources.getSystem().displayMetrics.density.toInt()
+
+val Int.px
+    get() = (this * Resources.getSystem().displayMetrics.density).toInt()

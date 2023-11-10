@@ -22,14 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util.ui
+package org.sopt.official.common.util
 
-import android.view.View
+import android.content.Context
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.fragment.app.Fragment
 
-fun View.setVisible(visible: Boolean, isGone: Boolean = true): View = apply {
-    visibility = when {
-        visible -> View.VISIBLE
-        isGone -> View.GONE
-        else -> View.INVISIBLE
-    }
-}
+fun Context.stringOf(@StringRes id: Int) = getString(id)
+
+fun Context.stringOf(@StringRes id: Int, arg1: String) = getString(id, arg1)
+
+fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, *args)
+
+fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
+
+fun Context.colorOf(@ColorRes id: Int) = getColor(id)
+
+fun Fragment.stringOf(@StringRes id: Int) = requireContext().stringOf(id)
+
+fun Fragment.drawableOf(@DrawableRes id: Int) = requireContext().drawableOf(id)
+
+fun Fragment.colorOf(@ColorRes id: Int) = requireContext().getColor(id)

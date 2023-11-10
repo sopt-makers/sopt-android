@@ -47,14 +47,21 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.sopt.officiail.domain.mypage.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.R
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.drawableOf
+import org.sopt.official.common.util.serializableExtra
+import org.sopt.official.common.util.setOnSingleClickListener
+import org.sopt.official.common.util.stringOf
+import org.sopt.official.common.util.ui.setVisible
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
-import org.sopt.officiail.domain.mypage.model.UserActiveState
-import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
@@ -64,13 +71,6 @@ import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
-import org.sopt.official.feature.mypage.util.dp
-import org.sopt.official.feature.mypage.util.drawableOf
-import org.sopt.official.util.serializableExtra
-import org.sopt.official.util.setOnSingleClickListener
-import org.sopt.official.feature.mypage.util.stringOf
-import org.sopt.official.feature.mypage.util.ui.setVisible
-import org.sopt.official.feature.mypage.util.viewBinding
 import java.io.Serializable
 import javax.inject.Inject
 

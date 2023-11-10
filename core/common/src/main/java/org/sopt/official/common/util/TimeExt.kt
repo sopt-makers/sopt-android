@@ -22,27 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util
+package org.sopt.official.common.util
 
-import android.content.Context
-import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.fragment.app.Fragment
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
-fun Context.stringOf(@StringRes id: Int) = getString(id)
+fun Instant.Companion.systemNow(): Instant = Clock.System.now()
 
-fun Context.stringOf(@StringRes id: Int, arg1: String) = getString(id, arg1)
-
-fun Context.stringOf(@StringRes id: Int, vararg args: String) = getString(id, *args)
-
-fun Context.drawableOf(@DrawableRes id: Int) = AppCompatResources.getDrawable(this, id)
-
-fun Context.colorOf(@ColorRes id: Int) = getColor(id)
-
-fun Fragment.stringOf(@StringRes id: Int) = requireContext().stringOf(id)
-
-fun Fragment.drawableOf(@DrawableRes id: Int) = requireContext().drawableOf(id)
-
-fun Fragment.colorOf(@ColorRes id: Int) = requireContext().getColor(id)
+fun Instant.toDefaultLocalDate(): LocalDate = toLocalDateTime(TimeZone.currentSystemDefault()).date

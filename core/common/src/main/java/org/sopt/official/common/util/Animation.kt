@@ -22,14 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.util.ui
+package org.sopt.official.common.util
 
-import android.view.View
+import android.view.animation.Animation
 
-fun View.setVisible(visible: Boolean, isGone: Boolean = true): View = apply {
-    visibility = when {
-        visible -> View.VISIBLE
-        isGone -> View.GONE
-        else -> View.INVISIBLE
-    }
+inline fun Animation.setOnAnimationEndListener(
+    crossinline onAnimationEnd: (animation: Animation?) -> Unit
+) {
+    setAnimationListener(object : Animation.AnimationListener {
+        override fun onAnimationStart(animation: Animation?) = Unit
+
+        override fun onAnimationEnd(animation: Animation?) {
+            onAnimationEnd(animation)
+        }
+
+        override fun onAnimationRepeat(animation: Animation?) = Unit
+    })
 }

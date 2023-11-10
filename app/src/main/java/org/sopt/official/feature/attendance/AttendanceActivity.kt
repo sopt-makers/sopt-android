@@ -47,6 +47,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.common.util.colorOf
+import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
 import org.sopt.official.domain.entity.attendance.AttendanceLog
@@ -57,9 +60,6 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.feature.mypage.util.colorOf
-import org.sopt.official.feature.mypage.util.dp
-import org.sopt.official.feature.mypage.util.stringOf
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {

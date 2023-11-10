@@ -22,20 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util
+package org.sopt.official.common.util
 
-import android.view.View
+import android.app.Activity
+import android.content.Intent
+import android.os.Build
+import android.os.Parcelable
+import java.io.Serializable
+import kotlin.properties.ReadOnlyProperty
 
-inline fun View.setOnSingleClickListener(
-    delay: Long = 500L,
-    crossinline block: (View) -> Unit
-) {
-    var previousClickedTime = 0L
-    setOnClickListener { view ->
-        val clickedTime = System.currentTimeMillis()
-        if (clickedTime - previousClickedTime >= delay) {
-            block(view)
-            previousClickedTime = clickedTime
+fun stringExtra(defaultValue: String? = null) =
+    ReadOnlyProperty<Activity, String?> { thisRef, property ->
+        if (defaultValue == null) {
+            thisRef.intent.extras?.getString(property.name)
+        } else {
+            thisRef.intent.extras?.getString(property.name, defaultValue)
         }
     }
+
+inline fun <reified T : Serializable?> Intent.serializableExtra(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getSerializableExtra(key, T::class.java)
+    } else {
+        getSerializableExtra(key) as? T
+    }
 }
+
+inline fun <reified S : Serializable> serializableExtra(defaultValue: S? = null) =
+    ReadOnlyProperty<Activity, S?> { thisRef, property ->
+        thisRef.intent.serializableExtra(property.name) ?: defaultValue
+    }
+
+inline fun <reified T : Parcelable> parcelableExtra(defaultValue: T? = null) =
+    ReadOnlyProperty<Activity, T?> { thisRef, property ->
+        thisRef.intent.getParcelableExtra(property.name) ?: defaultValue
+    }

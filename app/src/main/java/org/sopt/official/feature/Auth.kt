@@ -22,17 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.util.rx
+package org.sopt.official.feature
 
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
+import org.sopt.official.network.model.response.OAuthToken
+import org.sopt.officiail.domain.mypage.model.Auth
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
 
-fun <T : Any> Single<T>.subscribeOnIo() = this.subscribeOn(Schedulers.io())
-
-fun <T : Any> Single<T>.subscribeBy(
-    compositeDisposable: CompositeDisposable,
-    onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onSuccess: (T) -> Unit
-) = compositeDisposable.add(subscribe(onSuccess, onError))
+fun OAuthToken.toEntity() = Auth(
+    Token(
+        accessToken = accessToken,
+        refreshToken = refreshToken,
+        playgroundToken = playgroundToken
+    ),
+    status = UserStatus.valueOf(status)
+)

@@ -22,17 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.util.rx
+package org.sopt.official.common.util.ui
 
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import timber.log.Timber
+import android.view.View
 
-fun <T : Any> Single<T>.subscribeOnIo() = this.subscribeOn(Schedulers.io())
-
-fun <T : Any> Single<T>.subscribeBy(
-    compositeDisposable: CompositeDisposable,
-    onError: (Throwable) -> Unit = { Timber.e(it.message) },
-    onSuccess: (T) -> Unit
-) = compositeDisposable.add(subscribe(onSuccess, onError))
+fun View.setVisible(visible: Boolean, isGone: Boolean = true): View = apply {
+    visibility = when {
+        visible -> View.VISIBLE
+        isGone -> View.GONE
+        else -> View.INVISIBLE
+    }
+}

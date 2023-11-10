@@ -31,8 +31,8 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import org.sopt.official.util.calculateDurationOfGeneration
-import org.sopt.official.util.calculateGenerationStartDate
+import org.sopt.official.common.util.calculateDurationOfGeneration
+import org.sopt.official.common.util.calculateGenerationStartDate
 
 class CalculateActiveGenerationTest {
 

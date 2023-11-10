@@ -34,24 +34,24 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.officiail.domain.mypage.model.UserActiveState
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import org.sopt.officiail.domain.mypage.model.UserActiveState
+import org.sopt.official.common.util.rx.observeOnMain
+import org.sopt.official.common.util.rx.subscribeBy
+import org.sopt.official.common.util.rx.subscribeOnIo
+import org.sopt.official.common.util.serializableExtra
+import org.sopt.official.common.util.ui.setVisible
+import org.sopt.official.common.util.ui.throttleUi
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.databinding.ActivityMyPageBinding
 import org.sopt.official.feature.mypage.model.MyPageUiState
+import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
-import org.sopt.official.feature.mypage.signOut.SignOutActivity
-import org.sopt.official.feature.mypage.util.ui.serializableExtra
 import org.sopt.official.feature.mypage.web.WebUrlConstant
-import org.sopt.official.feature.mypage.util.rx.observeOnMain
-import org.sopt.official.feature.mypage.util.rx.subscribeBy
-import org.sopt.official.feature.mypage.util.rx.subscribeOnIo
-import org.sopt.official.feature.mypage.util.ui.setVisible
-import org.sopt.official.feature.mypage.util.ui.throttleUi
-import org.sopt.official.feature.mypage.util.viewBinding
 import java.io.Serializable
 
 @AndroidEntryPoint
