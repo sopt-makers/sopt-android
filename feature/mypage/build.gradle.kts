@@ -36,8 +36,6 @@ dependencies {
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
     implementation(projects.core.common)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
     implementation(libs.timber)
 
     implementation(libs.rxjava)
