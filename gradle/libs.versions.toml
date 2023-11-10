@@ -68,7 +68,7 @@ sentry-android = "6.33.1"
 process-pheonix = "2.1.2"
 amplitude = "1.12.1"
 spotless = "6.22.0"
-org-jetbrains-kotlin-jvm = "1.9.0"
+org-jetbrains-kotlin-jvm = "1.9.20"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
