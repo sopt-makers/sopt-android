@@ -2,7 +2,7 @@
 <!--
     MIT License
 
-    Copyright (c) 2022-2023 SOPT Makers
+    Copyright (c) 2023 SOPT Makers
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,7 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 -->
-<font-family xmlns:android="http://schemas.android.com/apk/res/android">
-    <font
-        android:font="@font/suit_extrabold"
-        android:fontStyle="normal"
-        android:fontWeight="800" />
-    <font
-        android:font="@font/suit_bold"
-        android:fontStyle="normal"
-        android:fontWeight="700" />
-    <font
-        android:font="@font/suit_semibold"
-        android:fontStyle="normal"
-        android:fontWeight="600" />
-    <font
-        android:font="@font/suit_medium"
-        android:fontStyle="normal"
-        android:fontWeight="500" />
-    <font
-        android:font="@font/suit_regular"
-        android:fontStyle="normal"
-        android:fontWeight="400" />
-    <font
-        android:font="@font/suit_light"
-        android:fontStyle="normal"
-        android:fontWeight="300" />
-    <font
-        android:font="@font/suit_extralight"
-        android:fontStyle="normal"
-        android:fontWeight="200" />
-    <font
-        android:font="@font/suit_thin"
-        android:fontStyle="normal"
-        android:fontWeight="100" />
-</font-family>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="@color/black_100" android:state_focused="true" />
+    <item android:color="@color/black_80"/>
+</selector>

@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
     implementation(projects.core.common)
+    implementation(projects.core.designsystem)
     implementation(libs.timber)
 
     implementation(libs.rxjava)

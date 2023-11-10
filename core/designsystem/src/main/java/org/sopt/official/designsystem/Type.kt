@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.designsystem.style
+package org.sopt.official.designsystem
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.TextStyle
@@ -30,7 +30,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import org.sopt.official.R
 
 val SuitExtraBold = FontFamily(Font(R.font.suit_extrabold, FontWeight.ExtraBold))
 val SuitBold = FontFamily(Font(R.font.suit_bold, FontWeight.Bold))

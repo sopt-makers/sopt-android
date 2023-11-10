@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.designsystem.style
+package org.sopt.official.designsystem
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
