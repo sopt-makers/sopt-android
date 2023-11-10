@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature
+package org.sopt.official.feature.auth
 
 import org.sopt.official.network.model.response.OAuthToken
 import model.Auth

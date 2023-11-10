@@ -58,7 +58,6 @@ import org.sopt.official.core.authimpl.api.AuthService
 import org.sopt.official.core.authimpl.model.request.AuthRequest
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.feature.home.HomeActivity
-import org.sopt.official.feature.toEntity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
