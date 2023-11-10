@@ -25,7 +25,6 @@
 package org.sopt.official.auth.repository
 
 import org.sopt.official.auth.model.Auth
-import org.sopt.official.auth.model.LogOut
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 
@@ -35,6 +34,6 @@ interface AuthRepository {
     fun save(token: Token)
     fun save(status: UserStatus)
     suspend fun withdraw(): Result<Unit>
-    suspend fun logout(pushToken: String): Result<LogOut>
+    suspend fun logout(pushToken: String): Result<Unit>
     suspend fun clearLocalData()
 }

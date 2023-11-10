@@ -24,7 +24,6 @@
  */
 package org.sopt.official.auth.impl.model.response
 
-import org.sopt.official.auth.model.LogOut
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -34,8 +33,4 @@ data class LogOutResponse(
     val success: Boolean,
     @SerialName("message")
     val message: String
-){
-    fun toEntity() = LogOut(
-        success, message
-    )
-}
+)

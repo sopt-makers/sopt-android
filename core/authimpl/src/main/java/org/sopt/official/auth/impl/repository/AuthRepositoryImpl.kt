@@ -25,7 +25,6 @@
 package org.sopt.official.auth.impl.repository
 
 import org.sopt.official.auth.repository.AuthRepository
-import org.sopt.official.auth.model.LogOut
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.impl.mapper.AuthMapper
@@ -57,13 +56,13 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun logout(
         pushToken: String
-    ): Result<LogOut> = runCatching {
+    ): Result<Unit> = runCatching {
         remoteAuthDataSource.logout(
             LogOutRequest(
                 platform = "Android",
                 pushToken = pushToken
             )
-        ).toEntity()
+        )
     }
 
     override suspend fun clearLocalData() {
