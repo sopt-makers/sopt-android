@@ -26,10 +26,11 @@ package org.sopt.official.data.mypage.repository
 
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.data.mypage.local.SoptampDataStore
+import org.sopt.official.data.mypage.source.UserDataSource
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val remote: org.sopt.official.data.mypage.source.UserDataSource,
+    private val remote: UserDataSource,
     private val local: SoptampDataStore
 ) : UserRepository {
     override val nickname: String

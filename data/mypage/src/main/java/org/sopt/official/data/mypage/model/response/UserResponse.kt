@@ -26,6 +26,7 @@ package org.sopt.official.data.mypage.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.mypage.model.SoptampUser
 
 @Serializable
 data class UserResponse(
@@ -37,5 +38,5 @@ data class UserResponse(
     val profileMessage: String? = null,
 ) {
     fun toDomain() =
-        org.sopt.official.domain.mypage.model.SoptampUser(nickname, points, profileMessage ?: "")
+        SoptampUser(nickname, points, profileMessage ?: "")
 }

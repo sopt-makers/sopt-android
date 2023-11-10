@@ -28,11 +28,12 @@ import org.sopt.official.data.mypage.model.request.UpdateNicknameRequest
 import org.sopt.official.data.mypage.model.request.UpdateProfileMessageRequest
 import org.sopt.official.data.mypage.model.response.UserResponse
 import org.sopt.official.data.mypage.remote.api.SoptampUserService
+import org.sopt.official.data.mypage.source.UserDataSource
 import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
     private val soptampUserService: SoptampUserService
-) : org.sopt.official.data.mypage.source.UserDataSource {
+) : UserDataSource {
 
     override suspend fun checkNickname(nickname: String) {
         return soptampUserService.checkNickname(nickname)
