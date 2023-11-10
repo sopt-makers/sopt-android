@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.mypage.remote.model.response
 
-import domain.model.LogOut
+import org.sopt.officiail.domain.mypage.model.LogOut
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

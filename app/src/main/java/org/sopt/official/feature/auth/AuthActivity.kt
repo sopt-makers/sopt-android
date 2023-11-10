@@ -53,7 +53,7 @@ import org.sopt.official.config.messaging.SoptFirebaseMessagingService.Companion
 import org.sopt.official.data.mypage.remote.model.request.AuthRequest
 import org.sopt.official.data.mypage.remote.api.AuthService
 import org.sopt.official.databinding.ActivityAuthBinding
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.feature.mypage.util.dp

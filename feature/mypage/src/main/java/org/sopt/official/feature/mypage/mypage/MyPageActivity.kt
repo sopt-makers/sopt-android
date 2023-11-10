@@ -34,7 +34,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.processphoenix.ProcessPhoenix
 import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import domain.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserActiveState
 import io.reactivex.rxjava3.core.BackpressureStrategy
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative

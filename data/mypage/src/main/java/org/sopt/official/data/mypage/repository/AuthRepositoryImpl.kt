@@ -27,10 +27,10 @@ package org.sopt.official.data.mypage.repository
 import org.sopt.official.data.mypage.remote.model.request.LogOutRequest
 import org.sopt.official.data.mypage.source.LocalAuthDataSource
 import org.sopt.official.data.mypage.source.RemoteAuthDataSource
-import domain.model.Token
-import domain.model.UserStatus
-import domain.repository.AuthRepository
-import domain.model.LogOut
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
+import org.sopt.officiail.domain.mypage.repository.AuthRepository
+import org.sopt.officiail.domain.mypage.model.LogOut
 import org.sopt.official.data.mypage.remote.mapper.AuthMapper
 import org.sopt.official.network.model.request.RefreshRequest
 import javax.inject.Inject

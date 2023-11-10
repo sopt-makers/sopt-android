@@ -28,8 +28,8 @@ import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import domain.model.Auth
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.Auth
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
 import javax.inject.Inject

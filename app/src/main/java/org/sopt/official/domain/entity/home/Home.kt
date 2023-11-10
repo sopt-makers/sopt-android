@@ -24,7 +24,7 @@
  */
 package org.sopt.official.domain.entity.home
 
-import domain.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserActiveState
 
 data class SoptUser(
     val user: User = User(),

@@ -26,7 +26,7 @@ package org.sopt.official.data.model.home
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import domain.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserActiveState
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.domain.entity.home.SoptActiveRecord
 import org.sopt.official.domain.entity.home.SoptUser

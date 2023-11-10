@@ -37,7 +37,7 @@ import org.sopt.official.data.mypage.source.LocalAuthDataSource
 import org.sopt.official.data.mypage.source.RemoteAuthDataSource
 import org.sopt.official.data.mypage.local.DefaultLocalAuthDataSource
 import org.sopt.official.data.mypage.remote.source.DefaultRemoteAuthDataSource
-import domain.repository.AuthRepository
+import org.sopt.officiail.domain.mypage.repository.AuthRepository
 import retrofit2.Retrofit
 import javax.inject.Singleton
 

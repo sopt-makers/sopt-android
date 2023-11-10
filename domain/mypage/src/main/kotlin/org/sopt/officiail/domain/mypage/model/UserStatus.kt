@@ -22,10 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package domain.model
+package org.sopt.officiail.domain.mypage.model
 
-enum class UserActiveState {
-    ACTIVE,
-    INACTIVE,
-    UNAUTHENTICATED
+enum class UserStatus(
+    val value: String
+) {
+    ACTIVE("ACTIVE"),
+    INACTIVE("INACTIVE"),
+    UNAUTHENTICATED("UNAUTHENTICATED");
+
+    companion object {
+        fun of(value: String) = entries.find { it.value == value }
+            ?: throw IllegalArgumentException("Invalid user status: $value")
+    }
 }

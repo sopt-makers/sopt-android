@@ -26,8 +26,8 @@ package org.sopt.official.data.mypage.local
 
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.data.mypage.source.LocalAuthDataSource
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import javax.inject.Inject
 
 class DefaultLocalAuthDataSource @Inject constructor(

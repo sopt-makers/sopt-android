@@ -1,4 +1,4 @@
-package domain.model
+package org.sopt.officiail.domain.mypage.model
 
 
 data class LogOut(

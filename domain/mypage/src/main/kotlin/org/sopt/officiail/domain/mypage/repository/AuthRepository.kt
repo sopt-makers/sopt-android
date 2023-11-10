@@ -22,12 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package domain.repository
+package org.sopt.officiail.domain.mypage.repository
 
-import domain.model.Auth
-import domain.model.LogOut
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.Auth
+import org.sopt.officiail.domain.mypage.model.LogOut
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
 
 
 interface AuthRepository {

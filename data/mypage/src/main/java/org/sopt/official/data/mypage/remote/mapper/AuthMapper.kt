@@ -24,9 +24,9 @@
  */
 package org.sopt.official.data.mypage.remote.mapper
 
-import domain.model.Auth
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.Auth
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.network.model.response.AuthResponse
 
 class AuthMapper {

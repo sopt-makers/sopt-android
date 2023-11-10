@@ -24,7 +24,7 @@
  */
 package org.sopt.official.feature.mypage.model
 
-import domain.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserActiveState
 
 
 sealed interface MyPageUiState {

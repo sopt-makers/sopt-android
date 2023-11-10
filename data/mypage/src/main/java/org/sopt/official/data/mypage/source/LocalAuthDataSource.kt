@@ -24,8 +24,8 @@
  */
 package org.sopt.official.data.mypage.source
 
-import domain.model.Token
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.Token
+import org.sopt.officiail.domain.mypage.model.UserStatus
 
 interface LocalAuthDataSource {
     fun save(token: Token)

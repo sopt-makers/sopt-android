@@ -53,8 +53,8 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
-import domain.model.UserActiveState
-import domain.model.UserStatus
+import org.sopt.officiail.domain.mypage.model.UserActiveState
+import org.sopt.officiail.domain.mypage.model.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
