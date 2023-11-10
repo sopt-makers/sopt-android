@@ -19,13 +19,13 @@ rootProject.name = "SOPT"
 include(
     ":app",
     ":domain:soptamp",
-    ":data:soptamp",
+    ":domain:mypage",
     ":core:network",
     ":core:analytics",
     ":core:common",
+    ":data:soptamp",
+    ":data:mypage",
     ":feature:auth",
     ":feature:soptamp",
-    ":domain:mypage",
-    ":data:mypage"
+    ":feature:mypage",
 )
-include(":feature:mypage")
