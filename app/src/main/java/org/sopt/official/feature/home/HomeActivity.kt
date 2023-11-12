@@ -203,6 +203,7 @@ class HomeActivity : AppCompatActivity() {
                 }
 
                 val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
+                binding.imageViewNotificationBadge.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
                 binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
                 binding.imageViewNotificationHistory.setOnClickListener {
                     tracker.track(type = EventType.CLICK, name = "alarm", properties = mapOf("view_type" to args?.userStatus?.value))
@@ -211,8 +212,10 @@ class HomeActivity : AppCompatActivity() {
                 }
             }.launchIn(lifecycleScope)
         viewModel.isAllNotificationsConfirm.flowWithLifecycle(lifecycle)
-            .onEach { binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE }
-            .launchIn(lifecycleScope)
+            .onEach {
+                if (viewModel.userActiveState.value == UserActiveState.UNAUTHENTICATED) return@onEach
+                binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE
+            }.launchIn(lifecycleScope)
         viewModel.generatedTagText
             .flowWithLifecycle(lifecycle)
             .onEach { (id, text) ->
