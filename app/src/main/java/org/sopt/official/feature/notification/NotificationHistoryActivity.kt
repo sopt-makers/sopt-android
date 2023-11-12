@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.notification
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -75,12 +74,14 @@ class NotificationHistoryActivity : AppCompatActivity() {
 
     private val notificationHistoryItemClickListener = NotificationHistoryItemClickListener { position ->
         notificationHistoryAdapter?.updateNotificationReadingState(position)
-        val clickedNotification = viewModel.notificationHistoryList.value[position]
+        val notificationId = viewModel.notificationHistoryList.value[position].notificationId
 
-        Intent(this@NotificationHistoryActivity, NotificationDetailActivity::class.java).run {
-            putExtra(NOTIFICATION_ID, clickedNotification.notificationId)
-            startActivity(this)
-        }
+        startActivity(
+            NotificationDetailActivity.getIntent(
+                this,
+                NotificationDetailActivity.StartArgs(notificationId)
+            )
+        )
     }
 
     private val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -122,9 +123,5 @@ class NotificationHistoryActivity : AppCompatActivity() {
                 notificationHistoryAdapter?.updateNotificationHistoryList(it)
             }
         }
-    }
-
-    companion object {
-        const val NOTIFICATION_ID = "notificationId"
     }
 }

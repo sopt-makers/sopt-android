@@ -97,7 +97,10 @@ class AttendanceCodeDialog : DialogFragment() {
         viewModel.initDialogTitle(dialogTitle)
         viewModel.title
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기" }
+            .onEach {
+                if (it.isEmpty()) return@onEach
+                binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기"
+            }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
