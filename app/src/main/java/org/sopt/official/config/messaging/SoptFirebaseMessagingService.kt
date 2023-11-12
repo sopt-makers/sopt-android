@@ -27,7 +27,6 @@ package org.sopt.official.config.messaging
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -41,7 +40,7 @@ import org.sopt.official.R
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
-import org.sopt.official.feature.auth.AuthActivity
+import org.sopt.official.feature.notification.SchemeActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -85,13 +84,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
 
         notificationBuilder.setNotificationContentIntent(
-            if (webLink.isNotBlank()) {
-                RemoteMessageLinkType.WEB_LINK
-            } else if (deepLink.isNotBlank()) {
-                RemoteMessageLinkType.DEEP_LINK
-            } else {
-                RemoteMessageLinkType.DEFAULT
-            },
             webLink.ifBlank { deepLink.ifBlank { "" } },
             notificationId
         )
@@ -101,15 +93,13 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun NotificationCompat.Builder.setNotificationContentIntent(
-        remoteMessageLinkType: RemoteMessageLinkType,
         link: String,
         notificationId: Int
     ): NotificationCompat.Builder {
-        val intent = Intent(this@SoptFirebaseMessagingService, AuthActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra(REMOTE_MESSAGE_EVENT_TYPE, remoteMessageLinkType.name)
-            putExtra(REMOTE_MESSAGE_EVENT_LINK, link)
-        }
+        val intent = SchemeActivity.getIntent(
+            this@SoptFirebaseMessagingService,
+            SchemeActivity.StartArgs(link)
+        )
 
         return this.setContentIntent(
             PendingIntent.getActivity(
@@ -127,8 +117,6 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
 
     companion object {
         const val NOTIFICATION_CHANNEL_ID = "SOPT"
-        const val REMOTE_MESSAGE_EVENT_TYPE = "REMOTE_MESSAGE_EVENT_TYPE"
-        const val REMOTE_MESSAGE_EVENT_LINK = "REMOTE_MESSAGE_EVENT_LINK"
     }
 
     override fun onDestroy() {

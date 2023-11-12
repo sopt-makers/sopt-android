@@ -119,7 +119,6 @@ class HomeActivity : AppCompatActivity() {
         setContentView(binding.root)
         tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.userStatus?.value))
 
-        initIntentData()
         requestNotificationPermission()
         initToolbar()
         initUserStatus()
@@ -130,23 +129,6 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         viewModel.initHomeUi(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
-    }
-
-    private fun initIntentData() {
-        args?.remoteMessageEventType?.let {
-            if (it.isBlank()) return
-            when (RemoteMessageLinkType.valueOf(it)) {
-                RemoteMessageLinkType.WEB_LINK -> {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(args?.remoteMessageEventLink))
-                    startActivity(intent)
-                }
-                // RemoteMessageLinkType.DEEP_LINK -> {} TODO: 딥링크 정의된 후 구현 예정
-                else -> {
-                    val intent = Intent(this, NotificationHistoryActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-        }
     }
 
     private fun initUserStatus() {
@@ -322,8 +304,7 @@ class HomeActivity : AppCompatActivity() {
 
     data class StartArgs(
         val userStatus: UserStatus,
-        val remoteMessageEventType: String = "",
-        val remoteMessageEventLink: String = "",
+        val isUnknownDeepLink: Boolean = false,
     ) : Serializable
 
     companion object {

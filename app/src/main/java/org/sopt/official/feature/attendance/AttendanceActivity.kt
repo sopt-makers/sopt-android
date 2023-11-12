@@ -25,6 +25,8 @@
 package org.sopt.official.feature.attendance
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.os.Bundle
@@ -60,13 +62,16 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.type.SoptColors
+import org.sopt.official.util.colorOf
+import org.sopt.official.util.dp
+import org.sopt.official.util.stringOf
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAttendanceBinding
     private val viewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
+    private val args by serializableExtra(StartArgs(false))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -78,6 +83,8 @@ class AttendanceActivity : AppCompatActivity() {
         initListener()
         observeData()
         observeProgressState()
+
+        handleDeepLinkOpenDialogState()
     }
 
     private fun observeProgressState() {
@@ -145,6 +152,11 @@ class AttendanceActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleDeepLinkOpenDialogState() {
+        if (args?.isNeedToOpenAttendanceCodeDialog != true) return
+        openAttendanceCodeDialog()
+    }
+
     private fun initView() {
         initToolbar()
         initRecyclerView()
@@ -198,10 +210,14 @@ class AttendanceActivity : AppCompatActivity() {
 
     private fun initListener() {
         binding.btnAttendance.setOnClickListener {
-            AttendanceCodeDialog()
-                .setTitle(binding.btnAttendance.text.toString())
-                .show(supportFragmentManager, "attendanceCodeDialog")
+            openAttendanceCodeDialog()
         }
+    }
+
+    private fun openAttendanceCodeDialog() {
+        AttendanceCodeDialog()
+            .setTitle(binding.btnAttendance.text.toString())
+            .show(supportFragmentManager, "attendanceCodeDialog")
     }
 
     private fun observeSoptEvent() {
@@ -351,5 +367,17 @@ class AttendanceActivity : AppCompatActivity() {
         }
         attendanceAdapter.submitList(list)
         binding.recyclerViewAttendanceHistory.scrollToPosition(0)
+    }
+
+    data class StartArgs(
+        val isNeedToOpenAttendanceCodeDialog: Boolean = false,
+    ) : Serializable
+
+    companion object {
+        @JvmStatic
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, AttendanceActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }

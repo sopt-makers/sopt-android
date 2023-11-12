@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.notification
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,6 +41,9 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
 import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.NOTIFICATION_ID
+import org.sopt.official.util.serializableExtra
+import org.sopt.official.util.viewBinding
+import java.io.Serializable
 
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {
@@ -47,16 +51,14 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
-    private val notificationId: Long by lazy {
-        intent.getLongExtra(NOTIFICATION_ID, 0L)
-    }
+    private val args by serializableExtra(StartArgs(0))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
-        viewModel.getNotificationDetail(notificationId)
+        viewModel.getNotificationDetail(args?.notificationId ?: 0)
 
         initStateFlowValues()
         initClickListeners()
@@ -100,5 +102,17 @@ class NotificationDetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    data class StartArgs(
+        val notificationId: Long
+    ) : Serializable
+
+    companion object {
+        @JvmStatic
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, NotificationDetailActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }
