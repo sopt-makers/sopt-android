@@ -118,6 +118,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.auth)
     implementation(projects.core.authimpl)
+    implementation(projects.core.webview)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(libs.kotlin.coroutines.google.play)
@@ -134,11 +135,6 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(libs.timber)
-
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.rxkotlin)
-    implementation(libs.rxbinding)
 
     implementation(libs.bundles.compose)
 
@@ -157,12 +153,6 @@ dependencies {
     androidTestImplementation(libs.bundles.compose.test)
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
-
-    debugImplementation(libs.bundles.flipper)
-    releaseImplementation(libs.flipper.noop)
-    debugImplementation(libs.flipper.network) {
-        exclude(group = "com.squareup.okhttp3", module = "okhttp")
-    }
 }
 
 secrets {

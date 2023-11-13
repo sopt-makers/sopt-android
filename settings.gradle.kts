@@ -24,6 +24,7 @@ include(
     ":core:authimpl",
     ":core:common",
     ":core:designsystem",
+    ":core:webview",
     ":data:mypage",
     ":data:soptamp",
     ":domain:mypage",

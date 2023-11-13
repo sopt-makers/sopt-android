@@ -54,5 +54,6 @@ internal fun Project.configureAndroidCommonPlugin() {
         "implementation"(libs.findLibrary("lifecycle.runtime").get())
         "implementation"(libs.findLibrary("activity").get())
         "implementation"(libs.findLibrary("material").get())
+        "implementation"(libs.findLibrary("timber").get())
     }
 }
