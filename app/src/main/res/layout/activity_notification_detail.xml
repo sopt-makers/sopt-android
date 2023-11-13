@@ -89,7 +89,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/linearLayout_newsDetailButton"
+        android:id="@+id/linearLayout_linkButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
