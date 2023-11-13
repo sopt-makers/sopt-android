@@ -76,7 +76,7 @@ class NotificationDetailActivity : AppCompatActivity() {
         binding.apply {
             textViewNotificationTitle.text = notification.title
             textViewNotificationContent.text = notification.content
-            linearLayoutNewsDetailButton.visibility = when (
+            linearLayoutLinkButton.visibility = when (
                 notification.deepLink.isNullOrBlank() &&
                     notification.webLink.isNullOrBlank()
             ) {
@@ -89,7 +89,7 @@ class NotificationDetailActivity : AppCompatActivity() {
     private fun initClickListeners() {
         binding.apply {
             includeAppBarBackArrow.toolbar.setOnClickListener(clickListener)
-            linearLayoutNewsDetailButton.setOnClickListener(clickListener)
+            linearLayoutLinkButton.setOnClickListener(clickListener)
         }
     }
 
@@ -97,8 +97,19 @@ class NotificationDetailActivity : AppCompatActivity() {
         binding.apply {
             when (it) {
                 includeAppBarBackArrow.toolbar -> onBackPressed()
-                linearLayoutNewsDetailButton -> viewModel.notificationDetail.value?.let {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.webLink)))
+                linearLayoutLinkButton -> viewModel.notificationDetail.value?.let {
+                    if (!it.webLink.isNullOrBlank()) {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.webLink)))
+                    }
+                    if (!it.deepLink.isNullOrBlank()) {
+                        startActivity(
+                            SchemeActivity.getIntent(
+                                this@NotificationDetailActivity,
+                                SchemeActivity.StartArgs(it.deepLink)
+                            )
+                        )
+                    }
+
                 }
             }
         }
