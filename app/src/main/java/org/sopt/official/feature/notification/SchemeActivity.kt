@@ -6,11 +6,13 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.data.persistence.SoptDataStore
 import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
+import org.sopt.official.util.isExpiredDate
 import org.sopt.official.util.serializableExtra
 import java.io.Serializable
 import javax.inject.Inject
@@ -33,7 +35,16 @@ class SchemeActivity : AppCompatActivity() {
             args?.link?.contains("http://") == true
             || args?.link?.contains("https://") == true
         ) {
-            true -> Intent(Intent.ACTION_VIEW, Uri.parse(args!!.link))
+            true -> {
+                when (args?.link?.toUri()?.getQueryParameter("expiredAt")?.isExpiredDate()) {
+                    true -> DeepLinkType.getHomeIntent(
+                        this,
+                        userStatus,
+                        DeepLinkType.EXPIRED
+                    )
+                    else -> Intent(Intent.ACTION_VIEW, Uri.parse(args!!.link))
+                }
+            }
             false -> {
                 val deepLinkType = DeepLinkType.invoke(args?.link ?: defaultDestination)
                 deepLinkType.getIntent(
