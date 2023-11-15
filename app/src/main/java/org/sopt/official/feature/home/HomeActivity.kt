@@ -62,6 +62,9 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
+import org.sopt.official.designsystem.AlertDialogOneButton
+import org.sopt.official.domain.entity.UserActiveState
+import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
@@ -70,6 +73,7 @@ import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
+import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -124,6 +128,8 @@ class HomeActivity : AppCompatActivity() {
         initUserStatus()
         initUserInfo()
         initBlock()
+
+        handleDeepLinkDialog()
     }
 
     override fun onResume() {
@@ -302,9 +308,32 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleDeepLinkDialog() {
+        if (
+            args?.deepLinkType != DeepLinkType.UNKNOWN
+            && args?.deepLinkType != DeepLinkType.EXPIRED
+        ) return
+
+        val titleRes = when (args?.deepLinkType == DeepLinkType.UNKNOWN) {
+            true -> R.string.notification_dialog_unknown_title
+            false -> R.string.notification_dialog_expired_title
+        }
+
+        val bodyRes = when (args?.deepLinkType == DeepLinkType.UNKNOWN) {
+            true -> R.string.notification_dialog_unknown_body
+            false -> R.string.notification_dialog_expired_body
+        }
+
+        AlertDialogOneButton(this)
+            .setTitle(titleRes)
+            .setSubtitle(bodyRes)
+            .setPositiveButton(R.string.notification_dialog_confirm_button)
+            .show()
+    }
+
     data class StartArgs(
         val userStatus: UserStatus,
-        val isUnknownDeepLink: Boolean = false,
+        val deepLinkType: DeepLinkType? = null,
     ) : Serializable
 
     companion object {

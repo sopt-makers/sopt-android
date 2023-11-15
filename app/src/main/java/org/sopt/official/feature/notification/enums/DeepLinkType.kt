@@ -12,6 +12,7 @@ import org.sopt.official.feature.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationDetailActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
+import org.sopt.official.util.isExpiredDate
 
 enum class DeepLinkType(
     val link: String
@@ -131,7 +132,16 @@ enum class DeepLinkType(
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            return getHomeIntent(context, userStatus, true)
+            return getHomeIntent(context, userStatus, UNKNOWN)
+        }
+    },
+    EXPIRED("expired") {
+        override fun getIntent(
+            context: Context,
+            userStatus: UserStatus,
+            deepLink: String,
+        ): Intent {
+            return getHomeIntent(context, userStatus, EXPIRED)
         }
     };
 
@@ -154,7 +164,7 @@ enum class DeepLinkType(
         fun getHomeIntent(
             context: Context,
             userStatus: UserStatus,
-            isUnknownDeepLink: Boolean = false
+            deepLinkType: DeepLinkType? = null
         ): Intent {
             return when (userStatus == UserStatus.UNAUTHENTICATED) {
                 true -> AuthActivity.newInstance(context)
@@ -162,7 +172,7 @@ enum class DeepLinkType(
                     context,
                     HomeActivity.StartArgs(
                         userStatus = userStatus,
-                        isUnknownDeepLink = isUnknownDeepLink
+                        deepLinkType = deepLinkType
                     )
                 )
             }
@@ -170,10 +180,14 @@ enum class DeepLinkType(
 
         operator fun invoke(deepLink: String): DeepLinkType {
             val link = deepLink.split("?")[0]
-            return entries.find { it.link == link } ?: run {
-                when (deepLink.isBlank()) {
-                    true -> NOTIFICATION_DETAIL
-                    false -> UNKNOWN
+            val expiredAt = deepLink.toUri().getQueryParameter("expiredAt")
+            return when (expiredAt?.isExpiredDate()) {
+                true -> EXPIRED
+                else -> entries.find { it.link == link } ?: run {
+                    when (deepLink.isBlank()) {
+                        true -> NOTIFICATION_DETAIL
+                        false -> UNKNOWN
+                    }
                 }
             }
         }

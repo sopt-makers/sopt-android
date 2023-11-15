@@ -106,4 +106,12 @@
     <string name="toolbar_notification_filter_news">소식</string>
     <string name="notification_history_empty_view">아직 도착한 알림이 없어요.</string>
     <string name="notification_history_news_detail">바로가기</string>
+
+    <!--    알림 관련 다이얼로그     -->
+    <string name="notification_dialog_unknown_title">업데이트 안내</string>
+    <string name="notification_dialog_unknown_body">현재 버전에서는 이동할 수 없는 링크에요.\nSOPT앱을 최신버전으로 업데이트해 주세요.</string>
+    <string name="notification_dialog_expired_title">유효하지 않은 링크</string>
+    <string name="notification_dialog_expired_body">해당 링크의 유효기간이 만료되어\n더 이상 내용을 확인할 수 없어요.</string>
+    <string name="notification_dialog_confirm_button">확인</string>
+
 </resources>
