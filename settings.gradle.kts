@@ -35,4 +35,5 @@ include(
     ":feature:mypage",
     ":feature:soptamp",
     ":feature:poke",
+    ":benchmark"
 )
