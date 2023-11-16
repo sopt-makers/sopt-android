@@ -37,7 +37,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.official.R
 import org.sopt.official.databinding.ItemAttendanceHistoryUserInfoBinding
 import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
 import org.sopt.official.type.SoptColors

@@ -51,6 +51,7 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
@@ -62,9 +63,8 @@ import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
-import org.sopt.official.util.colorOf
-import org.sopt.official.util.dp
-import org.sopt.official.util.stringOf
+import org.sopt.official.type.SoptColors
+import java.io.Serializable
 
 @AndroidEntryPoint
 class AttendanceActivity : AppCompatActivity() {

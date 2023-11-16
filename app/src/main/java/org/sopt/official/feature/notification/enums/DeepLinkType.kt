@@ -3,16 +3,16 @@ package org.sopt.official.feature.notification.enums
 import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
-import org.sopt.official.domain.entity.UserActiveState
-import org.sopt.official.domain.entity.auth.UserStatus
+import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.home.HomeActivity
-import org.sopt.official.feature.mypage.MyPageActivity
+import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationDetailActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
-import org.sopt.official.util.isExpiredDate
 
 enum class DeepLinkType(
     val link: String

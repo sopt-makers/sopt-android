@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.data.persistence.SoptDataStore
-import org.sopt.official.domain.entity.auth.UserStatus
+import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.isExpiredDate
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
-import org.sopt.official.util.isExpiredDate
-import org.sopt.official.util.serializableExtra
+import org.sopt.official.network.persistence.SoptDataStore
 import java.io.Serializable
 import javax.inject.Inject
 
