@@ -37,12 +37,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
-import org.sopt.official.feature.notification.NotificationHistoryActivity.Companion.NOTIFICATION_ID
-import org.sopt.official.util.serializableExtra
-import org.sopt.official.util.viewBinding
 import java.io.Serializable
 
 @AndroidEntryPoint

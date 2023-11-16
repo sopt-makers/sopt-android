@@ -59,12 +59,8 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.config.messaging.RemoteMessageLinkType
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
-import org.sopt.official.designsystem.AlertDialogOneButton
-import org.sopt.official.domain.entity.UserActiveState
-import org.sopt.official.domain.entity.auth.UserStatus
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
@@ -72,6 +68,7 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
+import org.sopt.official.feature.notification.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.stamp.SoptampActivity
