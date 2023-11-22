@@ -30,7 +30,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NotificationHistoryItemResponse(
     @SerialName("notificationId")
-    val notificationId: Long,
+    val notificationId: String,
     @SerialName("userId")
     val userId: Int,
     @SerialName("title")

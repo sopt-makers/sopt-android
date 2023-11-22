@@ -49,21 +49,21 @@ interface NotificationService {
         @Body body: UpdatePushTokenRequest
     ): UpdatePushTokenResponse
 
-    @GET("notification")
+    @GET("notification/all")
     suspend fun getNotificationHistory(
         @Query("page") page: Int
     ): ArrayList<NotificationHistoryItemResponse>
 
-    @GET("notification/{notificationId}")
+    @GET("notification/detail/{notificationId}")
     suspend fun getNotificationDetail(
-        @Path("notificationId") notificationId: Long
+        @Path("notificationId") notificationId: String
     ): NotificationDetailResponse
 
-    @PATCH("notification/{notificationId}")
+    @PATCH("notification/read/{notificationId}")
     suspend fun updateNotificationReadingState(
-        @Path("notificationId") notificationId: Long
-    ): NotificationReadingStateResponse
+        @Path("notificationId") notificationId: String
+    )
 
-    @PATCH("notification")
-    suspend fun updateEntireNotificationReadingState(): NotificationReadingStateResponse
+    @PATCH("notification/read")
+    suspend fun updateEntireNotificationReadingState()
 }

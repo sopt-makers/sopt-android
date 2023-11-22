@@ -68,12 +68,13 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isEmpty()) return
 
         val receivedData = remoteMessage.data
+        val notificationId = receivedData["id"] ?: ""
         val title = receivedData["title"] ?: ""
         val body = receivedData["content"] ?: ""
         val webLink = receivedData["webLink"] ?: ""
         val deepLink = receivedData["deepLink"] ?: ""
 
-        val notificationId = System.currentTimeMillis().toInt()
+        val notifyId = System.currentTimeMillis().toInt()
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
@@ -84,27 +85,29 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
 
         notificationBuilder.setNotificationContentIntent(
+            notificationId,
             webLink.ifBlank { deepLink.ifBlank { "" } },
-            notificationId
+            notifyId
         )
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notificationId, notificationBuilder.build())
+        notificationManager.notify(notifyId, notificationBuilder.build())
     }
 
     private fun NotificationCompat.Builder.setNotificationContentIntent(
+        notificationId: String,
         link: String,
-        notificationId: Int
+        notifyId: Int
     ): NotificationCompat.Builder {
         val intent = SchemeActivity.getIntent(
             this@SoptFirebaseMessagingService,
-            SchemeActivity.StartArgs(link)
+            SchemeActivity.StartArgs(notificationId, link)
         )
 
         return this.setContentIntent(
             PendingIntent.getActivity(
                 this@SoptFirebaseMessagingService,
-                notificationId,
+                notifyId,
                 intent,
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE

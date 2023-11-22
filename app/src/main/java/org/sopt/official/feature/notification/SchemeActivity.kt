@@ -21,8 +21,7 @@ import javax.inject.Inject
 class SchemeActivity : AppCompatActivity() {
     @Inject
     lateinit var dataStore: SoptDataStore
-    private val defaultDestination = DeepLinkType.NOTIFICATION_LIST.link
-    private val args by serializableExtra(StartArgs(defaultDestination))
+    private val args by serializableExtra(StartArgs("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,41 +29,53 @@ class SchemeActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLink() {
-        val userStatus = UserStatus.of(dataStore.userStatus)
+        val link = args?.link ?: ""
         val linkIntent = when (
-            args?.link?.contains("http://") == true
-            || args?.link?.contains("https://") == true
+            link.contains("http://")
+            || link.contains("https://")
         ) {
-            true -> {
-                when (args?.link?.toUri()?.getQueryParameter("expiredAt")?.isExpiredDate()) {
-                    true -> DeepLinkType.getHomeIntent(
-                        this,
-                        userStatus,
-                        DeepLinkType.EXPIRED
-                    )
-                    else -> Intent(Intent.ACTION_VIEW, Uri.parse(args!!.link))
-                }
-            }
-            false -> {
-                val deepLinkType = DeepLinkType.invoke(args?.link ?: defaultDestination)
-                deepLinkType.getIntent(
-                    this,
-                    userStatus,
-                    args?.link ?: defaultDestination
-                )
-            }
+            true -> checkWebLinkExpiration(link)
+            false -> checkDeepLinkExistence(link)
+
         }
 
         when (!isTaskRoot) {
             true -> startActivity(linkIntent)
             false -> TaskStackBuilder.create(this).apply {
                 if (!isIntentToHome(linkIntent)) addNextIntentWithParentStack(
-                    DeepLinkType.getHomeIntent(this@SchemeActivity, userStatus)
+                    DeepLinkType.getHomeIntent(this@SchemeActivity, UserStatus.of(dataStore.userStatus))
                 )
                 addNextIntent(linkIntent)
             }.startActivities()
         }
         finish()
+    }
+
+    private fun checkWebLinkExpiration(link: String): Intent {
+        return when (link.toUri().getQueryParameter("expiredAt")?.isExpiredDate()) {
+            true -> DeepLinkType.getHomeIntent(
+                this,
+                UserStatus.of(dataStore.userStatus),
+                DeepLinkType.EXPIRED
+            )
+            else -> Intent(Intent.ACTION_VIEW, Uri.parse(link))
+        }
+    }
+
+    private fun checkDeepLinkExistence(link: String?): Intent {
+        return when (link.isNullOrBlank()) {
+            true -> NotificationDetailActivity.getIntent(
+                this,
+                NotificationDetailActivity.StartArgs(
+                    notificationId = args?.notificationId ?: ""
+                )
+            )
+            false -> DeepLinkType.invoke(link).getIntent(
+                this,
+                UserStatus.of(dataStore.userStatus),
+                link
+            )
+        }
     }
 
     private fun isIntentToHome(intent: Intent): Boolean {
@@ -75,6 +86,7 @@ class SchemeActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
+        val notificationId: String,
         val link: String
     ) : Serializable
 

@@ -38,11 +38,9 @@ interface NotificationRepository {
         page: Int
     ): Result<List<NotificationHistoryItem>>
     suspend fun getNotificationDetail(
-        notificationId: Long
+        notificationId: String
     ): Result<NotificationDetailResponse>
 
-    suspend fun updateNotificationReadingState(
-        notificationId: Long
-    ): Result<NotificationReadingStateResponse>
-    suspend fun updateEntireNotificationReadingState(): Result<NotificationReadingStateResponse>
+    suspend fun updateNotificationReadingState(notificationId: String)
+    suspend fun updateEntireNotificationReadingState()
 }

@@ -26,7 +26,6 @@ package org.sopt.official.feature.notification
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -49,14 +48,14 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
-    private val args by serializableExtra(StartArgs(0))
+    private val args by serializableExtra(StartArgs( ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
-        viewModel.getNotificationDetail(args?.notificationId ?: 0)
+        viewModel.getNotificationDetail(args?.notificationId ?: "")
 
         initStateFlowValues()
         initClickListeners()
@@ -75,8 +74,8 @@ class NotificationDetailActivity : AppCompatActivity() {
             textViewNotificationTitle.text = notification.title
             textViewNotificationContent.text = notification.content
             linearLayoutLinkButton.visibility = when (
-                notification.deepLink.isNullOrBlank() &&
-                    notification.webLink.isNullOrBlank()
+                notification.deepLink.isNullOrBlank()
+                && notification.webLink.isNullOrBlank()
             ) {
                 true -> View.GONE
                 false -> View.VISIBLE
@@ -96,25 +95,20 @@ class NotificationDetailActivity : AppCompatActivity() {
             when (it) {
                 includeAppBarBackArrow.toolbar -> onBackPressed()
                 linearLayoutLinkButton -> viewModel.notificationDetail.value?.let {
-                    if (!it.webLink.isNullOrBlank()) {
-                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it.webLink)))
-                    }
-                    if (!it.deepLink.isNullOrBlank()) {
-                        startActivity(
-                            SchemeActivity.getIntent(
-                                this@NotificationDetailActivity,
-                                SchemeActivity.StartArgs(it.deepLink)
-                            )
+                    startActivity(SchemeActivity.getIntent(
+                        this@NotificationDetailActivity,
+                        SchemeActivity.StartArgs(
+                            notificationId = it.notificationId,
+                            link = it.webLink ?: it.deepLink ?: ""
                         )
-                    }
-
+                    ))
                 }
             }
         }
     }
 
     data class StartArgs(
-        val notificationId: Long
+        val notificationId: String
     ) : Serializable
 
     companion object {

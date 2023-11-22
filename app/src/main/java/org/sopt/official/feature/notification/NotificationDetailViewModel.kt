@@ -45,7 +45,7 @@ class NotificationDetailViewModel @Inject constructor(
     private val _notificationDetail = MutableStateFlow<NotificationDetailResponse?>(null)
     val notificationDetail: StateFlow<NotificationDetailResponse?> get() = _notificationDetail
 
-    fun getNotificationDetail(id: Long) {
+    fun getNotificationDetail(id: String) {
         viewModelScope.launch {
             getNotificationDetailUseCase.invoke(id)
                 .onSuccess {
@@ -56,10 +56,9 @@ class NotificationDetailViewModel @Inject constructor(
         }
     }
 
-    private fun updateNotificationReadingState(id: Long) {
+    private fun updateNotificationReadingState(id: String) {
         viewModelScope.launch {
             updateNotificationReadingStateUseCase.invoke(id)
-                .onFailure { Timber.e(it) }
         }
     }
 }
