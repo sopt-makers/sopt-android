@@ -72,14 +72,6 @@ class NotificationHistoryViewModel @Inject constructor(
     fun updateEntireNotificationReadingState() {
         viewModelScope.launch {
             updateEntireNotificationReadingStateUseCase.invoke()
-                .onSuccess {
-                    val newNotificationList = _notificationHistoryList.value
-                    for (notification in newNotificationList) {
-                        notification.isRead = true
-                    }
-                    _notificationHistoryList.value = newNotificationList
-                }
-                .onFailure { Timber.e(it) }
         }
     }
 }

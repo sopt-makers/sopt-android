@@ -31,7 +31,7 @@ import javax.inject.Inject
 class GetNotificationDetailUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository
 ) {
-    suspend operator fun invoke(notificationId: Long): Result<NotificationDetailResponse> {
+    suspend operator fun invoke(notificationId: String): Result<NotificationDetailResponse> {
         return notificationRepository.getNotificationDetail(notificationId)
     }
 }

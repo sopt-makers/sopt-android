@@ -44,7 +44,7 @@ enum class DeepLinkType(
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            val notificationId = deepLink.toUri().getQueryParameter("id")?.toLong() ?: 0
+            val notificationId = deepLink.toUri().getQueryParameter("id") ?: ""
             return userStatus.setIntent(
                 context,
                 NotificationDetailActivity.getIntent(
@@ -183,12 +183,7 @@ enum class DeepLinkType(
             val expiredAt = deepLink.toUri().getQueryParameter("expiredAt")
             return when (expiredAt?.isExpiredDate()) {
                 true -> EXPIRED
-                else -> entries.find { it.link == link } ?: run {
-                    when (deepLink.isBlank()) {
-                        true -> NOTIFICATION_DETAIL
-                        false -> UNKNOWN
-                    }
-                }
+                else -> entries.find { it.link == link } ?: UNKNOWN
             }
         }
     }

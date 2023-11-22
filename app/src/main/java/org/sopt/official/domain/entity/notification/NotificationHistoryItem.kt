@@ -25,7 +25,7 @@
 package org.sopt.official.domain.entity.notification
 
 data class NotificationHistoryItem(
-    val notificationId: Long,
+    val notificationId: String,
     val userId: Int,
     val title: String,
     val content: String?,
