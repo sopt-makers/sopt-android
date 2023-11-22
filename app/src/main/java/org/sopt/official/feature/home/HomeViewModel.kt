@@ -138,13 +138,14 @@ class HomeViewModel @Inject constructor(
                 UserActiveState.ACTIVE -> SoptMainContentUrl(
                     HomeCTAType.SOPT_ATTENDANCE,
                     HomeMenuType.SOPT_CREW_ACTIVE_URL,
-                    HomeMenuType.SOPT_MEMBER_ACTIVE_URL
+                    HomeMenuType.SOPT_PLAYGROUND_ACTIVE_URL
+
                 )
 
                 else -> SoptMainContentUrl(
-                    HomeCTAType.SOPT_CREW_URL,
-                    HomeMenuType.SOPT_MEMBER_INACTIVE_URL,
-                    HomeMenuType.SOPT_PROJECT_INACTIVE_URL
+                    HomeCTAType.SOPT_PLAYGROUND_URL,
+                    HomeMenuType.SOPT_CREW_INACTIVE_URL,
+                    HomeMenuType.SOPT_MEMBER_INACTIVE_URL
                 )
             }
         }
@@ -152,11 +153,13 @@ class HomeViewModel @Inject constructor(
         .map {
             when (it.user.activeState) {
                 UserActiveState.ACTIVE -> listOf(
+                    HomeMenuType.SOPT_MEMBER_ACTIVE_URL,
                     HomeMenuType.SOPT_PROJECT_ACTIVE_URL,
                     HomeMenuType.SOPT_OFFICIAL_PAGE_ACTIVE_URL
                 )
 
                 UserActiveState.INACTIVE -> listOf(
+                    HomeMenuType.SOPT_PROJECT_INACTIVE_URL,
                     HomeMenuType.SOPT_OFFICIAL_PAGE_INACTIVE_URL,
                     HomeMenuType.SOPT_INSTAGRAM_INACTIVE_URL,
                     HomeMenuType.SOPT_YOUTUBE_INACTIVE_URL
