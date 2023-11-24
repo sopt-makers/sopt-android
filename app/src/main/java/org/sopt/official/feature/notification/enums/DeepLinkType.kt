@@ -82,7 +82,7 @@ enum class DeepLinkType(
         }
     },
     ATTENDANCE_MODAL("home/attendance/attendance-modal") {
-        override fun getIntent( // TODO
+        override fun getIntent(
             context: Context,
             userStatus: UserStatus,
             deepLink: String,
@@ -109,21 +109,27 @@ enum class DeepLinkType(
         }
     },
     SOPTAMP_ENTIRE_RANKING("home/soptamp/entire-ranking") {
-        override fun getIntent( // TODO
+        override fun getIntent(
             context: Context,
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            TODO("Not yet implemented")
+            return userStatus.setIntent(
+                context,
+                Intent(context, SoptampActivity::class.java)
+            )
         }
     },
     SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
-        override fun getIntent( // TODO
+        override fun getIntent(
             context: Context,
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            TODO("Not yet implemented")
+            return userStatus.setIntent(
+                context,
+                Intent(context, SoptampActivity::class.java)
+            )
         }
     },
     UNKNOWN("unknown-deep-link") {
