@@ -80,6 +80,7 @@ import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.AlertDialogOneButton
+import org.sopt.official.webview.view.WebViewActivity
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -342,7 +343,10 @@ class HomeActivity : AppCompatActivity() {
                     name = item.clickEventName,
                     properties = mapOf("view_type" to args?.userStatus?.value)
                 )
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+//                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+                val intent = Intent(this@HomeActivity, WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.INTENT_URL, item.url)
+                }
                 startActivity(intent)
             }
         }
