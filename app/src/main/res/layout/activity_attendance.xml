@@ -340,6 +340,16 @@
         app:layout_constraintTop_toBottomOf="@id/layout_info_event"
         app:layout_constraintVertical_bias="0" />
 
+    <ImageView
+        android:id="@+id/gradientView"
+        android:layout_width="match_parent"
+        android:layout_height="156dp"
+        android:background="@drawable/shape_gradient_black"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_attendance"
         style="@style/TextAppearance.SOPT"
