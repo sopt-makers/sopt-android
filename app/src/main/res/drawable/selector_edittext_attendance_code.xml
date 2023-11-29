@@ -23,7 +23,7 @@
     SOFTWARE.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/rectangle_border_gray40_radius_8" android:state_focused="true" />
-    <item android:drawable="@drawable/rectangle_border_gray40_radius_8" android:state_enabled="false" />
-    <item android:drawable="@drawable/rectangle_black40_radius_8" />
+    <item android:drawable="@drawable/rectangle_gray600_radius_8" android:state_focused="true" />
+    <item android:drawable="@drawable/rectangle_gray600_radius_8" android:state_enabled="false" />
+    <item android:drawable="@drawable/rectangle_gray700_radius_8" />
 </selector>
