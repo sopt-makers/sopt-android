@@ -28,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    tools:background="?colorSurface">
+    tools:background="@color/mds_gray_800">
 
     <TextView
         android:id="@+id/text_attendance_history_log_header"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:text="@string/header_attendance_log"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="?colorOnSurfaceInverse"
+        android:textColor="@color/mds_gray_300"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
