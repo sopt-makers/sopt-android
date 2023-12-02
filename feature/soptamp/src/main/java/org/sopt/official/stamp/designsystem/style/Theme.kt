@@ -54,6 +54,7 @@ class SoptColors(
     error100: Color,
     access300: Color,
     onSurface: Color,
+    onSurface95: Color,
     onSurface90: Color,
     onSurface80: Color,
     onSurface70: Color,
@@ -100,6 +101,8 @@ class SoptColors(
         private set
     var onSurface by mutableStateOf(onSurface)
         private set
+    var onSurface95 by mutableStateOf(onSurface95)
+        private set
     var onSurface90 by mutableStateOf(onSurface90)
         private set
     var onSurface80 by mutableStateOf(onSurface80)
@@ -140,6 +143,7 @@ class SoptColors(
         error100 = error100,
         access300 = access300,
         onSurface,
+        onSurface95,
         onSurface90,
         onSurface80,
         onSurface70,
@@ -169,6 +173,7 @@ class SoptColors(
         error100 = other.error100
         access300 = other.access300
         onSurface = other.onSurface
+        onSurface95 = other.onSurface95
         onSurface90 = other.onSurface90
         onSurface80 = other.onSurface80
         onSurface70 = other.onSurface70
@@ -201,6 +206,7 @@ fun soptLightColors(
     error100: Color = Red100,
     access300: Color = Access300,
     onSurface: Color = Black,
+    onSurface95: Color = MdsGray950,
     onSurface90: Color = Gray900,
     onSurface80: Color = Gray800,
     onSurface70: Color = Gray700,
@@ -229,6 +235,7 @@ fun soptLightColors(
     error100,
     access300,
     onSurface,
+    onSurface95,
     onSurface90,
     onSurface80,
     onSurface70,

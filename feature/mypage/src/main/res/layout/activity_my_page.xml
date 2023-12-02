@@ -51,7 +51,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle_radius_10"
-                android:backgroundTint="@color/black_80"
+                android:backgroundTint="@color/mds_gray_900"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="8dp"
@@ -63,7 +63,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mypage_service_info_title"
                     android:textAppearance="?textAppearanceCaption"
-                    android:textColor="@color/gray_80"
+                    android:textColor="@color/mds_gray_400"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,7 +142,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle_radius_10"
-                android:backgroundTint="@color/black_80"
+                android:backgroundTint="@color/mds_gray_900"
                 android:orientation="vertical"
                 android:paddingVertical="16dp"
                 android:paddingStart="16dp"
@@ -154,7 +154,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mypage_notification_setting"
                     android:textAppearance="?textAppearanceCaption"
-                    android:textColor="@color/gray_80"
+                    android:textColor="@color/mds_gray_400"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -199,7 +199,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle_radius_10"
-                android:backgroundTint="@color/black_80"
+                android:backgroundTint="@color/mds_gray_900"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="8dp"
@@ -211,7 +211,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mypage_soptamp_setting_title"
                     android:textAppearance="?textAppearanceCaption"
-                    android:textColor="@color/gray_80"
+                    android:textColor="@color/mds_gray_400"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -291,7 +291,7 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="20dp"
                 android:background="@drawable/rectangle_radius_10"
-                android:backgroundTint="@color/black_80"
+                android:backgroundTint="@color/mds_gray_900"
                 android:paddingStart="16dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="8dp"
@@ -303,7 +303,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/mypage_etc_title"
                     android:textAppearance="?textAppearanceCaption"
-                    android:textColor="@color/gray_80"
+                    android:textColor="@color/mds_gray_400"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

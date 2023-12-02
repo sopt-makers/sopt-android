@@ -28,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/rectangle_radius_15"
-    android:backgroundTint="@color/black_60"
+    android:backgroundTint="@color/mds_gray_800"
     android:paddingStart="16dp"
     android:paddingBottom="12dp">
 
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:textColor="@color/white_100"
+        android:textColor="@color/white"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/description"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +58,7 @@
         style="@style/TextAppearance.SOPT.BodyLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray_30"
+        android:textColor="@color/mds_gray_100"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

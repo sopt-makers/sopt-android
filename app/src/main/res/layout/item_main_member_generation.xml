@@ -35,9 +35,9 @@
         android:layout_height="23dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_40"
+        android:backgroundTint="@color/mds_gray_600"
         android:gravity="center"
-        android:textColor="@color/white_100"
+        android:textColor="@color/white"
         tools:text="31" />
 
     <TextView
@@ -47,9 +47,9 @@
         android:layout_height="23dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_40_70"
+        android:backgroundTint="@color/mds_gray_700"
         android:gravity="center"
-        android:textColor="@color/white_100_70"
+        android:textColor="@color/mds_gray_10"
         tools:text="30" />
 
     <TextView
@@ -59,9 +59,9 @@
         android:layout_height="23dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_40_50"
+        android:backgroundTint="@color/mds_gray_800"
         android:gravity="center"
-        android:textColor="@color/white_100_50"
+        android:textColor="@color/mds_gray_100 "
         tools:text="29" />
 
     <TextView
@@ -71,9 +71,9 @@
         android:layout_height="23dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_40_30"
+        android:backgroundTint="@color/mds_gray_800"
         android:gravity="center"
-        android:textColor="@color/white_100_30"
+        android:textColor="@color/mds_gray_200"
         tools:text="28" />
 
     <TextView
@@ -83,9 +83,9 @@
         android:layout_height="23dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_40_20"
+        android:backgroundTint="@color/mds_gray_800"
         android:gravity="center"
-        android:textColor="@color/white_100_20"
+        android:textColor="@color/mds_gray_300"
         tools:text="31" />
 
     <TextView
@@ -94,8 +94,8 @@
         android:layout_width="23dp"
         android:layout_height="23dp"
         android:background="@drawable/oval"
-        android:backgroundTint="@color/black_80"
+        android:backgroundTint="@color/mds_gray_800"
         android:gravity="center"
-        android:textColor="@color/white_100"
+        android:textColor="@color/white"
         tools:text="+1" />
 </LinearLayout>
