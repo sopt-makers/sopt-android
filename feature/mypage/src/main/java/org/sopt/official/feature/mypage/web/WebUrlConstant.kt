@@ -30,9 +30,9 @@ object WebUrlConstant {
     val SOPT_PROJECT_URL = toSoptUrl("project")
     val SOPT_FAQ_URL = toSoptUrl("FAQ")
 
-    val PLAYGROUNG_MEMBER_URL = toPlaygroundUrl("members")
-    val PLAYGROUNG_PROJECT_URL = toPlaygroundUrl("projects")
-    val PLAYGROUNG_CREW_URL = toPlaygroundUrl("group")
+    val PLAYGROUND_MEMBER_URL = toPlaygroundUrl("members")
+    val PLAYGROUND_PROJECT_URL = toPlaygroundUrl("projects")
+    val PLAYGROUND_CREW_URL = toPlaygroundUrl("group")
 
     const val SOPT_INSTAGRAM = "https://www.instagram.com/sopt_official/"
     const val SOPT_OFFICIAL_YOUTUBE = "https://www.youtube.com/@SOPTMEDIA"
@@ -43,7 +43,7 @@ object WebUrlConstant {
     const val OPINION_GOOGLE_FORM = "https://forms.gle/mB59JD4F1FpKiXBAA"
 
     private const val SOPT_BASE_URL = "https://sopt.org"
-    private const val PLAYGROUNG_BASE_URL = "https://playground.sopt.org"
+    const val PLAYGROUND_BASE_URL = "https://playground.sopt.org"
 
     private fun toSoptUrl(url: String): String =
         if (url.isNotEmpty()) {
@@ -54,8 +54,8 @@ object WebUrlConstant {
 
     private fun toPlaygroundUrl(url: String): String =
         if (url.isNotEmpty()) {
-            "$PLAYGROUNG_BASE_URL/$url"
+            "$PLAYGROUND_BASE_URL/$url"
         } else {
-            PLAYGROUNG_BASE_URL
+            PLAYGROUND_BASE_URL
         }
 }
