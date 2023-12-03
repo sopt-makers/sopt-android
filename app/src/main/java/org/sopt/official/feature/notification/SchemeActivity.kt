@@ -30,14 +30,9 @@ class SchemeActivity : AppCompatActivity() {
 
     private fun handleDeepLink() {
         val link = args?.link ?: ""
-        val linkIntent = when (
-            link.contains("http://")
-            || link.contains("https://")
-        ) {
-            true -> checkWebLinkExpiration(link)
-            false -> checkDeepLinkExistence(link)
-
-        }
+        val linkIntent = if (link.contains("http://") || link.contains("https://")) {
+            checkWebLinkExpiration(link)
+        } else checkDeepLinkExistence(link)
 
         when (!isTaskRoot) {
             true -> startActivity(linkIntent)
