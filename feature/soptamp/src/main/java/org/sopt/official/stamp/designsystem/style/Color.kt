@@ -65,4 +65,3 @@ val Access300 = Color(0xFF784AB1)
 
 // MDS
 val MdsGray950 = Color(0xFF0F1012)
-
