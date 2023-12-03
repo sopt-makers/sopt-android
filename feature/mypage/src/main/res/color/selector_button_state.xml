@@ -23,6 +23,6 @@
     SOFTWARE.
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="@color/white_100" android:state_enabled="true" />
+    <item android:color="@color/mds_gray_10" android:state_enabled="true" />
     <item android:color="@color/black_40" />
 </selector>

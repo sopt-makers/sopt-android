@@ -63,7 +63,7 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="@color/white_100"
+        android:textColor="@color/mds_gray_10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layout_app_bar" />
