@@ -61,6 +61,12 @@ class NotificationDetailActivity : AppCompatActivity() {
         initClickListeners()
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        val newArgs = intent?.getSerializableExtra("args") as StartArgs
+        viewModel.getNotificationDetail(newArgs.notificationId)
+    }
+
     private fun initStateFlowValues() {
         viewModel.apply {
             notificationDetail.flowWithLifecycle(lifecycle)
