@@ -89,10 +89,7 @@ enum class DeepLinkType(
         ): Intent {
             return userStatus.setIntent(
                 context,
-                AttendanceActivity.getIntent(
-                    context,
-                    AttendanceActivity.StartArgs(true)
-                )
+                Intent(context, AttendanceActivity::class.java)
             )
         }
     },
@@ -167,6 +164,7 @@ enum class DeepLinkType(
                 false -> intent
             }
         }
+
         fun getHomeIntent(
             context: Context,
             userStatus: UserStatus,
