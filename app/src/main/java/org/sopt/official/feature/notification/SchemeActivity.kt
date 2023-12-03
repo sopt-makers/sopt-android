@@ -14,6 +14,7 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.network.persistence.SoptDataStore
+import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -29,10 +30,16 @@ class SchemeActivity : AppCompatActivity() {
     }
 
     private fun handleDeepLink() {
-        val link = args?.link ?: ""
-        val linkIntent = if (link.contains("http://") || link.contains("https://")) {
-            checkWebLinkExpiration(link)
-        } else checkDeepLinkExistence(link)
+        val link = args?.link
+        val linkIntent = when (link.isNullOrBlank()) {
+            true -> NotificationDetailActivity.getIntent(
+                this,
+                NotificationDetailActivity.StartArgs(
+                    notificationId = args?.notificationId ?: ""
+                )
+            )
+            false -> checkLinkExpiration(link)
+        }
 
         when (!isTaskRoot) {
             true -> startActivity(linkIntent)
@@ -46,29 +53,29 @@ class SchemeActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun checkWebLinkExpiration(link: String): Intent {
-        return when (link.toUri().getQueryParameter("expiredAt")?.isExpiredDate()) {
-            true -> DeepLinkType.getHomeIntent(
-                this,
-                UserStatus.of(dataStore.userStatus),
-                DeepLinkType.EXPIRED
-            )
-            else -> Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        }
-    }
-
-    private fun checkDeepLinkExistence(link: String?): Intent {
-        return when (link.isNullOrBlank()) {
-            true -> NotificationDetailActivity.getIntent(
-                this,
-                NotificationDetailActivity.StartArgs(
-                    notificationId = args?.notificationId ?: ""
+    private fun checkLinkExpiration(link: String): Intent {
+        return try {
+            when (link.toUri().getQueryParameter("expiredAt")?.isExpiredDate()) {
+                true -> DeepLinkType.getHomeIntent(
+                    this,
+                    UserStatus.of(dataStore.userStatus),
+                    DeepLinkType.EXPIRED
                 )
-            )
-            false -> DeepLinkType.invoke(link).getIntent(
+                else -> when (link.contains("http://") || link.contains("https://")) {
+                    true -> Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                    false -> DeepLinkType.invoke(link).getIntent(
+                        this,
+                        UserStatus.of(dataStore.userStatus),
+                        link
+                    )
+                }
+            }
+        } catch (exception: Exception) {
+            Timber.e(exception)
+            DeepLinkType.getHomeIntent(
                 this,
                 UserStatus.of(dataStore.userStatus),
-                link
+                DeepLinkType.UNKNOWN
             )
         }
     }
