@@ -63,7 +63,7 @@
         android:paddingVertical="16dp"
         android:hint="설정된 한 마디가 없습니다."
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="@color/white_100"
+        android:textColor="@color/mds_gray_10"
         android:textColorHint="@color/gray_100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

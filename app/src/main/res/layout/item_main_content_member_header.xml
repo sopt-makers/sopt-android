@@ -31,6 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/main_content_header"
-        android:textColor="@color/white_100"
+        android:textColor="@color/mds_gray_10"
         android:textStyle="bold" />
 </LinearLayout>

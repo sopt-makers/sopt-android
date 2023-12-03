@@ -83,7 +83,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="16dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/white_100"
+        android:backgroundTint="@color/mds_gray_10"
         android:textColor="@color/black_100"
         android:paddingVertical="16dp"
         android:paddingHorizontal="20dp"

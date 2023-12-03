@@ -28,16 +28,16 @@
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_100</item>
         <item name="colorPrimaryVariant">@color/purple_40</item>
-        <item name="colorOnPrimary">@color/real_white</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/purple_dim_100</item>
         <item name="colorSecondaryVariant">@color/teal_700</item>
-        <item name="colorOnSecondary">@color/white_100</item>
+        <item name="colorOnSecondary">@color/mds_gray_10</item>
         <!-- Neutral Key Color -->
         <item name="android:colorBackground">@color/black_100</item>
-        <item name="colorOnBackground">@color/white_100</item>
+        <item name="colorOnBackground">@color/mds_gray_10</item>
         <item name="colorSurface">@color/black_60</item>
-        <item name="colorOnSurface">@color/white_100</item>
+        <item name="colorOnSurface">@color/mds_gray_10</item>
         <item name="colorSurfaceVariant">@color/black_40</item>
         <item name="colorOnSurfaceInverse">@color/gray_60</item>
         <item name="colorOnSurfaceVariant">@color/gray_20</item>

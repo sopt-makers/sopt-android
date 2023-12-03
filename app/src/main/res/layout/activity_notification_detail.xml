@@ -95,7 +95,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="34dp"
         android:background="@drawable/rectangle_radius_10"
-        android:backgroundTint="@color/white_100"
+        android:backgroundTint="@color/mds_gray_10"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingVertical="16dp"

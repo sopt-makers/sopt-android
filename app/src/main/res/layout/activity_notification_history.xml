@@ -44,7 +44,7 @@
         android:paddingHorizontal="4dp"
         android:paddingVertical="8dp"
         android:text="@string/toolbar_notification_read_all"
-        android:textColor="@color/orange_100"
+        android:textColor="@color/mds_secondary"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@id/include_appBarBackArrow"
         app:layout_constraintEnd_toEndOf="@id/include_appBarBackArrow"

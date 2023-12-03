@@ -67,7 +67,7 @@
             android:layout_height="wrap_content"
             android:padding="20dp"
             android:text="SOPT 회원이 아니에요"
-            android:textColor="@color/white_100"
+            android:textColor="@color/mds_gray_10"
             android:textFontWeight="600"
             android:textSize="12dp"
             app:layout_constraintEnd_toEndOf="@+id/btn_sopt_login"
