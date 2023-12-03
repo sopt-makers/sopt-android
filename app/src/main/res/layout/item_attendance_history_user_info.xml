@@ -28,14 +28,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/transparent"
-    tools:background="?colorSurface">
+    tools:background="@color/mds_gray_800">
 
     <TextView
         android:id="@+id/text_user_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="?colorOnSurfaceInverse"
+        android:textColor="@color/mds_gray_300"
         android:textSize="14sp"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="32기 안드로이드파트 김솝트" />
@@ -48,7 +48,7 @@
         android:layout_marginEnd="10dp"
         android:bufferType="spannable"
         android:textAppearance="?textAppearanceBodyLarge"
-        android:textColor="?colorOnSurface"
+        android:textColor="@color/mds_gray_10"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@id/image_attendance_point_info"
         app:layout_constraintStart_toStartOf="parent"

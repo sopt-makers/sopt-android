@@ -46,23 +46,23 @@ class LogViewHolder(private val binding: ItemAttendanceHistoryLogBinding) : Recy
             textAttendanceState.text = log.attendanceState
             when (log.attendanceState) {
                 AttendanceStatus.ATTENDANCE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_green)
-                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_green))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.mds_green_900)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.mds_information))
                 }
 
                 AttendanceStatus.TARDY.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_yellow)
-                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_yellow))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.mds_yellow_900)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.mds_attention))
                 }
 
                 AttendanceStatus.ABSENT.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.sopt_red)
-                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.on_sopt_red))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.mds_red_800)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.mds_red_300))
                 }
 
                 AttendanceStatus.PARTICIPATE.statusKorean -> {
-                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.gray_30)
-                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.gray_100))
+                    textAttendanceState.backgroundTintList = ContextCompat.getColorStateList(root.context, SoptColors.mds_gray_700)
+                    textAttendanceState.setTextColor(root.context.getColor(SoptColors.mds_gray_200))
                 }
 
                 else -> {

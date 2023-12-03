@@ -67,7 +67,7 @@ class AttendanceCodeDialog : DialogFragment() {
         val inset = InsetDrawable(back, 24, 0, 24, 0)
         dialog?.window?.run {
             setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            setDimAmount(0.70f)
+            setDimAmount(0.85f)
             setBackgroundDrawable(inset)
         }
     }

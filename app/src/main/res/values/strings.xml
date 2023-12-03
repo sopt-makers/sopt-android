@@ -58,6 +58,8 @@
     <string name="main_active_large_block_attendance_description">아 맞다, 출석!</string>
     <string name="main_active_small_block_crew">모임/스터디</string>
     <string name="main_active_small_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_active_small_block_playground">Playground</string>
+    <string name="main_active_small_block_playground_description">지금 Hot한 글은?</string>
     <string name="main_active_small_block_member">멤버</string>
     <string name="main_active_small_block_member_description">궁금한 사람 찾아보기</string>
     <string name="main_active_small_block_project">프로젝트</string>
@@ -66,8 +68,10 @@
     <string name="main_active_small_block_official_page_description">솝트 홈페이지 바로보기</string>
 
     <!-- 비활동 -->
-    <string name="main_inactive_large_block_crew">모임/스터디</string>
-    <string name="main_inactive_large_block_crew_description">지금 열린 모임은?</string>
+    <string name="main_inactive_large_block_playground">모임/스터디</string>
+    <string name="main_inactive_large_block_playground_description">지금 열린 모임은?</string>
+    <string name="main_inactive_small_block_crew">모임/스터디</string>
+    <string name="main_inactive_small_block_crew_description">지금 열린 모임은?</string>
     <string name="main_inactive_small_block_member">멤버</string>
     <string name="main_inactive_small_block_member_description">궁금한 사람 찾아보기</string>
     <string name="main_inactive_small_block_project">프로젝트</string>

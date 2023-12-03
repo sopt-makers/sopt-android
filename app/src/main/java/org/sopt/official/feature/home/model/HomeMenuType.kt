@@ -77,21 +77,28 @@ enum class HomeMenuType(
     SOPT_CREW_ACTIVE_URL(
         R.string.main_active_small_block_crew,
         R.string.main_active_small_block_crew_description,
-        WebUrlConstant.PLAYGROUNG_CREW_URL,
+        WebUrlConstant.PLAYGROUND_CREW_URL,
         R.drawable.ic_crew_white100,
         "group"
+    ),
+    SOPT_PLAYGROUND_ACTIVE_URL(
+        R.string.main_active_small_block_playground,
+        R.string.main_active_small_block_playground_description,
+        WebUrlConstant.PLAYGROUND_BASE_URL,
+        R.drawable.ic_crew_white100,
+        clickEventName = "playground_community"
     ),
     SOPT_MEMBER_ACTIVE_URL(
         R.string.main_active_small_block_member,
         R.string.main_active_small_block_member_description,
-        WebUrlConstant.PLAYGROUNG_MEMBER_URL,
+        WebUrlConstant.PLAYGROUND_MEMBER_URL,
         R.drawable.ic_member_white100,
         "member"
     ),
     SOPT_PROJECT_ACTIVE_URL(
         R.string.main_active_small_block_project,
         R.string.main_active_small_block_project_description,
-        WebUrlConstant.PLAYGROUNG_PROJECT_URL,
+        WebUrlConstant.PLAYGROUND_PROJECT_URL,
         R.drawable.ic_project,
         "project"
     ),
@@ -104,17 +111,24 @@ enum class HomeMenuType(
     ),
 
     // 비활동
+    SOPT_CREW_INACTIVE_URL(
+        R.string.main_inactive_small_block_crew,
+        R.string.main_inactive_small_block_crew_description,
+        WebUrlConstant.PLAYGROUND_CREW_URL,
+        R.drawable.ic_crew_white100,
+        "group"
+    ),
     SOPT_MEMBER_INACTIVE_URL(
         R.string.main_inactive_small_block_member,
         R.string.main_inactive_small_block_member_description,
-        WebUrlConstant.PLAYGROUNG_MEMBER_URL,
+        WebUrlConstant.PLAYGROUND_MEMBER_URL,
         R.drawable.ic_member_white100,
         "member"
     ),
     SOPT_PROJECT_INACTIVE_URL(
         R.string.main_inactive_small_block_project,
         R.string.main_inactive_small_block_project_description,
-        WebUrlConstant.PLAYGROUNG_PROJECT_URL,
+        WebUrlConstant.PLAYGROUND_PROJECT_URL,
         R.drawable.ic_project,
         "project"
     ),

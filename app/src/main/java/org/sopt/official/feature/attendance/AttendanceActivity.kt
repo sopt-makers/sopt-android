@@ -95,7 +95,7 @@ class AttendanceActivity : AppCompatActivity() {
         viewModel.isFirstProgressBarActive.observe(this) {
             binding.ivAttendanceProgress1Check.isInvisible = !it
             binding.tvAttendanceProgress1.setTextColor(
-                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
+                if (it) colorOf(SoptColors.mds_gray_10) else colorOf(SoptColors.mds_gray_500)
             )
         }
         viewModel.isSecondProgressBarAttendance.observe(this) {
@@ -106,7 +106,7 @@ class AttendanceActivity : AppCompatActivity() {
         viewModel.isSecondProgressBarActive.observe(this) {
             binding.ivAttendanceProgress2Check.isInvisible = !it
             binding.tvAttendanceProgress2.setTextColor(
-                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
+                if (it) colorOf(SoptColors.mds_gray_10) else colorOf(SoptColors.mds_gray_500)
             )
         }
         viewModel.isThirdProgressBarVisible.observe(this) {
@@ -122,7 +122,7 @@ class AttendanceActivity : AppCompatActivity() {
                 if (it) R.string.attendance_progress_third_absent else R.string.attendance_progress_before
             )
             binding.tvAttendanceProgress3Attendance.setTextColor(
-                if (it) colorOf(SoptColors.white_100) else colorOf(SoptColors.gray_100)
+                if (it) colorOf(SoptColors.mds_gray_10) else colorOf(SoptColors.mds_gray_500)
             )
         }
         viewModel.isThirdProgressBarBeforeAttendance.observe(this) {
