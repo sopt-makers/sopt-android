@@ -35,6 +35,7 @@ plugins {
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
+    alias(libs.plugins.kotlin.android)
 }
 
 val properties = Properties().apply {
@@ -147,6 +148,9 @@ dependencies {
 
     implementation(libs.compose.destination.core)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.constraintlayout)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
