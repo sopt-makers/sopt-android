@@ -2,9 +2,9 @@ package org.sopt.official.feature.notification.enums
 
 import android.content.Context
 import android.content.Intent
-import androidx.core.net.toUri
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
@@ -45,7 +45,7 @@ enum class DeepLinkType(
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            val notificationId = deepLink.toUri().getQueryParameter("id") ?: ""
+            val notificationId = deepLink.extractQueryParameter("id")
             return userStatus.setIntent(
                 context,
                 NotificationDetailActivity.getIntent(
@@ -186,8 +186,8 @@ enum class DeepLinkType(
         operator fun invoke(deepLink: String): DeepLinkType {
             return try {
                 val link = deepLink.split("?")[0]
-                val expiredAt = deepLink.toUri().getQueryParameter("expiredAt")
-                when (expiredAt?.isExpiredDate()) {
+                val expiredAt = deepLink.extractQueryParameter("expiredAt")
+                when (expiredAt.isExpiredDate()) {
                     true -> EXPIRED
                     else -> entries.find { it.link == link } ?: UNKNOWN
                 }
