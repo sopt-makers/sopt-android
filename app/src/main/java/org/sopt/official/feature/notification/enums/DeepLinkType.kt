@@ -13,6 +13,7 @@ import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationDetailActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.stamp.SoptampActivity
+import timber.log.Timber
 
 enum class DeepLinkType(
     val link: String
@@ -183,11 +184,16 @@ enum class DeepLinkType(
         }
 
         operator fun invoke(deepLink: String): DeepLinkType {
-            val link = deepLink.split("?")[0]
-            val expiredAt = deepLink.toUri().getQueryParameter("expiredAt")
-            return when (expiredAt?.isExpiredDate()) {
-                true -> EXPIRED
-                else -> entries.find { it.link == link } ?: UNKNOWN
+            return try {
+                val link = deepLink.split("?")[0]
+                val expiredAt = deepLink.toUri().getQueryParameter("expiredAt")
+                when (expiredAt?.isExpiredDate()) {
+                    true -> EXPIRED
+                    else -> entries.find { it.link == link } ?: UNKNOWN
+                }
+            } catch (exception: Exception) {
+                Timber.e(exception)
+                UNKNOWN
             }
         }
     }
