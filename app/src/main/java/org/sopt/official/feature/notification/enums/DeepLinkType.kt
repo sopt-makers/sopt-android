@@ -155,7 +155,7 @@ enum class DeepLinkType(
     ): Intent
 
     companion object {
-        fun UserStatus.setIntent(
+        private fun UserStatus.setIntent(
             context: Context,
             intent: Intent,
         ): Intent {
