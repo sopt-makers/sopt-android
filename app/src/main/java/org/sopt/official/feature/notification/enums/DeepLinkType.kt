@@ -5,7 +5,6 @@ import android.content.Intent
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.extractQueryParameter
-import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.home.HomeActivity
@@ -186,11 +185,7 @@ enum class DeepLinkType(
         operator fun invoke(deepLink: String): DeepLinkType {
             return try {
                 val link = deepLink.split("?")[0]
-                val expiredAt = deepLink.extractQueryParameter("expiredAt")
-                when (expiredAt.isExpiredDate()) {
-                    true -> EXPIRED
-                    else -> entries.find { it.link == link } ?: UNKNOWN
-                }
+                entries.find { it.link == link } ?: UNKNOWN
             } catch (exception: Exception) {
                 Timber.e(exception)
                 UNKNOWN
