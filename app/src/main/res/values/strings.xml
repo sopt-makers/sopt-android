@@ -26,7 +26,7 @@
     <string name="app_name">SOPT</string>
     <string name="default_channel_id">SOPT_MESSAGE</string>
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
-    <string name="soptamp">SOPT AMP!</string>
+    <string name="soptamp">SOPT-AMP!</string>
 
     <!--    메인홈    -->
     <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>

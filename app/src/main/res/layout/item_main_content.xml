@@ -27,7 +27,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rectangle_radius_15"
-    android:backgroundTint="@color/black_60"
+    android:backgroundTint="@color/mds_gray_800"
     android:gravity="center"
     android:orientation="vertical"
     android:paddingStart="9dp"
@@ -39,7 +39,7 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white_100"
+        android:backgroundTint="@color/white"
         android:src="@drawable/img_soptamp" />
 
     <TextView
@@ -49,5 +49,5 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/soptamp"
-        android:textColor="@color/white_100" />
+        android:textColor="@color/mds_gray_10" />
 </LinearLayout>
