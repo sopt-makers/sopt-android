@@ -97,10 +97,7 @@ class AttendanceCodeDialog : DialogFragment() {
         viewModel.initDialogTitle(dialogTitle)
         viewModel.title
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach {
-                if (it.isEmpty()) return@onEach
-                binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기"
-            }
+            .onEach { binding.tvAttendanceCodeDialogTitle.text = "${it.substring(0, 5)}하기" }
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -213,7 +210,7 @@ class AttendanceCodeDialog : DialogFragment() {
             btnAttendanceCodeDialog.setOnClickListener {
                 viewModel.checkAttendanceCode(
                     "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}" +
-                        "${etAttendanceCode4.text}${etAttendanceCode5.text}"
+                            "${etAttendanceCode4.text}${etAttendanceCode5.text}"
                 )
             }
         }
