@@ -171,16 +171,16 @@ enum class DeepLinkType(
             userStatus: UserStatus,
             deepLinkType: DeepLinkType? = null
         ): Intent {
-            return when (userStatus == UserStatus.UNAUTHENTICATED) {
-                true -> AuthActivity.newInstance(context)
-                false -> HomeActivity.getIntent(
+            return userStatus.setIntent(
+                context,
+                HomeActivity.getIntent(
                     context,
                     HomeActivity.StartArgs(
                         userStatus = userStatus,
                         deepLinkType = deepLinkType
                     )
                 )
-            }
+            )
         }
 
         operator fun invoke(deepLink: String): DeepLinkType {
