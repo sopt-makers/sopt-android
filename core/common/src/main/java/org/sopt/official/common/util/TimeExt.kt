@@ -39,10 +39,15 @@ fun Instant.Companion.systemNow(): Instant = Clock.System.now()
 fun Instant.toDefaultLocalDate(): LocalDate = toLocalDateTime(TimeZone.currentSystemDefault()).date
 
 fun String.isExpiredDate(): Boolean {
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREA)
-    dateFormat.timeZone = android.icu.util.TimeZone.getTimeZone("Asia/Seoul")
+    return when (this.isBlank()) {
+        true -> false
+        false -> {
+            val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.KOREA)
+            dateFormat.timeZone = android.icu.util.TimeZone.getTimeZone("Asia/Seoul")
 
-    val currentDate = Date()
-    val receivedDate = dateFormat.parse(this)
-    return currentDate.time > receivedDate.time
+            val currentDate = Date()
+            val receivedDate = dateFormat.parse(this)
+            return currentDate.time > receivedDate.time
+        }
+    }
 }

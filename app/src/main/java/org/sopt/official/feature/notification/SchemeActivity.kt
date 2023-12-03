@@ -6,9 +6,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.net.toUri
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.home.HomeActivity
@@ -55,7 +55,8 @@ class SchemeActivity : AppCompatActivity() {
 
     private fun checkLinkExpiration(link: String): Intent {
         return try {
-            when (link.toUri().getQueryParameter("expiredAt")?.isExpiredDate()) {
+            val expiredAt = link.extractQueryParameter("expiredAt")
+            when (expiredAt.isExpiredDate()) {
                 true -> DeepLinkType.getHomeIntent(
                     this,
                     UserStatus.of(dataStore.userStatus),
