@@ -37,7 +37,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import org.sopt.official.R
 import org.sopt.official.databinding.ItemAttendanceHistoryUserInfoBinding
 import org.sopt.official.domain.entity.attendance.AttendanceUserInfo
 import org.sopt.official.type.SoptColors
@@ -54,7 +53,7 @@ class UserInfoViewHolder(private val binding: ItemAttendanceHistoryUserInfoBindi
             textUserAttendancePoint.text = "현재 출석점수는 ${userInfo.attendancePoint}점 입니다!"
             (textUserAttendancePoint.text as Spannable).run {
                 setSpan(
-                    (ForegroundColorSpan(ContextCompat.getColor(textUserAttendancePoint.context, SoptColors.orange_100))),
+                    (ForegroundColorSpan(ContextCompat.getColor(textUserAttendancePoint.context, SoptColors.mds_secondary))),
                     9,
                     9 + "${userInfo.attendancePoint}".length + 1,
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE

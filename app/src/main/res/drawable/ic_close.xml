@@ -32,13 +32,13 @@
       android:strokeLineJoin="round"
       android:strokeWidth="2"
       android:fillColor="#00000000"
-      android:strokeColor="#FCFCFC"
+      android:strokeColor="@color/mds_gray_300"
       android:strokeLineCap="round"/>
   <path
       android:pathData="M6,6L18,18"
       android:strokeLineJoin="round"
       android:strokeWidth="2"
       android:fillColor="#00000000"
-      android:strokeColor="#FCFCFC"
+      android:strokeColor="@color/mds_gray_300"
       android:strokeLineCap="round"/>
 </vector>

@@ -77,4 +77,33 @@
     <color name="white_100_50">#80FFFFFF</color>
     <color name="white_100_30">#4DFFFFFF</color>
     <color name="white_100_20">#33FFFFFF</color>
+
+    <!-- MDS Main Color -->
+    <color name="white">#FFFFFF</color>
+
+    <!-- MDS Semantic Color -->
+    <color name="mds_error">#F04251</color>
+    <color name="mds_secondary">#F77234</color>
+    <color name="mds_information">#16BF81</color>
+    <color name="mds_attention">#FFC234</color>
+
+    <!-- MDS GrayScale -->
+    <color name="mds_gray_10">#FCFCFC</color>
+    <color name="mds_gray_50">#E4E4E5</color>
+    <color name="mds_gray_100">#C3C3C6</color>
+    <color name="mds_gray_200">#9D9DA4</color>
+    <color name="mds_gray_300">#808087</color>
+    <color name="mds_gray_400">#66666D</color>
+    <color name="mds_gray_500">#515159</color>
+    <color name="mds_gray_600">#3F3F47</color>
+    <color name="mds_gray_700">#2E2E35</color>
+    <color name="mds_gray_800">#202025</color>
+    <color name="mds_gray_950">#0F1012</color>
+    <!-- MDS Red -->
+    <color name="mds_red_300">#FA616D</color>
+    <color name="mds_red_800">#562025</color>
+    <!-- MDS Yellow -->
+    <color name="mds_yellow_900">#534123</color>
+    <!-- MDS Green -->
+    <color name="mds_green_900">#15372B</color>
 </resources>
