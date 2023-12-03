@@ -44,7 +44,7 @@ enum class DeepLinkType(
             userStatus: UserStatus,
             deepLink: String,
         ): Intent {
-            val notificationId = deepLink.toUri().getQueryParameter("id") ?: ""
+            val notificationId = deepLink.toUri().getQueryParameter("notificationId") ?: ""
             return userStatus.setIntent(
                 context,
                 NotificationDetailActivity.getIntent(
