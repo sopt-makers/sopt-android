@@ -99,11 +99,14 @@
     <color name="mds_gray_700">#2E2E35</color>
     <color name="mds_gray_800">#202025</color>
     <color name="mds_gray_950">#0F1012</color>
-    <!-- MDS Red -->
+
+    <!-- MDS RedScale -->
     <color name="mds_red_300">#FA616D</color>
     <color name="mds_red_800">#562025</color>
-    <!-- MDS Yellow -->
+
+    <!-- MDS YellowScale -->
     <color name="mds_yellow_900">#534123</color>
-    <!-- MDS Green -->
+
+    <!-- MDS GreenScale -->
     <color name="mds_green_900">#15372B</color>
 </resources>

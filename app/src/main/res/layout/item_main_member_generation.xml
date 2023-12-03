@@ -61,7 +61,7 @@
         android:background="@drawable/oval"
         android:backgroundTint="@color/mds_gray_800"
         android:gravity="center"
-        android:textColor="@color/mds_gray_100 "
+        android:textColor="@color/mds_gray_100"
         tools:text="29" />
 
     <TextView
