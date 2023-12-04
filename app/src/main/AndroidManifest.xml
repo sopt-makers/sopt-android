@@ -88,22 +88,22 @@
             android:name=".feature.attendance.AttendanceActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".stamp.SoptampActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.home.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.mypage.mypage.MyPageActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.mypage.signOut.SignOutActivity"
             android:exported="false"
@@ -134,16 +134,16 @@
         <activity
             android:name=".feature.notification.NotificationHistoryActivity"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.notification.NotificationDetailActivity"
             android:exported="false"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTop" />
 
         <activity
             android:name=".feature.notification.SchemeActivity"
             android:exported="true"
-            android:launchMode="singleTask">
+            android:launchMode="singleTop">
         </activity>
 
         <service
