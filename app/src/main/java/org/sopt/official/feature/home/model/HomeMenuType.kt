@@ -85,7 +85,7 @@ enum class HomeMenuType(
         R.string.main_active_small_block_playground,
         R.string.main_active_small_block_playground_description,
         WebUrlConstant.PLAYGROUND_BASE_URL,
-        R.drawable.ic_crew_white100,
+        R.drawable.ic_member_white100,
         clickEventName = "playground_community"
     ),
     SOPT_MEMBER_ACTIVE_URL(
