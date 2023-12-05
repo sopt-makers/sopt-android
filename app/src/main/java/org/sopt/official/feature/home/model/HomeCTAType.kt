@@ -54,7 +54,7 @@ enum class HomeCTAType(
         R.string.main_inactive_large_block_playground,
         R.string.main_inactive_large_block_playground_description,
         WebUrlConstant.PLAYGROUND_BASE_URL,
-        R.drawable.ic_playground_orange,
+        R.drawable.ic_member_orange,
         "playground_community"
     ),
 }
