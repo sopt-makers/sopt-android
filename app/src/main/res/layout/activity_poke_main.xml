@@ -436,6 +436,48 @@
                         app:layout_constraintStart_toStartOf="@id/tv_friend_name2_of_my_friend"
                         app:layout_constraintTop_toBottomOf="@id/tv_friend_name2_of_my_friend"
                         tools:text="31기 기획" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_friend_box1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:constraint_referenced_ids="img_friend_profile1_of_my_friend, img_friend_poke1_of_my_friend, tv_friend_name1_of_my_friend, tv_friend_generation1_of_my_friend, img_friend_profile2_of_my_friend, img_friend_poke2_of_my_friend, tv_friend_name2_of_my_friend, tv_friend_generation2_of_my_friend" />
+                    
+                    <ImageView
+                        android:id="@+id/img_empty_view1_of_my_friend"
+                        android:layout_width="64dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/ic_empty_poke"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile1"/>
+
+                    <TextView
+                        android:id="@+id/tv_empty_view1_of_my_friend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:layout_marginTop="14dp"
+                        android:textSize="16dp"
+                        android:textFontWeight="600"
+                        android:fontFamily="@font/suit_bold"
+                        android:textColor="@color/mds_gray_300"
+                        android:layout_marginBottom="36dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_empty_view1_of_my_friend"
+                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_empty_box1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="img_empty_view1_of_my_friend, tv_empty_view1_of_my_friend"/>
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- BOX 2 -->
@@ -448,7 +490,7 @@
                     android:background="@drawable/rectangle_gray900_radius_12">
 
                     <ImageView
-                        android:id="@+id/img_my_friend_profile3"
+                        android:id="@+id/img_my_friend_profile2"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_marginStart="12dp"
@@ -466,9 +508,9 @@
                         android:textColor="@color/mds_gray_30"
                         android:textFontWeight="600"
                         android:textSize="14dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/img_my_friend_profile3"
-                        app:layout_constraintStart_toEndOf="@+id/img_my_friend_profile3"
-                        app:layout_constraintTop_toTopOf="@+id/img_my_friend_profile3"
+                        app:layout_constraintBottom_toBottomOf="@+id/img_my_friend_profile2"
+                        app:layout_constraintStart_toEndOf="@+id/img_my_friend_profile2"
+                        app:layout_constraintTop_toTopOf="@+id/img_my_friend_profile2"
                         tools:text="심유나의 친구에요" />
 
                     <ImageView
@@ -479,7 +521,7 @@
                         android:layout_marginTop="4dp"
                         android:src="@drawable/oval_border_gray400"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile3" />
+                        app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile2" />
 
                     <ImageView
                         android:id="@+id/img_friend_poke3_of_my_friend"
@@ -529,7 +571,7 @@
                         android:layout_marginEnd="25dp"
                         android:src="@drawable/oval_border_gray400"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile3" />
+                        app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile2" />
 
                     <ImageView
                         android:id="@+id/img_friend_poke4_of_my_friend"
@@ -570,6 +612,48 @@
                         app:layout_constraintStart_toStartOf="@id/tv_friend_name4_of_my_friend"
                         app:layout_constraintTop_toBottomOf="@id/tv_friend_name4_of_my_friend"
                         tools:text="31기 기획" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_friend_box2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:constraint_referenced_ids="img_friend_profile3_of_my_friend, img_friend_poke3_of_my_friend, tv_friend_name3_of_my_friend, tv_friend_generation3_of_my_friend, img_friend_profile4_of_my_friend, img_friend_poke4_of_my_friend, tv_friend_name4_of_my_friend, tv_friend_generation4_of_my_friend" />
+
+                    <ImageView
+                        android:id="@+id/img_empty_view2_of_my_friend"
+                        android:layout_width="64dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/ic_empty_poke"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile2"/>
+
+                    <TextView
+                        android:id="@+id/tv_empty_view2_of_my_friend"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="center"
+                        android:layout_marginTop="14dp"
+                        android:textSize="16dp"
+                        android:textFontWeight="600"
+                        android:fontFamily="@font/suit_bold"
+                        android:textColor="@color/mds_gray_300"
+                        android:layout_marginBottom="36dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_empty_view2_of_my_friend"
+                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_empty_box2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="img_empty_view2_of_my_friend, tv_empty_view2_of_my_friend" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <TextView
