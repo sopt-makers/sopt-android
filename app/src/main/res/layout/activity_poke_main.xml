@@ -43,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -73,6 +73,7 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/suit_bold"
                     android:lineHeight="24px"
+                    android:textFontWeight="600"
                     android:text="누가 나를 찔렀어요"
                     android:textColor="@color/white"
                     android:textSize="16dp"
@@ -90,7 +91,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/img_user_someone_poke_me"
+                    android:id="@+id/img_user_profile_someone_poke_me"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_marginTop="25dp"
@@ -113,7 +114,7 @@
                     android:textFontWeight="500"
                     android:lineHeight="22px"
                     app:layout_constraintTop_toBottomOf="@id/tv_title_someone_poke_me"
-                    app:layout_constraintStart_toEndOf="@id/img_user_someone_poke_me"/>
+                    app:layout_constraintStart_toEndOf="@id/img_user_profile_someone_poke_me"/>
 
                 <TextView
                     android:id="@+id/tv_user_generation_someone_poke_me"
@@ -211,7 +212,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    android:id="@+id/img_user_poke_my_friend"
+                    android:id="@+id/img_user_profile_poke_my_friend"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginTop="16dp"
@@ -231,9 +232,9 @@
                     android:textSize="14dp"
                     android:textFontWeight="500"
                     android:lineHeight="22px"
-                    app:layout_constraintBottom_toBottomOf="@id/img_user_poke_my_friend"
-                    app:layout_constraintStart_toEndOf="@id/img_user_poke_my_friend"
-                    app:layout_constraintTop_toTopOf="@id/img_user_poke_my_friend"
+                    app:layout_constraintBottom_toBottomOf="@id/img_user_profile_poke_my_friend"
+                    app:layout_constraintStart_toEndOf="@id/img_user_profile_poke_my_friend"
+                    app:layout_constraintTop_toTopOf="@id/img_user_profile_poke_my_friend"
                     tools:text="이승호가나" />
 
                 <TextView
@@ -281,8 +282,299 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <!-- 내 친구의 친구를 찔러보세요 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="28dp"
+                android:fontFamily="@font/suit_bold"
+                android:textSize="18dp"
+                android:textFontWeight="600"
+                android:textColor="@color/mds_gray_30"
+                android:text="내 친구의 친구를 찔러보세요" />
+
+            <!-- BOX 1 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/box1_friend_of_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="7dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/rectangle_gray900_radius_12">
+
+                <ImageView
+                    android:id="@+id/img_my_friend_profile1"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_my_friend_name1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:textSize="14dp"
+                    android:textFontWeight="600"
+                    android:textColor="@color/mds_gray_30"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_my_friend_profile1"
+                    app:layout_constraintStart_toEndOf="@+id/img_my_friend_profile1"
+                    app:layout_constraintTop_toTopOf="@+id/img_my_friend_profile1"
+                    tools:text="심유나의 친구에요" />
+
+                <ImageView
+                    android:id="@+id/img_friend_profile1_of_my_friend"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile1" />
+
+                <ImageView
+                    android:id="@+id/img_friend_poke1_of_my_friend"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/rectangle_gray700_radius_18"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_poke"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile1_of_my_friend"
+                    app:layout_constraintEnd_toEndOf="@+id/img_friend_profile1_of_my_friend" />
+
+                <TextView
+                    android:id="@+id/tv_friend_name1_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:textColor="@color/mds_gray_30"
+                    android:textFontWeight="500"
+                    android:textSize="14dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_friend_profile1_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/img_friend_profile1_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/img_friend_profile1_of_my_friend"
+                    tools:text="백송현" />
+
+                <TextView
+                    android:id="@+id/tv_friend_generation1_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:textColor="@color/mds_gray_300"
+                    android:textFontWeight="600"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/tv_friend_name1_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/tv_friend_name1_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/tv_friend_name1_of_my_friend"
+                    tools:text="31기 기획" />
+
+                <ImageView
+                    android:id="@+id/img_friend_profile2_of_my_friend"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="25dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile1" />
+
+                <ImageView
+                    android:id="@+id/img_friend_poke2_of_my_friend"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/rectangle_gray700_radius_18"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_poke"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile2_of_my_friend"
+                    app:layout_constraintEnd_toEndOf="@+id/img_friend_profile2_of_my_friend" />
+
+                <TextView
+                    android:id="@+id/tv_friend_name2_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:textColor="@color/mds_gray_30"
+                    android:textFontWeight="500"
+                    android:textSize="14dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_friend_profile2_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/img_friend_profile2_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/img_friend_profile2_of_my_friend"
+                    tools:text="백송현" />
+
+                <TextView
+                    android:id="@+id/tv_friend_generation2_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:textColor="@color/mds_gray_300"
+                    android:textFontWeight="600"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/tv_friend_name2_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/tv_friend_name2_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/tv_friend_name2_of_my_friend"
+                    tools:text="31기 기획" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- BOX 2 -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/box2_friend_of_friend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:layout_marginHorizontal="20dp"
+                android:background="@drawable/rectangle_gray900_radius_12">
+
+                <ImageView
+                    android:id="@+id/img_my_friend_profile3"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="12dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv_my_friend_name3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_bold"
+                    android:textSize="14dp"
+                    android:textFontWeight="600"
+                    android:textColor="@color/mds_gray_30"
+                    android:layout_marginStart="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_my_friend_profile3"
+                    app:layout_constraintStart_toEndOf="@+id/img_my_friend_profile3"
+                    app:layout_constraintTop_toTopOf="@+id/img_my_friend_profile3"
+                    tools:text="심유나의 친구에요" />
+
+                <ImageView
+                    android:id="@+id/img_friend_profile3_of_my_friend"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginStart="29dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile3" />
+
+                <ImageView
+                    android:id="@+id/img_friend_poke3_of_my_friend"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/rectangle_gray700_radius_18"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_poke"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile3_of_my_friend"
+                    app:layout_constraintEnd_toEndOf="@+id/img_friend_profile3_of_my_friend" />
+
+                <TextView
+                    android:id="@+id/tv_friend_name3_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:textColor="@color/mds_gray_30"
+                    android:textFontWeight="500"
+                    android:textSize="14dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_friend_profile3_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/img_friend_profile3_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/img_friend_profile3_of_my_friend"
+                    tools:text="백송현" />
+
+                <TextView
+                    android:id="@+id/tv_friend_generation3_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:textColor="@color/mds_gray_300"
+                    android:textFontWeight="600"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/tv_friend_name3_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/tv_friend_name3_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/tv_friend_name3_of_my_friend"
+                    tools:text="31기 기획" />
+
+                <ImageView
+                    android:id="@+id/img_friend_profile4_of_my_friend"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="25dp"
+                    android:src="@drawable/oval_border_gray400"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_my_friend_profile3" />
+
+                <ImageView
+                    android:id="@+id/img_friend_poke4_of_my_friend"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:background="@drawable/rectangle_gray700_radius_18"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_poke"
+                    app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile4_of_my_friend"
+                    app:layout_constraintEnd_toEndOf="@+id/img_friend_profile4_of_my_friend" />
+
+                <TextView
+                    android:id="@+id/tv_friend_name4_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/suit_medium"
+                    android:textColor="@color/mds_gray_30"
+                    android:textFontWeight="500"
+                    android:textSize="14dp"
+                    android:layout_marginTop="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/img_friend_profile4_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/img_friend_profile4_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/img_friend_profile4_of_my_friend"
+                    tools:text="백송현" />
+
+                <TextView
+                    android:id="@+id/tv_friend_generation4_of_my_friend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginBottom="12dp"
+                    android:fontFamily="@font/suit_bold"
+                    android:textColor="@color/mds_gray_300"
+                    android:textFontWeight="600"
+                    android:textSize="11dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@id/tv_friend_name4_of_my_friend"
+                    app:layout_constraintStart_toStartOf="@id/tv_friend_name4_of_my_friend"
+                    app:layout_constraintTop_toBottomOf="@id/tv_friend_name4_of_my_friend"
+                    tools:text="31기 기획" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="14dp"
+                android:textAlignment="center"
+                android:fontFamily="@font/suit_bold"
+                android:textColor="@color/mds_gray_200"
+                android:textFontWeight="600"
+                android:lineHeight="20dp"
+                android:textSize="14dp"
+                android:text="화면을 밑으로 당기면\n다른 친구를 볼 수 있어요" />
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
