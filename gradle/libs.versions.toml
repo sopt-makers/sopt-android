@@ -68,7 +68,6 @@ sentry-android = "7.0.0"
 process-pheonix = "2.1.2"
 amplitude = "1.12.2"
 spotless = "6.23.3"
-org-jetbrains-kotlin-jvm = "1.9.20"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -224,4 +223,4 @@ sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
