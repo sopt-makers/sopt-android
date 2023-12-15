@@ -172,6 +172,7 @@
                         app:layout_constraintTop_toBottomOf="@id/img_next_someone_poke_me" />
 
                     <TextView
+                        android:id="@+id/tv_friends_status_someone_poke_me"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp"
