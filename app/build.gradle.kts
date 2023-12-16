@@ -150,6 +150,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)
+    implementation(libs.constraintlayout)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
