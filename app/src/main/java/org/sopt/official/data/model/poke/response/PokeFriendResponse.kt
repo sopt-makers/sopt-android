@@ -15,8 +15,8 @@ data class PokeFriendResponse(
     val generation: String,
     @SerialName("part")
     val part: String,
-    @SerialName("pockNum")
-    val pockNum: Int,
+    @SerialName("pokeNum")
+    val pokeNum: Int,
     @SerialName("isAlreadyPoke")
     val isAlreadyPoke: Boolean
 )

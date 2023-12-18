@@ -65,6 +65,7 @@
             tools:text="친해지고 싶어요!" />
 
         <TextView
+            android:id="@+id/tv_user_friends_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -23,10 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SOPT"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
-        <activity
-            android:name=".feature.poke.PokeNotificationActivity"
-            android:exported="false" />
+        tools:targetApi="31"
+        android:networkSecurityConfig="@xml/network_security_config">
 
         <meta-data
             android:name="io.sentry.dsn"
@@ -126,6 +128,12 @@
             android:name=".feature.notification.SchemeActivity"
             android:exported="true"
             android:launchMode="singleTop"></activity>
+        <activity
+            android:name=".feature.poke.PokeMainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".feature.poke.PokeNotificationActivity"
+            android:exported="false" />
 
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
@@ -135,5 +143,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>

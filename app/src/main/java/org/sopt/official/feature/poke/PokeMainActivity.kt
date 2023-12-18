@@ -3,12 +3,14 @@ package org.sopt.official.feature.poke
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
 
@@ -31,27 +33,53 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModel.getPokeMe()
+        viewModel.getPokeFriend()
     }
 
     private fun initStateFlowValues() {
         viewModel.apply {
             pokeMe.flowWithLifecycle(lifecycle)
-                .onEach { it?.let { pokeMeItem -> initPokeMeView(pokeMeItem) } }
+                .onEach {
+                    if (it == null) {
+                        setPokeMeViewUnVisible()
+                        return@onEach
+                    }
+                    initPokeMeView(it)
+                }
                 .launchIn(lifecycleScope)
+        }
 
+        viewModel.apply {
+            pokeFriend.flowWithLifecycle(lifecycle)
+                .onEach {
+                    it?.let { initPokeFriendView(it) }
+                }
+                .launchIn(lifecycleScope)
         }
     }
 
     private fun initPokeMeView(pokeMeItem: PokeMeResponse) {
         with(binding) {
             tvUserNameSomeonePokeMe.text = pokeMeItem.name
-            tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.activities.first().part} ${pokeMeItem.activities.first().generation}기"
+            tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
-            if (!pokeMeItem.isFirstMeet) { // 이미 친한 친구라면
-                tvFriendsStatusSomeonePokeMe.text = "친한친구 ${pokeMeItem.pockNum}콕"
+            tvFriendsStatusSomeonePokeMe.text = if (pokeMeItem.isFirstMeet) {
+                "${pokeMeItem.mutual.first()} 외 ${pokeMeItem.mutual.size - 1}명과 친구"
             } else {
-                tvFriendsStatusSomeonePokeMe.text = "${pokeMeItem.mutual.first()} 외 ${pokeMeItem.mutual.size - 1}명과 친구"
+                "친한친구 ${pokeMeItem.pokeNum}콕"
             }
+        }
+    }
+
+    private fun setPokeMeViewUnVisible() {
+        binding.layoutSomeonePokeMe.isVisible = false
+    }
+
+    private fun initPokeFriendView(pokeFriendItem: PokeFriendResponse) {
+        with(binding) {
+            tvUserNamePokeMyFriend.text = pokeFriendItem.name
+            tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
+            tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
         }
     }
 }
