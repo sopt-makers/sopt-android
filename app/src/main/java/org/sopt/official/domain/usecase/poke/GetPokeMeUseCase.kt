@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetPokeMeUseCase @Inject constructor(
     private val pokeRepository: PokeRepository
 ) {
-    suspend operator fun invoke(): Result<PokeMeResponse> {
+    suspend operator fun invoke(): Result<PokeMeResponse?> {
         return pokeRepository.getPokeMe()
     }
 }
