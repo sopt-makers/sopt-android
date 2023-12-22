@@ -124,11 +124,13 @@ dependencies {
     implementation(projects.core.webview)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
+    implementation(projects.feature.poke)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.startup)
     implementation(libs.security)
+    implementation(libs.swipe.refresh.layout)
 
     implementation(libs.bundles.accompanist)
     implementation(libs.inappupdate)
@@ -152,8 +154,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.constraintlayout)
-    implementation(libs.androidx.swiperefreshlayout)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))

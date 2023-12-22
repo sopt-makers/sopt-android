@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/black"
+    android:paddingHorizontal="20dp"
+    android:paddingVertical="10dp">
+
+    <TextView
+        android:id="@+id/textView_friendListTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.SOPT.HeadLineMediumLarge"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/friend_relation_name_new_friend" />
+
+    <TextView
+        android:id="@+id/textView_friendListDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:textAppearance="@style/TextAppearance.SOPT.CaptionLarge"
+        android:textColor="@color/mds_gray_200"
+        app:layout_constraintBottom_toBottomOf="@id/textView_friendListTitle"
+        app:layout_constraintEnd_toStartOf="@id/textView_listCount"
+        app:layout_constraintStart_toEndOf="@id/textView_friendListTitle"
+        app:layout_constraintTop_toTopOf="@id/textView_friendListTitle"
+        tools:text="@string/friend_relation_description_new_friend" />
+
+    <TextView
+        android:id="@+id/textView_listCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/imageButton_more"
+        app:layout_constraintEnd_toStartOf="@id/imageButton_more"
+        app:layout_constraintTop_toTopOf="@id/imageButton_more"
+        tools:text="@string/friend_list_count" />
+
+    <ImageButton
+        android:id="@+id/imageButton_more"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/icon_chevron"
+        android:backgroundTint="@color/white"
+        android:rotation="180"
+        app:layout_constraintBottom_toBottomOf="@id/textView_friendListTitle"
+        app:layout_constraintDimensionRatio="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textView_friendListTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textView_friendListTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -51,6 +51,12 @@
         <item name="lineHeight">25dp</item>
     </style>
 
+    <style name="TextAppearance.SOPT.HeadLineMediumLarge">
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textSize">18dp</item>
+        <item name="lineHeight">20dp</item>
+    </style>
+
     <style name="TextAppearance.SOPT.HeadLineMedium">
         <item name="android:textFontWeight">700</item>
         <item name="android:textSize">16dp</item>

@@ -34,4 +34,5 @@ include(
     ":feature:auth",
     ":feature:mypage",
     ":feature:soptamp",
+    ":feature:poke",
 )

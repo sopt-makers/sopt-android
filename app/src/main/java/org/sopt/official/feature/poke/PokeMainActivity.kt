@@ -14,12 +14,11 @@ import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.R
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
-import org.sopt.official.databinding.ActivityPokeMainBinding
+import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.feature.poke.enums.MessageType
 import org.sopt.official.util.PokeUtil

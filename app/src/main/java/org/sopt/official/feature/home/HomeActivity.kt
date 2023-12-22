@@ -71,7 +71,7 @@ import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
-import org.sopt.official.feature.poke.PokeMainActivity
+import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -181,7 +181,12 @@ class HomeActivity : AppCompatActivity() {
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
                 binding.contentPoke.root.setOnSingleClickListener {
                     if (userActiveState == UserActiveState.ACTIVE) {
-                        startActivity(Intent(this, PokeMainActivity::class.java))
+                        startActivity(
+                            OnboardingActivity.getIntent(
+                                this,
+                                OnboardingActivity.StartArgs((0))
+                            )
+                        )
                     } else {
                         AlertDialogOneButton(this)
                             .setTitle(R.string.poke_dialog_preparing_title)
