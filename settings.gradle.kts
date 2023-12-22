@@ -27,6 +27,7 @@ include(
     ":core:webview",
     ":data:mypage",
     ":data:soptamp",
+    ":data:poke",
     ":domain:mypage",
     ":domain:soptamp",
     ":domain:poke",

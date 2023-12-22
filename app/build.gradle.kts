@@ -115,6 +115,7 @@ dependencies {
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
     implementation(projects.data.mypage)
+    implementation(projects.data.poke)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
