@@ -29,6 +29,7 @@ include(
     ":data:soptamp",
     ":domain:mypage",
     ":domain:soptamp",
+    ":domain:poke",
     ":feature:auth",
     ":feature:mypage",
     ":feature:soptamp",

@@ -111,6 +111,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
+    implementation(projects.domain.poke)
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
     implementation(projects.data.mypage)
