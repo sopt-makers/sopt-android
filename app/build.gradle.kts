@@ -151,6 +151,7 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
+    implementation(libs.androidx.swiperefreshlayout)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
@@ -158,7 +159,6 @@ dependencies {
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
 
-    implementation(libs.swiperefreshlayout)
     implementation(libs.coil.core)
 }
 
