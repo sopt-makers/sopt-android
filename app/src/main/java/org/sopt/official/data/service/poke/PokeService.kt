@@ -14,7 +14,7 @@ interface PokeService {
     @GET("poke/friend")
     suspend fun getPokeFriend() : List<PokeFriendResponse>
 
-    @GET("/poke/friend/random-user")
+    @GET("poke/friend/random-user")
     suspend fun getPokeFriendOfFriend(): List<PokeFriendOfFriendResponse>
 
     @GET("poke/to/me/list")
