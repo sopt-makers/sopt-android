@@ -71,6 +71,7 @@ import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
+import org.sopt.official.feature.poke.PokeMainActivity
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -178,6 +179,18 @@ class HomeActivity : AppCompatActivity() {
             .flowWithLifecycle(lifecycle)
             .onEach { userActiveState ->
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
+                binding.contentPoke.root.setOnSingleClickListener {
+                    if (userActiveState == UserActiveState.ACTIVE) {
+                        startActivity(Intent(this, PokeMainActivity::class.java))
+                    } else {
+                        AlertDialogOneButton(this)
+                            .setTitle(R.string.poke_dialog_preparing_title)
+                            .setSubtitle(R.string.poke_dialog_preparing_body)
+                            .setPositiveButton(R.string.poke_dialog_confirm_button)
+                            .show()
+                    }
+                }
+
                 val isClickable = userActiveState != UserActiveState.UNAUTHENTICATED
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
