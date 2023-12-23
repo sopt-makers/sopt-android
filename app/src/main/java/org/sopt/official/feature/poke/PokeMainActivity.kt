@@ -3,6 +3,7 @@ package org.sopt.official.feature.poke
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
@@ -114,28 +115,64 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse?>) {
         with(binding) {
-            box2FriendOfFriend.isVisible = list.size == 2
-            groupEmptyBox1.isVisible = list.first()?.friendList!!.isEmpty()
+            fun setVisibility(box1: View, box2: View, emptyBox: View, friendListSize: Int) {
+                box1.visibility = if (friendListSize >= 1) View.VISIBLE else View.GONE
+                box2.visibility = if (friendListSize == 2) View.VISIBLE else View.GONE
+                emptyBox.visibility = if (friendListSize == 0) View.VISIBLE else View.GONE
+            }
+
+            when (list.size) {
+                1 -> {
+                    box2FriendOfFriend.visibility = View.GONE
+                    val friendListSize = list[0]?.friendList?.size ?: 0
+                    setVisibility(groupFriend1Box1, groupFriend2Box1, groupEmptyBox1, friendListSize)
+                }
+                2 -> {
+                    box2FriendOfFriend.visibility = View.VISIBLE
+                    val friendListSize1 = list[0]?.friendList?.size ?: 0
+                    val friendListSize2 = list[1]?.friendList?.size ?: 0
+
+                    setVisibility(groupFriend1Box1, groupFriend2Box1, groupEmptyBox1, friendListSize1)
+                    setVisibility(groupFriend3Box2, groupFriend4Box2, groupEmptyBox2, friendListSize2)
+                }
+            }
         }
     }
+
     private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendResponse?>) {
-//        val friend1 = list[0]?.friendList?.get(0)
-//        val friend2 = list[0]?.friendList?.get(1)
-//        val friend3 = list[1]?.friendList?.get(0)
-//        val friend4 = list[1]?.friendList?.get(1)
-//
-//        with(binding) {
-//            tvMyFriendName1.text = list[0]?.friendName
-//            tvFriendName1OfMyFriend.text = friend1?.name
-//            tvFriendGeneration1OfMyFriend.text = "${friend1?.generation}기 ${friend1?.part}"
-//            tvFriendName2OfMyFriend.text = friend2?.name
-//            tvFriendGeneration2OfMyFriend.text = "${friend2?.generation}기 ${friend2?.part}"
-//
-//            tvMyFriendName2.text = list[1]?.friendName
-//            tvFriendName3OfMyFriend.text = friend3?.name
-//            tvFriendGeneration3OfMyFriend.text = "${friend3?.generation}기 ${friend3?.part}"
-//            tvFriendName4OfMyFriend.text = friend4?.name
-//            tvFriendGeneration4OfMyFriend.text = "${friend4?.generation}기 ${friend4?.part}"
-//        }
+        with(binding) {
+            val tvMyFriendNames = listOf(tvMyFriendName1, tvMyFriendName2)
+            val friendProfileImageViews = listOf(
+                imgFriendProfile1OfMyFriend, imgFriendProfile2OfMyFriend,
+                imgFriendProfile3OfMyFriend, imgFriendProfile4OfMyFriend
+            )
+            val friendTextViews = listOf(
+                tvFriendName1OfMyFriend, tvFriendName2OfMyFriend,
+                tvFriendName3OfMyFriend, tvFriendName4OfMyFriend
+            )
+            val friendGenerationTextViews = listOf(
+                tvFriendGeneration1OfMyFriend, tvFriendGeneration2OfMyFriend,
+                tvFriendGeneration3OfMyFriend, tvFriendGeneration4OfMyFriend
+            )
+
+            list.take(2).forEachIndexed { index, response ->
+                tvMyFriendNames[index].text = response?.friendName
+
+                (0 until 2).forEach { friendIndex ->
+                    val friend = response?.friendList?.getOrNull(friendIndex)
+                    val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
+                    val friendNameTextView = friendTextViews[2 * index + friendIndex]
+                    val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
+
+                    friend?.profileImage?.takeIf { it.isNotEmpty() }?.let {
+                        friendProfileImageView.load(it) { transformations(CircleCropTransformation()) }
+                    } ?: run {
+                        imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+                    }
+                    friendNameTextView.text = friend?.name
+                    friendGenerationTextView.text = "${friend?.generation}기 ${friend?.part}"
+                }
+            }
+        }
     }
 }

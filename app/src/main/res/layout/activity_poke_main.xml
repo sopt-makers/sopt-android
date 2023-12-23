@@ -118,7 +118,8 @@
                         android:layout_marginStart="17dp"
                         android:layout_marginTop="16dp"
                         android:fontFamily="@font/suit_medium"
-                        android:lineHeight="22px"
+                        android:lineHeight="22sp"
+                        android:lineSpacingExtra="5sp"
                         android:textColor="@color/white"
                         android:textFontWeight="500"
                         android:textSize="14dp"
@@ -148,7 +149,7 @@
                         android:layout_marginEnd="8dp"
                         android:ellipsize="end"
                         android:fontFamily="@font/suit_medium"
-                        android:lineHeight="22px"
+                        android:lineSpacingExtra="5sp"
                         android:maxLines="1"
                         android:textColor="@color/white"
                         android:textFontWeight="500"
@@ -178,7 +179,7 @@
                         android:layout_marginTop="7dp"
                         android:background="@drawable/rectangle_gray950_radius_4"
                         android:fontFamily="@font/suit_medium"
-                        android:lineHeight="14px"
+                        android:lineHeight="14sp"
                         android:paddingHorizontal="6dp"
                         android:paddingVertical="3dp"
                         android:textColor="@color/mds_gray_100"
@@ -312,6 +313,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="7dp"
+                    tools:visibility="visible"
                     android:background="@drawable/rectangle_gray900_radius_12">
 
                     <ImageView
@@ -451,7 +453,7 @@
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:constraint_referenced_ids="img_friend_profile2_of_my_friend, img_friend_poke2_of_my_friend, tv_friend_name2_of_my_friend, tv_friend_generation2_of_my_friend" />
-                    
+
                     <ImageView
                         android:id="@+id/img_empty_view1_of_my_friend"
                         android:layout_width="64dp"
@@ -496,7 +498,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="14dp"
                     android:background="@drawable/rectangle_gray900_radius_12"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/img_my_friend_profile2"
@@ -633,7 +635,7 @@
                         android:id="@+id/group_friend4_box2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:constraint_referenced_ids="img_friend_profile4_of_my_friend, img_friend_poke4_of_my_friend, tv_friend_name4_of_my_friend, tv_friend_generation4_of_my_friend" />
 
                     <ImageView
