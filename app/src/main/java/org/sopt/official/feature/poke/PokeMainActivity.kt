@@ -10,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,6 +40,10 @@ class PokeMainActivity : AppCompatActivity() {
             btnClose.setOnClickListener { finish() }
             btnNextSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
+            }
+            btnSomeonePokeMe.setOnClickListener {
+                val bottomSheetDialog = PokeMessageBottomSheetDialogFragment()
+                bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
             }
 
             scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
