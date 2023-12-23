@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".feature.poke.PokeMessageBottomSheetDialogFragment"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_bottom_sheet_background"
+    android:paddingTop="24dp"
+    android:paddingHorizontal="20dp">
+
+    <TextView
+        android:id="@+id/tv_title_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="700"
+        android:textSize="20dp"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@color/mds_gray_10"
+        android:text="답장하고 싶은 메세지를 선택해주세요"/>
+
+    <TextView
+        android:id="@+id/tv_message1_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="12dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:text="제 번호는요"/>
+
+    <TextView
+        android:id="@+id/tv_message2_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:text="제 번호는요"/>
+
+    <TextView
+        android:id="@+id/tv_message3_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:text="제 번호는요"/>
+
+    <TextView
+        android:id="@+id/tv_message4_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:text="제 번호는요"/>
+
+    <TextView
+        android:id="@+id/tv_message5_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:text="제 번호는요"/>
+
+    <EditText
+        android:id="@+id/et_message6_poke_message_bottom_sheet_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textFontWeight="500"
+        android:textSize="16dp"
+        android:fontFamily="@font/suit_regular"
+        android:textColor="@color/mds_gray_10"
+        android:layout_marginTop="4dp"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="12dp"
+        android:background="@drawable/rectangle_gray700_radius_6"
+        android:layout_marginBottom="34dp"
+        android:text="답장 골라봐요"/>
+
+</LinearLayout>
