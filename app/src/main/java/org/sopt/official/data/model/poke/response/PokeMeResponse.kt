@@ -19,6 +19,8 @@ data class PokeMeResponse(
     val part: String,
     @SerialName("pokeNum")
     val pokeNum: Int,
+    @SerialName("relationName")
+    val relationName: String,
     @SerialName("mutual")
     val mutual: List<String>,
     @SerialName("isFirstMeet")
