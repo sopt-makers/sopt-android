@@ -19,7 +19,7 @@ class PokeRepositoryImpl @Inject constructor(
 
     override suspend fun getPokeFriend(): Result<PokeFriendResponse> {
         return runCatching {
-            service.getPokeFriend()
+            service.getPokeFriend().first()
         }
     }
 
