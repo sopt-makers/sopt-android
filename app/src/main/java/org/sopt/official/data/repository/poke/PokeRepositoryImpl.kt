@@ -1,5 +1,6 @@
 package org.sopt.official.data.repository.poke
 
+import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.data.model.poke.response.PokeNotificationResponse
@@ -19,6 +20,12 @@ class PokeRepositoryImpl @Inject constructor(
     override suspend fun getPokeFriend(): Result<PokeFriendResponse> {
         return runCatching {
             service.getPokeFriend()
+        }
+    }
+
+    override suspend fun getPokeFriendOfFriend(): Result<PokeFriendOfFriendResponse> {
+        return runCatching {
+            service.getPokeFriendOfFriend()
         }
     }
 

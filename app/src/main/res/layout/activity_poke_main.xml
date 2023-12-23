@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" >
 
         <ImageView
-            android:id="@+id/img_close"
+            android:id="@+id/btn_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="8dp"
@@ -39,7 +39,7 @@
             android:textFontWeight="700"
             android:lineHeight="28px"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/img_close"
+            app:layout_constraintStart_toEndOf="@+id/btn_close"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -439,11 +439,18 @@
                         tools:text="31기 기획" />
 
                     <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_friend_box1"
+                        android:id="@+id/group_friend1_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
-                        app:constraint_referenced_ids="img_friend_profile1_of_my_friend, img_friend_poke1_of_my_friend, tv_friend_name1_of_my_friend, tv_friend_generation1_of_my_friend, img_friend_profile2_of_my_friend, img_friend_poke2_of_my_friend, tv_friend_name2_of_my_friend, tv_friend_generation2_of_my_friend" />
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="img_friend_profile1_of_my_friend, img_friend_poke1_of_my_friend, tv_friend_name1_of_my_friend, tv_friend_generation1_of_my_friend" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_friend2_box1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        app:constraint_referenced_ids="img_friend_profile2_of_my_friend, img_friend_poke2_of_my_friend, tv_friend_name2_of_my_friend, tv_friend_generation2_of_my_friend" />
                     
                     <ImageView
                         android:id="@+id/img_empty_view1_of_my_friend"
@@ -476,7 +483,7 @@
                         android:id="@+id/group_empty_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:constraint_referenced_ids="img_empty_view1_of_my_friend, tv_empty_view1_of_my_friend"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -488,7 +495,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="14dp"
-                    android:background="@drawable/rectangle_gray900_radius_12">
+                    android:background="@drawable/rectangle_gray900_radius_12"
+                    android:visibility="gone">
 
                     <ImageView
                         android:id="@+id/img_my_friend_profile2"
@@ -615,11 +623,18 @@
                         tools:text="31기 기획" />
 
                     <androidx.constraintlayout.widget.Group
-                        android:id="@+id/group_friend_box2"
+                        android:id="@+id/group_friend3_box2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="visible"
                         app:constraint_referenced_ids="img_friend_profile3_of_my_friend, img_friend_poke3_of_my_friend, tv_friend_name3_of_my_friend, tv_friend_generation3_of_my_friend, img_friend_profile4_of_my_friend, img_friend_poke4_of_my_friend, tv_friend_name4_of_my_friend, tv_friend_generation4_of_my_friend" />
+
+                    <androidx.constraintlayout.widget.Group
+                        android:id="@+id/group_friend4_box2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="visible"
+                        app:constraint_referenced_ids="img_friend_profile4_of_my_friend, img_friend_poke4_of_my_friend, tv_friend_name4_of_my_friend, tv_friend_generation4_of_my_friend" />
 
                     <ImageView
                         android:id="@+id/img_empty_view2_of_my_friend"

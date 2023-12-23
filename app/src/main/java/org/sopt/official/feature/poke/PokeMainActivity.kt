@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
@@ -26,6 +27,7 @@ class PokeMainActivity : AppCompatActivity() {
         binding.scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
             binding.refreshLayoutPokeMain.isEnabled = binding.scrollviewPokeMain.scrollY == 0
         }
+        binding.btnClose.setOnClickListener { finish() }
 
         initViewModel()
         initStateFlowValues()
@@ -33,18 +35,15 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initViewModel() {
         viewModel.getPokeMe()
-        viewModel.getPokeFriend()
+//        viewModel.getPokeFriend()
+//        viewModel.getPokeFriendOfFriend()
     }
 
     private fun initStateFlowValues() {
         viewModel.apply {
             pokeMe.flowWithLifecycle(lifecycle)
                 .onEach {
-                    if (it == null) {
-                        setPokeMeViewUnVisible()
-                        return@onEach
-                    }
-                    initPokeMeView(it)
+                    it?.let { initPokeMeView(it) }
                 }
                 .launchIn(lifecycleScope)
         }
@@ -53,6 +52,17 @@ class PokeMainActivity : AppCompatActivity() {
             pokeFriend.flowWithLifecycle(lifecycle)
                 .onEach {
                     it?.let { initPokeFriendView(it) }
+                }
+                .launchIn(lifecycleScope)
+        }
+
+        viewModel.apply {
+            pokeFriendOfFriend.flowWithLifecycle(lifecycle)
+                .onEach {
+                    it?.let {
+                        setPokeFriendOfFriendVisible(it.pokeFriendOfFriendList)
+                        initPokeFriendOfFriendView(it)
+                    }
                 }
                 .launchIn(lifecycleScope)
         }
@@ -71,7 +81,7 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPokeMeViewUnVisible() {
+    private fun setPokeMeViewVisible() {
         binding.layoutSomeonePokeMe.isVisible = false
     }
 
@@ -81,5 +91,15 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
         }
+    }
+
+    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse.PokeFriendOfFriend>) {
+        with(binding) {
+            box2FriendOfFriend.isVisible = list.size == 2
+            groupEmptyBox1.isVisible = list.first().friendList.isEmpty()
+        }
+    }
+    private fun initPokeFriendOfFriendView(pokeFriendOfFriendItem: PokeFriendOfFriendResponse) {
+
     }
 }
