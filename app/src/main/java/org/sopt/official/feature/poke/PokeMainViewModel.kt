@@ -48,8 +48,8 @@ class PokeMainViewModel @Inject constructor(
         }
     }
 
-    private val _pokeFriendOfFriend = MutableStateFlow<PokeFriendOfFriendResponse?>(null)
-    val pokeFriendOfFriend: StateFlow<PokeFriendOfFriendResponse?> get() = _pokeFriendOfFriend
+    private val _pokeFriendOfFriend = MutableStateFlow<List<PokeFriendOfFriendResponse>>(arrayListOf())
+    val pokeFriendOfFriend: StateFlow<List<PokeFriendOfFriendResponse>> get() = _pokeFriendOfFriend
 
     fun getPokeFriendOfFriend() {
         viewModelScope.launch {

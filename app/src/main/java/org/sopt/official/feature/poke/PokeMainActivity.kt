@@ -36,7 +36,7 @@ class PokeMainActivity : AppCompatActivity() {
     private fun initViewModel() {
         viewModel.getPokeMe()
         viewModel.getPokeFriend()
-//        viewModel.getPokeFriendOfFriend()
+        viewModel.getPokeFriendOfFriend()
     }
 
     private fun initStateFlowValues() {
@@ -59,8 +59,7 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.apply {
             pokeFriendOfFriend.flowWithLifecycle(lifecycle)
                 .onEach {
-                    it?.let {
-//                        setPokeFriendOfFriendVisible(it.pokeFriendOfFriendList)
+                    it.let {
                         initPokeFriendOfFriendView(it)
                     }
                 }
@@ -93,13 +92,13 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-//    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse.PokeFriendOfFriend>) {
-//        with(binding) {
-//            box2FriendOfFriend.isVisible = list.size == 2
-//            groupEmptyBox1.isVisible = list.first().friendList.isEmpty()
-//        }
-//    }
-    private fun initPokeFriendOfFriendView(pokeFriendOfFriendItem: PokeFriendOfFriendResponse) {
+    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse>) {
+        with(binding) {
+            box2FriendOfFriend.isVisible = list.size == 2
+            groupEmptyBox1.isVisible = list.first().friendList.isEmpty()
+        }
+    }
+    private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendResponse>) {
 
     }
 }

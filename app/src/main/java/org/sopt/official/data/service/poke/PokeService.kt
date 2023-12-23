@@ -5,6 +5,7 @@ import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.data.model.poke.response.PokeNotificationResponse
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface PokeService {
     @GET("poke/to/me")
@@ -14,8 +15,10 @@ interface PokeService {
     suspend fun getPokeFriend() : List<PokeFriendResponse>
 
     @GET("/poke/friend/random-user")
-    suspend fun getPokeFriendOfFriend(): PokeFriendOfFriendResponse
+    suspend fun getPokeFriendOfFriend(): List<PokeFriendOfFriendResponse>
 
     @GET("poke/to/me/list")
-    suspend fun getPokeNotification(): PokeNotificationResponse
+    suspend fun getPokeNotification(
+        @Query("page") page: Int
+    ): PokeNotificationResponse
 }

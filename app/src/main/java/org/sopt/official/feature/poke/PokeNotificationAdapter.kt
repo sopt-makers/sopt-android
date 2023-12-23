@@ -31,19 +31,15 @@ import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.R
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemPokeNotificationBinding
-import org.sopt.official.domain.entity.poke.PokeNotificationHistoryItem
+import org.sopt.official.databinding.ItemPokeNotificationHeaderBinding
+import org.sopt.official.domain.entity.poke.PokeNotificationItem
 
-class PokeNotificationAdapter(
-//    private val clickListener: NotificationHistoryItemClickListener
-) : ListAdapter<PokeNotificationHistoryItem, PokeNotificationAdapter.ViewHolder>(
+class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.userId == new.userId },
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
-    private var _viewBinding: ItemPokeNotificationBinding? = null
-    private val viewBinding get() = _viewBinding!!
-
     override fun getItemViewType(position: Int) = when (position) {
         0 -> R.layout.item_poke_notification_header
         else -> R.layout.item_poke_notification
@@ -51,48 +47,40 @@ class PokeNotificationAdapter(
 
     override fun getItemCount(): Int = currentList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        _viewBinding = ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context))
-        return ViewHolder(viewBinding)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        currentList[position].let { item ->
-            holder.bind(item)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        return when (viewType) {
+            R.layout.item_poke_notification_header -> NotificationHeaderViewHolder(ItemPokeNotificationHeaderBinding.inflate(LayoutInflater.from(parent.context)))
+            else -> NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
         }
     }
 
-    override fun onViewDetachedFromWindow(holder: ViewHolder) {
-        super.onViewDetachedFromWindow(holder)
-        _viewBinding = null
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is NotificationHeaderViewHolder) {
+            holder.bind()
+        }
+
+        if (holder is NotificationListViewHolder) {
+            currentList[position].let { item ->
+                holder.bind(item)
+            }
+        }
     }
 
-//    fun updateNotificationReadingState(position: Int) {
-//        val newList = currentList.toMutableList()
-//        newList[position].isRead = true
-//        submitList(newList)
-//        notifyItemChanged(position)
-//    }
-//
-//    fun updateEntireNotificationReadingState() {
-//        val newList = currentList.toMutableList()
-//        for (notification in newList) {
-//            notification.isRead = true
-//        }
-//        submitList(newList)
-//        notifyItemRangeChanged(0, newList.size)
-//    }
-
-    fun updatePokeNotification(newList: List<PokeNotificationHistoryItem>) {
+    fun updatePokeNotification(newList: List<PokeNotificationItem>) {
         submitList(newList)
         notifyDataSetChanged()
     }
 
-    inner class ViewHolder(
+    inner class NotificationHeaderViewHolder(
+        viewBinding: ItemPokeNotificationHeaderBinding
+    ): RecyclerView.ViewHolder(viewBinding.root) {
+        fun bind() {}
+    }
+
+    inner class NotificationListViewHolder(
         private val viewBinding: ItemPokeNotificationBinding
     ) : RecyclerView.ViewHolder(viewBinding.root) {
-
-        fun bind(item: PokeNotificationHistoryItem) {
+        fun bind(item: PokeNotificationItem) {
             with(viewBinding) {
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
@@ -102,7 +90,6 @@ class PokeNotificationAdapter(
                 } else {
                     "친한친구 ${item.pokeNum}콕"
                 }
-
             }
         }
     }
