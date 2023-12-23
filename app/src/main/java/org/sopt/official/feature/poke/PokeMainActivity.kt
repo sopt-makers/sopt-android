@@ -1,5 +1,6 @@
 package org.sopt.official.feature.poke
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -31,13 +32,18 @@ class PokeMainActivity : AppCompatActivity() {
             binding.refreshLayoutPokeMain.isEnabled = binding.scrollviewPokeMain.scrollY == 0
         }
 
-        initClickEvent()
+        initClickListener()
         initViewModel()
         initStateFlowValues()
     }
 
-    private fun initClickEvent() {
-        binding.btnClose.setOnClickListener { finish() }
+    private fun initClickListener() {
+        with(binding) {
+            btnClose.setOnClickListener { finish() }
+            btnNextSomeonePokeMe.setOnClickListener {
+                startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
+            }
+        }
     }
 
     private fun initViewModel() {
