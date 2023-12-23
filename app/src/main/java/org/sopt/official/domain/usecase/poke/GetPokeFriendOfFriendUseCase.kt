@@ -7,7 +7,7 @@ import javax.inject.Inject
 class GetPokeFriendOfFriendUseCase @Inject constructor(
     private val pokeRepository: PokeRepository
 ) {
-    suspend operator fun invoke(): Result<PokeFriendOfFriendResponse> {
+    suspend operator fun invoke(): Result<List<PokeFriendOfFriendResponse>> {
         return pokeRepository.getPokeFriendOfFriend()
     }
 }
