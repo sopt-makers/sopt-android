@@ -59,7 +59,8 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.apply {
             pokeFriendOfFriend.flowWithLifecycle(lifecycle)
                 .onEach {
-                    it.let {
+                    if (it.isNotEmpty()) {
+                        setPokeFriendOfFriendVisible(it)
                         initPokeFriendOfFriendView(it)
                     }
                 }
@@ -92,13 +93,30 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse>) {
+    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendResponse?>) {
         with(binding) {
             box2FriendOfFriend.isVisible = list.size == 2
-            groupEmptyBox1.isVisible = list.first().friendList.isEmpty()
+            groupEmptyBox1.isVisible = list.first()?.friendList!!.isEmpty()
         }
     }
-    private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendResponse>) {
-
+    private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendResponse?>) {
+//        val friend1 = list[0]?.friendList?.get(0)
+//        val friend2 = list[0]?.friendList?.get(1)
+//        val friend3 = list[1]?.friendList?.get(0)
+//        val friend4 = list[1]?.friendList?.get(1)
+//
+//        with(binding) {
+//            tvMyFriendName1.text = list[0]?.friendName
+//            tvFriendName1OfMyFriend.text = friend1?.name
+//            tvFriendGeneration1OfMyFriend.text = "${friend1?.generation}기 ${friend1?.part}"
+//            tvFriendName2OfMyFriend.text = friend2?.name
+//            tvFriendGeneration2OfMyFriend.text = "${friend2?.generation}기 ${friend2?.part}"
+//
+//            tvMyFriendName2.text = list[1]?.friendName
+//            tvFriendName3OfMyFriend.text = friend3?.name
+//            tvFriendGeneration3OfMyFriend.text = "${friend3?.generation}기 ${friend3?.part}"
+//            tvFriendName4OfMyFriend.text = friend4?.name
+//            tvFriendGeneration4OfMyFriend.text = "${friend4?.generation}기 ${friend4?.part}"
+//        }
     }
 }

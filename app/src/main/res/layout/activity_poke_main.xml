@@ -442,14 +442,14 @@
                         android:id="@+id/group_friend1_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:constraint_referenced_ids="img_friend_profile1_of_my_friend, img_friend_poke1_of_my_friend, tv_friend_name1_of_my_friend, tv_friend_generation1_of_my_friend" />
 
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_friend2_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
+                        android:visibility="visible"
                         app:constraint_referenced_ids="img_friend_profile2_of_my_friend, img_friend_poke2_of_my_friend, tv_friend_name2_of_my_friend, tv_friend_generation2_of_my_friend" />
                     
                     <ImageView
@@ -483,7 +483,7 @@
                         android:id="@+id/group_empty_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:constraint_referenced_ids="img_empty_view1_of_my_friend, tv_empty_view1_of_my_friend"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -496,7 +496,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="14dp"
                     android:background="@drawable/rectangle_gray900_radius_12"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <ImageView
                         android:id="@+id/img_my_friend_profile2"
@@ -509,7 +509,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
-                        android:id="@+id/tv_my_friend_name3"
+                        android:id="@+id/tv_my_friend_name2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
