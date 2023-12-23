@@ -29,25 +29,29 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
-            binding.refreshLayoutPokeMain.isEnabled = binding.scrollviewPokeMain.scrollY == 0
-        }
-
-        initClickListener()
-        initViewModel()
+        initData()
+        initListener()
         initStateFlowValues()
     }
 
-    private fun initClickListener() {
+    private fun initListener() {
         with(binding) {
             btnClose.setOnClickListener { finish() }
             btnNextSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
             }
+
+            scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
+                refreshLayoutPokeMain.isEnabled = binding.scrollviewPokeMain.scrollY == 0
+            }
+            refreshLayoutPokeMain.setOnRefreshListener {
+                initData()
+                refreshLayoutPokeMain.isRefreshing = false
+            }
         }
     }
 
-    private fun initViewModel() {
+    private fun initData() {
         viewModel.getPokeMe()
         viewModel.getPokeFriend()
         viewModel.getPokeFriendOfFriend()
