@@ -158,7 +158,8 @@ dependencies {
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
 
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation(libs.swiperefreshlayout)
+    implementation(libs.coil.core)
 }
 
 secrets {

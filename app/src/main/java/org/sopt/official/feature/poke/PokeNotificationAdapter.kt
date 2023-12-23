@@ -28,6 +28,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import org.sopt.official.R
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemPokeNotificationBinding
@@ -82,6 +84,9 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
     ) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: PokeNotificationItem) {
             with(viewBinding) {
+                item.profileImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message

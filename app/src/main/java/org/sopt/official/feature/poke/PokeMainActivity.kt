@@ -6,9 +6,12 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import coil.load
+import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.R
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
@@ -27,10 +30,14 @@ class PokeMainActivity : AppCompatActivity() {
         binding.scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
             binding.refreshLayoutPokeMain.isEnabled = binding.scrollviewPokeMain.scrollY == 0
         }
-        binding.btnClose.setOnClickListener { finish() }
 
+        initClickEvent()
         initViewModel()
         initStateFlowValues()
+    }
+
+    private fun initClickEvent() {
+        binding.btnClose.setOnClickListener { finish() }
     }
 
     private fun initViewModel() {
@@ -70,6 +77,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeMeView(pokeMeItem: PokeMeResponse) {
         with(binding) {
+            pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
+            } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
             tvUserNameSomeonePokeMe.text = pokeMeItem.name
             tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
@@ -87,6 +97,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeFriendView(pokeFriendItem: PokeFriendResponse) {
         with(binding) {
+            pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
+            } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
             tvUserNamePokeMyFriend.text = pokeFriendItem.name
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
