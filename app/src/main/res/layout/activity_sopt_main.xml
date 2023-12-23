@@ -219,25 +219,27 @@
                 tools:text="@string/main_content_header" />
 
             <include
-                android:id="@+id/content_soptamp"
-                layout="@layout/item_main_content"
+                android:id="@+id/content_poke"
+                layout="@layout/item_main_poke"
                 android:layout_width="0dp"
                 android:layout_height="120dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="9dp"
-                app:layout_constraintEnd_toStartOf="@id/content_dummy"
+                app:layout_constraintEnd_toStartOf="@+id/content_soptamp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bottom_description" />
 
-            <View
-                android:id="@+id/content_dummy"
+            <include
+                android:id="@+id/content_soptamp"
+                layout="@layout/item_main_soptamp"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="@id/content_soptamp"
+                android:layout_height="120dp"
+                android:layout_marginStart="11dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/content_poke"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/content_soptamp"
-                app:layout_constraintTop_toTopOf="@id/content_soptamp" />
+                app:layout_constraintStart_toEndOf="@+id/content_poke"
+                app:layout_constraintTop_toTopOf="@+id/content_poke" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
