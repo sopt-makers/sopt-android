@@ -110,6 +110,7 @@ class PokeMainActivity : AppCompatActivity() {
             } else {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
+            btnSomeonePokeMe.setImageResource(PokeUtil.setPokeIcon(pokeMeItem.isFirstMeet, pokeMeItem.isAlreadyPoke))
         }
     }
 
@@ -126,6 +127,7 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserNamePokeMyFriend.text = pokeFriendItem.name
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
+            btnPokeMyFriend.setImageResource(PokeUtil.setPokeIcon(pokeFriendItem.isFirstMeet, pokeFriendItem.isAlreadyPoke))
         }
     }
 
@@ -157,7 +159,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendResponse?>) {
         with(binding) {
-            val tvMyFriendNames = listOf(tvMyFriendName1, tvMyFriendName2)
+            val myFriendNameTextViews = listOf(tvMyFriendName1, tvMyFriendName2)
+            val myFriendProfileImageViews = listOf(imgMyFriendProfile1, imgMyFriendProfile2)
+
             val friendProfileImageViews = listOf(
                 imgFriendProfile1OfMyFriend, imgFriendProfile2OfMyFriend,
                 imgFriendProfile3OfMyFriend, imgFriendProfile4OfMyFriend
@@ -170,23 +174,36 @@ class PokeMainActivity : AppCompatActivity() {
                 tvFriendGeneration1OfMyFriend, tvFriendGeneration2OfMyFriend,
                 tvFriendGeneration3OfMyFriend, tvFriendGeneration4OfMyFriend
             )
+            val btnPokeImageViews = listOf(
+                btnFriendPoke1OfMyFriend, btnFriendPoke2OfMyFriend,
+                btnFriendPoke3OfMyFriend, btnFriendPoke4OfMyFriend
+            )
 
             list.take(2).forEachIndexed { index, response ->
-                tvMyFriendNames[index].text = response?.friendName
+                myFriendNameTextViews[index].text = response?.friendName
+                response?.friendProfileImage?.takeIf { it.isNotEmpty() }?.let {
+                    myFriendProfileImageViews[index].load(it) { transformations(CircleCropTransformation()) }
+                } ?: run {
+                    myFriendProfileImageViews[index].setImageResource(R.drawable.ic_empty_profile)
+                }
 
                 (0 until 2).forEach { friendIndex ->
                     val friend = response?.friendList?.getOrNull(friendIndex)
                     val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
                     val friendNameTextView = friendTextViews[2 * index + friendIndex]
                     val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
+                    val btnPokeImageView = btnPokeImageViews[2 * index + friendIndex]
 
-                    friend?.profileImage?.takeIf { it.isNotEmpty() }?.let {
-                        friendProfileImageView.load(it) { transformations(CircleCropTransformation()) }
-                    } ?: run {
-                        imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+                    friend?.let {
+                        it.profileImage.takeIf { url -> url.isNotEmpty() }?.let { url ->
+                            friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
+                        } ?: run {
+                            friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
+                        }
+                        friendNameTextView.text = it.name
+                        friendGenerationTextView.text = "${it.generation}기 ${it.part}"
+                        btnPokeImageView.setImageResource(PokeUtil.setPokeIcon(it.isFirstMeet, it.isAlreadyPoke))
                     }
-                    friendNameTextView.text = friend?.name
-                    friendGenerationTextView.text = "${friend?.generation}기 ${friend?.part}"
                 }
             }
         }
