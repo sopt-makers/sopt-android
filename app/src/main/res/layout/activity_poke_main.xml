@@ -179,7 +179,7 @@
                         android:layout_marginEnd="12dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/btn_next_someone_poke_me" />
@@ -295,7 +295,7 @@
                         android:layout_marginEnd="12dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/img_next_poke_my_friend" />
@@ -379,7 +379,7 @@
                         android:layout_height="44dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile1_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile1_of_my_friend" />
 
@@ -429,7 +429,7 @@
                         android:layout_height="44dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile2_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile2_of_my_friend" />
 
@@ -563,7 +563,7 @@
                         android:layout_height="44dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile3_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile3_of_my_friend" />
 
@@ -613,7 +613,7 @@
                         android:layout_height="44dp"
                         android:background="@drawable/rectangle_gray700_radius_18"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
+                        android:src="@drawable/ic_poke_gray500"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile4_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile4_of_my_friend" />
 

@@ -56,8 +56,8 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-//        viewModel.getPokeMe()
-//        viewModel.getPokeFriend()
+        viewModel.getPokeMe()
+        viewModel.getPokeFriend()
         viewModel.getPokeFriendOfFriend()
     }
 
