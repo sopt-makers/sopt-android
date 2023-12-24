@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class PokeMeResponse(
     @SerialName("userId")
     val userId: Long,
+    @SerialName("playgroundId")
+    val playgroundId: Long,
     @SerialName("profileImage")
     val profileImage: String,
     @SerialName("name")

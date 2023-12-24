@@ -12,8 +12,8 @@ import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.domain.usecase.poke.GetPokeFriendOfFriendUseCase
 import org.sopt.official.domain.usecase.poke.GetPokeFriendUseCase
 import org.sopt.official.domain.usecase.poke.GetPokeMeUseCase
+import org.sopt.official.feature.notification.enums.FriendType
 import timber.log.Timber
-import java.lang.Thread.State
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,6 +58,15 @@ class PokeMainViewModel @Inject constructor(
                     _pokeFriendOfFriend.value = it
                 }
                 .onFailure { Timber.e(it) }
+        }
+    }
+
+    fun convertRelationNameToBorderReSourceId(relationName: String): Int {
+        return when (relationName) {
+            FriendType.NEW_FRIEND.relationName -> FriendType.NEW_FRIEND.borderResourceId
+            FriendType.BEST_FRIEND.relationName -> FriendType.BEST_FRIEND.borderResourceId
+            FriendType.SOULMATE.relationName -> FriendType.SOULMATE.borderResourceId
+            else -> { FriendType.NEW_FRIEND.borderResourceId }
         }
     }
 }

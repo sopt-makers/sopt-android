@@ -115,7 +115,7 @@
     <string name="notification_dialog_confirm_button">확인</string>
 
     <!--    콕 찌르기 관련 다이얼로그  -->
-    <string name="poke_dialog_preparing_title">공지</string>
-    <string name="poke_dialog_preparing_body">콕 찌르기 기능이 준비 중이에요</string>
+    <string name="poke_dialog_preparing_title">접근할 수 없는 버튼이에요.</string>
+    <string name="poke_dialog_preparing_body">콕 찌르기 기능이 준비 중이에요.</string>
     <string name="poke_dialog_confirm_button">확인</string>
 </resources>

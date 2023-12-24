@@ -10,7 +10,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,8 +56,8 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        viewModel.getPokeMe()
-        viewModel.getPokeFriend()
+//        viewModel.getPokeMe()
+//        viewModel.getPokeFriend()
         viewModel.getPokeFriendOfFriend()
     }
 
@@ -66,7 +65,12 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.apply {
             pokeMe.flowWithLifecycle(lifecycle)
                 .onEach {
-                    it?.let { initPokeMeView(it) }
+                    if (it == null) {
+                        setPokeMeViewVisible(false)
+                    } else {
+                        setPokeMeViewVisible(true)
+                        initPokeMeView(it)
+                    }
                 }
                 .launchIn(lifecycleScope)
         }
@@ -96,19 +100,20 @@ class PokeMainActivity : AppCompatActivity() {
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            imgUserRelationSomeonePokeMe.setImageResource(viewModel.convertRelationNameToBorderReSourceId(pokeMeItem.relationName))
             tvUserNameSomeonePokeMe.text = pokeMeItem.name
             tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
             tvFriendsStatusSomeonePokeMe.text = if (pokeMeItem.isFirstMeet) {
                 "${pokeMeItem.mutual.first()} 외 ${pokeMeItem.mutual.size - 1}명과 친구"
             } else {
-                "친한친구 ${pokeMeItem.pokeNum}콕"
+                "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
         }
     }
 
-    private fun setPokeMeViewVisible() {
-        binding.layoutSomeonePokeMe.isVisible = false
+    private fun setPokeMeViewVisible(isVisible: Boolean) {
+        binding.layoutSomeonePokeMe.isVisible = isVisible
     }
 
     private fun initPokeFriendView(pokeFriendItem: PokeFriendResponse) {
@@ -116,6 +121,7 @@ class PokeMainActivity : AppCompatActivity() {
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+            imgUserRelationPokeMyFriend.setImageResource(viewModel.convertRelationNameToBorderReSourceId(pokeFriendItem.relationName))
             tvUserNamePokeMyFriend.text = pokeFriendItem.name
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"

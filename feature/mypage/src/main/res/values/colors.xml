@@ -84,6 +84,13 @@
     <!-- MDS YellowScale -->
     <color name="mds_yellow_900">#534123</color>
 
+    <!-- MDS OrangeScale -->
+    <color name="mds_orange_400">#F77234</color>
+
     <!-- MDS GreenScale -->
+    <color name="mds_green_400">#16BF81</color>
     <color name="mds_green_900">#15372B</color>
+
+    <!-- MDS BlueScale -->
+    <color name="mds_blue_400">#346FFA</color>
 </resources>

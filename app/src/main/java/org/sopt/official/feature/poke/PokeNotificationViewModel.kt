@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.entity.poke.PokeNotificationItem
 import org.sopt.official.domain.usecase.poke.GetPokeNotificationUseCase
+import org.sopt.official.feature.notification.enums.FriendType
 import timber.log.Timber
 import javax.inject.Inject
 
