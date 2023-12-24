@@ -60,13 +60,4 @@ class PokeMainViewModel @Inject constructor(
                 .onFailure { Timber.e(it) }
         }
     }
-
-    fun convertRelationNameToBorderReSourceId(relationName: String): Int {
-        return when (relationName) {
-            FriendType.NEW_FRIEND.relationName -> FriendType.NEW_FRIEND.borderResourceId
-            FriendType.BEST_FRIEND.relationName -> FriendType.BEST_FRIEND.borderResourceId
-            FriendType.SOULMATE.relationName -> FriendType.SOULMATE.borderResourceId
-            else -> { FriendType.NEW_FRIEND.borderResourceId }
-        }
-    }
 }

@@ -36,6 +36,7 @@ import org.sopt.official.databinding.ItemPokeNotificationBinding
 import org.sopt.official.databinding.ItemPokeNotificationHeaderBinding
 import org.sopt.official.domain.entity.poke.PokeNotificationItem
 import org.sopt.official.feature.notification.enums.FriendType
+import org.sopt.official.util.PokeUtil
 
 class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(
     ItemDiffCallback(
@@ -88,7 +89,7 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
                 item.profileImage.takeIf { it.isNotEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
-                imgUserRelation.setImageResource(convertRelationNameToBorderReSourceId(item.relationName))
+                imgUserRelation.setImageResource(PokeUtil.convertRelationNameToBorderReSourceId(item.relationName))
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message
@@ -97,15 +98,7 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
                 } else {
                     "${item.relationName} ${item.pokeNum}콕"
                 }
-            }
-        }
-
-        private fun convertRelationNameToBorderReSourceId(relationName: String): Int {
-            return when (relationName) {
-                FriendType.NEW_FRIEND.relationName -> FriendType.NEW_FRIEND.borderResourceId
-                FriendType.BEST_FRIEND.relationName -> FriendType.BEST_FRIEND.borderResourceId
-                FriendType.SOULMATE.relationName -> FriendType.SOULMATE.borderResourceId
-                else -> { FriendType.NEW_FRIEND.borderResourceId }
+                btnPoke.setImageResource(PokeUtil.setPokeIcon(item.isFirstMeet, item.isAlreadyPoke))
             }
         }
     }

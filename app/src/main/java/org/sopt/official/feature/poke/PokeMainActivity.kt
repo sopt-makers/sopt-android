@@ -19,6 +19,7 @@ import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
+import org.sopt.official.util.PokeUtil
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -100,7 +101,7 @@ class PokeMainActivity : AppCompatActivity() {
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
-            imgUserRelationSomeonePokeMe.setImageResource(viewModel.convertRelationNameToBorderReSourceId(pokeMeItem.relationName))
+            imgUserRelationSomeonePokeMe.setImageResource(PokeUtil.convertRelationNameToBorderReSourceId(pokeMeItem.relationName))
             tvUserNameSomeonePokeMe.text = pokeMeItem.name
             tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
@@ -121,7 +122,7 @@ class PokeMainActivity : AppCompatActivity() {
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
-            imgUserRelationPokeMyFriend.setImageResource(viewModel.convertRelationNameToBorderReSourceId(pokeFriendItem.relationName))
+            imgUserRelationPokeMyFriend.setImageResource(PokeUtil.convertRelationNameToBorderReSourceId(pokeFriendItem.relationName))
             tvUserNamePokeMyFriend.text = pokeFriendItem.name
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
