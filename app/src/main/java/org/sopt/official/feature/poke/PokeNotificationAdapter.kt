@@ -35,7 +35,6 @@ import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemPokeNotificationBinding
 import org.sopt.official.databinding.ItemPokeNotificationHeaderBinding
 import org.sopt.official.domain.entity.poke.PokeNotificationItem
-import org.sopt.official.feature.notification.enums.FriendType
 import org.sopt.official.util.PokeUtil
 
 class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(

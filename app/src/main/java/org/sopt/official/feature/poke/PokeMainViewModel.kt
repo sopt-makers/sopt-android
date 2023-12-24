@@ -12,7 +12,6 @@ import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.domain.usecase.poke.GetPokeFriendOfFriendUseCase
 import org.sopt.official.domain.usecase.poke.GetPokeFriendUseCase
 import org.sopt.official.domain.usecase.poke.GetPokeMeUseCase
-import org.sopt.official.feature.notification.enums.FriendType
 import timber.log.Timber
 import javax.inject.Inject
 

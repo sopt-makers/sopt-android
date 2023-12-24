@@ -1,4 +1,4 @@
-package org.sopt.official.feature.notification.enums
+package org.sopt.official.feature.poke.enums
 
 import org.sopt.official.R
 

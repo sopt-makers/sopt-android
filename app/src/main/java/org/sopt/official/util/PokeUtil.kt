@@ -1,7 +1,7 @@
 package org.sopt.official.util
 
 import org.sopt.official.R
-import org.sopt.official.feature.notification.enums.FriendType
+import org.sopt.official.feature.poke.enums.FriendType
 
 object PokeUtil {
     fun setPokeIcon(isFirstMeet: Boolean, isAlreadyPoke: Boolean): Int {

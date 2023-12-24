@@ -10,7 +10,7 @@
     android:paddingHorizontal="20dp">
 
     <TextView
-        android:id="@+id/tv_title_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="700"
@@ -20,7 +20,7 @@
         android:text="답장하고 싶은 메세지를 선택해주세요"/>
 
     <TextView
-        android:id="@+id/tv_message1_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_message1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -30,10 +30,10 @@
         android:layout_marginTop="12dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="12dp"
-        android:text="제 번호는요"/>
+        tools:text="제 번호는요"/>
 
     <TextView
-        android:id="@+id/tv_message2_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_message2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -43,10 +43,10 @@
         android:layout_marginTop="4dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="12dp"
-        android:text="제 번호는요"/>
+        tools:text="제 번호는요"/>
 
     <TextView
-        android:id="@+id/tv_message3_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_message3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -56,10 +56,10 @@
         android:layout_marginTop="4dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="12dp"
-        android:text="제 번호는요"/>
+        tools:text="제 번호는요"/>
 
     <TextView
-        android:id="@+id/tv_message4_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_message4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -69,10 +69,10 @@
         android:layout_marginTop="4dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="12dp"
-        android:text="제 번호는요"/>
+        tools:text="제 번호는요"/>
 
     <TextView
-        android:id="@+id/tv_message5_poke_message_bottom_sheet_dialog"
+        android:id="@+id/tv_message5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -82,10 +82,10 @@
         android:layout_marginTop="4dp"
         android:paddingHorizontal="8dp"
         android:paddingVertical="12dp"
-        android:text="제 번호는요"/>
+        tools:text="제 번호는요"/>
 
     <EditText
-        android:id="@+id/et_message6_poke_message_bottom_sheet_dialog"
+        android:id="@+id/et_message6"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textFontWeight="500"
@@ -97,6 +97,5 @@
         android:paddingVertical="12dp"
         android:background="@drawable/rectangle_gray700_radius_6"
         android:layout_marginBottom="34dp"
-        android:text="답장 골라봐요"/>
-
+        tools:text="답장 골라봐요"/>
 </LinearLayout>

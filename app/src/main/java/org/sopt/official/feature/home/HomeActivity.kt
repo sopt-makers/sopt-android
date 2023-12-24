@@ -68,7 +68,7 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.AlertDialogOneButton
+import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.feature.poke.PokeMainActivity

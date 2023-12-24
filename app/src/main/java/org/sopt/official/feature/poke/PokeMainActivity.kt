@@ -19,6 +19,9 @@ import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
+import org.sopt.official.feature.poke.enums.MessageType
+import org.sopt.official.util.AlertDialogOneButton
+import org.sopt.official.util.AlertDialogTwoButton
 import org.sopt.official.util.PokeUtil
 
 @AndroidEntryPoint
@@ -26,6 +29,7 @@ class PokeMainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -38,12 +42,9 @@ class PokeMainActivity : AppCompatActivity() {
     private fun initListener() {
         with(binding) {
             btnClose.setOnClickListener { finish() }
+
             btnNextSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
-            }
-            btnSomeonePokeMe.setOnClickListener {
-                val bottomSheetDialog = PokeMessageBottomSheetDialogFragment()
-                bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
             }
 
             scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
@@ -111,6 +112,11 @@ class PokeMainActivity : AppCompatActivity() {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
             btnSomeonePokeMe.setImageResource(PokeUtil.setPokeIcon(pokeMeItem.isFirstMeet, pokeMeItem.isAlreadyPoke))
+
+            btnSomeonePokeMe.setOnClickListener {
+                val bottomSheetDialog = PokeMessageBottomSheetDialogFragment(MessageType.POKE_FRIEND)
+                bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
+            }
         }
     }
 
