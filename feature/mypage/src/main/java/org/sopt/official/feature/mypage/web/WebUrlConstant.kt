@@ -58,4 +58,7 @@ object WebUrlConstant {
         } else {
             PLAYGROUND_BASE_URL
         }
+
+    fun toMemberProfileUrl(playgroundId: Long): String =
+        "$PLAYGROUND_MEMBER_URL/$playgroundId"
 }

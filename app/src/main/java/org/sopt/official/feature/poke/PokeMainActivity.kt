@@ -1,6 +1,7 @@
 package org.sopt.official.feature.poke
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -19,6 +20,7 @@ import org.sopt.official.data.model.poke.response.PokeFriendOfFriendResponse
 import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
+import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.feature.poke.enums.MessageType
 import org.sopt.official.util.PokeUtil
 
@@ -97,6 +99,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeMeView(pokeMeItem: PokeMeResponse) {
         with(binding) {
+            imgUserProfileSomeonePokeMe.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.toMemberProfileUrl(pokeMeItem.playgroundId))))
+            }
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
@@ -120,6 +125,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeFriendView(pokeFriendItem: PokeFriendResponse) {
         with(binding) {
+            imgUserProfilePokeMyFriend.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.toMemberProfileUrl(pokeFriendItem.playgroundId))))
+            }
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
@@ -180,31 +188,39 @@ class PokeMainActivity : AppCompatActivity() {
                 btnFriendPoke3OfMyFriend, btnFriendPoke4OfMyFriend
             )
 
-            list.take(2).forEachIndexed { index, response ->
-                myFriendNameTextViews[index].text = response?.friendName
-                response?.friendProfileImage?.takeIf { it.isNotEmpty() }?.let {
-                    myFriendProfileImageViews[index].load(it) { transformations(CircleCropTransformation()) }
-                } ?: run {
-                    myFriendProfileImageViews[index].setImageResource(R.drawable.ic_empty_profile)
-                }
+            list.take(2).forEachIndexed { index, friend ->
+                friend?.let { myFriend ->
+                    myFriendNameTextViews[index].text = myFriend.friendName
+                    myFriendProfileImageViews[index].setOnClickListener {
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.toMemberProfileUrl(myFriend.playgroundId))))
+                    }
+                    myFriend.friendProfileImage.takeIf { it.isNotEmpty() }?.let {
+                        myFriendProfileImageViews[index].load(it) { transformations(CircleCropTransformation()) }
+                    } ?: run {
+                        myFriendProfileImageViews[index].setImageResource(R.drawable.ic_empty_profile)
+                    }
 
-                (0 until 2).forEach { friendIndex ->
-                    val friendOfFriend = response?.friendList?.getOrNull(friendIndex)
-                    val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
-                    val friendNameTextView = friendTextViews[2 * index + friendIndex]
-                    val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
-                    val btnPokeImageView = btnPokeImageViews[2 * index + friendIndex]
+                    (0 until 2).forEach { friendIndex ->
+                        val friendOfFriend = myFriend.friendList.getOrNull(friendIndex)
+                        val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
+                        val friendNameTextView = friendTextViews[2 * index + friendIndex]
+                        val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
+                        val btnPokeImageView = btnPokeImageViews[2 * index + friendIndex]
 
-                    friendOfFriend?.let { friend ->
-                        friend.profileImage.takeIf { url -> url.isNotEmpty() }?.let { url ->
-                            friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
-                        } ?: run {
-                            friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
+                        friendOfFriend?.let { myFriendOfFriend ->
+                            friendProfileImageView.setOnClickListener {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.toMemberProfileUrl(myFriendOfFriend.playgroundId))))
+                            }
+                            myFriendOfFriend.profileImage.takeIf { url -> url.isNotEmpty() }?.let { url ->
+                                friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
+                            } ?: run {
+                                friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
+                            }
+                            friendNameTextView.text = myFriendOfFriend.name
+                            friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
+                            btnPokeImageView.setImageResource(PokeUtil.setPokeIcon(myFriendOfFriend.isFirstMeet, myFriendOfFriend.isAlreadyPoke))
+                            btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(myFriendOfFriend.isFirstMeet) }
                         }
-                        friendNameTextView.text = friend.name
-                        friendGenerationTextView.text = "${friend.generation}기 ${friend.part}"
-                        btnPokeImageView.setImageResource(PokeUtil.setPokeIcon(friend.isFirstMeet, friend.isAlreadyPoke))
-                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(friend.isFirstMeet) }
                     }
                 }
             }

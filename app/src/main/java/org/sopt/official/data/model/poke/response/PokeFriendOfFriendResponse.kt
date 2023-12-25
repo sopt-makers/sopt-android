@@ -7,6 +7,8 @@ import kotlinx.serialization.Serializable
 data class PokeFriendOfFriendResponse(
     @SerialName("friendId")
     val friendId: Long,
+    @SerialName("playgroundId")
+    val playgroundId: Long,
     @SerialName("friendName")
     val friendName: String,
     @SerialName("friendProfileImage")
@@ -18,6 +20,8 @@ data class PokeFriendOfFriendResponse(
     data class FriendOfFriend(
         @SerialName("userId")
         val userId: Long,
+        @SerialName("playgroundId")
+        val playgroundId: Long,
         @SerialName("name")
         val name: String,
         @SerialName("profileImage")
