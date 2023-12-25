@@ -9,6 +9,10 @@ import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
 import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeMeResponse
+import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
 import javax.inject.Inject
 
@@ -30,6 +34,46 @@ class PokeDataSource @Inject constructor(
             statusCode = call.code().toString()
             responseMessage = call.message()
             data = call.body()?.map { it.toEntity() }
+        }
+    }
+
+    suspend fun getPokeMe(): GetPokeMeResponse {
+        val call = service.getPokeMe()
+        return GetPokeMeResponse().apply {
+            statusCode = call.code().toString()
+            responseMessage = call.message()
+            data = call.body()?.toEntity()
+        }
+    }
+
+    suspend fun getPokeFriendList(): GetPokeFriendListResponse {
+        val call = service.getPokeFriendList()
+        return GetPokeFriendListResponse().apply {
+            statusCode = call.code().toString()
+            responseMessage = call.message()
+            data = call.body()?.map { it.toEntity() }
+        }
+    }
+
+    suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {
+        val call = service.getPokeFriendOfFriendList()
+        return GetPokeFriendOfFriendListResponse().apply {
+            statusCode = call.code().toString()
+            responseMessage = call.message()
+            data = call.body()?.map { it.toEntity() }
+        }
+    }
+
+    suspend fun getPokeNotificationList(
+        page: Int,
+    ): GetPokeNotificationListResponse {
+        val call = service.getPokeNotificationList(
+            page = page,
+            )
+        return GetPokeNotificationListResponse().apply {
+            statusCode = call.code().toString()
+            responseMessage = call.message()
+            data = call.body()?.toEntity()
         }
     }
 

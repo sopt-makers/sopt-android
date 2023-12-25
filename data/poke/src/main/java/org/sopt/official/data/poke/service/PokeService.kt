@@ -1,5 +1,9 @@
 package org.sopt.official.data.poke.service
 
+import org.sopt.official.data.poke.dto.response.PokeFriendOfFriendListResult
+import org.sopt.official.data.poke.dto.response.PokeFriendResult
+import org.sopt.official.data.poke.dto.response.PokeMeResult
+import org.sopt.official.data.poke.dto.response.PokeNotificationResult
 import org.sopt.official.data.poke.dto.response.CheckNewInPokeResult
 import org.sopt.official.data.poke.dto.response.GetPokeMessageListResult
 import org.sopt.official.data.poke.dto.response.GetFriendListDetailResult
@@ -18,6 +22,20 @@ interface PokeService {
 
     @GET("poke/random-user")
     suspend fun getOnboardingPokeUserList(): Response<List<PokeUserResult>>
+
+    @GET("poke/to/me")
+    suspend fun getPokeMe() : Response<PokeMeResult>
+
+    @GET("poke/friend")
+    suspend fun getPokeFriendList() : Response<List<PokeFriendResult>>
+
+    @GET("poke/friend/random-user")
+    suspend fun getPokeFriendOfFriendList(): Response<List<PokeFriendOfFriendListResult>>
+
+    @GET("poke/to/me/list")
+    suspend fun getPokeNotificationList(
+        @Query("page") page: Int,
+    ): Response<PokeNotificationResult>
 
     @GET("poke/friend/list")
     suspend fun getFriendListSummary(): Response<GetFriendListSummaryResult>

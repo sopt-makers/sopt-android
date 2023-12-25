@@ -1,4 +1,4 @@
-package org.sopt.official.domain.entity.poke
+package org.sopt.official.domain.poke.entity
 
 data class PokeNotificationItem (
     val userId: Long,

@@ -1,11 +1,10 @@
 package org.sopt.official.domain.poke.entity
 
-class PokeUserResponse : BaseResponse<PokeUser>()
+class GetPokeMeResponse: BaseResponse<PokeMe>()
 
-data class PokeUser(
-    val userId: Int,
-    val playGroundId: Int,
-    val profileImage: String?,
+data class PokeMe(
+    val userId: Long,
+    val profileImage: String,
     val name: String,
     val message: String,
     val generation: Int,
@@ -14,5 +13,5 @@ data class PokeUser(
     val relationName: String,
     val mutual: List<String>,
     val isFirstMeet: Boolean,
-    val isAlreadyPoke: Boolean,
+    val isAlreadyPoke: Boolean
 )

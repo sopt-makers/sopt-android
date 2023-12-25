@@ -1,10 +1,11 @@
-package org.sopt.official.data.model.poke.response
+package org.sopt.official.data.poke.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.poke.entity.PokeMe
 
 @Serializable
-data class PokeMeResponse(
+data class PokeMeResult(
     @SerialName("userId")
     val userId: Long,
     @SerialName("playgroundId")
@@ -28,5 +29,19 @@ data class PokeMeResponse(
     @SerialName("isFirstMeet")
     val isFirstMeet: Boolean,
     @SerialName("isAlreadyPoke")
-    val isAlreadyPoke: Boolean
-)
+    val isAlreadyPoke: Boolean,
+) {
+    fun toEntity(): PokeMe = PokeMe(
+        userId = userId,
+        profileImage = profileImage,
+        name = name,
+        message = message,
+        generation = generation,
+        part = part,
+        pokeNum = pokeNum,
+        relationName = relationName,
+        mutual = mutual,
+        isFirstMeet = isFirstMeet,
+        isAlreadyPoke = isAlreadyPoke,
+    )
+}

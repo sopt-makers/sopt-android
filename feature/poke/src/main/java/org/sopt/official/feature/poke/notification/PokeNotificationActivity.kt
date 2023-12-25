@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke
+package org.sopt.official.feature.poke.notification
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,9 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import org.sopt.official.R
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityPokeNotificationBinding
+import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke
+package org.sopt.official.feature.poke.notification
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,16 +30,15 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import org.sopt.official.R
 import org.sopt.official.common.view.ItemDiffCallback
-import org.sopt.official.databinding.ItemPokeNotificationBinding
-import org.sopt.official.databinding.ItemPokeNotificationHeaderBinding
-import org.sopt.official.domain.entity.poke.PokeNotificationItem
-import org.sopt.official.util.PokeUtil
+import org.sopt.official.domain.poke.entity.PokeNotificationItem
+import org.sopt.official.feature.poke.R
+import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
+import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
 
 class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(
     ItemDiffCallback(
-        onContentsTheSame = { old, new -> old == new },
+        onContentsTheSame = { old, new -> old.userId == new.userId },
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
@@ -88,16 +87,14 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
                 item.profileImage.takeIf { it.isNotEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
-                imgUserRelation.setImageResource(PokeUtil.convertRelationNameToBorderReSourceId(item.relationName))
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message
                 tvUserFriendsStatus.text = if (item.isFirstMeet) {
                     "${item.mutual.first()} 외 ${item.mutual.size - 1}명과 친구"
                 } else {
-                    "${item.relationName} ${item.pokeNum}콕"
+                    "친한친구 ${item.pokeNum}콕"
                 }
-                btnPoke.setImageResource(PokeUtil.setPokeIcon(item.isFirstMeet, item.isAlreadyPoke))
             }
         }
     }

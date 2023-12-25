@@ -25,7 +25,7 @@ data class PokeUserResult(
     @SerialName("relationName")
     val relationName: String,
     @SerialName("mutual")
-    val mutual: List<PokeUserResult>,
+    val mutual: List<String>,
     @SerialName("isFirstMeet")
     val isFirstMeet: Boolean,
     @SerialName("isAlreadyPoke")
@@ -41,7 +41,7 @@ data class PokeUserResult(
         part = part,
         pokeNum = pokeNum,
         relationName = relationName,
-        mutual = mutual.map { it.toEntity() },
+        mutual = mutual,
         isFirstMeet = isFirstMeet,
         isAlreadyPoke = isAlreadyPoke,
     )

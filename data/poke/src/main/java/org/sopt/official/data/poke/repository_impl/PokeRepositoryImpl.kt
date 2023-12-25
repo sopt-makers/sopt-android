@@ -6,7 +6,11 @@ import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
 import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
 import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
+import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
 import org.sopt.official.domain.poke.entity.request.GetPokeMessageListRequest
 import org.sopt.official.domain.poke.entity.request.PokeUserRequest
@@ -24,6 +28,26 @@ class PokeRepositoryImpl @Inject constructor(
 
     override suspend fun getOnboardingPokeUserList(): GetOnboardingPokeUserListResponse {
         return dataSource.getOnboardingPokeUserList()
+    }
+
+    override suspend fun getPokeMe(): GetPokeMeResponse {
+        return dataSource.getPokeMe()
+    }
+
+    override suspend fun getPokeFriendList(): GetPokeFriendListResponse {
+        return dataSource.getPokeFriendList()
+    }
+
+    override suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {
+        return dataSource.getPokeFriendOfFriendList()
+    }
+
+    override suspend fun getPokeNotificationList(
+        page: Int,
+    ): GetPokeNotificationListResponse {
+        return dataSource.getPokeNotificationList(
+            page = page,
+        )
     }
 
     override suspend fun getFriendListSummary(): GetFriendListSummaryResponse {

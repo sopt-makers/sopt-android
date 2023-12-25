@@ -19,6 +19,7 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener
@@ -137,8 +138,12 @@ class OnboardingActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<PokeUser> -> { messageListBottomSheet?.dismiss() }
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
+                    is UiState.Success<PokeUser> -> {
+                        messageListBottomSheet?.dismiss()
+                        startActivity(Intent(this, PokeMainActivity::class.java))
+                        finish()
+                    }
+                    is UiState.ApiError -> startActivity(Intent(this, PokeMainActivity::class.java)) // if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
                     is UiState.Failure -> it.throwable.message?.let { toast(it) }
                 }
             }

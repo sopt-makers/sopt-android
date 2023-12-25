@@ -63,6 +63,7 @@
 
     <!-- MDS GrayScale -->
     <color name="mds_gray_10">#FCFCFC</color>
+    <color name="mds_gray_30">#F0F0F0</color>
     <color name="mds_gray_50">#E4E4E5</color>
     <color name="mds_gray_100">#C3C3C6</color>
     <color name="mds_gray_200">#9D9DA4</color>

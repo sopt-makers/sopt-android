@@ -120,10 +120,10 @@
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
         <activity
-            android:name=".feature.poke.PokeMainActivity"
+            android:name=".feature.poke.main.PokeMainActivity"
             android:exported="false" />
         <activity
-            android:name=".feature.poke.PokeNotificationActivity"
+            android:name=".feature.poke.notification.PokeNotificationActivity"
             android:exported="false" />
 
         <activity
