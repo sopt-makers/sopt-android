@@ -39,7 +39,7 @@ import org.sopt.official.util.PokeUtil
 
 class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(
     ItemDiffCallback(
-        onContentsTheSame = { old, new -> old.userId == new.userId },
+        onContentsTheSame = { old, new -> old == new },
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
