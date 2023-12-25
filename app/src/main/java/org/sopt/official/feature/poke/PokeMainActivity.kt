@@ -20,8 +20,6 @@ import org.sopt.official.data.model.poke.response.PokeFriendResponse
 import org.sopt.official.data.model.poke.response.PokeMeResponse
 import org.sopt.official.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.enums.MessageType
-import org.sopt.official.util.AlertDialogOneButton
-import org.sopt.official.util.AlertDialogTwoButton
 import org.sopt.official.util.PokeUtil
 
 @AndroidEntryPoint
@@ -112,11 +110,7 @@ class PokeMainActivity : AppCompatActivity() {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
             btnSomeonePokeMe.setImageResource(PokeUtil.setPokeIcon(pokeMeItem.isFirstMeet, pokeMeItem.isAlreadyPoke))
-
-            btnSomeonePokeMe.setOnClickListener {
-                val bottomSheetDialog = PokeMessageBottomSheetDialogFragment(MessageType.POKE_FRIEND)
-                bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
-            }
+            btnSomeonePokeMe.setOnClickListener { showPokeMessageBottomSheet(pokeMeItem.isFirstMeet) }
         }
     }
 
@@ -134,6 +128,7 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.setImageResource(PokeUtil.setPokeIcon(pokeFriendItem.isFirstMeet, pokeFriendItem.isAlreadyPoke))
+            btnPokeMyFriend.setOnClickListener { showPokeMessageBottomSheet(pokeFriendItem.isFirstMeet) }
         }
     }
 
@@ -194,24 +189,31 @@ class PokeMainActivity : AppCompatActivity() {
                 }
 
                 (0 until 2).forEach { friendIndex ->
-                    val friend = response?.friendList?.getOrNull(friendIndex)
+                    val friendOfFriend = response?.friendList?.getOrNull(friendIndex)
                     val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
                     val friendNameTextView = friendTextViews[2 * index + friendIndex]
                     val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
                     val btnPokeImageView = btnPokeImageViews[2 * index + friendIndex]
 
-                    friend?.let {
-                        it.profileImage.takeIf { url -> url.isNotEmpty() }?.let { url ->
+                    friendOfFriend?.let { friend ->
+                        friend.profileImage.takeIf { url -> url.isNotEmpty() }?.let { url ->
                             friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
                         } ?: run {
                             friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
                         }
-                        friendNameTextView.text = it.name
-                        friendGenerationTextView.text = "${it.generation}기 ${it.part}"
-                        btnPokeImageView.setImageResource(PokeUtil.setPokeIcon(it.isFirstMeet, it.isAlreadyPoke))
+                        friendNameTextView.text = friend.name
+                        friendGenerationTextView.text = "${friend.generation}기 ${friend.part}"
+                        btnPokeImageView.setImageResource(PokeUtil.setPokeIcon(friend.isFirstMeet, friend.isAlreadyPoke))
+                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(friend.isFirstMeet) }
                     }
                 }
             }
         }
+    }
+
+    private fun showPokeMessageBottomSheet(isFirstMeet: Boolean) {
+        val type = if (isFirstMeet) MessageType.POKE_SOMEONE else MessageType.POKE_FRIEND
+        val bottomSheetDialog = PokeMessageBottomSheetDialogFragment(type)
+        bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
     }
 }
