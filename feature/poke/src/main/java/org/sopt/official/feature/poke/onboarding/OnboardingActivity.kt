@@ -15,11 +15,11 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.feature.poke.PokeMainActivity
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
-import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener

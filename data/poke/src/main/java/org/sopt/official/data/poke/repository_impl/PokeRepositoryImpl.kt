@@ -7,12 +7,12 @@ import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
 import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
 import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
-import org.sopt.official.domain.poke.entity.request.GetPokeMessageListRequest
+import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.domain.poke.entity.request.PokeUserRequest
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -34,8 +34,8 @@ class PokeRepositoryImpl @Inject constructor(
         return dataSource.getPokeMe()
     }
 
-    override suspend fun getPokeFriendList(): GetPokeFriendListResponse {
-        return dataSource.getPokeFriendList()
+    override suspend fun getPokeFriend(): GetPokeFriendResponse {
+        return dataSource.getPokeFriend()
     }
 
     override suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {

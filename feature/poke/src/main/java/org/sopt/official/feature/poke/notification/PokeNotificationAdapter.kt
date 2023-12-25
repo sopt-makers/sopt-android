@@ -31,12 +31,12 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import org.sopt.official.common.view.ItemDiffCallback
-import org.sopt.official.domain.poke.entity.PokeNotificationItem
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
 
-class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.ViewHolder>(
+class PokeNotificationAdapter: ListAdapter<PokeUser, RecyclerView.ViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.userId == new.userId },
         onItemsTheSame = { old, new -> old == new }
@@ -68,7 +68,7 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
         }
     }
 
-    fun updatePokeNotification(newList: List<PokeNotificationItem>) {
+    fun updatePokeNotification(newList: List<PokeUser>) {
         submitList(newList)
         notifyDataSetChanged()
     }
@@ -82,9 +82,9 @@ class PokeNotificationAdapter: ListAdapter<PokeNotificationItem, RecyclerView.Vi
     inner class NotificationListViewHolder(
         private val viewBinding: ItemPokeNotificationBinding
     ) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: PokeNotificationItem) {
+        fun bind(item: PokeUser) {
             with(viewBinding) {
-                item.profileImage.takeIf { it.isNotEmpty() }?.let {
+                item.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
                 tvUserName.text = item.name

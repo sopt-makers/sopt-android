@@ -6,10 +6,10 @@ import androidx.viewbinding.ViewBinding
 import coil.load
 import coil.transform.CircleCropTransformation
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeUserLargeBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeUserSmallBinding
+import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
 
 sealed class PokeUserViewHolder(
     binding: ViewBinding,
@@ -29,12 +29,7 @@ sealed class PokeUserViewHolder(
                 }
                 imageViewFriendLevelIndicator.backgroundTintList = ContextCompat.getColorStateList(
                     root.context,
-                    when (pokeUser.relationName) {
-                        PokeFriendType.NEW.name -> org.sopt.official.designsystem.R.color.mds_blue_900
-                        PokeFriendType.BEST_FRIEND.name -> org.sopt.official.designsystem.R.color.mds_information
-                        PokeFriendType.SOULMATE.name -> org.sopt.official.designsystem.R.color.mds_secondary
-                        else -> org.sopt.official.designsystem.R.color.transparent
-                    }
+                    pokeUser.getPokeFriendRelationColor(),
                 )
                 textViewUserName.text = pokeUser.name
                 textViewUserInfo.text = binding.root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)

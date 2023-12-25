@@ -31,7 +31,6 @@ class PokeNotificationActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
 
         initRecyclerView()
-        initViewModel()
         initStateFlowValues()
     }
 
@@ -54,14 +53,10 @@ class PokeNotificationActivity : AppCompatActivity() {
         }
     }
 
-    private fun initViewModel() {
-        viewModel.getPokeNotification()
-    }
-
     private fun initStateFlowValues() {
         lifecycleScope.launch {
             viewModel.pokeNotification.collectLatest {
-                pokeNotificationAdapter.updatePokeNotification(it)
+                pokeNotificationAdapter.updatePokeNotification(it?.history ?: arrayListOf())
             }
         }
     }

@@ -2,7 +2,7 @@ package org.sopt.official.data.poke.data_source
 
 import org.sopt.official.data.poke.service.PokeService
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
-import org.sopt.official.domain.poke.entity.request.GetPokeMessageListRequest
+import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.domain.poke.entity.request.PokeUserRequest
 import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
@@ -10,7 +10,7 @@ import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
 import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
 import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
@@ -46,9 +46,9 @@ class PokeDataSource @Inject constructor(
         }
     }
 
-    suspend fun getPokeFriendList(): GetPokeFriendListResponse {
-        val call = service.getPokeFriendList()
-        return GetPokeFriendListResponse().apply {
+    suspend fun getPokeFriend(): GetPokeFriendResponse {
+        val call = service.getPokeFriend()
+        return GetPokeFriendResponse().apply {
             statusCode = call.code().toString()
             responseMessage = call.message()
             data = call.body()?.map { it.toEntity() }

@@ -6,15 +6,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.PokeFriend
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
-import org.sopt.official.domain.poke.entity.PokeMe
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.use_case.GetPokeFriendOfFriendListUseCase
-import org.sopt.official.domain.poke.use_case.GetPokeFriendListUseCase
+import org.sopt.official.domain.poke.use_case.GetPokeFriendUseCase
 import org.sopt.official.domain.poke.use_case.GetPokeMeUseCase
 import org.sopt.official.domain.poke.use_case.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
@@ -24,16 +22,16 @@ import javax.inject.Inject
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
-    private val getPokeFriendListUseCase: GetPokeFriendListUseCase,
+    private val getPokeFriendUseCase: GetPokeFriendUseCase,
     private val getPokeFriendOfFriendListUseCase: GetPokeFriendOfFriendListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
 
-    private val _pokeMeUiState = MutableStateFlow<UiState<PokeMe>>(UiState.Loading)
-    val pokeMeUiState: StateFlow<UiState<PokeMe>> get() = _pokeMeUiState
+    private val _pokeMeUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
+    val pokeMeUiState: StateFlow<UiState<PokeUser>> get() = _pokeMeUiState
 
-    private val _pokeFriendUiState = MutableStateFlow<UiState<List<PokeFriend>>>(UiState.Loading)
-    val pokeFriendUiState: StateFlow<UiState<List<PokeFriend>>> get() = _pokeFriendUiState
+    private val _pokeFriendUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
+    val pokeFriendUiState: StateFlow<UiState<PokeUser>> get() = _pokeFriendUiState
 
     private val _pokeFriendOfFriendUiState = MutableStateFlow<UiState<List<PokeFriendOfFriendList>>>(UiState.Loading)
     val pokeFriendOfFriendUiState: StateFlow<UiState<List<PokeFriendOfFriendList>>> get() = _pokeFriendOfFriendUiState
@@ -44,7 +42,7 @@ class PokeMainViewModel @Inject constructor(
     fun getPokeMe() {
         viewModelScope.launch {
             getPokeMeUseCase.invoke()
-                .onSuccess {
+                .onSuccess { // todo: 데이터 없으면 null로 넘어옴.. 처리 필요..
                     _pokeMeUiState.emit(UiState.Success(it))
                 }
                 .onApiError { statusCode, responseMessage ->
@@ -59,9 +57,9 @@ class PokeMainViewModel @Inject constructor(
 
     fun getPokeFriend() {
         viewModelScope.launch {
-            getPokeFriendListUseCase.invoke()
+            getPokeFriendUseCase.invoke()
                 .onSuccess {
-                    _pokeFriendUiState.emit(UiState.Success(it))
+                    _pokeFriendUiState.emit(UiState.Success(it[0]))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _pokeFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))

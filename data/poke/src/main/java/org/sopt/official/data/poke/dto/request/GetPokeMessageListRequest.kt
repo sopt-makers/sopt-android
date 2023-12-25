@@ -1,4 +1,4 @@
-package org.sopt.official.domain.poke.entity.request
+package org.sopt.official.data.poke.dto.request
 
 import org.sopt.official.domain.poke.type.PokeMessageType
 

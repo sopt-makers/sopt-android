@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.PokeMainActivity">
+    tools:context=".PokeMainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_header"
@@ -12,7 +12,7 @@
         android:layout_height="56dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/btn_close"
@@ -33,11 +33,11 @@
             android:layout_marginVertical="14dp"
             android:layout_marginStart="2dp"
             android:fontFamily="@font/suit_bold"
+            android:lineHeight="28px"
             android:text="콕 찌르기"
-            android:textSize="18dp"
             android:textColor="@color/white"
             android:textFontWeight="700"
-            android:lineHeight="28px"
+            android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_close"
             app:layout_constraintTop_toTopOf="parent" />
@@ -94,11 +94,11 @@
                         android:id="@+id/btn_next_someone_poke_me"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/icon_chevron"
+                        android:backgroundTint="@color/mds_gray_30"
                         android:paddingHorizontal="17dp"
                         android:paddingVertical="14dp"
-                        android:background="@drawable/icon_chevron"
                         android:rotation="180"
-                        android:backgroundTint="@color/mds_gray_30"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -112,6 +112,16 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tv_title_someone_poke_me"
                         app:layout_constraintTop_toBottomOf="@id/tv_title_someone_poke_me" />
+
+                    <ImageView
+                        android:id="@+id/img_user_profile_poke_me_outline"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/oval_stroke_2"
+                        app:layout_constraintBottom_toBottomOf="@id/img_user_profile_someone_poke_me"
+                        app:layout_constraintEnd_toEndOf="@id/img_user_profile_someone_poke_me"
+                        app:layout_constraintStart_toStartOf="@id/img_user_profile_someone_poke_me"
+                        app:layout_constraintTop_toTopOf="@id/img_user_profile_someone_poke_me" />
 
                     <TextView
                         android:id="@+id/tv_user_name_someone_poke_me"
@@ -161,15 +171,14 @@
                         app:layout_constraintTop_toBottomOf="@id/tv_user_name_someone_poke_me"
                         tools:text="친해지고 싶어요 친해지고 싶어요 " />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/btn_someone_poke_me"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:layout_marginVertical="20dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/rectangle_gray700_radius_18"
+                        android:background="@drawable/image_button_poke"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/btn_next_someone_poke_me" />
@@ -219,11 +228,12 @@
                         android:id="@+id/img_next_poke_my_friend"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/icon_chevron"
+                        android:backgroundTint="@color/mds_gray_30"
                         android:paddingHorizontal="17dp"
                         android:paddingVertical="14dp"
-                        android:background="@drawable/icon_chevron"
                         android:rotation="180"
-                        android:backgroundTint="@color/mds_gray_30"                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
@@ -236,6 +246,16 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tv_title_poke_my_friend"
                         app:layout_constraintTop_toBottomOf="@id/tv_title_poke_my_friend" />
+
+                    <ImageView
+                        android:id="@+id/img_user_profile_poke_my_friend_outline"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/oval_stroke_2"
+                        app:layout_constraintBottom_toBottomOf="@id/img_user_profile_poke_my_friend"
+                        app:layout_constraintEnd_toEndOf="@id/img_user_profile_poke_my_friend"
+                        app:layout_constraintStart_toStartOf="@id/img_user_profile_poke_my_friend"
+                        app:layout_constraintTop_toTopOf="@id/img_user_profile_poke_my_friend" />
 
                     <TextView
                         android:id="@+id/tv_user_name_poke_my_friend"
@@ -267,15 +287,14 @@
                         app:layout_constraintTop_toTopOf="@id/tv_user_name_poke_my_friend"
                         tools:text="27기 iOS" />
 
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/btn_poke_my_friend"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
                         android:layout_marginVertical="8dp"
                         android:layout_marginEnd="12dp"
-                        android:background="@drawable/rectangle_gray700_radius_18"
+                        android:background="@drawable/image_button_poke"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/img_next_poke_my_friend" />
@@ -316,8 +335,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="7dp"
-                    tools:visibility="visible"
-                    android:background="@drawable/rectangle_gray900_radius_12">
+                    android:background="@drawable/rectangle_gray900_radius_12"
+                    tools:visibility="visible">
 
                     <ImageView
                         android:id="@+id/img_my_friend_profile1"
@@ -357,9 +376,8 @@
                         android:id="@+id/btn_friend_poke1_of_my_friend"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:background="@drawable/rectangle_gray700_radius_18"
+                        android:background="@drawable/image_button_poke"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile1_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile1_of_my_friend" />
 
@@ -407,9 +425,8 @@
                         android:id="@+id/btn_friend_poke2_of_my_friend"
                         android:layout_width="44dp"
                         android:layout_height="44dp"
-                        android:background="@drawable/rectangle_gray700_radius_18"
+                        android:background="@drawable/image_button_poke"
                         android:padding="10dp"
-                        android:src="@drawable/ic_poke_gray"
                         app:layout_constraintBottom_toBottomOf="@+id/img_friend_profile2_of_my_friend"
                         app:layout_constraintEnd_toEndOf="@+id/img_friend_profile2_of_my_friend" />
 
@@ -461,35 +478,35 @@
                         android:id="@+id/img_empty_view1_of_my_friend"
                         android:layout_width="64dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_empty_poke"
                         android:layout_marginTop="32dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:src="@drawable/ic_empty_poke"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile1"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile1" />
 
                     <TextView
                         android:id="@+id/tv_empty_view1_of_my_friend"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAlignment="center"
                         android:layout_marginTop="14dp"
-                        android:textSize="16dp"
-                        android:textFontWeight="600"
-                        android:fontFamily="@font/suit_bold"
-                        android:textColor="@color/mds_gray_300"
                         android:layout_marginBottom="36dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요"
+                        android:textAlignment="center"
+                        android:textColor="@color/mds_gray_300"
+                        android:textFontWeight="600"
+                        android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/img_empty_view1_of_my_friend"
-                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_empty_view1_of_my_friend" />
 
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_empty_box1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:visibility="gone"
-                        app:constraint_referenced_ids="img_empty_view1_of_my_friend, tv_empty_view1_of_my_friend"/>
+                        app:constraint_referenced_ids="img_empty_view1_of_my_friend, tv_empty_view1_of_my_friend" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -645,28 +662,28 @@
                         android:id="@+id/img_empty_view2_of_my_friend"
                         android:layout_width="64dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_empty_poke"
                         android:layout_marginTop="32dp"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:src="@drawable/ic_empty_poke"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile2"/>
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_my_friend_profile2" />
 
                     <TextView
                         android:id="@+id/tv_empty_view2_of_my_friend"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAlignment="center"
                         android:layout_marginTop="14dp"
-                        android:textSize="16dp"
-                        android:textFontWeight="600"
-                        android:fontFamily="@font/suit_bold"
-                        android:textColor="@color/mds_gray_300"
                         android:layout_marginBottom="36dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:fontFamily="@font/suit_bold"
+                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요"
+                        android:textAlignment="center"
+                        android:textColor="@color/mds_gray_300"
+                        android:textFontWeight="600"
+                        android:textSize="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/img_empty_view2_of_my_friend"
-                        android:text="아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요" />
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/img_empty_view2_of_my_friend" />
 
                     <androidx.constraintlayout.widget.Group
                         android:id="@+id/group_empty_box2"

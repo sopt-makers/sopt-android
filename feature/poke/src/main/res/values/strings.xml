@@ -30,5 +30,6 @@
     <!-- 친구 아이템 -->
     <string name="poke_user_info">%1$d기 %2$s</string>
     <string name="poke_user_poke_count">%1$d콕</string>
+    <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
 
 </resources>

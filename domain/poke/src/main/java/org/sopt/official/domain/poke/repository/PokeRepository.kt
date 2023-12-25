@@ -5,7 +5,7 @@ import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
 import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendListResponse
+import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
 import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
@@ -17,7 +17,7 @@ interface PokeRepository {
     suspend fun checkNewInPoke(): CheckNewInPokeResponse
     suspend fun getOnboardingPokeUserList(): GetOnboardingPokeUserListResponse
     suspend fun getPokeMe(): GetPokeMeResponse
-    suspend fun getPokeFriendList(): GetPokeFriendListResponse
+    suspend fun getPokeFriend(): GetPokeFriendResponse
     suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse
     suspend fun getPokeNotificationList(page: Int): GetPokeNotificationListResponse
 

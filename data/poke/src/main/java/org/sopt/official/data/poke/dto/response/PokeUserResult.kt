@@ -9,7 +9,7 @@ data class PokeUserResult(
     @SerialName("userId")
     val userId: Int,
     @SerialName("playgroundId")
-    val playGroundId: Int,
+    val playgroundId: Int,
     @SerialName("profileImage")
     val profileImage: String?,
     @SerialName("name")
@@ -33,7 +33,7 @@ data class PokeUserResult(
 ) {
     fun toEntity(): PokeUser = PokeUser(
         userId = userId,
-        playGroundId = playGroundId,
+        playgroundId = playgroundId,
         profileImage = profileImage,
         name = name,
         message = message,
