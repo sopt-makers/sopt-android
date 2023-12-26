@@ -24,4 +24,6 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.timber)
+
+    implementation(libs.android.lottie)
 }

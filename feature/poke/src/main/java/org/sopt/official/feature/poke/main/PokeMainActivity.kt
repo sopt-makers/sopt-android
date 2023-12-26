@@ -1,5 +1,6 @@
-package org.sopt.official.feature.poke
+package org.sopt.official.feature.poke.main
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +18,9 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.R
+import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
-import org.sopt.official.feature.poke.main.PokeMainViewModel
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
@@ -29,6 +30,8 @@ class PokeMainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
+
+    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +58,22 @@ class PokeMainActivity : AppCompatActivity() {
                 initData()
                 refreshLayoutPokeMain.isRefreshing = false
             }
+
+            animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {
+                    layoutLottie.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    layoutLottie.visibility = View.GONE
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator) {
+                }
+            })
         }
     }
 
@@ -111,13 +130,30 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
-
                         is UiState.ApiError -> startActivity(
                             Intent(
                                 this@PokeMainActivity,
                                 PokeMainActivity::class.java
                             )
                         ) // if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
+                        is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    }
+                }
+                .launchIn(lifecycleScope)
+        }
+
+        viewModel.apply {
+            pokeUserUiState.flowWithLifecycle(lifecycle)
+                .onEach {
+                    when (it) {
+                        is UiState.Loading -> "Loading"
+                        is UiState.Success<PokeUser> -> {
+                            messageListBottomSheet?.dismiss()
+                            if (!it.data.isFirstMeet && it.data.isAlreadyPoke) {
+                                binding.animationViewLottie.playAnimation()
+                            }
+                        }
+                        is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
                         is UiState.Failure -> it.throwable.message?.let { toast(it) }
                     }
                 }
@@ -143,7 +179,7 @@ class PokeMainActivity : AppCompatActivity() {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
             btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
-            btnSomeonePokeMe.setOnClickListener { showPokeMessageBottomSheet(pokeMeItem.isFirstMeet) }
+            btnSomeonePokeMe.setOnClickListener { onPressPokeButton(pokeMeItem.userId) }
         }
     }
 
@@ -160,7 +196,7 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
-            btnPokeMyFriend.setOnClickListener { showPokeMessageBottomSheet(pokeFriendItem.isFirstMeet) }
+//            btnPokeMyFriend.setOnClickListener { showPokeMessageBottomSheet(pokeFriendItem.isFirstMeet) }
         }
     }
 
@@ -248,16 +284,23 @@ class PokeMainActivity : AppCompatActivity() {
                         friendNameTextView.text = myFriendOfFriend.name
                         friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
                         btnPokeImageView.isEnabled = !myFriendOfFriend.isAlreadyPoke
-                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(myFriendOfFriend.isFirstMeet) }
+//                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(myFriendOfFriend.isFirstMeet) }
                     }
                 }
             }
         }
     }
 
-    private fun showPokeMessageBottomSheet(isFirstMeet: Boolean) {
-        val type = if (isFirstMeet) PokeMessageType.POKE_SOMEONE else PokeMessageType.POKE_FRIEND
-        val bottomSheetDialog = MessageListBottomSheetFragment()//(type)
-        bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
+    private fun onPressPokeButton(userId: Int) {
+        if (messageListBottomSheet?.isAdded == true) return
+        if (messageListBottomSheet == null) {
+            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                .create()
+        }
+
+        messageListBottomSheet?.let {
+            it.show(supportFragmentManager, it.tag)
+        }
     }
 }

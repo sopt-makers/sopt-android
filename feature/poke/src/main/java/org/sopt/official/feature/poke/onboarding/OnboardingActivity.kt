@@ -15,7 +15,7 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.feature.poke.PokeMainActivity
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding

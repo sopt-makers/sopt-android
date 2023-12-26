@@ -32,4 +32,6 @@
     <string name="poke_user_poke_count">%1$d콕</string>
     <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
 
+    <string name="friend_complete">찌르기 답장으로\n%s님과 친구가 되었어요!</string>
+
 </resources>

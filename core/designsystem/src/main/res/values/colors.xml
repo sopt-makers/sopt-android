@@ -75,6 +75,7 @@
     <color name="mds_gray_800">#202025</color>
     <color name="mds_gray_900">#17181C</color>
     <color name="mds_gray_950">#0F1012</color>
+    <color name="mds_gray_950_alpha80">#CC0F1012</color>
 
     <!-- MDS RedScale -->
     <color name="red_100">#BD372F</color>
