@@ -23,9 +23,12 @@ sealed class PokeUserViewHolder(
 
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
-                imageViewProfile.load(pokeUser.profileImage) {
-                    crossfade(true)
-                    transformations(CircleCropTransformation())
+                when (pokeUser.profileImage.isNullOrBlank()) {
+                    true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+                    false -> imageViewProfile.load(pokeUser.profileImage) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
                 }
                 imageViewFriendLevelIndicator.backgroundTintList = ContextCompat.getColorStateList(
                     root.context,
@@ -45,9 +48,12 @@ sealed class PokeUserViewHolder(
 
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
-                imageViewProfile.load(pokeUser.profileImage) {
-                    crossfade(true)
-                    transformations(CircleCropTransformation())
+                when (pokeUser.profileImage.isNullOrBlank()) {
+                    true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+                    false -> imageViewProfile.load(pokeUser.profileImage) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
                 }
                 textViewUserName.text = pokeUser.name
                 textViewUserInfo.text = binding.root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
