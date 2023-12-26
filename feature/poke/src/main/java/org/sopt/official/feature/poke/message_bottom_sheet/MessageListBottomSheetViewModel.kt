@@ -23,14 +23,10 @@ class MessageListBottomSheetViewModel @Inject constructor(
     private val _pokeMessageListUiState = MutableStateFlow<UiState<PokeMessageList>>(UiState.Loading)
     val pokeMessageListUiState: StateFlow<UiState<PokeMessageList>> get() = _pokeMessageListUiState
 
-    init {
-        getPokeMessageList()
-    }
-
-    fun getPokeMessageList() {
+    fun getPokeMessageList(pokeMessageType: PokeMessageType) {
         viewModelScope.launch {
             getPokeMessageListUseCase.invoke(
-                messageType = PokeMessageType.POKE_FRIEND,
+                messageType = pokeMessageType,
             )
                 .onSuccess { response ->
                     _pokeMessageListUiState.emit(UiState.Success(response))

@@ -16,6 +16,8 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.PokeMainActivity
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
@@ -24,6 +26,7 @@ import org.sopt.official.feature.poke.common_recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.common_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.common_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
+import org.sopt.official.feature.poke.friend_list_detail.FriendListDetailBottomSheetFragment
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 
 @AndroidEntryPoint
@@ -52,7 +55,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initAppBar()
-        initRecyclerView()
+        initFriendListBlock()
         launchFriendListSummaryUiStateFlow()
         launchPokeUserUiStateFlow()
     }
@@ -64,13 +67,14 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
     }
 
-    private fun initRecyclerView() {
+    private fun initFriendListBlock() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.getFriendListSummary()
             binding.swipeRefreshLayout.isRefreshing = false
         }
 
         binding.includeFriendListBlockNewFriend.apply {
+            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.NEW) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_new_friend)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_new_friend)
             textViewListCount.text = getString(R.string.friend_list_count, 0)
@@ -83,6 +87,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         binding.includeFriendListBlockBestFriend.apply {
+            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.BEST_FRIEND) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_best_friend)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_best_friend)
             textViewListCount.text = getString(R.string.friend_list_count, 0)
@@ -95,6 +100,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         binding.includeFriendListBlockSoulmate.apply {
+            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.SOULMATE) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_soulmate)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_soulmate)
             textViewListCount.text = getString(R.string.friend_list_count, 0)
@@ -105,6 +111,13 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 clickListener = pokeUserListClickLister,
             )
         }
+    }
+
+    private fun showFriendListDetailBottomSheet(pokeFriendType: PokeFriendType) {
+        FriendListDetailBottomSheetFragment.Builder()
+            .setPokeFriendType(pokeFriendType)
+            .create()
+            .let { it.show(supportFragmentManager, it.tag) }
     }
 
     private fun launchFriendListSummaryUiStateFlow() {
@@ -181,6 +194,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
             if (messageListBottomSheet?.isAdded == true) return
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                    .setMessageListType(PokeMessageType.POKE_SOMEONE)
                     .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
                     .create()
             }

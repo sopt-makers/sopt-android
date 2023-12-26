@@ -261,7 +261,7 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun showPokeMessageBottomSheet(isFirstMeet: Boolean) {
-        val type = if (isFirstMeet) PokeMessageType.POKE_SOMEONE else PokeMessageType.POKE_FRIEND
+//        val type = if (isFirstMeet) PokeMessageType.POKE_SOMEONE else PokeMessageType.POKE_FRIEND
         val bottomSheetDialog = MessageListBottomSheetFragment()//(type)
         bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
     }

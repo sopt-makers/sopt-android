@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeMessageList
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheetBinding
 
@@ -23,6 +24,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding: FragmentMessageListBottomSheetBinding get() = requireNotNull(_binding)
     private lateinit var viewModel: MessageListBottomSheetViewModel
 
+    var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String) -> Unit)? = null
 
     override fun onCreateView(
@@ -36,6 +38,8 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        pokeMessageType?.let { viewModel.getPokeMessageList(it) }
         launchPokeMessageListUiStateFlow()
     }
 
@@ -70,6 +74,11 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     class Builder {
         private val bottomSheet = MessageListBottomSheetFragment()
         fun create(): MessageListBottomSheetFragment = bottomSheet
+
+        fun setMessageListType(pokeMessageType: PokeMessageType): Builder {
+            bottomSheet.pokeMessageType = pokeMessageType
+            return this
+        }
 
         fun onClickMessageListItem(event: (message: String) -> Unit): Builder {
             bottomSheet.onClickMessageListItem = event
