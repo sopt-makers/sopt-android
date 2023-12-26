@@ -10,17 +10,23 @@ import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.use_case.GetFriendListSummaryUseCase
+import org.sopt.official.domain.poke.use_case.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import javax.inject.Inject
 
 @HiltViewModel
 class FriendListSummaryViewModel @Inject constructor(
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
+    private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
 
     private val _friendListSummaryUiState = MutableStateFlow<UiState<FriendListSummary>>(UiState.Loading)
     val friendListSummaryUiState: StateFlow<UiState<FriendListSummary>> get() = _friendListSummaryUiState
+
+    private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
+    val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
     init {
         getFriendListSummary()
@@ -37,6 +43,27 @@ class FriendListSummaryViewModel @Inject constructor(
                 }
                 .onFailure { throwable ->
                     _friendListSummaryUiState.emit(UiState.Failure(throwable))
+                }
+        }
+    }
+
+    fun pokeUser(
+        userId: Int,
+        message: String,
+    ) {
+        viewModelScope.launch {
+            pokeUserUseCase.invoke(
+                message = message,
+                userId = userId,
+            )
+                .onSuccess { response ->
+                    _pokeUserUiState.emit(UiState.Success(response))
+                }
+                .onApiError { statusCode, responseMessage ->
+                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
+                }
+                .onFailure { throwable ->
+                    _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
         }
     }

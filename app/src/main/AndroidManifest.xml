@@ -125,6 +125,8 @@
         <activity
             android:name=".feature.poke.notification.PokeNotificationActivity"
             android:exported="false" />
+        <activity android:name=".feature.poke.friend_list_summary.FriendListSummaryActivity"
+            android:exported="false" />
 
         <activity
             android:name=".auth.AuthCodeHandlerActivity"

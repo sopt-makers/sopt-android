@@ -19,6 +19,7 @@ import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
+import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.main.PokeMainViewModel
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
@@ -45,6 +46,10 @@ class PokeMainActivity : AppCompatActivity() {
 
             btnNextSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
+            }
+
+            imgNextPokeMyFriend.setOnClickListener {
+                startActivity(Intent(this@PokeMainActivity, FriendListSummaryActivity::class.java))
             }
 
             scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {

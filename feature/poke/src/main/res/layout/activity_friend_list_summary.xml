@@ -6,4 +6,54 @@
     android:layout_height="match_parent"
     tools:context=".friend_list_summary.FriendListSummaryActivity">
 
+    <include
+        android:id="@+id/include_app_bar"
+        layout="@layout/include_app_bar_back"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/include_app_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/include_friend_list_block_new_friend"
+                layout="@layout/include_friend_list_block_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/mds_gray_900" />
+
+            <include
+                android:id="@+id/include_friend_list_block_best_friend"
+                layout="@layout/include_friend_list_block_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="@color/mds_gray_900" />
+
+            <include
+                android:id="@+id/include_friend_list_block_soulmate"
+                layout="@layout/include_friend_list_block_small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

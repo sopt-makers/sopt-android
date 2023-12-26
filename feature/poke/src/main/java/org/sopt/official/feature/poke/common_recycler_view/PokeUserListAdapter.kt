@@ -23,10 +23,11 @@ class PokeUserListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokeUserViewHolder {
         return when (pokeUserListItemViewType) {
             PokeUserListItemViewType.SMALL -> PokeUserViewHolder.Small(
-                ItemPokeUserSmallBinding.inflate(LayoutInflater.from(parent.context))
+                ItemPokeUserSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
+
             else -> PokeUserViewHolder.Large(
-                ItemPokeUserLargeBinding.inflate(LayoutInflater.from(parent.context))
+                ItemPokeUserLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
     }

@@ -35,8 +35,8 @@ sealed class PokeUserViewHolder(
                     pokeUser.getPokeFriendRelationColor(),
                 )
                 textViewUserName.text = pokeUser.name
-                textViewUserInfo.text = binding.root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
-                textViewPokeCount.text = pokeUser.pokeNum.toString()
+                textViewUserInfo.text = root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
+                textViewPokeCount.text = root.context.getString(R.string.poke_user_poke_count, pokeUser.pokeNum)
                 imageButtonPoke.isEnabled = !pokeUser.isAlreadyPoke
             }
         }
