@@ -39,7 +39,7 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/mds_gray_30"
         android:src="@drawable/img_poke" />
 
     <TextView
@@ -48,6 +48,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="@string/poke"
+        android:text="@string/poke_title"
         android:textColor="@color/mds_gray_10" />
 </LinearLayout>
