@@ -2,6 +2,7 @@ package org.sopt.official.feature.poke.onboarding
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -21,9 +22,9 @@ import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.common_recycler_view.PokeUserListAdapter
+import org.sopt.official.feature.poke.common_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.common_recycler_view.PokeUserListItemViewType
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -114,8 +115,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage() {
-            // TODO("Navigate to playground")
+        override fun onClickProfileImage(playgroundId: Int) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
         override fun onClickPokeButton(userId: Int) {

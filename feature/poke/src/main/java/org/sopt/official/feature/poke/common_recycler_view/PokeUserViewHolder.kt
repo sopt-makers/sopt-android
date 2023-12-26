@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke.recycler_view
+package org.sopt.official.feature.poke.common_recycler_view
 
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView

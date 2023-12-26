@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke.recycler_view
+package org.sopt.official.feature.poke.common_recycler_view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -35,7 +35,7 @@ class PokeUserListAdapter(
         holder.apply {
             onBind(currentList[position])
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-                clickListener.onClickProfileImage()
+                clickListener.onClickProfileImage(currentList[position].playgroundId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
                 clickListener.onClickPokeButton(currentList[position].userId)
