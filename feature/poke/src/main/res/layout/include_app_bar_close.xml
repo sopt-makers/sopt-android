@@ -4,7 +4,7 @@
     android:id="@+id/layout_app_bar"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="?android:colorBackground">
+    android:background="@color/mds_gray_950">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -18,8 +18,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start"
             android:text="@string/poke_title"
-            android:textAppearance="?textAppearanceBodyLarge"
-            android:textColor="?colorOnBackground"
+            android:textAppearance="@style/TextAppearance.SOPT.HeadLineMediumLarge"
+            android:textColor="@color/mds_gray_30"
             android:textSize="16dp" />
 
     </androidx.appcompat.widget.Toolbar>

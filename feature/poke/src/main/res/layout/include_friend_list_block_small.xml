@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
     android:paddingVertical="10dp">
 
     <TextView
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:textAppearance="@style/TextAppearance.SOPT.HeadLineMediumLarge"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/friend_relation_name_new_friend" />
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="8dp"
         android:textAppearance="@style/TextAppearance.SOPT.CaptionLarge"
-        android:textColor="@color/mds_gray_200"
+        android:textColor="@color/mds_gray_300"
         app:layout_constraintBottom_toBottomOf="@id/textView_friendListTitle"
         app:layout_constraintEnd_toStartOf="@id/textView_listCount"
         app:layout_constraintStart_toEndOf="@id/textView_friendListTitle"
@@ -37,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintBottom_toBottomOf="@id/imageButton_more"
         app:layout_constraintEnd_toStartOf="@id/imageButton_more"
         app:layout_constraintTop_toTopOf="@id/imageButton_more"
@@ -49,7 +48,7 @@
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/icon_chevron"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/mds_gray_30"
         android:rotation="180"
         app:layout_constraintBottom_toBottomOf="@id/textView_friendListTitle"
         app:layout_constraintDimensionRatio="1"

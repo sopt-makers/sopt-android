@@ -146,7 +146,12 @@ class OnboardingActivity : AppCompatActivity() {
                         startActivity(Intent(this, PokeMainActivity::class.java))
                         finish()
                     }
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
+
+                    is UiState.ApiError -> {
+                        if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
+                        startActivity(Intent(this, PokeMainActivity::class.java))
+                    }
+
                     is UiState.Failure -> it.throwable.message?.let { toast(it) }
                 }
             }

@@ -9,9 +9,8 @@
         android:id="@+id/img_user_profile"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        tools:src="@drawable/oval_border_gray400"
-        android:layout_marginStart="20dp"
         android:layout_marginVertical="20dp"
+        android:layout_marginStart="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -78,17 +77,16 @@
             tools:text="제갈송현 외 1명과 친구" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/img_poke"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:padding="10dp"
-        android:src="@drawable/ic_poke_black"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/rectangle_gray10_radius_18"
-        app:layout_constraintBottom_toBottomOf="@+id/img_user_profile"
+        android:background="@drawable/image_button_poke"
+        app:layout_constraintBottom_toBottomOf="@id/img_user_profile"
+        app:layout_constraintDimensionRatio="1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/img_user_profile" />
+        app:layout_constraintTop_toTopOf="@id/img_user_profile" />
 
     <View
         android:layout_width="match_parent"

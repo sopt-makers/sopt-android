@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/onboarding_bottom_sheet_title"
         android:textAppearance="@style/TextAppearance.SOPT.HeadLineLarge"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -41,17 +41,13 @@
         android:layout_marginTop="8dp"
         android:text="@string/onboarding_bottom_sheet_content"
         android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintEnd_toEndOf="@id/imageView_onboarding"
         app:layout_constraintStart_toStartOf="@id/imageView_onboarding"
         app:layout_constraintTop_toBottomOf="@id/imageView_onboarding" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_confirm"
-        app:layout_constraintTop_toBottomOf="@id/textView_description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@id/textView_description"
-        app:layout_constraintEnd_toEndOf="@id/textView_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
@@ -61,6 +57,10 @@
         android:paddingVertical="12dp"
         android:text="@string/onboarding_bottom_sheet_confirm"
         android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/textView_description"
+        app:layout_constraintStart_toStartOf="@id/textView_description"
+        app:layout_constraintTop_toBottomOf="@id/textView_description" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

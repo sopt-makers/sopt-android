@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/black"
     android:paddingHorizontal="20dp"
     android:paddingVertical="10dp">
 
@@ -22,10 +21,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/oval_stroke_2"
-        app:layout_constraintStart_toStartOf="@id/imageView_profile"
-        app:layout_constraintEnd_toEndOf="@id/imageView_profile"
         app:layout_constraintBottom_toBottomOf="@id/imageView_profile"
-        app:layout_constraintTop_toTopOf="@id/imageView_profile"/>
+        app:layout_constraintEnd_toEndOf="@id/imageView_profile"
+        app:layout_constraintStart_toStartOf="@id/imageView_profile"
+        app:layout_constraintTop_toTopOf="@id/imageView_profile" />
 
     <TextView
         android:id="@+id/textView_userName"
@@ -34,7 +33,7 @@
         android:layout_marginVertical="16dp"
         android:layout_marginStart="10dp"
         android:textAppearance="@style/TextAppearance.SOPT.HeadLineMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintBottom_toBottomOf="@id/imageView_profile"
         app:layout_constraintStart_toEndOf="@id/imageView_profile"
         app:layout_constraintTop_toTopOf="@id/imageView_profile"
@@ -61,7 +60,7 @@
         android:layout_marginEnd="12dp"
         android:text="@string/poke_user_poke_count"
         android:textAppearance="@style/TextAppearance.SOPT.HeadLineMedium"
-        android:textColor="@color/white"
+        android:textColor="@color/mds_gray_30"
         app:layout_constraintBottom_toBottomOf="@id/imageButton_poke"
         app:layout_constraintEnd_toStartOf="@id/imageButton_poke"
         app:layout_constraintTop_toTopOf="@id/imageButton_poke" />
