@@ -19,7 +19,7 @@ class PokeNotificationViewModel @Inject constructor(
     private val getPokeNotificationListUseCase: GetPokeNotificationListUseCase
 ) : ViewModel() {
 
-    private val _pokeNotification = MutableStateFlow<PokeNotificationList?>(null)
+    private val _pokeNotification = MutableStateFlow<PokeNotificationList?>(PokeNotificationList(arrayListOf(), 0, 0))
     val pokeNotification: StateFlow<PokeNotificationList?> get() = _pokeNotification
 
     private var currentPaginationIndex = 0

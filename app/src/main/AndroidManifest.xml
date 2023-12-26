@@ -121,7 +121,8 @@
             android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".feature.poke.main.PokeMainActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".feature.poke.notification.PokeNotificationActivity"
             android:exported="false" />
