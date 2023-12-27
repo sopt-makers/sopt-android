@@ -213,7 +213,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        finish()
+                        viewModel.updatePokeUserState(it.data.userId)
                     }
 
                     is UiState.ApiError -> {

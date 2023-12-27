@@ -69,4 +69,32 @@ class FriendListSummaryViewModel @Inject constructor(
                 }
         }
     }
+
+    fun updatePokeUserState(userId: Int) {
+        viewModelScope.launch {
+            if (_friendListSummaryUiState.value is UiState.Success<FriendListSummary>) {
+                val data = (_friendListSummaryUiState.value as UiState.Success<FriendListSummary>).data
+
+                for (friend in data.newFriend) {
+                    if (friend.userId == userId) {
+                        friend.isAlreadyPoke = true
+                    }
+                }
+
+                for (friend in data.bestFriend) {
+                    if (friend.userId == userId) {
+                        friend.isAlreadyPoke = true
+                    }
+                }
+
+                for (friend in data.soulmate) {
+                    if (friend.userId == userId) {
+                        friend.isAlreadyPoke = true
+                    }
+                }
+                _friendListSummaryUiState.emit(UiState.Loading)
+                _friendListSummaryUiState.emit(UiState.Success(data))
+            }
+        }
+    }
 }
