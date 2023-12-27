@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
@@ -46,7 +47,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     private val recyclerViewItemDecorationDivider
         get() = ItemDecorationDivider(
             color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
-            height = 1 * resources.displayMetrics.density
+            height = 1.dp
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -165,7 +166,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     includeFriendListEmptyView.root.setVisible(false)
                     recyclerView
                     textViewListCount.text = getString(R.string.friend_list_count, data.bestFriendSize)
-                    bestFriendListAdapter?.submitList(data.newFriend)
+                    bestFriendListAdapter?.submitList(data.bestFriend)
                 }
             }
         }

@@ -17,13 +17,12 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.main.PokeMainViewModel
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
-import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -138,7 +137,7 @@ class PokeMainActivity : AppCompatActivity() {
             pokeMeItem.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
-            imgUserProfilePokeMeOutline.setImageResource(pokeMeItem.getPokeFriendRelationColor())
+            imgUserProfilePokeMeOutline.setRelationStrokeColor(pokeMeItem.relationName)
             tvUserNameSomeonePokeMe.text = pokeMeItem.name
             tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
@@ -160,7 +159,7 @@ class PokeMainActivity : AppCompatActivity() {
             pokeFriendItem.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
-            imgUserProfilePokeMyFriendOutline.setImageResource(pokeFriendItem.getPokeFriendRelationColor())
+            imgUserProfilePokeMyFriendOutline.setRelationStrokeColor(pokeFriendItem.relationName)
             tvUserNamePokeMyFriend.text = pokeFriendItem.name
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"

@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.FriendListDetail
@@ -44,7 +45,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private val recyclerViewItemDecorationDivider
         get() = ItemDecorationDivider(
             color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
-            height = 1 * resources.displayMetrics.density
+            height = 1.dp
         )
 
     var pokeFriendType: PokeFriendType? = null

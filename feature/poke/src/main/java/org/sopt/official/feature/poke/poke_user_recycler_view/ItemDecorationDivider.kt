@@ -4,10 +4,9 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import androidx.recyclerview.widget.RecyclerView
 
-
 class ItemDecorationDivider(
     color: Int,
-    private val height: Float,
+    private val height: Int,
 ) : RecyclerView.ItemDecoration() {
 
     private val paint = Paint()

@@ -1,6 +1,5 @@
 package org.sopt.official.feature.poke.poke_user_recycler_view
 
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import coil.load
@@ -9,7 +8,7 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeUserLargeBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeUserSmallBinding
-import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 sealed class PokeUserViewHolder(
     binding: ViewBinding,
@@ -23,6 +22,7 @@ sealed class PokeUserViewHolder(
 
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
+                imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
                 when (pokeUser.profileImage.isNullOrBlank()) {
                     true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
                     false -> imageViewProfile.load(pokeUser.profileImage) {
@@ -30,10 +30,7 @@ sealed class PokeUserViewHolder(
                         transformations(CircleCropTransformation())
                     }
                 }
-                imageViewFriendLevelIndicator.backgroundTintList = ContextCompat.getColorStateList(
-                    root.context,
-                    pokeUser.getPokeFriendRelationColor(),
-                )
+
                 textViewUserName.text = pokeUser.name
                 textViewUserInfo.text = root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
                 textViewPokeCount.text = root.context.getString(R.string.poke_user_poke_count, pokeUser.pokeNum)
