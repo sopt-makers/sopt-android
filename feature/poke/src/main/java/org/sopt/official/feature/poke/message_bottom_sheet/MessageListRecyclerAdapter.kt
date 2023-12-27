@@ -12,7 +12,7 @@ class MessageListRecyclerAdapter(
 ) : RecyclerView.Adapter<MessageListRecyclerAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageListRecyclerAdapter.ViewHolder {
-        return ViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.context)))
+        return ViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int = messageList.size
