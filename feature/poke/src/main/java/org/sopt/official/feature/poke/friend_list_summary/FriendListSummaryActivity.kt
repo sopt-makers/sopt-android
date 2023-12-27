@@ -73,7 +73,8 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         binding.includeFriendListBlockNewFriend.apply {
-            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.NEW) }
+            imageButton.setBackgroundResource(R.drawable.icon_chevron)
+            imageButton.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.NEW) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_new_friend)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_new_friend)
             textViewListCount.text = getString(R.string.friend_list_count, 0)
@@ -86,7 +87,8 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         binding.includeFriendListBlockBestFriend.apply {
-            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.BEST_FRIEND) }
+            imageButton.setBackgroundResource(R.drawable.icon_chevron)
+            imageButton.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.BEST_FRIEND) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_best_friend)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_best_friend)
             textViewListCount.text = getString(R.string.friend_list_count, 0)
@@ -99,7 +101,8 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         binding.includeFriendListBlockSoulmate.apply {
-            imageButtonMore.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.SOULMATE) }
+            imageButton.setBackgroundResource(R.drawable.icon_chevron)
+            imageButton.setOnClickListener { showFriendListDetailBottomSheet(PokeFriendType.SOULMATE) }
             textViewFriendListTitle.text = getString(R.string.friend_relation_name_soulmate)
             textViewFriendListDescription.text = getString(R.string.friend_relation_description_soulmate)
             textViewListCount.text = getString(R.string.friend_list_count, 0)

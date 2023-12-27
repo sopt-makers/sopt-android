@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="12dp"
         android:text="@string/poke_user_poke_count"
-        android:textAppearance="@style/TextAppearance.SOPT.HeadLineMedium"
+        android:textAppearance="@style/TextAppearance.SOPT.BodyLarge"
         android:textColor="@color/mds_gray_30"
         app:layout_constraintBottom_toBottomOf="@id/imageButton_poke"
         app:layout_constraintEnd_toStartOf="@id/imageButton_poke"

@@ -37,13 +37,13 @@
         android:layout_marginEnd="8dp"
         android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
         android:textColor="@color/mds_gray_30"
-        app:layout_constraintBottom_toBottomOf="@id/imageButton_more"
-        app:layout_constraintEnd_toStartOf="@id/imageButton_more"
-        app:layout_constraintTop_toTopOf="@id/imageButton_more"
+        app:layout_constraintBottom_toBottomOf="@id/imageButton"
+        app:layout_constraintEnd_toStartOf="@id/imageButton"
+        app:layout_constraintTop_toTopOf="@id/imageButton"
         tools:text="@string/friend_list_count" />
 
     <ImageButton
-        android:id="@+id/imageButton_more"
+        android:id="@+id/imageButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"

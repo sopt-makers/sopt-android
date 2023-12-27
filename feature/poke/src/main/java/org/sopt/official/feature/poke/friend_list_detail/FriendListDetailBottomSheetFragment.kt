@@ -92,6 +92,8 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
 
+            imageButton.setBackgroundResource(R.drawable.icon_close)
+            imageButton.setOnClickListener { dismiss() }
             recyclerView.addItemDecoration(recyclerViewItemDecorationDivider)
             recyclerView.adapter = PokeUserListAdapter(
                 pokeUserListItemViewType = PokeUserListItemViewType.SMALL,
