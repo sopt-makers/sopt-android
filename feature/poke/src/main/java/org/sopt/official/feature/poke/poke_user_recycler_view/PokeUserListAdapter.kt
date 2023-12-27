@@ -39,6 +39,7 @@ class PokeUserListAdapter(
                 clickListener.onClickProfileImage(currentList[position].playgroundId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
+                if(currentList[position].isAlreadyPoke) return@setOnClickListener
                 clickListener.onClickPokeButton(currentList[position].userId)
             }
         }
