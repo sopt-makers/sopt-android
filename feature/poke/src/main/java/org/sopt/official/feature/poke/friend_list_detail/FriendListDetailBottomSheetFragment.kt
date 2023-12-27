@@ -9,6 +9,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -41,6 +43,8 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val pokeFriendListAdapter
         get() = binding.includeFriendListBlock.recyclerView.adapter as PokeUserListAdapter?
+    private val pokeFriendListLayoutManager
+        get() = binding.includeFriendListBlock.recyclerView.layoutManager as LinearLayoutManager
 
     private val recyclerViewItemDecorationDivider
         get() = ItemDecorationDivider(
@@ -95,11 +99,24 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
             imageButton.setBackgroundResource(R.drawable.icon_close)
             imageButton.setOnClickListener { dismiss() }
+            recyclerView.addOnScrollListener(scrollListener)
             recyclerView.addItemDecoration(recyclerViewItemDecorationDivider)
             recyclerView.adapter = PokeUserListAdapter(
                 pokeUserListItemViewType = PokeUserListItemViewType.SMALL,
                 clickListener = pokeUserListClickLister,
             )
+        }
+    }
+
+    private val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            val lastVisibleItemPosition = pokeFriendListLayoutManager.findLastVisibleItemPosition()
+            val totalItemCount = pokeFriendListLayoutManager.itemCount
+            if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 20 == 0) {
+                pokeFriendType?.let { viewModel.getFriendListDetail(it) }
+            }
         }
     }
 
@@ -149,7 +166,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     recyclerView.setVisible(true)
                     includeFriendListEmptyView.root.setVisible(false)
                     textViewListCount.text = getString(R.string.friend_list_count, data.size)
-                    pokeFriendListAdapter?.submitList(data)
+                    pokeFriendListAdapter?.updatePokeUserList(data)
                 }
             }
         }
@@ -163,7 +180,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        dismiss()
+                        pokeFriendListAdapter?.updatePokeUserItemPokeState(it.data.userId)
                     }
 
                     is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)

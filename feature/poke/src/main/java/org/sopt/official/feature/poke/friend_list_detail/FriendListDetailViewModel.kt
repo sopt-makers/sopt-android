@@ -3,6 +3,7 @@ package org.sopt.official.feature.poke.friend_list_detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -29,10 +30,18 @@ class FriendListDetailViewModel @Inject constructor(
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
+    private var currentPaginationIndex = 0
+    private var friendListJob: Job? = null
+
     fun getFriendListDetail(pokeFriendType: PokeFriendType) {
-        viewModelScope.launch {
+        friendListJob?.let {
+            if (it.isActive || !it.isCompleted) return
+        }
+
+        friendListJob = viewModelScope.launch {
+            _friendListDetailUiState.emit(UiState.Loading)
             getFriendListDetailUseCase.invoke(
-                page = 0,
+                page = currentPaginationIndex,
                 type = pokeFriendType,
             )
                 .onSuccess { response ->

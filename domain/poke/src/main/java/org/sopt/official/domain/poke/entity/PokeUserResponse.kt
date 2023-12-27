@@ -14,5 +14,5 @@ data class PokeUser(
     val relationName: String,
     val mutual: List<String>,
     val isFirstMeet: Boolean,
-    val isAlreadyPoke: Boolean,
+    var isAlreadyPoke: Boolean,
 )
