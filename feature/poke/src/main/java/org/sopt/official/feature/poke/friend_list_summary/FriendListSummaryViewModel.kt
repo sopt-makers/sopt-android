@@ -34,6 +34,7 @@ class FriendListSummaryViewModel @Inject constructor(
 
     fun getFriendListSummary() {
         viewModelScope.launch {
+            _friendListSummaryUiState.emit(UiState.Loading)
             getFriendListSummaryUseCase.invoke()
                 .onSuccess { response ->
                     _friendListSummaryUiState.emit(UiState.Success(response))
@@ -52,6 +53,7 @@ class FriendListSummaryViewModel @Inject constructor(
         message: String,
     ) {
         viewModelScope.launch {
+            _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,

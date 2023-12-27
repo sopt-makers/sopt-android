@@ -25,6 +25,7 @@ class MessageListBottomSheetViewModel @Inject constructor(
 
     fun getPokeMessageList(pokeMessageType: PokeMessageType) {
         viewModelScope.launch {
+            _pokeMessageListUiState.emit(UiState.Loading)
             getPokeMessageListUseCase.invoke(
                 messageType = pokeMessageType,
             )

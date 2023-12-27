@@ -61,6 +61,7 @@ class FriendListDetailViewModel @Inject constructor(
         message: String,
     ) {
         viewModelScope.launch {
+            _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,

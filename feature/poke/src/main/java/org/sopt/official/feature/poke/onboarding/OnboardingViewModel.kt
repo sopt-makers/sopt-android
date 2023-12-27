@@ -33,6 +33,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun getOnboardingPokeUserList() {
         viewModelScope.launch {
+            _onboardingPokeUserListUiState.emit(UiState.Loading)
             getOnboardingPokeUserListUseCase.invoke()
                 .onSuccess { response ->
                     _onboardingPokeUserListUiState.emit(UiState.Success(response))
@@ -51,6 +52,7 @@ class OnboardingViewModel @Inject constructor(
         message: String,
     ) {
         viewModelScope.launch {
+            _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,

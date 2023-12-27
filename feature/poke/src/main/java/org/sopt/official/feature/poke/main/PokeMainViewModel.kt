@@ -41,6 +41,7 @@ class PokeMainViewModel @Inject constructor(
 
     fun getPokeMe() {
         viewModelScope.launch {
+            _pokeMeUiState.emit(UiState.Loading)
             getPokeMeUseCase.invoke()
                 .onSuccess { // todo: 데이터 없으면 null로 넘어옴.. 처리 필요..
                     _pokeMeUiState.emit(UiState.Success(it))
@@ -57,6 +58,7 @@ class PokeMainViewModel @Inject constructor(
 
     fun getPokeFriend() {
         viewModelScope.launch {
+            _pokeFriendUiState.emit(UiState.Loading)
             getPokeFriendUseCase.invoke()
                 .onSuccess {
                     _pokeFriendUiState.emit(UiState.Success(it[0]))
@@ -73,6 +75,7 @@ class PokeMainViewModel @Inject constructor(
 
     fun getPokeFriendOfFriend() {
         viewModelScope.launch {
+            _pokeFriendOfFriendUiState.emit(UiState.Loading)
             getPokeFriendOfFriendListUseCase.invoke()
                 .onSuccess {
                     _pokeFriendOfFriendUiState.emit(UiState.Success(it))
@@ -92,6 +95,7 @@ class PokeMainViewModel @Inject constructor(
         message: String,
     ) {
         viewModelScope.launch {
+            _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,

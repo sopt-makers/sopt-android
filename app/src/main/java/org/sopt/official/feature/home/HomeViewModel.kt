@@ -236,6 +236,7 @@ class HomeViewModel @Inject constructor(
 
     fun checkNewInPoke() {
         viewModelScope.launch {
+            _checkNewInPokeUiState.emit(UiState.Loading)
             checkNewInPokeUseCase.invoke()
                 .onSuccess { response ->
                     _checkNewInPokeUiState.emit(UiState.Success(response))
@@ -246,7 +247,6 @@ class HomeViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _checkNewInPokeUiState.emit(UiState.Failure(throwable))
                 }
-            _checkNewInPokeUiState.emit(UiState.Loading)
         }
     }
 }
