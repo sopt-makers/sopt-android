@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke.common_recycler_view
+package org.sopt.official.feature.poke.poke_user_recycler_view
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -21,10 +21,10 @@ import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
-import org.sopt.official.feature.poke.common_recycler_view.ItemDecorationDivider
-import org.sopt.official.feature.poke.common_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.common_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.common_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.poke_user_recycler_view.ItemDecorationDivider
+import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
+import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 
