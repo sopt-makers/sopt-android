@@ -59,9 +59,11 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
 import org.sopt.official.feature.home.model.HomeCTAType
@@ -71,6 +73,8 @@ import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
+import org.sopt.official.feature.poke.PokeMainActivity
+import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
@@ -180,15 +184,9 @@ class HomeActivity : AppCompatActivity() {
             .onEach { userActiveState ->
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
                 binding.contentPoke.root.setOnSingleClickListener {
-                    if (userActiveState == UserActiveState.ACTIVE) {
-                        startActivity(
-                            OnboardingActivity.getIntent(
-                                this,
-                                OnboardingActivity.StartArgs((0))
-                            )
-                        )
-                    } else {
-                        AlertDialogOneButton(this)
+                    when (userActiveState == UserActiveState.ACTIVE) {
+                        true -> viewModel.checkNewInPoke()
+                        false -> AlertDialogOneButton(this)
                             .setTitle(R.string.poke_dialog_preparing_title)
                             .setSubtitle(R.string.poke_dialog_preparing_body)
                             .setPositiveButton(R.string.poke_dialog_confirm_button)
@@ -243,6 +241,27 @@ class HomeActivity : AppCompatActivity() {
                     )
                 }
             }.launchIn(lifecycleScope)
+
+        viewModel.checkNewInPokeUiState
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
+                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
+                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun handleNewInPoke(isNewInPoke: Boolean) {
+        startActivity(
+            when (isNewInPoke) {
+                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(0))
+                false -> Intent(this, PokeMainActivity::class.java)
+            }
+        )
     }
 
     private fun TextView.setGenerationText(

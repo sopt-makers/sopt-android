@@ -31,6 +31,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
@@ -57,6 +58,12 @@ import org.sopt.official.common.util.calculateDurationOfGeneration
 import org.sopt.official.common.util.calculateGenerationStartDate
 import org.sopt.official.common.util.systemNow
 import org.sopt.official.common.util.toDefaultLocalDate
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.entity.onApiError
+import org.sopt.official.domain.poke.entity.onFailure
+import org.sopt.official.domain.poke.entity.onSuccess
+import org.sopt.official.domain.poke.use_case.CheckNewInPokeUseCase
+import org.sopt.official.feature.poke.UiState
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
@@ -65,6 +72,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,
+    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
 
     private val homeUiState = MutableStateFlow(SoptUser())
@@ -173,6 +181,10 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
+    val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
+
+
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
@@ -219,6 +231,22 @@ class HomeViewModel @Inject constructor(
                 registerPushTokenUseCase(it)
                     .onFailure(Timber::e)
             }.onFailure(Timber::e)
+        }
+    }
+
+    fun checkNewInPoke() {
+        viewModelScope.launch {
+            checkNewInPokeUseCase.invoke()
+                .onSuccess { response ->
+                    _checkNewInPokeUiState.emit(UiState.Success(response))
+                }
+                .onApiError { statusCode, responseMessage ->
+                    _checkNewInPokeUiState.emit(UiState.ApiError(statusCode, responseMessage))
+                }
+                .onFailure { throwable ->
+                    _checkNewInPokeUiState.emit(UiState.Failure(throwable))
+                }
+            _checkNewInPokeUiState.emit(UiState.Loading)
         }
     }
 }

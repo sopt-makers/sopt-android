@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
-import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.PokeMainActivity
@@ -46,37 +45,25 @@ class OnboardingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initAppBar()
         initView()
-        launchCheckNewInPokeUiStateFlow()
+        showOnboardingBottomSheet()
+
         launchOnboardingPokeUserListUiStateFlow()
         launchPokeUserUiStateFlow()
+    }
+
+    private fun initAppBar() {
+        binding.includeAppBar.apply {
+            toolbar.setOnClickListener { onBackPressed() }
+            textViewTitle.text = getString(R.string.poke_title)
+        }
     }
 
     private fun initView() {
         binding.textViewContent.text = getString(R.string.onboarding_content, args?.recentGeneration)
         binding.swipeRefreshLayout.setOnRefreshListener {
             viewModel.getOnboardingPokeUserList()
-        }
-    }
-
-    private fun launchCheckNewInPokeUiStateFlow() {
-        viewModel.checkNewInPokeUiState
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                when (it) {
-                    is UiState.Loading -> "Loading"
-                    is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
-                }
-            }
-            .launchIn(lifecycleScope)
-    }
-
-    private fun handleNewInPoke(isNewInPoke: Boolean) {
-        when (isNewInPoke) {
-            true -> showOnboardingBottomSheet()
-            false -> FriendListSummaryActivity.getIntent(this)
         }
     }
 
@@ -147,11 +134,7 @@ class OnboardingActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    is UiState.ApiError -> {
-                        if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                        startActivity(Intent(this, PokeMainActivity::class.java))
-                    }
-
+                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
                     is UiState.Failure -> it.throwable.message?.let { toast(it) }
                 }
             }

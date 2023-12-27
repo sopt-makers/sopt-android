@@ -9,9 +9,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.use_case.CheckNewInPokeUseCase
 import org.sopt.official.domain.poke.use_case.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.use_case.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
@@ -19,13 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
-
-    private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
-    val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
     private val _onboardingPokeUserListUiState = MutableStateFlow<UiState<List<PokeUser>>>(UiState.Loading)
     val onboardingPokeUserListUiState: StateFlow<UiState<List<PokeUser>>> get() = _onboardingPokeUserListUiState
@@ -34,23 +28,7 @@ class OnboardingViewModel @Inject constructor(
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
     init {
-        checkNewInPoke()
         getOnboardingPokeUserList()
-    }
-
-    fun checkNewInPoke() {
-        viewModelScope.launch {
-            checkNewInPokeUseCase.invoke()
-                .onSuccess { response ->
-                    _checkNewInPokeUiState.emit(UiState.Success(response))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _checkNewInPokeUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
-                .onFailure { throwable ->
-                    _checkNewInPokeUiState.emit(UiState.Failure(throwable))
-                }
-        }
     }
 
     fun getOnboardingPokeUserList() {

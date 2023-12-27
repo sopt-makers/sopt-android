@@ -18,7 +18,6 @@ import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
-import org.sopt.official.feature.poke.PokeMainActivity
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.common_recycler_view.ItemDecorationDivider
@@ -213,7 +212,6 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        startActivity(Intent(this, PokeMainActivity::class.java))
                         finish()
                     }
 
