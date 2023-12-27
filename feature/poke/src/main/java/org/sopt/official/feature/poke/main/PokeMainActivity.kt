@@ -139,8 +139,10 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
-                        binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                        binding.animationViewLottie.playAnimation()
+                        if (it.data.isFirstMeet) {
+                            binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                            binding.animationViewLottie.playAnimation()
+                        }
                     }
 
                     is UiState.ApiError -> {

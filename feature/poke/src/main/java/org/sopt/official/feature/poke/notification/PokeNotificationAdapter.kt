@@ -24,10 +24,8 @@
  */
 package org.sopt.official.feature.poke.notification
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -39,6 +37,7 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 class PokeNotificationAdapter(
     private val clickListener: PokeUserListClickListener,
@@ -82,6 +81,16 @@ class PokeNotificationAdapter(
         }
     }
 
+    fun updatePokeUserItemPokeState(userId: Int) {
+        val newList = currentList.toMutableList()
+        val pokeUser = newList.find { it.userId == userId }
+        val position = newList.indexOf(pokeUser)
+
+        pokeUser?.isAlreadyPoke = true
+        submitList(newList)
+        notifyItemChanged(position)
+    }
+
     fun updatePokeNotification(newList: List<PokeUser>) {
         submitList(newList)
         notifyDataSetChanged()
@@ -101,7 +110,7 @@ class PokeNotificationAdapter(
                 item.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
-                imgUserProfileOutline.setImageResource(item.getPokeFriendRelationColor())
+                imgUserProfileOutline.setRelationStrokeColor(item.relationName)
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message

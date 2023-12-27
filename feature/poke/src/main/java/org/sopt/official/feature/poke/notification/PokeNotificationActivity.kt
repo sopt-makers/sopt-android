@@ -17,15 +17,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
-import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.showAlertToast
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -129,14 +128,22 @@ class PokeNotificationActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
+                        pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
                         if (it.data.isFirstMeet) {
-                            messageListBottomSheet?.dismiss()
                             binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                             binding.animationViewLottie.playAnimation()
                         }
                     }
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+
+                    is UiState.ApiError -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(getString(R.string.poke_user_alert_exceeded))
+                    }
+
+                    is UiState.Failure -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    }
                 }
             }
             .launchIn(lifecycleScope)
