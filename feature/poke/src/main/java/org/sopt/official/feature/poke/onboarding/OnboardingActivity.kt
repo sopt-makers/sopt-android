@@ -80,7 +80,7 @@ class OnboardingActivity : AppCompatActivity() {
             if (messageListBottomSheet?.isAdded == true) return
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(PokeMessageType.REPLY_NEW)
+                    .setMessageListType(PokeMessageType.POKE_SOMEONE)
                     .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                     .create()
             }

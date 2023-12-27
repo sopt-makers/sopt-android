@@ -182,7 +182,7 @@ class PokeMainActivity : AppCompatActivity() {
                 showMessageListBottomSheet(
                     pokeMeItem.userId,
                     when (pokeMeItem.isFirstMeet) {
-                        true -> PokeMessageType.REPLY_NEW
+                        true -> PokeMessageType.POKE_SOMEONE
                         false -> PokeMessageType.POKE_FRIEND
                     }
                 )

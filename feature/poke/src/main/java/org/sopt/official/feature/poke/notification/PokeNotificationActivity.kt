@@ -78,7 +78,7 @@ class PokeNotificationActivity : AppCompatActivity() {
 
         override fun onClickPokeButton(user: PokeUser) {
             val messageType = when (user.isFirstMeet) {
-                true -> PokeMessageType.REPLY_NEW
+                true -> PokeMessageType.POKE_SOMEONE
                 false -> PokeMessageType.POKE_FRIEND
             }
             if (messageListBottomSheet?.isAdded == true) return
