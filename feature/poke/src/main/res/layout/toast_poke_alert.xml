@@ -3,29 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout_toastContainer"
-    android:layout_width="wrap_content"
-    android:padding="16dp"
-    android:layout_height="wrap_content">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/rectangle_all_r18_white"
-        android:layout_height="wrap_content" >
+        android:gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView_alert"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/icon_alert"
-            app:layout_constraintBottom_toBottomOf="@id/textView_alertMessage"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textView_alertMessage" />
+            android:background="@drawable/icon_alert" />
 
         <TextView
             android:id="@+id/textView_alertMessage"
@@ -34,13 +31,11 @@
             android:layout_marginVertical="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textAppearance="@style/TextAppearance.SOPT.BodyMedium"
             android:textColor="@color/mds_gray_900"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/imageView_alert"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/poke_user_alert_exceeded" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
