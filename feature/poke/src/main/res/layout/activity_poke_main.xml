@@ -132,12 +132,12 @@
 
                     <ImageView
                         android:id="@+id/btn_next_someone_poke_me"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:background="@drawable/icon_chevron"
-                        android:backgroundTint="@color/mds_gray_30"
-                        android:paddingHorizontal="17dp"
-                        android:paddingVertical="14dp"
+                        android:backgroundTint="@color/mds_gray_300"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
                         android:rotation="180"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -206,6 +206,7 @@
                         android:textColor="@color/mds_gray_30"
                         android:textFontWeight="500"
                         android:textSize="14dp"
+                        android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toStartOf="@id/btn_someone_poke_me"
                         app:layout_constraintStart_toStartOf="@id/tv_user_name_someone_poke_me"
                         app:layout_constraintTop_toBottomOf="@id/tv_user_name_someone_poke_me"
@@ -236,6 +237,8 @@
                         android:textColor="@color/mds_gray_100"
                         android:textFontWeight="600"
                         android:textSize="11dp"
+                        android:layout_marginBottom="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="@id/tv_user_msg_someone_poke_me"
                         app:layout_constraintTop_toBottomOf="@id/tv_user_msg_someone_poke_me"
                         tools:text="제갈송현 외 1명과 친구" />
@@ -266,12 +269,12 @@
 
                     <ImageView
                         android:id="@+id/img_next_poke_my_friend"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
                         android:background="@drawable/icon_chevron"
-                        android:backgroundTint="@color/mds_gray_30"
-                        android:paddingHorizontal="17dp"
-                        android:paddingVertical="14dp"
+                        android:backgroundTint="@color/mds_gray_300"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
                         android:rotation="180"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

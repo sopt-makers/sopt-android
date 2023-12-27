@@ -27,6 +27,7 @@
         android:textColor="@color/mds_gray_200"
         android:textFontWeight="600"
         android:textSize="14dp"
+        android:layout_marginStart="4dp"
         app:layout_constraintBottom_toBottomOf="@id/tv_title_poke_notification"
         app:layout_constraintStart_toEndOf="@id/tv_title_poke_notification"
         app:layout_constraintTop_toTopOf="@+id/tv_title_poke_notification" />
