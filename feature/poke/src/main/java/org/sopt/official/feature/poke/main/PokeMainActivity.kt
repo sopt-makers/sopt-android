@@ -96,10 +96,7 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> initPokeMeView(it.data)
                     is UiState.ApiError -> binding.layoutSomeonePokeMe.setVisible(false)
-                    is UiState.Failure -> {
-                        binding.layoutSomeonePokeMe.setVisible(false)
-                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
-                    }
+                    is UiState.Failure -> binding.layoutSomeonePokeMe.setVisible(false)
                 }
             }
             .launchIn(lifecycleScope)
