@@ -92,6 +92,7 @@ class HomeActivity : AppCompatActivity() {
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
 
+    private var currentGeneration: Int = 0
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
@@ -226,6 +227,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.generationList
             .flowWithLifecycle(lifecycle)
             .onEach { generationList ->
+                currentGeneration = generationList?.first?.toInt() ?: 0
                 binding.memberGeneration.generation1.setGenerationText(generationList, 2)
                 binding.memberGeneration.generation2.setGenerationText(generationList, 3)
                 binding.memberGeneration.generation3.setGenerationText(generationList, 4)
@@ -260,7 +262,7 @@ class HomeActivity : AppCompatActivity() {
     private fun handleNewInPoke(isNewInPoke: Boolean) {
         startActivity(
             when (isNewInPoke) {
-                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(0))
+                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration))
                 false -> Intent(this, PokeMainActivity::class.java)
             }
         )

@@ -60,7 +60,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initView() {
         binding.apply {
-            textViewContent.text = getString(R.string.onboarding_content, args?.recentGeneration)
+            textViewContent.text = getString(R.string.onboarding_content, args?.currentGeneration)
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.getOnboardingPokeUserList()
             }
@@ -145,7 +145,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-        val recentGeneration: Int
+        val currentGeneration: Int
     ) : Serializable
 
     companion object {
