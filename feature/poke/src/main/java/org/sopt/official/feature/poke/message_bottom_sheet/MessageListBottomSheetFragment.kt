@@ -48,7 +48,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<PokeMessageList> -> initMessageListRecyclerView(it.data.messages)
+                    is UiState.Success<PokeMessageList> -> initMessageListContent(it.data)
                     is UiState.ApiError -> activity?.showAlertToast(getString(R.string.poke_alert_error))
                     is UiState.Failure -> activity?.showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
@@ -56,8 +56,11 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
             .launchIn(lifecycleScope)
     }
 
-    private fun initMessageListRecyclerView(data: List<PokeMessageList.PokeMessage>) {
-        binding.recyclerView.adapter = MessageListRecyclerAdapter(data, messageListItemClickListener)
+    private fun initMessageListContent(data: PokeMessageList) {
+        binding.apply {
+            textViewTitle.text = data.header
+            recyclerView.adapter = MessageListRecyclerAdapter(data.messages, messageListItemClickListener)
+        }
     }
 
     private val messageListItemClickListener = MessageItemClickListener { message ->

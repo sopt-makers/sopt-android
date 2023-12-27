@@ -6,10 +6,13 @@ import org.sopt.official.domain.poke.entity.PokeMessageList
 
 @Serializable
 data class GetPokeMessageListResult(
+    @SerialName("header")
+    val header: String,
     @SerialName("messages")
     val messages: List<PokeMessageResult>,
 ) {
     fun toEntity(): PokeMessageList = PokeMessageList(
+        header = header,
         messages = messages.map { it.toEntity() },
     )
 
