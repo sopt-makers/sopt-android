@@ -173,7 +173,7 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
             tvFriendsStatusSomeonePokeMe.text = if (pokeMeItem.isFirstMeet) {
-                "${pokeMeItem.mutual.first()} 외 ${pokeMeItem.mutual.size - 1}명과 친구"
+                pokeMeItem.mutualRelationMessage
             } else {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }

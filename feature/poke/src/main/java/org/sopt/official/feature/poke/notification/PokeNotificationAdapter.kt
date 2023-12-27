@@ -115,7 +115,7 @@ class PokeNotificationAdapter(
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message
                 tvUserFriendsStatus.text = if (item.isFirstMeet) {
-                    "${item.mutual.first()} 외 ${item.mutual.size - 1}명과 친구"
+                    item.mutualRelationMessage
                 } else {
                     "친한친구 ${item.pokeNum}콕"
                 }

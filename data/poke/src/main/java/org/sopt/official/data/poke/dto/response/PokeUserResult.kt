@@ -11,7 +11,7 @@ data class PokeUserResult(
     @SerialName("playgroundId")
     val playgroundId: Int,
     @SerialName("profileImage")
-    val profileImage: String?,
+    val profileImage: String,
     @SerialName("name")
     val name: String,
     @SerialName("message")
@@ -24,8 +24,8 @@ data class PokeUserResult(
     val pokeNum: Int,
     @SerialName("relationName")
     val relationName: String,
-    @SerialName("mutual")
-    val mutual: List<String>,
+    @SerialName("mutualRelationMessage")
+    val mutualRelationMessage: String,
     @SerialName("isFirstMeet")
     val isFirstMeet: Boolean,
     @SerialName("isAlreadyPoke")
@@ -41,7 +41,7 @@ data class PokeUserResult(
         part = part,
         pokeNum = pokeNum,
         relationName = relationName,
-        mutual = mutual,
+        mutualRelationMessage = mutualRelationMessage,
         isFirstMeet = isFirstMeet,
         isAlreadyPoke = isAlreadyPoke,
     )
