@@ -9,8 +9,19 @@
         android:id="@+id/img_user_profile"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginVertical="20dp"
         android:layout_marginStart="20dp"
+        android:layout_marginVertical="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_user_profile_outline"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/oval_stroke_2"
+        android:layout_marginStart="20dp"
+        android:layout_marginVertical="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

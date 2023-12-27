@@ -24,8 +24,11 @@
  */
 package org.sopt.official.feature.poke.notification
 
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -35,8 +38,12 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
+import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
 
-class PokeNotificationAdapter: ListAdapter<PokeUser, RecyclerView.ViewHolder>(
+class PokeNotificationAdapter(
+    private val clickListener: PokeUserListClickListener,
+): ListAdapter<PokeUser, RecyclerView.ViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.userId == new.userId },
         onItemsTheSame = { old, new -> old == new }
@@ -63,7 +70,15 @@ class PokeNotificationAdapter: ListAdapter<PokeUser, RecyclerView.ViewHolder>(
 
         if (holder is NotificationListViewHolder) {
             currentList[position].let { item ->
-                holder.bind(item)
+                holder.apply {
+                    bind(item)
+                    itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
+                        clickListener.onClickProfileImage(currentList[position].playgroundId)
+                    }
+                    itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {
+                        clickListener.onClickPokeButton(currentList[position].userId)
+                    }
+                }
             }
         }
     }
@@ -87,6 +102,7 @@ class PokeNotificationAdapter: ListAdapter<PokeUser, RecyclerView.ViewHolder>(
                 item.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
+                imgUserProfileOutline.setImageResource(item.getPokeFriendRelationColor())
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message

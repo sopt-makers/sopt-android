@@ -1,5 +1,6 @@
-package org.sopt.official.feature.poke
+package org.sopt.official.feature.poke.main
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +17,8 @@ import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.R
+import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.main.PokeMainViewModel
@@ -62,6 +64,22 @@ class PokeMainActivity : AppCompatActivity() {
                 initData()
                 refreshLayoutPokeMain.isRefreshing = false
             }
+
+            animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {
+                    layoutLottie.visibility = View.VISIBLE
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    layoutLottie.visibility = View.GONE
+                }
+
+                override fun onAnimationCancel(animation: Animator) {
+                }
+
+                override fun onAnimationRepeat(animation: Animator) {
+                }
+            })
         }
     }
 
@@ -121,6 +139,8 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
+                        binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                        binding.animationViewLottie.playAnimation()
                     }
 
                     is UiState.ApiError -> {
