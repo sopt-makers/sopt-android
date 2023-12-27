@@ -124,12 +124,12 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
-        override fun onClickPokeButton(userId: Int) {
+        override fun onClickPokeButton(user: PokeUser) {
             if (messageListBottomSheet?.isAdded == true) return
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                     .setMessageListType(PokeMessageType.POKE_FRIEND)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                     .create()
             }
 

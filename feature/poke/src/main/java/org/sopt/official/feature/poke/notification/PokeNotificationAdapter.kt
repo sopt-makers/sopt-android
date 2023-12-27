@@ -38,8 +38,7 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
-import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.util.getPokeFriendRelationColor
+import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 
 class PokeNotificationAdapter(
     private val clickListener: PokeUserListClickListener,
@@ -76,7 +75,7 @@ class PokeNotificationAdapter(
                         clickListener.onClickProfileImage(currentList[position].playgroundId)
                     }
                     itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {
-                        clickListener.onClickPokeButton(currentList[position].userId)
+                        clickListener.onClickPokeButton(currentList[position])
                     }
                 }
             }

@@ -19,12 +19,13 @@ import kotlinx.coroutines.launch
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -76,11 +77,16 @@ class PokeNotificationActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
-        override fun onClickPokeButton(userId: Int) {
+        override fun onClickPokeButton(user: PokeUser) {
+            val messageType = when (user.isFirstMeet) {
+                true -> PokeMessageType.REPLY_NEW
+                false -> PokeMessageType.POKE_FRIEND
+            }
             if (messageListBottomSheet?.isAdded == true) return
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                    .setMessageListType(messageType)
+                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                     .create()
             }
 

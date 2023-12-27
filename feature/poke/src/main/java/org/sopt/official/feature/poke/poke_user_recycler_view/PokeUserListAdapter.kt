@@ -40,7 +40,7 @@ class PokeUserListAdapter(
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
                 if(currentList[position].isAlreadyPoke) return@setOnClickListener
-                clickListener.onClickPokeButton(currentList[position].userId)
+                clickListener.onClickPokeButton(currentList[position])
             }
         }
     }
