@@ -85,12 +85,15 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initStateFlowValues() {
         viewModel.apply {
-            pokeMeUiState.flowWithLifecycle(lifecycle)
+            pokeMeUiState
+                .flowWithLifecycle(lifecycle)
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
                         // todo: 데이터 없으면 null로 넘어옴.. 처리 필요..
-                        is UiState.Success<PokeUser> -> initPokeMeView(it.data)
+                        is UiState.Success<PokeUser> -> {
+                            it.data?.let { data -> initPokeMeView(data) }
+                        }
                         is UiState.ApiError -> startActivity(
                             Intent(
                                 this@PokeMainActivity,
@@ -104,7 +107,8 @@ class PokeMainActivity : AppCompatActivity() {
         }
 
         viewModel.apply {
-            pokeFriendUiState.flowWithLifecycle(lifecycle)
+            pokeFriendUiState
+                .flowWithLifecycle(lifecycle)
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
@@ -122,7 +126,8 @@ class PokeMainActivity : AppCompatActivity() {
         }
 
         viewModel.apply {
-            pokeFriendOfFriendUiState.flowWithLifecycle(lifecycle)
+            pokeFriendOfFriendUiState
+                .flowWithLifecycle(lifecycle)
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
@@ -143,13 +148,16 @@ class PokeMainActivity : AppCompatActivity() {
         }
 
         viewModel.apply {
-            pokeUserUiState.flowWithLifecycle(lifecycle)
+            pokeUserUiState
+                .flowWithLifecycle(lifecycle)
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
                         is UiState.Success<PokeUser> -> {
                             messageListBottomSheet?.dismiss()
-                            if (!it.data.isFirstMeet && it.data.isAlreadyPoke) {
+                            if (it.data.isFirstMeet) {
+                                messageListBottomSheet?.dismiss()
+                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
                         }
@@ -196,7 +204,7 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
-//            btnPokeMyFriend.setOnClickListener { showPokeMessageBottomSheet(pokeFriendItem.isFirstMeet) }
+            btnPokeMyFriend.setOnClickListener { onPressPokeButton(pokeFriendItem.userId) }
         }
     }
 
@@ -284,7 +292,7 @@ class PokeMainActivity : AppCompatActivity() {
                         friendNameTextView.text = myFriendOfFriend.name
                         friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
                         btnPokeImageView.isEnabled = !myFriendOfFriend.isAlreadyPoke
-//                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(myFriendOfFriend.isFirstMeet) }
+                        btnPokeImageView.setOnClickListener { onPressPokeButton(myFriendOfFriend.userId) }
                     }
                 }
             }

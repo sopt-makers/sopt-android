@@ -35,7 +35,7 @@ class PokeUserListAdapter(
         holder.apply {
             onBind(currentList[position])
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-                clickListener.onClickProfileImage()
+                clickListener.onClickProfileImage(currentList[position].playgroundId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
                 clickListener.onClickPokeButton(currentList[position].userId)

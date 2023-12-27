@@ -2,6 +2,7 @@ package org.sopt.official.feature.poke.onboarding
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -114,8 +115,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage() {
-            // TODO("Navigate to playground")
+        override fun onClickProfileImage(playgroundId: Int) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
         override fun onClickPokeButton(userId: Int) {
