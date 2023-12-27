@@ -111,4 +111,35 @@ class PokeMainViewModel @Inject constructor(
                 }
         }
     }
+
+    fun updatePokeUserState(userId: Int) {
+        viewModelScope.launch {
+            if (_pokeMeUiState.value is UiState.Success<PokeUser>) {
+                val oldData = (_pokeMeUiState.value as UiState.Success<PokeUser>).data
+                if (oldData.userId == userId) {
+                    _pokeMeUiState.emit(UiState.Loading)
+                    _pokeMeUiState.emit(UiState.Success(
+                        oldData.copy(isAlreadyPoke = true)
+                    ))
+                }
+            }
+            if (_pokeFriendUiState.value is UiState.Success<PokeUser>) {
+                val oldData = (_pokeFriendUiState.value as UiState.Success<PokeUser>).data
+                if (oldData.userId == userId) {
+                    _pokeFriendUiState.emit(UiState.Loading)
+                    _pokeFriendUiState.emit(UiState.Success(
+                        oldData.copy(isAlreadyPoke = true)
+                    ))
+                }
+            }
+            if (_pokeFriendOfFriendUiState.value is UiState.Success<List<PokeFriendOfFriendList>>) {
+                val oldData = (_pokeFriendOfFriendUiState.value as UiState.Success<List<PokeFriendOfFriendList>>).data
+                for (friend in oldData) {
+                    friend.friendList.find { it.userId == userId }?.isAlreadyPoke = true
+                }
+                _pokeFriendOfFriendUiState.emit(UiState.Loading)
+                _pokeFriendOfFriendUiState.emit(UiState.Success(oldData))
+            }
+        }
+    }
 }

@@ -129,7 +129,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             if (messageListBottomSheet?.isAdded == true) return
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(PokeMessageType.POKE_SOMEONE)
+                    .setMessageListType(PokeMessageType.POKE_FRIEND)
                     .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
                     .create()
             }

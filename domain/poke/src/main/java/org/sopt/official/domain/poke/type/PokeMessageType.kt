@@ -5,4 +5,5 @@ enum class PokeMessageType(
 ) {
     REPLY_NEW("replyNew"),
     POKE_SOMEONE("pokeSomeone"),
+    POKE_FRIEND("pokeFriend")
 }

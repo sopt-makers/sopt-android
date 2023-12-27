@@ -17,6 +17,7 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.main.PokeMainViewModel
@@ -29,6 +30,8 @@ class PokeMainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
+
+    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -127,6 +130,28 @@ class PokeMainActivity : AppCompatActivity() {
                 }
                 .launchIn(lifecycleScope)
         }
+
+        viewModel.pokeUserUiState
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<PokeUser> -> {
+                        messageListBottomSheet?.dismiss()
+                        viewModel.updatePokeUserState(it.data.userId)
+                    }
+
+                    is UiState.ApiError -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(it.responseMessage)
+                    }
+
+                    is UiState.Failure -> {
+                        messageListBottomSheet?.dismiss()
+                        it.throwable.message?.let { showAlertToast(it) }
+                    }
+                }
+            }
+            .launchIn(lifecycleScope)
     }
 
     private fun initPokeMeView(pokeMeItem: PokeUser) {
@@ -147,7 +172,9 @@ class PokeMainActivity : AppCompatActivity() {
                 "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
             }
             btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
-            btnSomeonePokeMe.setOnClickListener { showPokeMessageBottomSheet(pokeMeItem.isFirstMeet) }
+            btnSomeonePokeMe.setOnClickListener {
+                showMessageListBottomSheet(pokeMeItem.userId, pokeMeItem.isFirstMeet)
+            }
         }
     }
 
@@ -164,7 +191,9 @@ class PokeMainActivity : AppCompatActivity() {
             tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
-            btnPokeMyFriend.setOnClickListener { showPokeMessageBottomSheet(pokeFriendItem.isFirstMeet) }
+            btnPokeMyFriend.setOnClickListener {
+                showMessageListBottomSheet(pokeFriendItem.userId, pokeFriendItem.isFirstMeet)
+            }
         }
     }
 
@@ -252,16 +281,30 @@ class PokeMainActivity : AppCompatActivity() {
                         friendNameTextView.text = myFriendOfFriend.name
                         friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
                         btnPokeImageView.isEnabled = !myFriendOfFriend.isAlreadyPoke
-                        btnPokeImageView.setOnClickListener { showPokeMessageBottomSheet(myFriendOfFriend.isFirstMeet) }
+                        btnPokeImageView.setOnClickListener {
+                            showMessageListBottomSheet(myFriendOfFriend.userId, myFriendOfFriend.isFirstMeet)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun showPokeMessageBottomSheet(isFirstMeet: Boolean) {
-//        val type = if (isFirstMeet) PokeMessageType.POKE_SOMEONE else PokeMessageType.POKE_FRIEND
-        val bottomSheetDialog = MessageListBottomSheetFragment()//(type)
-        bottomSheetDialog.show(supportFragmentManager, "PokeMessageBottomSheetDialogFragment")
+    private fun showMessageListBottomSheet(userId: Int, isFirstMeet: Boolean) {
+        val messageType = when (isFirstMeet) {
+            true -> PokeMessageType.REPLY_NEW
+            false -> PokeMessageType.POKE_FRIEND
+        }
+        if (messageListBottomSheet?.isAdded == true) return
+        if (messageListBottomSheet == null) {
+            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                .setMessageListType(messageType)
+                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                .create()
+        }
+
+        messageListBottomSheet?.let {
+            it.show(supportFragmentManager, it.tag)
+        }
     }
 }
