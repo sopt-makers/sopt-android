@@ -44,11 +44,17 @@ class PokeNotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.btnBack.setOnClickListener { finish() }
-
+        initAppBar()
         initListener()
         initRecyclerView()
         initStateFlowValues()
+    }
+
+    private fun initAppBar() {
+        binding.includeAppBar.apply {
+            textViewTitle.text = getString(R.string.poke_notification_title)
+            toolbar.setOnClickListener { finish() }
+        }
     }
 
     private fun initListener() {

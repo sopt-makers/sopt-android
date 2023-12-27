@@ -46,7 +46,7 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            btnClose.setOnClickListener { finish() }
+            includeAppBar.toolbar.setOnClickListener { finish() }
 
             btnNextSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))

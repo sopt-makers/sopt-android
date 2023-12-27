@@ -46,42 +46,14 @@
             app:layout_constraintTop_toBottomOf="@id/animation_view_lottie" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_header"
+    <include
+        android:id="@+id/include_app_bar"
+        layout="@layout/include_app_bar_close"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/btn_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="8dp"
-            android:layout_marginStart="8dp"
-            android:paddingHorizontal="14dp"
-            android:paddingVertical="14dp"
-            android:src="@drawable/icon_close"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="14dp"
-            android:layout_marginStart="2dp"
-            android:fontFamily="@font/suit_bold"
-            android:lineHeight="28px"
-            android:text="콕 찌르기"
-            android:textColor="@color/mds_gray_30"
-            android:textFontWeight="700"
-            android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/btn_close"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/refresh_layout_poke_main"
@@ -90,16 +62,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_header">
+        app:layout_constraintTop_toBottomOf="@id/include_app_bar">
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollview_poke_main"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layout_header">
+            android:layout_height="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
