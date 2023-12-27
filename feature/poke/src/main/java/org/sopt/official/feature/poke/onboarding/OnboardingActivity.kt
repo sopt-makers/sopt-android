@@ -60,9 +60,35 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        binding.textViewContent.text = getString(R.string.onboarding_content, args?.recentGeneration)
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getOnboardingPokeUserList()
+        binding.apply {
+            textViewContent.text = getString(R.string.onboarding_content, args?.recentGeneration)
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.getOnboardingPokeUserList()
+            }
+            recyclerView.adapter = PokeUserListAdapter(
+                pokeUserListItemViewType = PokeUserListItemViewType.LARGE,
+                clickListener = pokeUserListClickLister,
+            )
+        }
+    }
+
+    private val pokeUserListClickLister = object : PokeUserListClickListener {
+        override fun onClickProfileImage(playgroundId: Int) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+        }
+
+        override fun onClickPokeButton(userId: Int) {
+            if (messageListBottomSheet?.isAdded == true) return
+            if (messageListBottomSheet == null) {
+                messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                    .setMessageListType(PokeMessageType.REPLY_NEW)
+                    .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                    .create()
+            }
+
+            messageListBottomSheet?.let {
+                it.show(supportFragmentManager, it.tag)
+            }
         }
     }
 
@@ -92,33 +118,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initRecyclerView(data: List<PokeUser>) {
         binding.swipeRefreshLayout.isRefreshing = false
-        binding.recyclerView.apply {
-            adapter = PokeUserListAdapter(
-                pokeUserListItemViewType = PokeUserListItemViewType.LARGE,
-                clickListener = pokeUserListClickLister,
-            )
-            pokeUserListAdapter?.submitList(data)
-        }
-    }
-
-    private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage(playgroundId: Int) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
-        }
-
-        override fun onClickPokeButton(userId: Int) {
-            if (messageListBottomSheet?.isAdded == true) return
-            if (messageListBottomSheet == null) {
-                messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(PokeMessageType.REPLY_NEW)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
-                    .create()
-            }
-
-            messageListBottomSheet?.let {
-                it.show(supportFragmentManager, it.tag)
-            }
-        }
+        pokeUserListAdapter?.submitList(data)
     }
 
     private fun launchPokeUserUiStateFlow() {
