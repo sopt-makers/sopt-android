@@ -76,6 +76,7 @@ import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.feature.poke.PokeMainActivity
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
+import org.sopt.official.feature.poke.util.showAlertToast
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -243,13 +244,14 @@ class HomeActivity : AppCompatActivity() {
             }.launchIn(lifecycleScope)
 
         viewModel.checkNewInPokeUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> showAlertToast(getString(org.sopt.official.feature.poke.R.string.poke_alert_error))
+                    is UiState.Failure -> showAlertToast(
+                        it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.poke_alert_error)
+                    )
                 }
             }
             .launchIn(lifecycleScope)

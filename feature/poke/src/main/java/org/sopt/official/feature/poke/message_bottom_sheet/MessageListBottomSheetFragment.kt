@@ -5,17 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeMessageList
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheetBinding
+import org.sopt.official.feature.poke.util.showAlertToast
 
 @AndroidEntryPoint
 class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
@@ -45,13 +45,12 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun launchPokeMessageListUiStateFlow() {
         viewModel.pokeMessageListUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeMessageList> -> initMessageListRecyclerView(it.data.messages)
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> activity?.showAlertToast(getString(R.string.poke_alert_error))
+                    is UiState.Failure -> activity?.showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
             }
             .launchIn(lifecycleScope)

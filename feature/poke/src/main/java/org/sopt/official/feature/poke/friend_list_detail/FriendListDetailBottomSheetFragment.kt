@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +16,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.FriendListDetail
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -30,6 +28,7 @@ import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickL
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.util.showAlertToast
 
 
 @AndroidEntryPoint
@@ -142,13 +141,12 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun launchPokeMessageListUiStateFlow() {
         viewModel.friendListDetailUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<FriendListDetail> -> updateRecyclerView(it.data.friendList)
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> activity?.showAlertToast(getString(R.string.poke_alert_error))
+                    is UiState.Failure -> activity?.showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -174,7 +172,6 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun launchPokeUserUiStateFlow() {
         viewModel.pokeUserUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
@@ -183,8 +180,15 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                         pokeFriendListAdapter?.updatePokeUserItemPokeState(it.data.userId)
                     }
 
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> {
+                        messageListBottomSheet?.dismiss()
+                        activity?.showAlertToast(getString(R.string.poke_user_alert_exceeded))
+                    }
+
+                    is UiState.Failure -> {
+                        messageListBottomSheet?.dismiss()
+                        activity?.showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    }
                 }
             }
             .launchIn(lifecycleScope)

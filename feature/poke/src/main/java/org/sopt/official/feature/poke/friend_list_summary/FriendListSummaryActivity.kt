@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -28,6 +26,7 @@ import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemVi
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
 import org.sopt.official.feature.poke.friend_list_detail.FriendListDetailBottomSheetFragment
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.util.showAlertToast
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -125,13 +124,12 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun launchFriendListSummaryUiStateFlow() {
         viewModel.friendListSummaryUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<FriendListSummary> -> updateRecyclerView(it.data)
-                    is UiState.ApiError -> it.responseMessage
-                    is UiState.Failure -> it.throwable.message
+                    is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
+                    is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -210,7 +208,6 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun launchPokeUserUiStateFlow() {
         viewModel.pokeUserUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
@@ -219,8 +216,15 @@ class FriendListSummaryActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(getString(R.string.poke_user_alert_exceeded))
+                    }
+
+                    is UiState.Failure -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    }
                 }
             }
             .launchIn(lifecycleScope)

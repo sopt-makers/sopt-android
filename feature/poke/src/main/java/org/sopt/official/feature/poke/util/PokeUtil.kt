@@ -1,10 +1,16 @@
 package org.sopt.official.feature.poke.util
 
+import android.app.Activity
 import android.graphics.drawable.GradientDrawable
+import android.view.Gravity
+import android.view.LayoutInflater
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import org.sopt.official.common.util.dp
 import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.feature.poke.R
+import org.sopt.official.feature.poke.databinding.ToastPokeAlertBinding
 
 fun ImageView.setRelationStrokeColor(relationName: String) {
     (background as GradientDrawable).setStroke(
@@ -19,4 +25,23 @@ fun ImageView.setRelationStrokeColor(relationName: String) {
             }
         )
     )
+}
+
+private var toast: Toast? = null
+fun Activity.showAlertToast(message: String) {
+    val binding = ToastPokeAlertBinding.inflate(LayoutInflater.from(this), null, false)
+    val toastMessage = when (message.isEmpty()) {
+        true -> getString(R.string.poke_alert_error)
+        false -> message
+    }
+
+    toast?.cancel()
+    toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT)
+    binding.textViewAlertMessage.text = toastMessage
+
+    toast?.let {
+        it.view = binding.root
+        it.setGravity(Gravity.TOP, 0, 0)
+        it.show()
+    }
 }

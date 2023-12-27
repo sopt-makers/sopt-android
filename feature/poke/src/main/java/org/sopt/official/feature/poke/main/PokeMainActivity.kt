@@ -6,15 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -24,6 +23,7 @@ import org.sopt.official.feature.poke.main.PokeMainViewModel
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
+import org.sopt.official.feature.poke.util.showAlertToast
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -72,45 +72,33 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun initStateFlowValues() {
-        viewModel.apply {
-            pokeMeUiState.flowWithLifecycle(lifecycle)
-                .onEach {
-                    when (it) {
-                        is UiState.Loading -> "Loading"
-                        // todo: 데이터 없으면 null로 넘어옴.. 처리 필요..
-                        is UiState.Success<PokeUser> -> initPokeMeView(it.data)
-                        is UiState.ApiError -> startActivity(
-                            Intent(
-                                this@PokeMainActivity,
-                                PokeMainActivity::class.java
-                            )
-                        ) // if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                        is UiState.Failure -> it.throwable.message?.let { toast(it) }
+        viewModel.pokeMeUiState
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<PokeUser> -> initPokeMeView(it.data)
+                    is UiState.ApiError -> binding.layoutSomeonePokeMe.setVisible(false)
+                    is UiState.Failure -> {
+                        binding.layoutSomeonePokeMe.setVisible(false)
+                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                     }
                 }
-                .launchIn(lifecycleScope)
-        }
+            }
+            .launchIn(lifecycleScope)
 
-        viewModel.apply {
-            pokeFriendUiState.flowWithLifecycle(lifecycle)
-                .onEach {
-                    when (it) {
-                        is UiState.Loading -> "Loading"
-                        is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
-                        is UiState.ApiError -> startActivity(
-                            Intent(
-                                this@PokeMainActivity,
-                                PokeMainActivity::class.java
-                            )
-                        ) // if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                        is UiState.Failure -> it.throwable.message?.let { toast(it) }
-                    }
+        viewModel.pokeFriendUiState
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
+                    is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
+                    is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
-                .launchIn(lifecycleScope)
-        }
+            }
+            .launchIn(lifecycleScope)
 
         viewModel.apply {
-            pokeFriendOfFriendUiState.flowWithLifecycle(lifecycle)
+            pokeFriendOfFriendUiState
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
@@ -119,13 +107,8 @@ class PokeMainActivity : AppCompatActivity() {
                             initPokeFriendOfFriendView(it.data)
                         }
 
-                        is UiState.ApiError -> startActivity(
-                            Intent(
-                                this@PokeMainActivity,
-                                PokeMainActivity::class.java
-                            )
-                        ) // if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                        is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                        is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
+                        is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -142,12 +125,12 @@ class PokeMainActivity : AppCompatActivity() {
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(it.responseMessage)
+                        showAlertToast(getString(R.string.poke_user_alert_exceeded))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        it.throwable.message?.let { showAlertToast(it) }
+                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                     }
                 }
             }
@@ -156,6 +139,7 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initPokeMeView(pokeMeItem: PokeUser) {
         with(binding) {
+            layoutSomeonePokeMe.setVisible(true)
             imgUserProfileSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }

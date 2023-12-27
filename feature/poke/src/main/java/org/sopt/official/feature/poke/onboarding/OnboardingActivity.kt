@@ -6,14 +6,12 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.view.toast
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.PokeMainActivity
@@ -24,6 +22,7 @@ import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomShee
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.showAlertToast
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -104,13 +103,12 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun launchOnboardingPokeUserListUiStateFlow() {
         viewModel.onboardingPokeUserListUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<List<PokeUser>> -> initRecyclerView(it.data)
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
+                    is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -123,7 +121,6 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun launchPokeUserUiStateFlow() {
         viewModel.pokeUserUiState
-            .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
@@ -133,8 +130,15 @@ class OnboardingActivity : AppCompatActivity() {
                         finish()
                     }
 
-                    is UiState.ApiError -> if (it.responseMessage.isNotBlank()) toast(it.responseMessage)
-                    is UiState.Failure -> it.throwable.message?.let { toast(it) }
+                    is UiState.ApiError -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(getString(R.string.poke_alert_error))
+                    }
+
+                    is UiState.Failure -> {
+                        messageListBottomSheet?.dismiss()
+                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    }
                 }
             }
             .launchIn(lifecycleScope)
