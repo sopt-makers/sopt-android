@@ -24,7 +24,7 @@ import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.util.showAlertToast
+import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -129,20 +129,23 @@ class PokeNotificationActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
-                        if (it.data.isFirstMeet) {
-                            binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                            binding.animationViewLottie.playAnimation()
+                        when (it.data.isFirstMeet) {
+                            true -> {
+                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                                binding.animationViewLottie.playAnimation()
+                            }
+                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(getString(R.string.poke_user_alert_exceeded))
+                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
             }

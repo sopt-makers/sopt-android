@@ -59,7 +59,6 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
@@ -76,7 +75,7 @@ import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
-import org.sopt.official.feature.poke.util.showAlertToast
+import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -250,9 +249,9 @@ class HomeActivity : AppCompatActivity() {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
-                    is UiState.ApiError -> showAlertToast(getString(org.sopt.official.feature.poke.R.string.poke_alert_error))
-                    is UiState.Failure -> showAlertToast(
-                        it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.poke_alert_error)
+                    is UiState.ApiError -> showPokeToast(getString(org.sopt.official.feature.poke.R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(
+                        it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.toast_poke_error)
                     )
                 }
             }

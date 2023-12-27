@@ -32,8 +32,11 @@
     <string name="poke_user_poke_count">%1$d콕</string>
     <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
     <string name="poke_user_alert_exceeded">오늘은 콕 찌르기를 다 썼어요.</string>
-    <string name="poke_alert_error">문제가 발생했습니다.</string>
 
+    <string name="toast_poke_error">문제가 발생했습니다.</string>
+    <string name="toast_poke_user_success">콕 찌르기를 완료했어요.</string>
     <string name="friend_complete">찌르기 답장으로\n%s님과 친구가 되었어요!</string>
+
+
 
 </resources>

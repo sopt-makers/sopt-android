@@ -22,7 +22,7 @@ import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomShee
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
-import org.sopt.official.feature.poke.util.showAlertToast
+import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 
 @AndroidEntryPoint
@@ -107,8 +107,8 @@ class OnboardingActivity : AppCompatActivity() {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<List<PokeUser>> -> initRecyclerView(it.data)
-                    is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
-                    is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -126,18 +126,19 @@ class OnboardingActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
+                        showPokeToast(getString(R.string.toast_poke_user_success))
                         startActivity(Intent(this, PokeMainActivity::class.java))
                         finish()
                     }
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(getString(R.string.poke_alert_error))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
             }

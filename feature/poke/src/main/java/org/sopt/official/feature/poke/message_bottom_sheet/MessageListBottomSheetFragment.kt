@@ -15,7 +15,7 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheetBinding
-import org.sopt.official.feature.poke.util.showAlertToast
+import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
 class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
@@ -49,8 +49,8 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeMessageList> -> initMessageListContent(it.data)
-                    is UiState.ApiError -> activity?.showAlertToast(getString(R.string.poke_alert_error))
-                    is UiState.Failure -> activity?.showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
+                    is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)

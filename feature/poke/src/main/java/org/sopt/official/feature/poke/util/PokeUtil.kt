@@ -28,10 +28,10 @@ fun ImageView.setRelationStrokeColor(relationName: String) {
 }
 
 private var toast: Toast? = null
-fun Activity.showAlertToast(message: String) {
+fun Activity.showPokeToast(message: String) {
     val binding = ToastPokeAlertBinding.inflate(LayoutInflater.from(this), null, false)
     val toastMessage = when (message.isEmpty()) {
-        true -> getString(R.string.poke_alert_error)
+        true -> getString(R.string.toast_poke_error)
         false -> message
     }
 

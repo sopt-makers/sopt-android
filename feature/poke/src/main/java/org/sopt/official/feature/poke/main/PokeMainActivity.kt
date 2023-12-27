@@ -25,7 +25,7 @@ import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActiv
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
-import org.sopt.official.feature.poke.util.showAlertToast
+import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -106,8 +106,8 @@ class PokeMainActivity : AppCompatActivity() {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
-                    is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
-                    is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -122,8 +122,8 @@ class PokeMainActivity : AppCompatActivity() {
                             initPokeFriendOfFriendView(it.data)
                         }
 
-                        is UiState.ApiError -> showAlertToast(getString(R.string.poke_alert_error))
-                        is UiState.Failure -> showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                        is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                        is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
                 .launchIn(lifecycleScope)
@@ -136,20 +136,23 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
-                        if (it.data.isFirstMeet) {
-                            binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                            binding.animationViewLottie.playAnimation()
+                        when (it.data.isFirstMeet) {
+                            true -> {
+                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                                binding.animationViewLottie.playAnimation()
+                            }
+                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(getString(R.string.poke_user_alert_exceeded))
+                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showAlertToast(it.throwable.message ?: getString(R.string.poke_alert_error))
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
             }
@@ -162,7 +165,7 @@ class PokeMainActivity : AppCompatActivity() {
             imgUserProfileSomeonePokeMe.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
-            pokeMeItem.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
+            pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
             imgUserProfilePokeMeOutline.setRelationStrokeColor(pokeMeItem.relationName)
