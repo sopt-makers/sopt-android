@@ -22,6 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+@file:Suppress("DEPRECATION")
+
 package org.sopt.official.feature.notification
 
 import android.content.Context
@@ -48,7 +50,7 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
-    private val args by serializableExtra(StartArgs( ""))
+    private val args by serializableExtra(StartArgs(""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,7 +83,7 @@ class NotificationDetailActivity : AppCompatActivity() {
             textViewNotificationContent.text = notification.content
             linearLayoutLinkButton.visibility = when (
                 notification.deepLink.isNullOrBlank()
-                && notification.webLink.isNullOrBlank()
+                        && notification.webLink.isNullOrBlank()
             ) {
                 true -> View.GONE
                 false -> View.VISIBLE
@@ -101,13 +103,15 @@ class NotificationDetailActivity : AppCompatActivity() {
             when (it) {
                 includeAppBarBackArrow.toolbar -> onBackPressed()
                 linearLayoutLinkButton -> viewModel.notificationDetail.value?.let {
-                    startActivity(SchemeActivity.getIntent(
-                        this@NotificationDetailActivity,
-                        SchemeActivity.StartArgs(
-                            notificationId = it.notificationId,
-                            link = it.webLink ?: it.deepLink ?: ""
+                    startActivity(
+                        SchemeActivity.getIntent(
+                            this@NotificationDetailActivity,
+                            SchemeActivity.StartArgs(
+                                notificationId = it.notificationId,
+                                link = it.webLink ?: it.deepLink ?: ""
+                            )
                         )
-                    ))
+                    )
                 }
             }
         }
