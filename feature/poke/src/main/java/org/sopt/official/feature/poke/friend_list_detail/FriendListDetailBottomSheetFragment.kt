@@ -137,7 +137,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
             val lastVisibleItemPosition = pokeFriendListLayoutManager.findLastVisibleItemPosition()
             val totalItemCount = pokeFriendListLayoutManager.itemCount
-            if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 20 == 0) {
+            if (lastVisibleItemPosition == totalItemCount - 1) {
                 pokeFriendType?.let { viewModel.getFriendListDetail(it) }
             }
         }
@@ -168,7 +168,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<FriendListDetail> -> updateRecyclerView(it.data.friendList)
+                    is UiState.Success<List<PokeUser>> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }

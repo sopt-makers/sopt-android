@@ -32,6 +32,10 @@ import org.sopt.official.domain.poke.entity.FriendListDetail
 data class GetFriendListDetailResult(
     @SerialName("friendList")
     val friendList: List<PokeUserResult>,
+    @SerialName("totalSize")
+    val totalSize: Int,
+    @SerialName("totalPageSize")
+    val totalPageSize: Int,
     @SerialName("pageSize")
     val pageSize: Int,
     @SerialName("pageNum")
@@ -39,6 +43,8 @@ data class GetFriendListDetailResult(
 ) {
     fun toEntity(): FriendListDetail = FriendListDetail(
         friendList = friendList.map { it.toEntity() },
+        totalSize = totalSize,
+        totalPageSize = totalPageSize,
         pageSize = pageSize,
         pageNum = pageNum,
     )

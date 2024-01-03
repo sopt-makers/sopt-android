@@ -31,7 +31,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.FriendListDetail
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
@@ -48,12 +47,13 @@ class FriendListDetailViewModel @Inject constructor(
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
 
-    private val _friendListDetailUiState = MutableStateFlow<UiState<FriendListDetail>>(UiState.Loading)
-    val friendListDetailUiState: StateFlow<UiState<FriendListDetail>> get() = _friendListDetailUiState
+    private val _friendListDetailUiState = MutableStateFlow<UiState<List<PokeUser>>>(UiState.Loading)
+    val friendListDetailUiState: StateFlow<UiState<List<PokeUser>>> get() = _friendListDetailUiState
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
+    private var totalPageSize = -1
     private var currentPaginationIndex = 0
     private var friendListJob: Job? = null
 
@@ -62,14 +62,22 @@ class FriendListDetailViewModel @Inject constructor(
             if (it.isActive || !it.isCompleted) return
         }
 
+        if (currentPaginationIndex == totalPageSize) return
+
         friendListJob = viewModelScope.launch {
+            val oldData = when (_friendListDetailUiState.value is UiState.Success) {
+                true -> (_friendListDetailUiState.value as UiState.Success<List<PokeUser>>).data
+                false -> emptyList()
+            }
             _friendListDetailUiState.emit(UiState.Loading)
             getFriendListDetailUseCase.invoke(
                 page = currentPaginationIndex,
                 type = pokeFriendType,
             )
                 .onSuccess { response ->
-                    _friendListDetailUiState.emit(UiState.Success(response))
+                    totalPageSize = response.totalPageSize
+                    currentPaginationIndex = response.pageNum
+                    _friendListDetailUiState.emit(UiState.Success(oldData.plus(response.friendList)))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _friendListDetailUiState.emit(UiState.ApiError(statusCode, responseMessage))
