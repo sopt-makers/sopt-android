@@ -123,11 +123,13 @@
         <activity
             android:name=".feature.poke.main.PokeMainActivity"
             android:exported="false"
-            android:launchMode="singleTop"/>
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.poke.notification.PokeNotificationActivity"
-            android:exported="false" />
-        <activity android:name=".feature.poke.friend_list_summary.FriendListSummaryActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".feature.poke.friend_list_summary.FriendListSummaryActivity"
             android:exported="false" />
 
         <activity
