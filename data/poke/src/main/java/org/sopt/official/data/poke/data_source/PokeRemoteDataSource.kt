@@ -26,6 +26,7 @@ package org.sopt.official.data.poke.data_source
 
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
+import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
 import org.sopt.official.data.poke.service.PokeService
 import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
 import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
@@ -37,7 +38,7 @@ import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
-import org.sopt.official.domain.poke.entity.request.PokeUserRequest
+import org.sopt.official.data.poke.dto.request.PokeUserRequest
 import javax.inject.Inject
 
 class PokeRemoteDataSource @Inject constructor(
@@ -89,11 +90,11 @@ class PokeRemoteDataSource @Inject constructor(
     }
 
     suspend fun getPokeNotificationList(
-        page: Int,
+        getPokeNotificationListRequest: GetPokeNotificationListRequest,
     ): GetPokeNotificationListResponse {
         val call = service.getPokeNotificationList(
-            page = page,
-            )
+            page = getPokeNotificationListRequest.page,
+        )
         return GetPokeNotificationListResponse().apply {
             statusCode = call.code().toString()
             responseMessage = call.message()

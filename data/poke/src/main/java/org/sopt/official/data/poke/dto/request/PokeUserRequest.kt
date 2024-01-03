@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.entity.request
+package org.sopt.official.data.poke.dto.request
 
 data class PokeUserRequest(
     val userId: Int,

@@ -28,6 +28,7 @@ import org.sopt.official.data.poke.data_source.PokeLocalDataSource
 import org.sopt.official.data.poke.data_source.PokeRemoteDataSource
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
+import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
 import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
 import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
 import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
@@ -38,7 +39,7 @@ import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
-import org.sopt.official.domain.poke.entity.request.PokeUserRequest
+import org.sopt.official.data.poke.dto.request.PokeUserRequest
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -81,7 +82,9 @@ class PokeRepositoryImpl @Inject constructor(
         page: Int,
     ): GetPokeNotificationListResponse {
         return remoteDataSource.getPokeNotificationList(
-            page = page,
+            getPokeNotificationListRequest = GetPokeNotificationListRequest(
+                page = page,
+            ),
         )
     }
 

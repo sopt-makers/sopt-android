@@ -22,9 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.entity.request
-
-import org.sopt.official.domain.poke.type.PokeMessageType
+package org.sopt.official.data.poke.dto.request
 
 data class GetPokeNotificationListRequest(
     val page: Int,
