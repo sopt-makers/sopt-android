@@ -24,12 +24,12 @@
  */
 package org.sopt.official.data.poke.service
 
-import org.sopt.official.data.poke.dto.response.PokeFriendOfFriendListResult
-import org.sopt.official.data.poke.dto.response.PokeNotificationResult
 import org.sopt.official.data.poke.dto.response.CheckNewInPokeResult
-import org.sopt.official.data.poke.dto.response.GetPokeMessageListResult
 import org.sopt.official.data.poke.dto.response.GetFriendListDetailResult
 import org.sopt.official.data.poke.dto.response.GetFriendListSummaryResult
+import org.sopt.official.data.poke.dto.response.GetPokeMessageListResult
+import org.sopt.official.data.poke.dto.response.PokeFriendOfFriendListResult
+import org.sopt.official.data.poke.dto.response.PokeNotificationResult
 import org.sopt.official.data.poke.dto.response.PokeUserResult
 import retrofit2.Response
 import retrofit2.http.Body

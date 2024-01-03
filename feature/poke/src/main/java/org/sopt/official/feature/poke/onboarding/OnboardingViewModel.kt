@@ -30,10 +30,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.use_case.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.use_case.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.use_case.PokeUserUseCase

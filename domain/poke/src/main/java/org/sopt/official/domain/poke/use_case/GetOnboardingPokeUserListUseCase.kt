@@ -25,8 +25,8 @@
 package org.sopt.official.domain.poke.use_case
 
 import org.sopt.official.domain.poke.entity.ApiResult
-import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 import javax.inject.Inject
 
