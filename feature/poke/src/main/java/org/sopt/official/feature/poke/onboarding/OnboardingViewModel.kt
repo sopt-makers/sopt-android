@@ -34,16 +34,23 @@ import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.use_case.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.use_case.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.use_case.PokeUserUseCase
+import org.sopt.official.domain.poke.use_case.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
+    private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,
+    private val updateNewInPokeOnboardingUseCase: UpdateNewInPokeOnboardingUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
+
+    private val _checkNewInPokeOnboardingState = MutableStateFlow<Boolean?>(null)
+    val checkNewInPokeOnboardingState: StateFlow<Boolean?> get() = _checkNewInPokeOnboardingState
 
     private val _onboardingPokeUserListUiState = MutableStateFlow<UiState<List<PokeUser>>>(UiState.Loading)
     val onboardingPokeUserListUiState: StateFlow<UiState<List<PokeUser>>> get() = _onboardingPokeUserListUiState
@@ -52,7 +59,20 @@ class OnboardingViewModel @Inject constructor(
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
     init {
+        checkNewInPokeOnboarding()
         getOnboardingPokeUserList()
+    }
+
+    private fun checkNewInPokeOnboarding() {
+        viewModelScope.launch {
+            _checkNewInPokeOnboardingState.emit(checkNewInPokeOnboardingUseCase.invoke())
+        }
+    }
+
+    fun updateNewInPokeOnboarding() {
+        viewModelScope.launch {
+            updateNewInPokeOnboardingUseCase.invoke()
+        }
     }
 
     fun getOnboardingPokeUserList() {

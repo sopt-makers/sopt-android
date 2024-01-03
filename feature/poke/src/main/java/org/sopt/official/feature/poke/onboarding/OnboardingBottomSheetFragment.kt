@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,8 @@ class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentOnboardingBottomSheetBinding? = null
     private val binding: FragmentOnboardingBottomSheetBinding get() = requireNotNull(_binding)
+
+    var onDismissEvent: (() -> Unit)? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,5 +54,21 @@ class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initClickListener() {
         binding.buttonConfirm.setOnClickListener { dismiss() }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onDismissEvent?.let { it() }
+    }
+
+
+    class Builder {
+        private val bottomSheet = OnboardingBottomSheetFragment()
+        fun create(): OnboardingBottomSheetFragment = bottomSheet
+
+        fun setOnDismissEvent(onDismissEvent: () -> Unit): Builder {
+            bottomSheet.onDismissEvent = onDismissEvent
+            return this
+        }
     }
 }

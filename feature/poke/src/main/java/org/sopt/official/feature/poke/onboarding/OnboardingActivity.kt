@@ -69,8 +69,8 @@ class OnboardingActivity : AppCompatActivity() {
 
         initAppBar()
         initView()
-        showOnboardingBottomSheet()
 
+        launchCheckNewInPokeOnboardingStateFlow()
         launchOnboardingPokeUserListUiStateFlow()
         launchPokeUserUiStateFlow()
     }
@@ -118,11 +118,19 @@ class OnboardingActivity : AppCompatActivity() {
     private fun showOnboardingBottomSheet() {
         if (onboardingBottomSheet?.isAdded == true) return
         if (onboardingBottomSheet == null) {
-            onboardingBottomSheet = OnboardingBottomSheetFragment()
+            onboardingBottomSheet = OnboardingBottomSheetFragment.Builder()
+                .setOnDismissEvent { viewModel.updateNewInPokeOnboarding() }
+                .create()
         }
         onboardingBottomSheet?.let {
             it.show(supportFragmentManager, it.tag)
         }
+    }
+
+    private fun launchCheckNewInPokeOnboardingStateFlow() {
+        viewModel.checkNewInPokeOnboardingState
+            .onEach { if (it == true) showOnboardingBottomSheet() }
+            .launchIn(lifecycleScope)
     }
 
     private fun launchOnboardingPokeUserListUiStateFlow() {

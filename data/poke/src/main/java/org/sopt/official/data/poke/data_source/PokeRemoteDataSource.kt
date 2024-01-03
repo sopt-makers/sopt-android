@@ -40,7 +40,7 @@ import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
 import javax.inject.Inject
 
-class PokeDataSource @Inject constructor(
+class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
 ) {
     suspend fun checkNewInPoke(): CheckNewInPokeResponse {

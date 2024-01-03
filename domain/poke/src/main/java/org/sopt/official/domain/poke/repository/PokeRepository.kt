@@ -38,6 +38,8 @@ import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
 
 interface PokeRepository {
+    suspend fun checkNewInPokeOnboarding(): Boolean
+    suspend fun updateNewInPokeOnboarding()
     suspend fun checkNewInPoke(): CheckNewInPokeResponse
     suspend fun getOnboardingPokeUserList(): GetOnboardingPokeUserListResponse
     suspend fun getPokeMe(): GetPokeMeResponse

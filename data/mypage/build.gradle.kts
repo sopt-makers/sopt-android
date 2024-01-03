@@ -34,6 +34,7 @@ android {
 dependencies {
     implementation(projects.domain.mypage)
     implementation(projects.domain.soptamp)
+    implementation(projects.data.poke)
     implementation(projects.core.network)
     implementation(projects.core.common)
     implementation(projects.core.auth)
