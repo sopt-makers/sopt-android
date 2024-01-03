@@ -30,11 +30,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.entity.FriendListSummary
-import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.use_case.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.use_case.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
@@ -91,34 +91,6 @@ class FriendListSummaryViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
-        }
-    }
-
-    fun updatePokeUserState(userId: Int) {
-        viewModelScope.launch {
-            if (_friendListSummaryUiState.value is UiState.Success<FriendListSummary>) {
-                val data = (_friendListSummaryUiState.value as UiState.Success<FriendListSummary>).data
-
-                for (friend in data.newFriend) {
-                    if (friend.userId == userId) {
-                        friend.isAlreadyPoke = true
-                    }
-                }
-
-                for (friend in data.bestFriend) {
-                    if (friend.userId == userId) {
-                        friend.isAlreadyPoke = true
-                    }
-                }
-
-                for (friend in data.soulmate) {
-                    if (friend.userId == userId) {
-                        friend.isAlreadyPoke = true
-                    }
-                }
-                _friendListSummaryUiState.emit(UiState.Loading)
-                _friendListSummaryUiState.emit(UiState.Success(data))
-            }
         }
     }
 }

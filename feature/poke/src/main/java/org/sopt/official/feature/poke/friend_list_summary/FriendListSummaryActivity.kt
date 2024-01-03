@@ -237,7 +237,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        viewModel.updatePokeUserState(it.data.userId)
+                        viewModel.getFriendListSummary()
                         showPokeToast(getString(R.string.toast_poke_user_success))
                     }
 
