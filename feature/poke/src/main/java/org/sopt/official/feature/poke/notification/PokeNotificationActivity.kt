@@ -115,7 +115,7 @@ class PokeNotificationActivity : AppCompatActivity() {
             if (messageListBottomSheet == null) {
                 messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                     .setMessageListType(messageType)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
                     .create()
             }
 
@@ -159,7 +159,7 @@ class PokeNotificationActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
-                        when (it.data.isFirstMeet) {
+                        when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
@@ -167,12 +167,10 @@ class PokeNotificationActivity : AppCompatActivity() {
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))

@@ -117,6 +117,7 @@ class PokeMainViewModel @Inject constructor(
     fun pokeUser(
         userId: Int,
         message: String,
+        isFirstMeet: Boolean,
     ) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
@@ -125,7 +126,7 @@ class PokeMainViewModel @Inject constructor(
                 userId = userId,
             )
                 .onSuccess { response ->
-                    _pokeUserUiState.emit(UiState.Success(response))
+                    _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))

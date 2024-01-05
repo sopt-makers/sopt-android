@@ -145,7 +145,6 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
-
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                         is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
@@ -160,7 +159,7 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
-                        when (it.data.isFirstMeet) {
+                        when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
@@ -168,12 +167,10 @@ class PokeMainActivity : AppCompatActivity() {
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -208,7 +205,8 @@ class PokeMainActivity : AppCompatActivity() {
                     when (pokeMeItem.isFirstMeet) {
                         true -> PokeMessageType.POKE_SOMEONE
                         false -> PokeMessageType.POKE_FRIEND
-                    }
+                    },
+                    pokeMeItem.isFirstMeet
                 )
             }
         }
@@ -219,7 +217,7 @@ class PokeMainActivity : AppCompatActivity() {
             imgUserProfilePokeMyFriend.setOnClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
-            pokeFriendItem.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
+            pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
             imgUserProfilePokeMyFriendOutline.setRelationStrokeColor(pokeFriendItem.relationName)
@@ -309,7 +307,7 @@ class PokeMainActivity : AppCompatActivity() {
                                 )
                             )
                         }
-                        myFriendOfFriend.profileImage.takeIf { !it.isNullOrEmpty() }?.let { url ->
+                        myFriendOfFriend.profileImage.takeIf { it.isNotEmpty() }?.let { url ->
                             friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
                         } ?: run {
                             friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
@@ -326,12 +324,12 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType) {
+    private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false) {
         if (messageListBottomSheet?.isAdded == true) return
         if (messageListBottomSheet == null) {
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                 .setMessageListType(pokeMessageType)
-                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message) }
+                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message, isFirstMeet) }
                 .create()
         }
 

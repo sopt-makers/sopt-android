@@ -27,7 +27,8 @@ package org.sopt.official.feature.poke
 sealed class UiState<out T : Any> {
     data object Loading : UiState<Nothing>()
     data class Success<out T : Any>(
-        val data: T
+        val data: T,
+        val isFirstMeet: Boolean = false
     ) : UiState<T>()
 
     data class ApiError(
