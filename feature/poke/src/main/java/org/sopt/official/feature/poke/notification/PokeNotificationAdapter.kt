@@ -52,7 +52,18 @@ class PokeNotificationAdapter(
     }
 
     override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
-        holder.onBind(getItem(position))
+        holder.apply {
+            onBind(currentList[position])
+
+            itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
+                clickListener.onClickProfileImage(currentList[position].playgroundId)
+            }
+
+            itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {
+                if (currentList[position].isAlreadyPoke) return@setOnClickListener
+                clickListener.onClickPokeButton(currentList[position])
+            }
+        }
     }
 
     fun updatePokeUserItemPokeState(userId: Int) {

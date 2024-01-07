@@ -47,7 +47,7 @@ sealed class PokeUserViewHolder(
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
-                when (pokeUser.profileImage.isNullOrBlank()) {
+                when (pokeUser.profileImage.isBlank()) {
                     true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
                     false -> imageViewProfile.load(pokeUser.profileImage) {
                         crossfade(true)
@@ -69,7 +69,7 @@ sealed class PokeUserViewHolder(
 
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
-                when (pokeUser.profileImage.isNullOrBlank()) {
+                when (pokeUser.profileImage.isBlank()) {
                     true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
                     false -> imageViewProfile.load(pokeUser.profileImage) {
                         crossfade(true)
