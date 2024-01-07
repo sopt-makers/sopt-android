@@ -34,12 +34,15 @@ data class PokeNotificationResult(
     val history: List<PokeUserResult>,
     @SerialName("pageSize")
     val pageSize: Int,
+    @SerialName("totalPageSize")
+    val totalPageSize: Int,
     @SerialName("pageNum")
     val pageNum: Int
 ) {
     fun toEntity(): PokeNotificationList = PokeNotificationList(
         history = history.map { it.toEntity() },
         pageSize = pageSize,
+        totalPageSize = totalPageSize,
         pageNum = pageNum,
     )
 }

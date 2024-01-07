@@ -36,10 +36,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -145,11 +143,16 @@ class PokeNotificationActivity : AppCompatActivity() {
     }
 
     private fun initStateFlowValues() {
-        lifecycleScope.launch {
-            viewModel.pokeNotification.collectLatest {
-                pokeNotificationAdapter.updatePokeNotification(it?.history ?: arrayListOf())
+        viewModel.pokeNotification
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<List<PokeUser>> -> pokeNotificationAdapter.updatePokeNotification(it.data)
+                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                }
             }
-        }
+            .launchIn(lifecycleScope)
 
         viewModel.pokeUserUiState
             .flowWithLifecycle(lifecycle)

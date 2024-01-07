@@ -48,12 +48,13 @@ class PokeNotificationViewModel @Inject constructor(
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
 
-    private val _pokeNotification = MutableStateFlow<PokeNotificationList?>(PokeNotificationList(arrayListOf(), 0, 0))
-    val pokeNotification: StateFlow<PokeNotificationList?> get() = _pokeNotification
+    private val _pokeNotification = MutableStateFlow<UiState<List<PokeUser>>>(UiState.Loading)
+    val pokeNotification: StateFlow<UiState<List<PokeUser>>> get() = _pokeNotification
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
+    private var totalPageSize = -1
     private var currentPaginationIndex = 0
     private var pokeNotificationJob: Job? = null
 
@@ -66,16 +67,25 @@ class PokeNotificationViewModel @Inject constructor(
             if (it.isActive || !it.isCompleted) return
         }
 
+        if (currentPaginationIndex == totalPageSize) return
+
         pokeNotificationJob = viewModelScope.launch {
-            getPokeNotificationListUseCase.invoke(currentPaginationIndex)
+            val oldData = when (_pokeNotification.value is UiState.Success) {
+                true -> (_pokeNotification.value as UiState.Success<List<PokeUser>>).data
+                false -> emptyList()
+            }
+            getPokeNotificationListUseCase.invoke(page = currentPaginationIndex)
                 .onSuccess {
-                    val oldPokeNotificationList = _pokeNotification.value?.history ?: arrayListOf()
-                    _pokeNotification.value = _pokeNotification.value?.copy(
-                        history = oldPokeNotificationList.plus(it.history)
-                    )
-                    currentPaginationIndex++
+                    totalPageSize = it.totalPageSize
+                    currentPaginationIndex = it.pageNum
+                    _pokeNotification.emit(UiState.Success(oldData.plus(it.history)))
                 }
-                .onFailure { Timber.e(it) }
+                .onApiError { statusCode, responseMessage ->
+                    _pokeNotification.emit(UiState.ApiError(statusCode, responseMessage))
+                }
+                .onFailure { throwable ->
+                    _pokeNotification.emit(UiState.Failure(throwable))
+                }
         }
     }
 

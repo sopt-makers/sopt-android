@@ -29,5 +29,6 @@ class GetPokeNotificationListResponse : BaseResponse<PokeNotificationList>()
 data class PokeNotificationList(
     val history: List<PokeUser>,
     val pageSize: Int,
+    val totalPageSize: Int,
     val pageNum: Int,
 )

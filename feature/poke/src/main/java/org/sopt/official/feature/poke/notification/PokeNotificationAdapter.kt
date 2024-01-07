@@ -47,6 +47,7 @@ class PokeNotificationAdapter(
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
+
     override fun getItemViewType(position: Int) = when (position) {
         0 -> R.layout.item_poke_notification_header
         else -> R.layout.item_poke_notification
@@ -107,7 +108,7 @@ class PokeNotificationAdapter(
     ) : RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(item: PokeUser) {
             with(viewBinding) {
-                item.profileImage.takeIf { !it.isNullOrEmpty() }?.let {
+                item.profileImage.takeIf { it.isNotEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
                 imgUserProfileOutline.setRelationStrokeColor(item.relationName)
