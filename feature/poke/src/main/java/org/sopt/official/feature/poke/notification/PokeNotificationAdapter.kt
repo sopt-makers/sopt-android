@@ -41,45 +41,18 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 class PokeNotificationAdapter(
     private val clickListener: PokeUserListClickListener,
-): ListAdapter<PokeUser, RecyclerView.ViewHolder>(
+): ListAdapter<PokeUser, PokeNotificationAdapter.NotificationListViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.userId == new.userId },
         onItemsTheSame = { old, new -> old == new }
     )
 ) {
-
-    override fun getItemViewType(position: Int) = when (position) {
-        0 -> R.layout.item_poke_notification_header
-        else -> R.layout.item_poke_notification
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationListViewHolder {
+        return NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun getItemCount(): Int = currentList.size
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when (viewType) {
-            R.layout.item_poke_notification_header -> NotificationHeaderViewHolder(ItemPokeNotificationHeaderBinding.inflate(LayoutInflater.from(parent.context)))
-            else -> NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
-        }
-    }
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is NotificationHeaderViewHolder) {
-            holder.bind()
-        }
-
-        if (holder is NotificationListViewHolder) {
-            currentList[position].let { item ->
-                holder.apply {
-                    bind(item)
-                    itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
-                        clickListener.onClickProfileImage(currentList[position].playgroundId)
-                    }
-                    itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {
-                        clickListener.onClickPokeButton(currentList[position])
-                    }
-                }
-            }
-        }
+    override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
+        holder.onBind(getItem(position))
     }
 
     fun updatePokeUserItemPokeState(userId: Int) {
@@ -97,16 +70,10 @@ class PokeNotificationAdapter(
         notifyDataSetChanged()
     }
 
-    inner class NotificationHeaderViewHolder(
-        viewBinding: ItemPokeNotificationHeaderBinding
-    ): RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind() {}
-    }
-
     inner class NotificationListViewHolder(
         private val viewBinding: ItemPokeNotificationBinding
     ) : RecyclerView.ViewHolder(viewBinding.root) {
-        fun bind(item: PokeUser) {
+        fun onBind(item: PokeUser) {
             with(viewBinding) {
                 item.profileImage.takeIf { it.isNotEmpty() }?.let {
                     imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
