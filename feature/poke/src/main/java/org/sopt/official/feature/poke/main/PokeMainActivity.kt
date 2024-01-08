@@ -209,6 +209,7 @@ class PokeMainActivity : AppCompatActivity() {
                     pokeMeItem.isFirstMeet
                 )
             }
+
         }
     }
 

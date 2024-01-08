@@ -98,6 +98,7 @@ class PokeNotificationAdapter(
                 } else {
                     "친한친구 ${item.pokeNum}콕"
                 }
+                imgPoke.isEnabled = !item.isAlreadyPoke
             }
         }
     }
