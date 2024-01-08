@@ -36,7 +36,7 @@
         android:elevation="@dimen/cardview_compat_inset_shadow"
         android:layout_gravity="center"
         android:background="@color/mds_gray_950_alpha80"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
