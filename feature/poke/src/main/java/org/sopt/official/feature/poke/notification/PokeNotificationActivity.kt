@@ -82,20 +82,15 @@ class PokeNotificationActivity : AppCompatActivity() {
     private fun initListener() {
         with(binding) {
             animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {
-                    layoutLottie.visibility = View.VISIBLE
-                }
-
-                override fun onAnimationEnd(animation: Animator) {
-                    layoutLottie.visibility = View.GONE
-                }
-
-                override fun onAnimationCancel(animation: Animator) {
-                }
-
-                override fun onAnimationRepeat(animation: Animator) {
-                }
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) { layoutLottie.visibility = View.GONE }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
             })
+
+            layoutLottie.setOnClickListener {
+                // do nothing
+            }
         }
     }
 
@@ -164,6 +159,7 @@ class PokeNotificationActivity : AppCompatActivity() {
                         pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
+                                binding.layoutLottie.visibility = View.VISIBLE
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
