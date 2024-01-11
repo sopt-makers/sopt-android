@@ -48,7 +48,10 @@ sealed class PokeUserViewHolder(
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
                 when (pokeUser.profileImage.isBlank()) {
-                    true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+                    true -> imageViewProfile.load(null) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
                     false -> imageViewProfile.load(pokeUser.profileImage) {
                         crossfade(true)
                         transformations(CircleCropTransformation())
@@ -70,7 +73,10 @@ sealed class PokeUserViewHolder(
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
                 when (pokeUser.profileImage.isBlank()) {
-                    true -> imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+                    true -> imageViewProfile.load(null) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
                     false -> imageViewProfile.load(pokeUser.profileImage) {
                         crossfade(true)
                         transformations(CircleCropTransformation())

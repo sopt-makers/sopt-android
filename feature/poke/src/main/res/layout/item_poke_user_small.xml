@@ -34,6 +34,7 @@
         android:id="@+id/imageView_profile"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="@drawable/ic_empty_profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1"
         app:layout_constraintStart_toStartOf="parent"
