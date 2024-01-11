@@ -116,4 +116,46 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_lottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:background="@color/mds_gray_950_alpha80"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view_lottie"
+            android:layout_width="108dp"
+            android:layout_height="88dp"
+            android:layout_marginTop="280dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_lottie"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_rawRes="@raw/friendcomplete"
+            app:lottie_repeatCount="2" />
+
+        <TextView
+            android:id="@+id/tv_lottie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/suit_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:textColor="@color/mds_gray_10"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="@id/animation_view_lottie"
+            app:layout_constraintStart_toStartOf="@id/animation_view_lottie"
+            app:layout_constraintTop_toBottomOf="@id/animation_view_lottie"
+            tools:text="찌르기 답장으로\n김다혜님과 친구가 되었어요" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

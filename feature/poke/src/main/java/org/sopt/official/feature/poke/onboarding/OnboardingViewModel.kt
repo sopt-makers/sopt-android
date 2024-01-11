@@ -102,6 +102,7 @@ class OnboardingViewModel @Inject constructor(
                 userId = userId,
             )
                 .onSuccess { response ->
+                    updatePokeUserState(response.userId)
                     _pokeUserUiState.emit(UiState.Success(response))
                 }
                 .onApiError { statusCode, responseMessage ->
@@ -110,6 +111,27 @@ class OnboardingViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
+        }
+    }
+
+    private suspend fun updatePokeUserState(userId: Int) {
+        viewModelScope.launch {
+            if (_onboardingPokeUserListUiState.value is UiState.Success<List<PokeUser>>) {
+                val newList = (_onboardingPokeUserListUiState.value as UiState.Success<List<PokeUser>>).data
+                    .map { pokeUser ->
+                        when (pokeUser.userId != userId) {
+                            true -> pokeUser
+                            false -> pokeUser.copy(
+                                pokeNum = pokeUser.pokeNum + 1,
+                                isAlreadyPoke = true
+                            )
+                        }
+                    }
+                _onboardingPokeUserListUiState.emit(UiState.Loading)
+                launch {
+                    _onboardingPokeUserListUiState.emit(UiState.Success(newList))
+                }
+            }
         }
     }
 }

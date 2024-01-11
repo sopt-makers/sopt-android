@@ -40,8 +40,12 @@ class PokeUserListAdapter(
     private val clickListener: PokeUserListClickListener,
 ) : ListAdapter<PokeUser, PokeUserViewHolder>(
     ItemDiffCallback(
-        onContentsTheSame = { old, new -> old.userId == new.userId },
-        onItemsTheSame = { old, new -> old == new }
+        onItemsTheSame = { old, new -> old == new },
+        onContentsTheSame = { old, new ->
+            old.userId == new.userId
+                    && old.isAlreadyPoke == new.isAlreadyPoke
+                    && old.pokeNum == new.pokeNum
+        },
     )
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokeUserViewHolder {
@@ -63,7 +67,7 @@ class PokeUserListAdapter(
                 clickListener.onClickProfileImage(currentList[position].playgroundId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
-                if(currentList[position].isAlreadyPoke) return@setOnClickListener
+                if (currentList[position].isAlreadyPoke) return@setOnClickListener
                 clickListener.onClickPokeButton(currentList[position])
             }
         }

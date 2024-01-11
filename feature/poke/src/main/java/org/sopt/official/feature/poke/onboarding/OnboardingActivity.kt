@@ -24,10 +24,12 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
+import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -69,6 +71,7 @@ class OnboardingActivity : AppCompatActivity() {
 
         initAppBar()
         initView()
+        initLottieAnimatorListener()
 
         launchCheckNewInPokeOnboardingStateFlow()
         launchOnboardingPokeUserListUiStateFlow()
@@ -115,6 +118,25 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
+    private fun initLottieAnimatorListener() {
+        binding.apply {
+            animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(animation: Animator) {}
+                override fun onAnimationEnd(animation: Animator) {
+                    layoutLottie.visibility = View.GONE
+                }
+                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationRepeat(animation: Animator) {}
+            })
+        }
+    }
+
+    private fun launchCheckNewInPokeOnboardingStateFlow() {
+        viewModel.checkNewInPokeOnboardingState
+            .onEach { if (it == true) showOnboardingBottomSheet() }
+            .launchIn(lifecycleScope)
+    }
+
     private fun showOnboardingBottomSheet() {
         if (onboardingBottomSheet?.isAdded == true) return
         if (onboardingBottomSheet == null) {
@@ -127,18 +149,16 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun launchCheckNewInPokeOnboardingStateFlow() {
-        viewModel.checkNewInPokeOnboardingState
-            .onEach { if (it == true) showOnboardingBottomSheet() }
-            .launchIn(lifecycleScope)
-    }
-
     private fun launchOnboardingPokeUserListUiStateFlow() {
         viewModel.onboardingPokeUserListUiState
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<List<PokeUser>> -> initRecyclerView(it.data)
+                    is UiState.Success<List<PokeUser>> -> when (it.data.find { user -> user.pokeNum >= 2 } == null) {
+                        true -> updateRecyclerView(it.data)
+                        false -> setIntentToPokeMain()
+                    }
+
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
@@ -146,9 +166,14 @@ class OnboardingActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
     }
 
-    private fun initRecyclerView(data: List<PokeUser>) {
+    private fun updateRecyclerView(data: List<PokeUser>) {
         binding.swipeRefreshLayout.isRefreshing = false
         pokeUserListAdapter?.submitList(data)
+    }
+
+    private fun setIntentToPokeMain() {
+        startActivity(Intent(this, PokeMainActivity::class.java))
+        finish()
     }
 
     private fun launchPokeUserUiStateFlow() {
@@ -158,9 +183,14 @@ class OnboardingActivity : AppCompatActivity() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_user_success))
-                        startActivity(Intent(this, PokeMainActivity::class.java))
-                        finish()
+                        when (it.isFirstMeet && !it.data.isFirstMeet) {
+                            true -> binding.apply {
+                                layoutLottie.visibility = View.VISIBLE
+                                tvLottie.text = root.context.getString(R.string.friend_complete, it.data.name)
+                                animationViewLottie.playAnimation()
+                            }
+                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
+                        }
                     }
 
                     is UiState.ApiError -> {
