@@ -105,13 +105,10 @@ class OnboardingActivity : AppCompatActivity() {
         }
 
         override fun onClickPokeButton(user: PokeUser) {
-            if (messageListBottomSheet?.isAdded == true) return
-            if (messageListBottomSheet == null) {
-                messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
-                    .create()
-            }
+            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                .setMessageListType(PokeMessageType.POKE_SOMEONE)
+                .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                .create()
 
             messageListBottomSheet?.let {
                 it.show(supportFragmentManager, it.tag)
@@ -172,8 +169,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun updateRecyclerView(data: List<PokeUser>) {
-        binding.swipeRefreshLayout.isRefreshing = false
         pokeUserListAdapter?.submitList(data)
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun setIntentToPokeMain() {

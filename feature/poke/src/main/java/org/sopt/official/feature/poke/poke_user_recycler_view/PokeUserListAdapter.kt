@@ -62,13 +62,13 @@ class PokeUserListAdapter(
 
     override fun onBindViewHolder(holder: PokeUserViewHolder, position: Int) {
         holder.apply {
-            onBind(currentList[position])
+            onBind(currentList[holder.adapterPosition])
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-                clickListener.onClickProfileImage(currentList[position].playgroundId)
+                clickListener.onClickProfileImage(currentList[holder.adapterPosition].playgroundId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
-                if (currentList[position].isAlreadyPoke) return@setOnClickListener
-                clickListener.onClickPokeButton(currentList[position])
+                if (currentList[holder.adapterPosition].isAlreadyPoke) return@setOnClickListener
+                clickListener.onClickPokeButton(currentList[holder.adapterPosition])
             }
         }
     }

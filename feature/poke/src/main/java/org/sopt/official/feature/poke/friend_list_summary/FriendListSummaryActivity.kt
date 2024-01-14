@@ -216,13 +216,10 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
 
         override fun onClickPokeButton(user: PokeUser) {
-            if (messageListBottomSheet?.isAdded == true) return
-            if (messageListBottomSheet == null) {
-                messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(PokeMessageType.POKE_FRIEND)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
-                    .create()
-            }
+            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                .setMessageListType(PokeMessageType.POKE_FRIEND)
+                .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                .create()
 
             messageListBottomSheet?.let {
                 it.show(supportFragmentManager, it.tag)

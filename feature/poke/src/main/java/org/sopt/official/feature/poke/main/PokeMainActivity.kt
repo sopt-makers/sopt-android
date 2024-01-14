@@ -321,13 +321,10 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false) {
-        if (messageListBottomSheet?.isAdded == true) return
-        if (messageListBottomSheet == null) {
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                .setMessageListType(pokeMessageType)
-                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message, isFirstMeet) }
-                .create()
-        }
+        messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            .setMessageListType(pokeMessageType)
+            .onClickMessageListItem { message -> viewModel.pokeUser(userId, message, isFirstMeet) }
+            .create()
 
         messageListBottomSheet?.let {
             it.show(supportFragmentManager, it.tag)

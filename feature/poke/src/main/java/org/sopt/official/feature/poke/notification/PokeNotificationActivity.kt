@@ -104,13 +104,10 @@ class PokeNotificationActivity : AppCompatActivity() {
                 true -> PokeMessageType.POKE_SOMEONE
                 false -> PokeMessageType.POKE_FRIEND
             }
-            if (messageListBottomSheet?.isAdded == true) return
-            if (messageListBottomSheet == null) {
-                messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                    .setMessageListType(messageType)
-                    .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
-                    .create()
-            }
+            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+                .setMessageListType(messageType)
+                .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
+                .create()
 
             messageListBottomSheet?.let {
                 it.show(supportFragmentManager, it.tag)
