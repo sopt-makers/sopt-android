@@ -32,6 +32,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -124,6 +125,7 @@ class OnboardingActivity : AppCompatActivity() {
                 override fun onAnimationStart(animation: Animator) {}
                 override fun onAnimationEnd(animation: Animator) {
                     layoutLottie.visibility = View.GONE
+                    setIntentToPokeMain()
                 }
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationRepeat(animation: Animator) {}
@@ -154,9 +156,12 @@ class OnboardingActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<List<PokeUser>> -> when (it.data.find { user -> user.pokeNum >= 2 } == null) {
-                        true -> updateRecyclerView(it.data)
-                        false -> setIntentToPokeMain()
+                    is UiState.Success<List<PokeUser>> -> {
+                        val newFriend = it.data.find { user -> user.pokeNum >= 2 }
+                        when (newFriend == null) {
+                            true -> updateRecyclerView(it.data)
+                            false -> playLottieAnimation(newFriend.name)
+                        }
                     }
 
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
@@ -172,6 +177,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun setIntentToPokeMain() {
+        if (binding.layoutLottie.isVisible) return
         startActivity(Intent(this, PokeMainActivity::class.java))
         finish()
     }
@@ -184,11 +190,7 @@ class OnboardingActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
-                            true -> binding.apply {
-                                layoutLottie.visibility = View.VISIBLE
-                                tvLottie.text = root.context.getString(R.string.friend_complete, it.data.name)
-                                animationViewLottie.playAnimation()
-                            }
+                            true -> playLottieAnimation(it.data.name)
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
@@ -205,6 +207,14 @@ class OnboardingActivity : AppCompatActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun playLottieAnimation(userName: String) {
+        binding.apply {
+            layoutLottie.visibility = View.VISIBLE
+            tvLottie.text = root.context.getString(R.string.friend_complete, userName)
+            animationViewLottie.playAnimation()
+        }
     }
 
     data class StartArgs(
