@@ -24,16 +24,20 @@
  */
 package org.sopt.official.feature.poke.friend_list_detail
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -82,7 +86,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFriendListDetailBottomSheetBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(FriendListDetailViewModel::class.java)
+        viewModel = ViewModelProvider(this)[FriendListDetailViewModel::class.java]
         return binding.root
     }
 
@@ -214,6 +218,22 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        val bottomSheetDialog = (dialog as? BottomSheetDialog)?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+
+        bottomSheetDialog?.let {
+            val layoutParams = it.layoutParams
+            layoutParams.height= ViewGroup.LayoutParams.MATCH_PARENT
+            it.layoutParams = layoutParams
+
+            val bottomSheetBehavior =  BottomSheetBehavior.from(it)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetBehavior.skipCollapsed = true
+            bottomSheetBehavior.isHideable = true
+        }
     }
 
     override fun onDestroyView() {
