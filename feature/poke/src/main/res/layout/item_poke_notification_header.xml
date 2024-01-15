@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:text="누가 나를 찔렀어요"
+        android:text="@string/someone_poke_me_title"
         android:fontFamily="@font/suit_semibold"
         android:textColor="@color/mds_gray_30"
         android:textFontWeight="600"
@@ -45,7 +45,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="나도 찔러서 답장을 해보세요"
+        android:text="@string/someone_poke_me_subtitle"
         android:fontFamily="@font/suit_semibold"
         android:textColor="@color/mds_gray_200"
         android:textFontWeight="600"

@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="누가 나를 찔렀어요"
+                    android:text="@string/someone_poke_me_title"
                     android:textColor="@color/mds_gray_30"
                     android:textFontWeight="600"
                     android:textSize="18dp" />
@@ -119,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:fontFamily="@font/suit_semibold"
-                    android:text="나도 찔러서 답장을 해보세요"
+                    android:text="@string/someone_poke_me_subtitle"
                     android:textColor="@color/mds_gray_200"
                     android:textFontWeight="600"
                     android:textSize="14dp" />
