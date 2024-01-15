@@ -72,19 +72,4 @@ class PokeUserListAdapter(
             }
         }
     }
-
-    fun updatePokeUserItemPokeState(userId: Int) {
-        val newList = currentList.toMutableList()
-        val pokeUser = newList.find { it.userId == userId }
-        val position = newList.indexOf(pokeUser)
-
-        pokeUser?.isAlreadyPoke = true
-        submitList(newList)
-        notifyItemChanged(position)
-    }
-
-    fun updatePokeUserList(newList: List<PokeUser>) {
-        submitList(newList)
-        notifyDataSetChanged()
-    }
 }

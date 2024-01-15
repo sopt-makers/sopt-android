@@ -99,6 +99,7 @@ class FriendListDetailViewModel @Inject constructor(
                 userId = userId,
             )
                 .onSuccess { response ->
+                    updatePokeUserState(response.userId)
                     _pokeUserUiState.emit(UiState.Success(response))
                 }
                 .onApiError { statusCode, responseMessage ->
@@ -107,6 +108,27 @@ class FriendListDetailViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
+        }
+    }
+
+    private suspend fun updatePokeUserState(userId: Int) {
+        viewModelScope.launch {
+            if (_friendListDetailUiState.value is UiState.Success<List<PokeUser>>) {
+                val newList = (_friendListDetailUiState.value as UiState.Success<List<PokeUser>>).data
+                    .map { pokeUser ->
+                        when (pokeUser.userId != userId) {
+                            true -> pokeUser
+                            false -> pokeUser.copy(
+                                pokeNum = pokeUser.pokeNum + 1,
+                                isAlreadyPoke = true
+                            )
+                        }
+                    }
+                _friendListDetailUiState.emit(UiState.Loading)
+                launch {
+                    _friendListDetailUiState.emit(UiState.Success(newList))
+                }
+            }
         }
     }
 }

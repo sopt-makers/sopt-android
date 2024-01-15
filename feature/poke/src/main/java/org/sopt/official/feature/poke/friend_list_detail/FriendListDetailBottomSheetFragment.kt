@@ -189,7 +189,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     recyclerView.setVisible(true)
                     includeFriendListEmptyView.root.setVisible(false)
                     textViewListCount.text = getString(R.string.friend_list_count, data.size)
-                    pokeFriendListAdapter?.updatePokeUserList(data)
+                    pokeFriendListAdapter?.submitList(data)
                 }
             }
         }
@@ -202,7 +202,6 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        pokeFriendListAdapter?.updatePokeUserItemPokeState(it.data.userId)
                         activity?.showPokeToast(getString(R.string.toast_poke_user_success))
                     }
 
