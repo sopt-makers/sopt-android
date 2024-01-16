@@ -65,7 +65,14 @@ class PokeMainActivity : AppCompatActivity() {
 
         initData()
         initListener()
+        initFriendOfFriendEmptyViewText()
         initStateFlowValues()
+    }
+
+    private fun initData() {
+        viewModel.getPokeMe()
+        viewModel.getPokeFriend()
+        viewModel.getPokeFriendOfFriend()
     }
 
     private fun initListener() {
@@ -102,10 +109,12 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initData() {
-        viewModel.getPokeMe()
-        viewModel.getPokeFriend()
-        viewModel.getPokeFriendOfFriend()
+    private fun initFriendOfFriendEmptyViewText() {
+        binding.apply {
+            val emptyViewText = getString(R.string.poke_my_friend_of_friend_empty)
+            includeFriendListEmptyView01.textView.text = emptyViewText
+            includeFriendListEmptyView02.textView.text = emptyViewText
+        }
     }
 
     private fun initStateFlowValues() {
@@ -239,7 +248,7 @@ class PokeMainActivity : AppCompatActivity() {
                 1 -> {
                     box2FriendOfFriend.visibility = View.GONE
                     val friendListSize = list[0].friendList.size
-                    setVisibility(groupFriend1Box1, groupFriend2Box1, groupEmptyBox1, friendListSize)
+                    setVisibility(groupFriend1Box1, groupFriend2Box1, includeFriendListEmptyView01.root, friendListSize)
                 }
 
                 2 -> {
@@ -247,8 +256,8 @@ class PokeMainActivity : AppCompatActivity() {
                     val friendListSize1 = list[0].friendList.size
                     val friendListSize2 = list[1].friendList.size
 
-                    setVisibility(groupFriend1Box1, groupFriend2Box1, groupEmptyBox1, friendListSize1)
-                    setVisibility(groupFriend3Box2, groupFriend4Box2, groupEmptyBox2, friendListSize2)
+                    setVisibility(groupFriend1Box1, groupFriend2Box1, includeFriendListEmptyView01.root, friendListSize1)
+                    setVisibility(groupFriend3Box2, groupFriend4Box2, includeFriendListEmptyView02.root, friendListSize2)
                 }
             }
         }
