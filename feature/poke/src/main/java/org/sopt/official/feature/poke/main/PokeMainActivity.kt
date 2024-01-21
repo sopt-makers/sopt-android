@@ -105,7 +105,12 @@ class PokeMainActivity : AppCompatActivity() {
             }
 
             imgNextPokeMyFriend.setOnClickListener {
-                startActivity(Intent(this@PokeMainActivity, FriendListSummaryActivity::class.java))
+                startActivity(
+                    FriendListSummaryActivity.getIntent(
+                        this@PokeMainActivity,
+                        FriendListSummaryActivity.StartArgs(args?.userStatus ?: "")
+                    )
+                )
             }
 
             scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {
@@ -119,7 +124,10 @@ class PokeMainActivity : AppCompatActivity() {
 
             animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) { layoutLottie.visibility = View.GONE }
+                override fun onAnimationEnd(animation: Animator) {
+                    layoutLottie.visibility = View.GONE
+                }
+
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationRepeat(animation: Animator) {}
             })
@@ -170,6 +178,7 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
+
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                         is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
@@ -190,13 +199,16 @@ class PokeMainActivity : AppCompatActivity() {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
+
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
+
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
+
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -213,7 +225,11 @@ class PokeMainActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = "memberprofile",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_alarm", "view_profile" to pokeMeItem.playgroundId)
+                    properties = mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_main_alarm",
+                        "view_profile" to pokeMeItem.playgroundId
+                    )
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
@@ -234,7 +250,11 @@ class PokeMainActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = "poke_icon",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_alarm", "view_profile" to pokeMeItem.userId)
+                    properties = mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_main_alarm",
+                        "view_profile" to pokeMeItem.userId
+                    )
                 )
                 showMessageListBottomSheet(
                     pokeMeItem.userId,
@@ -254,7 +274,11 @@ class PokeMainActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = "memberprofile",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_friend", "view_profile" to pokeFriendItem.playgroundId)
+                    properties = mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_main_friend",
+                        "view_profile" to pokeFriendItem.playgroundId
+                    )
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
@@ -270,7 +294,11 @@ class PokeMainActivity : AppCompatActivity() {
                 tracker.track(
                     type = EventType.CLICK,
                     name = "poke_icon",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_friend", "view_profile" to pokeFriendItem.userId)
+                    properties = mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_main_friend",
+                        "view_profile" to pokeFriendItem.userId
+                    )
                 )
                 showMessageListBottomSheet(pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
             }
@@ -332,7 +360,11 @@ class PokeMainActivity : AppCompatActivity() {
                     tracker.track(
                         type = EventType.CLICK,
                         name = "memberprofile",
-                        properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_myfriend", "view_profile" to friend.playgroundId)
+                        properties = mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "poke_main_recommend_myfriend",
+                            "view_profile" to friend.playgroundId
+                        )
                     )
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, friend.playgroundId))))
                 }
@@ -354,7 +386,11 @@ class PokeMainActivity : AppCompatActivity() {
                             tracker.track(
                                 type = EventType.CLICK,
                                 name = "memberprofile",
-                                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_notmyfriend", "view_profile" to friend.playgroundId)
+                                properties = mapOf(
+                                    "view_type" to args?.userStatus,
+                                    "click_view_type" to "poke_main_recommend_notmyfriend",
+                                    "view_profile" to friend.playgroundId
+                                )
                             )
                             startActivity(
                                 Intent(
@@ -375,7 +411,11 @@ class PokeMainActivity : AppCompatActivity() {
                             tracker.track(
                                 type = EventType.CLICK,
                                 name = "poke_icon",
-                                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_notmyfriend", "view_profile" to myFriendOfFriend.userId)
+                                properties = mapOf(
+                                    "view_type" to args?.userStatus,
+                                    "click_view_type" to "poke_main_recommend_notmyfriend",
+                                    "view_profile" to myFriendOfFriend.userId
+                                )
                             )
                             showMessageListBottomSheet(myFriendOfFriend.userId, PokeMessageType.POKE_SOMEONE)
                         }

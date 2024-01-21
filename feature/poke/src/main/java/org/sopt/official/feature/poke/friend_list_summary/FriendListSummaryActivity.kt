@@ -34,7 +34,10 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.FriendListSummary
@@ -46,11 +49,14 @@ import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
 import org.sopt.official.feature.poke.friend_list_detail.FriendListDetailBottomSheetFragment
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.poke_user_recycler_view.ItemDecorationDivider
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -58,8 +64,11 @@ class FriendListSummaryActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityFriendListSummaryBinding::inflate)
     private val viewModel by viewModels<FriendListSummaryViewModel>()
 
+    private val args by serializableExtra(StartArgs(""))
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
+    @Inject
+    private lateinit var tracker: AmplitudeTracker
     private val newFriendListAdapter
         get() = binding.includeFriendListBlockNewFriend.recyclerView.adapter as PokeUserListAdapter?
     private val bestFriendListAdapter
@@ -81,6 +90,11 @@ class FriendListSummaryActivity : AppCompatActivity() {
         initFriendListBlock()
         launchFriendListSummaryUiStateFlow()
         launchPokeUserUiStateFlow()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tracker.track(type = EventType.VIEW, name = "poke_friend", properties = mapOf("view_type" to args?.userStatus))
     }
 
     private fun initAppBar() {
@@ -212,10 +226,28 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
         override fun onClickProfileImage(playgroundId: Int) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "memberprofile",
+                properties = mapOf(
+                    "view_type" to args?.userStatus,
+                    "click_view_type" to "friend",
+                    "view_profile" to playgroundId
+                )
+            )
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
         override fun onClickPokeButton(user: PokeUser) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "poke_icon",
+                properties = mapOf(
+                    "view_type" to args?.userStatus,
+                    "click_view_type" to "friend",
+                    "view_profile" to user.userId
+                )
+            )
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_FRIEND)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
@@ -252,8 +284,15 @@ class FriendListSummaryActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
     }
 
+    data class StartArgs(
+        val userStatus: String
+    ) : Serializable
+
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, FriendListSummaryActivity::class.java)
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, FriendListSummaryActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }
