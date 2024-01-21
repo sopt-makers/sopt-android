@@ -37,6 +37,8 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
@@ -51,6 +53,7 @@ import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickL
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
@@ -58,11 +61,13 @@ class OnboardingActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityOnboardingBinding::inflate)
     private val viewModel by viewModels<OnboardingViewModel>()
 
-    private val args by serializableExtra(StartArgs(0))
+    private val args by serializableExtra(StartArgs(0, ""))
 
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
+    @Inject
+    lateinit var tracker: AmplitudeTracker
     private val pokeUserListAdapter
         get() = binding.recyclerView.adapter as PokeUserListAdapter?
 
@@ -77,6 +82,11 @@ class OnboardingActivity : AppCompatActivity() {
         launchCheckNewInPokeOnboardingStateFlow()
         launchOnboardingPokeUserListUiStateFlow()
         launchPokeUserUiStateFlow()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tracker.track(type = EventType.VIEW, name = "poke_onboarding", properties = mapOf("view_type" to args?.userStatus))
     }
 
     private fun initAppBar() {
@@ -101,10 +111,20 @@ class OnboardingActivity : AppCompatActivity() {
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
         override fun onClickProfileImage(playgroundId: Int) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "memberprofile",
+                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to playgroundId)
+            )
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
         override fun onClickPokeButton(user: PokeUser) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "poke_icon",
+                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.userId)
+            )
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_SOMEONE)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
@@ -124,6 +144,7 @@ class OnboardingActivity : AppCompatActivity() {
                     layoutLottie.visibility = View.GONE
                     setIntentToPokeMain()
                 }
+
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationRepeat(animation: Animator) {}
             })
@@ -215,7 +236,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-        val currentGeneration: Int
+        val currentGeneration: Int,
+        val userStatus: String,
     ) : Serializable
 
     companion object {

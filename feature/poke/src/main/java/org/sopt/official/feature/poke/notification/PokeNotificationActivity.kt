@@ -38,6 +38,8 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -47,6 +49,7 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBindin
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -54,6 +57,8 @@ class PokeNotificationActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
     private val viewModel by viewModels<PokeNotificationViewModel>()
 
+    @Inject
+    lateinit var tracker: AmplitudeTracker
     private val pokeNotificationAdapter
         get() = binding.recyclerviewPokeNotification.adapter as PokeNotificationAdapter
 
@@ -70,6 +75,11 @@ class PokeNotificationActivity : AppCompatActivity() {
         initListener()
         initRecyclerView()
         initStateFlowValues()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        tracker.track(EventType.VIEW, name = "view_poke_alarm_detail", properties = mapOf("view_type" to intent.getStringExtra("userStatus")))
     }
 
     private fun initAppBar() {

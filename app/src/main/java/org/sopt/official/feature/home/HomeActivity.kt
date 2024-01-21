@@ -185,6 +185,7 @@ class HomeActivity : AppCompatActivity() {
             .onEach { userActiveState ->
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
                 binding.contentPoke.root.setOnSingleClickListener {
+                    tracker.track(type = EventType.CLICK, name = "poke", properties = mapOf("view_type" to args?.userStatus?.value))
                     when (userActiveState == UserActiveState.ACTIVE) {
                         true -> viewModel.checkNewInPoke()
                         false -> AlertDialogOneButton(this)
@@ -261,8 +262,8 @@ class HomeActivity : AppCompatActivity() {
     private fun handleNewInPoke(isNewInPoke: Boolean) {
         startActivity(
             when (isNewInPoke) {
-                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration))
-                false -> Intent(this, PokeMainActivity::class.java)
+                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration, args?.userStatus?.value ?: ""))
+                false -> PokeMainActivity.getIntent(this, PokeMainActivity.StartArgs(args?.userStatus?.value ?: ""))
             }
         )
     }

@@ -25,6 +25,7 @@
 package org.sopt.official.feature.poke.main
 
 import android.animation.Animator
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -37,6 +38,9 @@ import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
@@ -48,8 +52,11 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
+import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -57,7 +64,12 @@ class PokeMainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
 
+    private val args by serializableExtra(PokeMainActivity.StartArgs(""))
+
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+
+    @Inject
+    lateinit var tracker: AmplitudeTracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,6 +81,11 @@ class PokeMainActivity : AppCompatActivity() {
         initStateFlowValues()
     }
 
+    override fun onResume() {
+        super.onResume()
+        tracker.track(type = EventType.VIEW, name = "poke_main", properties = mapOf("view_type" to args?.userStatus))
+    }
+
     private fun initData() {
         viewModel.getPokeMe()
         viewModel.getPokeFriend()
@@ -77,9 +94,13 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            includeAppBar.toolbar.setOnClickListener { finish() }
+            includeAppBar.toolbar.setOnClickListener {
+                tracker.track(type = EventType.CLICK, name = "poke_quit")
+                finish()
+            }
 
             btnNextSomeonePokeMe.setOnClickListener {
+                tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
                 startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
             }
 
@@ -189,6 +210,11 @@ class PokeMainActivity : AppCompatActivity() {
         with(binding) {
             layoutSomeonePokeMe.setVisible(true)
             imgUserProfileSomeonePokeMe.setOnClickListener {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "memberprofile",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_alarm", "view_profile" to pokeMeItem.playgroundId)
+                )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
@@ -205,6 +231,11 @@ class PokeMainActivity : AppCompatActivity() {
             }
             btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
             btnSomeonePokeMe.setOnClickListener {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "poke_icon",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_alarm", "view_profile" to pokeMeItem.userId)
+                )
                 showMessageListBottomSheet(
                     pokeMeItem.userId,
                     when (pokeMeItem.isFirstMeet) {
@@ -220,6 +251,11 @@ class PokeMainActivity : AppCompatActivity() {
     private fun initPokeFriendView(pokeFriendItem: PokeUser) {
         with(binding) {
             imgUserProfilePokeMyFriend.setOnClickListener {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "memberprofile",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_friend", "view_profile" to pokeFriendItem.playgroundId)
+                )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
@@ -231,6 +267,11 @@ class PokeMainActivity : AppCompatActivity() {
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
             btnPokeMyFriend.setOnClickListener {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "poke_icon",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_friend", "view_profile" to pokeFriendItem.userId)
+                )
                 showMessageListBottomSheet(pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
             }
         }
@@ -288,6 +329,11 @@ class PokeMainActivity : AppCompatActivity() {
             list.take(2).forEachIndexed { index, friend ->
                 myFriendNameTextViews[index].text = friend.friendName
                 myFriendProfileImageViews[index].setOnClickListener {
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "memberprofile",
+                        properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_myfriend", "view_profile" to friend.playgroundId)
+                    )
                     startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, friend.playgroundId))))
                 }
                 friend.friendProfileImage.takeIf { it.isNotEmpty() }?.let {
@@ -305,6 +351,11 @@ class PokeMainActivity : AppCompatActivity() {
 
                     friendOfFriend?.let { myFriendOfFriend ->
                         friendProfileImageView.setOnClickListener {
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "memberprofile",
+                                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_notmyfriend", "view_profile" to friend.playgroundId)
+                            )
                             startActivity(
                                 Intent(
                                     Intent.ACTION_VIEW,
@@ -321,6 +372,11 @@ class PokeMainActivity : AppCompatActivity() {
                         friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
                         btnPokeImageView.isEnabled = !myFriendOfFriend.isAlreadyPoke
                         btnPokeImageView.setOnClickListener {
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "poke_icon",
+                                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "poke_main_recommend_notmyfriend", "view_profile" to myFriendOfFriend.userId)
+                            )
                             showMessageListBottomSheet(myFriendOfFriend.userId, PokeMessageType.POKE_SOMEONE)
                         }
                     }
@@ -338,5 +394,17 @@ class PokeMainActivity : AppCompatActivity() {
         messageListBottomSheet?.let {
             it.show(supportFragmentManager, it.tag)
         }
+    }
+
+    data class StartArgs(
+        val userStatus: String
+    ) : Serializable
+
+    companion object {
+        @JvmStatic
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, OnboardingActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }

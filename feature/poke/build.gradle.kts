@@ -50,4 +50,5 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.android.lottie)
+    implementation(project(":core:analytics"))
 }
