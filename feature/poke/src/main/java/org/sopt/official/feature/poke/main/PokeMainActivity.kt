@@ -65,7 +65,7 @@ class PokeMainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
 
-    private val args by serializableExtra(PokeMainActivity.StartArgs(""))
+    private val args by serializableExtra(StartArgs(""))
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
@@ -112,7 +112,7 @@ class PokeMainActivity : AppCompatActivity() {
                 startActivity(
                     FriendListSummaryActivity.getIntent(
                         this@PokeMainActivity,
-                        FriendListSummaryActivity.StartArgs(args?.userStatus ?: "")
+                        FriendListSummaryActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
                     )
                 )
             }
