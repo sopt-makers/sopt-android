@@ -25,6 +25,7 @@
 package org.sopt.official.feature.poke.notification
 
 import android.animation.Animator
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -40,6 +41,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -49,6 +51,7 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBindin
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -56,6 +59,8 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
     private val viewModel by viewModels<PokeNotificationViewModel>()
+
+    private val args by serializableExtra(StartArgs(""))
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -107,6 +112,15 @@ class PokeNotificationActivity : AppCompatActivity() {
     private val pokeUserListClickLister = object : PokeUserListClickListener {
         override fun onClickProfileImage(playgroundId: Int) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+            tracker.track(
+                type = EventType.CLICK,
+                name = "memberprofile",
+                properties = mapOf(
+                    "view_type" to args?.userStatus,
+                    "click_view_type" to "poke_alarm",
+                    "view_profile" to playgroundId,
+                )
+            )
         }
 
         override fun onClickPokeButton(user: PokeUser) {
@@ -122,6 +136,15 @@ class PokeNotificationActivity : AppCompatActivity() {
             messageListBottomSheet?.let {
                 it.show(supportFragmentManager, it.tag)
             }
+            tracker.track(
+                type = EventType.CLICK,
+                name = "poke_icon",
+                properties = mapOf(
+                    "view_type" to args?.userStatus,
+                    "click_view_type" to "poke_alarm",
+                    "view_profile" to user.playgroundId,
+                )
+            )
         }
     }
 
@@ -184,5 +207,17 @@ class PokeNotificationActivity : AppCompatActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    data class StartArgs(
+        val userStatus: String
+    ) : Serializable
+
+    companion object {
+        @JvmStatic
+        fun getIntent(context: Context, args: StartArgs) =
+            Intent(context, PokeNotificationActivity::class.java).apply {
+                putExtra("args", args)
+            }
     }
 }

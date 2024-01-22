@@ -158,7 +158,10 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
             return userStatus.setIntent(
                 context,
-                Intent(context, PokeNotificationActivity::class.java)
+                PokeNotificationActivity.getIntent(
+                    context,
+                    PokeNotificationActivity.StartArgs(userStatus.name)
+                )
             )
         }
     },

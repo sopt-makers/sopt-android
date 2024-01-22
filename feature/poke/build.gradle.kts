@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.core.auth)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.analytics)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)

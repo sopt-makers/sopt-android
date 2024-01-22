@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
@@ -101,7 +102,10 @@ class PokeMainActivity : AppCompatActivity() {
 
             btnNextSomeonePokeMe.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
-                startActivity(Intent(this@PokeMainActivity, PokeNotificationActivity::class.java))
+                PokeNotificationActivity.getIntent(
+                    this@PokeMainActivity,
+                    PokeNotificationActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
+                )
             }
 
             imgNextPokeMyFriend.setOnClickListener {
