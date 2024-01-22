@@ -24,14 +24,12 @@
  */
 package org.sopt.official.feature.poke.friend_list_detail
 
-import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,9 +40,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
-import org.sopt.official.domain.poke.entity.FriendListDetail
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -57,6 +56,7 @@ import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapte
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -65,6 +65,9 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentFriendListDetailBottomSheetBinding? = null
     private val binding: FragmentFriendListDetailBottomSheetBinding get() = requireNotNull(_binding)
     private lateinit var viewModel: FriendListDetailViewModel
+
+    @Inject
+    private lateinit var tracker: AmplitudeTracker
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
@@ -79,6 +82,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             height = 1.dp
         )
 
+    var userStatus: String? = null
     var pokeFriendType: PokeFriendType? = null
 
     override fun onCreateView(
@@ -93,7 +97,21 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        pokeFriendType?.let { viewModel.getFriendListDetail(it) }
+        pokeFriendType?.let {
+            viewModel.getFriendListDetail(it)
+            tracker.track(
+                type = EventType.VIEW,
+                name = "poke_friend_detail",
+                properties = mapOf(
+                    "view_type" to userStatus,
+                    "friend_type" to when (it) {
+                        PokeFriendType.NEW -> "newFriend"
+                        PokeFriendType.BEST_FRIEND -> "bestFriend"
+                        PokeFriendType.SOULMATE -> "soulmate"
+                    }
+                )
+            )
+        }
 
         initRecyclerView()
         launchPokeMessageListUiStateFlow()
@@ -149,10 +167,28 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
         override fun onClickProfileImage(playgroundId: Int) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "memberprofile",
+                properties = mapOf(
+                    "view_type" to userStatus,
+                    "click_view_type" to "friend_detail",
+                    "view_profile" to playgroundId
+                )
+            )
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
         }
 
         override fun onClickPokeButton(user: PokeUser) {
+            tracker.track(
+                type = EventType.CLICK,
+                name = "poke_icon",
+                properties = mapOf(
+                    "view_type" to userStatus,
+                    "click_view_type" to "friend_detail",
+                    "view_profile" to user.playgroundId
+                )
+            )
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_FRIEND)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
@@ -244,6 +280,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     class Builder {
         private val bottomSheet = FriendListDetailBottomSheetFragment()
         fun create(): FriendListDetailBottomSheetFragment = bottomSheet
+
+        fun setUserStatus(userStatus: String): Builder {
+            bottomSheet.userStatus = userStatus
+            return this
+        }
 
         fun setPokeFriendType(pokeFriendType: PokeFriendType): Builder {
             bottomSheet.pokeFriendType = pokeFriendType

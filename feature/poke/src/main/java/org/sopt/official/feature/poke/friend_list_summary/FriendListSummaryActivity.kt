@@ -36,6 +36,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
@@ -49,7 +50,6 @@ import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
 import org.sopt.official.feature.poke.friend_list_detail.FriendListDetailBottomSheetFragment
 import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.poke_user_recycler_view.ItemDecorationDivider
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
 import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
@@ -69,6 +69,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     @Inject
     private lateinit var tracker: AmplitudeTracker
+
     private val newFriendListAdapter
         get() = binding.includeFriendListBlockNewFriend.recyclerView.adapter as PokeUserListAdapter?
     private val bestFriendListAdapter
@@ -155,6 +156,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun showFriendListDetailBottomSheet(pokeFriendType: PokeFriendType) {
         FriendListDetailBottomSheetFragment.Builder()
+            .setUserStatus(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
             .setPokeFriendType(pokeFriendType)
             .create()
             .let { it.show(supportFragmentManager, it.tag) }
@@ -245,7 +247,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 properties = mapOf(
                     "view_type" to args?.userStatus,
                     "click_view_type" to "friend",
-                    "view_profile" to user.userId
+                    "view_profile" to user.playgroundId
                 )
             )
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
