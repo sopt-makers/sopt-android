@@ -68,7 +68,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
     @Inject
-    private lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: AmplitudeTracker
 
     private val newFriendListAdapter
         get() = binding.includeFriendListBlockNewFriend.recyclerView.adapter as PokeUserListAdapter?
