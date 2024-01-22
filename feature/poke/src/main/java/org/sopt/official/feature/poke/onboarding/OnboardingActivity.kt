@@ -123,7 +123,7 @@ class OnboardingActivity : AppCompatActivity() {
             tracker.track(
                 type = EventType.CLICK,
                 name = "poke_icon",
-                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.userId)
+                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.playgroundId)
             )
             messageListBottomSheet = MessageListBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_SOMEONE)

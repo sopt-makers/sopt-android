@@ -257,7 +257,7 @@ class PokeMainActivity : AppCompatActivity() {
                     properties = mapOf(
                         "view_type" to args?.userStatus,
                         "click_view_type" to "poke_main_alarm",
-                        "view_profile" to pokeMeItem.userId
+                        "view_profile" to pokeMeItem.playgroundId
                     )
                 )
                 showMessageListBottomSheet(
@@ -301,7 +301,7 @@ class PokeMainActivity : AppCompatActivity() {
                     properties = mapOf(
                         "view_type" to args?.userStatus,
                         "click_view_type" to "poke_main_friend",
-                        "view_profile" to pokeFriendItem.userId
+                        "view_profile" to pokeFriendItem.playgroundId
                     )
                 )
                 showMessageListBottomSheet(pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
@@ -418,7 +418,7 @@ class PokeMainActivity : AppCompatActivity() {
                                 properties = mapOf(
                                     "view_type" to args?.userStatus,
                                     "click_view_type" to "poke_main_recommend_notmyfriend",
-                                    "view_profile" to myFriendOfFriend.userId
+                                    "view_profile" to myFriendOfFriend.playgroundId
                                 )
                             )
                             showMessageListBottomSheet(myFriendOfFriend.userId, PokeMessageType.POKE_SOMEONE)
