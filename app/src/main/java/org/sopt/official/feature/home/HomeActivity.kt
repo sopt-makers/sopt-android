@@ -37,6 +37,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
@@ -185,6 +186,7 @@ class HomeActivity : AppCompatActivity() {
             .onEach { userActiveState ->
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
                 binding.contentPoke.root.setOnSingleClickListener {
+                    tracker.setNotificationStateToUserProperties(NotificationManagerCompat.from(this).areNotificationsEnabled())
                     tracker.track(type = EventType.CLICK, name = "poke", properties = mapOf("view_type" to args?.userStatus?.value))
                     when (userActiveState == UserActiveState.ACTIVE) {
                         true -> viewModel.checkNewInPoke()
