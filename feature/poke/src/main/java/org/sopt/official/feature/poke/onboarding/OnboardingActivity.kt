@@ -148,6 +148,9 @@ class OnboardingActivity : AppCompatActivity() {
                 override fun onAnimationCancel(animation: Animator) {}
                 override fun onAnimationRepeat(animation: Animator) {}
             })
+            layoutLottie.setOnClickListener {
+                // do nothing
+            }
         }
     }
 
