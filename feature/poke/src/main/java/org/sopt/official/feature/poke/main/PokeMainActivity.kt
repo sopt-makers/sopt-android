@@ -182,7 +182,6 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
-
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                         is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
@@ -203,16 +202,13 @@ class PokeMainActivity : AppCompatActivity() {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
-
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -328,7 +324,6 @@ class PokeMainActivity : AppCompatActivity() {
                     box2FriendOfFriend.visibility = View.VISIBLE
                     val friendListSize1 = list[0].friendList.size
                     val friendListSize2 = list[1].friendList.size
-
                     setVisibility(groupFriend1Box1, groupFriend2Box1, includeFriendListEmptyView01.root, friendListSize1)
                     setVisibility(groupFriend3Box2, groupFriend4Box2, includeFriendListEmptyView02.root, friendListSize2)
                 }
