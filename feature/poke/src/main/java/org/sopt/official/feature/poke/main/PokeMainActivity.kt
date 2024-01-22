@@ -442,7 +442,7 @@ class PokeMainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, OnboardingActivity::class.java).apply {
+            Intent(context, PokeMainActivity::class.java).apply {
                 putExtra("args", args)
             }
     }
