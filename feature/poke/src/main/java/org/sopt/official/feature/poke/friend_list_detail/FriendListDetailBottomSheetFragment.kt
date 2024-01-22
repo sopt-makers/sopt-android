@@ -67,7 +67,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: FriendListDetailViewModel
 
     @Inject
-    private lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: AmplitudeTracker
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
