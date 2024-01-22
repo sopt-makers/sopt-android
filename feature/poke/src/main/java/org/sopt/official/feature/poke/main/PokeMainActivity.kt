@@ -102,9 +102,11 @@ class PokeMainActivity : AppCompatActivity() {
 
             btnNextSomeonePokeMe.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
-                PokeNotificationActivity.getIntent(
-                    this@PokeMainActivity,
-                    PokeNotificationActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
+                startActivity(
+                    PokeNotificationActivity.getIntent(
+                        this@PokeMainActivity,
+                        PokeNotificationActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
+                    )
                 )
             }
 
