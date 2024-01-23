@@ -36,6 +36,7 @@ import org.sopt.official.domain.poke.repository.PokeRepository
 abstract class RepositoryModule {
 
     @Binds
+    @Singleton
     abstract fun bindPokeRepository(
         impl: PokeRepositoryImpl,
     ): PokeRepository
