@@ -24,6 +24,7 @@ internal fun Project.configureAndroidCommonPlugin() {
         defaultConfig {
             val apiKey = properties["apiKey"] as? String ?: ""
             val dataStoreKey = properties["dataStoreKey"] as? String ?: ""
+            val pokeDataStoreKey = properties["pokeDataStoreKey"] as? String ?: ""
             val devUrl = properties["devApi"] as? String ?: ""
             val baseUrl = properties["newApi"] as? String ?: ""
             val devOperationUrl = properties["devOperationApi"] as? String ?: ""
@@ -33,6 +34,7 @@ internal fun Project.configureAndroidCommonPlugin() {
             manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
+            buildConfigField("String", "POKE_DATA_STORE_KEY", pokeDataStoreKey)
             buildConfigField("String", "SOPT_DEV_BASE_URL", devUrl)
             buildConfigField("String", "SOPT_BASE_URL", baseUrl)
             buildConfigField("String", "SOPT_DEV_OPERATION_BASE_URL", devOperationUrl)

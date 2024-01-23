@@ -62,6 +62,7 @@
 
     <!-- MDS GrayScale -->
     <color name="mds_gray_10">#FCFCFC</color>
+    <color name="mds_gray_30">#F0F0F0</color>
     <color name="mds_gray_50">#E4E4E5</color>
     <color name="mds_gray_100">#C3C3C6</color>
     <color name="mds_gray_200">#9D9DA4</color>
@@ -83,6 +84,13 @@
     <!-- MDS YellowScale -->
     <color name="mds_yellow_900">#534123</color>
 
+    <!-- MDS OrangeScale -->
+    <color name="mds_orange_400">#F77234</color>
+
     <!-- MDS GreenScale -->
+    <color name="mds_green_400">#16BF81</color>
     <color name="mds_green_900">#15372B</color>
+
+    <!-- MDS BlueScale -->
+    <color name="mds_blue_400">#346FFA</color>
 </resources>

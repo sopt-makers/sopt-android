@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationDetailActivity
 import org.sopt.official.feature.notification.NotificationHistoryActivity
+import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.stamp.SoptampActivity
 import timber.log.Timber
 
@@ -150,6 +151,17 @@ enum class DeepLinkType(
             return userStatus.setIntent(
                 context,
                 Intent(context, SoptampActivity::class.java)
+            )
+        }
+    },
+    POKE_NOTIFICATION_LIST("home/poke/notification-list") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
+            return userStatus.setIntent(
+                context,
+                PokeNotificationActivity.getIntent(
+                    context,
+                    PokeNotificationActivity.StartArgs(userStatus.name)
+                )
             )
         }
     },

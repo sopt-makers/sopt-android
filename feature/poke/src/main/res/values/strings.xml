@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023-2024 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<resources>
+    <!-- 온보딩 -->
+    <string name="poke_title">콕 찌르기</string>
+
+    <string name="onboarding_bottom_sheet_title">콕 찌르기를 소개할게요</string>
+    <string name="onboarding_bottom_sheet_content">SOPT 내에서 아는 사람, 친해지고 싶은 친구를 콕 찔러 호감의 표시를 해보세요.</string>
+    <string name="onboarding_bottom_sheet_confirm">확인</string>
+
+    <string name="onboarding_title">아는 사람을 콕 찔러서 친구를 맺어보세요</string>
+    <string name="onboarding_content">나와 같은 %1$d기를 하고 있어요</string>
+    <string name="onboarding_swipe_to_refresh">아는 사람이 없나요?\n화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
+
+    <string name="message_bottom_sheet_title">보낼 메시지를 골라주세요</string>
+
+    <!-- 메인 / 찌르기 알림 /  -->
+    <string name="someone_poke_me_title">누가 나를 찔렀어요</string>
+    <string name="someone_poke_me_subtitle">나도 찔러서 답장을 해보세요</string>
+
+    <string name="poke_my_friend_title">내 친구를 찔러보세요</string>
+
+    <string name="poke_my_friend_of_friend_title">내 친구의 친구를 찔러보세요</string>
+    <string name="poke_my_friend_of_friend_empty">아직 없어요 T.T\n내 친구가 더 많은 친구가 생길 때까지 기다려주세요</string>
+
+    <string name="poke_main_pull_to_refresh">화면을 밑으로 당기면\n다른 친구를 볼 수 있어요</string>
+
+    <!-- 친구 목록 -->
+    <string name="my_friend_title">내 친구</string>
+
+    <string name="friend_relation_name_new_friend">나랑 친한 친구</string>
+    <string name="friend_relation_description_new_friend">2번 이상 찌르면 될 수 있어요</string>
+
+    <string name="friend_relation_name_best_friend">나랑 단짝친구</string>
+    <string name="friend_relation_description_best_friend">5번 이상 찌르면 될 수 있어요</string>
+
+    <string name="friend_relation_name_soulmate">나랑 천생연분</string>
+    <string name="friend_relation_description_soulmate">11번 이상 찌르면 될 수 있어요</string>
+
+    <string name="friend_list_count">%1$d명</string>
+    <string name="friend_list_empty">아직 없어요 T.T\n더 많은 찌르기로 달성해보세요</string>
+
+    <!-- 친구 아이템 -->
+    <string name="poke_user_info">%1$d기 %2$s</string>
+    <string name="poke_user_poke_count">%1$d콕</string>
+    <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
+    <string name="poke_user_alert_exceeded">오늘은 콕 찌르기를 다 썼어요.</string>
+    <string name="friend_complete">찌르기 답장으로\n%s님과 친구가 되었어요!</string>
+
+    <!-- 찌르기 알림 -->
+    <string name="poke_notification_title">찌르기 알림</string>
+
+    <!-- 토스트 메시지 -->
+    <string name="toast_poke_error">문제가 발생했습니다.</string>
+    <string name="toast_poke_user_success">콕 찌르기를 완료했어요.</string>
+
+</resources>

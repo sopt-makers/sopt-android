@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+  <path
+      android:pathData="M5.637,4.877L7.955,13.524C6.596,13.388 3.686,13.071 2.997,13.256C2.487,13.392 1.93,13.722 1.671,14.627C1.415,15.519 1.89,17.825 5.136,17.81C7.881,17.798 9.924,19.88 11.207,21.634C11.75,22.376 12.676,22.756 13.564,22.518L18.494,21.197C19.607,20.899 20.267,19.756 19.969,18.643L19.457,16.731C21.16,14.242 20.656,10.508 19.844,8.741C19.032,6.975 17.347,6.999 16.759,7.928C16.331,6.33 14.119,6.235 13.535,7.491C12.77,6.225 11.07,6.731 10.56,7.361L9.549,3.588C9.217,2.347 8.351,1.372 7.11,1.704C7.074,1.714 7.038,1.724 7.001,1.734C5.59,2.122 5.259,3.463 5.637,4.877Z"
+      android:strokeLineJoin="round"
+      android:strokeWidth="1.5"
+      android:fillColor="#00000000"
+      android:strokeColor="#000000"
+      android:strokeLineCap="round"/>
+</vector>

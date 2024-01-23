@@ -35,6 +35,7 @@ plugins {
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
+    alias(libs.plugins.kotlin.android)
 }
 
 val properties = Properties().apply {
@@ -110,9 +111,11 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
+    implementation(projects.domain.poke)
     implementation(projects.feature.soptamp)
     implementation(projects.data.soptamp)
     implementation(projects.data.mypage)
+    implementation(projects.data.poke)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
@@ -121,11 +124,13 @@ dependencies {
     implementation(projects.core.webview)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
+    implementation(projects.feature.poke)
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.startup)
     implementation(libs.security)
+    implementation(libs.swipe.refresh.layout)
 
     implementation(libs.bundles.accompanist)
     implementation(libs.inappupdate)
@@ -147,12 +152,16 @@ dependencies {
 
     implementation(libs.compose.destination.core)
     implementation(libs.androidx.lifecycle.process)
+    implementation(libs.appcompat)
+    implementation(libs.material)
     ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.compose.test)
     androidTestImplementation(libs.bundles.android.test)
     debugImplementation(libs.bundles.compose.android.test)
+
+    implementation(libs.coil.core)
 }
 
 secrets {

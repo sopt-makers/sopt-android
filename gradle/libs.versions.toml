@@ -15,6 +15,7 @@ corektx = "1.12.0"
 appcompat = "1.6.1"
 activity = "1.8.2"
 lifecycle = "2.7.0"
+swipe-refresh-layout = "1.1.0"
 navigation = "2.7.6"
 startup = "1.1.1"
 security = "1.1.0-alpha06"
@@ -67,7 +68,7 @@ sentry = "4.2.0"
 sentry-android = "7.2.0"
 process-pheonix = "2.1.2"
 amplitude = "1.12.2"
-spotless = "6.24.0"
+spotless = "6.25.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -84,6 +85,7 @@ core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
@@ -179,6 +181,7 @@ rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" 
 rxbinding = { module = "com.jakewharton.rxbinding4:rxbinding", version.ref = "rxbinding" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
+android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
 
 [bundles]
 compose = [

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,46 +27,51 @@ package org.sopt.official.data.mypage.repository
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.data.mypage.local.SoptampDataStore
 import org.sopt.official.data.mypage.source.UserDataSource
+import org.sopt.official.data.poke.data_source.PokeLocalDataSource
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
-    private val local: SoptampDataStore
+    private val soptampLocal: SoptampDataStore,
+    private val pokeLocal: PokeLocalDataSource,
 ) : UserRepository {
     override val nickname: String
-        get() = local.nickname
+        get() = soptampLocal.nickname
 
     override suspend fun checkNickname(nickname: String) = runCatching { remote.checkNickname(nickname) }
-    override suspend fun logout(): Result<Unit> = runCatching { local.clear() }
+    override suspend fun logout(): Result<Unit> = runCatching {
+        soptampLocal.clear()
+        pokeLocal.clear()
+    }
 
     override suspend fun getUserInfo() = runCatching {
         remote.getUserInfo().toDomain()
     }.onSuccess {
-        local.nickname = it.nickname
-        local.profileMessage = it.profileMessage
+        soptampLocal.nickname = it.nickname
+        soptampLocal.profileMessage = it.profileMessage
     }
 
     override suspend fun updateProfileMessage(profileMessage: String) = runCatching {
         remote.updateProfileMessage(profileMessage)
     }.onSuccess {
-        local.profileMessage = profileMessage
+        soptampLocal.profileMessage = profileMessage
     }
 
     override suspend fun updateNickname(nickname: String): Result<Unit> = runCatching {
         remote.updateNickname(nickname)
     }.onSuccess {
-        local.nickname = nickname
+        soptampLocal.nickname = nickname
     }
 
     override fun updateLocalUserInfo(profileMessage: String) {
-        local.apply {
+        soptampLocal.apply {
             this.profileMessage = profileMessage
         }
     }
 
-    override fun fetchUserId() = local.userId
-    override fun getIsOnboardingSeen() = local.isOnboardingSeen
+    override fun fetchUserId() = soptampLocal.userId
+    override fun getIsOnboardingSeen() = soptampLocal.isOnboardingSeen
     override fun updateOnboardingSeen(value: Boolean) {
-        local.isOnboardingSeen = value
+        soptampLocal.isOnboardingSeen = value
     }
 }

@@ -27,6 +27,7 @@
     <string name="default_channel_id">SOPT_MESSAGE</string>
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT-AMP!</string>
+    <string name="poke">콕 찌르기</string>
 
     <!--    메인홈    -->
     <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
@@ -114,4 +115,8 @@
     <string name="notification_dialog_expired_body">해당 링크의 유효기간이 만료되어\n더 이상 내용을 확인할 수 없어요.</string>
     <string name="notification_dialog_confirm_button">확인</string>
 
+    <!--    콕 찌르기 관련 다이얼로그  -->
+    <string name="poke_dialog_preparing_title">접근할 수 없는 버튼이에요.</string>
+    <string name="poke_dialog_preparing_body">콕 찌르기 기능이 준비 중이에요.</string>
+    <string name="poke_dialog_confirm_button">확인</string>
 </resources>

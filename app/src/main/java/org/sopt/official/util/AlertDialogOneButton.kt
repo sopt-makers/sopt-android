@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.notification
+package org.sopt.official.util
 
 import android.app.AlertDialog
 import android.content.Context
@@ -91,7 +91,7 @@ class AlertDialogOneButton(context: Context) : ConstraintLayout(context) {
         dialog?.show()
     }
 
-    fun dismiss() {
+    private fun dismiss() {
         dialog?.dismiss()
     }
 }

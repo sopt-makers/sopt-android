@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package org.sopt.official.analytics
 import android.content.Context
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
+import com.amplitude.android.events.Identify
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -54,5 +55,11 @@ class AmplitudeTracker @Inject constructor(
             Timber.d("Amplitude: ${type.prefix}_$name properties: $properties")
         }
         amplitude.track(eventType = "${type.prefix}_$name", eventProperties = properties)
+    }
+
+    fun setNotificationStateToUserProperties(value: Boolean) {
+        val identify = Identify()
+        identify.setOnce("state_of_push_notification", value)
+        amplitude.identify(identify)
     }
 }

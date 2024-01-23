@@ -2,7 +2,7 @@
 <!--
     MIT License
 
-    Copyright (c) 2022-2023 SOPT Makers
+    Copyright (c) 2022-2024 SOPT Makers
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -87,23 +87,23 @@
         <activity
             android:name=".feature.attendance.AttendanceActivity"
             android:exported="false"
-            android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".stamp.SoptampActivity"
             android:exported="false"
-            android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".feature.home.HomeActivity"
             android:exported="false"
-            android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".feature.mypage.mypage.MyPageActivity"
             android:exported="false"
-            android:theme="@style/Theme.SOPT"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.SOPT" />
         <activity
             android:name=".feature.mypage.signOut.SignOutActivity"
             android:exported="false"
@@ -116,6 +116,22 @@
             android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
+        <activity
+            android:name=".feature.poke.onboarding.OnboardingActivity"
+            android:exported="false"
+            android:theme="@style/Theme.SOPT" />
+        <activity
+            android:name=".feature.poke.main.PokeMainActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".feature.poke.notification.PokeNotificationActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".feature.poke.friend_list_summary.FriendListSummaryActivity"
+            android:exported="false" />
+
         <activity
             android:name=".auth.AuthCodeHandlerActivity"
             android:exported="true"
@@ -139,12 +155,10 @@
             android:name=".feature.notification.NotificationDetailActivity"
             android:exported="false"
             android:launchMode="singleTop" />
-
         <activity
             android:name=".feature.notification.SchemeActivity"
             android:exported="true"
-            android:launchMode="singleTop">
-        </activity>
+            android:launchMode="singleTop" />
 
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
@@ -154,5 +168,4 @@
             </intent-filter>
         </service>
     </application>
-
 </manifest>

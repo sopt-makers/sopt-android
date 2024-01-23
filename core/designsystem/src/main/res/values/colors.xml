@@ -24,6 +24,7 @@
 -->
 <resources>
     <!-- Material Theme -->
+    <color name="transparent">#00000000</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -62,6 +63,7 @@
 
     <!-- MDS GrayScale -->
     <color name="mds_gray_10">#FCFCFC</color>
+    <color name="mds_gray_30">#F0F0F0</color>
     <color name="mds_gray_50">#E4E4E5</color>
     <color name="mds_gray_100">#C3C3C6</color>
     <color name="mds_gray_200">#9D9DA4</color>
@@ -73,6 +75,7 @@
     <color name="mds_gray_800">#202025</color>
     <color name="mds_gray_900">#17181C</color>
     <color name="mds_gray_950">#0F1012</color>
+    <color name="mds_gray_950_alpha80">#CC0F1012</color>
 
     <!-- MDS RedScale -->
     <color name="red_100">#BD372F</color>
@@ -85,4 +88,7 @@
 
     <!-- MDS GreenScale -->
     <color name="mds_green_900">#15372B</color>
+
+    <!-- MDS BlueScale -->
+    <color name="mds_blue_900">#346FFA</color>
 </resources>

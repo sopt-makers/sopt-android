@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="98dp"
+    android:height="71dp"
+    android:viewportWidth="98"
+    android:viewportHeight="71">
+  <group>
+    <clip-path
+        android:pathData="M0,0.5h98v70h-98z"/>
+    <path
+        android:pathData="M30.618,2.326L35.684,7.318L35.391,2.701L36.998,1.07L37.281,5.806L42.652,6.791L41.184,8.281L37.359,7.532L37.511,9.117L38.957,10.542L37.682,11.835L29.344,3.62L30.618,2.326Z"
+        android:fillColor="#E4E4E5"/>
+    <path
+        android:pathData="M34.09,15.327C34.804,14.153 34.348,12.965 33.201,12.267C32.066,11.577 30.801,11.719 30.087,12.892C29.374,14.066 29.83,15.254 30.964,15.944C32.111,16.642 33.376,16.5 34.09,15.327ZM30.092,17.378C28.214,16.236 27.372,14.009 28.601,11.988C29.838,9.954 32.195,9.691 34.073,10.833C35.951,11.975 36.801,14.189 35.564,16.223C34.334,18.244 31.969,18.52 30.092,17.378Z"
+        android:fillColor="#E4E4E5"/>
+    <path
+        android:pathData="M20.745,19.597L27.229,22.517L25.35,18.29L26.29,16.202L28.201,20.544L33.58,19.602L32.721,21.508L28.874,22.136L29.567,23.569L31.418,24.403L30.672,26.059L19.999,21.253L20.745,19.597Z"
+        android:fillColor="#E4E4E5"/>
+    <path
+        android:pathData="M62.187,29.97m-23.867,13.78a27.559,27.559 105,1 1,47.734 -27.559a27.559,27.559 105,1 1,-47.734 27.559"
+        android:fillColor="#E4E4E5"/>
+    <path
+        android:pathData="M61.199,27.497a10.453,6.557 90,1 1,-13.114 -0a10.453,6.557 90,1 1,13.114 0z"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#3F3F47"/>
+    <path
+        android:pathData="M76.887,27.497a10.453,6.557 90,1 1,-13.114 -0a10.453,6.557 90,1 1,13.114 0z"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#3F3F47"/>
+    <path
+        android:pathData="M53.185,27.649C53.185,30.536 54.94,32.876 57.105,32.876C59.27,32.876 61.025,30.536 61.025,27.649C61.025,24.763 59.27,22.423 57.105,22.423C54.94,22.423 53.185,24.763 53.185,27.649Z"
+        android:fillColor="#3F3F47"/>
+    <path
+        android:pathData="M76.886,27.65a5.227,3.92 90,1 1,-7.84 -0a5.227,3.92 90,1 1,7.84 0z"
+        android:fillColor="#3F3F47"/>
+    <path
+        android:pathData="M47.174,30.383C45.517,29.112 43.625,28.179 41.607,27.638L52.856,47.121C53.397,45.103 53.535,42.999 53.262,40.928C52.989,38.856 52.311,36.859 51.267,35.05C50.222,33.241 48.832,31.655 47.174,30.383Z"
+        android:fillColor="#E4E4E5"/>
+    <path
+        android:pathData="M41.607,27.638C43.625,28.179 45.517,29.112 47.174,30.383C48.832,31.655 50.222,33.241 51.267,35.05C52.311,36.859 52.989,38.856 53.262,40.928C53.535,42.999 53.397,45.103 52.856,47.121"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:strokeColor="#3F3F47"/>
+    <path
+        android:pathData="M45.676,43.058L32.92,55.814C35.46,56.96 40.926,59.368 41.957,60.399C42.718,61.161 43.365,62.312 42.901,64.175C42.442,66.014 39.25,69.604 33.527,66.266C29.387,63.851 24.591,64.669 20.751,66.078C17.874,67.133 14.58,66.739 12.413,64.572L8.367,60.527C5.653,57.812 5.653,53.41 8.367,50.695L9.319,49.744C8.847,43.608 13.549,37.522 16.786,35.229C20.024,32.935 22.978,34.698 23.068,36.939C25.456,34.55 29.463,36.64 29.213,39.456C31.857,37.999 34.346,40.628 34.603,42.262L40.24,36.626C42.094,34.772 44.62,33.932 46.474,35.786C48.693,38.004 47.895,40.839 45.676,43.058Z"
+        android:strokeLineJoin="round"
+        android:strokeWidth="1.5"
+        android:fillColor="#F77234"
+        android:strokeColor="#202025"
+        android:strokeLineCap="round"/>
+  </group>
+</vector>

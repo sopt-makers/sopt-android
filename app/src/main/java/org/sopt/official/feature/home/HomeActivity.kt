@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,7 @@ import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
@@ -62,15 +63,20 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivitySoptMainBinding
 import org.sopt.official.databinding.ItemMainSmallBinding
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.home.adapter.SmallBlockAdapter
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.AlertDialogOneButton
+import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
+import org.sopt.official.feature.poke.UiState
+import org.sopt.official.feature.poke.main.PokeMainActivity
+import org.sopt.official.feature.poke.onboarding.OnboardingActivity
+import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
 import java.io.Serializable
 import javax.inject.Inject
@@ -86,6 +92,7 @@ class HomeActivity : AppCompatActivity() {
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
 
+    private var currentGeneration: Int = 0
     private val requestNotificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission(),
     ) { isGranted: Boolean ->
@@ -178,6 +185,19 @@ class HomeActivity : AppCompatActivity() {
             .flowWithLifecycle(lifecycle)
             .onEach { userActiveState ->
                 binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
+                binding.contentPoke.root.setOnSingleClickListener {
+                    tracker.setNotificationStateToUserProperties(NotificationManagerCompat.from(this).areNotificationsEnabled())
+                    tracker.track(type = EventType.CLICK, name = "poke", properties = mapOf("view_type" to args?.userStatus?.value))
+                    when (userActiveState == UserActiveState.ACTIVE) {
+                        true -> viewModel.checkNewInPoke()
+                        false -> AlertDialogOneButton(this)
+                            .setTitle(R.string.poke_dialog_preparing_title)
+                            .setSubtitle(R.string.poke_dialog_preparing_body)
+                            .setPositiveButton(R.string.poke_dialog_confirm_button)
+                            .show()
+                    }
+                }
+
                 val isClickable = userActiveState != UserActiveState.UNAUTHENTICATED
                 if (isClickable) {
                     val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
@@ -209,6 +229,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.generationList
             .flowWithLifecycle(lifecycle)
             .onEach { generationList ->
+                currentGeneration = generationList?.first?.toInt() ?: 0
                 binding.memberGeneration.generation1.setGenerationText(generationList, 2)
                 binding.memberGeneration.generation2.setGenerationText(generationList, 3)
                 binding.memberGeneration.generation3.setGenerationText(generationList, 4)
@@ -225,6 +246,28 @@ class HomeActivity : AppCompatActivity() {
                     )
                 }
             }.launchIn(lifecycleScope)
+
+        viewModel.checkNewInPokeUiState
+            .onEach {
+                when (it) {
+                    is UiState.Loading -> "Loading"
+                    is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
+                    is UiState.ApiError -> showPokeToast(getString(org.sopt.official.feature.poke.R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(
+                        it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.toast_poke_error)
+                    )
+                }
+            }
+            .launchIn(lifecycleScope)
+    }
+
+    private fun handleNewInPoke(isNewInPoke: Boolean) {
+        startActivity(
+            when (isNewInPoke) {
+                true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration, args?.userStatus?.value ?: ""))
+                false -> PokeMainActivity.getIntent(this, PokeMainActivity.StartArgs(args?.userStatus?.value ?: ""))
+            }
+        )
     }
 
     private fun TextView.setGenerationText(
