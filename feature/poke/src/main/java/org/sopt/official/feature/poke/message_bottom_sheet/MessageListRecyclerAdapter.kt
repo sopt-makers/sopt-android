@@ -54,7 +54,7 @@ class MessageListRecyclerAdapter(
         }
     }
 
-    inner class ViewHolder(
+    class ViewHolder(
         private val binding: ItemMessageBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
