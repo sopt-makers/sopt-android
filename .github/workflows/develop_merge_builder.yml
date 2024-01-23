@@ -50,6 +50,7 @@ jobs:
           STORE_PASSWORD: ${{ secrets.SENTRY_DSN }}
           DEV_AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
           AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
+          POKE_DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
         run: |
           echo sentryDsn=\"$SENTRY_DSN\" >> ./local.properties
           echo apiKey=\"$API_KEY\" >> ./local.properties
@@ -63,6 +64,7 @@ jobs:
           echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
           echo devAmplitudeKey=\"$DEV_AMPLITUDE_KEY\" >> ./local.properties
           echo amplitudeKey=\"$AMPLITUDE_KEY\" >> ./local.properties
+          echo pokeDataStoreKey=\"$POKE_DATA_STORE_KEY\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
