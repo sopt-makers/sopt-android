@@ -41,7 +41,7 @@ data class PokeFriendOfFriendListResult(
     @SerialName("friendList")
     val friendList: List<PokeUserResult>
 ) {
-    fun toEntity(): PokeFriendOfFriendList = PokeFriendOfFriendList(
+    fun toEntity() = PokeFriendOfFriendList(
         friendId = friendId,
         playgroundId = playgroundId,
         friendName = friendName,
