@@ -24,8 +24,12 @@
  */
 package org.sopt.official.data.poke.dto.request
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 import org.sopt.official.domain.poke.type.PokeMessageType
 
+@Serializable
 data class GetPokeMessageListRequest(
+    @SerialName("messageType")
     val messageType: PokeMessageType,
 )

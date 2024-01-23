@@ -24,6 +24,11 @@
  */
 package org.sopt.official.data.poke.dto.request
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class GetPokeNotificationListRequest(
+    @SerialName("page")
     val page: Int,
 )

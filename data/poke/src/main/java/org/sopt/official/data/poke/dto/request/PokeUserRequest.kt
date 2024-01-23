@@ -24,7 +24,13 @@
  */
 package org.sopt.official.data.poke.dto.request
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class PokeUserRequest(
+    @SerialName("userId")
     val userId: Int,
+    @SerialName("message")
     val message: String,
 )
