@@ -30,6 +30,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.data.poke.repository_impl.PokeRepositoryImpl
 import org.sopt.official.domain.poke.repository.PokeRepository
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
