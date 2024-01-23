@@ -67,7 +67,7 @@ sentry = "4.2.0"
 sentry-android = "7.2.0"
 process-pheonix = "2.1.2"
 amplitude = "1.12.2"
-spotless = "6.24.0"
+spotless = "6.25.0"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
