@@ -198,12 +198,15 @@ class HomeActivity : AppCompatActivity() {
                     }
                 }
 
-                val isClickable = userActiveState != UserActiveState.UNAUTHENTICATED
-                if (isClickable) {
-                    val intent = Intent(this@HomeActivity, SoptampActivity::class.java)
-                    binding.contentSoptamp.root.setOnSingleClickListener {
-                        tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
-                        this@HomeActivity.startActivity(intent)
+                binding.contentSoptamp.root.setOnSingleClickListener {
+                    tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
+                    when (userActiveState != UserActiveState.UNAUTHENTICATED) {
+                        true -> startActivity(Intent(this, SoptampActivity::class.java))
+                        false -> AlertDialogOneButton(this)
+                            .setTitle(R.string.soptamp_dialog_can_not_enter_title)
+                            .setSubtitle(R.string.soptamp_dialog_can_not_enter_body)
+                            .setPositiveButton(R.string.soptamp_dialog_confirm_button)
+                            .show()
                     }
                 }
 
