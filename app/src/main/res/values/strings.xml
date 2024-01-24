@@ -119,4 +119,9 @@
     <string name="poke_dialog_preparing_title">접근할 수 없는 버튼이에요.</string>
     <string name="poke_dialog_preparing_body">콕 찌르기 기능이 준비 중이에요.</string>
     <string name="poke_dialog_confirm_button">확인</string>
+
+    <!--    솜탬프 관련 다이얼로그 -->
+    <string name="soptamp_dialog_can_not_enter_title">접근할 수 없는 버튼이에요.</string>
+    <string name="soptamp_dialog_can_not_enter_body">솝템프는 솝트 회원들에게만 제공되는 기능이에요.</string>
+    <string name="soptamp_dialog_confirm_button">확인</string>
 </resources>
