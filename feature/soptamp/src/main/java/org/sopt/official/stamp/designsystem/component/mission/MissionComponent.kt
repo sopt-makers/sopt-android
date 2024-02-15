@@ -33,7 +33,7 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 @Composable
 fun MissionComponent(
     mission: MissionUiModel,
-    onClick: (() -> Unit) = {}
+    onClick: () -> Unit = {}
 ) {
     val shape = MissionShape.DEFAULT_WAVE
     val stamp = Stamp.findStampByLevel(mission.level)
@@ -68,7 +68,8 @@ fun MissionComponent(
         if (mission.isCompleted) {
             CompletedStamp(
                 stamp = stamp,
-                modifier = Modifier.aspectRatio(1.3f)
+                modifier = Modifier
+                    .aspectRatio(1.3f)
                     .padding(horizontal = 12.dp)
             )
         } else {

@@ -37,8 +37,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +65,6 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
  * @param elevation 앱바의 elevation 을 설정합니다.
  *
  * @author jinsu4755*/
-
 @Composable
 fun SoptTopAppBar(
     title: @Composable () -> Unit,
@@ -130,7 +129,7 @@ fun SoptAppBar(
             .fillMaxWidth()
             .height(SoptAppBarDefault.height),
         color = backgroundColor,
-        elevation = elevation
+        shadowElevation = elevation
     ) {
         Row(
             modifier = modifier,
