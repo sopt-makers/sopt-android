@@ -41,7 +41,6 @@ import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
@@ -84,8 +83,8 @@ class MissionsViewModel @Inject constructor(
                 MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
             }
             missions.mapCatching { it.toUiModel(filter.title) }
-                .onSuccess { missions ->
-                    _state.value = MissionsState.Success(missions)
+                .onSuccess { result ->
+                    _state.value = MissionsState.Success(result)
                 }
                 .onFailure { throwable ->
                     when (throwable) {

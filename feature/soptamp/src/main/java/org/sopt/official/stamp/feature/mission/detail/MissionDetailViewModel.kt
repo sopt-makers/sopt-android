@@ -76,7 +76,7 @@ class MissionDetailViewModel @Inject constructor(
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
-    val isMe = uiState.map { it.isMe }
+    private val isMe = uiState.map { it.isMe }
     val isSuccess = uiState.map { it.isSuccess }
     val content = uiState.map { it.content }
     val imageModel = uiState.map { it.imageUri }

@@ -22,6 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package org.sopt.official.stamp.feature.mission.detail.component
 
 import androidx.compose.foundation.border
@@ -29,9 +31,10 @@ import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -86,13 +89,13 @@ fun Memo(
         modifier = modifierWithBorder,
         shape = RoundedCornerShape(10.dp),
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = backgroundColor,
+            containerColor = backgroundColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
-            textColor = SoptTheme.colors.onSurface90,
+            focusedTextColor = SoptTheme.colors.onSurface90,
             disabledTextColor = SoptTheme.colors.onSurface90,
-            placeholderColor = SoptTheme.colors.onSurface60
+            focusedPlaceholderColor = SoptTheme.colors.onSurface60
         ),
         textStyle = SoptTheme.typography.caption1,
         placeholder = {

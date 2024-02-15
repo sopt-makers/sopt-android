@@ -32,7 +32,6 @@ data class MissionListUiModel(
     val missionList: List<MissionUiModel>
 )
 
-// TODO: filter 부분은 나중에 삭제하기
 fun List<Mission>.toUiModel(title: String): MissionListUiModel = MissionListUiModel(
     title = title,
     missionList = this
