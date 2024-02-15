@@ -132,7 +132,6 @@ dependencies {
     implementation(libs.security)
     implementation(libs.swipe.refresh.layout)
 
-    implementation(libs.bundles.accompanist)
     implementation(libs.inappupdate)
 
     implementation(platform(libs.okhttp.bom))
