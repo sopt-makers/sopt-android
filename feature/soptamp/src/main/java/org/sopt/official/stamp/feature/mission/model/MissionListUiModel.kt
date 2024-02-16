@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,6 @@ data class MissionListUiModel(
     val missionList: List<MissionUiModel>
 )
 
-// TODO: filter 부분은 나중에 삭제하기
 fun List<Mission>.toUiModel(title: String): MissionListUiModel = MissionListUiModel(
     title = title,
     missionList = this

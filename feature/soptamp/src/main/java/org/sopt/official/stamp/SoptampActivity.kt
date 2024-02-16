@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,15 @@
  */
 package org.sopt.official.stamp
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.staticCompositionLocalOf
-import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.analytics.AmplitudeTracker
@@ -46,16 +47,18 @@ val LocalTracker = staticCompositionLocalOf<AmplitudeTracker> {
 class SoptampActivity : AppCompatActivity() {
     @Inject
     lateinit var tracker: AmplitudeTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val systemUiController = rememberSystemUiController()
-            SideEffect {
-                systemUiController.setStatusBarColor(
-                    color = Color.White,
-                    darkIcons = true
-                )
+            val view = LocalView.current
+            if (!view.isInEditMode) {
+                SideEffect {
+                    window.statusBarColor = Color.WHITE
+                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+                }
             }
+
             CompositionLocalProvider(LocalTracker provides tracker) {
                 DestinationsNavHost(navGraph = NavGraphs.root)
             }

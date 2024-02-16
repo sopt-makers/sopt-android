@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)
-    implementation(libs.bundles.accompanist)
     implementation(libs.timber)
     implementation(libs.retrofit)
     implementation(libs.coil.compose)

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,9 @@
 package org.sopt.official.stamp.designsystem.component.button
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExtendedFloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -58,7 +58,7 @@ fun SoptampFloatingButton(
         },
         onClick = { onClick() },
         shape = RoundedCornerShape(46.dp),
-        backgroundColor = SoptTheme.colors.purple300
+        containerColor = SoptTheme.colors.purple300,
     )
 }
 

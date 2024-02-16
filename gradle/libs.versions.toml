@@ -8,7 +8,7 @@ versionCode = "20101"
 kotlin = "1.9.22"
 kotlinx-serialization-json = "1.6.2"
 kotlinx-serialization-converter = "1.0.0"
-kotlinx-coroutines = "1.7.3"
+kotlinx-coroutines = "1.8.0"
 kotlinx-datetime = "0.5.0"
 javax-inject = "1"
 corektx = "1.12.0"
@@ -29,7 +29,6 @@ rxbinding = "4.0.0"
 rxandroid = "3.0.2"
 
 material = "1.11.0"
-accompanist = "0.34.0"
 in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
 
@@ -54,7 +53,7 @@ soloader = "0.11.0"
 okhttp = "4.12.0"
 retrofit = "2.9.0"
 timber = "5.0.1"
-compose-destination = "1.10.0"
+compose-destination = "1.10.1"
 mavericks = "3.0.9"
 coil = "2.5.0"
 lottie = "6.3.0"
@@ -115,8 +114,6 @@ compose-destination-core = { module = "io.github.raamcosta.compose-destinations:
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
-
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -206,7 +203,6 @@ android-test = ["androidx-test-junit", "androidx-test-espresso"]
 okhttp = ["okhttp", "okhttp-logging-interceptor"]
 flipper = ["flipper", "soloader"]
 firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-messaging"]
-accompanist = ["accompanist-systemuicontroller"]
 mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
 junit5-test = ["junit5", "junit5-engine", "junit5-params", "junit5-vintage"]
 androidx-android-test = ["androidx-test-runner", "androidx-test-rules", "androidx-uiautomator"]

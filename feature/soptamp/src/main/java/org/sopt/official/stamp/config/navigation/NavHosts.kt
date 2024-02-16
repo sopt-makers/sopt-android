@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,15 +27,6 @@ package org.sopt.official.stamp.config.navigation
 import com.ramcosta.composedestinations.annotation.NavGraph
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 
-/*
-* Splash와 Onboarding 포함한 Screen
-* */
-@RootNavGraph
-@NavGraph
-annotation class AuthNavGraph(
-    val start: Boolean = false
-)
-
 @RootNavGraph(start = true)
 @NavGraph
 annotation class MissionNavGraph(
@@ -45,17 +36,5 @@ annotation class MissionNavGraph(
 @RootNavGraph
 @NavGraph
 annotation class SettingNavGraph(
-    val start: Boolean = false
-)
-
-@RootNavGraph
-@NavGraph
-annotation class LoginNavGraph(
-    val start: Boolean = false
-)
-
-@RootNavGraph
-@NavGraph
-annotation class SignUpNavGraph(
     val start: Boolean = false
 )

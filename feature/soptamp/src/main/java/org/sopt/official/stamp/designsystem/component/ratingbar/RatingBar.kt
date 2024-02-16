@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,10 +44,10 @@ private const val DEFAULT_MAX = 3
 
 @Composable
 fun RatingBar(
-    modifier: Modifier = Modifier,
     @DrawableRes icon: Int,
-    maxStars: Int = DEFAULT_MAX,
     stars: Int,
+    modifier: Modifier = Modifier,
+    maxStars: Int = DEFAULT_MAX,
     gapSize: Dp = 10.dp,
     selectedColor: Color = SoptTheme.colors.mint300,
     unselectedColor: Color = SoptTheme.colors.onSurface30

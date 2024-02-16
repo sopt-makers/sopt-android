@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,6 @@ import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
 import javax.inject.Inject
-
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
@@ -84,8 +83,8 @@ class MissionsViewModel @Inject constructor(
                 MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
             }
             missions.mapCatching { it.toUiModel(filter.title) }
-                .onSuccess { missions ->
-                    _state.value = MissionsState.Success(missions)
+                .onSuccess { result ->
+                    _state.value = MissionsState.Success(result)
                 }
                 .onFailure { throwable ->
                     when (throwable) {
