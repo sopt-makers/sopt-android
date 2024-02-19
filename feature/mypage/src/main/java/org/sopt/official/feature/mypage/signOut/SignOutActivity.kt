@@ -29,14 +29,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
-import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.sopt.official.common.util.rx.observeOnMain
-import org.sopt.official.common.util.rx.subscribeBy
-import org.sopt.official.common.util.rx.subscribeOnIo
-import org.sopt.official.common.util.ui.throttleUi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.databinding.ActivitySignOutBinding
 
@@ -44,8 +43,6 @@ import org.sopt.official.feature.mypage.databinding.ActivitySignOutBinding
 class SignOutActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySignOutBinding::inflate)
     private val viewModel by viewModels<SignOutViewModel>()
-
-    private val createDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,38 +60,17 @@ class SignOutActivity : AppCompatActivity() {
     }
 
     private fun initClick() {
-        binding.confirmButton.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    viewModel.signOut()
-                    this.finish()
-                }
-            )
+        binding.confirmButton.setOnSingleClickListener {
+            viewModel.signOut()
+        }
     }
 
     private fun initRestart() {
-        viewModel.restartSignal
-            .distinctUntilChanged()
-            .filter { it }
-            .subscribeOnIo()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    ProcessPhoenix.triggerRebirth(this)
-                }
-            )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        createDisposable.dispose()
+        viewModel.event
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                ProcessPhoenix.triggerRebirth(this)
+            }.launchIn(lifecycleScope)
     }
 
     companion object {
