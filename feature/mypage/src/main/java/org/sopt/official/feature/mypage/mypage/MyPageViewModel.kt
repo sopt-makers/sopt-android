@@ -28,10 +28,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.processors.BehaviorProcessor
-import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
@@ -43,9 +47,15 @@ class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
+    private val _userActiveState = MutableStateFlow<MyPageUiState>(MyPageUiState.UnInitialized)
+    val userActiveState = _userActiveState.filterIsInstance<MyPageUiState.User>()
+        .map { it.activeState != UserActiveState.UNAUTHENTICATED }
+    private val _finish = Channel<Unit>()
+    val finish = _finish.receiveAsFlow()
 
-    val userActiveState = BehaviorProcessor.createDefault<MyPageUiState>(MyPageUiState.UnInitialized)
-    val restartSignal = PublishSubject.create<Boolean>()
+    fun setUserActiveState(new: MyPageUiState) {
+        _userActiveState.value = new
+    }
 
     fun logOut() {
         viewModelScope.launch {
@@ -55,7 +65,7 @@ class MyPageViewModel @Inject constructor(
                 authRepository.logout(it)
                     .onSuccess {
                         authRepository.clearLocalData()
-                        restartSignal.onNext(true)
+                        _finish.send(Unit)
                     }.onFailure { error -> Timber.e(error) }
             }.onFailure {
                 Timber.e(it)

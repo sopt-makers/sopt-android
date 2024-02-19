@@ -31,19 +31,17 @@ import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
-import com.jakewharton.rxbinding4.view.clicks
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.core.BackpressureStrategy
-import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
-import org.sopt.official.common.util.rx.observeOnMain
-import org.sopt.official.common.util.rx.subscribeBy
-import org.sopt.official.common.util.rx.subscribeOnIo
 import org.sopt.official.common.util.serializableExtra
+import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.ui.setVisible
-import org.sopt.official.common.util.ui.throttleUi
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
@@ -56,13 +54,15 @@ import org.sopt.official.feature.mypage.web.WebUrlConstant
 import java.io.Serializable
 import javax.inject.Inject
 
+enum class ResultCode {
+    LOG_IN;
+}
+
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
     private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
-
-    private val createDisposable = CompositeDisposable()
 
     @Inject
     lateinit var navigatorProvider: NavigatorProvider
@@ -82,177 +82,85 @@ class MyPageActivity : AppCompatActivity() {
 
     private fun initStartArgs() {
         args?.userActiveState?.let {
-            viewModel.userActiveState.onNext(MyPageUiState.User(it))
+            viewModel.setUserActiveState(MyPageUiState.User(it))
         }
     }
 
     private fun initToolbar() {
-        binding.includeAppBarBackArrow.apply {
+        with(binding.includeAppBarBackArrow) {
             textViewTitle.text = getString(R.string.toolbar_mypage)
-            toolbar.clicks()
-                .throttleUi()
-                .observeOnMain()
-                .onBackpressureLatest()
-                .subscribeBy(
-                    createDisposable,
-                    onNext = {
-                        onBackPressedDispatcher.onBackPressed()
-                    }
-                )
+            toolbar.setOnSingleClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
         }
     }
 
     private fun initView() {
         viewModel.userActiveState
-            .distinctUntilChanged()
-            .filter { it is MyPageUiState.User }
-            .map { (it as MyPageUiState.User).activeState != UserActiveState.UNAUTHENTICATED }
-            .subscribeOnIo()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = { isAuthenticated ->
-                    binding.containerNotificationSetting.setVisible(isAuthenticated)
-                    binding.containerSoptampInfo.setVisible(isAuthenticated)
-                    binding.textLogIn.setVisible(!isAuthenticated)
-                    binding.iconLogIn.setVisible(!isAuthenticated)
-                    binding.textLogOut.setVisible(isAuthenticated)
-                    binding.iconLogOut.setVisible(isAuthenticated)
-                    binding.textSignOut.setVisible(isAuthenticated)
-                    binding.iconSignOut.setVisible(isAuthenticated)
-                }
-            )
+            .flowWithLifecycle(lifecycle)
+            .onEach { isAuthenticated ->
+                binding.containerNotificationSetting.setVisible(isAuthenticated)
+                binding.containerSoptampInfo.setVisible(isAuthenticated)
+                binding.textLogIn.setVisible(!isAuthenticated)
+                binding.iconLogIn.setVisible(!isAuthenticated)
+                binding.textLogOut.setVisible(isAuthenticated)
+                binding.iconLogOut.setVisible(isAuthenticated)
+                binding.textSignOut.setVisible(isAuthenticated)
+                binding.iconSignOut.setVisible(isAuthenticated)
+            }.launchIn(lifecycleScope)
     }
 
     private fun initClick() {
-        binding.iconPrivateInfo.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))
-                    )
+        binding.iconPrivateInfo.setOnSingleClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
+        }
+        binding.iconServiceRule.setOnSingleClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
+        }
+        binding.iconSendOpinion.setOnSingleClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_GOOGLE_FORM)))
+        }
+        binding.iconAdjustSentence.setOnSingleClickListener {
+            startActivity(AdjustSentenceActivity.getIntent(this))
+        }
+        binding.iconChangeNickname.setOnSingleClickListener {
+            startActivity(ChangeNickNameActivity.getIntent(this))
+        }
+        binding.iconResetStamp.setOnSingleClickListener {
+            AlertDialogPositiveNegative(this)
+                .setTitle(R.string.mypage_alert_soptamp_reset_title)
+                .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
+                .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
+                    viewModel.resetSoptamp()
                 }
-            )
-
-        binding.iconServiceRule.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))
-                    )
+                .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
+                .show()
+        }
+        binding.iconLogOut.setOnSingleClickListener {
+            AlertDialogPositiveNegative(this)
+                .setTitle(R.string.mypage_alert_log_out_title)
+                .setSubtitle(R.string.mypage_alert_log_out_subtitle)
+                .setPositiveButton(R.string.mypage_alert_log_out_positive) {
+                    viewModel.logOut()
                 }
-            )
-        binding.iconSendOpinion.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(
-                        Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_GOOGLE_FORM))
-                    )
-                }
-            )
-        binding.iconAdjustSentence.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(AdjustSentenceActivity.getIntent(this))
-                }
-            )
-        binding.iconChangeNickname.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(ChangeNickNameActivity.getIntent(this))
-                }
-            )
-        binding.iconResetStamp.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    AlertDialogPositiveNegative(this)
-                        .setTitle(R.string.mypage_alert_soptamp_reset_title)
-                        .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
-                        .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
-                            viewModel.resetSoptamp()
-                        }
-                        .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
-                        .show()
-                }
-            )
-        binding.iconLogOut.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    AlertDialogPositiveNegative(this)
-                        .setTitle(R.string.mypage_alert_log_out_title)
-                        .setSubtitle(R.string.mypage_alert_log_out_subtitle)
-                        .setPositiveButton(R.string.mypage_alert_log_out_positive) {
-                            viewModel.logOut()
-                        }
-                        .setNegativeButton(R.string.mypage_alert_log_out_negative)
-                        .show()
-                }
-            )
-        binding.iconSignOut.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.startActivity(SignOutActivity.getIntent(this))
-                }
-            )
-        binding.iconLogIn.clicks()
-            .throttleUi()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    setResult(ResultCode.LOG_IN.ordinal)
-                    onBackPressedDispatcher.onBackPressed()
-                }
-            )
+                .setNegativeButton(R.string.mypage_alert_log_out_negative)
+                .show()
+        }
+        binding.iconSignOut.setOnSingleClickListener {
+            startActivity(SignOutActivity.getIntent(this))
+        }
+        binding.iconLogIn.setOnSingleClickListener {
+            setResult(ResultCode.LOG_IN.ordinal)
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     private fun initRestart() {
-        viewModel.restartSignal.toFlowable(BackpressureStrategy.LATEST)
-            .distinctUntilChanged()
-            .filter { it }
-            .subscribeOnIo()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    ProcessPhoenix.triggerRebirth(this, navigatorProvider.getAuthActivityIntent())
-                }
-            )
+        viewModel.finish
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                ProcessPhoenix.triggerRebirth(this, navigatorProvider.getAuthActivityIntent())
+            }.launchIn(lifecycleScope)
     }
 
     private fun initNotificationSettingClickListener() {
@@ -265,25 +173,14 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-
-        createDisposable.dispose()
-    }
-
-    enum class ResultCode {
-        LOG_IN,
-    }
-
     data class StartArgs(
         val userActiveState: UserActiveState
     ) : Serializable
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, MyPageActivity::class.java).apply {
-                putExtra("args", args)
-            }
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }

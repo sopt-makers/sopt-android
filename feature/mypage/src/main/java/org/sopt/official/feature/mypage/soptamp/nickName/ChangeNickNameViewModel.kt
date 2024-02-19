@@ -27,7 +27,6 @@ package org.sopt.official.feature.mypage.soptamp.nickName
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.processors.BehaviorProcessor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,7 +47,6 @@ class ChangeNickNameViewModel @Inject constructor(
     val isConfirmEnabled = _nickName.map { it.isNotEmpty() }
     private val _isValidNickName = MutableStateFlow(true)
     val isValidNickName = _isValidNickName.asStateFlow()
-    val nickName = BehaviorProcessor.createDefault("")
 
     init {
         validateNickName()
