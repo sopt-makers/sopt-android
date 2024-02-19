@@ -138,7 +138,6 @@ dependencies {
     implementation(libs.bundles.okhttp)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization.converter)
-    implementation(libs.timber)
 
     implementation(libs.bundles.compose)
 

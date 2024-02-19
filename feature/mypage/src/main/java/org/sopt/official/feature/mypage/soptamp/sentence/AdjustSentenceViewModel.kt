@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,10 @@ package org.sopt.official.feature.mypage.soptamp.sentence
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
@@ -37,16 +40,23 @@ import javax.inject.Inject
 class AdjustSentenceViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val backPressedSignal = PublishSubject.create<Boolean>()
+    private val _sentence = MutableStateFlow("")
+    val isConfirmed = _sentence.map { it.isNotEmpty() }
+    private val _finish = Channel<Unit>()
+    val finish = _finish.receiveAsFlow()
 
-    fun adjustSentence(message: String) {
+    fun adjustSentence() {
         viewModelScope.launch {
-            userRepository.updateProfileMessage(message)
+            userRepository.updateProfileMessage(_sentence.value)
                 .onSuccess {
-                    backPressedSignal.onNext(true)
+                    _finish.send(Unit)
                 }.onFailure {
                     Timber.e(it)
                 }
         }
+    }
+
+    fun onChange(new: String) {
+        _sentence.value = new
     }
 }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,12 @@ package org.sopt.official.feature.mypage.soptamp.nickName
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.processors.BehaviorProcessor
-import io.reactivex.rxjava3.subjects.PublishSubject
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.common.util.rx.subscribeBy
-import org.sopt.official.common.util.rx.subscribeOnIo
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -41,59 +41,53 @@ import javax.inject.Inject
 class ChangeNickNameViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    val backPressedSignal = PublishSubject.create<Boolean>()
-    val nickName = BehaviorProcessor.createDefault("")
-    val isValidNickName = BehaviorProcessor.createDefault(true)
-
-    private val createDisposable = CompositeDisposable()
+    private val _finish = Channel<Unit>()
+    val finish = _finish.receiveAsFlow()
+    private val _nickName = MutableStateFlow("")
+    val isConfirmEnabled = _nickName.map { it.isNotEmpty() }
+    private val _isValidNickName = MutableStateFlow(true)
+    val isValidNickName = _isValidNickName.asStateFlow()
 
     init {
         validateNickName()
     }
 
+    fun onChangeNickName(new: String) {
+        _nickName.value = new
+    }
+
     fun changeNickName() {
         viewModelScope.launch {
-            nickName.first("")
-                .subscribeOnIo()
-                .subscribeBy(
-                    createDisposable,
-                    onSuccess = {
-                        backPressedSignal.onNext(true)
-                    }
-                )
+            userRepository.updateNickname(_nickName.value)
+                .onSuccess {
+                    _finish.send(Unit)
+                }.onFailure {
+                    Timber.e(it)
+                }
         }
     }
 
     private fun validateNickName() {
-        nickName.first("")
-            .subscribeOnIo()
-            .subscribeBy(
-                createDisposable,
-                onSuccess = {
-                    if (it.isBlank()) {
-                        isValidNickName.onNext(true)
-                    } else {
-                        checkNickName(it)
-                    }
+        viewModelScope.launch {
+            _nickName.collect {
+                if (it.isBlank()) {
+                    _isValidNickName.value = true
+                } else {
+                    checkNickName(it)
                 }
-            )
+            }
+        }
     }
 
     private fun checkNickName(nickName: String) {
         viewModelScope.launch {
             userRepository.checkNickname(nickName)
                 .onSuccess {
-                    isValidNickName.onNext(true)
+                    _isValidNickName.value = true
                 }.onFailure {
                     Timber.e(it)
-                    isValidNickName.onNext(false)
+                    _isValidNickName.value = false
                 }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-
-        createDisposable.dispose()
     }
 }

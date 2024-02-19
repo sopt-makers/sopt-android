@@ -2,7 +2,7 @@
 <!--
     MIT License
 
-    Copyright (c) 2023 SOPT Makers
+    Copyright (c) 2023-2024 SOPT Makers
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -59,9 +59,9 @@
         android:layout_marginHorizontal="20dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/layout_edit_text_background"
+        android:hint="설정된 한 마디가 없습니다."
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp"
-        android:hint="설정된 한 마디가 없습니다."
         android:textAppearance="?textAppearanceBodyLarge"
         android:textColor="@color/mds_gray_10"
         android:textColorHint="@color/gray_100"

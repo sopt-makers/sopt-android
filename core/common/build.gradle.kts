@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,12 +29,4 @@ plugins {
 
 android {
     namespace = "org.sopt.official.common"
-}
-
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.rxkotlin)
-    implementation(libs.rxbinding)
 }

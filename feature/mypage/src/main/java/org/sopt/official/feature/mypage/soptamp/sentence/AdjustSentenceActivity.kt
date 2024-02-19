@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.jakewharton.rxbinding4.view.clicks
-import com.jakewharton.rxbinding4.widget.textChanges
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.rxjava3.core.BackpressureStrategy
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import org.sopt.official.common.util.rx.observeOnMain
-import org.sopt.official.common.util.rx.subscribeBy
-import org.sopt.official.common.util.rx.subscribeOnIo
-import org.sopt.official.common.util.ui.throttleUi
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBinding
 
@@ -45,8 +43,6 @@ import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBindin
 class AdjustSentenceActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityAdjustSentenceBinding::inflate)
     private val viewModel by viewModels<AdjustSentenceViewModel>()
-
-    private val createDisposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,55 +60,29 @@ class AdjustSentenceActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        viewModel.backPressedSignal
-            .toFlowable(BackpressureStrategy.LATEST)
-            .filter { it }
-            .subscribeOnIo()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    this.onBackPressedDispatcher.onBackPressed()
-                }
-            )
-        binding.edittext.textChanges()
-            .throttleUi()
-            .map { it.isNotEmpty() }
-            .distinctUntilChanged()
-            .observeOnMain()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    binding.confirmButton.isEnabled = it
-                }
-            )
+        viewModel.finish
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                this.onBackPressedDispatcher.onBackPressed()
+            }.launchIn(lifecycleScope)
+        binding.edittext.doAfterTextChanged {
+            viewModel.onChange(it.toString())
+        }
+        viewModel.isConfirmed
+            .flowWithLifecycle(lifecycle)
+            .onEach {
+                binding.confirmButton.isEnabled = it
+            }.launchIn(lifecycleScope)
     }
 
     private fun initClick() {
-        binding.confirmButton.clicks()
-            .throttleUi()
-            .map { binding.edittext.text.toString() }
-            .distinctUntilChanged()
-            .onBackpressureLatest()
-            .subscribeBy(
-                createDisposable,
-                onNext = {
-                    viewModel.adjustSentence(it)
-                }
-            )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        createDisposable.dispose()
+        binding.confirmButton.setOnSingleClickListener {
+            viewModel.adjustSentence()
+        }
     }
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, AdjustSentenceActivity::class.java).apply {
-        }
+        fun getIntent(context: Context) = Intent(context, AdjustSentenceActivity::class.java)
     }
 }

@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.compose.destination.core)
     ksp(libs.compose.destination.ksp)
-    implementation(libs.timber)
     implementation(libs.retrofit)
     implementation(libs.coil.compose)
     implementation(libs.process.phoenix)

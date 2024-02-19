@@ -23,10 +23,6 @@ customtab = "1.7.0"
 compose-compiler = "1.5.8"
 compose-bom = "2024.02.00"
 desugarJdk = "2.0.4"
-rxjava = "3.1.8"
-rxkotlin = "3.0.1"
-rxbinding = "4.0.0"
-rxandroid = "3.0.2"
 
 material = "1.11.0"
 in-app-update = "2.1.0"
@@ -171,11 +167,6 @@ ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlin
 sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
 
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
-
-rxandroid = { module = "io.reactivex.rxjava3:rxandroid", version.ref = "rxandroid" }
-rxjava = { module = "io.reactivex.rxjava3:rxjava", version.ref = "rxjava" }
-rxkotlin = { module = "io.reactivex.rxjava3:rxkotlin", version.ref = "rxkotlin" }
-rxbinding = { module = "com.jakewharton.rxbinding4:rxbinding", version.ref = "rxbinding" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }

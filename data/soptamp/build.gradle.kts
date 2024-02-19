@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,6 @@ dependencies {
     implementation(projects.domain.soptamp)
     implementation(projects.core.common)
     implementation(libs.security)
-    implementation(libs.timber)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
     implementation(libs.retrofit)

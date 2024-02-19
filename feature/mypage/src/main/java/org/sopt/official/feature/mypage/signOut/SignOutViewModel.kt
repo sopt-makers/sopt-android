@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,8 @@ package org.sopt.official.feature.mypage.signOut
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.rxjava3.processors.PublishProcessor
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.auth.repository.AuthRepository
 import timber.log.Timber
@@ -37,13 +38,14 @@ import javax.inject.Inject
 class SignOutViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-    val restartSignal = PublishProcessor.create<Boolean>()
+    private val _event = Channel<Unit>()
+    val event = _event.receiveAsFlow()
 
     fun signOut() {
         viewModelScope.launch {
             authRepository.withdraw()
                 .onSuccess {
-                    restartSignal.onNext(true)
+                    _event.send(Unit)
                 }.onFailure {
                     Timber.e(it)
                 }
