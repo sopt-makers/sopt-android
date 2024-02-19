@@ -48,8 +48,6 @@ dependencies {
     implementation(libs.swipe.refresh.layout)
 
     implementation(libs.coil.core)
-    implementation(libs.timber)
-
     implementation(libs.android.lottie)
     implementation(project(":core:analytics"))
 }

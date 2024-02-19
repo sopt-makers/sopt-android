@@ -35,7 +35,6 @@ dependencies {
     implementation(projects.domain.soptamp)
     implementation(projects.core.common)
     implementation(libs.security)
-    implementation(libs.timber)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
     implementation(libs.retrofit)

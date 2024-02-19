@@ -30,11 +30,3 @@ plugins {
 android {
     namespace = "org.sopt.official.common"
 }
-
-dependencies {
-    implementation(libs.timber)
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.rxkotlin)
-    implementation(libs.rxbinding)
-}

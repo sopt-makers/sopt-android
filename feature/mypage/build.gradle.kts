@@ -38,11 +38,6 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
 
-    implementation(libs.rxjava)
-    implementation(libs.rxandroid)
-    implementation(libs.rxkotlin)
-    implementation(libs.rxbinding)
-
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.process.phoenix)
