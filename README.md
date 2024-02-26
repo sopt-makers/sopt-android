@@ -48,6 +48,7 @@
 
 5. **Generate new token**을 눌러주세요
 6. 다음 사항에 주의해서 Personal Access Token을 만들어주세요
+
 - Note: Access to the SOPT Android repository 혹은 아무거나 입력
 - Expiration: 7 days (No Expiration은 보안상 위험하니 권장하지 않습니다)
 - Select scopes: repo (이외 scope는 건드릴 필요 없음)
@@ -62,6 +63,7 @@
 12. 초기설정이 완료되었습니다. 이후 발생하는 문제는 [이슈](https://github.com/sopt-makers/sopt-android/issues)에 등록해주세요.
 
 <h2>Contributing</h2>
+
 - 기능 제작 이후 Lint 및 파일의 형식 규약을 지키기 위해 다음 스크립트를 실행시켜주시기 바랍니다.
 
 ```shell
