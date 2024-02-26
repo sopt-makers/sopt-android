@@ -61,6 +61,16 @@
 11. 실행 이후에 복사해둔 토큰을 입력해주세요!
 12. 초기설정이 완료되었습니다. 이후 발생하는 문제는 [이슈](https://github.com/sopt-makers/sopt-android/issues)에 등록해주세요.
 
+<h2>Contributing</h2>
+- 기능 제작 이후 Lint 및 파일의 형식 규약을 지키기 위해 다음 스크립트를 실행시켜주시기 바랍니다.
+
+```shell
+./gradlew spotlessApply -PspotlessSetLicenseHeaderYearsFromGitHistory=true
+```
+
+- 본 프로젝트는 squash merge를 사용합니다. 따라서 PR 병합을 하실 때에는 머지 옵션을 `Squash and merge`를 선택해주세요.
+<img src="https://github.com/sopt-makers/sopt-android/assets/54518925/6b06b8e3-c778-4a0b-b995-9d949276c5bb" width="60%" />
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
