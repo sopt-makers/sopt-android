@@ -24,7 +24,17 @@
  */
 package org.sopt.official.designsystem
 
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+
+@Stable
+fun AlphaColor(
+    color: Int,
+    alphaPercentage: Int = 100
+): Color {
+    val alpha = (alphaPercentage / 100f * 255).toInt()
+    return Color((color and 0x00FFFFFF) or (alpha shl 24))
+}
 
 // Blue Scale
 val Blue600 = Color(0xFF2E60F6)
