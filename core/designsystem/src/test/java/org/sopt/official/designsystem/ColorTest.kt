@@ -56,7 +56,7 @@ class ColorAlphaArgumentsProvider : ArgumentsProvider {
 class ColorTest {
     @ParameterizedTest
     @ArgumentsSource(ColorAlphaArgumentsProvider::class)
-    fun `Alpha 값을 100을 주면 alpha 채널은 FF이다`(alpha: Int, expectedHex: Long) {
+    fun alphaColorCompatibilityTest(alpha: Int, expectedHex: Long) {
         // given
         val expected = Color(expectedHex)
 
