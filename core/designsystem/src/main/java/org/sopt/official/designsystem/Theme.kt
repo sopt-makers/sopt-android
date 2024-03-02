@@ -139,7 +139,7 @@ fun soptLightColors(
     background: Color = White,
     onBackground: Color = Black,
     surface: Color = White,
-    error: Color = Red,
+    error: Color = Red400,
     onSurface: Color = Black,
     onSurface95: Color = MdsGray950,
     onSurface90: Color = Gray900,
