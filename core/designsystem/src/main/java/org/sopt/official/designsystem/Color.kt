@@ -110,5 +110,49 @@ val Orange400 = Color(0xFFF77234)
 val Orange200 = Color(0xFFFFA480)
 val Orange100 = Color(0xFFFFCEBD)
 
+// Red-Alpha Scale
+val RedAlpha900 = AlphaColor(0xF04251, 90)
+val RedAlpha800 = AlphaColor(0xF04251, 80)
+val RedAlpha700 = AlphaColor(0xF04251, 70)
+val RedAlpha600 = AlphaColor(0xF04251, 60)
+val RedAlpha500 = AlphaColor(0xF04251, 50)
+val RedAlpha400 = AlphaColor(0xF04251, 40)
+val RedAlpha300 = AlphaColor(0xF04251, 30)
+val RedAlpha200 = AlphaColor(0xF04251, 20)
+val RedAlpha100 = AlphaColor(0xF04251, 10)
+
+// Orange-Alpha Scale
+val OrangeAlpha900 = AlphaColor(0xFF77234, 90)
+val OrangeAlpha800 = AlphaColor(0xFF77234, 80)
+val OrangeAlpha700 = AlphaColor(0xFF77234, 70)
+val OrangeAlpha600 = AlphaColor(0xFF77234, 60)
+val OrangeAlpha500 = AlphaColor(0xFF77234, 50)
+val OrangeAlpha400 = AlphaColor(0xFF77234, 40)
+val OrangeAlpha300 = AlphaColor(0xFF77234, 30)
+val OrangeAlpha200 = AlphaColor(0xFF77234, 20)
+val OrangeAlpha100 = AlphaColor(0xFF77234, 10)
+
+// Blue-Alpha Scale
+val BlueAlpha900 = AlphaColor(0x346FFA, 90)
+val BlueAlpha800 = AlphaColor(0x346FFA, 80)
+val BlueAlpha700 = AlphaColor(0x346FFA, 70)
+val BlueAlpha600 = AlphaColor(0x346FFA, 60)
+val BlueAlpha500 = AlphaColor(0x346FFA, 50)
+val BlueAlpha400 = AlphaColor(0x346FFA, 40)
+val BlueAlpha300 = AlphaColor(0x346FFA, 30)
+val BlueAlpha200 = AlphaColor(0x346FFA, 20)
+val BlueAlpha100 = AlphaColor(0x346FFA, 10)
+
+// Gray-Alpha Scale
+val GrayAlpha900 = AlphaColor(0x0F0F12, 90)
+val GrayAlpha800 = AlphaColor(0x0F0F12, 80)
+val GrayAlpha700 = AlphaColor(0x0F0F12, 70)
+val GrayAlpha600 = AlphaColor(0x0F0F12, 60)
+val GrayAlpha500 = AlphaColor(0x0F0F12, 50)
+val GrayAlpha400 = AlphaColor(0x0F0F12, 40)
+val GrayAlpha300 = AlphaColor(0x0F0F12, 30)
+val GrayAlpha200 = AlphaColor(0x0F0F12, 20)
+val GrayAlpha100 = AlphaColor(0x0F0F12, 10)
+
 // MDS
 val MdsGray950 = Color(0xFF0F1012)
