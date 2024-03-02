@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 plugins {
-    id("org.sopt.official.feature")
+    sopt("feature")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.secret)

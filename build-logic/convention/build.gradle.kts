@@ -44,5 +44,9 @@ gradlePlugin {
             id = "org.sopt.official.test"
             implementationClass = "org.sopt.official.plugin.AndroidTestPlugin"
         }
+        create("kotlin") {
+            id = "org.sopt.official.kotlin"
+            implementationClass = "org.sopt.official.plugin.KotlinJvmPlugin"
+        }
     }
 }

@@ -26,8 +26,8 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.*
 
 plugins {
-    id("org.sopt.official.application")
-    id("org.sopt.official.test")
+    sopt("application")
+    sopt("test")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
