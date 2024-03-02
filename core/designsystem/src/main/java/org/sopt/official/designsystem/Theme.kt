@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
  */
 package org.sopt.official.designsystem
 
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 
@@ -34,20 +34,26 @@ class SoptColors(
     onPrimary: Color,
     background: Color,
     onBackground: Color,
+    backgroundDimmed: Color,
     surface: Color,
+    success: Color,
     error: Color,
+    information: Color,
+    attention: Color,
     onSurface: Color,
-    onSurface95: Color,
-    onSurface90: Color,
-    onSurface80: Color,
-    onSurface70: Color,
-    onSurface60: Color,
+    onSurface950: Color,
+    onSurface900: Color,
+    onSurface800: Color,
+    onSurface700: Color,
+    onSurface600: Color,
+    onSurface500: Color,
+    onSurface400: Color,
+    onSurface300: Color,
+    onSurface200: Color,
+    onSurface100: Color,
     onSurface50: Color,
-    onSurface40: Color,
     onSurface30: Color,
-    onSurface20: Color,
     onSurface10: Color,
-    onSurface5: Color,
     isLight: Boolean
 ) {
     var primary by mutableStateOf(primary)
@@ -58,33 +64,45 @@ class SoptColors(
         private set
     var onBackground by mutableStateOf(onBackground)
         private set
+    var backgroundDimmed by mutableStateOf(backgroundDimmed)
+        private set
     var surface by mutableStateOf(surface)
+        private set
+    var success by mutableStateOf(success)
         private set
     var error by mutableStateOf(error)
         private set
+    var information by mutableStateOf(information)
+        private set
+    var attention by mutableStateOf(attention)
+        private set
     var onSurface by mutableStateOf(onSurface)
         private set
-    var onSurface95 by mutableStateOf(onSurface95)
+    var onSurface950 by mutableStateOf(onSurface950)
         private set
-    var onSurface90 by mutableStateOf(onSurface90)
+    var onSurface900 by mutableStateOf(onSurface900)
         private set
-    var onSurface80 by mutableStateOf(onSurface80)
+    var onSurface800 by mutableStateOf(onSurface800)
         private set
-    var onSurface70 by mutableStateOf(onSurface70)
+    var onSurface700 by mutableStateOf(onSurface700)
         private set
-    var onSurface60 by mutableStateOf(onSurface60)
+    var onSurface600 by mutableStateOf(onSurface600)
+        private set
+    var onSurface500 by mutableStateOf(onSurface500)
+        private set
+    var onSurface400 by mutableStateOf(onSurface400)
+        private set
+    var onSurface300 by mutableStateOf(onSurface300)
+        private set
+    var onSurface200 by mutableStateOf(onSurface200)
+        private set
+    var onSurface100 by mutableStateOf(onSurface100)
         private set
     var onSurface50 by mutableStateOf(onSurface50)
         private set
-    var onSurface40 by mutableStateOf(onSurface40)
-        private set
     var onSurface30 by mutableStateOf(onSurface30)
         private set
-    var onSurface20 by mutableStateOf(onSurface20)
-        private set
     var onSurface10 by mutableStateOf(onSurface10)
-        private set
-    var onSurface5 by mutableStateOf(onSurface5)
         private set
     var isLight by mutableStateOf(isLight)
 
@@ -93,20 +111,26 @@ class SoptColors(
         onPrimary,
         background,
         onBackground,
+        backgroundDimmed,
         surface,
+        success,
         error,
+        information,
+        attention,
         onSurface,
-        onSurface95,
-        onSurface90,
-        onSurface80,
-        onSurface70,
-        onSurface60,
+        onSurface950,
+        onSurface900,
+        onSurface800,
+        onSurface700,
+        onSurface600,
+        onSurface500,
+        onSurface400,
+        onSurface300,
+        onSurface200,
+        onSurface100,
         onSurface50,
-        onSurface40,
         onSurface30,
-        onSurface20,
         onSurface10,
-        onSurface5,
         isLight
     )
 
@@ -115,62 +139,80 @@ class SoptColors(
         onPrimary = other.onPrimary
         background = other.background
         onBackground = other.onBackground
+        backgroundDimmed = other.backgroundDimmed
         surface = other.surface
+        success = other.success
         error = other.error
+        information = other.information
+        attention = other.attention
         onSurface = other.onSurface
-        onSurface95 = other.onSurface95
-        onSurface90 = other.onSurface90
-        onSurface80 = other.onSurface80
-        onSurface70 = other.onSurface70
-        onSurface60 = other.onSurface60
+        onSurface950 = other.onSurface950
+        onSurface900 = other.onSurface900
+        onSurface800 = other.onSurface800
+        onSurface700 = other.onSurface700
+        onSurface600 = other.onSurface600
+        onSurface500 = other.onSurface500
+        onSurface400 = other.onSurface400
+        onSurface300 = other.onSurface300
+        onSurface200 = other.onSurface200
+        onSurface100 = other.onSurface100
         onSurface50 = other.onSurface50
-        onSurface40 = other.onSurface40
         onSurface30 = other.onSurface30
-        onSurface20 = other.onSurface20
         onSurface10 = other.onSurface10
-        onSurface5 = other.onSurface5
         isLight = other.isLight
     }
 }
 
 fun soptLightColors(
-    primary: Color = Blue500,
+    primary: Color = White,
     onPrimary: Color = Gray900,
-    background: Color = White,
-    onBackground: Color = Black,
+    background: Color = Gray950,
+    onBackground: Color = White,
+    backgroundDimmed: Color = GrayAlpha100,
     surface: Color = White,
-    error: Color = Red,
+    success: Color = Blue400,
+    error: Color = Red400,
+    information: Color = Green400,
+    attention: Color = Yellow400,
     onSurface: Color = Black,
-    onSurface95: Color = MdsGray950,
-    onSurface90: Color = Gray900,
-    onSurface80: Color = Gray800,
-    onSurface70: Color = Gray700,
-    onSurface60: Color = Gray600,
-    onSurface50: Color = Gray500,
-    onSurface40: Color = Gray400,
-    onSurface30: Color = Gray300,
-    onSurface20: Color = Gray200,
-    onSurface10: Color = Gray100,
-    onSurface5: Color = Gray50
+    onSurface950: Color = Gray950,
+    onSurface900: Color = Gray900,
+    onSurface800: Color = Gray800,
+    onSurface700: Color = Gray700,
+    onSurface600: Color = Gray600,
+    onSurface500: Color = Gray500,
+    onSurface400: Color = Gray400,
+    onSurface300: Color = Gray300,
+    onSurface200: Color = Gray200,
+    onSurface100: Color = Gray100,
+    onSurface50: Color = Gray50,
+    onSurface30: Color = Gray30,
+    onSurface10: Color = Gray10
 ) = SoptColors(
     primary,
     onPrimary,
     background,
     onBackground,
+    backgroundDimmed,
     surface,
+    success,
     error,
+    information,
+    attention,
     onSurface,
-    onSurface95,
-    onSurface90,
-    onSurface80,
-    onSurface70,
-    onSurface60,
+    onSurface950,
+    onSurface900,
+    onSurface800,
+    onSurface700,
+    onSurface600,
+    onSurface500,
+    onSurface400,
+    onSurface300,
+    onSurface200,
+    onSurface100,
     onSurface50,
-    onSurface40,
     onSurface30,
-    onSurface20,
     onSurface10,
-    onSurface5,
     isLight = true
 )
 
@@ -189,9 +231,15 @@ private val LocalSoptTypography = staticCompositionLocalOf<SoptTypography> {
 * Typo를 변경하고 싶다면 SoptTheme.typography.h1 이런식으로 접근하면 됩니다.
 * */
 object SoptTheme {
-    val colors: SoptColors @Composable get() = LocalSoptColors.current
+    val colors: SoptColors
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalSoptColors.current
 
-    val typography: SoptTypography @Composable get() = LocalSoptTypography.current
+    val typography: SoptTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalSoptTypography.current
 }
 
 @Composable

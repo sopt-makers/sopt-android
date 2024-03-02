@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2023 SOPT - Shout Our Passion Together
+ * Copyright 2022-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,10 +31,11 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-val SuitExtraBold = FontFamily(Font(R.font.suit_extrabold, FontWeight.ExtraBold))
-val SuitBold = FontFamily(Font(R.font.suit_bold, FontWeight.Bold))
-val SuitMedium = FontFamily(Font(R.font.suit_medium, FontWeight.Medium))
-val SuitRegular = FontFamily(Font(R.font.suit_regular, FontWeight.Normal))
+val PretendardBold = FontFamily(Font(R.font.pretendard_bold, FontWeight.Bold))
+val PretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold, FontWeight.SemiBold))
+val PretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medium))
+val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
+val PretendardLight = FontFamily(Font(R.font.pretendard_light, FontWeight.Light))
 
 @Stable
 class SoptTypography internal constructor(
@@ -43,11 +44,24 @@ class SoptTypography internal constructor(
     h3: TextStyle,
     h4: TextStyle,
     h5: TextStyle,
-    sub1: TextStyle,
-    sub2: TextStyle,
-    b1: TextStyle,
-    b2: TextStyle,
-    caption: TextStyle,
+    h6: TextStyle,
+    h7: TextStyle,
+    title1: TextStyle,
+    title2: TextStyle,
+    title3: TextStyle,
+    title4: TextStyle,
+    title5: TextStyle,
+    title6: TextStyle,
+    title7: TextStyle,
+    body1: TextStyle,
+    body2: TextStyle,
+    body3: TextStyle,
+    body4: TextStyle,
+    label1: TextStyle,
+    label2: TextStyle,
+    label3: TextStyle,
+    label4: TextStyle,
+    label5: TextStyle
 ) {
     var h1: TextStyle by mutableStateOf(h1)
         private set
@@ -59,15 +73,41 @@ class SoptTypography internal constructor(
         private set
     var h5: TextStyle by mutableStateOf(h5)
         private set
-    var sub1: TextStyle by mutableStateOf(sub1)
+    var h6: TextStyle by mutableStateOf(h6)
         private set
-    var sub2: TextStyle by mutableStateOf(sub2)
+    var h7: TextStyle by mutableStateOf(h7)
         private set
-    var b1: TextStyle by mutableStateOf(b1)
+    var title1: TextStyle by mutableStateOf(title1)
         private set
-    var b2: TextStyle by mutableStateOf(b2)
+    var title2: TextStyle by mutableStateOf(title2)
         private set
-    var caption: TextStyle by mutableStateOf(caption)
+    var title3: TextStyle by mutableStateOf(title3)
+        private set
+    var title4: TextStyle by mutableStateOf(title4)
+        private set
+    var title5: TextStyle by mutableStateOf(title5)
+        private set
+    var title6: TextStyle by mutableStateOf(title6)
+        private set
+    var title7: TextStyle by mutableStateOf(title7)
+        private set
+    var body1: TextStyle by mutableStateOf(body1)
+        private set
+    var body2: TextStyle by mutableStateOf(body2)
+        private set
+    var body3: TextStyle by mutableStateOf(body3)
+        private set
+    var body4: TextStyle by mutableStateOf(body4)
+        private set
+    var label1: TextStyle by mutableStateOf(label1)
+        private set
+    var label2: TextStyle by mutableStateOf(label2)
+        private set
+    var label3: TextStyle by mutableStateOf(label3)
+        private set
+    var label4: TextStyle by mutableStateOf(label4)
+        private set
+    var label5: TextStyle by mutableStateOf(label5)
         private set
 
     fun copy(
@@ -76,12 +116,49 @@ class SoptTypography internal constructor(
         h3: TextStyle = this.h3,
         h4: TextStyle = this.h4,
         h5: TextStyle = this.h5,
-        sub1: TextStyle = this.sub1,
-        sub2: TextStyle = this.sub2,
-        b1: TextStyle = this.b1,
-        b2: TextStyle = this.b2,
-        caption: TextStyle = this.caption,
-    ): SoptTypography = SoptTypography(h1, h2, h3, h4, h5, sub1, sub2, b1, b2, caption)
+        h6: TextStyle = this.h6,
+        h7: TextStyle = this.h7,
+        title1: TextStyle = this.title1,
+        title2: TextStyle = this.title2,
+        title3: TextStyle = this.title3,
+        title4: TextStyle = this.title4,
+        title5: TextStyle = this.title5,
+        title6: TextStyle = this.title6,
+        title7: TextStyle = this.title7,
+        body1: TextStyle = this.body1,
+        body2: TextStyle = this.body2,
+        body3: TextStyle = this.body3,
+        body4: TextStyle = this.body4,
+        label1: TextStyle = this.label1,
+        label2: TextStyle = this.label2,
+        label3: TextStyle = this.label3,
+        label4: TextStyle = this.label4,
+        label5: TextStyle = this.label5
+    ): SoptTypography = SoptTypography(
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        h7,
+        title1,
+        title2,
+        title3,
+        title4,
+        title5,
+        title6,
+        title7,
+        body1,
+        body2,
+        body3,
+        body4,
+        label1,
+        label2,
+        label3,
+        label4,
+        label5
+    )
 
     fun update(other: SoptTypography) {
         h1 = other.h1
@@ -89,11 +166,24 @@ class SoptTypography internal constructor(
         h3 = other.h3
         h4 = other.h4
         h5 = other.h5
-        sub1 = other.sub1
-        sub2 = other.sub2
-        b1 = other.b1
-        b2 = other.b2
-        caption = other.caption
+        h6 = other.h6
+        h7 = other.h7
+        title1 = other.title1
+        title2 = other.title2
+        title3 = other.title3
+        title4 = other.title4
+        title5 = other.title5
+        title6 = other.title6
+        title7 = other.title7
+        body1 = other.body1
+        body2 = other.body2
+        body3 = other.body3
+        body4 = other.body4
+        label1 = other.label1
+        label2 = other.label2
+        label3 = other.label3
+        label4 = other.label4
+        label5 = other.label5
     }
 }
 
@@ -101,54 +191,142 @@ class SoptTypography internal constructor(
 fun SoptTypography(): SoptTypography {
     return SoptTypography(
         h1 = TextStyle(
-            fontFamily = SuitExtraBold,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.ExtraBold
+            fontFamily = PretendardBold,
+            fontSize = 48.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 72.sp
         ),
         h2 = TextStyle(
-            fontFamily = SuitBold,
-            fontSize = 24.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = PretendardBold,
+            fontSize = 32.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 48.sp
         ),
         h3 = TextStyle(
-            fontFamily = SuitBold,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = PretendardBold,
+            fontSize = 28.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 42.sp
         ),
         h4 = TextStyle(
-            fontFamily = SuitBold,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
+            fontFamily = PretendardBold,
+            fontSize = 24.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 36.sp
         ),
         h5 = TextStyle(
-            fontFamily = SuitMedium,
+            fontFamily = PretendardBold,
+            fontSize = 20.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 30.sp
+        ),
+        h6 = TextStyle(
+            fontFamily = PretendardBold,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Medium
+            letterSpacing = 0.15.sp,
+            lineHeight = 28.sp
         ),
-        sub1 = TextStyle(
-            fontFamily = SuitBold,
+        h7 = TextStyle(
+            fontFamily = PretendardBold,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
+            letterSpacing = 0.15.sp,
+            lineHeight = 24.sp
         ),
-        sub2 = TextStyle(
-            fontFamily = SuitMedium,
+        title1 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 32.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 48.sp
+        ),
+        title2 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 28.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 42.sp
+        ),
+        title3 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 24.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 36.sp
+        ),
+        title4 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 20.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 30.sp
+        ),
+        title5 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 18.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 28.sp
+        ),
+        title6 = TextStyle(
+            fontFamily = PretendardSemiBold,
             fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
+            letterSpacing = 0.15.sp,
+            lineHeight = 24.sp
         ),
-        b1 = TextStyle(
-            fontFamily = SuitRegular,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal
-        ),
-        b2 = TextStyle(
-            fontFamily = SuitRegular,
+        title7 = TextStyle(
+            fontFamily = PretendardSemiBold,
             fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
+            letterSpacing = 0.15.sp,
+            lineHeight = 24.sp
         ),
-        caption = TextStyle(
-            fontFamily = SuitRegular,
+        body1 = TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 18.sp,
+            letterSpacing = 0.5.sp,
+            lineHeight = 30.sp
+        ),
+        body2 = TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 16.sp,
+            letterSpacing = 0.25.sp,
+            lineHeight = 26.sp
+        ),
+        body3 = TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 14.sp,
+            letterSpacing = 0.25.sp,
+            lineHeight = 22.sp
+        ),
+        body4 = TextStyle(
+            fontFamily = PretendardRegular,
+            fontSize = 13.sp,
+            letterSpacing = 0.25.sp,
+            lineHeight = 20.sp
+        ),
+        label1 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 18.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 24.sp
+        ),
+        label2 = TextStyle(
+            fontFamily = PretendardSemiBold,
+            fontSize = 16.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 22.sp
+        ),
+        label3 = TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 14.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 20.sp
+        ),
+        label4 = TextStyle(
+            fontFamily = PretendardMedium,
             fontSize = 12.sp,
-            fontWeight = FontWeight.Normal
+            letterSpacing = 0.15.sp,
+            lineHeight = 16.sp
+        ),
+        label5 = TextStyle(
+            fontFamily = PretendardMedium,
+            fontSize = 11.sp,
+            letterSpacing = 0.15.sp,
+            lineHeight = 14.sp
         )
     )
 }
