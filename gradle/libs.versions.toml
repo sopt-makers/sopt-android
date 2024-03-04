@@ -52,7 +52,7 @@ timber = "5.0.1"
 compose-destination = "1.10.1"
 mavericks = "3.0.9"
 coil = "2.6.0"
-lottie = "6.3.0"
+lottie = "6.4.0"
 
 google-services = "4.4.1"
 crashlytics = "2.9.9"
