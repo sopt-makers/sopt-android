@@ -30,8 +30,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,10 +44,13 @@ import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.feature.poke.config.LocalTracker
+import org.sopt.official.feature.poke.config.rememberTracker
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeEntryPointActivity
 import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
@@ -73,7 +79,16 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContent {
+            CompositionLocalProvider(
+                LocalTracker provides rememberTracker(LocalContext.current)
+            ) {
+                SoptTheme {
+                    // TODO by Nunu Content 작성하기
+                }
+            }
+        }
+        // etContentView(binding.root)
 
         initAppBar()
         initView()

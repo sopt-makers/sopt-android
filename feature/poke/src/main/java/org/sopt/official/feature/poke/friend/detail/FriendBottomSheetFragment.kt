@@ -42,8 +42,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
+import org.sopt.official.designsystem.CommonColors
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -76,7 +78,7 @@ class FriendBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val recyclerViewItemDecorationDivider
         get() = ItemDecorationDivider(
-            color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
+            color = colorOf(CommonColors.mds_gray_800),
             height = 1.dp
         )
 
