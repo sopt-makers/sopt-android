@@ -22,8 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.message_bottom_sheet
+package org.sopt.official.feature.poke.user
 
-fun interface MessageItemClickListener {
-    fun onClickMessageItem(message:String)
+import org.sopt.official.domain.poke.entity.PokeUser
+
+interface PokeUserListClickListener {
+    fun onClickProfileImage(playgroundId: Int)
+    fun onClickPokeButton(user: PokeUser)
 }

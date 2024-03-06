@@ -48,8 +48,8 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
@@ -70,7 +70,7 @@ class PokeNotificationActivity : AppCompatActivity() {
     private val pokeNotificationLayoutManager
         get() = binding.recyclerviewPokeNotification.layoutManager as LinearLayoutManager
 
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -128,7 +128,7 @@ class PokeNotificationActivity : AppCompatActivity() {
                 true -> PokeMessageType.POKE_SOMEONE
                 false -> PokeMessageType.POKE_FRIEND
             }
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            messageListBottomSheet = MessagesBottomSheetFragment.Builder()
                 .setMessageListType(messageType)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
                 .create()

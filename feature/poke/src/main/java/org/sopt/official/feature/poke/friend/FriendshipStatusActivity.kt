@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.friend_list_summary
+package org.sopt.official.feature.poke.friend
 
 import android.content.Context
 import android.content.Intent
@@ -48,24 +48,24 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
-import org.sopt.official.feature.poke.friend_list_detail.FriendListDetailBottomSheetFragment
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.ItemDecorationDivider
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.friend.detail.FriendBottomSheetFragment
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
+import org.sopt.official.feature.poke.user.ItemDecorationDivider
+import org.sopt.official.feature.poke.user.PokeUserListAdapter
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FriendListSummaryActivity : AppCompatActivity() {
+class FriendshipStatusActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityFriendListSummaryBinding::inflate)
-    private val viewModel by viewModels<FriendListSummaryViewModel>()
+    private val viewModel by viewModels<FriendshipStatusViewModel>()
 
     private val args by serializableExtra(StartArgs(""))
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -155,7 +155,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     }
 
     private fun showFriendListDetailBottomSheet(pokeFriendType: PokeFriendType) {
-        FriendListDetailBottomSheetFragment.Builder()
+        FriendBottomSheetFragment.Builder()
             .setUserStatus(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
             .setPokeFriendType(pokeFriendType)
             .create()
@@ -250,7 +250,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     "view_profile" to user.playgroundId
                 )
             )
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            messageListBottomSheet = MessagesBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_FRIEND)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                 .create()
@@ -293,7 +293,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, FriendListSummaryActivity::class.java).apply {
+            Intent(context, FriendshipStatusActivity::class.java).apply {
                 putExtra("args", args)
             }
     }

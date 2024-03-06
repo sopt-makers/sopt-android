@@ -22,11 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.poke_user_recycler_view
+package org.sopt.official.feature.poke.user
 
-import org.sopt.official.domain.poke.entity.PokeUser
+import android.graphics.Canvas
+import android.graphics.Paint
+import androidx.recyclerview.widget.RecyclerView
 
-interface PokeUserListClickListener {
-    fun onClickProfileImage(playgroundId: Int)
-    fun onClickPokeButton(user: PokeUser)
+class ItemDecorationDivider(
+    color: Int,
+    private val height: Int,
+) : RecyclerView.ItemDecoration() {
+
+    private val paint = Paint()
+
+    init {
+        paint.color = color
+    }
+
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        super.onDrawOver(c, parent, state)
+        for (i in 0 until parent.childCount) {
+            val top = (parent.getChildAt(i).bottom).toFloat()
+            val bottom = top + height
+            c.drawRect(0f, top, (parent.width).toFloat(), bottom, paint)
+        }
+    }
 }

@@ -50,8 +50,8 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
-import org.sopt.official.feature.poke.friend_list_summary.FriendListSummaryActivity
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.friend.FriendshipStatusActivity
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
@@ -59,14 +59,14 @@ import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class PokeMainActivity : AppCompatActivity() {
+class PokeEntryPointActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
-    private val viewModel by viewModels<PokeMainViewModel>()
+    private val viewModel by viewModels<PokeEntryPointViewModel>()
 
     private val args by serializableExtra(StartArgs(""))
 
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -103,7 +103,7 @@ class PokeMainActivity : AppCompatActivity() {
                 tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
                 startActivity(
                     PokeNotificationActivity.getIntent(
-                        this@PokeMainActivity,
+                        this@PokeEntryPointActivity,
                         PokeNotificationActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
                     )
                 )
@@ -111,9 +111,9 @@ class PokeMainActivity : AppCompatActivity() {
 
             imgNextPokeMyFriend.setOnClickListener {
                 startActivity(
-                    FriendListSummaryActivity.getIntent(
-                        this@PokeMainActivity,
-                        FriendListSummaryActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
+                    FriendshipStatusActivity.getIntent(
+                        this@PokeEntryPointActivity,
+                        FriendshipStatusActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
                     )
                 )
             }
@@ -183,6 +183,7 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
+
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                         is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
@@ -203,13 +204,16 @@ class PokeMainActivity : AppCompatActivity() {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
+
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
+
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
+
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -426,7 +430,7 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false) {
-        messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+        messageListBottomSheet = MessagesBottomSheetFragment.Builder()
             .setMessageListType(pokeMessageType)
             .onClickMessageListItem { message -> viewModel.pokeUser(userId, message, isFirstMeet) }
             .create()
@@ -443,7 +447,7 @@ class PokeMainActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, PokeMainActivity::class.java).apply {
+            Intent(context, PokeEntryPointActivity::class.java).apply {
                 putExtra("args", args)
             }
     }

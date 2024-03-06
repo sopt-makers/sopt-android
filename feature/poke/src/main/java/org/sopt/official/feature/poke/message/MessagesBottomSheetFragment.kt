@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.message_bottom_sheet
+package org.sopt.official.feature.poke.message
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -42,11 +42,11 @@ import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheet
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
-class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
+class MessagesBottomSheetFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentMessageListBottomSheetBinding? = null
     private val binding: FragmentMessageListBottomSheetBinding get() = requireNotNull(_binding)
-    private lateinit var viewModel: MessageListBottomSheetViewModel
+    private lateinit var viewModel: MessagesViewModel
 
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String) -> Unit)? = null
@@ -56,7 +56,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMessageListBottomSheetBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this).get(MessageListBottomSheetViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MessagesViewModel::class.java)
         return binding.root
     }
 
@@ -83,11 +83,11 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     private fun initMessageListContent(data: PokeMessageList) {
         binding.apply {
             textViewTitle.text = data.header
-            recyclerView.adapter = MessageListRecyclerAdapter(data.messages, messageListItemClickListener)
+            recyclerView.adapter = MessageListAdapter(data.messages, messageListItemClickListener)
         }
     }
 
-    private val messageListItemClickListener = MessageItemClickListener { message ->
+    private val messageListItemClickListener = MessagePressListener { message ->
         onClickMessageListItem?.let { it(message) }
     }
 
@@ -98,8 +98,8 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
 
     class Builder {
-        private val bottomSheet = MessageListBottomSheetFragment()
-        fun create(): MessageListBottomSheetFragment = bottomSheet
+        private val bottomSheet = MessagesBottomSheetFragment()
+        fun create(): MessagesBottomSheetFragment = bottomSheet
 
         fun setMessageListType(pokeMessageType: PokeMessageType): Builder {
             bottomSheet.pokeMessageType = pokeMessageType

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.message_bottom_sheet
+package org.sopt.official.feature.poke.message
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -40,7 +40,7 @@ import org.sopt.official.feature.poke.UiState
 import javax.inject.Inject
 
 @HiltViewModel
-class MessageListBottomSheetViewModel @Inject constructor(
+class MessagesViewModel @Inject constructor(
     private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
 ) : ViewModel() {
 

@@ -44,7 +44,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class PokeMainViewModel @Inject constructor(
+class PokeEntryPointViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
     private val getPokeFriendUseCase: GetPokeFriendUseCase,
     private val getPokeFriendOfFriendListUseCase: GetPokeFriendOfFriendListUseCase,

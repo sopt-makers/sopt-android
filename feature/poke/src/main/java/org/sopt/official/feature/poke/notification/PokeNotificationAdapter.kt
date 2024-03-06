@@ -35,8 +35,7 @@ import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
-import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 class PokeNotificationAdapter(

@@ -46,11 +46,11 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
-import org.sopt.official.feature.poke.main.PokeMainActivity
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.main.PokeEntryPointActivity
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
+import org.sopt.official.feature.poke.user.PokeUserListAdapter
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
@@ -64,7 +64,7 @@ class OnboardingActivity : AppCompatActivity() {
     private val args by serializableExtra(StartArgs(0, ""))
 
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -125,7 +125,7 @@ class OnboardingActivity : AppCompatActivity() {
                 name = "poke_icon",
                 properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.playgroundId)
             )
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            messageListBottomSheet = MessagesBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_SOMEONE)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                 .create()
@@ -199,7 +199,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setIntentToPokeMain() {
         if (binding.layoutLottie.isVisible) return
-        startActivity(Intent(this, PokeMainActivity::class.java))
+        startActivity(Intent(this, PokeEntryPointActivity::class.java))
         finish()
     }
 
