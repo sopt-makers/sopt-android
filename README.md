@@ -13,7 +13,7 @@
 </p>
 <br />  
 
-<img width="1224" alt="image" src="https://github.com/sopt-makers/sopt-android/assets/63586451/6012247f-a081-43c6-962a-13acea07f970">
+<img width="1424" alt="image" src="https://github.com/sopt-makers/sopt-android/assets/63586451/57b33448-ac1b-42d3-b8d2-067e76635bae">
 </div>
 
 <h2>Download</h2>
