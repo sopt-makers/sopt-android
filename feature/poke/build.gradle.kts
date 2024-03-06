@@ -39,6 +39,9 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
 
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
 
