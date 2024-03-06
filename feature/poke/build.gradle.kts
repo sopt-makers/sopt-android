@@ -48,5 +48,4 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
-    implementation(project(":core:analytics"))
 }
