@@ -29,6 +29,13 @@ plugins {
 
 android {
     namespace = "org.sopt.official.feature.poke"
+
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+    }
 }
 
 dependencies {
