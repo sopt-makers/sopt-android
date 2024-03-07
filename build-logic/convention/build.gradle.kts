@@ -32,17 +32,21 @@ gradlePlugin {
             id = "org.sopt.official.hilt"
             implementationClass = "org.sopt.official.plugin.AndroidHiltPlugin"
         }
-        create("kotlin-serialization") {
-            id = "org.sopt.official.serialization"
-            implementationClass = "org.sopt.official.plugin.KotlinSerializationPlugin"
+        create("android-compose") {
+            id = "org.sopt.official.compose"
+            implementationClass = "org.sopt.official.plugin.AndroidComposePlugin"
+        }
+        create("android-test") {
+            id = "org.sopt.official.test"
+            implementationClass = "org.sopt.official.plugin.AndroidTestPlugin"
         }
         create("junit5") {
             id = "org.sopt.official.junit5"
             implementationClass = "org.sopt.official.plugin.JUnit5Plugin"
         }
-        create("android-test") {
-            id = "org.sopt.official.test"
-            implementationClass = "org.sopt.official.plugin.AndroidTestPlugin"
+        create("kotlin-serialization") {
+            id = "org.sopt.official.serialization"
+            implementationClass = "org.sopt.official.plugin.KotlinSerializationPlugin"
         }
         create("kotlin") {
             id = "org.sopt.official.kotlin"

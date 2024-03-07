@@ -20,7 +20,7 @@ navigation = "2.7.7"
 startup = "1.1.1"
 security = "1.1.0-alpha06"
 customtab = "1.8.0"
-compose-compiler = "1.5.8"
+compose-compiler = "1.5.10"
 compose-bom = "2024.02.02"
 desugarJdk = "2.0.4"
 
