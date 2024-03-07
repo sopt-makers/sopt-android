@@ -33,7 +33,12 @@ import android.view.View
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -84,7 +89,7 @@ class OnboardingActivity : AppCompatActivity() {
                 LocalTracker provides rememberTracker(LocalContext.current)
             ) {
                 SoptTheme {
-                    // TODO by Nunu Content 작성하기
+                    OnboardingScreen()
                 }
             }
         }
