@@ -4,6 +4,7 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
+import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
 class AndroidComposePlugin : Plugin<Project> {
@@ -16,6 +17,11 @@ class AndroidComposePlugin : Plugin<Project> {
             composeOptions {
                 kotlinCompilerExtensionVersion = libs.findVersion("compose-compiler").get().requiredVersion
             }
+        }
+        dependencies {
+            "implementation"(platform(libs.findLibrary("compose-bom").get()))
+            "implementation"(libs.findBundle("compose").get())
+            "implementation"(libs.findLibrary("coil-compose").get())
         }
     }
 }
