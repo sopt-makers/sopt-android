@@ -25,17 +25,11 @@
 
 plugins {
     sopt("feature")
+    sopt("compose")
 }
 
 android {
     namespace = "org.sopt.official.feature.poke"
-
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
@@ -45,9 +39,6 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
-
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
