@@ -36,8 +36,6 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.designsystem)
     implementation(libs.customtab)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.logging.interceptor)
 }

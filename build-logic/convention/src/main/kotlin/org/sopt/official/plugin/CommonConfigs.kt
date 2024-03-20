@@ -15,6 +15,7 @@ internal fun Project.configureAndroidCommonPlugin() {
 
     apply<AndroidKotlinPlugin>()
     apply<KotlinSerializationPlugin>()
+    apply<RetrofitPlugin>()
     with(plugins) {
         apply("kotlin-parcelize")
     }
