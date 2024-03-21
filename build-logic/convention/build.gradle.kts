@@ -52,5 +52,9 @@ gradlePlugin {
             id = "org.sopt.official.kotlin"
             implementationClass = "org.sopt.official.plugin.KotlinJvmPlugin"
         }
+        create("retrofit") {
+            id = "org.sopt.official.retrofit"
+            implementationClass = "org.sopt.official.plugin.RetrofitPlugin"
+        }
     }
 }

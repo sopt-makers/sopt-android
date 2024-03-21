@@ -35,8 +35,6 @@ android {
 dependencies {
     implementation(projects.core.common)
     implementation(libs.security)
-    implementation(libs.retrofit)
-    implementation(libs.retrofit.kotlin.serialization.converter)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.process.phoenix)
