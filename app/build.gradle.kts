@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
-import java.util.*
+import java.util.Properties
 
 plugins {
     sopt("application")
@@ -174,6 +174,7 @@ ktlint {
     coloredOutput.set(true)
     verbose.set(true)
     outputToConsole.set(true)
+    version.set("1.2.1")
     filter {
         exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
         exclude { it.file.name.contains("gradle") }
