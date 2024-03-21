@@ -49,17 +49,9 @@ interface PokeRepository {
 
     suspend fun getFriendListSummary(): GetFriendListSummaryResponse
 
-    suspend fun getFriendListDetail(
-        type: PokeFriendType,
-        page: Int,
-    ): GetFriendListDetailResponse
+    suspend fun getFriendListDetail(type: PokeFriendType, page: Int,): GetFriendListDetailResponse
 
-    suspend fun getPokeMessageList(
-        messageType: PokeMessageType,
-    ): GetPokeMessageListResponse
+    suspend fun getPokeMessageList(messageType: PokeMessageType,): GetPokeMessageListResponse
 
-    suspend fun pokeUser(
-        userId: Int,
-        message: String,
-    ): PokeUserResponse
+    suspend fun pokeUser(userId: Int, message: String,): PokeUserResponse
 }

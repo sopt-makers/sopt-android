@@ -65,8 +65,7 @@ class ContentUriRequestBody(
 
     override fun contentLength(): Long = size
 
-    override fun contentType(): MediaType? =
-        uri?.let { contentResolver.getType(it)?.toMediaTypeOrNull() }
+    override fun contentType(): MediaType? = uri?.let { contentResolver.getType(it)?.toMediaTypeOrNull() }
 
     override fun writeTo(sink: BufferedSink) {
         uri?.let {

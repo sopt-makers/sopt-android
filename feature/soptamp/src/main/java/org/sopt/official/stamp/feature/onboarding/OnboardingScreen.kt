@@ -70,16 +70,14 @@ private enum class OnBoardingPageUiModel(
         image = R.drawable.ic_onboarding_3,
         title = "완료된 미션으로 추억 감상하기",
         content = "완료된 미션을 확인하며\n추억을 감상할 수 있어요"
-    );
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @MissionNavGraph
 @Destination("onboarding")
 @Composable
-fun OnboardingScreen(
-    navigator: DestinationsNavigator
-) {
+fun OnboardingScreen(navigator: DestinationsNavigator) {
     val onboardingPages = OnBoardingPageUiModel.entries.toTypedArray()
     val pageState = rememberPagerState { onboardingPages.size }
     SoptTheme {
@@ -131,10 +129,7 @@ fun OnboardingScreen(
 }
 
 @Composable
-fun OnboardingButton(
-    isButtonEnabled: Boolean = true,
-    onClick: () -> Unit = {}
-) {
+fun OnboardingButton(isButtonEnabled: Boolean = true, onClick: () -> Unit = {}) {
     Button(
         onClick = { onClick() },
         enabled = isButtonEnabled,

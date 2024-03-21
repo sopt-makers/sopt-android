@@ -37,12 +37,7 @@ import org.sopt.official.stamp.designsystem.style.PretendardMedium
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
-fun RankScore(
-    modifier: Modifier = Modifier,
-    rank: Int,
-    score: Int,
-    isMyRankScore: Boolean = false
-) {
+fun RankScore(modifier: Modifier = Modifier, rank: Int, score: Int, isMyRankScore: Boolean = false) {
     val textColor = if (isMyRankScore) {
         SoptTheme.colors.purple300
     } else {

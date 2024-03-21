@@ -55,8 +55,7 @@ abstract class PlaygroundResultReceiver<T> : ResultReceiver(Handler(Looper.getMa
         receiveFailure(resultData)
     }
 
-    private fun logResultData(resultData: Bundle?) =
-        PlaygroundLog.d("Auth State Result Data: $resultData")
+    private fun logResultData(resultData: Bundle?) = PlaygroundLog.d("Auth State Result Data: $resultData")
 
     abstract fun receiveSuccess(resultData: Bundle?)
 

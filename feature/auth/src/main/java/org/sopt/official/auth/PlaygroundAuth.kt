@@ -33,8 +33,8 @@ import kotlinx.coroutines.launch
 import org.sopt.official.auth.data.PlaygroundApiManager
 import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.data.RemotePlaygroundAuthDatasource
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.auth.utils.PlaygroundUriProvider
+import org.sopt.official.network.model.response.OAuthToken
 
 object PlaygroundAuth {
     fun authorizeWithWebTab(
@@ -59,12 +59,7 @@ object PlaygroundAuth {
         )
     }
 
-    private fun startAuthTab(
-        context: Context,
-        uri: Uri,
-        state: String,
-        resultReceiver: ResultReceiver
-    ) {
+    private fun startAuthTab(context: Context, uri: Uri, state: String, resultReceiver: ResultReceiver) {
         AuthIntentFactory.authIntentWithAuthTab(
             context = context,
             uri = uri,
@@ -73,25 +68,20 @@ object PlaygroundAuth {
         ).run { context.startActivity(this) }
     }
 
-    private fun resultReceiver(
-        authDataSource: PlaygroundAuthDatasource,
-        callback: (Result<OAuthToken>) -> Unit
-    ) = PlaygroundAuthResultReceiver(
-        callback = { code, error ->
-            if (error != null) {
-                callback(Result.failure(error as PlaygroundError))
-            } else {
-                code ?: throw IllegalStateException()
-                requestOauthToken(authDataSource, code, callback)
+    private fun resultReceiver(authDataSource: PlaygroundAuthDatasource, callback: (Result<OAuthToken>) -> Unit) =
+        PlaygroundAuthResultReceiver(
+            callback = { code, error ->
+                if (error != null) {
+                    callback(Result.failure(error as PlaygroundError))
+                } else {
+                    code ?: throw IllegalStateException()
+                    requestOauthToken(authDataSource, code, callback)
+                }
             }
-        }
-    )
+        )
 
-    private fun requestOauthToken(
-        authDataSource: PlaygroundAuthDatasource,
-        code: String,
-        callback: (Result<OAuthToken>) -> Unit
-    ) = CoroutineScope(Dispatchers.Default).launch {
-        callback(authDataSource.oauth(code))
-    }
+    private fun requestOauthToken(authDataSource: PlaygroundAuthDatasource, code: String, callback: (Result<OAuthToken>) -> Unit) =
+        CoroutineScope(Dispatchers.Default).launch {
+            callback(authDataSource.oauth(code))
+        }
 }

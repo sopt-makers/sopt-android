@@ -24,12 +24,12 @@
  */
 package org.sopt.official.data.soptamp.repository
 
+import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 import org.sopt.official.domain.soptamp.model.Mission
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
-import javax.inject.Inject
 
 internal class RemoteMissionsRepository @Inject constructor(
     private val remote: MissionsDataSource

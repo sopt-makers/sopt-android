@@ -26,8 +26,8 @@ package org.sopt.official.data.mypage.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import org.sopt.official.domain.soptamp.constant.Soptamp
 import javax.inject.Inject
+import org.sopt.official.domain.soptamp.constant.Soptamp
 
 class SoptampDataStore @Inject constructor(
     @Soptamp private val dataStore: SharedPreferences

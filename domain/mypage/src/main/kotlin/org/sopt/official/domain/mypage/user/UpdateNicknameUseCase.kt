@@ -24,8 +24,8 @@
  */
 package org.sopt.official.domain.mypage.user
 
-import org.sopt.official.domain.mypage.repository.UserRepository
 import javax.inject.Inject
+import org.sopt.official.domain.mypage.repository.UserRepository
 
 class UpdateNicknameUseCase @Inject constructor(
     private val repository: UserRepository

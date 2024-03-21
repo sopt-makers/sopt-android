@@ -30,24 +30,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.poke.databinding.FragmentOnboardingBottomSheetBinding
 
 class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
-
-    private var _binding: FragmentOnboardingBottomSheetBinding? = null
-    private val binding: FragmentOnboardingBottomSheetBinding get() = requireNotNull(_binding)
+    private val binding by viewBinding(FragmentOnboardingBottomSheetBinding::bind)
 
     var onDismissEvent: (() -> Unit)? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentOnboardingBottomSheetBinding.inflate(layoutInflater)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
+        return FragmentOnboardingBottomSheetBinding.inflate(layoutInflater).root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?,) {
         super.onViewCreated(view, savedInstanceState)
         initClickListener()
     }
@@ -61,9 +56,9 @@ class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
         onDismissEvent?.let { it() }
     }
 
-
     class Builder {
         private val bottomSheet = OnboardingBottomSheetFragment()
+
         fun create(): OnboardingBottomSheetFragment = bottomSheet
 
         fun setOnDismissEvent(onDismissEvent: () -> Unit): Builder {

@@ -35,23 +35,22 @@ import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
-import org.sopt.official.feature.poke.databinding.ItemPokeNotificationHeaderBinding
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 class PokeNotificationAdapter(
     private val clickListener: PokeUserListClickListener,
-): ListAdapter<PokeUser, PokeNotificationAdapter.NotificationListViewHolder>(
+) : ListAdapter<PokeUser, PokeNotificationAdapter.NotificationListViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.userId == new.userId },
-        onItemsTheSame = { old, new -> old == new }
-    )
+        onItemsTheSame = { old, new -> old == new },
+    ),
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): NotificationListViewHolder {
         return NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int,) {
         holder.apply {
             onBind(currentList[position])
 
@@ -82,7 +81,7 @@ class PokeNotificationAdapter(
     }
 
     inner class NotificationListViewHolder(
-        private val viewBinding: ItemPokeNotificationBinding
+        private val viewBinding: ItemPokeNotificationBinding,
     ) : RecyclerView.ViewHolder(viewBinding.root) {
         fun onBind(item: PokeUser) {
             with(viewBinding) {
@@ -93,11 +92,12 @@ class PokeNotificationAdapter(
                 tvUserName.text = item.name
                 tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message
-                tvUserFriendsStatus.text = if (item.isFirstMeet) {
-                    item.mutualRelationMessage
-                } else {
-                    "친한친구 ${item.pokeNum}콕"
-                }
+                tvUserFriendsStatus.text =
+                    if (item.isFirstMeet) {
+                        item.mutualRelationMessage
+                    } else {
+                        "친한친구 ${item.pokeNum}콕"
+                    }
                 imgPoke.isEnabled = !item.isAlreadyPoke
             }
         }

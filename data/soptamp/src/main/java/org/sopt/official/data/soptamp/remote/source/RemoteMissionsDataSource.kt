@@ -24,13 +24,13 @@
  */
 package org.sopt.official.data.soptamp.remote.source
 
+import java.net.UnknownHostException
+import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.remote.api.SoptampService
 import org.sopt.official.data.soptamp.remote.mapper.toData
 import org.sopt.official.data.soptamp.remote.model.MissionData
 import org.sopt.official.data.soptamp.source.MissionsDataSource
-import java.net.UnknownHostException
-import javax.inject.Inject
 
 internal class RemoteMissionsDataSource @Inject constructor(
     private val soptampService: SoptampService

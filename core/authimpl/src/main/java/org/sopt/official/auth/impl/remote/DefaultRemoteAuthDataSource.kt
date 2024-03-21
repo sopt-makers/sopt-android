@@ -24,15 +24,15 @@
  */
 package org.sopt.official.auth.impl.remote
 
-import org.sopt.official.common.di.Auth
+import javax.inject.Inject
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.response.LogOutRequest
 import org.sopt.official.auth.impl.model.response.LogOutResponse
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
-import org.sopt.official.network.model.response.AuthResponse
+import org.sopt.official.common.di.Auth
 import org.sopt.official.network.model.request.RefreshRequest
+import org.sopt.official.network.model.response.AuthResponse
 import org.sopt.official.network.service.RefreshService
-import javax.inject.Inject
 
 class DefaultRemoteAuthDataSource @Inject constructor(
     @Auth private val authService: AuthService,

@@ -33,12 +33,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.mocking.MockableMavericks
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {

@@ -32,8 +32,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,11 +48,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
-fun TopRankerItem(
-    ranker: RankerUiModel,
-    height: Dp,
-    onClick: (RankerUiModel) -> Unit = {}
-) {
+fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) -> Unit = {}) {
     Column(
         modifier = Modifier.noRippleClickable { onClick(ranker) },
         verticalArrangement = Arrangement.Bottom,
@@ -91,11 +87,7 @@ fun TopRankBarOfRankText(rank: Int) {
 }
 
 @Composable
-fun TopRankBarOfGraph(
-    rank: Int,
-    score: Int,
-    height: Dp
-) {
+fun TopRankBarOfGraph(rank: Int, score: Int, height: Dp) {
     Box(
         modifier = Modifier
             .size(90.dp, height)

@@ -33,13 +33,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import java.security.KeyStore
+import javax.inject.Singleton
 import org.sopt.official.data.soptamp.BuildConfig
 import org.sopt.official.domain.soptamp.constant.Constant
 import org.sopt.official.domain.soptamp.constant.Soptamp
 import org.sopt.official.domain.soptamp.constant.Strings
 import timber.log.Timber
-import java.security.KeyStore
-import javax.inject.Singleton
 
 private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
 private const val ANDROID_KEY_STORE = "AndroidKeyStore"
@@ -62,11 +62,7 @@ object ConfigModule {
         createSharedPreference(!BuildConfig.DEBUG, fileName, context)
     }
 
-    private fun createSharedPreference(
-        isEncrypted: Boolean,
-        fileName: String,
-        context: Context
-    ) = if (isEncrypted) {
+    private fun createSharedPreference(isEncrypted: Boolean, fileName: String, context: Context) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
             context,
             fileName,

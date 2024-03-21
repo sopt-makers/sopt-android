@@ -26,13 +26,13 @@ package org.sopt.official.common.util
 
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import java.util.Date
-import java.util.Locale
 
 fun Instant.Companion.systemNow(): Instant = Clock.System.now()
 

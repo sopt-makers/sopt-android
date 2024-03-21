@@ -38,12 +38,8 @@ interface AttendanceService {
     suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse>
 
     @GET("/api/v1/app/lectures/round/{lectureId}")
-    suspend fun getAttendanceRound(
-        @Path("lectureId") lectureId: Long
-    ): BaseAttendanceResponse<AttendanceRoundResponse>
+    suspend fun getAttendanceRound(@Path("lectureId") lectureId: Long): BaseAttendanceResponse<AttendanceRoundResponse>
 
     @POST("/api/v1/app/attendances/attend")
-    suspend fun confirmAttendanceCode(
-        @Body param: RequestAttendanceCode
-    ): BaseAttendanceResponse<AttendanceCodeResponse>
+    suspend fun confirmAttendanceCode(@Body param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse>
 }

@@ -28,10 +28,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import org.sopt.official.data.soptamp.BuildConfig
 import org.sopt.official.domain.soptamp.constant.Constant
 import org.sopt.official.domain.soptamp.constant.Strings
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

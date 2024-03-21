@@ -24,9 +24,9 @@
  */
 package org.sopt.official.domain.usecase
 
+import javax.inject.Inject
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.repository.AuthRepository
-import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository

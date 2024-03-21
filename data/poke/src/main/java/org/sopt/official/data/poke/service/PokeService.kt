@@ -46,36 +46,26 @@ interface PokeService {
     suspend fun getOnboardingPokeUserList(): Response<List<PokeUserResult>>
 
     @GET("poke/to/me")
-    suspend fun getPokeMe() : Response<PokeUserResult>
+    suspend fun getPokeMe(): Response<PokeUserResult>
 
     @GET("poke/friend")
-    suspend fun getPokeFriend() : Response<List<PokeUserResult>>
+    suspend fun getPokeFriend(): Response<List<PokeUserResult>>
 
     @GET("poke/friend/random-user")
     suspend fun getPokeFriendOfFriendList(): Response<List<PokeFriendOfFriendListResult>>
 
     @GET("poke/to/me/list")
-    suspend fun getPokeNotificationList(
-        @Query("page") page: Int,
-    ): Response<PokeNotificationResult>
+    suspend fun getPokeNotificationList(@Query("page") page: Int,): Response<PokeNotificationResult>
 
     @GET("poke/friend/list")
     suspend fun getFriendListSummary(): Response<GetFriendListSummaryResult>
 
     @GET("poke/friend/list")
-    suspend fun getFriendListDetail(
-        @Query("type") type: String,
-        @Query("page") page: Int,
-    ): Response<GetFriendListDetailResult>
+    suspend fun getFriendListDetail(@Query("type") type: String, @Query("page") page: Int,): Response<GetFriendListDetailResult>
 
     @GET("poke/message")
-    suspend fun getPokeMessageList(
-        @Query("messageType") messageType: String,
-    ): Response<GetPokeMessageListResult>
+    suspend fun getPokeMessageList(@Query("messageType") messageType: String,): Response<GetPokeMessageListResult>
 
     @PUT("poke/{userId}")
-    suspend fun pokeUser(
-        @Path("userId") userId: Int,
-        @Body message: String,
-    ): Response<PokeUserResult>
+    suspend fun pokeUser(@Path("userId") userId: Int, @Body message: String,): Response<PokeUserResult>
 }

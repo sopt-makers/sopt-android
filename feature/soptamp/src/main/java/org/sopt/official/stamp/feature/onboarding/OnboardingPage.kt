@@ -44,11 +44,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun OnboardingPage(
-    @DrawableRes image: Int,
-    title: String,
-    content: String
-) {
+fun OnboardingPage(@DrawableRes image: Int, title: String, content: String) {
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally

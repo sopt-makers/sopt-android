@@ -24,8 +24,8 @@
  */
 package org.sopt.official.domain.mypage.user
 
-import org.sopt.official.domain.mypage.repository.UserRepository
 import javax.inject.Inject
+import org.sopt.official.domain.mypage.repository.UserRepository
 
 class CheckNicknameDuplicateUseCase @Inject constructor(
     private val userRepository: UserRepository

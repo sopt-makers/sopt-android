@@ -36,11 +36,7 @@ import org.sopt.official.stamp.designsystem.style.MontserratBold
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
-fun RankNumber(
-    modifier: Modifier = Modifier,
-    rank: Int,
-    isMyRankNumber: Boolean = false
-) {
+fun RankNumber(modifier: Modifier = Modifier, rank: Int, isMyRankNumber: Boolean = false) {
     val defaultRankSymbols = "-"
     Text(
         text = if (rank <= 0) defaultRankSymbols else "$rank",

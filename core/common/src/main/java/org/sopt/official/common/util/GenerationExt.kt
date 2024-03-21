@@ -32,11 +32,7 @@ import kotlinx.datetime.toLocalDate
 
 private const val BASE_DATE = "2007-03-01"
 
-fun calculateGenerationStartDate(
-    generation: Int,
-    period: Int = 6,
-    from: LocalDate = BASE_DATE.toLocalDate()
-): LocalDate {
+fun calculateGenerationStartDate(generation: Int, period: Int = 6, from: LocalDate = BASE_DATE.toLocalDate()): LocalDate {
     val monthsToTake = generation * period
     return from.plus(monthsToTake, DateTimeUnit.MONTH)
 }

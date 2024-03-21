@@ -48,6 +48,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
@@ -55,9 +58,6 @@ import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.domain.soptamp.error.Error
-import org.sopt.official.domain.soptamp.MissionLevel
-import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -173,10 +173,7 @@ fun DescriptionText(description: String) {
 }
 
 @Composable
-fun UserMissionListHeader(
-    title: String,
-    onClickBack: () -> Unit = {}
-) {
+fun UserMissionListHeader(title: String, onClickBack: () -> Unit = {}) {
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
         navigationIcon = {

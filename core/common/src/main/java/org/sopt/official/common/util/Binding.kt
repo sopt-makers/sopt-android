@@ -35,9 +35,7 @@ import androidx.viewbinding.ViewBinding
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
-inline fun <T : ViewBinding> AppCompatActivity.viewBinding(
-    crossinline inflater: (LayoutInflater) -> T
-) = lazy(LazyThreadSafetyMode.NONE) {
+inline fun <T : ViewBinding> AppCompatActivity.viewBinding(crossinline inflater: (LayoutInflater) -> T) = lazy(LazyThreadSafetyMode.NONE) {
     inflater.invoke(layoutInflater)
 }
 
@@ -80,5 +78,4 @@ class FragmentViewBindingDelegate<F : Fragment, T : ViewBinding>(
     }
 }
 
-fun <T : ViewBinding> Fragment.viewBinding(viewBinder: (View) -> T) =
-    FragmentViewBindingDelegate(this, viewBinder)
+fun <T : ViewBinding> Fragment.viewBinding(viewBinder: (View) -> T) = FragmentViewBindingDelegate(this, viewBinder)

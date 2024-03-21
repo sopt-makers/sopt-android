@@ -37,10 +37,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun SoptampFloatingButton(
-    text: String,
-    onClick: () -> Unit = {}
-) {
+fun SoptampFloatingButton(text: String, onClick: () -> Unit = {}) {
     ExtendedFloatingActionButton(
         text = {
             Text(

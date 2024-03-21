@@ -43,9 +43,7 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
-fun SingleOptionDialog(
-    onConfirm: () -> Unit
-) {
+fun SingleOptionDialog(onConfirm: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -30,5 +30,5 @@ enum class Part(val partName: String) {
     ANDROID("안드로이드"),
     IOS("iOS"),
     WEB("웹"),
-    SERVER("서버");
+    SERVER("서버")
 }

@@ -41,18 +41,10 @@ class FakeKeyStore : KeyStoreSpi() {
     override fun engineGetCertificate(alias: String?): Certificate = wrapped.getCertificate(alias)
     override fun engineGetCreationDate(alias: String?): Date = wrapped.getCreationDate(alias)
     override fun engineDeleteEntry(alias: String?) = wrapped.deleteEntry(alias)
-    override fun engineSetKeyEntry(
-        alias: String?,
-        key: Key?,
-        password: CharArray?,
-        chain: Array<out Certificate>?
-    ) = wrapped.setKeyEntry(alias, key, password, chain)
+    override fun engineSetKeyEntry(alias: String?, key: Key?, password: CharArray?, chain: Array<out Certificate>?) =
+        wrapped.setKeyEntry(alias, key, password, chain)
 
-    override fun engineSetKeyEntry(
-        alias: String?,
-        key: ByteArray?,
-        chain: Array<out Certificate>?
-    ) = wrapped.setKeyEntry(alias, key, chain)
+    override fun engineSetKeyEntry(alias: String?, key: ByteArray?, chain: Array<out Certificate>?) = wrapped.setKeyEntry(alias, key, chain)
 
     override fun engineStore(stream: OutputStream?, password: CharArray?) = wrapped.store(stream, password)
     override fun engineSize(): Int = wrapped.size()

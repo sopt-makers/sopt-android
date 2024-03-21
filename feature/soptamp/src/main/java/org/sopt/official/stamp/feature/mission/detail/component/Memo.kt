@@ -48,13 +48,7 @@ import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Memo(
-    value: String,
-    placeHolder: String,
-    onValueChange: (String) -> Unit,
-    borderColor: Color,
-    isEditable: Boolean
-) {
+fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, borderColor: Color, isEditable: Boolean) {
     val isEmpty = remember(value) { value.isEmpty() }
 
     val modifier = Modifier

@@ -97,12 +97,11 @@ object PlaygroundCustomTabManager {
         context.packageManager.resolveActivityInfo(it)
     }
 
-    private fun queryCustomTabsConnectionServices(context: Context): List<ResolveInfo> =
-        Intent().setAction(
-            CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
-        ).let {
-            context.packageManager.queryServicesInfo(it)
-        }
+    private fun queryCustomTabsConnectionServices(context: Context): List<ResolveInfo> = Intent().setAction(
+        CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION
+    ).let {
+        context.packageManager.queryServicesInfo(it)
+    }
 
     private fun String.isChromePackageName(): Boolean = arrayOf(
         "com.android.chrome",

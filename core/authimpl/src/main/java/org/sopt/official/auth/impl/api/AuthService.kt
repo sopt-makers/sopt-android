@@ -35,15 +35,11 @@ import retrofit2.http.POST
 
 interface AuthService {
     @POST("auth/playground")
-    suspend fun authenticate(
-        @Body body: AuthRequest
-    ): AuthResponse
+    suspend fun authenticate(@Body body: AuthRequest): AuthResponse
 
     @DELETE("user")
     suspend fun withdraw()
 
     @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
-    suspend fun logOut(
-        @Body body: LogOutRequest
-    ): LogOutResponse
+    suspend fun logOut(@Body body: LogOutRequest): LogOutResponse
 }

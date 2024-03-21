@@ -22,7 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.soptamp.mapper // ktlint-disable filename
+@file:Suppress("ktlint:standard:filename")
+
+package org.sopt.official.data.soptamp.mapper
 
 import org.sopt.official.data.soptamp.remote.model.MissionData
 import org.sopt.official.domain.soptamp.model.Mission

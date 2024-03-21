@@ -29,17 +29,17 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.common.di.AppRetrofit
-import org.sopt.official.common.di.Auth
-import org.sopt.official.auth.impl.repository.AuthRepositoryImpl
+import javax.inject.Singleton
+import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.local.DefaultLocalAuthDataSource
 import org.sopt.official.auth.impl.remote.DefaultRemoteAuthDataSource
+import org.sopt.official.auth.impl.repository.AuthRepositoryImpl
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
-import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.repository.AuthRepository
+import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.Auth
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

@@ -24,15 +24,15 @@
  */
 package org.sopt.official.auth.impl.repository
 
-import org.sopt.official.auth.repository.AuthRepository
-import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import javax.inject.Inject
 import org.sopt.official.auth.impl.mapper.AuthMapper
 import org.sopt.official.auth.impl.model.response.LogOutRequest
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
+import org.sopt.official.auth.model.Token
+import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.network.model.request.RefreshRequest
-import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: RemoteAuthDataSource,
@@ -54,9 +54,7 @@ class AuthRepositoryImpl @Inject constructor(
         remoteAuthDataSource.withdraw()
     }
 
-    override suspend fun logout(
-        pushToken: String
-    ): Result<Unit> = runCatching {
+    override suspend fun logout(pushToken: String): Result<Unit> = runCatching {
         remoteAuthDataSource.logout(
             LogOutRequest(
                 platform = "Android",

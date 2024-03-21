@@ -43,20 +43,12 @@ enum class DeepLinkType(
     val link: String
 ) {
     HOME("home") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return getHomeIntent(context, userStatus)
         }
     },
     NOTIFICATION_LIST("home/notification") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, NotificationHistoryActivity::class.java)
@@ -64,11 +56,7 @@ enum class DeepLinkType(
         }
     },
     NOTIFICATION_DETAIL("home/notification/detail") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             val notificationId = deepLink.extractQueryParameter("id")
             return userStatus.setIntent(
                 context,
@@ -80,11 +68,7 @@ enum class DeepLinkType(
         }
     },
     MY_PAGE("home/mypage") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 MyPageActivity.getIntent(
@@ -95,11 +79,7 @@ enum class DeepLinkType(
         }
     },
     ATTENDANCE("home/attendance") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, AttendanceActivity::class.java)
@@ -107,11 +87,7 @@ enum class DeepLinkType(
         }
     },
     ATTENDANCE_MODAL("home/attendance/attendance-modal") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, AttendanceActivity::class.java)
@@ -119,11 +95,7 @@ enum class DeepLinkType(
         }
     },
     SOPTAMP("home/soptamp") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, SoptampActivity::class.java)
@@ -131,11 +103,7 @@ enum class DeepLinkType(
         }
     },
     SOPTAMP_ENTIRE_RANKING("home/soptamp/entire-ranking") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, SoptampActivity::class.java)
@@ -143,11 +111,7 @@ enum class DeepLinkType(
         }
     },
     SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return userStatus.setIntent(
                 context,
                 Intent(context, SoptampActivity::class.java)
@@ -166,46 +130,27 @@ enum class DeepLinkType(
         }
     },
     UNKNOWN("unknown-deep-link") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return getHomeIntent(context, userStatus, UNKNOWN)
         }
     },
     EXPIRED("expired") {
-        override fun getIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLink: String,
-        ): Intent {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent {
             return getHomeIntent(context, userStatus, EXPIRED)
         }
     };
 
-    abstract fun getIntent(
-        context: Context,
-        userStatus: UserStatus,
-        deepLink: String,
-    ): Intent
+    abstract fun getIntent(context: Context, userStatus: UserStatus, deepLink: String,): Intent
 
     companion object {
-        private fun UserStatus.setIntent(
-            context: Context,
-            intent: Intent,
-        ): Intent {
+        private fun UserStatus.setIntent(context: Context, intent: Intent,): Intent {
             return when (this == UserStatus.UNAUTHENTICATED) {
                 true -> AuthActivity.newInstance(context)
                 false -> intent
             }
         }
 
-        fun getHomeIntent(
-            context: Context,
-            userStatus: UserStatus,
-            deepLinkType: DeepLinkType? = null
-        ): Intent {
+        fun getHomeIntent(context: Context, userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent {
             return userStatus.setIntent(
                 context,
                 HomeActivity.getIntent(

@@ -27,6 +27,7 @@ package org.sopt.official.feature.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,6 @@ import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.usecase.notification.GetNotificationHistoryUseCase
 import org.sopt.official.domain.usecase.notification.UpdateEntireNotificationReadingStateUseCase
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class NotificationHistoryViewModel @Inject constructor(

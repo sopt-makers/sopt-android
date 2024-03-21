@@ -35,6 +35,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -47,17 +49,14 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.user.PokeUserListAdapter
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
-
     private val binding by viewBinding(ActivityOnboardingBinding::inflate)
     private val viewModel by viewModels<OnboardingViewModel>()
 
@@ -102,52 +101,64 @@ class OnboardingActivity : AppCompatActivity() {
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.getOnboardingPokeUserList()
             }
-            recyclerView.adapter = PokeUserListAdapter(
-                pokeUserListItemViewType = PokeUserListItemViewType.LARGE,
-                clickListener = pokeUserListClickLister,
-            )
+            recyclerView.adapter =
+                PokeUserListAdapter(
+                    pokeUserListItemViewType = PokeUserListItemViewType.LARGE,
+                    clickListener = pokeUserListClickLister,
+                )
         }
     }
 
-    private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage(playgroundId: Int) {
-            tracker.track(
-                type = EventType.CLICK,
-                name = "memberprofile",
-                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to playgroundId)
-            )
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
-        }
+    private val pokeUserListClickLister =
+        object : PokeUserListClickListener {
+            override fun onClickProfileImage(playgroundId: Int) {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "memberprofile",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to playgroundId),
+                )
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+            }
 
-        override fun onClickPokeButton(user: PokeUser) {
-            tracker.track(
-                type = EventType.CLICK,
-                name = "poke_icon",
-                properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.playgroundId)
-            )
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
-                .create()
+            override fun onClickPokeButton(user: PokeUser) {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "poke_icon",
+                    properties =
+                    mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "onboarding",
+                        "view_profile" to user.playgroundId,
+                    ),
+                )
+                messageListBottomSheet =
+                    MessageListBottomSheetFragment.Builder()
+                        .setMessageListType(PokeMessageType.POKE_SOMEONE)
+                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                        .create()
 
-            messageListBottomSheet?.let {
-                it.show(supportFragmentManager, it.tag)
+                messageListBottomSheet?.let {
+                    it.show(supportFragmentManager, it.tag)
+                }
             }
         }
-    }
 
     private fun initLottieAnimatorListener() {
         binding.apply {
-            animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) {
-                    layoutLottie.visibility = View.GONE
-                    setIntentToPokeMain()
-                }
+            animationViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
 
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
+                    override fun onAnimationEnd(animation: Animator) {
+                        layoutLottie.visibility = View.GONE
+                        setIntentToPokeMain()
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
             layoutLottie.setOnClickListener {
                 // do nothing
             }
@@ -163,9 +174,10 @@ class OnboardingActivity : AppCompatActivity() {
     private fun showOnboardingBottomSheet() {
         if (onboardingBottomSheet?.isAdded == true) return
         if (onboardingBottomSheet == null) {
-            onboardingBottomSheet = OnboardingBottomSheetFragment.Builder()
-                .setOnDismissEvent { viewModel.updateNewInPokeOnboarding() }
-                .create()
+            onboardingBottomSheet =
+                OnboardingBottomSheetFragment.Builder()
+                    .setOnDismissEvent { viewModel.updateNewInPokeOnboarding() }
+                    .create()
         }
         onboardingBottomSheet?.let {
             it.show(supportFragmentManager, it.tag)
@@ -245,9 +257,8 @@ class OnboardingActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, OnboardingActivity::class.java).apply {
-                putExtra("args", args)
-            }
+        fun getIntent(context: Context, args: StartArgs,) = Intent(context, OnboardingActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }

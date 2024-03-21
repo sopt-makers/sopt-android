@@ -37,9 +37,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,8 +59,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
-import org.sopt.official.domain.soptamp.fake.FakeUserRepository
 import org.sopt.official.domain.mypage.user.UpdateProfileUseCase
+import org.sopt.official.domain.soptamp.fake.FakeUserRepository
 import org.sopt.official.stamp.config.navigation.SettingNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
@@ -73,10 +73,7 @@ import org.sopt.official.stamp.util.addFocusCleaner
 @SettingNavGraph
 @Destination("introduction")
 @Composable
-fun UpdateProfileScreen(
-    resultNavigator: ResultBackNavigator<Boolean>,
-    viewModel: UpdateProfileViewModel = hiltViewModel()
-) {
+fun UpdateProfileScreen(resultNavigator: ResultBackNavigator<Boolean>, viewModel: UpdateProfileViewModel = hiltViewModel()) {
     val focusRequester by remember { mutableStateOf(FocusRequester()) }
     val focusManager = LocalFocusManager.current
     val context = LocalContext.current

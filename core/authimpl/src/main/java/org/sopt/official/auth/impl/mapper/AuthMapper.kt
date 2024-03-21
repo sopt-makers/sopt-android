@@ -30,7 +30,7 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.network.model.response.AuthResponse
 
 class AuthMapper {
-    fun toEntity(responseItem:AuthResponse) = Auth(
+    fun toEntity(responseItem: AuthResponse) = Auth(
         Token(
             accessToken = responseItem.accessToken,
             refreshToken = responseItem.refreshToken,

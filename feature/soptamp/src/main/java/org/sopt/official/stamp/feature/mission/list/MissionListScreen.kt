@@ -64,6 +64,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
+import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
@@ -73,9 +76,6 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.domain.soptamp.error.Error
-import org.sopt.official.domain.soptamp.MissionLevel
-import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
@@ -237,12 +237,7 @@ fun MissionEmptyScreen(contentText: String) {
 }
 
 @Composable
-fun MissionListHeader(
-    title: String,
-    menuTexts: List<String>,
-    onMenuClick: (String) -> Unit = {},
-    onOnboadingButtonClick: () -> Unit = {}
-) {
+fun MissionListHeader(title: String, menuTexts: List<String>, onMenuClick: (String) -> Unit = {}, onOnboadingButtonClick: () -> Unit = {}) {
     var currentText by remember { mutableStateOf(title) }
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
@@ -266,9 +261,7 @@ fun MissionListHeader(
 }
 
 @Composable
-fun MissionListHeaderTitle(
-    title: String
-) {
+fun MissionListHeaderTitle(title: String) {
     Text(
         text = title,
         color = Color.Black,
@@ -277,10 +270,7 @@ fun MissionListHeaderTitle(
 }
 
 @Composable
-fun DropDownMenuButton(
-    menuTexts: List<String>,
-    onMenuClick: (String) -> Unit = {}
-) {
+fun DropDownMenuButton(menuTexts: List<String>, onMenuClick: (String) -> Unit = {}) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
     Box {

@@ -26,13 +26,13 @@ package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
-import javax.inject.Inject
 
 sealed interface AuthUiEvent {
     data class Success(val userStatus: UserStatus) : AuthUiEvent

@@ -37,21 +37,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.util.DefaultPreview
 import org.sopt.official.stamp.designsystem.component.ratingbar.RatingBar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.feature.ranking.headerBackgroundColorOf
+import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Header(
-    title: String,
-    stars: Int,
-    toolbarIconType: ToolbarIconType,
-    isMe: Boolean,
-    isCompleted: Boolean
-) {
+fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Boolean, isCompleted: Boolean) {
     Surface(
         modifier = Modifier
             .background(

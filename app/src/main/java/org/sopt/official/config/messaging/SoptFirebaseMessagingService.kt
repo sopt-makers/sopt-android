@@ -32,16 +32,16 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
-import javax.inject.Inject
+import org.sopt.official.network.persistence.SoptDataStore
 
 @AndroidEntryPoint
 class SoptFirebaseMessagingService : FirebaseMessagingService() {

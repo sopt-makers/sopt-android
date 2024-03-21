@@ -118,12 +118,7 @@ fun SoptTopAppBar(
 }
 
 @Composable
-fun SoptAppBar(
-    backgroundColor: Color,
-    elevation: Dp,
-    modifier: Modifier,
-    content: @Composable RowScope.() -> Unit
-) {
+fun SoptAppBar(backgroundColor: Color, elevation: Dp, modifier: Modifier, content: @Composable RowScope.() -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()

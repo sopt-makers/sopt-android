@@ -29,6 +29,7 @@ package org.sopt.official.stamp.feature.setting.nickname
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -42,12 +43,11 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.user.CheckNicknameDuplicateUseCase
 import org.sopt.official.domain.mypage.user.UpdateNicknameUseCase
 import retrofit2.HttpException
-import javax.inject.Inject
 
 enum class UpdateNicknameErrorState {
     INPUT_EMPTY,
     IS_NOT_NEW,
-    REQUEST_ERROR;
+    REQUEST_ERROR
 }
 
 data class UpdateNicknameUiState(

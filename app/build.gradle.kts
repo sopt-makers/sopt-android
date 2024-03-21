@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
-import java.util.*
+import java.util.Properties
 
 plugins {
     sopt("application")
@@ -38,9 +38,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-val properties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
-}
+val properties =
+    Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
 android {
     namespace = "org.sopt.official"
 
@@ -84,7 +85,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
         }
@@ -174,6 +175,7 @@ ktlint {
     coloredOutput.set(true)
     verbose.set(true)
     outputToConsole.set(true)
+    version.set("1.2.1")
     filter {
         exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
         exclude { it.file.name.contains("gradle") }

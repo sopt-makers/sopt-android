@@ -35,10 +35,7 @@ import retrofit2.Retrofit
 
 internal object ServiceFactory {
     @OptIn(ExperimentalSerializationApi::class)
-    fun withClient(
-        url: String,
-        client: OkHttpClient
-    ): Retrofit = Retrofit.Builder()
+    fun withClient(url: String, client: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(url)
         .client(client)
         .addConverterFactory(serializer.asConverterFactory("application/json".toMediaType()))

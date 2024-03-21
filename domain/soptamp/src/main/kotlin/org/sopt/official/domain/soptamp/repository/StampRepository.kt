@@ -28,22 +28,11 @@ import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 
 interface StampRepository {
-    suspend fun completeMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ): Result<Unit>
+    suspend fun completeMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit>
 
-    suspend fun getMissionContent(
-        missionId: Int,
-        nickname: String,
-    ): Result<Archive>
+    suspend fun getMissionContent(missionId: Int, nickname: String,): Result<Archive>
 
-    suspend fun modifyMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ): Result<Unit>
+    suspend fun modifyMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit>
 
     suspend fun deleteMission(missionId: Int): Result<Unit>
 

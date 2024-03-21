@@ -45,14 +45,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.official.auth.model.UserActiveState
-import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.R
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.util.serializableExtra
@@ -70,7 +72,6 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.feature.poke.UiState
@@ -78,8 +79,7 @@ import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
-import java.io.Serializable
-import javax.inject.Inject
+import org.sopt.official.util.AlertDialogOneButton
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -273,10 +273,7 @@ class HomeActivity : AppCompatActivity() {
         )
     }
 
-    private fun TextView.setGenerationText(
-        activeGeneration: SoptActiveGeneration?,
-        comparator: Int
-    ) {
+    private fun TextView.setGenerationText(activeGeneration: SoptActiveGeneration?, comparator: Int) {
         isVisible = activeGeneration?.isLongerOrEqual(comparator) == true
         if (activeGeneration?.isLongerOrEqual(comparator) == true) {
             text = activeGeneration.textAt(comparator - 1)
@@ -353,9 +350,11 @@ class HomeActivity : AppCompatActivity() {
 
     private fun handleDeepLinkDialog() {
         if (
-            args?.deepLinkType != DeepLinkType.UNKNOWN
-            && args?.deepLinkType != DeepLinkType.EXPIRED
-        ) return
+            args?.deepLinkType != DeepLinkType.UNKNOWN &&
+            args?.deepLinkType != DeepLinkType.EXPIRED
+        ) {
+            return
+        }
 
         val titleRes = when (args?.deepLinkType == DeepLinkType.UNKNOWN) {
             true -> R.string.notification_dialog_unknown_title
@@ -381,10 +380,9 @@ class HomeActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, HomeActivity::class.java).apply {
-                putExtra("args", args)
-                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, HomeActivity::class.java).apply {
+            putExtra("args", args)
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
     }
 }

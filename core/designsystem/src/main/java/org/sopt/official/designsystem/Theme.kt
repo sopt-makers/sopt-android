@@ -243,11 +243,7 @@ object SoptTheme {
 }
 
 @Composable
-fun ProvideSoptColorsAndTypography(
-    colors: SoptColors,
-    typography: SoptTypography,
-    content: @Composable () -> Unit
-) {
+fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypography, content: @Composable () -> Unit) {
     val provideColors = remember { colors.copy() }
     provideColors.update(colors)
     val provideTypography = remember { typography.copy() }
@@ -260,10 +256,7 @@ fun ProvideSoptColorsAndTypography(
 }
 
 @Composable
-fun SoptTheme(
-    darkTheme: Boolean = false,
-    content: @Composable () -> Unit
-) {
+fun SoptTheme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
     val colors = soptLightColors()
     val typography = SoptTypography()
     ProvideSoptColorsAndTypography(colors, typography) {

@@ -24,11 +24,11 @@
  */
 package org.sopt.official.auth.impl.local
 
+import javax.inject.Inject
+import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
 
 class DefaultLocalAuthDataSource @Inject constructor(
     private val dataStore: SoptDataStore

@@ -31,12 +31,7 @@ import android.os.Bundle
 import android.os.ResultReceiver
 
 internal object AuthIntentFactory {
-    fun authIntentWithAuthTab(
-        context: Context,
-        uri: Uri,
-        state: String,
-        resultReceiver: ResultReceiver
-    ): Intent = Bundle().apply {
+    fun authIntentWithAuthTab(context: Context, uri: Uri, state: String, resultReceiver: ResultReceiver): Intent = Bundle().apply {
         putParcelable(Constants.AUTH_URI_KEY, uri)
         putString(Constants.STATE, state)
         putParcelable(Constants.RESULT_RECEIVER, resultReceiver)

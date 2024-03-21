@@ -29,6 +29,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -43,7 +44,6 @@ import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.authenticator.SoptAuthenticator
 import retrofit2.Converter
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -72,9 +72,7 @@ object NetModule {
 
     @Provides
     @Singleton
-    fun provideNonAuthOkHttpClient(
-        @Logging loggingInterceptor: Interceptor,
-    ): OkHttpClient = OkHttpClient.Builder()
+    fun provideNonAuthOkHttpClient(@Logging loggingInterceptor: Interceptor,): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
@@ -88,16 +86,12 @@ object NetModule {
 
     @Provides
     @Singleton
-    fun provideKotlinSerializationConverter(json: Json): Converter.Factory =
-        json.asConverterFactory("application/json".toMediaType())
+    fun provideKotlinSerializationConverter(json: Json): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
     @AppRetrofit
     @Provides
     @Singleton
-    fun provideAppRetrofit(
-        @Auth client: OkHttpClient,
-        converter: Converter.Factory
-    ): Retrofit = Retrofit.Builder()
+    fun provideAppRetrofit(@Auth client: OkHttpClient, converter: Converter.Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
@@ -106,10 +100,7 @@ object NetModule {
     @AppRetrofit(false)
     @Provides
     @Singleton
-    fun provideNoneAuthAppRetrofit(
-        client: OkHttpClient,
-        converter: Converter.Factory
-    ): Retrofit = Retrofit.Builder()
+    fun provideNoneAuthAppRetrofit(client: OkHttpClient, converter: Converter.Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
@@ -118,10 +109,7 @@ object NetModule {
     @OperationRetrofit
     @Provides
     @Singleton
-    fun provideOperationRetrofit(
-        @Auth client: OkHttpClient,
-        converter: Converter.Factory
-    ): Retrofit = Retrofit.Builder()
+    fun provideOperationRetrofit(@Auth client: OkHttpClient, converter: Converter.Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_OPERATION_BASE_URL else BuildConfig.SOPT_OPERATION_BASE_URL)

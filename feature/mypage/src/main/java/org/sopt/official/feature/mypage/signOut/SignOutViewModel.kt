@@ -27,12 +27,12 @@ package org.sopt.official.feature.mypage.signOut
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.auth.repository.AuthRepository
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class SignOutViewModel @Inject constructor(

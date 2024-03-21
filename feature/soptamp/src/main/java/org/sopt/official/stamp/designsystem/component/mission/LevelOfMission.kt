@@ -30,8 +30,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
-import org.sopt.official.stamp.R
 import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.stamp.R
 
 @Composable
 fun LevelOfMission(stamp: Stamp, spaceSize: Dp) {

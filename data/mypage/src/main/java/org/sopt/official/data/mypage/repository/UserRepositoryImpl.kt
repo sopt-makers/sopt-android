@@ -24,11 +24,11 @@
  */
 package org.sopt.official.data.mypage.repository
 
-import org.sopt.official.domain.mypage.repository.UserRepository
+import javax.inject.Inject
 import org.sopt.official.data.mypage.local.SoptampDataStore
 import org.sopt.official.data.mypage.source.UserDataSource
-import org.sopt.official.data.poke.data_source.PokeLocalDataSource
-import javax.inject.Inject
+import org.sopt.official.data.poke.source.local.PokeLocalDataSource
+import org.sopt.official.domain.mypage.repository.UserRepository
 
 class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
@@ -39,6 +39,7 @@ class UserRepositoryImpl @Inject constructor(
         get() = soptampLocal.nickname
 
     override suspend fun checkNickname(nickname: String) = runCatching { remote.checkNickname(nickname) }
+
     override suspend fun logout(): Result<Unit> = runCatching {
         soptampLocal.clear()
         pokeLocal.clear()
@@ -70,7 +71,9 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override fun fetchUserId() = soptampLocal.userId
+
     override fun getIsOnboardingSeen() = soptampLocal.isOnboardingSeen
+
     override fun updateOnboardingSeen(value: Boolean) {
         soptampLocal.isOnboardingSeen = value
     }

@@ -29,12 +29,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import org.sopt.official.common.di.OperationRetrofit
 import org.sopt.official.data.repository.attendance.AttendanceRepositoryImpl
 import org.sopt.official.data.service.attendance.AttendanceService
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)

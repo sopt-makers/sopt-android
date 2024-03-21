@@ -35,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
@@ -42,7 +43,6 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
-import java.io.Serializable
 
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {
@@ -82,8 +82,8 @@ class NotificationDetailActivity : AppCompatActivity() {
             textViewNotificationTitle.text = notification.title
             textViewNotificationContent.text = notification.content
             linearLayoutLinkButton.visibility = when (
-                notification.deepLink.isNullOrBlank()
-                        && notification.webLink.isNullOrBlank()
+                notification.deepLink.isNullOrBlank() &&
+                    notification.webLink.isNullOrBlank()
             ) {
                 true -> View.GONE
                 false -> View.VISIBLE
@@ -123,9 +123,8 @@ class NotificationDetailActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, NotificationDetailActivity::class.java).apply {
-                putExtra("args", args)
-            }
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, NotificationDetailActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }

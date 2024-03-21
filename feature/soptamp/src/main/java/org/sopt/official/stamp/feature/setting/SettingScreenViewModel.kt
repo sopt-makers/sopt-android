@@ -27,16 +27,17 @@ package org.sopt.official.stamp.feature.setting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 import timber.log.Timber
-import javax.inject.Inject
 
 enum class SettingScreenAction {
-    CLEAR_ALL_STAMP, LOGOUT;
+    CLEAR_ALL_STAMP,
+    LOGOUT
 }
 
 sealed interface SettingUiState {

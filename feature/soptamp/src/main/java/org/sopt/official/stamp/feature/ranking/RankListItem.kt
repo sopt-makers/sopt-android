@@ -49,11 +49,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
-fun RankListItem(
-    item: RankerUiModel,
-    isMyRanking: Boolean = false,
-    onClickUser: (RankerUiModel) -> Unit = {}
-) {
+fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser: (RankerUiModel) -> Unit = {}) {
     val itemPadding = PaddingValues(
         top = 19.dp,
         bottom = 16.dp,
@@ -118,11 +114,7 @@ fun RankListItem(
 }
 
 @Composable
-fun RankerInformation(
-    modifier: Modifier = Modifier,
-    user: String,
-    description: String
-) {
+fun RankerInformation(modifier: Modifier = Modifier, user: String, description: String) {
     Column(modifier) {
         Text(
             modifier = Modifier.fillMaxWidth(),
