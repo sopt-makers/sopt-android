@@ -44,7 +44,6 @@ import org.sopt.official.network.authenticator.SoptAuthenticator
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
