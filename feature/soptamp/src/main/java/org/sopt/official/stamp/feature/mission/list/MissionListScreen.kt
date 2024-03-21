@@ -162,7 +162,7 @@ fun MissionListScreen(
         floatingActionButton = {
             SoptampSegmentedFloatingButton(
                 option1 = "전체 랭킹",
-                option2 = "33기 랭킹",
+                option2 = "34기 랭킹",
                 onClickFirstOption = onAllRankingButtonClick,
                 onClickSecondOption = onCurrentRankingButtonClick
             )

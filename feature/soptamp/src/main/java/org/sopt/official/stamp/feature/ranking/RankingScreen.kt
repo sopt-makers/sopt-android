@@ -130,7 +130,7 @@ fun RankingScreen(
     Scaffold(
         topBar = {
             RankingHeader(
-                title = if (isCurrent) "33기 랭킹" else "전체 랭킹",
+                title = if (isCurrent) "34기 랭킹" else "전체 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
