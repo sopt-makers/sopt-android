@@ -24,11 +24,11 @@
  */
 package org.sopt.official.data.mypage.repository
 
+import javax.inject.Inject
 import org.sopt.official.data.mypage.local.SoptampDataStore
 import org.sopt.official.data.mypage.source.UserDataSource
 import org.sopt.official.data.poke.source.local.PokeLocalDataSource
 import org.sopt.official.domain.mypage.repository.UserRepository
-import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,

@@ -31,7 +31,6 @@ import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeMessageType
 
-
 class GetPokeMessageListUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
