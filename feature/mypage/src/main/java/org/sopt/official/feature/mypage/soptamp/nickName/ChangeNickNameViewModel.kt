@@ -27,6 +27,7 @@ package org.sopt.official.feature.mypage.soptamp.nickName
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +36,6 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class ChangeNickNameViewModel @Inject constructor(
@@ -43,8 +43,8 @@ class ChangeNickNameViewModel @Inject constructor(
 ) : ViewModel() {
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
-    private val _nickName = MutableStateFlow("")
-    val isConfirmEnabled = _nickName.map { it.isNotEmpty() }
+    private val nickName = MutableStateFlow("")
+    val isConfirmEnabled = nickName.map { it.isNotEmpty() }
     private val _isValidNickName = MutableStateFlow(true)
     val isValidNickName = _isValidNickName.asStateFlow()
 
@@ -53,12 +53,12 @@ class ChangeNickNameViewModel @Inject constructor(
     }
 
     fun onChangeNickName(new: String) {
-        _nickName.value = new
+        nickName.value = new
     }
 
     fun changeNickName() {
         viewModelScope.launch {
-            userRepository.updateNickname(_nickName.value)
+            userRepository.updateNickname(nickName.value)
                 .onSuccess {
                     _finish.send(Unit)
                 }.onFailure {
@@ -69,7 +69,7 @@ class ChangeNickNameViewModel @Inject constructor(
 
     private fun validateNickName() {
         viewModelScope.launch {
-            _nickName.collect {
+            nickName.collect {
                 if (it.isBlank()) {
                     _isValidNickName.value = true
                 } else {

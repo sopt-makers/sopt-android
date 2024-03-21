@@ -24,9 +24,9 @@
  */
 package org.sopt.official.domain.usecase.notification
 
+import javax.inject.Inject
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import org.sopt.official.domain.repository.notification.NotificationRepository
-import javax.inject.Inject
 
 class DeletePushTokenUseCase @Inject constructor(
     private val notificationRepository: NotificationRepository

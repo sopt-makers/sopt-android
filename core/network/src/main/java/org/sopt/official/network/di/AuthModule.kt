@@ -29,13 +29,13 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import org.sopt.official.network.interceptor.AuthInterceptor
 import org.sopt.official.network.service.RefreshService
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module

@@ -28,8 +28,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.data.poke.BuildConfig
 import javax.inject.Singleton
+import org.sopt.official.data.poke.BuildConfig
 
 @Module
 @InstallIn(SingletonComponent::class)

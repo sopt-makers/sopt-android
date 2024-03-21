@@ -53,15 +53,12 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.feature.ranking.model.RankersUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
+import org.sopt.official.stamp.feature.ranking.model.RankersUiModel
 import org.sopt.official.stamp.feature.ranking.model.TopRankerDescriptionBubble
 
 @Composable
-fun TopRankerList(
-    topRanker: RankersUiModel,
-    onClickTopRankerBubble: (RankerUiModel) -> Unit = {}
-) {
+fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiModel) -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -102,11 +99,7 @@ fun TopRankerList(
 }
 
 @Composable
-fun TopRankDescriptionBubble(
-    bubble: TopRankerDescriptionBubble,
-    onClickRankerDescriptionState: String,
-    onClickItem: () -> Unit = {}
-) {
+fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDescriptionState: String, onClickItem: () -> Unit = {}) {
     Box(
         modifier = Modifier.noRippleClickable {
             onClickItem()

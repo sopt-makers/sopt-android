@@ -24,15 +24,14 @@
  */
 package org.sopt.official.data.repository.notfication
 
+import javax.inject.Inject
 import org.sopt.official.data.mapper.NotificationHistoryItemMapper
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
-import org.sopt.official.data.service.notification.NotificationService
-import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
+import org.sopt.official.data.service.notification.NotificationService
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.domain.repository.notification.NotificationRepository
-import javax.inject.Inject
 
 class NotificationRepositoryImpl @Inject constructor(
     private val service: NotificationService
@@ -62,25 +61,19 @@ class NotificationRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getNotificationHistory(
-        page: Int
-    ): Result<List<NotificationHistoryItem>> {
+    override suspend fun getNotificationHistory(page: Int): Result<List<NotificationHistoryItem>> {
         return runCatching {
             service.getNotificationHistory(page).map(notificationHistoryMapper::toNotificationHistoryItem)
         }
     }
 
-    override suspend fun getNotificationDetail(
-        notificationId: String
-    ): Result<NotificationDetailResponse> {
+    override suspend fun getNotificationDetail(notificationId: String): Result<NotificationDetailResponse> {
         return runCatching {
             service.getNotificationDetail(notificationId)
         }
     }
 
-    override suspend fun updateNotificationReadingState(
-        notificationId: String
-    ) {
+    override suspend fun updateNotificationReadingState(notificationId: String) {
         runCatching {
             service.updateNotificationReadingState(notificationId)
         }

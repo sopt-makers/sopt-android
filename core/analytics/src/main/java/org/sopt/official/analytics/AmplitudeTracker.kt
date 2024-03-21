@@ -29,8 +29,8 @@ import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.amplitude.android.events.Identify
 import dagger.hilt.android.qualifiers.ApplicationContext
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class AmplitudeTracker @Inject constructor(
     @ApplicationContext private val context: Context
@@ -46,11 +46,7 @@ class AmplitudeTracker @Inject constructor(
         )
     )
 
-    fun track(
-        type: EventType,
-        name: String,
-        properties: Map<String, Any?> = emptyMap()
-    ) {
+    fun track(type: EventType, name: String, properties: Map<String, Any?> = emptyMap()) {
         if (BuildConfig.DEBUG) {
             Timber.d("Amplitude: ${type.prefix}_$name properties: $properties")
         }

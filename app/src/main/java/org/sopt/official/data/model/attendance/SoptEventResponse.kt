@@ -79,17 +79,17 @@ data class SoptEventResponse(
             val endAtDateTime = endAt.toLocalDateTime()
             if (startAtDateTime.date == endAtDateTime.date) {
                 "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 ${
-                startAtDateTime.hour.toString().padStart(2, '0')
+                    startAtDateTime.hour.toString().padStart(2, '0')
                 }:${startAtDateTime.minute.toString().padStart(2, '0')} - ${
-                endAtDateTime.hour.toString().padStart(2, '0')
+                    endAtDateTime.hour.toString().padStart(2, '0')
                 }:${endAtDateTime.minute.toString().padStart(2, '0')}"
             } else {
                 "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 ${
-                startAtDateTime.hour.toString().padStart(2, '0')
+                    startAtDateTime.hour.toString().padStart(2, '0')
                 }:${
-                startAtDateTime.minute.toString().padStart(2, '0')
+                    startAtDateTime.minute.toString().padStart(2, '0')
                 } - ${endAtDateTime.monthNumber}월 ${endAtDateTime.dayOfMonth}일 ${
-                endAtDateTime.hour.toString().padStart(2, '0')
+                    endAtDateTime.hour.toString().padStart(2, '0')
                 }:${endAtDateTime.minute.toString().padStart(2, '0')}"
             }
         } else {

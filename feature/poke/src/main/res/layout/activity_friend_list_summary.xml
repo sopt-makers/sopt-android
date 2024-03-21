@@ -28,7 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mds_gray_950"
-    tools:context=".friend_list_summary.FriendListSummaryActivity">
+    tools:context=".friend.summary.FriendListSummaryActivity">
 
     <include
         android:id="@+id/include_app_bar"

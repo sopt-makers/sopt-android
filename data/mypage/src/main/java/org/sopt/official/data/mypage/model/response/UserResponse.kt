@@ -37,6 +37,5 @@ data class UserResponse(
     @SerialName("profileMessage")
     val profileMessage: String? = null,
 ) {
-    fun toDomain() =
-        SoptampUser(nickname, points, profileMessage ?: "")
+    fun toDomain() = SoptampUser(nickname, points, profileMessage ?: "")
 }

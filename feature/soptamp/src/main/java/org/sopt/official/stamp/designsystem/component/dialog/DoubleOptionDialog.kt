@@ -47,12 +47,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun DoubleOptionDialog(
-    title: String,
-    subTitle: String = "",
-    onConfirm: () -> Unit,
-    onCancel: () -> Unit
-) {
+fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Unit, onCancel: () -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxSize()

@@ -35,10 +35,7 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 
 @Composable
-fun PostSubmissionBadge(
-    composition: LottieComposition?,
-    progress: Float
-) {
+fun PostSubmissionBadge(composition: LottieComposition?, progress: Float) {
     Box(
         modifier = Modifier
             .fillMaxSize()

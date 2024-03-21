@@ -27,6 +27,7 @@ package org.sopt.official.feature.poke.onboarding
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -34,12 +35,11 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.use_case.CheckNewInPokeOnboardingUseCase
-import org.sopt.official.domain.poke.use_case.GetOnboardingPokeUserListUseCase
-import org.sopt.official.domain.poke.use_case.PokeUserUseCase
-import org.sopt.official.domain.poke.use_case.UpdateNewInPokeOnboardingUseCase
+import org.sopt.official.domain.poke.usecase.CheckNewInPokeOnboardingUseCase
+import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
+import org.sopt.official.domain.poke.usecase.PokeUserUseCase
+import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
-import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
@@ -48,7 +48,6 @@ class OnboardingViewModel @Inject constructor(
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
-
     private val _checkNewInPokeOnboardingState = MutableStateFlow<Boolean?>(null)
     val checkNewInPokeOnboardingState: StateFlow<Boolean?> get() = _checkNewInPokeOnboardingState
 
@@ -91,10 +90,7 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun pokeUser(
-        userId: Int,
-        message: String,
-    ) {
+    fun pokeUser(userId: Int, message: String,) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
@@ -117,16 +113,18 @@ class OnboardingViewModel @Inject constructor(
     private suspend fun updatePokeUserState(userId: Int) {
         viewModelScope.launch {
             if (_onboardingPokeUserListUiState.value is UiState.Success<List<PokeUser>>) {
-                val newList = (_onboardingPokeUserListUiState.value as UiState.Success<List<PokeUser>>).data
-                    .map { pokeUser ->
-                        when (pokeUser.userId != userId) {
-                            true -> pokeUser
-                            false -> pokeUser.copy(
-                                pokeNum = pokeUser.pokeNum + 1,
-                                isAlreadyPoke = true
-                            )
+                val newList =
+                    (_onboardingPokeUserListUiState.value as UiState.Success<List<PokeUser>>).data
+                        .map { pokeUser ->
+                            when (pokeUser.userId != userId) {
+                                true -> pokeUser
+                                false ->
+                                    pokeUser.copy(
+                                        pokeNum = pokeUser.pokeNum + 1,
+                                        isAlreadyPoke = true,
+                                    )
+                            }
                         }
-                    }
                 _onboardingPokeUserListUiState.emit(UiState.Loading)
                 launch {
                     _onboardingPokeUserListUiState.emit(UiState.Success(newList))

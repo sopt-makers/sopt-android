@@ -33,8 +33,5 @@ interface AttendanceRepository {
     suspend fun fetchSoptEvent(): Result<SoptEvent>
     suspend fun fetchAttendanceHistory(): Result<AttendanceHistory>
     suspend fun fetchAttendanceRound(lectureId: Long): Result<AttendanceRound>
-    suspend fun confirmAttendanceCode(
-        subLectureId: Long,
-        code: String
-    ): Result<AttendanceCodeResponse>
+    suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<AttendanceCodeResponse>
 }

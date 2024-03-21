@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.poke.di
 
-
 import javax.inject.Qualifier
 
 @Qualifier

@@ -28,12 +28,12 @@ package org.sopt.official.designsystem
 
 import androidx.compose.ui.graphics.Color
 import com.google.common.truth.Truth.assertThat
+import java.util.stream.Stream
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.stream.Stream
 
 class ColorAlphaArgumentsProvider : ArgumentsProvider {
     override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {

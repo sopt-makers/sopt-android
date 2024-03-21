@@ -64,10 +64,7 @@ import org.sopt.official.stamp.util.DefaultPreview
 @SettingNavGraph(true)
 @Destination("menu")
 @Composable
-fun SettingScreen(
-    navigator: DestinationsNavigator,
-    viewModel: SettingScreenViewModel = hiltViewModel()
-) {
+fun SettingScreen(navigator: DestinationsNavigator, viewModel: SettingScreenViewModel = hiltViewModel()) {
     val myInfoSectionItems = remember {
         listOf(
             SectionUiModel.Header(title = "내 정보"),
@@ -227,12 +224,7 @@ fun SettingScreen(
 }
 
 @Composable
-private fun AlertDialog(
-    action: SettingScreenAction,
-    onLogout: () -> Unit,
-    onClearStamps: () -> Unit,
-    onDismiss: () -> Unit
-) {
+private fun AlertDialog(action: SettingScreenAction, onLogout: () -> Unit, onClearStamps: () -> Unit, onDismiss: () -> Unit) {
     val dialogParam = remember(action) {
         when (action) {
             SettingScreenAction.LOGOUT -> {

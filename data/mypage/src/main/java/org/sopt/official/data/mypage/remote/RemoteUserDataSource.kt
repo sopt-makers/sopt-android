@@ -24,12 +24,12 @@
  */
 package org.sopt.official.data.mypage.remote
 
+import javax.inject.Inject
 import org.sopt.official.data.mypage.model.request.UpdateNicknameRequest
 import org.sopt.official.data.mypage.model.request.UpdateProfileMessageRequest
 import org.sopt.official.data.mypage.model.response.UserResponse
 import org.sopt.official.data.mypage.remote.api.SoptampUserService
 import org.sopt.official.data.mypage.source.UserDataSource
-import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
     private val soptampUserService: SoptampUserService

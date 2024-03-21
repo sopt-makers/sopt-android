@@ -28,7 +28,6 @@ import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 
-
 interface AuthRepository {
     suspend fun refresh(token: String): Result<Auth>
     fun save(token: Token)

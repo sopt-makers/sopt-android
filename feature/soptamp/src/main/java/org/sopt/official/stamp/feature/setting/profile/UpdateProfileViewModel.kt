@@ -27,6 +27,7 @@ package org.sopt.official.stamp.feature.setting.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -34,7 +35,6 @@ import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.user.UpdateProfileUseCase
-import javax.inject.Inject
 
 data class EditIntroductionUiState(
     val introduction: String = "",

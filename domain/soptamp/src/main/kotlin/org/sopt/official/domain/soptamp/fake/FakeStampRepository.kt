@@ -36,19 +36,11 @@ object FakeStampRepository : StampRepository {
         missionId = 1
     )
 
-    override suspend fun completeMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ): Result<Unit> = runCatching { }
+    override suspend fun completeMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit> = runCatching { }
 
     override suspend fun getMissionContent(missionId: Int, nickname: String) = runCatching { fakeArchive }
 
-    override suspend fun modifyMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ) = runCatching { }
+    override suspend fun modifyMission(missionId: Int, imageUri: ImageModel, content: String) = runCatching { }
 
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 

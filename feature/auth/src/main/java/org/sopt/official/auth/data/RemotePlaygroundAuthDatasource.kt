@@ -24,12 +24,12 @@
  */
 package org.sopt.official.auth.data
 
+import java.net.UnknownHostException
 import org.sopt.official.auth.PlaygroundError
 import org.sopt.official.auth.data.remote.AuthService
 import org.sopt.official.auth.data.remote.model.request.RequestToken
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.common.di.Auth
-import java.net.UnknownHostException
+import org.sopt.official.network.model.response.OAuthToken
 
 internal class RemotePlaygroundAuthDatasource(
     @Auth private val authService: AuthService

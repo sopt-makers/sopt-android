@@ -27,6 +27,7 @@ package org.sopt.official.feature.poke.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -35,13 +36,12 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.use_case.GetPokeFriendOfFriendListUseCase
-import org.sopt.official.domain.poke.use_case.GetPokeFriendUseCase
-import org.sopt.official.domain.poke.use_case.GetPokeMeUseCase
-import org.sopt.official.domain.poke.use_case.PokeUserUseCase
+import org.sopt.official.domain.poke.usecase.GetPokeFriendOfFriendListUseCase
+import org.sopt.official.domain.poke.usecase.GetPokeFriendUseCase
+import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
+import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
@@ -50,7 +50,6 @@ class PokeMainViewModel @Inject constructor(
     private val getPokeFriendOfFriendListUseCase: GetPokeFriendOfFriendListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
-
     private val _pokeMeUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeMeUiState: StateFlow<UiState<PokeUser>> get() = _pokeMeUiState
 
@@ -114,11 +113,7 @@ class PokeMainViewModel @Inject constructor(
         }
     }
 
-    fun pokeUser(
-        userId: Int,
-        message: String,
-        isFirstMeet: Boolean,
-    ) {
+    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean,) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
@@ -143,18 +138,22 @@ class PokeMainViewModel @Inject constructor(
                 val oldData = (_pokeMeUiState.value as UiState.Success<PokeUser>).data
                 if (oldData.userId == userId) {
                     _pokeMeUiState.emit(UiState.Loading)
-                    _pokeMeUiState.emit(UiState.Success(
-                        oldData.copy(isAlreadyPoke = true)
-                    ))
+                    _pokeMeUiState.emit(
+                        UiState.Success(
+                            oldData.copy(isAlreadyPoke = true),
+                        ),
+                    )
                 }
             }
             if (_pokeFriendUiState.value is UiState.Success<PokeUser>) {
                 val oldData = (_pokeFriendUiState.value as UiState.Success<PokeUser>).data
                 if (oldData.userId == userId) {
                     _pokeFriendUiState.emit(UiState.Loading)
-                    _pokeFriendUiState.emit(UiState.Success(
-                        oldData.copy(isAlreadyPoke = true)
-                    ))
+                    _pokeFriendUiState.emit(
+                        UiState.Success(
+                            oldData.copy(isAlreadyPoke = true),
+                        ),
+                    )
                 }
             }
             if (_pokeFriendOfFriendUiState.value is UiState.Success<List<PokeFriendOfFriendList>>) {

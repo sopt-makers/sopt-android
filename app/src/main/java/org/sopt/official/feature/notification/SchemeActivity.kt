@@ -28,9 +28,11 @@ import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
@@ -39,8 +41,6 @@ import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {
@@ -68,9 +68,11 @@ class SchemeActivity : AppCompatActivity() {
         when (!isTaskRoot) {
             true -> startActivity(linkIntent)
             false -> TaskStackBuilder.create(this).apply {
-                if (!isIntentToHome(linkIntent)) addNextIntentWithParentStack(
-                    DeepLinkType.getHomeIntent(this@SchemeActivity, UserStatus.of(dataStore.userStatus))
-                )
+                if (!isIntentToHome(linkIntent)) {
+                    addNextIntentWithParentStack(
+                        DeepLinkType.getHomeIntent(this@SchemeActivity, UserStatus.of(dataStore.userStatus))
+                    )
+                }
                 addNextIntent(linkIntent)
             }.startActivities()
         }
@@ -119,9 +121,8 @@ class SchemeActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, SchemeActivity::class.java).apply {
-                putExtra("args", args)
-            }
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, SchemeActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }

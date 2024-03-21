@@ -30,10 +30,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 
 @Stable
-fun AlphaColor(
-    color: Int,
-    alphaPercentage: Int = 100
-): Color {
+fun AlphaColor(color: Int, alphaPercentage: Int = 100): Color {
     val alpha = (alphaPercentage / 100f * 255).toInt()
     return Color((color and 0x00FFFFFF) or (alpha shl 24))
 }

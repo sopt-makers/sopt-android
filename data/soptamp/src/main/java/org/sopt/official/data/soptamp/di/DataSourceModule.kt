@@ -28,24 +28,20 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import org.sopt.official.data.soptamp.remote.source.RemoteMissionsDataSource
 import org.sopt.official.data.soptamp.remote.source.RemoteRankingDataSource
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 import org.sopt.official.data.soptamp.source.RankingDataSource
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal abstract class DataSourceModule {
     @Binds
     @Singleton
-    abstract fun bindRemoteMissionsDataSource(
-        source: RemoteMissionsDataSource
-    ): MissionsDataSource
+    abstract fun bindRemoteMissionsDataSource(source: RemoteMissionsDataSource): MissionsDataSource
 
     @Binds
     @Singleton
-    abstract fun bindRemoteRankDataSource(
-        source: RemoteRankingDataSource
-    ): RankingDataSource
+    abstract fun bindRemoteRankDataSource(source: RemoteRankingDataSource): RankingDataSource
 }

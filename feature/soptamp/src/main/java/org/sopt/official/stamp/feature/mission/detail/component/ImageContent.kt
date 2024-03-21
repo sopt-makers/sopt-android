@@ -46,17 +46,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.domain.soptamp.model.ImageModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ImageContent(
-    imageModel: ImageModel,
-    onChangeImage: (images: ImageModel) -> Unit,
-    isEditable: Boolean
-) {
+fun ImageContent(imageModel: ImageModel, onChangeImage: (images: ImageModel) -> Unit, isEditable: Boolean) {
     val isImageEmpty = remember(imageModel) { imageModel.isEmpty() }
     val pagerState = rememberPagerState { imageModel.size }
     val photoPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {

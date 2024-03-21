@@ -45,9 +45,7 @@ import org.sopt.official.stamp.feature.setting.model.SectionUiModel
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Section(
-    items: List<SectionUiModel>
-) {
+fun Section(items: List<SectionUiModel>) {
     Column(
         modifier = Modifier
             .background(

@@ -46,12 +46,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun ErrorDialog(
-    title: String,
-    content: String? = null,
-    retryButtonText: String = "확인",
-    onRetry: () -> Unit = {}
-) {
+fun ErrorDialog(title: String, content: String? = null, retryButtonText: String = "확인", onRetry: () -> Unit = {}) {
     var openDialog by remember {
         mutableStateOf(true)
     }

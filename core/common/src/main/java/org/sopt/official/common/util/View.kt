@@ -26,10 +26,7 @@ package org.sopt.official.common.util
 
 import android.view.View
 
-inline fun View.setOnSingleClickListener(
-    delay: Long = 500L,
-    crossinline block: (View) -> Unit
-) {
+inline fun View.setOnSingleClickListener(delay: Long = 500L, crossinline block: (View) -> Unit) {
     var previousClickedTime = 0L
     setOnClickListener { view ->
         val clickedTime = System.currentTimeMillis()

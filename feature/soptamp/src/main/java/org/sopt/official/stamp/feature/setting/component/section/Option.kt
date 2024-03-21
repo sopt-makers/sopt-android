@@ -44,13 +44,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Option(
-    modifier: Modifier = Modifier,
-    title: String,
-    titleTextColor: Color,
-    @DrawableRes iconResId: Int,
-    onPress: () -> Unit
-) {
+fun Option(modifier: Modifier = Modifier, title: String, titleTextColor: Color, @DrawableRes iconResId: Int, onPress: () -> Unit) {
     Row(
         modifier = modifier
             .fillMaxWidth()

@@ -152,5 +152,5 @@ enum class HomeMenuType(
         WebUrlConstant.SOPT_OFFICIAL_YOUTUBE,
         R.drawable.ic_youtube,
         "youtube"
-    );
+    )
 }

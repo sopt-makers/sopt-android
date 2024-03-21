@@ -35,5 +35,4 @@ internal fun MissionResponse.toData(): MissionData = MissionData(
     isCompleted = this.isCompleted
 )
 
-internal fun List<MissionResponse>.toData(): List<MissionData> =
-    this.map { it.toData() }
+internal fun List<MissionResponse>.toData(): List<MissionData> = this.map { it.toData() }

@@ -27,9 +27,9 @@ package org.sopt.official.stamp.designsystem.component.mission
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.domain.soptamp.MissionLevel
 
 enum class Stamp(
     val missionLevel: MissionLevel,

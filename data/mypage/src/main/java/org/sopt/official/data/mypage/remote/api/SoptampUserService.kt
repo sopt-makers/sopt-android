@@ -46,7 +46,5 @@ interface SoptampUserService {
     suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
     @PATCH("user/profile-message")
-    suspend fun updateProfileMessage(
-        @Body profileMessage: UpdateProfileMessageRequest
-    ): UpdateProfileMessageResponse
+    suspend fun updateProfileMessage(@Body profileMessage: UpdateProfileMessageRequest): UpdateProfileMessageResponse
 }

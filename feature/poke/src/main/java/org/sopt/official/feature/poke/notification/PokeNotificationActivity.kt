@@ -37,6 +37,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -48,15 +50,12 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
+import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
-
     private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
     private val viewModel by viewModels<PokeNotificationViewModel>()
 
@@ -84,7 +83,11 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        tracker.track(EventType.VIEW, name = "view_poke_alarm_detail", properties = mapOf("view_type" to intent.getStringExtra("userStatus")))
+        tracker.track(
+            EventType.VIEW,
+            name = "view_poke_alarm_detail",
+            properties = mapOf("view_type" to intent.getStringExtra("userStatus")),
+        )
     }
 
     private fun initAppBar() {
@@ -96,12 +99,19 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            animationViewLottie.addAnimatorListener(object : Animator.AnimatorListener {
-                override fun onAnimationStart(animation: Animator) {}
-                override fun onAnimationEnd(animation: Animator) { layoutLottie.visibility = View.GONE }
-                override fun onAnimationCancel(animation: Animator) {}
-                override fun onAnimationRepeat(animation: Animator) {}
-            })
+            animationViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        layoutLottie.visibility = View.GONE
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
 
             layoutLottie.setOnClickListener {
                 // do nothing
@@ -109,56 +119,62 @@ class PokeNotificationActivity : AppCompatActivity() {
         }
     }
 
-    private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage(playgroundId: Int) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
-            tracker.track(
-                type = EventType.CLICK,
-                name = "memberprofile",
-                properties = mapOf(
-                    "view_type" to args?.userStatus,
-                    "click_view_type" to "poke_alarm",
-                    "view_profile" to playgroundId,
+    private val pokeUserListClickLister =
+        object : PokeUserListClickListener {
+            override fun onClickProfileImage(playgroundId: Int) {
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "memberprofile",
+                    properties =
+                    mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_alarm",
+                        "view_profile" to playgroundId,
+                    ),
                 )
-            )
-        }
-
-        override fun onClickPokeButton(user: PokeUser) {
-            val messageType = when (user.isFirstMeet) {
-                true -> PokeMessageType.POKE_SOMEONE
-                false -> PokeMessageType.POKE_FRIEND
             }
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
-                .setMessageListType(messageType)
-                .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
-                .create()
 
-            messageListBottomSheet?.let {
-                it.show(supportFragmentManager, it.tag)
-            }
-            tracker.track(
-                type = EventType.CLICK,
-                name = "poke_icon",
-                properties = mapOf(
-                    "view_type" to args?.userStatus,
-                    "click_view_type" to "poke_alarm",
-                    "view_profile" to user.playgroundId,
+            override fun onClickPokeButton(user: PokeUser) {
+                val messageType =
+                    when (user.isFirstMeet) {
+                        true -> PokeMessageType.POKE_SOMEONE
+                        false -> PokeMessageType.POKE_FRIEND
+                    }
+                messageListBottomSheet =
+                    MessageListBottomSheetFragment.Builder()
+                        .setMessageListType(messageType)
+                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
+                        .create()
+
+                messageListBottomSheet?.let {
+                    it.show(supportFragmentManager, it.tag)
+                }
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "poke_icon",
+                    properties =
+                    mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "poke_alarm",
+                        "view_profile" to user.playgroundId,
+                    ),
                 )
-            )
-        }
-    }
-
-    private val scrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
-            val totalItemCount = pokeNotificationLayoutManager.itemCount
-            if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
-                viewModel.getPokeNotification()
             }
         }
-    }
+
+    private val scrollListener =
+        object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int,) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
+                val totalItemCount = pokeNotificationLayoutManager.itemCount
+                if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
+                    viewModel.getPokeNotification()
+                }
+            }
+        }
 
     private fun initRecyclerView() {
         with(binding.recyclerviewPokeNotification) {
@@ -210,14 +226,13 @@ class PokeNotificationActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-        val userStatus: String
+        val userStatus: String,
     ) : Serializable
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) =
-            Intent(context, PokeNotificationActivity::class.java).apply {
-                putExtra("args", args)
-            }
+        fun getIntent(context: Context, args: StartArgs,) = Intent(context, PokeNotificationActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }

@@ -31,7 +31,5 @@ import retrofit2.http.POST
 
 internal interface AuthService {
     @POST("auth/playground")
-    suspend fun oauth(
-        @Body request: RequestToken
-    ): OAuthToken
+    suspend fun oauth(@Body request: RequestToken): OAuthToken
 }

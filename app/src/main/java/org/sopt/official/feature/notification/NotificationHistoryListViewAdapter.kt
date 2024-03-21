@@ -31,32 +31,32 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Date
+import java.util.Locale
 import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemNotificationHistoryBinding
 import org.sopt.official.domain.entity.notification.NotificationHistoryItem
 import org.sopt.official.type.SoptColors
-import java.util.Date
-import java.util.Locale
 
 class NotificationHistoryListViewAdapter(
-    private val clickListener: NotificationHistoryItemClickListener
+    private val clickListener: NotificationHistoryItemClickListener,
 ) : ListAdapter<NotificationHistoryItem, NotificationHistoryListViewAdapter.ViewHolder>(
     ItemDiffCallback(
         onContentsTheSame = { old, new -> old.notificationId == new.notificationId },
-        onItemsTheSame = { old, new -> old == new }
-    )
+        onItemsTheSame = { old, new -> old == new },
+    ),
 ) {
-    private var _viewBinding: ItemNotificationHistoryBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private var viewBinding: ItemNotificationHistoryBinding? = null
 
     override fun getItemCount(): Int = currentList.size
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        _viewBinding = ItemNotificationHistoryBinding.inflate(LayoutInflater.from(parent.context))
-        return ViewHolder(viewBinding)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): ViewHolder {
+        viewBinding = ItemNotificationHistoryBinding.inflate(LayoutInflater.from(parent.context))
+        return ViewHolder(viewBinding!!)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int,) {
         currentList[position].let { item ->
             holder.bind(item)
             holder.itemView.setOnClickListener {
@@ -67,7 +67,7 @@ class NotificationHistoryListViewAdapter(
 
     override fun onViewDetachedFromWindow(holder: ViewHolder) {
         super.onViewDetachedFromWindow(holder)
-        _viewBinding = null
+        viewBinding = null
     }
 
     fun updateNotificationReadingState(position: Int) {
@@ -92,18 +92,18 @@ class NotificationHistoryListViewAdapter(
     }
 
     inner class ViewHolder(
-        private val viewBinding: ItemNotificationHistoryBinding
+        private val viewBinding: ItemNotificationHistoryBinding,
     ) : RecyclerView.ViewHolder(viewBinding.root) {
-
         fun bind(item: NotificationHistoryItem) {
             viewBinding.apply {
                 textViewTitle.text = item.title
                 textViewContent.text = item.content
                 textViewReceivedTime.text = item.createdAt.convertToTimesAgo()
-                constraintLayoutBackground.background = when (item.isRead) {
-                    true -> root.context.drawableOf(SoptColors.black_100)
-                    false -> root.context.drawableOf(SoptColors.black_80)
-                }
+                constraintLayoutBackground.background =
+                    when (item.isRead) {
+                        true -> root.context.drawableOf(SoptColors.black_100)
+                        false -> root.context.drawableOf(SoptColors.black_80)
+                    }
             }
         }
 

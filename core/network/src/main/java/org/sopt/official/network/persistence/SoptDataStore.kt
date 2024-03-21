@@ -29,12 +29,12 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.sopt.official.common.BuildConfig
-import org.sopt.official.common.di.LocalStore
-import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.sopt.official.common.BuildConfig
+import org.sopt.official.common.di.LocalStore
+import timber.log.Timber
 
 @Singleton
 class SoptDataStore @Inject constructor(
@@ -59,11 +59,7 @@ class SoptDataStore @Inject constructor(
         )
     }
 
-    private fun createSharedPreference(
-        isEncrypted: Boolean,
-        fileName: String,
-        masterKey: MasterKey
-    ) = if (isEncrypted) {
+    private fun createSharedPreference(isEncrypted: Boolean, fileName: String, masterKey: MasterKey) = if (isEncrypted) {
         EncryptedSharedPreferences.create(
             context,
             fileName,
@@ -124,7 +120,6 @@ class SoptDataStore @Inject constructor(
         private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
         private const val ANDROID_KEY_STORE = "AndroidKeyStore"
         private const val PUSH_TOKEN = "push_token"
-        private const val UNAUTHENTICATED="UNAUTHENTICATED"
-
+        private const val UNAUTHENTICATED = "UNAUTHENTICATED"
     }
 }

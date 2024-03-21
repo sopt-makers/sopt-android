@@ -32,5 +32,5 @@ annotation class Strings(val value: Constant)
 
 enum class Constant {
     SOPTAMP_API_KEY,
-    SOPTAMP_DATA_STORE;
+    SOPTAMP_DATA_STORE
 }

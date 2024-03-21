@@ -39,10 +39,7 @@ import retrofit2.http.Query
 
 interface StampService {
     @GET("stamp")
-    suspend fun retrieveStamp(
-        @Query("missionId") missionId: Int,
-        @Query("nickname") nickname: String,
-    ): StampResponse
+    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String,): StampResponse
 
     @Multipart
     @PUT("stamp/{missionId}")

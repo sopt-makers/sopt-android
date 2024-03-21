@@ -26,9 +26,7 @@ package org.sopt.official.common.util
 
 import android.view.animation.Animation
 
-inline fun Animation.setOnAnimationEndListener(
-    crossinline onAnimationEnd: (animation: Animation?) -> Unit
-) {
+inline fun Animation.setOnAnimationEndListener(crossinline onAnimationEnd: (animation: Animation?) -> Unit) {
     setAnimationListener(object : Animation.AnimationListener {
         override fun onAnimationStart(animation: Animation?) = Unit
 

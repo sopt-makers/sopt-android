@@ -32,10 +32,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
-fun Header(
-    modifier: Modifier,
-    title: String
-) {
+fun Header(modifier: Modifier, title: String) {
     Text(
         text = title,
         style = SoptTheme.typography.caption1,

@@ -28,7 +28,6 @@ import org.sopt.official.data.model.attendance.*
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
-import org.sopt.official.data.model.notification.response.NotificationReadingStateResponse
 import org.sopt.official.data.model.notification.response.UpdatePushTokenResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -40,29 +39,19 @@ import retrofit2.http.Query
 
 interface NotificationService {
     @POST("user/push-token")
-    suspend fun registerToken(
-        @Body body: UpdatePushTokenRequest
-    ): UpdatePushTokenResponse
+    suspend fun registerToken(@Body body: UpdatePushTokenRequest): UpdatePushTokenResponse
 
     @DELETE("user/push-token")
-    suspend fun deleteToken(
-        @Body body: UpdatePushTokenRequest
-    ): UpdatePushTokenResponse
+    suspend fun deleteToken(@Body body: UpdatePushTokenRequest): UpdatePushTokenResponse
 
     @GET("notification/all")
-    suspend fun getNotificationHistory(
-        @Query("page") page: Int
-    ): ArrayList<NotificationHistoryItemResponse>
+    suspend fun getNotificationHistory(@Query("page") page: Int): ArrayList<NotificationHistoryItemResponse>
 
     @GET("notification/detail/{notificationId}")
-    suspend fun getNotificationDetail(
-        @Path("notificationId") notificationId: String
-    ): NotificationDetailResponse
+    suspend fun getNotificationDetail(@Path("notificationId") notificationId: String): NotificationDetailResponse
 
     @PATCH("notification/read/{notificationId}")
-    suspend fun updateNotificationReadingState(
-        @Path("notificationId") notificationId: String
-    )
+    suspend fun updateNotificationReadingState(@Path("notificationId") notificationId: String)
 
     @PATCH("notification/read")
     suspend fun updateEntireNotificationReadingState()

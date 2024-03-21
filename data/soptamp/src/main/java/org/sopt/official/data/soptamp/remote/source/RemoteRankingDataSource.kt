@@ -24,13 +24,13 @@
  */
 package org.sopt.official.data.soptamp.remote.source
 
+import java.net.UnknownHostException
+import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.remote.api.RankService
 import org.sopt.official.data.soptamp.remote.mapper.toData
 import org.sopt.official.data.soptamp.remote.model.RankData
 import org.sopt.official.data.soptamp.source.RankingDataSource
-import java.net.UnknownHostException
-import javax.inject.Inject
 
 internal class RemoteRankingDataSource @Inject constructor(
     private val rankService: RankService

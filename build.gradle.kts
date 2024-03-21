@@ -46,6 +46,20 @@ subprojects {
             licenseHeaderFile(rootProject.file("spotless/spotless.license.kt"))
             trimTrailingWhitespace()
             endWithNewline()
+            ktlint("1.2.1")
+                .editorConfigOverride(
+                    mapOf(
+                        "ktlint_code_style" to "android_studio",
+                        "ktlint_standard_annotation" to "disabled",
+                        "ktlint_standard_class-naming" to "disabled",
+                        "ktlint_standard_comment-wrapping" to "disabled",
+                        "ktlint_standard_filename" to "disabled",
+                        "ktlint_standard_function-naming" to "disabled",
+                        "ktlint_standard_no-wildcard-imports" to "disabled",
+                        "ktlint_standard_trailing-comma-on-call-site" to "disabled",
+                        "ktlint_standard_trailing-comma-on-declaration-site" to "disabled",
+                    ),
+                )
         }
         format("kts") {
             target("**/*.kts")

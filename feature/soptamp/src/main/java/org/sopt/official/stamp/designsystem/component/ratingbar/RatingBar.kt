@@ -71,10 +71,7 @@ fun RatingBar(
 }
 
 @Composable
-private fun RatingIcon(
-    @DrawableRes icon: Int,
-    tint: Color
-) {
+private fun RatingIcon(@DrawableRes icon: Int, tint: Color) {
     Icon(
         painter = painterResource(id = icon),
         contentDescription = "Rating Icon",

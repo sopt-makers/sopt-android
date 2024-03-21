@@ -27,6 +27,7 @@ package org.sopt.official.data.soptamp.repository
 import android.content.Context
 import android.net.Uri
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -38,7 +39,6 @@ import org.sopt.official.data.soptamp.remote.api.StampService
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.repository.StampRepository
-import javax.inject.Inject
 
 class StampRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -51,11 +51,7 @@ class StampRepositoryImpl @Inject constructor(
         val contents: String
     )
 
-    override suspend fun completeMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ): Result<Unit> {
+    override suspend fun completeMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit> {
         val contentJson = json.encodeToString(Content(content))
         val contentRequestBody = contentJson.toRequestBody("application/json".toMediaType())
         val imageRequestBody = when (imageUri) {
@@ -79,10 +75,7 @@ class StampRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getMissionContent(
-        missionId: Int,
-        nickname: String
-    ): Result<Archive> {
+    override suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive> {
         return runCatching {
             service.retrieveStamp(
                 missionId = missionId,
@@ -91,11 +84,7 @@ class StampRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun modifyMission(
-        missionId: Int,
-        imageUri: ImageModel,
-        content: String
-    ): Result<Unit> {
+    override suspend fun modifyMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit> {
         val contentJson = json.encodeToString(Content(content))
         val contentRequestBody = contentJson.toRequestBody("application/json".toMediaType())
         val imageRequestBody = when (imageUri) {

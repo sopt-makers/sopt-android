@@ -56,11 +56,8 @@ internal class MissionShape(
     private val patternCount: Int
 ) : Shape {
 
-    override fun createOutline(
-        size: Size,
-        layoutDirection: LayoutDirection,
-        density: Density
-    ): Outline = Outline.Generic(drawMissionPatternPath(size))
+    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
+        Outline.Generic(drawMissionPatternPath(size))
 
     private fun drawMissionPatternPath(size: Size): Path {
         val pattern = MissionPattern(calculatePatternLength(size))

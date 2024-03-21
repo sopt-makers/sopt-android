@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -40,7 +41,6 @@ import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(

@@ -45,20 +45,17 @@ object WebUrlConstant {
     private const val SOPT_BASE_URL = "https://sopt.org"
     const val PLAYGROUND_BASE_URL = "https://playground.sopt.org"
 
-    private fun toSoptUrl(url: String): String =
-        if (url.isNotEmpty()) {
-            "$SOPT_BASE_URL/$url"
-        } else {
-            SOPT_BASE_URL
-        }
+    private fun toSoptUrl(url: String): String = if (url.isNotEmpty()) {
+        "$SOPT_BASE_URL/$url"
+    } else {
+        SOPT_BASE_URL
+    }
 
-    private fun toPlaygroundUrl(url: String): String =
-        if (url.isNotEmpty()) {
-            "$PLAYGROUND_BASE_URL/$url"
-        } else {
-            PLAYGROUND_BASE_URL
-        }
+    private fun toPlaygroundUrl(url: String): String = if (url.isNotEmpty()) {
+        "$PLAYGROUND_BASE_URL/$url"
+    } else {
+        PLAYGROUND_BASE_URL
+    }
 
-    fun toMemberProfileUrl(playgroundId: Long): String =
-        "$PLAYGROUND_MEMBER_URL/$playgroundId"
+    fun toMemberProfileUrl(playgroundId: Long): String = "$PLAYGROUND_MEMBER_URL/$playgroundId"
 }

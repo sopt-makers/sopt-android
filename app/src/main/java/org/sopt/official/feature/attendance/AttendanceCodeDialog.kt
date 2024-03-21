@@ -47,12 +47,12 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.DialogAttendanceCodeBinding
 import org.sopt.official.feature.attendance.model.DialogState
 
 class AttendanceCodeDialog : DialogFragment() {
-    private var _binding: DialogAttendanceCodeBinding? = null
-    private val binding: DialogAttendanceCodeBinding get() = requireNotNull(_binding)
+    private val binding by viewBinding(DialogAttendanceCodeBinding::bind)
     private val viewModel: AttendanceViewModel by activityViewModels()
     private lateinit var dialogTitle: String
 
@@ -72,16 +72,11 @@ class AttendanceCodeDialog : DialogFragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = DialogAttendanceCodeBinding.inflate(inflater, container, false)
-        return binding.root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
+        return DialogAttendanceCodeBinding.inflate(inflater, container, false).root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?,) {
         super.onViewCreated(view, savedInstanceState)
         initTitle()
         initListener()
@@ -138,7 +133,7 @@ class AttendanceCodeDialog : DialogFragment() {
                         etAttendanceCode2.requestFocus()
                         etAttendanceCode1.isEnabled = false
                     }
-                }
+                },
             )
             etAttendanceCode2.requestFocusAfterTextChanged(etAttendanceCode3)
             etAttendanceCode3.requestFocusAfterTextChanged(etAttendanceCode4)
@@ -210,7 +205,7 @@ class AttendanceCodeDialog : DialogFragment() {
             btnAttendanceCodeDialog.setOnClickListener {
                 viewModel.checkAttendanceCode(
                     "${etAttendanceCode1.text}${etAttendanceCode2.text}${etAttendanceCode3.text}" +
-                            "${etAttendanceCode4.text}${etAttendanceCode5.text}"
+                        "${etAttendanceCode4.text}${etAttendanceCode5.text}",
                 )
             }
         }
@@ -270,10 +265,5 @@ class AttendanceCodeDialog : DialogFragment() {
     private fun initCodeEditText(et: EditText) {
         et.isEnabled = true
         et.text = null
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

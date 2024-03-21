@@ -53,6 +53,7 @@ fun ImageView.setRelationStrokeColor(relationName: String) {
 }
 
 private var toast: Toast? = null
+
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Activity.showPokeToast(message: String) {
     val binding = ToastPokeBinding.inflate(LayoutInflater.from(this), null, false)

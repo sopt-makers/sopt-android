@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.repository.attendance
 
+import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
@@ -38,7 +39,6 @@ import org.sopt.official.domain.entity.attendance.AttendanceRound
 import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import retrofit2.HttpException
-import javax.inject.Inject
 
 class AttendanceRepositoryImpl @Inject constructor(
     private val attendanceService: AttendanceService,
@@ -67,10 +67,7 @@ class AttendanceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun confirmAttendanceCode(
-        subLectureId: Long,
-        code: String
-    ): Result<AttendanceCodeResponse> = runCatching {
+    override suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<AttendanceCodeResponse> = runCatching {
         attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data ?: AttendanceCodeResponse(-1)
     }.recoverCatching { cause ->
         when (cause) {

@@ -38,9 +38,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-val properties = Properties().apply {
-    load(rootProject.file("local.properties").inputStream())
-}
+val properties =
+    Properties().apply {
+        load(rootProject.file("local.properties").inputStream())
+    }
 android {
     namespace = "org.sopt.official"
 
@@ -84,7 +85,7 @@ android {
             isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
         }
