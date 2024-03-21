@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.friend_list_detail
+package org.sopt.official.feature.poke.friend.detail
 
 import android.content.Intent
 import android.net.Uri
@@ -42,34 +42,34 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
+import org.sopt.official.designsystem.CommonColors
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.ItemDecorationDivider
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
+import org.sopt.official.feature.poke.user.ItemDecorationDivider
+import org.sopt.official.feature.poke.user.PokeUserListAdapter
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 import javax.inject.Inject
 
-
 @AndroidEntryPoint
-class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
-
+class FriendBottomSheetFragment : BottomSheetDialogFragment() {
     private var _binding: FragmentFriendListDetailBottomSheetBinding? = null
     private val binding: FragmentFriendListDetailBottomSheetBinding get() = requireNotNull(_binding)
-    private lateinit var viewModel: FriendListDetailViewModel
+    private lateinit var viewModel: FriendViewModel
 
     @Inject
     lateinit var tracker: AmplitudeTracker
 
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     private val pokeFriendListAdapter
         get() = binding.includeFriendListBlock.recyclerView.adapter as PokeUserListAdapter?
@@ -78,7 +78,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val recyclerViewItemDecorationDivider
         get() = ItemDecorationDivider(
-            color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
+            color = colorOf(CommonColors.mds_gray_800),
             height = 1.dp
         )
 
@@ -90,7 +90,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFriendListDetailBottomSheetBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[FriendListDetailViewModel::class.java]
+        viewModel = ViewModelProvider(this)[FriendViewModel::class.java]
         return binding.root
     }
 
@@ -189,7 +189,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     "view_profile" to user.playgroundId
                 )
             )
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            messageListBottomSheet = MessagesBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_FRIEND)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                 .create()
@@ -261,10 +261,10 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
         bottomSheetDialog?.let {
             val layoutParams = it.layoutParams
-            layoutParams.height= ViewGroup.LayoutParams.MATCH_PARENT
+            layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
             it.layoutParams = layoutParams
 
-            val bottomSheetBehavior =  BottomSheetBehavior.from(it)
+            val bottomSheetBehavior = BottomSheetBehavior.from(it)
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetBehavior.skipCollapsed = true
             bottomSheetBehavior.isHideable = true
@@ -278,8 +278,8 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
 
     class Builder {
-        private val bottomSheet = FriendListDetailBottomSheetFragment()
-        fun create(): FriendListDetailBottomSheetFragment = bottomSheet
+        private val bottomSheet = FriendBottomSheetFragment()
+        fun create(): FriendBottomSheetFragment = bottomSheet
 
         fun setUserStatus(userStatus: String): Builder {
             bottomSheet.userStatus = userStatus

@@ -30,8 +30,16 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,16 +49,19 @@ import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.feature.poke.config.LocalTracker
+import org.sopt.official.feature.poke.config.rememberTracker
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
-import org.sopt.official.feature.poke.main.PokeMainActivity
-import org.sopt.official.feature.poke.message_bottom_sheet.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListAdapter
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListClickListener
-import org.sopt.official.feature.poke.poke_user_recycler_view.PokeUserListItemViewType
+import org.sopt.official.feature.poke.main.PokeEntryPointActivity
+import org.sopt.official.feature.poke.message.MessagesBottomSheetFragment
+import org.sopt.official.feature.poke.user.PokeUserListAdapter
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
@@ -64,7 +75,7 @@ class OnboardingActivity : AppCompatActivity() {
     private val args by serializableExtra(StartArgs(0, ""))
 
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+    private var messageListBottomSheet: MessagesBottomSheetFragment? = null
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -73,7 +84,16 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        setContent {
+            CompositionLocalProvider(
+                LocalTracker provides rememberTracker(LocalContext.current)
+            ) {
+                SoptTheme {
+                    OnboardingScreen()
+                }
+            }
+        }
+        // etContentView(binding.root)
 
         initAppBar()
         initView()
@@ -125,7 +145,7 @@ class OnboardingActivity : AppCompatActivity() {
                 name = "poke_icon",
                 properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to user.playgroundId)
             )
-            messageListBottomSheet = MessageListBottomSheetFragment.Builder()
+            messageListBottomSheet = MessagesBottomSheetFragment.Builder()
                 .setMessageListType(PokeMessageType.POKE_SOMEONE)
                 .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
                 .create()
@@ -199,7 +219,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setIntentToPokeMain() {
         if (binding.layoutLottie.isVisible) return
-        startActivity(Intent(this, PokeMainActivity::class.java))
+        startActivity(Intent(this, PokeEntryPointActivity::class.java))
         finish()
     }
 

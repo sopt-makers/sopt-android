@@ -22,11 +22,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.poke_user_recycler_view
+package org.sopt.official.feature.poke.user
 
-import org.sopt.official.domain.poke.entity.PokeUser
-
-interface PokeUserListClickListener {
-    fun onClickProfileImage(playgroundId: Int)
-    fun onClickPokeButton(user: PokeUser)
+enum class PokeUserListItemViewType {
+    SMALL, LARGE
 }

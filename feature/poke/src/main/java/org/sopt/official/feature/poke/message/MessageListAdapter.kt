@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.message_bottom_sheet
+package org.sopt.official.feature.poke.message
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -30,15 +30,15 @@ import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.domain.poke.entity.PokeMessageList
 import org.sopt.official.feature.poke.databinding.ItemMessageBinding
 
-class MessageListRecyclerAdapter(
+class MessageListAdapter(
     private val messageList: List<PokeMessageList.PokeMessage>,
-    private val clickListener: MessageItemClickListener,
-) : RecyclerView.Adapter<MessageListRecyclerAdapter.ViewHolder>() {
+    private val clickListener: MessagePressListener,
+) : RecyclerView.Adapter<MessageListAdapter.ViewHolder>() {
 
     private var lastClickTime: Long = 0
     private val clickInterval: Long = 1000 // 1초 동안 연속 클릭 무시
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageListRecyclerAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
@@ -49,7 +49,7 @@ class MessageListRecyclerAdapter(
             val currentTime = System.currentTimeMillis()
             if (currentTime - lastClickTime >= clickInterval) {
                 lastClickTime = currentTime
-                clickListener.onClickMessageItem(messageList[position].content)
+                clickListener.onPress(messageList[position].content)
             }
         }
     }

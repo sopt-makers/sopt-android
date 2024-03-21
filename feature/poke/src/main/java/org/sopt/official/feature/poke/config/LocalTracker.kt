@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.poke_user_recycler_view
+package org.sopt.official.feature.poke.config
 
-enum class PokeUserListItemViewType {
-    SMALL, LARGE
+import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.remember
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.analytics.AmplitudeTracker
+
+val LocalTracker = compositionLocalOf<AmplitudeTracker> {
+    error("No LocalTrackerProvider provided")
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface TrackerEntryPoint {
+    fun amplitudeTracker(): AmplitudeTracker
+}
+
+@Composable
+fun rememberTracker(context: Context) = remember(context) {
+    EntryPointAccessors
+        .fromApplication<TrackerEntryPoint>(context)
+        .amplitudeTracker()
 }

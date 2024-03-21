@@ -74,7 +74,7 @@ import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.feature.poke.UiState
-import org.sopt.official.feature.poke.main.PokeMainActivity
+import org.sopt.official.feature.poke.main.PokeEntryPointActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
@@ -268,7 +268,7 @@ class HomeActivity : AppCompatActivity() {
         startActivity(
             when (isNewInPoke) {
                 true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration, args?.userStatus?.value ?: ""))
-                false -> PokeMainActivity.getIntent(this, PokeMainActivity.StartArgs(args?.userStatus?.value ?: ""))
+                false -> PokeEntryPointActivity.getIntent(this, PokeEntryPointActivity.StartArgs(args?.userStatus?.value ?: ""))
             }
         )
     }
