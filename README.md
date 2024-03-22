@@ -6,7 +6,7 @@
 **국내 최대 IT 벤처창업동아리 SOPT의 공식 Android 앱**
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Kotlin-1.9.22-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Kotlin-1.9.23-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
     <img src="https://img.shields.io/badge/all_contributors-12-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
