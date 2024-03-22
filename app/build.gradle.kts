@@ -35,7 +35,7 @@ plugins {
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.androidx.baselineprofile)
 }
 
 val properties =
@@ -73,14 +73,14 @@ android {
     }
 
     buildTypes {
-        getByName("debug") {
+        val debug by getting {
             applicationIdSuffix = ".debug"
             firebaseAppDistribution {
                 artifactType = "APK"
                 groups = "app-team"
             }
         }
-        release {
+        val release by getting {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -88,6 +88,17 @@ android {
                 "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName("release")
+        }
+        val benchmark by creating {
+            initWith(release)
+            matchingFallbacks.add("release")
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            isMinifyEnabled = true
+            isDebuggable = false
         }
     }
     applicationVariants.all {
@@ -159,6 +170,8 @@ dependencies {
     debugImplementation(libs.bundles.compose.android.test)
 
     implementation(libs.coil.core)
+    implementation(libs.profileinstaller)
+    baselineProfile(projects.benchmark)
 }
 
 secrets {
