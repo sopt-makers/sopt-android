@@ -154,7 +154,7 @@ fun RankingScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         val defaultPadding = PaddingValues(
-            top = 0.dp,
+            top = paddingValues.calculateTopPadding(),
             bottom = paddingValues.calculateBottomPadding(),
             start = 16.dp,
             end = 16.dp

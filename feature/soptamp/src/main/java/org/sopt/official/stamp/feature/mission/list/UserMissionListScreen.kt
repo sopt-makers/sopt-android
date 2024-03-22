@@ -129,7 +129,7 @@ fun UserMissionListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = 12.dp,
+                    top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = 16.dp,
                     end = 16.dp
