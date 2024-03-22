@@ -133,6 +133,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "chattymin",
+      "name": "Dongmin Park",
+      "avatar_url": "https://avatars.githubusercontent.com/u/52882799?v=4",
+      "profile": "https://naemamdaelo.tistory.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
