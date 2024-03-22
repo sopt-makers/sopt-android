@@ -125,3 +125,6 @@
 -dontwarn org.conscrypt.**
 -dontwarn org.bouncycastle.**
 -dontwarn org.openjsse.**
+-dontwarn com.google.auto.service.AutoService
+-dontwarn net.ltgt.gradle.incap.IncrementalAnnotationProcessor
+-dontwarn net.ltgt.gradle.incap.IncrementalAnnotationProcessorType
