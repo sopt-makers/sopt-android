@@ -300,7 +300,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs,) = Intent(context, FriendListSummaryActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, FriendListSummaryActivity::class.java).apply {
             putExtra("args", args)
         }
     }

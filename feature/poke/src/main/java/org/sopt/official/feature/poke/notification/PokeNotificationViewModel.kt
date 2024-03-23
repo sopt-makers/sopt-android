@@ -27,7 +27,6 @@ package org.sopt.official.feature.poke.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +38,7 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
+import javax.inject.Inject
 
 @HiltViewModel
 class PokeNotificationViewModel @Inject constructor(
@@ -88,21 +88,18 @@ class PokeNotificationViewModel @Inject constructor(
             }
     }
 
-    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean,) {
+    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean) {
         viewModelScope.launch {
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,
-            )
-                .onSuccess { response ->
-                    _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
-                .onFailure { throwable ->
-                    _pokeUserUiState.emit(UiState.Failure(throwable))
-                }
+            ).onSuccess { response ->
+                _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
+            }.onApiError { statusCode, responseMessage ->
+                _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
+            }.onFailure { throwable ->
+                _pokeUserUiState.emit(UiState.Failure(throwable))
+            }
         }
     }
 }

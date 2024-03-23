@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,6 +39,7 @@ import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
@@ -69,7 +69,7 @@ class MissionsViewModel @Inject constructor(
         )
     }
 
-    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String,) {
+    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String) {
         if (nickname.isEmpty()) {
             val missions = when (filter) {
                 MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()

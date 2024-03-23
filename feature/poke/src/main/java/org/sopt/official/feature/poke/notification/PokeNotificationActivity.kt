@@ -37,8 +37,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -53,6 +51,8 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBindin
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -165,7 +165,7 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     private val scrollListener =
         object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int,) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
@@ -231,7 +231,7 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs,) = Intent(context, PokeNotificationActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeNotificationActivity::class.java).apply {
             putExtra("args", args)
         }
     }
