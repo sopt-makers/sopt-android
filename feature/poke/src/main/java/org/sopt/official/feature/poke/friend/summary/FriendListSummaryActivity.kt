@@ -32,13 +32,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
@@ -57,6 +56,8 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -79,7 +80,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     private val recyclerViewItemDecorationDivider
         get() =
             ItemDecorationDivider(
-                color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
+                color = colorOf(org.sopt.official.designsystem.R.color.mds_gray_800),
                 height = 1.dp,
             )
 
