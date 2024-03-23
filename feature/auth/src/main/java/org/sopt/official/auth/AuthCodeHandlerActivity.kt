@@ -35,7 +35,7 @@ import android.os.ResultReceiver
 import androidx.appcompat.app.AppCompatActivity
 import org.sopt.official.auth.utils.PlaygroundCustomTabManager
 import org.sopt.official.auth.utils.PlaygroundLog
-import org.sopt.official.playground.auth.utils.getParcelableAs
+import org.sopt.official.auth.utils.getParcelableAs
 
 class AuthCodeHandlerActivity : AppCompatActivity() {
     private lateinit var uri: Uri
