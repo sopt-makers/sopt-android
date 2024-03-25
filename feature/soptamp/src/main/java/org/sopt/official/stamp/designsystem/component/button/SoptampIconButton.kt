@@ -56,13 +56,14 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
  * */
 @Composable
 fun SoptampIconButton(
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
     onClick: () -> Unit = {}
 ) {
     Row(
-        modifier = Modifier.noRippleClickable { onClick() }
+        modifier = modifier.noRippleClickable { onClick() }
     ) {
         Icon(
             imageVector = imageVector,
