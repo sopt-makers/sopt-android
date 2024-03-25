@@ -28,6 +28,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -37,18 +38,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.stamp.designsystem.style.Gray600
+import org.sopt.official.stamp.designsystem.style.Gray800
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
-fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) -> Unit = {}) {
+fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) -> Unit = {}, onClickTopRankerBubble: () -> Unit = {}) {
     Column(
         modifier = Modifier.noRippleClickable { onClick(ranker) },
         verticalArrangement = Arrangement.Bottom,
@@ -57,10 +62,10 @@ fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) ->
         TopRankBarOfRankText(rank = ranker.rank)
         TopRankBarOfGraph(rank = ranker.rank, score = ranker.score, height = height)
         Spacer(modifier = Modifier.size(10.dp))
-        Text(
-            text = ranker.nickname,
-            style = SoptTheme.typography.h3,
-            color = Color.Black
+        TopRankBarOfName(
+            rank = ranker.rank,
+            nickname = ranker.nickname,
+            onClickTopRankerBubble = onClickTopRankerBubble
         )
     }
 }
@@ -106,6 +111,38 @@ fun TopRankBarOfGraph(rank: Int, score: Int, height: Dp) {
     }
 }
 
+@Composable
+fun TopRankBarOfName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
+    Box(
+        modifier = Modifier
+            .noRippleClickable {
+                onClickTopRankerBubble()
+            }
+            .size(width = 97.dp, height = 32.dp)
+            .background(
+                color = getRankBackgroundColor(rank),
+                shape = RoundedCornerShape(50.dp)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = nickname,
+                maxLines = 1,
+                style = SoptTheme.typography.sub3,
+                color = Gray800
+            )
+            SoptampIconButton(
+                modifier = Modifier.size(16.dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
+                tint = Gray600
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewTopRankerItem() {
@@ -113,7 +150,7 @@ fun PreviewTopRankerItem() {
         TopRankerItem(
             ranker = RankerUiModel(
                 rank = 1,
-                nickname = "jinsu",
+                nickname = "디자인김땡땡",
                 score = 1000
             ),
             height = 150.dp
