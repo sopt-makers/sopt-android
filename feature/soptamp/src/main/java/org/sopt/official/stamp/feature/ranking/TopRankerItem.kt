@@ -62,7 +62,7 @@ fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) ->
         TopRankBarOfRankText(rank = ranker.rank)
         TopRankBarOfGraph(rank = ranker.rank, score = ranker.score, height = height)
         Spacer(modifier = Modifier.size(10.dp))
-        TopRankBarOfName(
+        TopRankBarOfUserName(
             rank = ranker.rank,
             nickname = ranker.nickname,
             onClickTopRankerBubble = onClickTopRankerBubble
@@ -112,7 +112,7 @@ fun TopRankBarOfGraph(rank: Int, score: Int, height: Dp) {
 }
 
 @Composable
-fun TopRankBarOfName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
+fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .noRippleClickable {
