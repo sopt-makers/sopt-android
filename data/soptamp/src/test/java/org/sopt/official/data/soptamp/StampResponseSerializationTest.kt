@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,12 @@
  */
 package org.sopt.official.data.soptamp
 
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import org.junit.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 
 class StampResponseSerializationTest {
-    @OptIn(ExperimentalSerializationApi::class)
     @Test
     fun `missionId가 비어있을 시 역직렬화가 실패해야 한다`() {
         // given
