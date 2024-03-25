@@ -131,7 +131,7 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
 }
 
 @Composable
-fun TopRankBarOfName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
+fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .noRippleClickable {
