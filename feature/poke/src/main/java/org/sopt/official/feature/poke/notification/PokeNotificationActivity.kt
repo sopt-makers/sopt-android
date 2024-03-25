@@ -165,7 +165,7 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     private val scrollListener =
         object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int,) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
@@ -231,7 +231,7 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs,) = Intent(context, PokeNotificationActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeNotificationActivity::class.java).apply {
             putExtra("args", args)
         }
     }

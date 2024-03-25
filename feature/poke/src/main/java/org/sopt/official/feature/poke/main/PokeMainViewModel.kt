@@ -113,7 +113,7 @@ class PokeMainViewModel @Inject constructor(
         }
     }
 
-    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean,) {
+    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(

@@ -38,7 +38,7 @@ class ItemDecorationDivider(
         paint.color = color
     }
 
-    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State,) {
+    override fun onDrawOver(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         super.onDrawOver(c, parent, state)
         for (i in 0 until parent.childCount) {
             val top = (parent.getChildAt(i).bottom).toFloat()

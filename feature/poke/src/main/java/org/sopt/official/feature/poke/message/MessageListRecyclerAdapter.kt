@@ -37,13 +37,13 @@ class MessageListRecyclerAdapter(
     private var lastClickTime: Long = 0
     private val clickInterval: Long = 1000 // 1초 동안 연속 클릭 무시
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ItemMessageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun getItemCount(): Int = messageList.size
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int,) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.onBind(messageList[position])
         holder.itemView.setOnClickListener {
             val currentTime = System.currentTimeMillis()

@@ -46,11 +46,11 @@ class PokeNotificationAdapter(
         onItemsTheSame = { old, new -> old == new },
     ),
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): NotificationListViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationListViewHolder {
         return NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
-    override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int,) {
+    override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
         holder.apply {
             onBind(currentList[position])
 
