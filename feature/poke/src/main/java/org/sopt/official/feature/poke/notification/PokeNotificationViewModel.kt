@@ -88,21 +88,18 @@ class PokeNotificationViewModel @Inject constructor(
             }
     }
 
-    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean,) {
+    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean) {
         viewModelScope.launch {
             pokeUserUseCase.invoke(
                 message = message,
                 userId = userId,
-            )
-                .onSuccess { response ->
-                    _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
-                .onFailure { throwable ->
-                    _pokeUserUiState.emit(UiState.Failure(throwable))
-                }
+            ).onSuccess { response ->
+                _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
+            }.onApiError { statusCode, responseMessage ->
+                _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
+            }.onFailure { throwable ->
+                _pokeUserUiState.emit(UiState.Failure(throwable))
+            }
         }
     }
 }

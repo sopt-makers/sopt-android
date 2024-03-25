@@ -26,8 +26,8 @@ package org.sopt.official.common.util
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
 import android.os.Parcelable
+import androidx.core.content.IntentCompat
 import java.io.Serializable
 import kotlin.properties.ReadOnlyProperty
 
@@ -40,11 +40,7 @@ fun stringExtra(defaultValue: String? = null) = ReadOnlyProperty<Activity, Strin
 }
 
 inline fun <reified T : Serializable?> Intent.serializableExtra(key: String): T? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getSerializableExtra(key, T::class.java)
-    } else {
-        getSerializableExtra(key) as? T
-    }
+    return IntentCompat.getSerializableExtra(this, key, T::class.java)
 }
 
 inline fun <reified S : Serializable> serializableExtra(defaultValue: S? = null) = ReadOnlyProperty<Activity, S?> { thisRef, property ->
@@ -52,5 +48,5 @@ inline fun <reified S : Serializable> serializableExtra(defaultValue: S? = null)
 }
 
 inline fun <reified T : Parcelable> parcelableExtra(defaultValue: T? = null) = ReadOnlyProperty<Activity, T?> { thisRef, property ->
-    thisRef.intent.getParcelableExtra(property.name) ?: defaultValue
+    IntentCompat.getParcelableExtra(thisRef.intent, property.name, T::class.java) ?: defaultValue
 }

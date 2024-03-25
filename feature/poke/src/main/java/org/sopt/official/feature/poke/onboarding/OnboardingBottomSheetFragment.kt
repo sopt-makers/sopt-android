@@ -38,11 +38,11 @@ class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
 
     var onDismissEvent: (() -> Unit)? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return FragmentOnboardingBottomSheetBinding.inflate(layoutInflater).root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?,) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initClickListener()
     }
