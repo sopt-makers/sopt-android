@@ -24,17 +24,34 @@
  */
 package org.sopt.official.data.soptamp
 
-import org.junit.Assert.*
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
 import org.junit.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+class StampResponseSerializationTest {
+    @OptIn(ExperimentalSerializationApi::class)
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun `missionId가 비어있을 시 역직렬화가 실패해야 한다`() {
+        // given
+        val json = """
+            {
+                "createdAt": "2023-01-01T00:00:00",
+                "updatedAt": "2023-01-01T00:00:00",
+                "id": 1,
+                "contents": "contents",
+                "images": ["image1", "image2"]
+            }
+        """.trimIndent()
+        val jsonDecoder = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+        }
+
+        // expected
+        assertDoesNotThrow {
+            jsonDecoder.decodeFromString<StampResponse>(json)
+        }
     }
 }
