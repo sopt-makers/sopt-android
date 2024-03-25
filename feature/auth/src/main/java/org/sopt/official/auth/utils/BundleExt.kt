@@ -22,16 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.playground.auth.utils
+package org.sopt.official.auth.utils
 
-import android.os.Build
 import android.os.Bundle
+import androidx.core.os.BundleCompat
 
 internal inline fun <reified T> Bundle.getParcelableAs(key: String): T? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelable(key, T::class.java)
-    } else {
-        @Suppress("DEPRECATION")
-        getParcelable(key) as? T
-    }
+    return BundleCompat.getParcelable(this, key, T::class.java)
 }

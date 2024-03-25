@@ -25,7 +25,7 @@
 package org.sopt.official.auth
 
 import android.os.Bundle
-import org.sopt.official.playground.auth.utils.getParcelableAs
+import org.sopt.official.auth.utils.getParcelableAs
 
 internal class PlaygroundAuthResultReceiver(
     callback: (String?, Throwable?) -> Unit
