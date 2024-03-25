@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,32 @@
  */
 package org.sopt.official.data.soptamp
 
-import org.junit.Assert.*
+import kotlinx.serialization.json.Json
 import org.junit.Test
+import org.junit.jupiter.api.assertDoesNotThrow
+import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
-class ExampleUnitTest {
+class StampResponseSerializationTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun `missionId가 비어있을 시 역직렬화가 실패해야 한다`() {
+        // given
+        val json = """
+            {
+                "createdAt": "2023-01-01T00:00:00",
+                "updatedAt": "2023-01-01T00:00:00",
+                "id": 1,
+                "contents": "contents",
+                "images": ["image1", "image2"]
+            }
+        """.trimIndent()
+        val jsonDecoder = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+        }
+
+        // expected
+        assertDoesNotThrow {
+            jsonDecoder.decodeFromString<StampResponse>(json)
+        }
     }
 }

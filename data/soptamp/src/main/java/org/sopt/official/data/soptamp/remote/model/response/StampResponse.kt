@@ -41,7 +41,7 @@ data class StampResponse(
     @SerialName("images")
     val images: List<String>? = null,
     @SerialName("missionId")
-    val missionId: Int
+    val missionId: Int = -1
 ) {
     fun toDomain() = Archive(
         createdAt = createdAt,
