@@ -69,7 +69,7 @@ class MissionsViewModel @Inject constructor(
         )
     }
 
-    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String,) {
+    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String) {
         if (nickname.isEmpty()) {
             val missions = when (filter) {
                 MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()

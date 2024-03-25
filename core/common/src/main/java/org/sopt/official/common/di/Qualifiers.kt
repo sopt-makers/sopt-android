@@ -32,7 +32,7 @@ annotation class Logging
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class Auth()
+annotation class Auth
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)

@@ -48,7 +48,7 @@ class PokeUserListAdapter(
         },
     ),
 ) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int,): PokeUserViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokeUserViewHolder {
         return when (pokeUserListItemViewType) {
             PokeUserListItemViewType.SMALL ->
                 PokeUserViewHolder.Small(
@@ -62,7 +62,7 @@ class PokeUserListAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: PokeUserViewHolder, position: Int,) {
+    override fun onBindViewHolder(holder: PokeUserViewHolder, position: Int) {
         holder.apply {
             onBind(currentList[holder.adapterPosition])
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {

@@ -316,7 +316,7 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendList>) {
         with(binding) {
-            fun setVisibility(box1: View, box2: View, emptyBox: View, friendListSize: Int,) {
+            fun setVisibility(box1: View, box2: View, emptyBox: View, friendListSize: Int) {
                 box1.visibility = if (friendListSize >= 1) View.VISIBLE else View.GONE
                 box2.visibility = if (friendListSize == 2) View.VISIBLE else View.GONE
                 emptyBox.visibility = if (friendListSize == 0) View.VISIBLE else View.GONE
@@ -448,7 +448,7 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false,) {
+    private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false) {
         messageListBottomSheet =
             MessageListBottomSheetFragment.Builder()
                 .setMessageListType(pokeMessageType)
@@ -466,7 +466,7 @@ class PokeMainActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs,) = Intent(context, PokeMainActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeMainActivity::class.java).apply {
             putExtra("args", args)
         }
     }

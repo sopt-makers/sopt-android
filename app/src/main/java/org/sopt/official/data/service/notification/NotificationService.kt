@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.service.notification
 
-import org.sopt.official.data.model.attendance.*
 import org.sopt.official.data.model.notification.request.UpdatePushTokenRequest
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.data.model.notification.response.NotificationHistoryItemResponse
