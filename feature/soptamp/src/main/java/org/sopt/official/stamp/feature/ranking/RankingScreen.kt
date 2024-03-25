@@ -166,7 +166,7 @@ fun RankingScreen(
                 state = listState,
                 modifier = Modifier.padding(defaultPadding),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(bottom = 70.dp)
+                contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 item {
                     TopRankerList(
