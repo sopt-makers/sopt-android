@@ -63,10 +63,10 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
         modifier = Modifier
             .fillMaxWidth()
             .padding(
-                top = 8.dp,
-                bottom = 10.dp,
-                start = 9.dp,
-                end = 9.dp
+                top = 6.dp,
+                bottom = 11.dp,
+                start = 6.dp,
+                end = 6.dp
             ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
