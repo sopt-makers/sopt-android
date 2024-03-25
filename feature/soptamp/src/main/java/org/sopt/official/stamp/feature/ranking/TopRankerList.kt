@@ -91,9 +91,24 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
             val onClickRanker = { ranker: RankerUiModel ->
                 onClickRankerState = ranker
             }
-            TopRankerItem(ranker = topRanker.second, 110.dp, onClickRanker)
-            TopRankerItem(ranker = topRanker.first, 150.dp, onClickRanker)
-            TopRankerItem(ranker = topRanker.third, 70.dp, onClickRanker)
+            TopRankerItem(
+                ranker = topRanker.second,
+                height = 110.dp,
+                onClick = onClickRanker,
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.second) }
+            )
+            TopRankerItem(
+                ranker = topRanker.first,
+                height = 150.dp,
+                onClick = onClickRanker,
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.first) }
+            )
+            TopRankerItem(
+                ranker = topRanker.third,
+                height = 70.dp,
+                onClick = onClickRanker,
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.third) }
+            )
         }
     }
 }
