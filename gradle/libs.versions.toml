@@ -62,7 +62,7 @@ ktlint = "12.1.0"
 sentry = "4.3.1"
 sentry-android = "7.6.0"
 process-pheonix = "3.0.0"
-amplitude = "1.16.2"
+amplitude = "1.16.4"
 spotless = "6.25.0"
 
 [libraries]
