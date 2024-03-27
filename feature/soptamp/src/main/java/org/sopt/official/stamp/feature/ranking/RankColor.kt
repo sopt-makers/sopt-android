@@ -25,6 +25,7 @@
 package org.sopt.official.stamp.feature.ranking
 
 import androidx.compose.runtime.Composable
+import org.sopt.official.stamp.designsystem.style.Gray300
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
@@ -56,7 +57,7 @@ fun getRankBackgroundColor(rank: Int) = when (rank) {
     1 -> SoptTheme.colors.purple200
     2 -> SoptTheme.colors.pink200
     3 -> SoptTheme.colors.mint200
-    else -> SoptTheme.colors.onSurface5
+    else -> Gray300
 }
 
 @Composable
