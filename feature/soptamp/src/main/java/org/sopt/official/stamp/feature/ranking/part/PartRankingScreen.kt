@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,7 +38,6 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
 import org.sopt.official.stamp.LocalTracker
@@ -161,34 +159,11 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
         verticalAlignment = Alignment.Bottom
     ) {
         items(rankList) { part ->
-            PartRankingBar(part)
+            RankingBar(
+                modifier = Modifier.size(width = 50.dp, height = getRankHeight(part.rank)),
+                rank = part.rank
+            )
         }
-    }
-}
-
-@Composable
-fun PartRankingBar(part: PartRankModel, width: Dp = 50.dp) {
-    val newRank = if (part.point != 0) {
-        part.rank
-    } else {
-        0
-    }
-
-    Column(
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        if (part.rank < 4 && part.point != 0) {
-            TopRankBarOfRankText(rank = part.rank)
-        }
-        RankingBar(modifier = Modifier.size(width = 50.dp, height = getRankHeight(newRank)), rank = newRank)
-        Spacer(modifier = Modifier.size(8.dp))
-        Text(
-            text = part.part,
-            maxLines = 1,
-            style = SoptTheme.typography.sub3,
-            color = SoptTheme.colors.onSurface80
-        )
     }
 }
 
