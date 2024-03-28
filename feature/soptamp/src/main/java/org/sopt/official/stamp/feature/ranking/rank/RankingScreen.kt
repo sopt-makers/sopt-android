@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.rank
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +66,8 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
+import org.sopt.official.stamp.feature.ranking.RankListItem
+import org.sopt.official.stamp.feature.ranking.TopRankerList
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
