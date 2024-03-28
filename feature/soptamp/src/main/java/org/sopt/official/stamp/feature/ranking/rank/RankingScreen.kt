@@ -131,12 +131,13 @@ fun RankingScreen(
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
         tracker.track(
-            EventType.VIEW, if (isCurrent) "nowranking" else "partranking")
+            EventType.VIEW, if (isCurrent) "nowranking" else "partdetailranking"
+        )
     }
     Scaffold(
         topBar = {
             RankingHeader(
-                title = type + " 랭킹",
+                title = if (isCurrent) "$type 랭킹" else "$type 파트 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
