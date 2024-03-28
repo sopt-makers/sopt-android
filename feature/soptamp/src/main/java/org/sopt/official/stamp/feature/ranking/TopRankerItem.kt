@@ -130,38 +130,6 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
     }
 }
 
-@Composable
-fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
-    Box(
-        modifier = Modifier
-            .noRippleClickable {
-                onClickTopRankerBubble()
-            }
-            .size(width = 97.dp, height = 32.dp)
-            .background(
-                color = getRankBackgroundColor(rank),
-                shape = RoundedCornerShape(50.dp)
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = nickname,
-                maxLines = 1,
-                style = SoptTheme.typography.sub3,
-                color = Gray800
-            )
-            SoptampIconButton(
-                modifier = Modifier.size(16.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
-                tint = Gray600
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 fun PreviewTopRankerItem() {
