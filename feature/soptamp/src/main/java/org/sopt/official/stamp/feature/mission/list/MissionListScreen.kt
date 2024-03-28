@@ -64,6 +64,10 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
@@ -125,7 +129,7 @@ fun MissionListScreen(
             is MissionsState.Success -> MissionListScreen(
                 nickname = nickname,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                menuTexts = MissionsFilter.getTitleOfMissionsList(),
+                menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
                 onMissionItemClick = { item ->
                     navigator.navigate(
@@ -144,7 +148,7 @@ fun MissionListScreen(
 fun MissionListScreen(
     nickname: String,
     missionListUiModel: MissionListUiModel,
-    menuTexts: List<String>,
+    menuTexts: ImmutableList<String>,// List<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onPartRankingButtonClick: () -> Unit = {},
@@ -383,7 +387,7 @@ fun PreviewMissionListScreen() {
         MissionListScreen(
             nickname = "Nunu",
             missionListUiModel,
-            listOf("전체 미션", "완료 미션", "미완료 미션")
+            persistentListOf("전체 미션", "완료 미션", "미완료 미션")
         )
     }
 }

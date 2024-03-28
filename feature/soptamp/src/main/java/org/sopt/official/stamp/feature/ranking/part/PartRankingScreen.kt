@@ -38,6 +38,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
 import org.sopt.official.stamp.LocalTracker
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
@@ -96,7 +99,7 @@ fun PartRankingScreen(
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PartRankingScreen(
-    partRankList: List<PartRankModel>,
+    partRankList: ImmutableList<PartRankModel>,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
@@ -261,7 +264,7 @@ fun getRankHeight(rank: Int) = when (rank) {
 @Preview
 @Composable
 fun PartRankingPreview() {
-    val partRankList = listOf(
+    val partRankList = persistentListOf(
         PartRankModel(
             3,
             "기획",
@@ -291,7 +294,7 @@ fun PartRankingPreview() {
             5,
             "서버",
             200
-        ),
+        )
     )
     SoptTheme {
         PartRankingScreen(partRankList)
