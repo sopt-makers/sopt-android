@@ -86,7 +86,6 @@ import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.mission.model.toArgs
-import org.sopt.official.stamp.feature.ranking.part.PartRankingScreen
 
 @MissionNavGraph(true)
 @Destination("list")
