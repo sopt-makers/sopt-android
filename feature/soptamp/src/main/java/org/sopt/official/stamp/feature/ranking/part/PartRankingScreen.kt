@@ -67,7 +67,8 @@ fun PartRankingScreen(
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
         tracker.track(
-            EventType.VIEW, "partranking"
+            EventType.VIEW,
+            "partranking"
         )
         // TODO: Data fetch
     }
@@ -91,7 +92,6 @@ fun PartRankingScreen(
         }
     }
 }
-
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
