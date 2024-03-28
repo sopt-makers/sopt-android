@@ -24,12 +24,13 @@
  */
 package org.sopt.official.stamp.feature.ranking.part
 
+import kotlinx.collections.immutable.ImmutableList
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 
 sealed class PartRankingState {
     data object Loading : PartRankingState()
 
-    data class Success(val partRankList: List<PartRankModel>) : PartRankingState()
+    data class Success(val partRankList: ImmutableList<PartRankModel>) : PartRankingState()
 
     data object Failure : PartRankingState()
 }
