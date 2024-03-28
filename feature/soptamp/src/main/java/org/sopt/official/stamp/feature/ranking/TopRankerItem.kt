@@ -60,7 +60,14 @@ fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) ->
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopRankBarOfRankText(rank = ranker.rank)
-        TopRankBarOfGraph(rank = ranker.rank, score = ranker.score, height = height)
+        RankingBar(90.dp, height, ranker.rank) {
+            RankScore(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                rank = ranker.rank,
+                score = ranker.score
+            )
+        }
         Spacer(modifier = Modifier.size(10.dp))
         TopRankBarOfUserName(
             rank = ranker.rank,
@@ -88,26 +95,6 @@ fun TopRankBarOfRankText(rank: Int) {
     } else {
         RankNumber(rank = rank)
         Spacer(modifier = Modifier.size(10.dp))
-    }
-}
-
-@Composable
-fun TopRankBarOfGraph(rank: Int, score: Int, height: Dp) {
-    Box(
-        modifier = Modifier
-            .size(90.dp, height)
-            .background(
-                color = getRankBackgroundColor(rank),
-                shape = RoundedCornerShape(8.dp)
-            )
-    ) {
-        RankScore(
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 8.dp),
-            rank = rank,
-            score = score
-        )
     }
 }
 

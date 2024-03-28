@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.rank
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +66,8 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
+import org.sopt.official.stamp.feature.ranking.RankListItem
+import org.sopt.official.stamp.feature.ranking.TopRankerList
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
@@ -76,11 +78,12 @@ import org.sopt.official.stamp.util.toPx
 @Destination("ranking")
 @Composable
 fun RankingScreen(
-    isCurrent: Boolean,
+    type: String,
     rankingViewModel: RankingViewModel = hiltViewModel(),
     resultNavigator: ResultBackNavigator<Boolean>,
     navigator: DestinationsNavigator
 ) {
+    val isCurrent = type == "34기"
     val state by rankingViewModel.state.collectAsState()
     LaunchedEffect(true) {
         rankingViewModel.fetchRanking(isCurrent)
@@ -94,6 +97,7 @@ fun RankingScreen(
 
             is RankingState.Success -> RankingScreen(
                 isCurrent = isCurrent,
+                type = type,
                 refreshing = rankingViewModel.isRefreshing,
                 onRefresh = { rankingViewModel.onRefresh(isCurrent) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
@@ -109,6 +113,7 @@ fun RankingScreen(
 @Composable
 fun RankingScreen(
     isCurrent: Boolean,
+    type: String,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
@@ -125,12 +130,15 @@ fun RankingScreen(
     val scrollOffsetPx = (-257).dp.toPx()
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
-        tracker.track(EventType.VIEW, if (isCurrent) "nowranking" else "allranking")
+        tracker.track(
+            EventType.VIEW,
+            if (isCurrent) "nowranking" else "partdetailranking"
+        )
     }
     Scaffold(
         topBar = {
             RankingHeader(
-                title = if (isCurrent) "34기 랭킹" else "전체 랭킹",
+                title = if (isCurrent) "$type 랭킹" else "$type 파트 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
@@ -223,7 +231,8 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
-            isCurrent = false,
+            isCurrent = true,
+            type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
         )

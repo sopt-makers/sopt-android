@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.rank
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
