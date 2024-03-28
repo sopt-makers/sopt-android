@@ -178,7 +178,7 @@ fun PartRankingBar(part: PartRankModel, width: Dp = 50.dp) {
         if (part.rank < 4 && part.point != 0) {
             TopRankBarOfRankText(rank = part.rank)
         }
-        RankingBar(width = 50.dp, height = getRankHeight(newRank), rank = newRank)
+        RankingBar(modifier = Modifier.size(width = 50.dp, height = getRankHeight(newRank)), rank = newRank)
         Spacer(modifier = Modifier.size(8.dp))
         Text(
             text = part.part,

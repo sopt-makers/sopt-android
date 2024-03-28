@@ -60,7 +60,7 @@ fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) ->
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         TopRankBarOfRankText(rank = ranker.rank)
-        RankingBar(90.dp, height, ranker.rank) {
+        RankingBar(modifier = Modifier.size(width = 90.dp, height = height), ranker.rank) {
             RankScore(
                 modifier = Modifier
                     .padding(top = 8.dp),
