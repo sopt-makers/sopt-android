@@ -78,6 +78,7 @@ import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
+import org.sopt.official.stamp.feature.destinations.PartRankingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -85,6 +86,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.mission.model.toArgs
+import org.sopt.official.stamp.feature.ranking.part.PartRankingScreen
 
 @MissionNavGraph(true)
 @Destination("list")
@@ -131,8 +133,8 @@ fun MissionListScreen(
                         MissionDetailScreenDestination(item)
                     )
                 },
-                onAllRankingButtonClick = { navigator.navigate(RankingScreenDestination(false)) },
-                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination(true)) },
+                onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
+                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("34기")) },
                 onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
             )
         }
@@ -146,7 +148,7 @@ fun MissionListScreen(
     menuTexts: List<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
-    onAllRankingButtonClick: () -> Unit = {},
+    onPartRankingButtonClick: () -> Unit = {},
     onCurrentRankingButtonClick: () -> Unit = {},
     onOnboadingButtonClick: () -> Unit = {},
 ) {
@@ -161,10 +163,10 @@ fun MissionListScreen(
         },
         floatingActionButton = {
             SoptampSegmentedFloatingButton(
-                option1 = "전체 랭킹",
-                option2 = "34기 랭킹",
-                onClickFirstOption = onAllRankingButtonClick,
-                onClickSecondOption = onCurrentRankingButtonClick
+                option1 = "34기 랭킹",
+                option2 = "파트별 랭킹",
+                onClickFirstOption = onCurrentRankingButtonClick,
+                onClickSecondOption = onPartRankingButtonClick
             )
         },
         floatingActionButtonPosition = FabPosition.Center
