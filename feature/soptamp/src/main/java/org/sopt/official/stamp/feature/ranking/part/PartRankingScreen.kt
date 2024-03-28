@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
@@ -37,8 +36,8 @@ import org.sopt.official.stamp.designsystem.style.Gray800
 import org.sopt.official.stamp.designsystem.style.MontserratBold
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.RankScore
+import org.sopt.official.stamp.feature.ranking.RankingBar
 import org.sopt.official.stamp.feature.ranking.TopRankBarOfRankText
-import org.sopt.official.stamp.feature.ranking.getRankBackgroundColor
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.rank.RankingHeader
 
@@ -133,20 +132,6 @@ fun PartRankingBar(part: PartRankModel) {
             style = SoptTheme.typography.sub3,
             color = Gray800
         )
-    }
-}
-
-@Composable
-fun RankingBar(width: Dp, height: Dp, rank: Int, content: () -> Unit = {}) {
-    Box(
-        modifier = Modifier
-            .size(width, height)
-            .background(
-                color = getRankBackgroundColor(rank),
-                shape = RoundedCornerShape(8.dp)
-            )
-    ) {
-        content()
     }
 }
 
