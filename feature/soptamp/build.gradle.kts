@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(libs.kotlin.datetime)
+    implementation(libs.kotlin.collections.immutable)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.compose.destination.core)
