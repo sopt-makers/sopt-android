@@ -131,7 +131,8 @@ fun RankingScreen(
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
         tracker.track(
-            EventType.VIEW, if (isCurrent) "nowranking" else "partdetailranking"
+            EventType.VIEW,
+            if (isCurrent) "nowranking" else "partdetailranking"
         )
     }
     Scaffold(
