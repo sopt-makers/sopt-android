@@ -22,14 +22,25 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.ramcosta.composedestinations.result.ResultBackNavigator
+import org.sopt.official.stamp.config.navigation.MissionNavGraph
+import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.Gray500
 import org.sopt.official.stamp.designsystem.style.Gray800
@@ -41,13 +52,49 @@ import org.sopt.official.stamp.feature.ranking.TopRankBarOfRankText
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.rank.RankingHeader
 
+@MissionNavGraph
+@Destination("partRanking")
+@Composable
+fun PartRankingScreen(
+    partRankingViewModel: PartRankingViewModel = hiltViewModel(),
+    resultNavigator: ResultBackNavigator<Boolean>,
+    navigator: DestinationsNavigator
+) {
+    val state by partRankingViewModel.state.collectAsState()
+    LaunchedEffect(true) {
+        // TODO: Data fetch
+    }
+
+    SoptTheme {
+        when (state) {
+            PartRankingState.Loading -> LoadingScreen()
+            PartRankingState.Failure -> SingleOptionDialog {
+                // TODO: Error Handling
+            }
+
+            is PartRankingState.Success -> PartRankingScreen(
+                partRankList = (state as PartRankingState.Success).partRankList,
+                refreshing = partRankingViewModel.isRefreshing,
+                onRefresh = { partRankingViewModel.onRefresh() },
+                onClickBack = { resultNavigator.navigateBack() },
+                onClickPart = {
+                    // TODO: Navigate PartDetailRanking
+                    // arg로 --파트 or 34기 이렇게 보내주고, 그걸 랭킹에서 받아서 쓰자.
+                }
+            )
+        }
+    }
+}
+
+
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PartRankingScreen(
     partRankList: List<PartRankModel>,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
-    onClickBack: () -> Unit = {}
+    onClickBack: () -> Unit = {},
+    onClickPart: () -> Unit = {}
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -59,7 +106,7 @@ fun PartRankingScreen(
         topBar = {
             RankingHeader(
                 title = "파트별 랭킹",
-                onClickBack = { onClickBack() }
+                onClickBack = onClickBack
             )
         }
     ) { paddingValues ->
@@ -83,9 +130,7 @@ fun PartRankingScreen(
                 items(partRankList.sortedBy { it.rank }) { item -> // 리스트를 받으면 넣을 예정
                     PartRankListItem(
                         item = item,
-                        onClickUser = {
-                            // 파트별 랭킹 페이지 이동 (기존 RankingScreen 활용)
-                        }
+                        onClickPart = onClickPart
                     )
                 }
             }
@@ -111,7 +156,7 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
 }
 
 @Composable
-fun PartRankingBar(part: PartRankModel) {
+fun PartRankingBar(part: PartRankModel, width: Dp = 50.dp) {
     val newRank = if (part.point != 0) {
         part.rank
     } else {
@@ -137,7 +182,7 @@ fun PartRankingBar(part: PartRankModel) {
 }
 
 @Composable
-fun PartRankListItem(item: PartRankModel, onClickUser: () -> Unit = {}) {
+fun PartRankListItem(item: PartRankModel, onClickPart: () -> Unit = {}) {
     val itemPadding = PaddingValues(
         top = 12.dp,
         bottom = 11.dp,
@@ -152,7 +197,7 @@ fun PartRankListItem(item: PartRankModel, onClickUser: () -> Unit = {}) {
     Row(
         modifier = backgroundModifier
             .fillMaxWidth()
-            .noRippleClickable { onClickUser() }
+            .noRippleClickable { onClickPart() }
             .padding(itemPadding),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
