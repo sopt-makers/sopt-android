@@ -38,6 +38,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import org.sopt.official.analytics.EventType
+import org.sopt.official.stamp.LocalTracker
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
@@ -46,6 +48,7 @@ import org.sopt.official.stamp.designsystem.style.Gray500
 import org.sopt.official.stamp.designsystem.style.Gray800
 import org.sopt.official.stamp.designsystem.style.MontserratBold
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankScore
 import org.sopt.official.stamp.feature.ranking.RankingBar
 import org.sopt.official.stamp.feature.ranking.TopRankBarOfRankText
@@ -61,7 +64,11 @@ fun PartRankingScreen(
     navigator: DestinationsNavigator
 ) {
     val state by partRankingViewModel.state.collectAsState()
+    val tracker = LocalTracker.current
     LaunchedEffect(true) {
+        tracker.track(
+            EventType.VIEW, "partranking"
+        )
         // TODO: Data fetch
     }
 
@@ -78,8 +85,7 @@ fun PartRankingScreen(
                 onRefresh = { partRankingViewModel.onRefresh() },
                 onClickBack = { resultNavigator.navigateBack() },
                 onClickPart = {
-                    // TODO: Navigate PartDetailRanking
-                    // arg로 --파트 or 34기 이렇게 보내주고, 그걸 랭킹에서 받아서 쓰자.
+                    navigator.navigate(RankingScreenDestination(it))
                 }
             )
         }
@@ -94,7 +100,7 @@ fun PartRankingScreen(
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
-    onClickPart: () -> Unit = {}
+    onClickPart: (String) -> Unit = {}
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -130,7 +136,9 @@ fun PartRankingScreen(
                 items(partRankList.sortedBy { it.rank }) { item -> // 리스트를 받으면 넣을 예정
                     PartRankListItem(
                         item = item,
-                        onClickPart = onClickPart
+                        onClickPart = {
+                            onClickPart(item.part)
+                        }
                     )
                 }
             }
