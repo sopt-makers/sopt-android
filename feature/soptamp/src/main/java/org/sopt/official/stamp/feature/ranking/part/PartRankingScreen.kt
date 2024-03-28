@@ -25,7 +25,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
@@ -155,6 +154,7 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
 }
 
 @Composable
+    val backgroundModifier = Modifier.background(
 fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
     val newRank = if (part.point != 0) {
         part.rank
