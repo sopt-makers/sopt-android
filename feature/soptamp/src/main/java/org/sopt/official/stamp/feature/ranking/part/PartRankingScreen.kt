@@ -44,6 +44,7 @@ import org.sopt.official.stamp.feature.ranking.rank.RankingHeader
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PartRankingScreen(
+    partRankList: List<PartRankModel>,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {}
@@ -83,7 +84,7 @@ fun PartRankingScreen(
                     PartRankListItem(
                         item = item,
                         onClickUser = {
-                            // 페이지 이동
+                            // 파트별 랭킹 페이지 이동 (기존 RankingScreen 활용)
                         }
                     )
                 }
@@ -94,7 +95,7 @@ fun PartRankingScreen(
 }
 
 @Composable
-fun PartRankingBarList(rankList: List<PartRankModel> = partRankList) {
+fun PartRankingBarList(rankList: List<PartRankModel>) {
     LazyRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(
@@ -204,43 +205,42 @@ fun getRankHeight(rank: Int) = when (rank) {
     else -> 27.dp
 }
 
-val partRankList = listOf(
-    PartRankModel(
-        3,
-        "기획",
-        500
-    ),
-    PartRankModel(
-        4,
-        "디자인",
-        400
-    ),
-    PartRankModel(
-        6,
-        "웹",
-        100
-    ),
-    PartRankModel(
-        1,
-        "아요",
-        10000
-    ),
-    PartRankModel(
-        2,
-        "안드",
-        800
-    ),
-    PartRankModel(
-        5,
-        "서버",
-        200
-    ),
-)
-
 @Preview
 @Composable
 fun PartRankingPreview() {
+    val partRankList = listOf(
+        PartRankModel(
+            3,
+            "기획",
+            500
+        ),
+        PartRankModel(
+            4,
+            "디자인",
+            400
+        ),
+        PartRankModel(
+            6,
+            "웹",
+            100
+        ),
+        PartRankModel(
+            2,
+            "아요",
+            1000
+        ),
+        PartRankModel(
+            1,
+            "안드",
+            8000
+        ),
+        PartRankModel(
+            5,
+            "서버",
+            200
+        ),
+    )
     SoptTheme {
-        PartRankingScreen()
+        PartRankingScreen(partRankList)
     }
 }
