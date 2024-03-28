@@ -83,8 +83,8 @@ fun PartRankingScreen(
             is PartRankingState.Success -> PartRankingScreen(
                 partRankList = (state as PartRankingState.Success).partRankList,
                 refreshing = partRankingViewModel.isRefreshing,
-                onRefresh = { partRankingViewModel.onRefresh() },
-                onClickBack = { resultNavigator.navigateBack() },
+                onRefresh = partRankingViewModel::onRefresh,
+                onClickBack = resultNavigator::navigateBack,
                 onClickPart = {
                     navigator.navigate(RankingScreenDestination(it))
                 }
@@ -184,7 +184,7 @@ fun PartRankingBar(part: PartRankModel, width: Dp = 50.dp) {
             text = part.part,
             maxLines = 1,
             style = SoptTheme.typography.sub3,
-            color = Gray800
+            color = SoptTheme.colors.onSurface80
         )
     }
 }

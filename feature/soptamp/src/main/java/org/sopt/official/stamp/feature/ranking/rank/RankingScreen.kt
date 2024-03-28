@@ -102,7 +102,7 @@ fun RankingScreen(
                 onRefresh = { rankingViewModel.onRefresh(isCurrent) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
                 nickname = rankingViewModel.nickname,
-                onClickBack = { resultNavigator.navigateBack() },
+                onClickBack = resultNavigator::navigateBack,
                 onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
             )
         }
