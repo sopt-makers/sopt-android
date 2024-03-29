@@ -147,7 +147,7 @@ fun MissionListScreen(
 fun MissionListScreen(
     nickname: String,
     missionListUiModel: MissionListUiModel,
-    menuTexts: ImmutableList<String>, // List<String>,
+    menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onPartRankingButtonClick: () -> Unit = {},
