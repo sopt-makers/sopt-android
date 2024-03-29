@@ -53,7 +53,6 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
 
     val modifier = Modifier
         .fillMaxWidth()
-        .padding(14.dp)
         .defaultMinSize(minHeight = 132.dp)
         .clip(RoundedCornerShape(10.dp))
 
