@@ -118,7 +118,7 @@ class MyPageActivity : AppCompatActivity() {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
         }
         binding.iconSendOpinion.setOnSingleClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_GOOGLE_FORM)))
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
         }
         binding.iconAdjustSentence.setOnSingleClickListener {
             startActivity(AdjustSentenceActivity.getIntent(this))
