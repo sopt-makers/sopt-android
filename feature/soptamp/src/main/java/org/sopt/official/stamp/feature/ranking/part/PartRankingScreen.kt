@@ -45,7 +45,6 @@ import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.Gray500
 import org.sopt.official.stamp.designsystem.style.Gray800
 import org.sopt.official.stamp.designsystem.style.MontserratBold
 import org.sopt.official.stamp.designsystem.style.SoptTheme
@@ -159,11 +158,37 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
         verticalAlignment = Alignment.Bottom
     ) {
         items(rankList) { part ->
-            RankingBar(
-                modifier = Modifier.size(width = 50.dp, height = getRankHeight(part.rank)),
-                rank = part.rank
-            )
+            PartRankingBar(part = part, modifier = Modifier.size(width = 50.dp, height = getRankHeight(part.rank)))
         }
+    }
+}
+
+@Composable
+fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
+    val newRank = if (part.point != 0) {
+        part.rank
+    } else {
+        0
+    }
+
+    Column(
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if (part.rank < 4 && part.point != 0) {
+            TopRankBarOfRankText(rank = part.rank)
+        }
+        RankingBar(
+            modifier = modifier,
+            rank = newRank
+        )
+        Spacer(modifier = Modifier.size(8.dp))
+        Text(
+            text = part.part,
+            maxLines = 1,
+            style = SoptTheme.typography.sub3,
+            color = SoptTheme.colors.onSurface80
+        )
     }
 }
 
@@ -196,7 +221,7 @@ fun PartRankListItem(item: PartRankModel, onClickPart: () -> Unit = {}) {
                 fontFamily = MontserratBold,
                 fontSize = 30.sp,
                 fontWeight = FontWeight.Bold,
-                color = Gray500,
+                color = SoptTheme.colors.onSurface50,
                 modifier = Modifier.align(Alignment.Center),
                 textAlign = TextAlign.Center
             )
