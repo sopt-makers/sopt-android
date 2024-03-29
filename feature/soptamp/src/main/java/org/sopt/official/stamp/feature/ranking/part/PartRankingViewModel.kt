@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +27,7 @@ class PartRankingViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    private fun onSuccessStateChange(ranking: List<PartRankModel>) {
+    private fun onSuccessStateChange(ranking: ImmutableList<PartRankModel>) {
         _state.value = PartRankingState.Success(ranking)
     }
 }
