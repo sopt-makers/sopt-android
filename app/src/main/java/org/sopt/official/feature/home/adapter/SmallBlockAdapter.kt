@@ -25,7 +25,6 @@
 package org.sopt.official.feature.home.adapter
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
