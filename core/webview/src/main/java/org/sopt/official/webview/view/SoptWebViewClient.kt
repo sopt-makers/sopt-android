@@ -37,25 +37,17 @@ class SoptWebViewClient(
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
+
         if (hasReloaded) return
-
         val script = """
-            (function() {
-                return new Promise((resolve, reject) => {
-                    window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
-                    resolve();
-                });
-            })().then(() => {
-                window.location.reload();
-                return window.localStorage.getItem('serviceAccessToken');
-            });
+            window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
         """.trimIndent()
-
-        view?.evaluateJavascript(script) { localStorageToken ->
-            Timber.tag("SoptWebViewClient").d("localStorageToken: $localStorageToken")
-            Timber.tag("SoptWebViewClient").d("playgroundToken: $dataStore.playgroundToken")
-            if (localStorageToken == dataStore.playgroundToken) hasReloaded = true
+        view?.evaluateJavascript(script) {
+            Timber.tag("SoptWebViewClient").d("Nunu localStorageToken: $it")
+            Timber.tag("SoptWebViewClient").d("Nunu playgroundToken: $dataStore.playgroundToken")
+            if (it == dataStore.playgroundToken) {
+                hasReloaded = true
+            }
         }
-
     }
 }
