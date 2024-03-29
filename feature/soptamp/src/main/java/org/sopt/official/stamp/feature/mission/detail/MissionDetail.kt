@@ -65,6 +65,7 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
@@ -158,10 +159,20 @@ fun MissionDetailScreen(
                     onChangeImage = viewModel::onChangeImage,
                     isEditable = isEditable && isMe
                 )
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(8.dp))
+                DatePicker(
+                    value = "", // TODO: 서버에서 받아오는 정보 추가해야함.
+                    placeHolder = "날짜를 입력해 주세요.",
+                    onClicked = {
+                                // TODO: BottomSheet 올라오게 해야함.
+                        },
+                    borderColor = getRankTextColor(level.value),
+                    isEditable = isEditable && isMe && !isSuccess
+                )
+                Spacer(modifier = Modifier.height(8.dp))
                 Memo(
                     value = content,
-                    placeHolder = "메모를 작성해 주세요.",
+                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                     onValueChange = viewModel::onChangeContent,
                     borderColor = getRankTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
