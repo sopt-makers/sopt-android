@@ -65,7 +65,6 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.immutableListOf
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.soptamp.MissionLevel
@@ -148,7 +147,7 @@ fun MissionListScreen(
 fun MissionListScreen(
     nickname: String,
     missionListUiModel: MissionListUiModel,
-    menuTexts: ImmutableList<String>,// List<String>,
+    menuTexts: ImmutableList<String>, // List<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onPartRankingButtonClick: () -> Unit = {},
