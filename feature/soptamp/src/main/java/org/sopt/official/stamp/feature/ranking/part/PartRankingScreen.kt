@@ -125,7 +125,7 @@ fun PartRankingScreen(
                 }
                 items(partRankList.sortedBy { it.rank }) { item ->
                     RankListItem(
-                        item = item,
+                        partItem = item,
                         onClickPart = {
                             onClickPart(item.part)
                         }
