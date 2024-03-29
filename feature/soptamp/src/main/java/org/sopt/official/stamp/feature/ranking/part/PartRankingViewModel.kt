@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
-import javax.inject.Inject
 
 @HiltViewModel
 class PartRankingViewModel @Inject constructor() : ViewModel() {
