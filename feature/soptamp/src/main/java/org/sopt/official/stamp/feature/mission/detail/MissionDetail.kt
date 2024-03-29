@@ -65,6 +65,7 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
 import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
@@ -95,6 +96,7 @@ fun MissionDetailScreen(
     val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsState(false)
     val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState(false)
     val isError by viewModel.isError.collectAsState(false)
+    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsState(false)
     val lottieResId = remember(level) {
         when (level.value) {
             1 -> R.raw.pinkstamps
@@ -164,8 +166,8 @@ fun MissionDetailScreen(
                     value = "", // TODO: 서버에서 받아오는 정보 추가해야함.
                     placeHolder = "날짜를 입력해 주세요.",
                     onClicked = {
-                                // TODO: BottomSheet 올라오게 해야함.
-                        },
+                        viewModel.onChangeDatePickerBottomSheetOpened(true)
+                    },
                     borderColor = getRankTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
@@ -234,6 +236,15 @@ fun MissionDetailScreen(
             NetworkErrorDialog {
                 viewModel.onPressNetworkErrorDialog()
             }
+        }
+        if (isBottomSheetOpened) {
+            DataPickerBottomSheet(
+                onSelected = { date ->
+                    viewModel.onChangeDate(date)
+                    viewModel.onChangeDatePickerBottomSheetOpened(false)
+                },
+                onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+            )
         }
     }
 }

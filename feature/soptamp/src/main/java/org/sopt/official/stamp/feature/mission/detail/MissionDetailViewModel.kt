@@ -48,6 +48,7 @@ data class PostUiState(
     val id: Int = -1,
     val imageUri: ImageModel = ImageModel.Empty,
     val content: String = "",
+    val date: String = "", // TODO: 서버에서 받아오는 값에 추가해야함.
     val createdAt: String = "",
     val stampId: Int = -1,
     val isSuccess: Boolean = false,
@@ -58,7 +59,8 @@ data class PostUiState(
     val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
     val isDeleteSuccess: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
-    val isMe: Boolean = true
+    val isMe: Boolean = true,
+    val isBottomSheetOpened: Boolean = false
 ) {
     companion object {
         fun from(data: Archive) = PostUiState(
@@ -93,6 +95,7 @@ class MissionDetailViewModel @Inject constructor(
     val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
+    val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
 
@@ -184,6 +187,18 @@ class MissionDetailViewModel @Inject constructor(
     fun onChangeDeleteDialogVisibility(value: Boolean) {
         uiState.update {
             it.copy(isDeleteDialogVisible = value)
+        }
+    }
+
+    fun onChangeDate(value: String){
+        uiState.update {
+            it.copy(date = value)
+        }
+    }
+
+    fun onChangeDatePickerBottomSheetOpened(value: Boolean) {
+        uiState.update {
+            it.copy(isBottomSheetOpened = value)
         }
     }
 
