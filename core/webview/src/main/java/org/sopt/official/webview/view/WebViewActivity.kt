@@ -1,12 +1,10 @@
 package org.sopt.official.webview.view
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class WebViewActivity : AppCompatActivity() {
@@ -18,10 +16,11 @@ class WebViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding  = ActivityWebViewBinding.inflate(layoutInflater)
+        binding = ActivityWebViewBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val mLinkUrl = intent.getStringExtra(INTENT_URL)
+        Timber.d("LinkUrl: $mLinkUrl")
         mLinkUrl?.let { binding.webView.loadUrl(it) }
     }
 }
