@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
+import javax.inject.Inject
 
 @HiltViewModel
 class PartRankingViewModel @Inject constructor() : ViewModel() {
