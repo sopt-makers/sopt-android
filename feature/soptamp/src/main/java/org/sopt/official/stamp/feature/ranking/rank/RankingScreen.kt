@@ -184,7 +184,7 @@ fun RankingScreen(
                 }
                 items(rankingListUiModel.otherRankingList) { item ->
                     RankListItem(
-                        item = item,
+                        rankerItem = item,
                         isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
                             if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
