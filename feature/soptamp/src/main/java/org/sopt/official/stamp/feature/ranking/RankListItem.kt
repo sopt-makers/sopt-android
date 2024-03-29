@@ -50,7 +50,8 @@ import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
 fun RankListItem(
-    item: Any,
+    partItem: PartRankModel? = null,
+    rankerItem: RankerUiModel? = null,
     isMyRanking: Boolean = false,
     onClickPart: (PartRankModel) -> Unit = {},
     onClickUser: (RankerUiModel) -> Unit = {}
@@ -79,20 +80,41 @@ fun RankListItem(
         )
     }
 
-    val isPartRankItem = item is PartRankModel
-    val rank = if (isPartRankItem) (item as PartRankModel).rank else (item as RankerUiModel).rank
-    val name = if (isPartRankItem) (item as PartRankModel).part else (item as RankerUiModel).nickname
-    val description = if (isPartRankItem) null else (item as RankerUiModel).getDescription()
-    val score = if (isPartRankItem) (item as PartRankModel).point else (item as RankerUiModel).score
+    val isPartRankItem = partItem != null
+
+
+    var ranking: Int = -1
+    var newRank = -1
+    var name: String = ""
+    var description: String? = ""
+    var scorePoint: Int = -1
+
+    if (partItem != null) {
+        with(partItem) {
+            ranking = rank
+            newRank = -1
+            name = part
+            description = null
+            scorePoint = point
+        }
+    } else if (rankerItem != null) {
+        with(rankerItem) {
+            ranking = rank
+            newRank = rank
+            name = nickname
+            description = getDescription()
+            scorePoint = score
+        }
+    }
 
     Row(
         modifier = backgroundModifier
             .fillMaxWidth()
             .noRippleClickable {
-                if (isPartRankItem) {
-                    onClickPart(item as PartRankModel)
-                } else {
-                    onClickUser(item as RankerUiModel)
+                if (partItem != null) {
+                    onClickPart(partItem)
+                } else if (rankerItem != null) {
+                    onClickUser(rankerItem)
                 }
             }
             .padding(itemPadding),
@@ -104,7 +126,7 @@ fun RankListItem(
         ) {
             RankNumber(
                 modifier = Modifier.align(Alignment.Center),
-                rank = rank,
+                rank = ranking,
                 isPartRankNumber = isPartRankItem,
                 isMyRankNumber = isMyRanking
             )
@@ -124,8 +146,8 @@ fun RankListItem(
         ) {
             RankScore(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                rank = if (isPartRankItem) -1 else (item as RankerUiModel).rank,
-                score = score,
+                rank = newRank,
+                score = scorePoint,
                 isMyRankScore = isMyRanking
             )
         }
@@ -162,33 +184,33 @@ fun PreviewRankListItem() {
     SoptTheme {
         Column(Modifier.padding(horizontal = 16.dp)) {
             RankListItem(
-                item = RankerUiModel(
+                rankerItem = RankerUiModel(
                     rank = 4,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 300
                 ),
-                true
+                isMyRanking = true
             )
             Spacer(modifier = Modifier.size(10.dp))
             RankListItem(
-                item = RankerUiModel(
+                rankerItem = RankerUiModel(
                     rank = 10,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 340
                 ),
-                false
+                isMyRanking = false
             )
             Spacer(modifier = Modifier.size(10.dp))
             RankListItem(
-                item = RankerUiModel(
+                rankerItem = RankerUiModel(
                     rank = 140,
                     nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
                     score = 945
                 ),
-                false
+                isMyRanking = false
             )
         }
     }
