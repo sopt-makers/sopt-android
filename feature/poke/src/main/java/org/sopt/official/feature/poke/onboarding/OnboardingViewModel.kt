@@ -90,7 +90,7 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun pokeUser(userId: Int, message: String,) {
+    fun pokeUser(userId: Int, message: String) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(

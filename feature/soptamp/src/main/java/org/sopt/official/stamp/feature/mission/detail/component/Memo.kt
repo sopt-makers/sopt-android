@@ -81,8 +81,11 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
         onValueChange = onValueChange,
         modifier = modifierWithBorder,
         shape = RoundedCornerShape(10.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = backgroundColor,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = backgroundColor,
+            unfocusedContainerColor = backgroundColor,
+            disabledContainerColor = backgroundColor,
+            errorContainerColor = backgroundColor,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,

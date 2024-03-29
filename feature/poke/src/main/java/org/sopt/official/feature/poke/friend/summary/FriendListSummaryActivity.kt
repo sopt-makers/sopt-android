@@ -39,6 +39,7 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
@@ -79,7 +80,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     private val recyclerViewItemDecorationDivider
         get() =
             ItemDecorationDivider(
-                color = resources.getColor(org.sopt.official.designsystem.R.color.mds_gray_800),
+                color = colorOf(org.sopt.official.designsystem.R.color.mds_gray_800),
                 height = 1.dp,
             )
 
@@ -299,7 +300,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs,) = Intent(context, FriendListSummaryActivity::class.java).apply {
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, FriendListSummaryActivity::class.java).apply {
             putExtra("args", args)
         }
     }

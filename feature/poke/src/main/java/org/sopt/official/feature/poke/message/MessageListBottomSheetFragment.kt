@@ -50,12 +50,12 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String) -> Unit)? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
-        viewModel = ViewModelProvider(this).get(MessageListBottomSheetViewModel::class.java)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        viewModel = ViewModelProvider(this)[MessageListBottomSheetViewModel::class.java]
         return FragmentMessageListBottomSheetBinding.inflate(inflater, container, false).root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?,) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         pokeMessageType?.let { viewModel.getPokeMessageList(it) }

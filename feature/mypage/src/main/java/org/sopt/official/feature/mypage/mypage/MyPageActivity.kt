@@ -111,22 +111,22 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initClick() {
-        binding.iconPrivateInfo.setOnSingleClickListener {
+        binding.layoutPrivaceInfo.setOnSingleClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
         }
-        binding.iconServiceRule.setOnSingleClickListener {
+        binding.layoutServideRule.setOnSingleClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
         }
-        binding.iconSendOpinion.setOnSingleClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_GOOGLE_FORM)))
+        binding.layoutSendOpinion.setOnSingleClickListener {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
         }
-        binding.iconAdjustSentence.setOnSingleClickListener {
+        binding.layoutAdjustSentence.setOnSingleClickListener {
             startActivity(AdjustSentenceActivity.getIntent(this))
         }
-        binding.iconChangeNickname.setOnSingleClickListener {
+        binding.layoutChangeNickname.setOnSingleClickListener {
             startActivity(ChangeNickNameActivity.getIntent(this))
         }
-        binding.iconResetStamp.setOnSingleClickListener {
+        binding.layoutResetStamp.setOnSingleClickListener {
             AlertDialogPositiveNegative(this)
                 .setTitle(R.string.mypage_alert_soptamp_reset_title)
                 .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
@@ -136,7 +136,7 @@ class MyPageActivity : AppCompatActivity() {
                 .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
                 .show()
         }
-        binding.iconLogOut.setOnSingleClickListener {
+        binding.layoutLogOut.setOnSingleClickListener {
             AlertDialogPositiveNegative(this)
                 .setTitle(R.string.mypage_alert_log_out_title)
                 .setSubtitle(R.string.mypage_alert_log_out_subtitle)
@@ -146,10 +146,10 @@ class MyPageActivity : AppCompatActivity() {
                 .setNegativeButton(R.string.mypage_alert_log_out_negative)
                 .show()
         }
-        binding.iconSignOut.setOnSingleClickListener {
+        binding.layoutSignOut.setOnSingleClickListener {
             startActivity(SignOutActivity.getIntent(this))
         }
-        binding.iconLogIn.setOnSingleClickListener {
+        binding.layoutLogIn.setOnSingleClickListener {
             setResult(ResultCode.LOG_IN.ordinal)
             onBackPressedDispatcher.onBackPressed()
         }
