@@ -40,21 +40,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
-fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser: (RankerUiModel) -> Unit = {}) {
+fun RankListItem(
+    item: Any,
+    isMyRanking: Boolean = false,
+    onClickPart: (PartRankModel) -> Unit = {},
+    onClickUser: (RankerUiModel) -> Unit = {}
+) {
     val itemPadding = PaddingValues(
-        top = 19.dp,
-        bottom = 16.dp,
-        start = 14.dp,
-        end = 14.dp
+        top = 12.dp,
+        bottom = 11.dp,
+        start = 16.dp,
+        end = 16.dp
     )
     val backgroundModifier = if (isMyRanking) {
         Modifier
@@ -73,10 +78,23 @@ fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser:
             shape = RoundedCornerShape(8.dp)
         )
     }
+
+    val isPartRankItem = item is PartRankModel
+    val rank = if (isPartRankItem) (item as PartRankModel).rank else (item as RankerUiModel).rank
+    val name = if (isPartRankItem) (item as PartRankModel).part else (item as RankerUiModel).nickname
+    val description = if (isPartRankItem) null else (item as RankerUiModel).getDescription()
+    val score = if (isPartRankItem) (item as PartRankModel).point else (item as RankerUiModel).score
+
     Row(
         modifier = backgroundModifier
             .fillMaxWidth()
-            .noRippleClickable { onClickUser(item) }
+            .noRippleClickable {
+                if (isPartRankItem) {
+                    onClickPart(item as PartRankModel)
+                } else {
+                    onClickUser(item as RankerUiModel)
+                }
+            }
             .padding(itemPadding),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
@@ -86,7 +104,8 @@ fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser:
         ) {
             RankNumber(
                 modifier = Modifier.align(Alignment.Center),
-                rank = item.rank,
+                rank = rank,
+                isPartRankNumber = isPartRankItem,
                 isMyRankNumber = isMyRanking
             )
         }
@@ -95,18 +114,18 @@ fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser:
             modifier = Modifier.weight(0.53f)
         ) {
             RankerInformation(
-                user = item.nickname,
-                description = item.getDescription()
+                user = name,
+                description = description
             )
         }
         Spacer(modifier = Modifier.weight(0.04f))
         Box(
-            modifier = Modifier.weight(0.2f)
+            modifier = Modifier.weight(0.4f)
         ) {
             RankScore(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                rank = item.rank,
-                score = item.score,
+                rank = if (isPartRankItem) -1 else (item as RankerUiModel).rank,
+                score = score,
                 isMyRankScore = isMyRanking
             )
         }
@@ -114,24 +133,26 @@ fun RankListItem(item: RankerUiModel, isMyRanking: Boolean = false, onClickUser:
 }
 
 @Composable
-fun RankerInformation(modifier: Modifier = Modifier, user: String, description: String) {
+fun RankerInformation(modifier: Modifier = Modifier, user: String, description: String? = null) {
     Column(modifier) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = user,
             style = SoptTheme.typography.h3,
-            color = Color.Black,
+            color = SoptTheme.colors.onSurface80,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = description,
-            style = SoptTheme.typography.caption1,
-            color = SoptTheme.colors.onSurface70,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+        if (description != null) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = description,
+                style = SoptTheme.typography.caption1,
+                color = SoptTheme.colors.onSurface70,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
     }
 }
 
