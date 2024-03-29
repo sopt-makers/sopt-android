@@ -25,8 +25,6 @@
 package org.sopt.official.stamp.feature.ranking
 
 import androidx.compose.runtime.Composable
-import org.sopt.official.stamp.designsystem.style.Gray300
-import org.sopt.official.stamp.designsystem.style.Gray400
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
