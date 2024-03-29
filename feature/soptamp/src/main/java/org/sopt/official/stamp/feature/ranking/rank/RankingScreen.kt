@@ -138,7 +138,7 @@ fun RankingScreen(
     Scaffold(
         topBar = {
             RankingHeader(
-                title = if (isCurrent) "$type 랭킹" else type +"파트 랭킹",
+                title = if (isCurrent) "$type 랭킹" else type + "파트 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
