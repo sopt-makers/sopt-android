@@ -111,13 +111,13 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     private fun initClick() {
-        binding.iconPrivateInfo.setOnSingleClickListener {
+        binding.layoutPrivaceInfo.setOnSingleClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
         }
-        binding.iconServiceRule.setOnSingleClickListener {
+        binding.layoutServideRule.setOnSingleClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
         }
-        binding.iconSendOpinion.setOnSingleClickListener {
+        binding.layoutSendOpinion.setOnSingleClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
         }
         binding.iconAdjustSentence.setOnSingleClickListener {
