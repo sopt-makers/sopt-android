@@ -24,6 +24,7 @@
  */
 package org.sopt.official.webview.view
 
+import android.graphics.Bitmap
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import org.sopt.official.network.persistence.SoptDataStore
@@ -32,11 +33,29 @@ import timber.log.Timber
 class SoptWebViewClient(
     private val dataStore: SoptDataStore
 ) : WebViewClient() {
-    override fun onPageFinished(view: WebView?, url: String?) {
-        super.onPageFinished(view, url)
-        val script = "window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');"
-        view?.evaluateJavascript(script) {
-            Timber.d("SOPT onPageFinished callback $it")
+    private var hasReloaded = false
+
+    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+        super.onPageStarted(view, url, favicon)
+        if (hasReloaded) return
+
+        val script = """
+            (function() {
+                return new Promise((resolve, reject) => {
+                    window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
+                    resolve();
+                });
+            })().then(() => {
+                window.location.reload();
+                return window.localStorage.getItem('serviceAccessToken');
+            });
+        """.trimIndent()
+
+        view?.evaluateJavascript(script) { localStorageToken ->
+            Timber.tag("SoptWebViewClient").d("localStorageToken: $localStorageToken")
+            Timber.tag("SoptWebViewClient").d("playgroundToken: $dataStore.playgroundToken")
+            if (localStorageToken == dataStore.playgroundToken) hasReloaded = true
         }
+
     }
 }
