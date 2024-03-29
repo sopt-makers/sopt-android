@@ -1,9 +1,11 @@
 package org.sopt.official.stamp.feature.ranking.part
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -24,8 +27,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -37,9 +44,12 @@ import org.sopt.official.stamp.LocalTracker
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
+import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.stamp.designsystem.style.Gray800
+import org.sopt.official.stamp.designsystem.style.MontserratBold
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
-import org.sopt.official.stamp.feature.ranking.RankListItem
+import org.sopt.official.stamp.feature.ranking.RankScore
 import org.sopt.official.stamp.feature.ranking.RankingBar
 import org.sopt.official.stamp.feature.ranking.TopRankBarOfRankText
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
@@ -123,9 +133,9 @@ fun PartRankingScreen(
                 item {
                     PartRankingBarList(partRankList)
                 }
-                items(partRankList.sortedBy { it.rank }) { item ->
-                    RankListItem(
-                        partItem = item,
+                items(partRankList.sortedBy { it.rank }) { item -> // 리스트를 받으면 넣을 예정
+                    PartRankListItem(
+                        item = item,
                         onClickPart = {
                             onClickPart(item.part)
                         }
@@ -154,7 +164,6 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
 }
 
 @Composable
-    val backgroundModifier = Modifier.background(
 fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
     val newRank = if (part.point != 0) {
         part.rank
@@ -180,6 +189,66 @@ fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
             style = SoptTheme.typography.sub3,
             color = SoptTheme.colors.onSurface80
         )
+    }
+}
+
+@Composable
+fun PartRankListItem(item: PartRankModel, onClickPart: () -> Unit = {}) {
+    val itemPadding = PaddingValues(
+        top = 12.dp,
+        bottom = 11.dp,
+        start = 16.dp,
+        end = 16.dp
+    )
+    val backgroundModifier = Modifier.background(
+        color = SoptTheme.colors.onSurface5,
+        shape = RoundedCornerShape(8.dp)
+    )
+
+    Row(
+        modifier = backgroundModifier
+            .fillMaxWidth()
+            .noRippleClickable { onClickPart() }
+            .padding(itemPadding),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier.weight(0.18f)
+        ) {
+            Text(
+                text = if (item.rank <= 0) "-" else "${item.rank}",
+                fontFamily = MontserratBold,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                color = SoptTheme.colors.onSurface50,
+                modifier = Modifier.align(Alignment.Center),
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(modifier = Modifier.weight(0.05f))
+        Box(
+            modifier = Modifier.weight(0.53f)
+        ) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = item.part,
+                style = SoptTheme.typography.h3,
+                color = Gray800,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+        Spacer(modifier = Modifier.weight(0.04f))
+        Box(
+            modifier = Modifier.weight(0.4f)
+        ) {
+            RankScore(
+                modifier = Modifier.align(Alignment.CenterEnd),
+                rank = -1,
+                score = item.point,
+            )
+        }
     }
 }
 
