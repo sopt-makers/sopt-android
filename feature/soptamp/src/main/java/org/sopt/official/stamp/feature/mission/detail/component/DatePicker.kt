@@ -25,9 +25,11 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,7 +39,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.util.Calendar
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
@@ -46,6 +49,9 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -53,8 +59,8 @@ fun DatePicker(
     placeHolder: String,
     borderColor: Color,
     isEditable: Boolean,
+    onClicked: () -> Unit,
     modifier: Modifier = Modifier,
-    onClicked: () -> Unit
 ) {
     val isEmpty = remember(value) { value.isEmpty() }
 
@@ -117,20 +123,21 @@ fun DatePicker(
 fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState()
 
-    val chosenYear = remember { mutableIntStateOf(currentYear) }
-    val chosenMonth = remember { mutableIntStateOf(currentMonth) }
-    val chosenDay = remember { mutableIntStateOf(currentDay) }
+    val formatter = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+    var chosenYear by remember { mutableIntStateOf(currentYear) }
+    var chosenMonth by remember { mutableIntStateOf(currentMonth) }
+    var chosenDay by remember { mutableIntStateOf(currentDay) }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
     ) {
         DatePickerUI(
-            currentYear = chosenYear.value,
-            currentMonth = chosenMonth.value,
-            onYearChosen = { chosenYear.value = it },
-            onMonthChosen = { chosenMonth.value = it },
-            onDayChosen = { chosenDay.value = it }
+            currentYear = chosenYear,
+            currentMonth = chosenMonth,
+            onYearChosen = { chosenYear = it },
+            onMonthChosen = { chosenMonth = it },
+            onDayChosen = { chosenDay = it }
         )
         Spacer(modifier = Modifier.height(20.dp))
         SoptampButton(
@@ -138,7 +145,14 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             text = "확인",
-            onClicked = { onSelected("${chosenYear.value}.${chosenMonth.value}.${chosenDay.value}") }
+            onClicked = {
+                val calendar = Calendar.getInstance().apply {
+                    set(chosenYear, chosenMonth - 1, chosenDay)
+                }
+                val formattedDate = formatter.format(calendar.time)
+
+                onSelected(formattedDate)
+            }
         )
         Spacer(modifier = Modifier.height(40.dp))
     }
@@ -206,7 +220,7 @@ fun DateSelectionSection(
 }
 
 @Composable
-fun InfiniteItemsPicker(modifier: Modifier = Modifier, items: List<String>, firstIndex: Int, onItemSelected: (String) -> Unit,) {
+fun InfiniteItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSelected: (String) -> Unit, modifier: Modifier = Modifier) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
@@ -256,11 +270,11 @@ val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 
-val years = (1950..2050).map { it.toString() }
-val monthsNumber = (1..12).map { it.toString() }
-val days = (1..31).map { it.toString() }
-val febDays = (1..28).map { it.toString() }
-val febDaysLeap = (1..29).map { it.toString() }
+val years = (1950..2050).map { it.toString() }.toImmutableList()
+val monthsNumber = (1..12).map { it.toString() }.toImmutableList()
+val days = (1..31).map { it.toString() }.toImmutableList()
+val febDays = (1..28).map { it.toString() }.toImmutableList()
+val febDaysLeap = (1..29).map { it.toString() }.toImmutableList()
 val monthsNames = listOf(
     "Jan",
     "Feb",
