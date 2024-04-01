@@ -48,7 +48,14 @@ import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun DatePicker(value: String, placeHolder: String, borderColor: Color, isEditable: Boolean, modifier: Modifier = Modifier, onClicked: () -> Unit) {
+fun DatePicker(
+    value: String,
+    placeHolder: String,
+    borderColor: Color,
+    isEditable: Boolean,
+    modifier: Modifier = Modifier,
+    onClicked: () -> Unit
+) {
     val isEmpty = remember(value) { value.isEmpty() }
 
     val newModifier = modifier
