@@ -191,7 +191,7 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun onChangeDate(value: String){
+    fun onChangeDate(value: String) {
         uiState.update {
             it.copy(date = value)
         }

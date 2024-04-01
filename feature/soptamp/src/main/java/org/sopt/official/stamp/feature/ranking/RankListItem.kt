@@ -82,7 +82,6 @@ fun RankListItem(
 
     val isPartRankItem = partItem != null
 
-
     var ranking: Int = -1
     var newRank = -1
     var name: String = ""
