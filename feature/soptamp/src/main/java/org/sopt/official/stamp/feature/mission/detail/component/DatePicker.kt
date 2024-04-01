@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -55,18 +56,19 @@ fun DatePicker(value: String, placeHolder: String, onClicked: () -> Unit, border
         .fillMaxWidth()
         .defaultMinSize(minHeight = 39.dp)
         .clip(RoundedCornerShape(9.dp))
-
-    val modifierWithBorder = remember(isEmpty, isEditable) {
-        if (isEmpty || !isEditable) {
-            modifier
-        } else {
-            modifier.border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(10.dp)
-            )
-        }
-    }
+        .then(
+            remember(isEmpty, isEditable) {
+                if (isEmpty || !isEditable) {
+                    Modifier
+                } else {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                }
+            }
+        )
 
     val backgroundColor = remember(isEmpty, isEditable) {
         if (isEmpty || !isEditable) {
@@ -77,7 +79,7 @@ fun DatePicker(value: String, placeHolder: String, onClicked: () -> Unit, border
     }
 
     Box(
-        modifier = modifierWithBorder
+        modifier = modifier
             .background(backgroundColor, RoundedCornerShape(9.dp))
             .noRippleClickable { if (isEditable) onClicked() })
     {
@@ -279,7 +281,7 @@ val monthsNames = listOf(
 private fun DatePickerPreview() {
     SoptTheme {
         DatePicker(
-            value = "",
+            value = "2024.12.25",
             onClicked = {},
             borderColor = getLevelTextColor(2),
             placeHolder = "날짜를 입력해주세요.",
