@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -26,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +64,7 @@ fun DatePicker(
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isEmpty = remember(value) { value.isEmpty() }
+    val isEmpty by remember(value) { derivedStateOf{value.isEmpty()} }
 
     val newModifier = modifier
         .fillMaxWidth()
@@ -281,19 +281,19 @@ fun DateItemsPicker(
     }
 }
 
-val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
-val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+private val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+private val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-const val startYear = 1950
-const val endYear = 2100
-val years = (listOf("") + (startYear..endYear).map { it.toString() } + listOf("")).toImmutableList()
-val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
-val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
-val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList()
-val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 4,6,9,11
-val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 1,3,5,7,8,10.12
-val days30Months = immutableListOf(4, 6, 9, 11)
+private const val startYear = 1950
+private const val endYear = 2100
+private val years = (listOf("") + (startYear..endYear).map { it.toString() } + listOf("")).toImmutableList()
+private val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
+private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
+private val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList()
+private val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 4,6,9,11
+private val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 1,3,5,7,8,10.12
+private val days30Months = immutableListOf(4, 6, 9, 11)
 
 @DefaultPreview
 @Composable
