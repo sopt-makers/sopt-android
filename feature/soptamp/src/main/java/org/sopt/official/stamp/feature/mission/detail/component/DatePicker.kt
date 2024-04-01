@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -39,11 +40,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import okhttp3.internal.immutableListOf
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
@@ -52,6 +51,9 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -69,16 +71,14 @@ fun DatePicker(
         .defaultMinSize(minHeight = 39.dp)
         .clip(RoundedCornerShape(9.dp))
         .then(
-            remember(isEmpty, isEditable) {
-                if (isEmpty || !isEditable) {
-                    Modifier
-                } else {
-                    Modifier.border(
-                        width = 1.dp,
-                        color = borderColor,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                }
+            if (isEmpty || !isEditable) {
+                Modifier
+            } else {
+                Modifier.border(
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(10.dp)
+                )
             }
         )
 
@@ -135,6 +135,7 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
         DatePickerUI(
             currentYear = chosenYear,
             currentMonth = chosenMonth,
+            currentDay = chosenDay,
             onYearChosen = { chosenYear = it },
             onMonthChosen = { chosenMonth = it },
             onDayChosen = { chosenDay = it }
@@ -154,7 +155,7 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
                 onSelected(formattedDate)
             }
         )
-        Spacer(modifier = Modifier.height(40.dp))
+        Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
@@ -162,6 +163,7 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
 fun DatePickerUI(
     currentYear: Int,
     currentMonth: Int,
+    currentDay: Int,
     onYearChosen: (Int) -> Unit,
     onMonthChosen: (Int) -> Unit,
     onDayChosen: (Int) -> Unit,
@@ -175,6 +177,7 @@ fun DatePickerUI(
         DateSelectionSection(
             currentYear = currentYear,
             currentMonth = currentMonth,
+            currentDay = currentDay,
             onYearChosen = { onYearChosen(it.toInt()) },
             onMonthChosen = { onMonthChosen(it.toInt()) },
             onDayChosen = { onDayChosen(it.toInt()) },
@@ -186,45 +189,51 @@ fun DatePickerUI(
 fun DateSelectionSection(
     currentYear: Int,
     currentMonth: Int,
+    currentDay: Int,
     onYearChosen: (String) -> Unit,
     onMonthChosen: (String) -> Unit,
     onDayChosen: (String) -> Unit,
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     ) {
-        InfiniteItemsPicker(
-            items = years,
-            firstIndex = Int.MAX_VALUE / 2 + (currentYear - 1967),
+        DateItemsPicker(
+            items = years.toImmutableList(),
+            firstIndex = (currentYear - startYear),
             onItemSelected = onYearChosen
         )
         Spacer(modifier = Modifier.width(10.dp))
-        InfiniteItemsPicker(
-            items = monthsNumber,
-            firstIndex = Int.MAX_VALUE / 2 - 4 + currentMonth,
+        DateItemsPicker(
+            items = monthsNumber.toImmutableList(),
+            firstIndex = currentMonth,
             onItemSelected = onMonthChosen
         )
         Spacer(modifier = Modifier.width(10.dp))
-        InfiniteItemsPicker(
+        DateItemsPicker(
             items = when {
-                (currentYear % 4 == 0) && currentMonth == 2 -> febDaysLeap
-                currentMonth == 2 -> febDays
-                else -> days
+                (currentYear % 4 == 0) && currentMonth == 2 -> days29.toImmutableList()
+                currentMonth == 2 -> days28.toImmutableList()
+                days30Months.contains(currentMonth) -> days30.toImmutableList()
+                else -> days31.toImmutableList()
             },
-            firstIndex = Int.MAX_VALUE / 2 + (currentDay - 2),
+            firstIndex = currentDay - 1,
             onItemSelected = onDayChosen
         )
     }
 }
 
 @Composable
-fun InfiniteItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSelected: (String) -> Unit, modifier: Modifier = Modifier) {
+fun DateItemsPicker(
+    items: ImmutableList<String>,
+    firstIndex: Int,
+    onItemSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
-    LaunchedEffect(key1 = !listState.isScrollInProgress) {
+    LaunchedEffect(!listState.isScrollInProgress) {
         onItemSelected(currentValue.value)
         listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
     }
@@ -237,15 +246,21 @@ fun InfiniteItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSel
             modifier = modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            HorizontalDivider(modifier = Modifier.size(height = 1.dp, width = 60.dp), color = SoptTheme.colors.black)
-            HorizontalDivider(modifier = Modifier.size(height = 1.dp, width = 60.dp), color = SoptTheme.colors.black)
+            HorizontalDivider(
+                modifier = Modifier.size(height = 1.dp, width = 60.dp),
+                color = SoptTheme.colors.black
+            )
+            HorizontalDivider(
+                modifier = Modifier.size(height = 1.dp, width = 60.dp),
+                color = SoptTheme.colors.black
+            )
         }
         LazyColumn(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState,
         ) {
-            items(count = Int.MAX_VALUE) {
+            items(items.size) {
                 val index = it % items.size
                 if (it == listState.firstVisibleItemIndex + 1) {
                     currentValue.value = items[index]
@@ -267,28 +282,18 @@ fun InfiniteItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSel
 }
 
 val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
+val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-val years = (1950..2050).map { it.toString() }.toImmutableList()
-val monthsNumber = (1..12).map { it.toString() }.toImmutableList()
-val days = (1..31).map { it.toString() }.toImmutableList()
-val febDays = (1..28).map { it.toString() }.toImmutableList()
-val febDaysLeap = (1..29).map { it.toString() }.toImmutableList()
-val monthsNames = listOf(
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-)
+const val startYear = 1950
+const val endYear = 2100
+val years = (listOf("") + (startYear..endYear).map { it.toString() } + listOf("")).toImmutableList()
+val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
+val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
+val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList()
+val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 4,6,9,11
+val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 1,3,5,7,8,10.12
+val days30Months = immutableListOf(4, 6, 9, 11)
 
 @DefaultPreview
 @Composable
@@ -314,6 +319,7 @@ private fun CustomDatePickerPreview() {
         DatePickerUI(
             currentYear = chosenYear.value,
             currentMonth = chosenMonth.value,
+            currentDay = chosenDay.value,
             onYearChosen = { chosenYear.value = it },
             onMonthChosen = { chosenMonth.value = it },
             onDayChosen = { chosenDay.value = it }
