@@ -87,6 +87,7 @@ fun MissionDetailScreen(
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsState("")
+    val date by viewModel.date.collectAsState("")
     val imageModel by viewModel.imageModel.collectAsState(ImageModel.Empty)
     val isSuccess by viewModel.isSuccess.collectAsState(false)
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsState(false)
@@ -163,7 +164,7 @@ fun MissionDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DatePicker(
-                    value = "", // TODO: 서버에서 받아오는 정보 추가해야함.
+                    value = date, // TODO: 서버에서 받아오는 정보 추가해야함.
                     placeHolder = "날짜를 입력해 주세요.",
                     onClicked = {
                         viewModel.onChangeDatePickerBottomSheetOpened(true)
