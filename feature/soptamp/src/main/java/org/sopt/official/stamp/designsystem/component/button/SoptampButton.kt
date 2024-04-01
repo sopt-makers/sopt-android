@@ -13,7 +13,7 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
-fun SoptampButton(modifier: Modifier, text: String, onClicked: () -> Unit) {
+fun SoptampButton(text: String, modifier: Modifier = Modifier, onClicked: () -> Unit) {
     Box(
         modifier = modifier
             .noRippleClickable { onClicked() }
