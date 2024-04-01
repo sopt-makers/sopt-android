@@ -29,7 +29,6 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.CombinedModifier
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
@@ -38,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import java.util.Calendar
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
@@ -46,7 +46,6 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
-import java.util.Calendar
 
 @Composable
 fun DatePicker(value: String, placeHolder: String, onClicked: () -> Unit, borderColor: Color, isEditable: Boolean) {
@@ -81,8 +80,8 @@ fun DatePicker(value: String, placeHolder: String, onClicked: () -> Unit, border
     Box(
         modifier = modifier
             .background(backgroundColor, RoundedCornerShape(9.dp))
-            .noRippleClickable { if (isEditable) onClicked() })
-    {
+            .noRippleClickable { if (isEditable) onClicked() }
+    ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 14.dp, vertical = 10.dp)
@@ -200,12 +199,7 @@ fun DateSelectionSection(
 }
 
 @Composable
-fun InfiniteItemsPicker(
-    modifier: Modifier = Modifier,
-    items: List<String>,
-    firstIndex: Int,
-    onItemSelected: (String) -> Unit,
-) {
+fun InfiniteItemsPicker(modifier: Modifier = Modifier, items: List<String>, firstIndex: Int, onItemSelected: (String) -> Unit,) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
@@ -229,8 +223,7 @@ fun InfiniteItemsPicker(
             modifier = modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState,
-        )
-        {
+        ) {
             items(count = Int.MAX_VALUE) {
                 val index = it % items.size
                 if (it == listState.firstVisibleItemIndex + 1) {
