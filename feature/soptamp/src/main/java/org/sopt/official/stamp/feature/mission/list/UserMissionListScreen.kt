@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
@@ -138,7 +139,7 @@ fun UserMissionListScreen(
             DescriptionText(description = description)
             Spacer(modifier = Modifier.size(33.dp))
             MissionsGridComponent(
-                missions = missionListUiModel.missionList,
+                missions = missionListUiModel.missionList.toImmutableList(),
                 onMissionItemClick = { onMissionItemClick(it) },
                 isMe = isMe,
                 nickname = userName
