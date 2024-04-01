@@ -164,7 +164,7 @@ fun MissionDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DatePicker(
-                    value = date, // TODO: 서버에서 받아오는 정보 추가해야함.
+                    value = date,
                     placeHolder = "날짜를 입력해 주세요.",
                     onClicked = {
                         viewModel.onChangeDatePickerBottomSheetOpened(true)
