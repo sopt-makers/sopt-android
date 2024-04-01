@@ -81,6 +81,7 @@ class MissionDetailViewModel @Inject constructor(
     private val isMe = uiState.map { it.isMe }
     val isSuccess = uiState.map { it.isSuccess }
     val content = uiState.map { it.content }
+    val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
     val isSubmitEnabled = combine(content, imageModel, isMe) { content, image, isMe ->
         content.isNotEmpty() && !image.isEmpty() && isMe
