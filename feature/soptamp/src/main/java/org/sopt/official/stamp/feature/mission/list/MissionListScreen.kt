@@ -94,9 +94,9 @@ import org.sopt.official.stamp.feature.mission.model.toArgs
 @Destination("list")
 @Composable
 fun MissionListScreen(
-    missionsViewModel: MissionsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>
+    resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>,
+    missionsViewModel: MissionsViewModel = hiltViewModel()
 ) {
     val state by missionsViewModel.state.collectAsState()
     val nickname by missionsViewModel.nickname.collectAsState()
@@ -187,7 +187,7 @@ fun MissionListScreen(
                 MissionEmptyScreen(contentText = missionListUiModel.title)
             } else {
                 MissionsGridComponent(
-                    missions = missionListUiModel.missionList,
+                    missions = missionListUiModel.missionList.toImmutableList(),
                     onMissionItemClick = { onMissionItemClick(it) },
                     isMe = true,
                     nickname = nickname
@@ -199,7 +199,7 @@ fun MissionListScreen(
 
 @Composable
 fun MissionsGridComponent(
-    missions: List<MissionUiModel>,
+    missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
     nickname: String
@@ -241,7 +241,12 @@ fun MissionEmptyScreen(contentText: String) {
 }
 
 @Composable
-fun MissionListHeader(title: String, menuTexts: List<String>, onMenuClick: (String) -> Unit = {}, onOnboadingButtonClick: () -> Unit = {}) {
+fun MissionListHeader(
+    title: String,
+    menuTexts: ImmutableList<String>,
+    onMenuClick: (String) -> Unit = {},
+    onOnboadingButtonClick: () -> Unit = {}
+) {
     var currentText by remember { mutableStateOf(title) }
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
@@ -274,7 +279,7 @@ fun MissionListHeaderTitle(title: String) {
 }
 
 @Composable
-fun DropDownMenuButton(menuTexts: List<String>, onMenuClick: (String) -> Unit = {}) {
+fun DropDownMenuButton(menuTexts: ImmutableList<String>, onMenuClick: (String) -> Unit = {}) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
     Box {
