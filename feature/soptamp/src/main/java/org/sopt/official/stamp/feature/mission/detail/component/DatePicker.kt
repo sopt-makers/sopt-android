@@ -76,9 +76,10 @@ fun DatePicker(value: String, placeHolder: String, onClicked: () -> Unit, border
         }
     }
 
-    Box(modifier = modifierWithBorder
-        .background(backgroundColor, RoundedCornerShape(9.dp))
-        .noRippleClickable { if (isEditable) onClicked() })
+    Box(
+        modifier = modifierWithBorder
+            .background(backgroundColor, RoundedCornerShape(9.dp))
+            .noRippleClickable { if (isEditable) onClicked() })
     {
         Row(
             modifier = Modifier
