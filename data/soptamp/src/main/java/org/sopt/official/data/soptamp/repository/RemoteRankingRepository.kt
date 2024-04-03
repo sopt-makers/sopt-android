@@ -24,14 +24,15 @@
  */
 package org.sopt.official.data.soptamp.repository
 
-import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.remote.api.RankService
 import org.sopt.official.data.soptamp.source.RankingDataSource
+import org.sopt.official.domain.soptamp.model.PartRank
 import org.sopt.official.domain.soptamp.model.Rank
 import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
+import javax.inject.Inject
 
 internal class RemoteRankingRepository @Inject constructor(
     private val remote: RankingDataSource,
@@ -52,5 +53,9 @@ internal class RemoteRankingRepository @Inject constructor(
 
     override suspend fun getRankDetail(nickname: String) = runCatching {
         service.getRankDetail(nickname).toEntity()
+    }
+
+    override suspend fun getPartRanking(): Result<List<PartRank>> = runCatching {
+        service.getPartRanking().map { it.toDomain() }
     }
 }

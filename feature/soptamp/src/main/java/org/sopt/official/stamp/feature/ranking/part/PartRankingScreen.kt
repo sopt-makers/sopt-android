@@ -60,14 +60,14 @@ fun PartRankingScreen(
             EventType.VIEW,
             "partranking"
         )
-        // TODO: Data fetch
+        partRankingViewModel.fetchRanking()
     }
 
     SoptTheme {
         when (state) {
             PartRankingState.Loading -> LoadingScreen()
             PartRankingState.Failure -> SingleOptionDialog {
-                // TODO: Error Handling
+                partRankingViewModel.fetchRanking()
             }
 
             is PartRankingState.Success -> PartRankingScreen(
