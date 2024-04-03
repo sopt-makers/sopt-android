@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,18 +36,22 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import okhttp3.RequestBody
+import org.sopt.official.data.soptamp.remote.api.StampService
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
+import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
     val imageUri: ImageModel = ImageModel.Empty,
     val content: String = "",
-    val date: String = "", // TODO: 서버에서 받아오는 값에 추가해야함.
+    val date: String = "",
     val createdAt: String = "",
     val stampId: Int = -1,
     val isSuccess: Boolean = false,
@@ -66,7 +69,8 @@ data class PostUiState(
         fun from(data: Archive) = PostUiState(
             id = data.missionId,
             imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
-            content = data.contents
+            content = data.contents,
+            date = data.activityDate
         )
     }
 }
@@ -74,7 +78,8 @@ data class PostUiState(
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
-    private val repository: StampRepository
+    private val repository: StampRepository,
+    private val service: StampService,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -99,6 +104,7 @@ class MissionDetailViewModel @Inject constructor(
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
+    private var requestbody: RequestBody? = null
 
     init {
         viewModelScope.launch {
@@ -209,42 +215,77 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
+    fun setRequestBody(body: RequestBody?) {
+        requestbody = body
+    }
+
     private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
-            val (id, imageUri, content) = currentState
+            val (id, imageUri, content, date) = currentState
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)
             }
-            if (uiState.value.isCompleted) {
-                repository.modifyMission(
-                    missionId = id,
-                    content = content,
-                    imageUri = imageUri
-                ).onSuccess {
-                    uiState.update {
-                        it.copy(isLoading = false, isSuccess = true)
+
+
+            repository.getS3URL().onSuccess { S3URL ->
+                val preSignedURL = S3URL.preSignedURL
+                val imageURL = S3URL.imageURL
+
+                if (requestbody != null) {
+
+                    // error 발생
+                    try {
+                        service.putS3Image(
+                            preSignedURL = preSignedURL,
+                            image = requestbody ?: throw IllegalStateException("error"),
+                        )
+                    } catch (e: Exception) {
+                        Timber.e(e)
                     }
-                }.onFailure { error ->
-                    Timber.e(error)
-                    uiState.update {
-                        it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+
+
+
+
+                    if (uiState.value.isCompleted) {
+                        repository.modifyMission(
+                            missionId = id,
+                            content = content,
+                            imageUri = imageUri
+                        ).onSuccess {
+                            uiState.update {
+                                it.copy(isLoading = false, isSuccess = true)
+                            }
+                        }.onFailure { error ->
+                            Timber.e(error)
+                            uiState.update {
+                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                            }
+                        }
+                    } else {
+                        repository.completeMission(
+                            Stamp(
+                                missionId = id,
+                                image = imageURL,
+                                contents = content,
+                                activityDate = date
+                            )
+                        ).onSuccess {
+                            uiState.update {
+                                it.copy(isLoading = false, isSuccess = true)
+                            }
+                        }.onFailure { error ->
+                            Timber.e(error)
+                            uiState.update {
+                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                            }
+                        }
                     }
                 }
-            } else {
-                repository.completeMission(
-                    missionId = id,
-                    content = content,
-                    imageUri = imageUri
-                ).onSuccess {
-                    uiState.update {
-                        it.copy(isLoading = false, isSuccess = true)
-                    }
-                }.onFailure { error ->
-                    Timber.e(error)
-                    uiState.update {
-                        it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                    }
+            }.onFailure { error ->
+                Timber.e(error)
+                uiState.update {
+                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                 }
             }
         }

@@ -30,6 +30,8 @@ import org.sopt.official.domain.soptamp.model.Archive
 
 @Serializable
 data class StampResponse(
+    @SerialName("activityDate")
+    val activityDate: String,
     @SerialName("createdAt")
     val createdAt: String? = null,
     @SerialName("updatedAt")
@@ -44,6 +46,7 @@ data class StampResponse(
     val missionId: Int = -1
 ) {
     fun toDomain() = Archive(
+        activityDate = activityDate,
         createdAt = createdAt,
         updatedAt = updatedAt,
         id = id,
