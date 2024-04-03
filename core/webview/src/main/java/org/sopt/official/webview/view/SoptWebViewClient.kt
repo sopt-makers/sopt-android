@@ -28,26 +28,16 @@ import android.graphics.Bitmap
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import org.sopt.official.network.persistence.SoptDataStore
-import timber.log.Timber
 
 class SoptWebViewClient(
     private val dataStore: SoptDataStore
 ) : WebViewClient() {
-    private var hasReloaded = false
-
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
-        if (hasReloaded) return
         val script = """
             window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
         """.trimIndent()
-        view?.evaluateJavascript(script) {
-            Timber.tag("SoptWebViewClient").d("Nunu localStorageToken: $it")
-            Timber.tag("SoptWebViewClient").d("Nunu playgroundToken: $dataStore.playgroundToken")
-            if (it == dataStore.playgroundToken) {
-                hasReloaded = true
-            }
-        }
+        view?.evaluateJavascript(script) {}
     }
 }
