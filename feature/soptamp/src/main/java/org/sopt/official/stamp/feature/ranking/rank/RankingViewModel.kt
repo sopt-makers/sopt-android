@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,6 +39,7 @@ import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
+import javax.inject.Inject
 
 @HiltViewModel
 class RankingViewModel @Inject constructor(
@@ -51,19 +51,32 @@ class RankingViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
     val nickname = getNicknameUseCase()
 
-    fun onRefresh(isCurrent: Boolean) {
+    fun onRefresh(isCurrent: Boolean, part: String) {
         viewModelScope.launch {
             isRefreshing = true
-            fetchRanking(isCurrent)
+            fetchRanking(isCurrent, part)
         }
     }
 
-    fun fetchRanking(isCurrent: Boolean) = viewModelScope.launch {
+    fun fetchRanking(isCurrent: Boolean, part: String) = viewModelScope.launch {
         _state.value = RankingState.Loading
-        rankingRepository.getRanking(
-            if (isCurrent) RankFetchType.Term() else RankFetchType.All
-        ).mapCatching { it.toUiModel() }
-            .onSuccess { ranking ->
+
+        if (isCurrent) {
+            rankingRepository.getRanking(
+                RankFetchType.Term()
+            ).mapCatching { it.toUiModel() }
+                .onSuccess { ranking ->
+                    if (isRefreshing) {
+                        isRefreshing = false
+                    }
+                    onSuccessStateChange(ranking)
+                }.onFailure {
+                    _state.value = RankingState.Failure
+                }
+        } else {
+            rankingRepository.getCurrentPartRanking(
+                partEnglishName[part]?: ""
+            ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
                 if (isRefreshing) {
                     isRefreshing = false
                 }
@@ -71,7 +84,17 @@ class RankingViewModel @Inject constructor(
             }.onFailure {
                 _state.value = RankingState.Failure
             }
+        }
     }
+
+    private val partEnglishName = hashMapOf(
+        "기획" to "PLAN",
+        "디자인" to "DESIGN",
+        "웹" to "WEB",
+        "아요" to "IOS",
+        "안드" to "ANDROID",
+        "서버" to "SERVER"
+    )
 
     private fun onSuccessStateChange(ranking: RankingListUiModel) {
         _state.value = RankingState.Success(ranking, getNicknameUseCase())

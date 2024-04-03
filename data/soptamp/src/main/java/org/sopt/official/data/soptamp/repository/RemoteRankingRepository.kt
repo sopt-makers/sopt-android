@@ -27,6 +27,7 @@ package org.sopt.official.data.soptamp.repository
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.remote.api.RankService
+import org.sopt.official.data.soptamp.remote.mapper.toDomain
 import org.sopt.official.data.soptamp.source.RankingDataSource
 import org.sopt.official.domain.soptamp.model.PartRank
 import org.sopt.official.domain.soptamp.model.Rank
@@ -57,5 +58,9 @@ internal class RemoteRankingRepository @Inject constructor(
 
     override suspend fun getPartRanking(): Result<List<PartRank>> = runCatching {
         service.getPartRanking().map { it.toDomain() }
+    }
+
+    override suspend fun getCurrentPartRanking(part: String): Result<List<Rank>> = runCatching {
+        service.getCurrentPartRanking(part).map { it.toDomain() }
     }
 }

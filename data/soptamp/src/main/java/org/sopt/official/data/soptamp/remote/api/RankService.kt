@@ -28,6 +28,7 @@ import org.sopt.official.data.soptamp.remote.model.response.PartRankResponse
 import org.sopt.official.data.soptamp.remote.model.response.RankDetailResponse
 import org.sopt.official.data.soptamp.remote.model.response.RankResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface RankService {
@@ -43,4 +44,7 @@ internal interface RankService {
 
     @GET("rank/part")
     suspend fun getPartRanking(): List<PartRankResponse>
+
+    @GET("rank/current/part/{part}")
+    suspend fun getCurrentPartRanking(@Path("part") part: String): List<RankResponse>
 }
