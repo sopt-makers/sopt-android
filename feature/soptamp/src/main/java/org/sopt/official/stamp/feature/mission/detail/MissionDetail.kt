@@ -185,18 +185,6 @@ fun MissionDetailScreen(
                     borderColor = getLevelTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
-                if (!isEditable || !isMe) {
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = createdAt,
-                            style = SoptTheme.typography.caption4.copy(fontSize = 10.sp),
-                            color = SoptTheme.colors.onSurface60
-                        )
-                    }
-                }
             }
 
             if (isEditable && isMe) {
