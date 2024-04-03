@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -122,6 +123,7 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
                 overflow = TextOverflow.Ellipsis,
                 text = nickname,
                 maxLines = 1,
+                textAlign = TextAlign.Center,
                 style = SoptTheme.typography.sub3,
                 color = Gray800
             )
