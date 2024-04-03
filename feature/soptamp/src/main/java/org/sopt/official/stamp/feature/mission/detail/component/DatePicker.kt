@@ -123,7 +123,7 @@ fun DatePicker(
 fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> Unit) {
     val sheetState = rememberModalBottomSheetState()
 
-    val formatter = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
+    val formatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREA)
     var chosenYear by remember { mutableIntStateOf(currentYear) }
     var chosenMonth by remember { mutableIntStateOf(currentMonth) }
     var chosenDay by remember { mutableIntStateOf(currentDay) }

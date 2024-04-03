@@ -164,7 +164,7 @@ fun MissionDetailScreen(
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 DatePicker(
-                    value = date,
+                    value = if (date.isNotBlank()) date.slice(0..9) else date,
                     placeHolder = "날짜를 입력해 주세요.",
                     onClicked = {
                         viewModel.onChangeDatePickerBottomSheetOpened(true)
