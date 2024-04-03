@@ -25,52 +25,50 @@
 package org.sopt.official.data.soptamp.remote.api
 
 import okhttp3.MultipartBody
+import okhttp3.Request
 import okhttp3.RequestBody
+import okio.Timeout
 import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
 import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.Part
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.Url
 
-interface StampService {
-    @GET("stamp")
-    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
 
-    @Multipart
-    @PUT("stamp/{missionId}")
-    suspend fun modifyStamp(
-        @Path("missionId") missionId: Int,
-        @Part("stampContent") stampContent: RequestBody,
-        @Part imgUrl: List<MultipartBody.Part>? = null
-    ): ModifyStampResponse
+object FakeStampService : StampService {
+    private val fakeStampResponse = StampResponse(
+        activityDate = "",
+        id = -1,
+        contents = ""
+    )
 
-    @POST("stamp")
-    suspend fun registerStamp(
-        @Body body: StampRequest
-    ): StampResponse
+    private val fakeModifyStampResponse = ModifyStampResponse(
+        stampId = -1
+    )
 
-    @DELETE("stamp/{missionId}")
-    suspend fun deleteStamp(@Path("missionId") missionId: Int)
+    private val fakeS3URLResponse = S3URLResponse(
+        preSignedURL = "",
+        imageURL = ""
+    )
 
-    @DELETE("stamp/all")
-    suspend fun deleteAllStamps()
+    private val fakeResponse: Response<Unit> = Response.success(Unit)
 
-    @GET("s3/stamp")
-    suspend fun getS3URL(): S3URLResponse
+    override suspend fun retrieveStamp(missionId: Int, nickname: String): StampResponse = fakeStampResponse
 
-    @PUT
-    suspend fun putS3Image(
-        @Url preSignedURL: String,
-        @Body image: RequestBody
-    ): Response<Unit>
+    override suspend fun modifyStamp(missionId: Int, stampContent: RequestBody, imgUrl: List<MultipartBody.Part>?): ModifyStampResponse =
+        fakeModifyStampResponse
+
+    override suspend fun registerStamp(body: StampRequest): StampResponse = fakeStampResponse
+
+    override suspend fun deleteStamp(missionId: Int) {}
+
+    override suspend fun deleteAllStamps() {}
+
+    override suspend fun getS3URL(): S3URLResponse = fakeS3URLResponse
+
+    override suspend fun putS3Image(preSignedURL: String, image: RequestBody): Response<Unit> {
+        return fakeResponse
+    }
 }

@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,6 +45,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,6 +56,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
+import okhttp3.RequestBody
+import org.sopt.official.data.soptamp.remote.api.FakeStampService
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
@@ -74,7 +78,6 @@ import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBa
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
-import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @MissionNavGraph
@@ -112,6 +115,8 @@ fun MissionDetailScreen(
         composition = lottieComposition,
         isPlaying = isSuccess
     )
+
+    val context = LocalContext.current
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -196,7 +201,26 @@ fun MissionDetailScreen(
 
             if (isEditable && isMe) {
                 Button(
-                    onClick = { viewModel.onSubmit() },
+                    onClick = {
+                        var requestBody: RequestBody? = null
+                        when (imageModel) {
+                            ImageModel.Empty -> ContentUriRequestBody(context, Uri.parse("temp2"))
+                            is ImageModel.Local -> {
+                                val temp = (imageModel as ImageModel.Local).uri[0]
+                                val uri = Uri.parse(temp)
+                                requestBody = ContentUriRequestBody(context, uri)
+                            }
+
+                            is ImageModel.Remote -> {
+                                val temp = (imageModel as ImageModel.Remote).url[0]
+                                val uri = Uri.parse(temp)
+                                requestBody = ContentUriRequestBody(context, uri)
+                            }
+                        }
+                        viewModel.setRequestBody(requestBody)
+
+                        viewModel.onSubmit()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 32.dp),
@@ -265,7 +289,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(FakeStampRepository)
+            MissionDetailViewModel(repository = FakeStampRepository, service = FakeStampService)
         )
     }
 }
