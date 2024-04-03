@@ -169,7 +169,7 @@ fun MissionDetailScreen(
                     onClicked = {
                         viewModel.onChangeDatePickerBottomSheetOpened(true)
                     },
-                    borderColor = getRankTextColor(level.value),
+                    borderColor = getLevelTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -177,7 +177,7 @@ fun MissionDetailScreen(
                     value = content,
                     placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                     onValueChange = viewModel::onChangeContent,
-                    borderColor = getRankTextColor(level.value),
+                    borderColor = getLevelTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
                 if (!isEditable || !isMe) {
