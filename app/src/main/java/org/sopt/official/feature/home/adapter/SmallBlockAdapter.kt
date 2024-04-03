@@ -55,7 +55,6 @@ class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder
                 descriptionSmall.isVisible = item.description != null
                 descriptionSmall.text = item.description?.let { context.stringOf(it) }
                 root.setOnSingleClickListener {
-//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
                     val intent = Intent(context, WebViewActivity::class.java).apply {
                         putExtra(WebViewActivity.INTENT_URL, item.url)
                     }
