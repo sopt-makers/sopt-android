@@ -26,10 +26,8 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +45,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -190,22 +187,26 @@ fun MissionDetailScreen(
             if (isEditable && isMe) {
                 Button(
                     onClick = {
-                        var requestBody: RequestBody? = null
+                        val requestBodyList: MutableList<RequestBody> = mutableListOf()
                         when (imageModel) {
                             ImageModel.Empty -> ContentUriRequestBody(context, Uri.parse("temp2"))
                             is ImageModel.Local -> {
-                                val temp = (imageModel as ImageModel.Local).uri[0]
-                                val uri = Uri.parse(temp)
-                                requestBody = ContentUriRequestBody(context, uri)
+                                (imageModel as ImageModel.Local).uri.map {
+                                    val uri = Uri.parse(it)
+                                    val requestBody = ContentUriRequestBody(context, uri)
+                                    requestBodyList.add(requestBody)
+                                }
                             }
 
                             is ImageModel.Remote -> {
-                                val temp = (imageModel as ImageModel.Remote).url[0]
-                                val uri = Uri.parse(temp)
-                                requestBody = ContentUriRequestBody(context, uri)
+                                (imageModel as ImageModel.Remote).url.map {
+                                    val uri = Uri.parse(it)
+                                    val requestBody = ContentUriRequestBody(context, uri)
+                                    requestBodyList.add(requestBody)
+                                }
                             }
                         }
-                        viewModel.setRequestBody(requestBody)
+                        viewModel.setRequestBody(requestBodyList)
 
                         viewModel.onSubmit()
                     },

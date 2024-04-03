@@ -104,7 +104,7 @@ class MissionDetailViewModel @Inject constructor(
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
-    private var requestbody: RequestBody? = null
+    private var requestbody: List<RequestBody>? = null
 
     init {
         viewModelScope.launch {
@@ -216,7 +216,7 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun setRequestBody(body: RequestBody?) {
+    fun setRequestBody(body: List<RequestBody>) {
         requestbody = body
     }
 
@@ -233,51 +233,47 @@ class MissionDetailViewModel @Inject constructor(
                 val preSignedURL = S3URL.preSignedURL
                 val imageURL = S3URL.imageURL
 
-                if (requestbody != null) {
-                    try {
-                        service.putS3Image(
-                            preSignedURL = preSignedURL,
-                            image = requestbody ?: throw IllegalStateException("error"),
-                        )
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
+                requestbody?.map {
+                    service.putS3Image(
+                        preSignedURL = preSignedURL,
+                        image = it
+                    )
+                }
 
-                    if (uiState.value.isCompleted) {
-                        repository.modifyMission(
-                            Stamp(
-                                missionId = id,
-                                image = imageURL,
-                                contents = content,
-                                activityDate = date
-                            )
-                        ).onSuccess {
-                            uiState.update {
-                                it.copy(isLoading = false, isSuccess = true)
-                            }
-                        }.onFailure { error ->
-                            Timber.e(error)
-                            uiState.update {
-                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                            }
+                if (uiState.value.isCompleted) {
+                    repository.modifyMission(
+                        Stamp(
+                            missionId = id,
+                            image = imageURL,
+                            contents = content,
+                            activityDate = date
+                        )
+                    ).onSuccess {
+                        uiState.update {
+                            it.copy(isLoading = false, isSuccess = true)
                         }
-                    } else {
-                        repository.completeMission(
-                            Stamp(
-                                missionId = id,
-                                image = imageURL,
-                                contents = content,
-                                activityDate = date
-                            )
-                        ).onSuccess {
-                            uiState.update {
-                                it.copy(isLoading = false, isSuccess = true)
-                            }
-                        }.onFailure { error ->
-                            Timber.e(error)
-                            uiState.update {
-                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                            }
+                    }.onFailure { error ->
+                        Timber.e(error)
+                        uiState.update {
+                            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                        }
+                    }
+                } else {
+                    repository.completeMission(
+                        Stamp(
+                            missionId = id,
+                            image = imageURL,
+                            contents = content,
+                            activityDate = date
+                        )
+                    ).onSuccess {
+                        uiState.update {
+                            it.copy(isLoading = false, isSuccess = true)
+                        }
+                    }.onFailure { error ->
+                        Timber.e(error)
+                        uiState.update {
+                            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                         }
                     }
                 }
