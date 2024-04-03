@@ -25,7 +25,6 @@
 package org.sopt.official.domain.soptamp.fake
 
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.S3URL
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.StampRepository
@@ -48,7 +47,7 @@ object FakeStampRepository : StampRepository {
 
     override suspend fun getMissionContent(missionId: Int, nickname: String) = runCatching { fakeArchive }
 
-    override suspend fun modifyMission(missionId: Int, imageUri: ImageModel, content: String) = runCatching { }
+    override suspend fun modifyMission(stamp: Stamp) = runCatching { }
 
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 

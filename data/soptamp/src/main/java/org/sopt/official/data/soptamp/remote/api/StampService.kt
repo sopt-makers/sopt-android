@@ -35,6 +35,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Part
@@ -46,12 +47,9 @@ interface StampService {
     @GET("stamp")
     suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
 
-    @Multipart
-    @PUT("stamp/{missionId}")
+    @PATCH("stamp")
     suspend fun modifyStamp(
-        @Path("missionId") missionId: Int,
-        @Part("stampContent") stampContent: RequestBody,
-        @Part imgUrl: List<MultipartBody.Part>? = null
+        @Body body: StampRequest
     ): ModifyStampResponse
 
     @POST("stamp")

@@ -34,7 +34,7 @@ interface StampRepository {
 
     suspend fun getMissionContent(missionId: Int, nickname: String,): Result<Archive>
 
-    suspend fun modifyMission(missionId: Int, imageUri: ImageModel, content: String): Result<Unit>
+    suspend fun modifyMission(stamp: Stamp): Result<Unit>
 
     suspend fun deleteMission(missionId: Int): Result<Unit>
 
