@@ -195,10 +195,11 @@ class AttendanceViewModel @Inject constructor(
                     setThirdProgressBarBeforeAttendance(true)
                     setThirdProgressBarTardy(false)
                 } else if (firstStatus == "ATTENDANCE" && secondStatus == "ABSENT") {
-                    // 마지막 progress가 결석
-                    setThirdProgressBarBeforeAttendance(false)
+                    // 마지막 progress가 지각
+                    setThirdProgressBarBeforeAttendance(true)
                     setThirdProgressBar(true)
-                    setThirdProgressBarTardy(false)
+                    setThirdProgressBarTardy(true)
+                    setThirdProgressBarAttendance(true)
                 } else if (firstStatus == "ABSENT" && secondStatus == "ATTENDANCE") {
                     // 마지막 progress가 지각
                     setThirdProgressBarBeforeAttendance(true)
