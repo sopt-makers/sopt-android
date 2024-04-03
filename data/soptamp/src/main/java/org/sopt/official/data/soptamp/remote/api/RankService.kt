@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
+import org.sopt.official.data.soptamp.remote.model.response.PartRankResponse
 import org.sopt.official.data.soptamp.remote.model.response.RankDetailResponse
 import org.sopt.official.data.soptamp.remote.model.response.RankResponse
 import retrofit2.http.GET
@@ -39,4 +40,7 @@ internal interface RankService {
 
     @GET("rank/detail")
     suspend fun getRankDetail(@Query("nickname") nickname: String): RankDetailResponse
+
+    @GET("rank/part")
+    suspend fun getPartRanking(): List<PartRankResponse>
 }
