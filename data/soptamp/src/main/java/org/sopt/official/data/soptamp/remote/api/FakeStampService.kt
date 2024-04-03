@@ -24,17 +24,13 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
-import okhttp3.MultipartBody
-import okhttp3.Request
 import okhttp3.RequestBody
-import okio.Timeout
 import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
 import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Body
 
 
 object FakeStampService : StampService {
@@ -57,8 +53,7 @@ object FakeStampService : StampService {
 
     override suspend fun retrieveStamp(missionId: Int, nickname: String): StampResponse = fakeStampResponse
 
-    override suspend fun modifyStamp(missionId: Int, stampContent: RequestBody, imgUrl: List<MultipartBody.Part>?): ModifyStampResponse =
-        fakeModifyStampResponse
+    override suspend fun modifyStamp(@Body body: StampRequest): ModifyStampResponse = fakeModifyStampResponse
 
     override suspend fun registerStamp(body: StampRequest): StampResponse = fakeStampResponse
 

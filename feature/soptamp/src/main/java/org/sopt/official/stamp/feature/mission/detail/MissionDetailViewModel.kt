@@ -139,6 +139,7 @@ class MissionDetailViewModel @Inject constructor(
                     }
                     val result = PostUiState.from(it).copy(
                         stampId = it.id,
+                        imageUri = ImageModel.Remote(url = it.images),
                         isCompleted = isCompleted,
                         toolbarIconType = option,
                         createdAt = it.createdAt ?: ""
@@ -233,8 +234,6 @@ class MissionDetailViewModel @Inject constructor(
                 val imageURL = S3URL.imageURL
 
                 if (requestbody != null) {
-
-                    // error 발생
                     try {
                         service.putS3Image(
                             preSignedURL = preSignedURL,
@@ -244,14 +243,14 @@ class MissionDetailViewModel @Inject constructor(
                         Timber.e(e)
                     }
 
-
-
-
                     if (uiState.value.isCompleted) {
                         repository.modifyMission(
-                            missionId = id,
-                            content = content,
-                            imageUri = imageUri
+                            Stamp(
+                                missionId = id,
+                                image = imageURL,
+                                contents = content,
+                                activityDate = date
+                            )
                         ).onSuccess {
                             uiState.update {
                                 it.copy(isLoading = false, isSuccess = true)
