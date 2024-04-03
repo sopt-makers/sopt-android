@@ -34,4 +34,6 @@ interface RankingRepository {
     suspend fun getRankDetail(nickname: String): Result<OtherMission>
 
     suspend fun getPartRanking(): Result<List<PartRank>>
+
+    suspend fun getCurrentPartRanking(part: String): Result<List<Rank>>
 }

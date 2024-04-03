@@ -86,20 +86,20 @@ fun RankingScreen(
     val isCurrent = type == "34기"
     val state by rankingViewModel.state.collectAsState()
     LaunchedEffect(true) {
-        rankingViewModel.fetchRanking(isCurrent)
+        rankingViewModel.fetchRanking(isCurrent, type)
     }
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
             RankingState.Failure -> SingleOptionDialog {
-                rankingViewModel.fetchRanking(isCurrent)
+                rankingViewModel.fetchRanking(isCurrent, type)
             }
 
             is RankingState.Success -> RankingScreen(
                 isCurrent = isCurrent,
                 type = type,
                 refreshing = rankingViewModel.isRefreshing,
-                onRefresh = { rankingViewModel.onRefresh(isCurrent) },
+                onRefresh = { rankingViewModel.onRefresh(isCurrent, type) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
                 nickname = rankingViewModel.nickname,
                 onClickBack = resultNavigator::navigateBack,
