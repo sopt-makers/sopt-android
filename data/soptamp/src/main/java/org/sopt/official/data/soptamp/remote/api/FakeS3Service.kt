@@ -25,13 +25,7 @@
 package org.sopt.official.data.soptamp.remote.api
 
 import okhttp3.RequestBody
-import org.sopt.official.data.soptamp.remote.model.request.StampRequest
-import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
-import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
-import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 import retrofit2.Response
-import retrofit2.http.Body
-
 
 object FakeS3Service : S3Service {
     private val fakeResponse: Response<Unit> = Response.success(Unit)

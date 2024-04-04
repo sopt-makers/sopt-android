@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.soptamp.repository
 
+import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.remote.api.RankService
@@ -33,7 +34,6 @@ import org.sopt.official.domain.soptamp.model.PartRank
 import org.sopt.official.domain.soptamp.model.Rank
 import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
-import javax.inject.Inject
 
 internal class RemoteRankingRepository @Inject constructor(
     private val remote: RankingDataSource,

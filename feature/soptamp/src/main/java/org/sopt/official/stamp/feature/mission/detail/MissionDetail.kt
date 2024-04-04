@@ -55,7 +55,6 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
 import okhttp3.RequestBody
 import org.sopt.official.data.soptamp.remote.api.FakeS3Service
-import org.sopt.official.data.soptamp.remote.api.FakeStampService
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel

@@ -26,6 +26,7 @@ package org.sopt.official.data.soptamp.repository
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -35,7 +36,6 @@ import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.S3URL
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.StampRepository
-import javax.inject.Inject
 
 class StampRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,

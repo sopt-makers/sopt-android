@@ -24,38 +24,27 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
 import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import retrofit2.http.Url
 
 interface StampService {
     @GET("stamp")
     suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
 
     @PUT("stamp")
-    suspend fun modifyStamp(
-        @Body body: StampRequest
-    ): ModifyStampResponse
+    suspend fun modifyStamp(@Body body: StampRequest): ModifyStampResponse
 
     @POST("stamp")
-    suspend fun registerStamp(
-        @Body body: StampRequest
-    ): StampResponse
+    suspend fun registerStamp(@Body body: StampRequest): StampResponse
 
     @DELETE("stamp/{missionId}")
     suspend fun deleteStamp(@Path("missionId") missionId: Int)
@@ -65,10 +54,4 @@ interface StampService {
 
     @GET("s3/stamp")
     suspend fun getS3URL(): S3URLResponse
-
-    @PUT
-    suspend fun putS3Image(
-        @Url preSignedURL: String,
-        @Body image: RequestBody
-    ): Response<Unit>
 }

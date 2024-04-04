@@ -25,14 +25,13 @@
 package org.sopt.official.domain.soptamp.repository
 
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.S3URL
 import org.sopt.official.domain.soptamp.model.Stamp
 
 interface StampRepository {
     suspend fun completeMission(stamp: Stamp): Result<Archive>
 
-    suspend fun getMissionContent(missionId: Int, nickname: String,): Result<Archive>
+    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
 
     suspend fun modifyMission(stamp: Stamp): Result<Unit>
 

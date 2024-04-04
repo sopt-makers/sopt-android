@@ -5,4 +5,3 @@ data class PartRank(
     val rank: Int,
     val points: Int,
 )
-

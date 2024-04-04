@@ -217,6 +217,9 @@ fun MissionsGridComponent(
                 }
             )
         }
+        item {
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
+        }
     }
 }
 
