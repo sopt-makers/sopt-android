@@ -123,9 +123,9 @@ class MyPageActivity : AppCompatActivity() {
         binding.layoutAdjustSentence.setOnSingleClickListener {
             startActivity(AdjustSentenceActivity.getIntent(this))
         }
-        binding.layoutChangeNickname.setOnSingleClickListener {
-            startActivity(ChangeNickNameActivity.getIntent(this))
-        }
+//        binding.layoutChangeNickname.setOnSingleClickListener {
+//            startActivity(ChangeNickNameActivity.getIntent(this))
+//        }
         binding.layoutResetStamp.setOnSingleClickListener {
             AlertDialogPositiveNegative(this)
                 .setTitle(R.string.mypage_alert_soptamp_reset_title)
