@@ -1,7 +1,5 @@
 package org.sopt.official.stamp.feature.ranking.model
 
-
-import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.soptamp.model.PartRank
 
 data class PartRankModel(

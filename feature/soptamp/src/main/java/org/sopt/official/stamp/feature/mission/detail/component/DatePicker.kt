@@ -40,6 +40,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import okhttp3.internal.immutableListOf
@@ -51,9 +54,6 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -64,7 +64,7 @@ fun DatePicker(
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isEmpty by remember(value) { derivedStateOf{value.isEmpty()} }
+    val isEmpty by remember(value) { derivedStateOf { value.isEmpty() } }
 
     val newModifier = modifier
         .fillMaxWidth()
@@ -224,12 +224,7 @@ fun DateSelectionSection(
 }
 
 @Composable
-fun DateItemsPicker(
-    items: ImmutableList<String>,
-    firstIndex: Int,
-    onItemSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
+fun DateItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSelected: (String) -> Unit, modifier: Modifier = Modifier) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
@@ -285,8 +280,8 @@ private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 private val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 private val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-private const val startYear = 1950
-private const val endYear = 2100
+private val startYear = 1950
+private val endYear = 2100
 private val years = (listOf("") + (startYear..endYear).map { it.toString() } + listOf("")).toImmutableList()
 private val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
 private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
