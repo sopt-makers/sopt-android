@@ -36,8 +36,8 @@ android {
 
 dependencies {
     implementation(projects.core.network)
+    implementation(projects.core.common)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
-    implementation(project(":core:common"))
 }
