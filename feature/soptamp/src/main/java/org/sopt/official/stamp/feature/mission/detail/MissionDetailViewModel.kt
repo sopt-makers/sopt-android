@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import okhttp3.RequestBody
-import org.sopt.official.data.soptamp.remote.api.StampService
+import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
@@ -79,7 +79,8 @@ data class PostUiState(
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
     private val repository: StampRepository,
-    private val service: StampService,
+    private val service: S3Service,
+    // private val service: StampService,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -228,23 +229,35 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isError = false, error = null, isLoading = true)
             }
 
-
             repository.getS3URL().onSuccess { S3URL ->
                 val preSignedURL = S3URL.preSignedURL
                 val imageURL = S3URL.imageURL
 
                 requestbody?.map {
                     service.putS3Image(
-                        preSignedURL = preSignedURL,
+                        preSignedURL = imageURL, // preSignedURL,
                         image = it
                     )
                 }
-
                 if (uiState.value.isCompleted) {
+                    val image = when (imageUri) {
+                        ImageModel.Empty -> {
+                            "ERROR"
+                        }
+
+                        is ImageModel.Local -> {
+                            imageUri.uri[0]
+                        }
+
+                        is ImageModel.Remote -> {
+                            imageUri.url[0]
+                        }
+                    }
+
                     repository.modifyMission(
                         Stamp(
                             missionId = id,
-                            image = imageURL,
+                            image = image,
                             contents = content,
                             activityDate = date
                         )
@@ -259,6 +272,8 @@ class MissionDetailViewModel @Inject constructor(
                         }
                     }
                 } else {
+                    Timber.e("WHY!!!")
+                    Timber.e(content)
                     repository.completeMission(
                         Stamp(
                             missionId = id,
@@ -271,18 +286,17 @@ class MissionDetailViewModel @Inject constructor(
                             it.copy(isLoading = false, isSuccess = true)
                         }
                     }.onFailure { error ->
-                        Timber.e(error)
                         uiState.update {
                             it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                         }
                     }
                 }
             }.onFailure { error ->
-                Timber.e(error)
                 uiState.update {
                     it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                 }
             }
+
         }
     }
 
