@@ -24,29 +24,13 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
-import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.sopt.official.data.soptamp.remote.model.request.StampRequest
-import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
-import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
-import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 import retrofit2.Response
 import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Multipart
-import retrofit2.http.PATCH
-import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Part
-import retrofit2.http.Path
-import retrofit2.http.Query
 import retrofit2.http.Url
 
 interface S3Service {
     @PUT
-    suspend fun putS3Image(
-        @Url preSignedURL: String,
-        @Body image: RequestBody
-    ): Response<Unit>
+    suspend fun putS3Image(@Url preSignedURL: String, @Body image: RequestBody): Response<Unit>
 }
