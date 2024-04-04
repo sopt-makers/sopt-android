@@ -25,7 +25,6 @@
 package org.sopt.official.feature.home.adapter
 
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -37,6 +36,7 @@ import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.ItemDiffCallback
 import org.sopt.official.databinding.ItemMainSmallBlockListBinding
 import org.sopt.official.feature.home.model.HomeMenuType
+import org.sopt.official.webview.view.WebViewActivity
 
 class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder>(
     ItemDiffCallback(
@@ -55,7 +55,9 @@ class SmallBlockAdapter : ListAdapter<HomeMenuType, SmallBlockAdapter.ViewHolder
                 descriptionSmall.isVisible = item.description != null
                 descriptionSmall.text = item.description?.let { context.stringOf(it) }
                 root.setOnSingleClickListener {
-                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+                    val intent = Intent(context, WebViewActivity::class.java).apply {
+                        putExtra(WebViewActivity.INTENT_URL, item.url)
+                    }
                     context.startActivity(intent)
                 }
             }
