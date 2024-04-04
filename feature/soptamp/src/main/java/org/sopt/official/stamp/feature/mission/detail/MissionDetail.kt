@@ -54,6 +54,7 @@ import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
 import okhttp3.RequestBody
+import org.sopt.official.data.soptamp.remote.api.FakeS3Service
 import org.sopt.official.data.soptamp.remote.api.FakeStampService
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
@@ -76,6 +77,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
+import timber.log.Timber
 
 @MissionNavGraph
 @Destination("detail")
@@ -188,23 +190,20 @@ fun MissionDetailScreen(
                 Button(
                     onClick = {
                         val requestBodyList: MutableList<RequestBody> = mutableListOf()
+
                         when (imageModel) {
-                            ImageModel.Empty -> ContentUriRequestBody(context, Uri.parse("temp2"))
+                            ImageModel.Empty -> {}
                             is ImageModel.Local -> {
                                 (imageModel as ImageModel.Local).uri.map {
                                     val uri = Uri.parse(it)
+                                    Timber.e(uri.toString())
                                     val requestBody = ContentUriRequestBody(context, uri)
+                                    Timber.e(requestBody.toString())
                                     requestBodyList.add(requestBody)
                                 }
                             }
 
-                            is ImageModel.Remote -> {
-                                (imageModel as ImageModel.Remote).url.map {
-                                    val uri = Uri.parse(it)
-                                    val requestBody = ContentUriRequestBody(context, uri)
-                                    requestBodyList.add(requestBody)
-                                }
-                            }
+                            is ImageModel.Remote -> {}
                         }
                         viewModel.setRequestBody(requestBodyList)
 
@@ -270,7 +269,7 @@ fun MissionDetailPreview() {
         id = 1,
         title = "앱잼 팀원 다 함께 바다 보고 오기",
         level = MissionLevel.of(2),
-        isCompleted = false,
+        isCompleted = true,
         isMe = true,
         nickname = "Nunu",
     )
@@ -278,7 +277,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(repository = FakeStampRepository, service = FakeStampService)
+            MissionDetailViewModel(repository = FakeStampRepository, service = FakeS3Service)
         )
     }
 }

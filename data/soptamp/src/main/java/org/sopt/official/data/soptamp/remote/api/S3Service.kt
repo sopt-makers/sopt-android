@@ -43,29 +43,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.Url
 
-interface StampService {
-    @GET("stamp")
-    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
-
-    @PUT("stamp")
-    suspend fun modifyStamp(
-        @Body body: StampRequest
-    ): ModifyStampResponse
-
-    @POST("stamp")
-    suspend fun registerStamp(
-        @Body body: StampRequest
-    ): StampResponse
-
-    @DELETE("stamp/{missionId}")
-    suspend fun deleteStamp(@Path("missionId") missionId: Int)
-
-    @DELETE("stamp/all")
-    suspend fun deleteAllStamps()
-
-    @GET("s3/stamp")
-    suspend fun getS3URL(): S3URLResponse
-
+interface S3Service {
     @PUT
     suspend fun putS3Image(
         @Url preSignedURL: String,
