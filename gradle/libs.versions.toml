@@ -64,6 +64,7 @@ sentry-android = "7.6.0"
 process-pheonix = "3.0.0"
 amplitude = "1.16.7"
 spotless = "6.25.0"
+constraintlayout = "2.1.4"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -172,6 +173,7 @@ process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "p
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
 android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [bundles]
 compose = [
