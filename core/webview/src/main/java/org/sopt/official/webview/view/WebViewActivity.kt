@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
-import timber.log.Timber
 
 @AndroidEntryPoint
 class WebViewActivity : AppCompatActivity() {
@@ -20,7 +19,6 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val mLinkUrl = intent.getStringExtra(INTENT_URL)
-        Timber.d("LinkUrl: $mLinkUrl")
         mLinkUrl?.let { binding.webView.loadUrl(it) }
     }
 }
