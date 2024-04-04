@@ -272,8 +272,6 @@ class MissionDetailViewModel @Inject constructor(
                         }
                     }
                 } else {
-                    Timber.e("WHY!!!")
-                    Timber.e(content)
                     repository.completeMission(
                         Stamp(
                             missionId = id,
