@@ -30,7 +30,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,6 +41,7 @@ import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import org.sopt.official.feature.attendance.model.AttendanceState
 import org.sopt.official.feature.attendance.model.DialogState
 import timber.log.Timber
+import javax.inject.Inject
 
 data class ProgressBarState(
     val isFirstProgressBarActive: Boolean = false,
@@ -283,10 +283,17 @@ class AttendanceViewModel @Inject constructor(
                 _attendanceRound.value = AttendanceState.Success(it)
                 subLectureId = it.id
                 when (it.id) {
+                    // N차 출석 정보 조회 에러
+                    -2L -> {
+                        setAttendanceButtonVisibility(false)
+                    }
+
+                    // 오늘 세션이 없는 경우
                     -1L -> {
                         setAttendanceButtonVisibility(false)
                     }
 
+                    // 1차 출석 전 || 2차 출석 전 || 2차 출석 종료 후
                     0L -> {
                         setAttendanceButtonText(it.roundText)
                         setAttendanceButtonVisibility(true)
@@ -295,10 +302,12 @@ class AttendanceViewModel @Inject constructor(
 
                     else -> {
                         if (it.roundText.isNotEmpty() && attendancesSize == it.roundText[0].code - '0'.code) {
+                            // 사용자가 출석을 완료한 경우
                             setAttendanceButtonText(it.roundText.substring(0, 5) + " 종료")
                             setAttendanceButtonVisibility(true)
                             setAttendanceButtonEnabled(false)
                         } else {
+                            // 사용자가 출석을 진행해야 하는 경우
                             setAttendanceButtonText(it.roundText)
                             setAttendanceButtonVisibility(true)
                             setAttendanceButtonEnabled(true)
