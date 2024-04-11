@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -46,6 +45,7 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -80,7 +80,6 @@ data class PostUiState(
 class MissionDetailViewModel @Inject constructor(
     private val repository: StampRepository,
     private val service: S3Service,
-    // private val service: StampService,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -236,7 +235,7 @@ class MissionDetailViewModel @Inject constructor(
                 runCatching {
                     requestbody?.map {
                         service.putS3Image(
-                            preSignedURL = preSignedURL, // preSignedURL,
+                            preSignedURL = preSignedURL,
                             image = it
                         )
                     }
@@ -272,7 +271,6 @@ class MissionDetailViewModel @Inject constructor(
                             it.copy(isLoading = false, isSuccess = true)
                         }
                     }.onFailure { error ->
-                        Timber.e(error)
                         uiState.update {
                             it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                         }
@@ -316,7 +314,6 @@ class MissionDetailViewModel @Inject constructor(
                         it.copy(isLoading = false, isDeleteSuccess = true)
                     }
                 }.onFailure { error ->
-                    Timber.e(error)
                     uiState.update {
                         it.copy(isLoading = false, isError = true, error = error)
                     }

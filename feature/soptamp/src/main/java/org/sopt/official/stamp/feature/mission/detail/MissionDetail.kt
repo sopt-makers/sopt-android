@@ -76,7 +76,6 @@ import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
-import timber.log.Timber
 
 @MissionNavGraph
 @Destination("detail")
@@ -195,9 +194,7 @@ fun MissionDetailScreen(
                             is ImageModel.Local -> {
                                 (imageModel as ImageModel.Local).uri.map {
                                     val uri = Uri.parse(it)
-                                    Timber.e(uri.toString())
                                     val requestBody = ContentUriRequestBody(context, uri)
-                                    Timber.e(requestBody.toString())
                                     requestBodyList.add(requestBody)
                                 }
                             }
