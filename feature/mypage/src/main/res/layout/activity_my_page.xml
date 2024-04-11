@@ -271,38 +271,6 @@
                         app:layout_constraintTop_toTopOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-<!--                <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--                    android:id="@+id/layout_change_nickname"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="22dp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@id/layout_adjust_sentence">-->
-
-<!--                    <TextView-->
-<!--                        android:id="@+id/text_change_nickname"-->
-<!--                        android:layout_width="0dp"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:text="@string/mypage_change_nickname"-->
-<!--                        android:textAppearance="?textAppearanceBodyLarge"-->
-<!--                        android:textColor="?colorOnBackground"-->
-<!--                        app:layout_constraintBottom_toBottomOf="@id/icon_change_nickname"-->
-<!--                        app:layout_constraintStart_toStartOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="@id/icon_change_nickname" />-->
-
-<!--                    <ImageView-->
-<!--                        android:id="@+id/icon_change_nickname"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:background="@drawable/btn_arrow_right"-->
-<!--                        android:backgroundTint="@color/gray_80"-->
-<!--                        app:layout_constraintEnd_toEndOf="parent"-->
-<!--                        app:layout_constraintTop_toTopOf="parent" />-->
-<!--                </androidx.constraintlayout.widget.ConstraintLayout>-->
-
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/layout_reset_stamp"
                     android:layout_width="0dp"

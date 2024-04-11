@@ -25,12 +25,8 @@
 package org.sopt.official.data.soptamp.remote.api
 
 import okhttp3.RequestBody
-import retrofit2.Response
 
 object FakeS3Service : S3Service {
-    private val fakeResponse: Response<Unit> = Response.success(Unit)
+    override suspend fun putS3Image(preSignedURL: String, image: RequestBody) {}
 
-    override suspend fun putS3Image(preSignedURL: String, image: RequestBody): Response<Unit> {
-        return fakeResponse
-    }
 }
