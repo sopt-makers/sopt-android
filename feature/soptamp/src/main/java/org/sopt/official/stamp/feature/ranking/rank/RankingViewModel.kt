@@ -62,21 +62,32 @@ class RankingViewModel @Inject constructor(
         _state.value = RankingState.Loading
 
         if (isCurrent) {
-            rankingRepository.getRanking(
-                RankFetchType.Term()
-            ).mapCatching { it.toUiModel() }
-                .onSuccess { ranking ->
-                    if (isRefreshing) {
-                        isRefreshing = false
-                    }
-                    onSuccessStateChange(ranking)
-                }.onFailure {
-                    _state.value = RankingState.Failure
-                }
+            fetchCurrentRanking()
         } else {
-            rankingRepository.getCurrentPartRanking(
-                partEnglishName[part] ?: ""
-            ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
+            val partEnum = when (part) {
+                "기획" -> PART.PLAN
+                "디자인" -> PART.DESIGN
+                "웹" -> PART.WEB
+                "아요" -> PART.IOS
+                "안드" -> PART.ANDROID
+                "서버" -> PART.SERVER
+                else -> PART.ERROR
+            }
+
+            if (partEnum == PART.ERROR) {
+                _state.value = RankingState.Failure
+            } else {
+                fetchPartRanking(partEnum)
+            }
+
+        }
+    }
+
+    private suspend fun fetchCurrentRanking() {
+        rankingRepository.getRanking(
+            RankFetchType.Term()
+        ).mapCatching { it.toUiModel() }
+            .onSuccess { ranking ->
                 if (isRefreshing) {
                     isRefreshing = false
                 }
@@ -84,17 +95,30 @@ class RankingViewModel @Inject constructor(
             }.onFailure {
                 _state.value = RankingState.Failure
             }
+    }
+
+    private suspend fun fetchPartRanking(part: PART) {
+        rankingRepository.getCurrentPartRanking(
+            part.name
+        ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
+            if (isRefreshing) {
+                isRefreshing = false
+            }
+            onSuccessStateChange(ranking)
+        }.onFailure {
+            _state.value = RankingState.Failure
         }
     }
 
-    private val partEnglishName = hashMapOf(
-        "기획" to "PLAN",
-        "디자인" to "DESIGN",
-        "웹" to "WEB",
-        "아요" to "IOS",
-        "안드" to "ANDROID",
-        "서버" to "SERVER"
-    )
+    enum class PART {
+        PLAN,
+        DESIGN,
+        WEB,
+        IOS,
+        ANDROID,
+        SERVER,
+        ERROR
+    }
 
     private fun onSuccessStateChange(ranking: RankingListUiModel) {
         _state.value = RankingState.Success(ranking, getNicknameUseCase())

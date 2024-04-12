@@ -91,10 +91,7 @@ fun RankingScreen(
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
-            RankingState.Failure -> SingleOptionDialog {
-                rankingViewModel.fetchRanking(isCurrent, type)
-            }
-
+            RankingState.Failure -> SingleOptionDialog(resultNavigator::navigateBack)
             is RankingState.Success -> RankingScreen(
                 isCurrent = isCurrent,
                 type = type,
