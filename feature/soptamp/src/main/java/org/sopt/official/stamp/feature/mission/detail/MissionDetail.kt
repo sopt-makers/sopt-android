@@ -54,6 +54,7 @@ import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
 import okhttp3.RequestBody
+import org.sopt.official.common.util.ContentUriRequestBody
 import org.sopt.official.data.soptamp.remote.api.FakeS3Service
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
@@ -93,7 +94,6 @@ fun MissionDetailScreen(
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsState(false)
     val toolbarIconType by viewModel.toolbarIconType.collectAsState(ToolbarIconType.NONE)
     val isEditable by viewModel.isEditable.collectAsState(true)
-    val createdAt by viewModel.createdAt.collectAsState("")
     val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsState(false)
     val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState(false)
     val isError by viewModel.isError.collectAsState(false)
