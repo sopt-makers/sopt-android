@@ -52,7 +52,6 @@ data class PostUiState(
     val imageUri: ImageModel = ImageModel.Empty,
     val content: String = "",
     val date: String = "",
-    val createdAt: String = "",
     val stampId: Int = -1,
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false,
@@ -96,8 +95,6 @@ class MissionDetailViewModel @Inject constructor(
     val isEditable = toolbarIconType.map {
         it != ToolbarIconType.WRITE
     }
-    val createdAt = uiState.map { it.createdAt }
-        .filter { it.isNotEmpty() }
     val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
@@ -142,7 +139,6 @@ class MissionDetailViewModel @Inject constructor(
                         imageUri = ImageModel.Remote(url = it.images),
                         isCompleted = isCompleted,
                         toolbarIconType = option,
-                        createdAt = it.createdAt ?: ""
                     )
                     uiState.update { result }
                 }.onFailure { error ->

@@ -1,4 +1,4 @@
-package org.sopt.official.stamp.feature.mission.detail
+package org.sopt.official.common.util
 
 import android.content.Context
 import android.graphics.Bitmap

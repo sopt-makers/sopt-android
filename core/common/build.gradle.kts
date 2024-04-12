@@ -30,3 +30,7 @@ plugins {
 android {
     namespace = "org.sopt.official.common"
 }
+
+dependencies {
+    implementation(libs.okhttp)
+}
