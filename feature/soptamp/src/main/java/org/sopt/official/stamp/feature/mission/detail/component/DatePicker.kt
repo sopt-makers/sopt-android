@@ -200,7 +200,7 @@ fun DateSelectionSection(
     ) {
         DateItemsPicker(
             items = years.toImmutableList(),
-            firstIndex = (currentYear - startYear),
+            firstIndex = (currentYear - START_YEAR),
             onItemSelected = onYearChosen
         )
         Spacer(modifier = Modifier.width(10.dp))
@@ -280,9 +280,9 @@ private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 private val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 private val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-private val startYear = 1950
-private val endYear = 2100
-private val years = (listOf("") + (startYear..endYear).map { it.toString() } + listOf("")).toImmutableList()
+private const val START_YEAR = 1950
+private const val END_YEAR = 2100
+private val years = (listOf("") + (START_YEAR..END_YEAR).map { it.toString() } + listOf("")).toImmutableList()
 private val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
 private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
 private val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList()
