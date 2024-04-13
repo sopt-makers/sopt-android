@@ -139,7 +139,7 @@ soloader = { module = "com.facebook.soloader:soloader", version.ref = "soloader"
 flipper-network = { module = "com.facebook.flipper:flipper-network-plugin", version.ref = "flipper" }
 
 okhttp-bom = { module = "com.squareup.okhttp3:okhttp-bom", version.ref = "okhttp" }
-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp"}
+okhttp = { module = "com.squareup.okhttp3:okhttp" }
 okhttp-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor" }
 
 retrofit-bom = { module = "com.squareup.retrofit2:retrofit-bom", version.ref = "retrofit" }
