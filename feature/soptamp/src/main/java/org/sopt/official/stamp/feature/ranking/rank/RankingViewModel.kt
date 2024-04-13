@@ -64,20 +64,12 @@ class RankingViewModel @Inject constructor(
         if (isCurrent) {
             fetchCurrentRanking()
         } else {
-            val partEnum = when (part) {
-                "기획" -> Part.PLAN
-                "디자인" -> Part.DESIGN
-                "웹" -> Part.WEB
-                "아요" -> Part.IOS
-                "안드" -> Part.ANDROID
-                "서버" -> Part.SERVER
-                else -> Part.ERROR
-            }
+            val partName = Part.getPartName(part)
 
-            if (partEnum == Part.ERROR) {
+            if (partName.isNullOrBlank()) {
                 _state.value = RankingState.Failure
             } else {
-                fetchPartRanking(partEnum)
+                fetchPartRanking(partName)
             }
         }
     }
@@ -96,9 +88,9 @@ class RankingViewModel @Inject constructor(
             }
     }
 
-    private suspend fun fetchPartRanking(part: Part) {
+    private suspend fun fetchPartRanking(part: String) {
         rankingRepository.getCurrentPartRanking(
-            part.name
+            part
         ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
             if (isRefreshing) {
                 isRefreshing = false
@@ -108,16 +100,23 @@ class RankingViewModel @Inject constructor(
             _state.value = RankingState.Failure
         }
     }
+    enum class Part(val part: String) {
+        PLAN("기획"),
+        DESIGN("디자인"),
+        WEB("웹"),
+        IOS("아요"),
+        ANDROID("안드"),
+        SERVER("서버");
 
-    enum class Part {
-        PLAN,
-        DESIGN,
-        WEB,
-        IOS,
-        ANDROID,
-        SERVER,
-        ERROR
+        companion object {
+            private val partMap = entries.associateBy { it.part }
+
+            fun getPartName(part: String): String? {
+                return partMap[part]?.name
+            }
+        }
     }
+
 
     private fun onSuccessStateChange(ranking: RankingListUiModel) {
         _state.value = RankingState.Success(ranking, getNicknameUseCase())
