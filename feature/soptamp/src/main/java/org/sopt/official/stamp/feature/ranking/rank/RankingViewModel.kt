@@ -30,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,7 +40,6 @@ import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
-import javax.inject.Inject
 
 @HiltViewModel
 class RankingViewModel @Inject constructor(
@@ -65,21 +65,20 @@ class RankingViewModel @Inject constructor(
             fetchCurrentRanking()
         } else {
             val partEnum = when (part) {
-                "기획" -> PART.PLAN
-                "디자인" -> PART.DESIGN
-                "웹" -> PART.WEB
-                "아요" -> PART.IOS
-                "안드" -> PART.ANDROID
-                "서버" -> PART.SERVER
-                else -> PART.ERROR
+                "기획" -> Part.PLAN
+                "디자인" -> Part.DESIGN
+                "웹" -> Part.WEB
+                "아요" -> Part.IOS
+                "안드" -> Part.ANDROID
+                "서버" -> Part.SERVER
+                else -> Part.ERROR
             }
 
-            if (partEnum == PART.ERROR) {
+            if (partEnum == Part.ERROR) {
                 _state.value = RankingState.Failure
             } else {
                 fetchPartRanking(partEnum)
             }
-
         }
     }
 
@@ -97,7 +96,7 @@ class RankingViewModel @Inject constructor(
             }
     }
 
-    private suspend fun fetchPartRanking(part: PART) {
+    private suspend fun fetchPartRanking(part: Part) {
         rankingRepository.getCurrentPartRanking(
             part.name
         ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
@@ -110,7 +109,7 @@ class RankingViewModel @Inject constructor(
         }
     }
 
-    enum class PART {
+    enum class Part {
         PLAN,
         DESIGN,
         WEB,

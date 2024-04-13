@@ -28,5 +28,4 @@ import okhttp3.RequestBody
 
 object FakeS3Service : S3Service {
     override suspend fun putS3Image(preSignedURL: String, image: RequestBody) {}
-
 }
