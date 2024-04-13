@@ -117,7 +117,6 @@ class RankingViewModel @Inject constructor(
         }
     }
 
-
     private fun onSuccessStateChange(ranking: RankingListUiModel) {
         _state.value = RankingState.Success(ranking, getNicknameUseCase())
     }
