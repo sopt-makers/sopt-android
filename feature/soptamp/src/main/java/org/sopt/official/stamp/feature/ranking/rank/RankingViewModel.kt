@@ -111,7 +111,7 @@ class RankingViewModel @Inject constructor(
 
         companion object {
             fun getPartName(part: String): String {
-                return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name")
+                return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name : $part")
             }
         }
     }
