@@ -64,12 +64,12 @@ class RankingViewModel @Inject constructor(
         if (isCurrent) {
             fetchCurrentRanking()
         } else {
-            val partName = Part.getPartName(part)
-
-            if (partName.isNullOrBlank()) {
-                _state.value = RankingState.Failure
-            } else {
+            runCatching {
+                Part.getPartName(part)
+            }.onSuccess { partName ->
                 fetchPartRanking(partName)
+            }.onFailure {
+                _state.value = RankingState.Failure
             }
         }
     }
@@ -100,6 +100,7 @@ class RankingViewModel @Inject constructor(
             _state.value = RankingState.Failure
         }
     }
+
     enum class Part(val part: String) {
         PLAN("기획"),
         DESIGN("디자인"),
@@ -109,10 +110,8 @@ class RankingViewModel @Inject constructor(
         SERVER("서버");
 
         companion object {
-            private val partMap = entries.associateBy { it.part }
-
-            fun getPartName(part: String): String? {
-                return partMap[part]?.name
+            fun getPartName(part: String): String {
+                return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name")
             }
         }
     }
