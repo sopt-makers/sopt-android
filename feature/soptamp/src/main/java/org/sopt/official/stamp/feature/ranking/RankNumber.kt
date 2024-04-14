@@ -45,7 +45,7 @@ fun RankNumber(modifier: Modifier = Modifier, rank: Int, isMyRankNumber: Boolean
         fontWeight = FontWeight.Bold,
         color = when {
             isMyRankNumber -> SoptTheme.colors.purple300
-            isMyRankNumber -> SoptTheme.colors.onSurface80
+            isPartRankNumber -> SoptTheme.colors.onSurface40
             else -> getRankTextColor(rank)
         },
         modifier = modifier,

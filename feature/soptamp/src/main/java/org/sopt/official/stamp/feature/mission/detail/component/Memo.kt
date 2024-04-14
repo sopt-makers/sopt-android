@@ -52,7 +52,7 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
 
     val modifier = Modifier
         .fillMaxWidth()
-        .defaultMinSize(minHeight = 132.dp)
+        .defaultMinSize(minHeight = 100.dp)
         .clip(RoundedCornerShape(12.dp))
 
     val modifierWithBorder = remember(isEmpty, isEditable) {

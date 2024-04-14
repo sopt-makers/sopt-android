@@ -76,8 +76,7 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
         if (onClickRankerState.rank > 0) {
             TopRankDescriptionBubble(
                 bubble = TopRankerDescriptionBubble.findBubbleByRank(onClickRankerState.rank),
-                onClickRankerDescriptionState = onClickRankerState.getDescription(),
-                onClickItem = { onClickTopRankerBubble(onClickRankerState) }
+                onClickRankerDescriptionState = onClickRankerState.getDescription()
             )
             Spacer(modifier = Modifier.size(8.dp))
         }
@@ -114,17 +113,16 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
 }
 
 @Composable
-fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDescriptionState: String, onClickItem: () -> Unit = {}) {
+fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDescriptionState: String) {
+    val isDefault = onClickRankerDescriptionState == RankerUiModel.DEFAULT_DESCRIPTION
     Box(
-        modifier = Modifier.noRippleClickable {
-            onClickItem()
-        }
+        contentAlignment = Alignment.Center
     ) {
         Icon(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = bubble.background),
             contentDescription = "Top Ranker DescriptionBubble",
-            tint = bubble.backgroundColor
+            tint = if (isDefault) SoptTheme.colors.onSurface10 else bubble.backgroundColor
         )
         Row(
             modifier = Modifier
@@ -147,15 +145,10 @@ fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDe
             Text(
                 text = description,
                 style = SoptTheme.typography.sub3,
-                color = bubble.textColor,
+                color = if (isDefault) SoptTheme.colors.onSurface50 else bubble.textColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
-            )
-            SoptampIconButton(
-                imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
-                tint = Color.White,
-                onClick = { onClickItem() }
             )
         }
     }
