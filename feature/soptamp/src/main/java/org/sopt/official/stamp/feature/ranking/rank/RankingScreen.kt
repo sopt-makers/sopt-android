@@ -140,19 +140,18 @@ fun RankingScreen(
             )
         },
         floatingActionButton = {
-            SoptampFloatingButton(
-                text = "내 랭킹 보기"
-            ) {
-                tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
-                coroutineScope.launch {
-                    val currentUserIndex = rankingListUiModel.otherRankingList.withIndex()
-                        .find { it.value.nickname == nickname }
-                        ?.index
-                        ?: 0
-                    listState.animateScrollToItem(
-                        index = currentUserIndex,
-                        scrollOffset = scrollOffsetPx
-                    )
+            val myIndex = rankingListUiModel.otherRankingList.withIndex().find { it.value.nickname == nickname }
+            if (myIndex != null) {
+                SoptampFloatingButton(
+                    text = "내 랭킹 보기"
+                ) {
+                    tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(
+                            index = myIndex.index,
+                            scrollOffset = scrollOffsetPx
+                        )
+                    }
                 }
             }
         },

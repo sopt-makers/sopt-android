@@ -128,14 +128,17 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
     var chosenMonth by remember { mutableIntStateOf(currentMonth) }
     var chosenDay by remember { mutableIntStateOf(currentDay) }
 
+    val isValidDate by remember { derivedStateOf { calculateValidDate(chosenYear, chosenMonth, chosenDay) } }
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState
     ) {
         DatePickerUI(
-            currentYear = chosenYear,
-            currentMonth = chosenMonth,
-            currentDay = chosenDay,
+            isValidDate = isValidDate,
+            chosenYear = chosenYear,
+            chosenMonth = chosenMonth,
+            chosenDay = chosenDay,
             onYearChosen = { chosenYear = it },
             onMonthChosen = { chosenMonth = it },
             onDayChosen = { chosenDay = it }
@@ -143,27 +146,43 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
         Spacer(modifier = Modifier.height(20.dp))
         SoptampButton(
             modifier = Modifier
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+                .background(
+                    color = if (isValidDate) SoptTheme.colors.black else SoptTheme.colors.onSurface30,
+                    shape = RoundedCornerShape(9.dp)
+                ),
             text = "확인",
             onClicked = {
-                val calendar = Calendar.getInstance().apply {
-                    set(chosenYear, chosenMonth - 1, chosenDay)
-                }
-                val formattedDate = formatter.format(calendar.time)
+                if (isValidDate) {
+                    val calendar = Calendar.getInstance().apply {
+                        set(chosenYear, chosenMonth - 1, chosenDay)
+                    }
+                    val formattedDate = formatter.format(calendar.time)
 
-                onSelected(formattedDate)
+                    onSelected(formattedDate)
+                }
             }
         )
         Spacer(modifier = Modifier.height(60.dp))
     }
 }
 
+fun calculateValidDate(year: Int, month: Int, day: Int): Boolean {
+    val givenCalendar = Calendar.getInstance().apply {
+        set(year, month - 1, day)
+    }
+    val referenceCalendar = Calendar.getInstance()
+
+    return !givenCalendar.after(referenceCalendar)
+}
+
 @Composable
 fun DatePickerUI(
-    currentYear: Int,
-    currentMonth: Int,
-    currentDay: Int,
+    isValidDate: Boolean,
+    chosenYear: Int,
+    chosenMonth: Int,
+    chosenDay: Int,
     onYearChosen: (Int) -> Unit,
     onMonthChosen: (Int) -> Unit,
     onDayChosen: (Int) -> Unit,
@@ -175,9 +194,10 @@ fun DatePickerUI(
             .padding(vertical = 10.dp, horizontal = 5.dp)
     ) {
         DateSelectionSection(
-            currentYear = currentYear,
-            currentMonth = currentMonth,
-            currentDay = currentDay,
+            isValidDate = isValidDate,
+            chosenYear = chosenYear,
+            chosenMonth = chosenMonth,
+            chosenDay = chosenDay,
             onYearChosen = { onYearChosen(it.toInt()) },
             onMonthChosen = { onMonthChosen(it.toInt()) },
             onDayChosen = { onDayChosen(it.toInt()) },
@@ -187,9 +207,10 @@ fun DatePickerUI(
 
 @Composable
 fun DateSelectionSection(
-    currentYear: Int,
-    currentMonth: Int,
-    currentDay: Int,
+    isValidDate: Boolean,
+    chosenYear: Int,
+    chosenMonth: Int,
+    chosenDay: Int,
     onYearChosen: (String) -> Unit,
     onMonthChosen: (String) -> Unit,
     onDayChosen: (String) -> Unit,
@@ -199,38 +220,56 @@ fun DateSelectionSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         DateItemsPicker(
+            isValidDate = isValidDate,
+            max = currentYear - 1950,
             items = years.toImmutableList(),
-            firstIndex = (currentYear - START_YEAR),
+            firstIndex = (chosenYear - START_YEAR),
             onItemSelected = onYearChosen
         )
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
+            isValidDate = isValidDate,
+            max = currentMonth,
             items = monthsNumber.toImmutableList(),
-            firstIndex = currentMonth,
+            firstIndex = chosenMonth,
             onItemSelected = onMonthChosen
         )
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
+            isValidDate = isValidDate,
+            max = currentDay - 1,
             items = when {
-                (currentYear % 4 == 0) && currentMonth == 2 -> days29.toImmutableList()
-                currentMonth == 2 -> days28.toImmutableList()
-                days30Months.contains(currentMonth) -> days30.toImmutableList()
+                (chosenYear % 4 == 0) && chosenMonth == 2 -> days29.toImmutableList()
+                chosenMonth == 2 -> days28.toImmutableList()
+                days30Months.contains(chosenMonth) -> days30.toImmutableList()
                 else -> days31.toImmutableList()
             },
-            firstIndex = currentDay - 1,
+            firstIndex = chosenDay - 1,
             onItemSelected = onDayChosen
         )
     }
 }
 
 @Composable
-fun DateItemsPicker(items: ImmutableList<String>, firstIndex: Int, onItemSelected: (String) -> Unit, modifier: Modifier = Modifier) {
+fun DateItemsPicker(
+    isValidDate: Boolean,
+    max: Int,
+    items: ImmutableList<String>,
+    firstIndex: Int,
+    onItemSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
-    LaunchedEffect(!listState.isScrollInProgress) {
-        onItemSelected(currentValue.value)
-        listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
+    LaunchedEffect(!listState.isScrollInProgress, isValidDate) {
+        if (isValidDate) {
+            onItemSelected(currentValue.value)
+            listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
+        } else {
+            listState.animateScrollToItem(index = max)
+            onItemSelected(currentValue.value)
+        }
     }
 
     Box(
@@ -312,12 +351,15 @@ private fun CustomDatePickerPreview() {
     val chosenDay = remember { mutableStateOf(currentDay) }
     SoptTheme {
         DatePickerUI(
-            currentYear = chosenYear.value,
-            currentMonth = chosenMonth.value,
-            currentDay = chosenDay.value,
+            isValidDate = true,
+            chosenYear = chosenYear.value,
+            chosenMonth = chosenMonth.value,
+            chosenDay = chosenDay.value,
             onYearChosen = { chosenYear.value = it },
             onMonthChosen = { chosenMonth.value = it },
             onDayChosen = { chosenDay.value = it }
         )
     }
 }
+
+

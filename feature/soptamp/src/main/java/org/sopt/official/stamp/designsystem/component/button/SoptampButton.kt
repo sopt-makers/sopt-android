@@ -1,9 +1,7 @@
 package org.sopt.official.stamp.designsystem.component.button
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,11 +14,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 fun SoptampButton(text: String, modifier: Modifier = Modifier, onClicked: () -> Unit) {
     Box(
         modifier = modifier
-            .noRippleClickable { onClicked() }
-            .background(
-                color = SoptTheme.colors.black,
-                shape = RoundedCornerShape(9.dp)
-            ),
+            .noRippleClickable { onClicked() },
         contentAlignment = Alignment.Center
     ) {
         Text(

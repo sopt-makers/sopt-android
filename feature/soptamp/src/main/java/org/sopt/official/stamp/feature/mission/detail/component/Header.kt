@@ -46,21 +46,23 @@ import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
 fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Boolean, isCompleted: Boolean) {
+    val backgroundColor = if ((!isMe || isCompleted) && toolbarIconType == ToolbarIconType.WRITE) {
+        headerBackgroundColorOf(stars)
+    } else {
+        SoptTheme.colors.onSurface5
+    }
+
     Surface(
         modifier = Modifier
             .background(
-                color = if ((!isMe || isCompleted) && toolbarIconType == ToolbarIconType.WRITE) {
-                    headerBackgroundColorOf(stars)
-                } else {
-                    SoptTheme.colors.onSurface5
-                },
+                color = backgroundColor,
                 shape = RoundedCornerShape(10.dp)
             )
             .fillMaxWidth()
             .padding(vertical = 12.dp)
     ) {
         Column(
-            modifier = Modifier.background(SoptTheme.colors.onSurface5),
+            modifier = Modifier.background(backgroundColor),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
