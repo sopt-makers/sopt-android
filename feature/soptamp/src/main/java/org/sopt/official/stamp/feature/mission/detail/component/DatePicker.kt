@@ -271,7 +271,6 @@ fun DateItemsPicker(
                 listState.animateScrollToItem(index = max)
                 onItemSelected(currentValue.value)
             }
-
         }
     }
 
@@ -364,5 +363,3 @@ private fun CustomDatePickerPreview() {
         )
     }
 }
-
-
