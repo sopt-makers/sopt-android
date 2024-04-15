@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -59,6 +58,8 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.repository.home.HomeRepository
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
+import org.sopt.official.feature.home.model.AppServiceEnum
+import org.sopt.official.feature.home.model.AppServiceState
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.SoptMainContentUrl
@@ -67,6 +68,7 @@ import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.poke.UiState
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -199,6 +201,10 @@ class HomeViewModel @Inject constructor(
     private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
     val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
+    private val _appServiceState = MutableStateFlow<AppServiceState>(AppServiceState())
+    val appServiceState: StateFlow<AppServiceState>
+        get() = _appServiceState
+
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
@@ -224,6 +230,31 @@ class HomeViewModel @Inject constructor(
                         SoptActiveRecord(),
                     )
             }
+
+            homeRepository.getAppService()
+                .onSuccess { appServiceList ->
+                    var appService = AppServiceState()
+
+                    appServiceList.map { service ->
+                        when (service.serviceName) {
+                            AppServiceEnum.SOPTAMP.name -> {
+                                appService = appService.copy(
+                                    showSoptamp = (homeUiState.value.user.activeState == UserActiveState.ACTIVE && service.activeUser) || (homeUiState.value.user.activeState == UserActiveState.INACTIVE && service.inactiveUser)
+                                )
+                            }
+
+                            AppServiceEnum.POKE.name -> {
+                                appService = appService.copy(
+                                    showPoke = (homeUiState.value.user.activeState == UserActiveState.ACTIVE && service.activeUser) || (homeUiState.value.user.activeState == UserActiveState.INACTIVE && service.inactiveUser)
+                                )
+                            }
+
+                            else -> {}
+                        }
+                    }
+
+                    _appServiceState.value = appService
+                }
         }
     }
 

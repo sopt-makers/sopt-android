@@ -26,6 +26,7 @@ package org.sopt.official.data.repository.home
 
 import javax.inject.Inject
 import org.sopt.official.data.service.home.HomeService
+import org.sopt.official.domain.entity.home.AppService
 import org.sopt.official.domain.entity.home.HomeSection
 import org.sopt.official.domain.entity.home.SoptUser
 import org.sopt.official.domain.repository.home.HomeRepository
@@ -42,6 +43,12 @@ class DefaultHomeRepository @Inject constructor(
     override suspend fun getMainDescription(): Result<HomeSection> {
         return runCatching {
             homeService.getMainDescription().toEntity()
+        }
+    }
+
+    override suspend fun getAppService(): Result<List<AppService>> {
+        return runCatching {
+            homeService.getAppService().map { it.toEntity() }
         }
     }
 }
