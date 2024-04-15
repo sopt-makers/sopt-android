@@ -235,6 +235,7 @@ class MissionDetailViewModel @Inject constructor(
                         )
                     }
                 }.onSuccess {
+                    Timber.e(it.toString())
                 }.onFailure {
                     Timber.e(it.toString())
                 }
@@ -257,7 +258,7 @@ class MissionDetailViewModel @Inject constructor(
                     repository.modifyMission(
                         Stamp(
                             missionId = id,
-                            image = image,
+                            image = imageURL,
                             contents = content,
                             activityDate = date
                         )
