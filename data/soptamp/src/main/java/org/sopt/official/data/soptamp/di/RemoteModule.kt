@@ -31,6 +31,7 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.soptamp.remote.api.RankService
+import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.data.soptamp.remote.api.SoptampService
 import org.sopt.official.data.soptamp.remote.api.StampService
 import retrofit2.Retrofit
@@ -49,4 +50,8 @@ internal object RemoteModule {
     @Provides
     @Singleton
     fun provideRankingService(@AppRetrofit retrofit: Retrofit): RankService = retrofit.create(RankService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideS3Service(@AppRetrofit(false) retrofit: Retrofit): S3Service = retrofit.create(S3Service::class.java)
 }

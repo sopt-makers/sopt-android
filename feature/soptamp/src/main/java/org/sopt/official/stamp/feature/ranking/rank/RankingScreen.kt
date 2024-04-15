@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.rank
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -66,6 +66,8 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
+import org.sopt.official.stamp.feature.ranking.RankListItem
+import org.sopt.official.stamp.feature.ranking.TopRankerList
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
@@ -76,29 +78,28 @@ import org.sopt.official.stamp.util.toPx
 @Destination("ranking")
 @Composable
 fun RankingScreen(
-    isCurrent: Boolean,
+    type: String,
     rankingViewModel: RankingViewModel = hiltViewModel(),
     resultNavigator: ResultBackNavigator<Boolean>,
     navigator: DestinationsNavigator
 ) {
+    val isCurrent = type == "34기"
     val state by rankingViewModel.state.collectAsState()
     LaunchedEffect(true) {
-        rankingViewModel.fetchRanking(isCurrent)
+        rankingViewModel.fetchRanking(isCurrent, type)
     }
     SoptTheme {
         when (state) {
             RankingState.Loading -> LoadingScreen()
-            RankingState.Failure -> SingleOptionDialog {
-                rankingViewModel.fetchRanking(isCurrent)
-            }
-
+            RankingState.Failure -> SingleOptionDialog(resultNavigator::navigateBack)
             is RankingState.Success -> RankingScreen(
                 isCurrent = isCurrent,
+                type = type,
                 refreshing = rankingViewModel.isRefreshing,
-                onRefresh = { rankingViewModel.onRefresh(isCurrent) },
+                onRefresh = { rankingViewModel.onRefresh(isCurrent, type) },
                 rankingListUiModel = (state as RankingState.Success).uiModel,
                 nickname = rankingViewModel.nickname,
-                onClickBack = { resultNavigator.navigateBack() },
+                onClickBack = resultNavigator::navigateBack,
                 onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
             )
         }
@@ -109,6 +110,7 @@ fun RankingScreen(
 @Composable
 fun RankingScreen(
     isCurrent: Boolean,
+    type: String,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
@@ -125,29 +127,31 @@ fun RankingScreen(
     val scrollOffsetPx = (-257).dp.toPx()
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
-        tracker.track(EventType.VIEW, if (isCurrent) "nowranking" else "allranking")
+        tracker.track(
+            EventType.VIEW,
+            if (isCurrent) "nowranking" else "partdetailranking"
+        )
     }
     Scaffold(
         topBar = {
             RankingHeader(
-                title = if (isCurrent) "34기 랭킹" else "전체 랭킹",
+                title = if (isCurrent) "$type 랭킹" else type + "파트 랭킹",
                 onClickBack = { onClickBack() }
             )
         },
         floatingActionButton = {
-            SoptampFloatingButton(
-                text = "내 랭킹 보기"
-            ) {
-                tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
-                coroutineScope.launch {
-                    val currentUserIndex = rankingListUiModel.otherRankingList.withIndex()
-                        .find { it.value.nickname == nickname }
-                        ?.index
-                        ?: 0
-                    listState.animateScrollToItem(
-                        index = currentUserIndex,
-                        scrollOffset = scrollOffsetPx
-                    )
+            val myIndex = rankingListUiModel.otherRankingList.withIndex().find { it.value.nickname == nickname }
+            if (myIndex != null) {
+                SoptampFloatingButton(
+                    text = "내 랭킹 보기"
+                ) {
+                    tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(
+                            index = myIndex.index,
+                            scrollOffset = scrollOffsetPx
+                        )
+                    }
                 }
             }
         },
@@ -166,7 +170,7 @@ fun RankingScreen(
                 state = listState,
                 modifier = Modifier.padding(defaultPadding),
                 verticalArrangement = Arrangement.spacedBy(10.dp),
-                contentPadding = PaddingValues(bottom = 70.dp)
+                contentPadding = PaddingValues(bottom = 80.dp)
             ) {
                 item {
                     TopRankerList(
@@ -176,7 +180,7 @@ fun RankingScreen(
                 }
                 items(rankingListUiModel.otherRankingList) { item ->
                     RankListItem(
-                        item = item,
+                        rankerItem = item,
                         isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
                             if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
@@ -223,7 +227,8 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
-            isCurrent = false,
+            isCurrent = true,
+            type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
         )

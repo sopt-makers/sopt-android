@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.soptamp.repository
+package org.sopt.official.data.soptamp.remote.api
 
-import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.S3URL
-import org.sopt.official.domain.soptamp.model.Stamp
+import okhttp3.RequestBody
 
-interface StampRepository {
-    suspend fun completeMission(stamp: Stamp): Result<Archive>
-
-    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
-
-    suspend fun modifyMission(stamp: Stamp): Result<Unit>
-
-    suspend fun deleteMission(missionId: Int): Result<Unit>
-
-    suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getS3URL(): Result<S3URL>
+object FakeS3Service : S3Service {
+    override suspend fun putS3Image(preSignedURL: String, image: RequestBody) {}
 }

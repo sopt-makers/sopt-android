@@ -64,6 +64,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
 import com.ramcosta.composedestinations.result.ResultRecipient
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
@@ -78,6 +81,7 @@ import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
+import org.sopt.official.stamp.feature.destinations.PartRankingScreenDestination
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -90,9 +94,9 @@ import org.sopt.official.stamp.feature.mission.model.toArgs
 @Destination("list")
 @Composable
 fun MissionListScreen(
-    missionsViewModel: MissionsViewModel = hiltViewModel(),
     navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>
+    resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>,
+    missionsViewModel: MissionsViewModel = hiltViewModel()
 ) {
     val state by missionsViewModel.state.collectAsState()
     val nickname by missionsViewModel.nickname.collectAsState()
@@ -124,15 +128,15 @@ fun MissionListScreen(
             is MissionsState.Success -> MissionListScreen(
                 nickname = nickname,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                menuTexts = MissionsFilter.getTitleOfMissionsList(),
+                menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
                 onMissionItemClick = { item ->
                     navigator.navigate(
                         MissionDetailScreenDestination(item)
                     )
                 },
-                onAllRankingButtonClick = { navigator.navigate(RankingScreenDestination(false)) },
-                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination(true)) },
+                onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
+                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("34기")) },
                 onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
             )
         }
@@ -143,10 +147,10 @@ fun MissionListScreen(
 fun MissionListScreen(
     nickname: String,
     missionListUiModel: MissionListUiModel,
-    menuTexts: List<String>,
+    menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
-    onAllRankingButtonClick: () -> Unit = {},
+    onPartRankingButtonClick: () -> Unit = {},
     onCurrentRankingButtonClick: () -> Unit = {},
     onOnboadingButtonClick: () -> Unit = {},
 ) {
@@ -161,10 +165,10 @@ fun MissionListScreen(
         },
         floatingActionButton = {
             SoptampSegmentedFloatingButton(
-                option1 = "전체 랭킹",
-                option2 = "34기 랭킹",
-                onClickFirstOption = onAllRankingButtonClick,
-                onClickSecondOption = onCurrentRankingButtonClick
+                option1 = "34기 랭킹",
+                option2 = "파트별 랭킹",
+                onClickFirstOption = onCurrentRankingButtonClick,
+                onClickSecondOption = onPartRankingButtonClick
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -173,7 +177,7 @@ fun MissionListScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
-                    top = 20.dp,
+                    top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
                     start = 16.dp,
                     end = 16.dp
@@ -183,7 +187,7 @@ fun MissionListScreen(
                 MissionEmptyScreen(contentText = missionListUiModel.title)
             } else {
                 MissionsGridComponent(
-                    missions = missionListUiModel.missionList,
+                    missions = missionListUiModel.missionList.toImmutableList(),
                     onMissionItemClick = { onMissionItemClick(it) },
                     isMe = true,
                     nickname = nickname
@@ -195,7 +199,7 @@ fun MissionListScreen(
 
 @Composable
 fun MissionsGridComponent(
-    missions: List<MissionUiModel>,
+    missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
     nickname: String
@@ -212,6 +216,9 @@ fun MissionsGridComponent(
                     onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
                 }
             )
+        }
+        item {
+            Spacer(modifier = Modifier.padding(vertical = 20.dp))
         }
     }
 }
@@ -237,7 +244,12 @@ fun MissionEmptyScreen(contentText: String) {
 }
 
 @Composable
-fun MissionListHeader(title: String, menuTexts: List<String>, onMenuClick: (String) -> Unit = {}, onOnboadingButtonClick: () -> Unit = {}) {
+fun MissionListHeader(
+    title: String,
+    menuTexts: ImmutableList<String>,
+    onMenuClick: (String) -> Unit = {},
+    onOnboadingButtonClick: () -> Unit = {}
+) {
     var currentText by remember { mutableStateOf(title) }
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
@@ -270,7 +282,7 @@ fun MissionListHeaderTitle(title: String) {
 }
 
 @Composable
-fun DropDownMenuButton(menuTexts: List<String>, onMenuClick: (String) -> Unit = {}) {
+fun DropDownMenuButton(menuTexts: ImmutableList<String>, onMenuClick: (String) -> Unit = {}) {
     var isMenuExpanded by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(0) }
     Box {
@@ -382,7 +394,7 @@ fun PreviewMissionListScreen() {
         MissionListScreen(
             nickname = "Nunu",
             missionListUiModel,
-            listOf("전체 미션", "완료 미션", "미완료 미션")
+            persistentListOf("전체 미션", "완료 미션", "미완료 미션")
         )
     }
 }

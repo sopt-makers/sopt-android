@@ -33,13 +33,15 @@
     android:paddingStart="9dp"
     android:paddingTop="12dp"
     android:paddingEnd="9dp"
-    android:paddingBottom="12dp">
+    android:paddingBottom="12dp"
+    android:visibility="invisible">
 
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/mds_gray_30"
+        android:paddingHorizontal="28dp"
         android:src="@drawable/img_poke" />
 
     <TextView

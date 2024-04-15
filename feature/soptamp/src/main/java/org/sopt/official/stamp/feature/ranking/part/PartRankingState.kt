@@ -22,14 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.part
 
-import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
+import kotlinx.collections.immutable.ImmutableList
+import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 
-sealed class RankingState {
-    data object Loading : RankingState()
+sealed class PartRankingState {
+    data object Loading : PartRankingState()
 
-    data class Success(val uiModel: RankingListUiModel, val nickname: String) : RankingState()
+    data class Success(val partRankList: ImmutableList<PartRankModel>) : PartRankingState()
 
-    data object Failure : RankingState()
+    data object Failure : PartRankingState()
 }

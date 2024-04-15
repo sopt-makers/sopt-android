@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking
+package org.sopt.official.stamp.feature.ranking.rank
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -51,17 +51,32 @@ class RankingViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
     val nickname = getNicknameUseCase()
 
-    fun onRefresh(isCurrent: Boolean) {
+    fun onRefresh(isCurrent: Boolean, part: String) {
         viewModelScope.launch {
             isRefreshing = true
-            fetchRanking(isCurrent)
+            fetchRanking(isCurrent, part)
         }
     }
 
-    fun fetchRanking(isCurrent: Boolean) = viewModelScope.launch {
+    fun fetchRanking(isCurrent: Boolean, part: String) = viewModelScope.launch {
         _state.value = RankingState.Loading
+
+        if (isCurrent) {
+            fetchCurrentRanking()
+        } else {
+            runCatching {
+                Part.getPartName(part)
+            }.onSuccess { partName ->
+                fetchPartRanking(partName)
+            }.onFailure {
+                _state.value = RankingState.Failure
+            }
+        }
+    }
+
+    private suspend fun fetchCurrentRanking() {
         rankingRepository.getRanking(
-            if (isCurrent) RankFetchType.Term() else RankFetchType.All
+            RankFetchType.Term()
         ).mapCatching { it.toUiModel() }
             .onSuccess { ranking ->
                 if (isRefreshing) {
@@ -71,6 +86,34 @@ class RankingViewModel @Inject constructor(
             }.onFailure {
                 _state.value = RankingState.Failure
             }
+    }
+
+    private suspend fun fetchPartRanking(part: String) {
+        rankingRepository.getCurrentPartRanking(
+            part
+        ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
+            if (isRefreshing) {
+                isRefreshing = false
+            }
+            onSuccessStateChange(ranking)
+        }.onFailure {
+            _state.value = RankingState.Failure
+        }
+    }
+
+    enum class Part(val part: String) {
+        PLAN("기획"),
+        DESIGN("디자인"),
+        WEB("웹"),
+        IOS("아요"),
+        ANDROID("안드"),
+        SERVER("서버");
+
+        companion object {
+            fun getPartName(part: String): String {
+                return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name : $part")
+            }
+        }
     }
 
     private fun onSuccessStateChange(ranking: RankingListUiModel) {

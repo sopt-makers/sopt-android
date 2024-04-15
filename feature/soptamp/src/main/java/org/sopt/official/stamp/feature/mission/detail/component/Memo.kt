@@ -29,7 +29,6 @@ package org.sopt.official.stamp.feature.mission.detail.component
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -53,9 +52,8 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
 
     val modifier = Modifier
         .fillMaxWidth()
-        .padding(14.dp)
-        .defaultMinSize(minHeight = 132.dp)
-        .clip(RoundedCornerShape(10.dp))
+        .defaultMinSize(minHeight = 100.dp)
+        .clip(RoundedCornerShape(12.dp))
 
     val modifierWithBorder = remember(isEmpty, isEditable) {
         if (isEmpty || !isEditable) {

@@ -24,16 +24,15 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
+import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
-import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.PUT
-import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -41,25 +40,18 @@ interface StampService {
     @GET("stamp")
     suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
 
-    @Multipart
-    @PUT("stamp/{missionId}")
-    suspend fun modifyStamp(
-        @Path("missionId") missionId: Int,
-        @Part("stampContent") stampContent: RequestBody,
-        @Part imgUrl: List<MultipartBody.Part>? = null
-    ): ModifyStampResponse
+    @PUT("stamp")
+    suspend fun modifyStamp(@Body body: StampRequest): ModifyStampResponse
 
-    @Multipart
-    @POST("stamp/{missionId}")
-    suspend fun registerStamp(
-        @Path("missionId") missionId: Int,
-        @Part("stampContent") stampContent: RequestBody,
-        @Part imgUrl: List<MultipartBody.Part>? = null
-    ): StampResponse
+    @POST("stamp")
+    suspend fun registerStamp(@Body body: StampRequest): StampResponse
 
     @DELETE("stamp/{missionId}")
     suspend fun deleteStamp(@Path("missionId") missionId: Int)
 
     @DELETE("stamp/all")
     suspend fun deleteAllStamps()
+
+    @GET("s3/stamp")
+    suspend fun getS3URL(): S3URLResponse
 }

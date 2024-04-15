@@ -45,3 +45,7 @@ annotation class OperationRetrofit
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class LocalStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class S3

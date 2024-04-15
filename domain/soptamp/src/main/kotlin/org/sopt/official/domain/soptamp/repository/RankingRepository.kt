@@ -25,10 +25,15 @@
 package org.sopt.official.domain.soptamp.repository
 
 import org.sopt.official.domain.soptamp.model.OtherMission
+import org.sopt.official.domain.soptamp.model.PartRank
 import org.sopt.official.domain.soptamp.model.Rank
 import org.sopt.official.domain.soptamp.model.RankFetchType
 
 interface RankingRepository {
     suspend fun getRanking(type: RankFetchType): Result<List<Rank>>
     suspend fun getRankDetail(nickname: String): Result<OtherMission>
+
+    suspend fun getPartRanking(): Result<List<PartRank>>
+
+    suspend fun getCurrentPartRanking(part: String): Result<List<Rank>>
 }

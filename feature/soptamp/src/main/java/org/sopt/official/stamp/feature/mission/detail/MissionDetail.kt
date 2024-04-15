@@ -24,11 +24,10 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
+import android.net.Uri
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,8 +43,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -54,6 +53,9 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
+import okhttp3.RequestBody
+import org.sopt.official.common.util.ContentUriRequestBody
+import org.sopt.official.data.soptamp.remote.api.FakeS3Service
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
@@ -65,6 +67,8 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
+import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
@@ -72,7 +76,6 @@ import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBa
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
-import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @MissionNavGraph
@@ -85,15 +88,16 @@ fun MissionDetailScreen(
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsState("")
+    val date by viewModel.date.collectAsState("")
     val imageModel by viewModel.imageModel.collectAsState(ImageModel.Empty)
     val isSuccess by viewModel.isSuccess.collectAsState(false)
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsState(false)
     val toolbarIconType by viewModel.toolbarIconType.collectAsState(ToolbarIconType.NONE)
     val isEditable by viewModel.isEditable.collectAsState(true)
-    val createdAt by viewModel.createdAt.collectAsState("")
     val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsState(false)
     val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState(false)
     val isError by viewModel.isError.collectAsState(false)
+    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsState(false)
     val lottieResId = remember(level) {
         when (level.value) {
             1 -> R.raw.pinkstamps
@@ -108,6 +112,8 @@ fun MissionDetailScreen(
         composition = lottieComposition,
         isPlaying = isSuccess
     )
+
+    val context = LocalContext.current
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -158,31 +164,47 @@ fun MissionDetailScreen(
                     onChangeImage = viewModel::onChangeImage,
                     isEditable = isEditable && isMe
                 )
-                Spacer(modifier = Modifier.height(12.dp))
-                Memo(
-                    value = content,
-                    placeHolder = "메모를 작성해 주세요.",
-                    onValueChange = viewModel::onChangeContent,
-                    borderColor = getRankTextColor(level.value),
+                Spacer(modifier = Modifier.height(8.dp))
+                DatePicker(
+                    value = date,
+                    placeHolder = "날짜를 입력해 주세요.",
+                    onClicked = {
+                        viewModel.onChangeDatePickerBottomSheetOpened(true)
+                    },
+                    borderColor = getLevelTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
-                if (!isEditable || !isMe) {
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(
-                            text = createdAt,
-                            style = SoptTheme.typography.caption4.copy(fontSize = 10.sp),
-                            color = SoptTheme.colors.onSurface60
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Memo(
+                    value = content,
+                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                    onValueChange = viewModel::onChangeContent,
+                    borderColor = getLevelTextColor(level.value),
+                    isEditable = isEditable && isMe && !isSuccess
+                )
             }
 
             if (isEditable && isMe) {
                 Button(
-                    onClick = { viewModel.onSubmit() },
+                    onClick = {
+                        val requestBodyList: MutableList<RequestBody> = mutableListOf()
+
+                        when (imageModel) {
+                            ImageModel.Empty -> {}
+                            is ImageModel.Local -> {
+                                (imageModel as ImageModel.Local).uri.map {
+                                    val uri = Uri.parse(it)
+                                    val requestBody = ContentUriRequestBody(context, uri)
+                                    requestBodyList.add(requestBody)
+                                }
+                            }
+
+                            is ImageModel.Remote -> {}
+                        }
+                        viewModel.setRequestBody(requestBodyList)
+
+                        viewModel.onSubmit()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 32.dp),
@@ -224,6 +246,15 @@ fun MissionDetailScreen(
                 viewModel.onPressNetworkErrorDialog()
             }
         }
+        if (isBottomSheetOpened) {
+            DataPickerBottomSheet(
+                onSelected = { date ->
+                    viewModel.onChangeDate(date)
+                    viewModel.onChangeDatePickerBottomSheetOpened(false)
+                },
+                onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+            )
+        }
     }
 }
 
@@ -234,7 +265,7 @@ fun MissionDetailPreview() {
         id = 1,
         title = "앱잼 팀원 다 함께 바다 보고 오기",
         level = MissionLevel.of(2),
-        isCompleted = false,
+        isCompleted = true,
         isMe = true,
         nickname = "Nunu",
     )
@@ -242,7 +273,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(FakeStampRepository)
+            MissionDetailViewModel(repository = FakeStampRepository, service = FakeS3Service)
         )
     }
 }

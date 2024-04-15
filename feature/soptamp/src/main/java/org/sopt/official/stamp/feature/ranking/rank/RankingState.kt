@@ -22,22 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.soptamp.repository
+package org.sopt.official.stamp.feature.ranking.rank
 
-import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.S3URL
-import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 
-interface StampRepository {
-    suspend fun completeMission(stamp: Stamp): Result<Archive>
+sealed class RankingState {
+    data object Loading : RankingState()
 
-    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
+    data class Success(val uiModel: RankingListUiModel, val nickname: String) : RankingState()
 
-    suspend fun modifyMission(stamp: Stamp): Result<Unit>
-
-    suspend fun deleteMission(missionId: Int): Result<Unit>
-
-    suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getS3URL(): Result<S3URL>
+    data object Failure : RankingState()
 }

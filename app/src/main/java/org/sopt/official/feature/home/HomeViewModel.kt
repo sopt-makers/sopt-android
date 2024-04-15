@@ -59,6 +59,8 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.repository.home.HomeRepository
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
+import org.sopt.official.feature.home.model.AppServiceEnum
+import org.sopt.official.feature.home.model.AppServiceUiState
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.SoptMainContentUrl
@@ -199,6 +201,10 @@ class HomeViewModel @Inject constructor(
     private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
     val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
+    private val _appServiceUiState = MutableStateFlow<AppServiceUiState>(AppServiceUiState())
+    val appServiceUiState: StateFlow<AppServiceUiState>
+        get() = _appServiceUiState
+
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
@@ -224,6 +230,34 @@ class HomeViewModel @Inject constructor(
                         SoptActiveRecord(),
                     )
             }
+
+            homeRepository.getAppService()
+                .onSuccess { appServiceList ->
+                    var appService = AppServiceUiState()
+
+                    appServiceList.map { service ->
+                        val showActiveUser = homeUiState.value.user.activeState == UserActiveState.ACTIVE && service.activeUser
+                        val showInactiveUser = homeUiState.value.user.activeState == UserActiveState.INACTIVE && service.inactiveUser
+
+                        when (service.serviceName) {
+                            AppServiceEnum.SOPTAMP.name -> {
+                                appService = appService.copy(
+                                    showSoptamp = showActiveUser || showInactiveUser
+                                )
+                            }
+
+                            AppServiceEnum.POKE.name -> {
+                                appService = appService.copy(
+                                    showPoke = showActiveUser || showInactiveUser
+                                )
+                            }
+
+                            else -> {}
+                        }
+                    }
+
+                    _appServiceUiState.value = appService
+                }
         }
     }
 

@@ -50,7 +50,6 @@ import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.databinding.ActivityMyPageBinding
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
-import org.sopt.official.feature.mypage.soptamp.nickName.ChangeNickNameActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 
@@ -122,9 +121,6 @@ class MyPageActivity : AppCompatActivity() {
         }
         binding.layoutAdjustSentence.setOnSingleClickListener {
             startActivity(AdjustSentenceActivity.getIntent(this))
-        }
-        binding.layoutChangeNickname.setOnSingleClickListener {
-            startActivity(ChangeNickNameActivity.getIntent(this))
         }
         binding.layoutResetStamp.setOnSingleClickListener {
             AlertDialogPositiveNegative(this)

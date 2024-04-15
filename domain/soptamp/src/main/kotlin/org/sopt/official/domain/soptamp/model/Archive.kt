@@ -25,6 +25,7 @@
 package org.sopt.official.domain.soptamp.model
 
 data class Archive(
+    val activityDate: String,
     val createdAt: String? = null,
     val updatedAt: String? = null,
     val id: Int,
