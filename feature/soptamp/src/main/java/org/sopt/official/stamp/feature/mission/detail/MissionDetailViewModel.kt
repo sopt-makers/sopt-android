@@ -223,77 +223,81 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isError = false, error = null, isLoading = true)
             }
 
-            repository.getS3URL().onSuccess { S3URL ->
-                val preSignedURL = S3URL.preSignedURL
-                val imageURL = S3URL.imageURL
-
-                runCatching {
-                    requestbody?.map {
-                        service.putS3Image(
-                            preSignedURL = preSignedURL,
-                            image = it
-                        )
-                    }
-                }.onSuccess {
-                    Timber.e(it.toString())
-                }.onFailure {
-                    Timber.e(it.toString())
-                }
-
-                if (uiState.value.isCompleted) {
-                    val image = when (imageUri) {
-                        ImageModel.Empty -> {
-                            "ERROR"
-                        }
-
-                        is ImageModel.Local -> {
-                            imageUri.uri[0]
-                        }
-
-                        is ImageModel.Remote -> {
-                            imageUri.url[0]
-                        }
+            if (uiState.value.isCompleted && requestbody.isNullOrEmpty()) {
+                val image = when (imageUri) {
+                    ImageModel.Empty -> {
+                        "ERROR"
                     }
 
-                    repository.modifyMission(
-                        Stamp(
-                            missionId = id,
-                            image = imageURL,
-                            contents = content,
-                            activityDate = date
-                        )
-                    ).onSuccess {
-                        uiState.update {
-                            it.copy(isLoading = false, isSuccess = true)
-                        }
-                    }.onFailure { error ->
-                        uiState.update {
-                            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                        }
+                    is ImageModel.Local -> {
+                        imageUri.uri[0]
                     }
-                } else {
-                    repository.completeMission(
-                        Stamp(
-                            missionId = id,
-                            image = imageURL,
-                            contents = content,
-                            activityDate = date
-                        )
-                    ).onSuccess {
-                        uiState.update {
-                            it.copy(isLoading = false, isSuccess = true)
-                        }
-                    }.onFailure { error ->
-                        uiState.update {
-                            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                        }
+
+                    is ImageModel.Remote -> {
+                        imageUri.url[0]
                     }
                 }
-            }.onFailure { error ->
-                uiState.update {
-                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+
+                modifyMission(id, image, content, date)
+            } else {
+                repository.getS3URL().onSuccess { S3URL ->
+                    val preSignedURL = S3URL.preSignedURL
+                    val imageURL = S3URL.imageURL
+
+                    runCatching {
+                        requestbody?.map {
+                            service.putS3Image(
+                                preSignedURL = preSignedURL,
+                                image = it
+                            )
+                        }
+                    }.onFailure {
+                        Timber.e(it.toString())
+                    }
+
+                    if (uiState.value.isCompleted) {
+                        modifyMission(id, imageURL, content, date)
+                    } else {
+                        repository.completeMission(
+                            Stamp(
+                                missionId = id,
+                                image = imageURL,
+                                contents = content,
+                                activityDate = date
+                            )
+                        ).onSuccess {
+                            uiState.update {
+                                it.copy(isLoading = false, isSuccess = true)
+                            }
+                        }.onFailure { error ->
+                            uiState.update {
+                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                            }
+                        }
+                    }
+                }.onFailure { error ->
+                    uiState.update {
+                        it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                    }
                 }
             }
+        }
+    }
+
+    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = repository.modifyMission(
+        Stamp(
+            missionId = id,
+            image = image,
+            contents = content,
+            activityDate = date
+        )
+    ).onSuccess {
+        uiState.update {
+            it.copy(isLoading = false, isSuccess = true)
+        }
+    }.onFailure { error ->
+        uiState.update {
+            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
         }
     }
 
