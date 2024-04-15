@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2023-2024 SOPT Makers
@@ -222,23 +221,21 @@
             <include
                 android:id="@+id/content_poke"
                 layout="@layout/item_main_poke"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/content_soptamp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/bottom_description" />
 
             <include
                 android:id="@+id/content_soptamp"
                 layout="@layout/item_main_soptamp"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="120dp"
                 android:layout_marginStart="11dp"
                 android:layout_marginEnd="20dp"
                 app:layout_constraintBottom_toBottomOf="@+id/content_poke"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/content_poke"
                 app:layout_constraintTop_toTopOf="@+id/content_poke" />
         </androidx.constraintlayout.widget.ConstraintLayout>
