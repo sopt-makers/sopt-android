@@ -1,6 +1,6 @@
 package org.sopt.official.feature.home.model
 
-data class AppServiceState(
+data class AppServiceUiState(
     val showSoptamp: Boolean = false,
     val showPoke: Boolean = false
 )
