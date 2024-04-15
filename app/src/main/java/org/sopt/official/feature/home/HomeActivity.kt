@@ -267,7 +267,7 @@ class HomeActivity : AppCompatActivity() {
         viewModel.appServiceUiState.flowWithLifecycle(lifecycle).onEach {
             with(binding) {
                 bottomDescription.isVisible = it.showPoke || it.showSoptamp
-                contentSoptamp.root.isVisible = true // it.showSoptamp
+                contentSoptamp.root.isVisible = it.showSoptamp
                 contentPoke.root.isVisible = it.showPoke
             }
         }.launchIn(lifecycleScope)
