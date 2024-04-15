@@ -6,5 +6,6 @@ data class AppServiceState(
 )
 
 enum class AppServiceEnum {
-    SOPTAMP, POKE
+    SOPTAMP,
+    POKE
 }
