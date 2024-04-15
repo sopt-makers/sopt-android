@@ -60,7 +60,7 @@ import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.repository.home.HomeRepository
 import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
 import org.sopt.official.feature.home.model.AppServiceEnum
-import org.sopt.official.feature.home.model.AppServiceState
+import org.sopt.official.feature.home.model.AppServiceUiState
 import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.SoptMainContentUrl
@@ -201,9 +201,9 @@ class HomeViewModel @Inject constructor(
     private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
     val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
-    private val _appServiceState = MutableStateFlow<AppServiceState>(AppServiceState())
-    val appServiceState: StateFlow<AppServiceState>
-        get() = _appServiceState
+    private val _appServiceUiState = MutableStateFlow<AppServiceUiState>(AppServiceUiState())
+    val appServiceUiState: StateFlow<AppServiceUiState>
+        get() = _appServiceUiState
 
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
@@ -233,7 +233,7 @@ class HomeViewModel @Inject constructor(
 
             homeRepository.getAppService()
                 .onSuccess { appServiceList ->
-                    var appService = AppServiceState()
+                    var appService = AppServiceUiState()
 
                     appServiceList.map { service ->
                         val showActiveUser = homeUiState.value.user.activeState == UserActiveState.ACTIVE && service.activeUser
@@ -256,7 +256,7 @@ class HomeViewModel @Inject constructor(
                         }
                     }
 
-                    _appServiceState.value = appService
+                    _appServiceUiState.value = appService
                 }
         }
     }
