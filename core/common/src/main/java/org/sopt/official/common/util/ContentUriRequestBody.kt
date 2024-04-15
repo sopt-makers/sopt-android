@@ -7,12 +7,12 @@ import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
 import android.provider.MediaStore
+import java.io.ByteArrayOutputStream
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okio.BufferedSink
-import java.io.ByteArrayOutputStream
 
 class ContentUriRequestBody(
     context: Context,
@@ -41,7 +41,6 @@ class ContentUriRequestBody(
                 }
             }
 
-            // Compress bitmap
             compressBitmap()
         }
     }
@@ -97,7 +96,6 @@ class ContentUriRequestBody(
         var inSampleSize = 1
 
         if (height > reqHeight || width > reqWidth) {
-
             val halfHeight: Int = height / 2
             val halfWidth: Int = width / 2
 
