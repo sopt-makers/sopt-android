@@ -267,8 +267,11 @@ fun DateItemsPicker(
             onItemSelected(currentValue.value)
             listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
         } else {
-            listState.animateScrollToItem(index = max)
-            onItemSelected(currentValue.value)
+            if (max < currentValue.value.toInt()) {
+                listState.animateScrollToItem(index = max)
+                onItemSelected(currentValue.value)
+            }
+
         }
     }
 
