@@ -70,6 +70,7 @@ import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.TopRankerList
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
+import org.sopt.official.stamp.feature.ranking.model.RankerUiModel.Companion.DEFAULT_USER_NAME
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toArgs
 import org.sopt.official.stamp.util.toPx
@@ -175,7 +176,9 @@ fun RankingScreen(
                 item {
                     TopRankerList(
                         topRanker = rankingListUiModel.topRankingList,
-                        onClickTopRankerBubble = { ranker -> onClickUser(ranker.toArgs()) }
+                        onClickTopRankerBubble = { ranker ->
+                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs())
+                        }
                     )
                 }
                 items(rankingListUiModel.otherRankingList) { item ->

@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -148,13 +150,13 @@ fun PartRankingBarList(rankList: List<PartRankModel>) {
         verticalAlignment = Alignment.Bottom
     ) {
         items(rankList) { part ->
-            PartRankingBar(part = part, modifier = Modifier.size(width = 50.dp, height = getRankHeight(part.rank)))
+            PartRankingBar(part = part)
         }
     }
 }
 
 @Composable
-fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
+fun PartRankingBar(part: PartRankModel, modifier: Modifier = Modifier) {
     val newRank = if (part.point != 0) {
         part.rank
     } else {
@@ -162,6 +164,7 @@ fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
     }
 
     Column(
+        modifier = Modifier.defaultMinSize(minHeight = getRankHeight(1)),
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -169,7 +172,7 @@ fun PartRankingBar(part: PartRankModel, modifier: Modifier) {
             TopRankBarOfRankText(rank = part.rank)
         }
         RankingBar(
-            modifier = modifier,
+            modifier = modifier.size(width = 50.dp, height = getRankHeight(newRank)),
             rank = newRank
         )
         Spacer(modifier = Modifier.size(8.dp))

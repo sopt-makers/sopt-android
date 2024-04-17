@@ -207,7 +207,8 @@ fun MissionsGridComponent(
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(40.dp, Alignment.Top),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(bottom = 80.dp)
     ) {
         items(missions) { missionUiModel ->
             MissionComponent(

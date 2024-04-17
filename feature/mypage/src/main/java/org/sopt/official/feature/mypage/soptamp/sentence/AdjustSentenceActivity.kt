@@ -65,9 +65,11 @@ class AdjustSentenceActivity : AppCompatActivity() {
             .onEach {
                 this.onBackPressedDispatcher.onBackPressed()
             }.launchIn(lifecycleScope)
+
         binding.edittext.doAfterTextChanged {
             viewModel.onChange(it.toString())
         }
+
         viewModel.isConfirmed
             .flowWithLifecycle(lifecycle)
             .onEach {

@@ -121,7 +121,7 @@ fun RankListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
-            modifier = Modifier.weight(0.18f)
+            modifier = Modifier.weight(0.25f)
         ) {
             RankNumber(
                 modifier = Modifier.align(Alignment.Center),

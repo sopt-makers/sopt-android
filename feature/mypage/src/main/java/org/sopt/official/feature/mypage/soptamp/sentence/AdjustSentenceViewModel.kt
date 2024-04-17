@@ -51,6 +51,7 @@ class AdjustSentenceViewModel @Inject constructor(
                 .onSuccess {
                     _finish.send(Unit)
                 }.onFailure {
+                    _finish.send(Unit)
                     Timber.e(it)
                 }
         }
