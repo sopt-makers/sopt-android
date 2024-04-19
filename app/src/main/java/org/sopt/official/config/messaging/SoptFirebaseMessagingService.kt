@@ -27,15 +27,17 @@ package org.sopt.official.config.messaging
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import androidx.annotation.CallSuper
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.auth.model.UserStatus
@@ -44,7 +46,7 @@ import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.network.persistence.SoptDataStore
 
 @AndroidEntryPoint
-class SoptFirebaseMessagingService : FirebaseMessagingService() {
+class SoptFirebaseMessagingService : FirebaseMessagingService(), LifecycleOwner {
 
     @Inject
     lateinit var dataStore: SoptDataStore
@@ -52,12 +54,28 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
     @Inject
     lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
 
-    private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val dispatcher = ServiceLifecycleDispatcher(this)
+
+    override val lifecycle: Lifecycle
+        get() = dispatcher.lifecycle
+
+    @CallSuper
+    override fun onCreate() {
+        dispatcher.onServicePreSuperOnCreate()
+        super.onCreate()
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    @CallSuper
+    override fun onStart(intent: Intent?, startId: Int) {
+        dispatcher.onServicePreSuperOnStart()
+        super.onStart(intent, startId)
+    }
 
     override fun onNewToken(token: String) {
         if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
-        scope.launch {
+        lifecycleScope.launch {
             dataStore.pushToken = token
             registerPushTokenUseCase.invoke(token)
         }
@@ -118,12 +136,13 @@ class SoptFirebaseMessagingService : FirebaseMessagingService() {
         )
     }
 
-    companion object {
-        const val NOTIFICATION_CHANNEL_ID = "SOPT"
+    @CallSuper
+    override fun onDestroy() {
+        dispatcher.onServicePreSuperOnDestroy()
+        super.onDestroy()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        job.cancel()
+    companion object {
+        const val NOTIFICATION_CHANNEL_ID = "SOPT"
     }
 }
