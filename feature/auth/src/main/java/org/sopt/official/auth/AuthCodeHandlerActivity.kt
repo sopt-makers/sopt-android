@@ -90,7 +90,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             ?: return sendError(PlaygroundError.IllegalConnect("resultReceiver was not provided"))
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         newIntentState += 1
         PlaygroundLog.i("onNewIntent - state: $newIntentState")
@@ -100,7 +100,7 @@ class AuthCodeHandlerActivity : AppCompatActivity() {
             }
         }
         internalHandler = null
-        loadAppLinkData(intent ?: throw IllegalStateException("안휘 이게 웨 업워"))
+        loadAppLinkData(intent)
     }
 
     private fun loadAppLinkData(intent: Intent) {
