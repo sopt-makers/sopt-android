@@ -35,7 +35,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
@@ -43,6 +42,7 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.data.model.notification.response.NotificationDetailResponse
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
+import java.io.Serializable
 
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {
@@ -63,9 +63,9 @@ class NotificationDetailActivity : AppCompatActivity() {
         initClickListeners()
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        val newArgs = intent?.getSerializableExtra("args") as StartArgs
+        val newArgs = intent.getSerializableExtra("args") as StartArgs
         viewModel.getNotificationDetail(newArgs.notificationId)
     }
 
