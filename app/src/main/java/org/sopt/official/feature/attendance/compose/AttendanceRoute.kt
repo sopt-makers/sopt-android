@@ -28,11 +28,11 @@ fun AttendanceRoute() {
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "출석") })
-    }) {
+    }) { innerPaddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(it)
+                .padding(innerPaddingValues)
         ) {
             when (state) {
                 AttendanceUiState.Loading -> {
