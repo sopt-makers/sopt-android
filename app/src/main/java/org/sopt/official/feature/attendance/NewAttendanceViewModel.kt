@@ -25,8 +25,4 @@ class NewAttendanceViewModel @Inject constructor(
             _uiState.emit(AttendanceUiState.Success(fakeTitle))
         }
     }
-
-    fun onClickFake() {
-
-    }
 }
