@@ -10,7 +10,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.official.feature.attendance.NewAttendanceViewModel
@@ -20,7 +19,6 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttendanceRoute() {
-
     val viewModel: NewAttendanceViewModel = viewModel()
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -47,10 +45,4 @@ fun AttendanceRoute() {
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun AttendanceRoutePreview() {
-    AttendanceRoute()
 }
