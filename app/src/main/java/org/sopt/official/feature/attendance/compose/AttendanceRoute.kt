@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -22,7 +23,7 @@ fun AttendanceRoute() {
     val viewModel: NewAttendanceViewModel = viewModel()
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val action = AttendanceAction(viewModel)
+    val action = viewModel.rememberAttendanceActions()
 
     Scaffold(topBar = {
         TopAppBar(title = { Text(text = "출석") })
@@ -45,4 +46,11 @@ fun AttendanceRoute() {
             }
         }
     }
+}
+
+@Composable
+fun NewAttendanceViewModel.rememberAttendanceActions(): AttendanceAction = remember(this) {
+    AttendanceAction(
+        onFakeClick = this::updateUiState
+    )
 }
