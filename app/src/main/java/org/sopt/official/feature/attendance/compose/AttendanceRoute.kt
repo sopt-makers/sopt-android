@@ -25,9 +25,11 @@ fun AttendanceRoute() {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val action = viewModel.rememberAttendanceActions()
 
-    Scaffold(topBar = {
-        TopAppBar(title = { Text(text = "출석") })
-    }) { innerPaddingValues ->
+    Scaffold(
+        topBar = {
+            TopAppBar(title = { Text(text = "출석") })
+        }
+    ) { innerPaddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
