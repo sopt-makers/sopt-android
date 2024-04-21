@@ -12,7 +12,7 @@ class NewAttendanceActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SoptTheme(darkTheme = false) {
+            SoptTheme {
                 AttendanceRoute()
             }
         }
