@@ -16,6 +16,6 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
+        // TODO
     }
 }
