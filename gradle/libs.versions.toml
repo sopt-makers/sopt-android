@@ -79,7 +79,7 @@ kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-s
 kotlin-coroutines-google-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
-kotlin-collections-immutable = {group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable"}
+kotlin-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
@@ -120,6 +120,7 @@ compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", ve
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 # For accesss of ComposeCompilerGradlePluginExtension
 compose-compiler-extension = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
