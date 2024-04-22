@@ -142,6 +142,7 @@ dependencies {
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+    implementation(libs.compose.lifecycle)
     implementation(libs.startup)
     implementation(libs.security)
     implementation(libs.swipe.refresh.layout)
