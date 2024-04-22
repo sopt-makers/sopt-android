@@ -118,6 +118,7 @@ compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", ve
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 # For accesss of ComposeCompilerGradlePluginExtension
 compose-compiler-extension = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
+compose-lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
