@@ -4,7 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -17,9 +20,11 @@ import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBa
 import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttendanceRoute(onClickBackIcon: () -> Unit) {
     val viewModel: NewAttendanceViewModel = viewModel()
+
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val action = viewModel.rememberAttendanceActions()
 
