@@ -18,7 +18,7 @@ import org.sopt.official.designsystem.util.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions) {
+fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier = Modifier) {
     CenterAlignedTopAppBar(
         title = {
             Text(
@@ -27,7 +27,7 @@ fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions) {
                 style = SoptTheme.typography.body1
             )
         },
-        modifier = Modifier,
+        modifier = modifier,
         navigationIcon = {
             Icon(
                 painter = painterResource(id = R.drawable.ic_attendance_arrow_left_white),
