@@ -56,7 +56,7 @@ coil = "2.6.0"
 lottie = "6.4.0"
 
 google-services = "4.4.1"
-crashlytics = "2.9.9"
+crashlytics = "3.0.0"
 firebase = "33.0.0"
 app-distribution = "4.2.0"
 ktlint = "12.1.0"
