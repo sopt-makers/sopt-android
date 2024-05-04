@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
@@ -50,9 +51,9 @@ fun AttendanceHistoryCard(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row {
-            Text(text = "오늘은 ", color = SoptTheme.colors.onSurface10)
+            Text(text = stringResource(R.string.attendance_event_info_prefix), color = SoptTheme.colors.onSurface10)
             Text(text = state.eventName, color = SoptTheme.colors.onSurface10)
-            Text(text = " 날이에요", color = SoptTheme.colors.onSurface10)
+            Text(text = stringResource(R.string.attendance_event_info_suffix), color = SoptTheme.colors.onSurface10)
         }
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(
