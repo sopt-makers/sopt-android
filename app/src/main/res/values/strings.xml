@@ -126,4 +126,6 @@
     <string name="soptamp_dialog_can_not_enter_title">접근할 수 없는 버튼이에요.</string>
     <string name="soptamp_dialog_can_not_enter_body">솝템프는 솝트 회원들에게만 제공되는 기능이에요.</string>
     <string name="soptamp_dialog_confirm_button">확인</string>
+    <string name="attendance_event_info_prefix">"오늘은 "</string>
+    <string name="attendance_event_info_suffix">" 날이에요"</string>
 </resources>
