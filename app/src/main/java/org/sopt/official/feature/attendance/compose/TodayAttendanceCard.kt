@@ -21,7 +21,7 @@ import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun TodayAttendanceCard(
-    state: AttendanceHistoryCardState,
+    state: TodayAttendanceCardState,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -64,7 +64,7 @@ fun TodayAttendanceCard(
     }
 }
 
-class AttendanceHistoryCardState(
+class TodayAttendanceCardState(
     val eventDate: String,
     val eventLocation: String,
     val eventName: String,
@@ -79,7 +79,7 @@ private fun AttendanceHistoryCardPreview() {
     SoptTheme {
         TodayAttendanceCard(
             state =
-            AttendanceHistoryCardState(
+            TodayAttendanceCardState(
                 eventDate = "3월 23일 토요일 14:00 - 18:00",
                 eventLocation = "건국대학교 꽥꽥오리관",
                 eventName = "2차 세미나",
