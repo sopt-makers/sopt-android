@@ -35,8 +35,6 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody
-import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
@@ -79,7 +77,6 @@ data class PostUiState(
 class MissionDetailViewModel @Inject constructor(
     private val repository: StampRepository,
     private val imageUploader: ImageUploaderRepository,
-    private val service: S3Service,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -102,7 +99,6 @@ class MissionDetailViewModel @Inject constructor(
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
-    private var requestbody: List<RequestBody>? = null
     private var imageUriList: List<String>? = null
 
     init {
@@ -214,10 +210,6 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun setRequestBody(body: List<RequestBody>) {
-        requestbody = body
-    }
-
     fun setImageUri(list: List<String>) {
         imageUriList = list
     }
@@ -230,7 +222,7 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isError = false, error = null, isLoading = true)
             }
 
-            if (uiState.value.isCompleted && requestbody.isNullOrEmpty()) {
+            if (uiState.value.isCompleted && imageUriList.isNullOrEmpty()) {
                 val image = when (imageUri) {
                     ImageModel.Empty -> {
                         "ERROR"
@@ -254,15 +246,8 @@ class MissionDetailViewModel @Inject constructor(
                     runCatching {
                         imageUploader.uploadImage(
                             preSignedURL = preSignedURL,
-                            imageUri = imageUriList?.get(0) ?:""
+                            imageUri = imageUriList?.get(0) ?: ""
                         )
-
-//                        requestbody?.map {
-//                            service.putS3Image(
-//                                preSignedURL = preSignedURL,
-//                                image = it
-//                            )
-//                        }
                     }.onFailure {
                         Timber.e(it.toString())
                     }
