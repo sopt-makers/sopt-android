@@ -187,21 +187,26 @@ fun MissionDetailScreen(
             if (isEditable && isMe) {
                 Button(
                     onClick = {
-                        val requestBodyList: MutableList<RequestBody> = mutableListOf()
+                        val imageUriList: MutableList<String> = mutableListOf()
+//                         val requestBodyList: MutableList<RequestBody> = mutableListOf()
 
                         when (imageModel) {
                             ImageModel.Empty -> {}
                             is ImageModel.Local -> {
                                 (imageModel as ImageModel.Local).uri.map {
-                                    val uri = Uri.parse(it)
-                                    val requestBody = ContentUriRequestBody(context, uri)
-                                    requestBodyList.add(requestBody)
+                                    imageUriList.add(it)
                                 }
+//                                (imageModel as ImageModel.Local).uri.map {
+//                                    val uri = Uri.parse(it)
+//                                    val requestBody = ContentUriRequestBody(context, uri)
+//                                    requestBodyList.add(requestBody)
+//                                }
                             }
 
                             is ImageModel.Remote -> {}
                         }
-                        viewModel.setRequestBody(requestBodyList)
+                        viewModel.setImageUri(imageUriList)
+//                         viewModel.setRequestBody(requestBodyList)
 
                         viewModel.onSubmit()
                     },
@@ -273,7 +278,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(repository = FakeStampRepository, service = FakeS3Service)
+            // MissionDetailViewModel(repository = FakeStampRepository, service = FakeS3Service)
         )
     }
 }

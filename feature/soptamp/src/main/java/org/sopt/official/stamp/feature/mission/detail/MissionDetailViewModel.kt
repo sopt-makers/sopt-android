@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,10 +40,12 @@ import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -61,7 +62,7 @@ data class PostUiState(
     val isDeleteSuccess: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
     val isMe: Boolean = true,
-    val isBottomSheetOpened: Boolean = false
+    val isBottomSheetOpened: Boolean = false,
 ) {
     companion object {
         fun from(data: Archive) = PostUiState(
@@ -77,6 +78,7 @@ data class PostUiState(
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
     private val repository: StampRepository,
+    private val imageUploader: ImageUploaderRepository,
     private val service: S3Service,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
@@ -101,6 +103,7 @@ class MissionDetailViewModel @Inject constructor(
 
     private val submitEvent = MutableSharedFlow<Unit>()
     private var requestbody: List<RequestBody>? = null
+    private var imageUriList: List<String>? = null
 
     init {
         viewModelScope.launch {
@@ -215,6 +218,10 @@ class MissionDetailViewModel @Inject constructor(
         requestbody = body
     }
 
+    fun setImageUri(list: List<String>) {
+        imageUriList = list
+    }
+
     private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
@@ -245,12 +252,17 @@ class MissionDetailViewModel @Inject constructor(
                     val imageURL = S3URL.imageURL
 
                     runCatching {
-                        requestbody?.map {
-                            service.putS3Image(
-                                preSignedURL = preSignedURL,
-                                image = it
-                            )
-                        }
+                        imageUploader.uploadImage(
+                            preSignedURL = preSignedURL,
+                            imageUri = imageUriList?.get(0) ?:""
+                        )
+
+//                        requestbody?.map {
+//                            service.putS3Image(
+//                                preSignedURL = preSignedURL,
+//                                image = it
+//                            )
+//                        }
                     }.onFailure {
                         Timber.e(it.toString())
                     }
