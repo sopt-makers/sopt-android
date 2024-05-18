@@ -75,8 +75,8 @@ data class PostUiState(
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
-    private val repository: StampRepository,
-    private val imageUploader: ImageUploaderRepository,
+    private val stampRepository: StampRepository,
+    private val imageUploaderRepository: ImageUploaderRepository
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -121,7 +121,7 @@ class MissionDetailViewModel @Inject constructor(
                     isMe = isMe
                 )
             }
-            repository.getMissionContent(id, nickname)
+            stampRepository.getMissionContent(id, nickname)
                 .onSuccess {
                     val option = if (!isMe) {
                         ToolbarIconType.NONE
@@ -239,12 +239,12 @@ class MissionDetailViewModel @Inject constructor(
 
                 modifyMission(id, image, content, date)
             } else {
-                repository.getS3URL().onSuccess { S3URL ->
+                imageUploaderRepository.getS3URL().onSuccess { S3URL ->
                     val preSignedURL = S3URL.preSignedURL
                     val imageURL = S3URL.imageURL
 
                     runCatching {
-                        imageUploader.uploadImage(
+                        imageUploaderRepository.uploadImage(
                             preSignedURL = preSignedURL,
                             imageUri = imageUriList?.get(0) ?: ""
                         )
@@ -255,7 +255,7 @@ class MissionDetailViewModel @Inject constructor(
                     if (uiState.value.isCompleted) {
                         modifyMission(id, imageURL, content, date)
                     } else {
-                        repository.completeMission(
+                        stampRepository.completeMission(
                             Stamp(
                                 missionId = id,
                                 image = imageURL,
@@ -281,7 +281,7 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = repository.modifyMission(
+    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = stampRepository.modifyMission(
         Stamp(
             missionId = id,
             image = image,
@@ -305,7 +305,7 @@ class MissionDetailViewModel @Inject constructor(
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)
             }
-            repository.deleteMission(id)
+            stampRepository.deleteMission(id)
                 .onSuccess {
                     uiState.update {
                         it.copy(isLoading = false, isDeleteSuccess = true)

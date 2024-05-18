@@ -25,7 +25,7 @@
 package org.sopt.official.domain.soptamp.repository
 
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.S3URL
+import org.sopt.official.domain.soptamp.model.ImageUploadUrl
 import org.sopt.official.domain.soptamp.model.Stamp
 
 interface StampRepository {
@@ -38,6 +38,4 @@ interface StampRepository {
     suspend fun deleteMission(missionId: Int): Result<Unit>
 
     suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getS3URL(): Result<S3URL>
 }

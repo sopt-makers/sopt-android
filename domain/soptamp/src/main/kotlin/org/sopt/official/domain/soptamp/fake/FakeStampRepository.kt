@@ -25,7 +25,7 @@
 package org.sopt.official.domain.soptamp.fake
 
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.S3URL
+import org.sopt.official.domain.soptamp.model.ImageUploadUrl
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.StampRepository
 
@@ -38,7 +38,7 @@ object FakeStampRepository : StampRepository {
         activityDate = ""
     )
 
-    private val fakeS3URL = S3URL(
+    private val fakeImageUploadUrl = ImageUploadUrl(
         preSignedURL = "",
         imageURL = ""
     )
@@ -52,5 +52,5 @@ object FakeStampRepository : StampRepository {
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 
     override suspend fun deleteAllStamps(): Result<Unit> = runCatching { }
-    override suspend fun getS3URL(): Result<S3URL> = runCatching { fakeS3URL }
+    override suspend fun getS3URL(): Result<ImageUploadUrl> = runCatching { fakeImageUploadUrl }
 }
