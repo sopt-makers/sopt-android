@@ -265,7 +265,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(stampRepository = FakeStampRepository, imageUploader = FakeImageUploaderRepository)
+            MissionDetailViewModel(stampRepository = FakeStampRepository, imageUploaderRepository = FakeImageUploaderRepository)
         )
     }
 }

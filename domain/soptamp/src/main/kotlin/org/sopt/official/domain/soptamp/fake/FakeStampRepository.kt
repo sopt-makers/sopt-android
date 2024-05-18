@@ -38,11 +38,6 @@ object FakeStampRepository : StampRepository {
         activityDate = ""
     )
 
-    private val fakeImageUploadUrl = ImageUploadUrl(
-        preSignedURL = "",
-        imageURL = ""
-    )
-
     override suspend fun completeMission(stamp: Stamp): Result<Archive> = runCatching { fakeArchive }
 
     override suspend fun getMissionContent(missionId: Int, nickname: String) = runCatching { fakeArchive }
@@ -52,5 +47,4 @@ object FakeStampRepository : StampRepository {
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 
     override suspend fun deleteAllStamps(): Result<Unit> = runCatching { }
-    override suspend fun getS3URL(): Result<ImageUploadUrl> = runCatching { fakeImageUploadUrl }
 }
