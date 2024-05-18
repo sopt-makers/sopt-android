@@ -25,7 +25,6 @@
 package org.sopt.official.domain.soptamp.repository
 
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.ImageUploadUrl
 import org.sopt.official.domain.soptamp.model.Stamp
 
 interface StampRepository {
