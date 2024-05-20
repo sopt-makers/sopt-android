@@ -99,7 +99,6 @@ class MissionDetailViewModel @Inject constructor(
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
-    private var imageUriList: List<String>? = null
 
     init {
         viewModelScope.launch {
@@ -210,10 +209,6 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun setImageUri(list: List<String>) {
-        imageUriList = list
-    }
-
     private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
@@ -222,21 +217,21 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isError = false, error = null, isLoading = true)
             }
 
-            if (uiState.value.isCompleted && imageUriList.isNullOrEmpty()) {
-                val image = when (imageUri) {
-                    ImageModel.Empty -> {
-                        "ERROR"
-                    }
-
-                    is ImageModel.Local -> {
-                        imageUri.uri[0]
-                    }
-
-                    is ImageModel.Remote -> {
-                        imageUri.url[0]
-                    }
+            val image = when (imageUri) {
+                ImageModel.Empty -> {
+                    "ERROR"
                 }
 
+                is ImageModel.Local -> {
+                    imageUri.uri[0]
+                }
+
+                is ImageModel.Remote -> {
+                    imageUri.url[0]
+                }
+            }
+
+            if (uiState.value.isCompleted) {
                 modifyMission(id, image, content, date)
             } else {
                 imageUploaderRepository.getS3URL().onSuccess { S3URL ->
@@ -246,7 +241,7 @@ class MissionDetailViewModel @Inject constructor(
                     runCatching {
                         imageUploaderRepository.uploadImage(
                             preSignedURL = preSignedURL,
-                            imageUri = imageUriList?.get(0) ?: ""
+                            imageUri = image
                         )
                     }.onFailure {
                         Timber.e(it.toString())

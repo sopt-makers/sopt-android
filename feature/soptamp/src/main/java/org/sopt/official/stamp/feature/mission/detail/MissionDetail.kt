@@ -181,20 +181,6 @@ fun MissionDetailScreen(
             if (isEditable && isMe) {
                 Button(
                     onClick = {
-                        val imageUriList: MutableList<String> = mutableListOf()
-
-                        when (imageModel) {
-                            ImageModel.Empty -> {}
-                            is ImageModel.Local -> {
-                                (imageModel as ImageModel.Local).uri.map {
-                                    imageUriList.add(it)
-                                }
-                            }
-
-                            is ImageModel.Remote -> {}
-                        }
-                        viewModel.setImageUri(imageUriList)
-
                         viewModel.onSubmit()
                     },
                     modifier = Modifier
