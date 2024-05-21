@@ -26,7 +26,6 @@ package org.sopt.official
 
 import com.google.common.truth.Truth.assertThat
 import kotlinx.datetime.LocalDate
-import kotlinx.datetime.toLocalDate
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -64,10 +63,10 @@ class CalculateActiveGenerationTest {
     companion object {
         @JvmStatic
         fun generationStartDateList() = listOf(
-            Arguments.of(30, "2022-03-01".toLocalDate()),
-            Arguments.of(31, "2022-09-01".toLocalDate()),
-            Arguments.of(32, "2023-03-01".toLocalDate()),
-            Arguments.of(33, "2023-09-01".toLocalDate())
+            Arguments.of(30, LocalDate.parse("2022-03-01")),
+            Arguments.of(31, LocalDate.parse("2022-09-01")),
+            Arguments.of(32, LocalDate.parse("2023-03-01")),
+            Arguments.of(33, LocalDate.parse("2023-09-01"))
         )
 
         @JvmStatic
