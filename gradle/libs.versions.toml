@@ -119,6 +119,8 @@ compose-destination-core = { module = "io.github.raamcosta.compose-destinations:
 compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
+# For accesss of ComposeCompilerGradlePluginExtension
+compose-compiler-extension = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
@@ -229,5 +231,6 @@ junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" 
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 androidTest = { id = "com.android.test", version.ref = "gradleplugin" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-baselineprofile" }
