@@ -26,18 +26,13 @@
 plugins {
     sopt("feature")
     sopt("test")
+    sopt("compose")
 }
 
 android {
     namespace = "org.sopt.official.designsystem"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 

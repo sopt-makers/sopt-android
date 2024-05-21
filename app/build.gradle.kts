@@ -26,8 +26,10 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.Properties
 
 plugins {
+    alias(libs.plugins.kotlin.android)
     sopt("application")
     sopt("test")
+    sopt("compose")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
@@ -110,12 +112,6 @@ android {
                 }
             }
         }
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
 }
 
