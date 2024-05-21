@@ -22,7 +22,6 @@ navigation = "2.7.7"
 startup = "1.1.1"
 security = "1.1.0-alpha06"
 customtab = "1.8.0"
-compose-compiler = "1.5.14"
 compose-bom = "2024.05.00"
 desugarJdk = "2.0.4"
 
@@ -42,7 +41,7 @@ androidx-test = "1.5.2"
 androidx-test-rules = "1.5.0"
 
 gradleplugin = "8.4.1"
-kspplugin = "2.0.0-RC3-1.0.20"
+kspplugin = "2.0.0-1.0.21"
 
 dagger-hilt = "2.51.1"
 dagger-hilt-navigation-compose = "1.2.0"
