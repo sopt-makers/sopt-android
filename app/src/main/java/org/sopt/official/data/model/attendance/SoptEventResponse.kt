@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.model.attendance
 
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
@@ -59,7 +59,7 @@ data class SoptEventResponse(
     ) {
         fun toEntity(index: Int): SoptEvent.Attendance {
             val attendedAtTime = if (this.status == "ATTENDANCE") {
-                attendedAt.toLocalDateTime().run {
+                LocalDateTime.parse(attendedAt).run {
                     "${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}"
                 }
             } else {
@@ -75,8 +75,8 @@ data class SoptEventResponse(
 
     fun toEntity(): SoptEvent {
         val eventDateTime: String = if (startAt != "" && endAt != "") {
-            val startAtDateTime = startAt.toLocalDateTime()
-            val endAtDateTime = endAt.toLocalDateTime()
+            val startAtDateTime = LocalDateTime.parse(startAt)
+            val endAtDateTime = LocalDateTime.parse(endAt)
             if (startAtDateTime.date == endAtDateTime.date) {
                 "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 ${
                     startAtDateTime.hour.toString().padStart(2, '0')
