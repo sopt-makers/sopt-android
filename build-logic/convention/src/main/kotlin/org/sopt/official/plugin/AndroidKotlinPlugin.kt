@@ -30,6 +30,13 @@ class AndroidKotlinPlugin : Plugin<Project> {
                 sourceCompatibility = JavaVersion.VERSION_17
                 targetCompatibility = JavaVersion.VERSION_17
             }
+            packagingOptions {
+                resources.excludes.apply {
+                    add("/META-INF/AL2.0")
+                    add("/META-INF/LGPL2.1")
+                    add("kotlin/reflect/*")
+                }
+            }
         }
         extensions.getByType<KotlinAndroidProjectExtension>().apply {
             compilerOptions {
