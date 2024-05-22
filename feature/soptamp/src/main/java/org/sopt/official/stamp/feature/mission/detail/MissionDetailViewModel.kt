@@ -231,7 +231,7 @@ class MissionDetailViewModel @Inject constructor(
                 }
             }
 
-            if (uiState.value.isCompleted) {
+            if (imageUri is ImageModel.Remote) {
                 modifyMission(id, image, content, date)
             } else {
                 imageUploaderRepository.getS3URL().onSuccess { S3URL ->
