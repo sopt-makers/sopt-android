@@ -36,11 +36,10 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import okhttp3.RequestBody
-import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
@@ -61,7 +60,7 @@ data class PostUiState(
     val isDeleteSuccess: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
     val isMe: Boolean = true,
-    val isBottomSheetOpened: Boolean = false
+    val isBottomSheetOpened: Boolean = false,
 ) {
     companion object {
         fun from(data: Archive) = PostUiState(
@@ -76,8 +75,8 @@ data class PostUiState(
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
-    private val repository: StampRepository,
-    private val service: S3Service,
+    private val stampRepository: StampRepository,
+    private val imageUploaderRepository: ImageUploaderRepository
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 
@@ -100,7 +99,6 @@ class MissionDetailViewModel @Inject constructor(
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
     private val submitEvent = MutableSharedFlow<Unit>()
-    private var requestbody: List<RequestBody>? = null
 
     init {
         viewModelScope.launch {
@@ -122,7 +120,7 @@ class MissionDetailViewModel @Inject constructor(
                     isMe = isMe
                 )
             }
-            repository.getMissionContent(id, nickname)
+            stampRepository.getMissionContent(id, nickname)
                 .onSuccess {
                     val option = if (!isMe) {
                         ToolbarIconType.NONE
@@ -211,10 +209,6 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun setRequestBody(body: List<RequestBody>) {
-        requestbody = body
-    }
-
     private suspend fun handleSubmit() {
         viewModelScope.launch {
             val currentState = uiState.value
@@ -223,34 +217,32 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isError = false, error = null, isLoading = true)
             }
 
-            if (uiState.value.isCompleted && requestbody.isNullOrEmpty()) {
-                val image = when (imageUri) {
-                    ImageModel.Empty -> {
-                        "ERROR"
-                    }
-
-                    is ImageModel.Local -> {
-                        imageUri.uri[0]
-                    }
-
-                    is ImageModel.Remote -> {
-                        imageUri.url[0]
-                    }
+            val image = when (imageUri) {
+                ImageModel.Empty -> {
+                    "ERROR"
                 }
 
+                is ImageModel.Local -> {
+                    imageUri.uri[0]
+                }
+
+                is ImageModel.Remote -> {
+                    imageUri.url[0]
+                }
+            }
+
+            if (imageUri is ImageModel.Remote) {
                 modifyMission(id, image, content, date)
             } else {
-                repository.getS3URL().onSuccess { S3URL ->
+                imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
                     val preSignedURL = S3URL.preSignedURL
                     val imageURL = S3URL.imageURL
 
                     runCatching {
-                        requestbody?.map {
-                            service.putS3Image(
-                                preSignedURL = preSignedURL,
-                                image = it
-                            )
-                        }
+                        imageUploaderRepository.uploadImage(
+                            preSignedURL = preSignedURL,
+                            imageUri = image
+                        )
                     }.onFailure {
                         Timber.e(it.toString())
                     }
@@ -258,7 +250,7 @@ class MissionDetailViewModel @Inject constructor(
                     if (uiState.value.isCompleted) {
                         modifyMission(id, imageURL, content, date)
                     } else {
-                        repository.completeMission(
+                        stampRepository.completeMission(
                             Stamp(
                                 missionId = id,
                                 image = imageURL,
@@ -284,7 +276,7 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = repository.modifyMission(
+    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = stampRepository.modifyMission(
         Stamp(
             missionId = id,
             image = image,
@@ -308,7 +300,7 @@ class MissionDetailViewModel @Inject constructor(
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)
             }
-            repository.deleteMission(id)
+            stampRepository.deleteMission(id)
                 .onSuccess {
                     uiState.update {
                         it.copy(isLoading = false, isDeleteSuccess = true)

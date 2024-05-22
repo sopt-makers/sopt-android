@@ -33,7 +33,6 @@ import kotlinx.serialization.json.Json
 import org.sopt.official.data.soptamp.remote.api.StampService
 import org.sopt.official.data.soptamp.remote.mapper.toData
 import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.S3URL
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.StampRepository
 
@@ -83,9 +82,5 @@ class StampRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAllStamps(): Result<Unit> {
         return runCatching { service.deleteAllStamps() }
-    }
-
-    override suspend fun getS3URL(): Result<S3URL> {
-        return runCatching { service.getS3URL().toDomain() }
     }
 }

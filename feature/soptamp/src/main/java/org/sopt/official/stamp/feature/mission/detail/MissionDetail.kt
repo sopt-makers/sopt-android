@@ -24,7 +24,6 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,7 +42,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.airbnb.lottie.compose.LottieCompositionSpec
@@ -53,10 +51,8 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
-import okhttp3.RequestBody
-import org.sopt.official.common.util.ContentUriRequestBody
-import org.sopt.official.data.soptamp.remote.api.FakeS3Service
 import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
@@ -84,7 +80,7 @@ import org.sopt.official.stamp.util.DefaultPreview
 fun MissionDetailScreen(
     args: MissionNavArgs,
     resultNavigator: ResultBackNavigator<Boolean>,
-    viewModel: MissionDetailViewModel = hiltViewModel()
+    viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsState("")
@@ -112,8 +108,6 @@ fun MissionDetailScreen(
         composition = lottieComposition,
         isPlaying = isSuccess
     )
-
-    val context = LocalContext.current
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -187,22 +181,6 @@ fun MissionDetailScreen(
             if (isEditable && isMe) {
                 Button(
                     onClick = {
-                        val requestBodyList: MutableList<RequestBody> = mutableListOf()
-
-                        when (imageModel) {
-                            ImageModel.Empty -> {}
-                            is ImageModel.Local -> {
-                                (imageModel as ImageModel.Local).uri.map {
-                                    val uri = Uri.parse(it)
-                                    val requestBody = ContentUriRequestBody(context, uri)
-                                    requestBodyList.add(requestBody)
-                                }
-                            }
-
-                            is ImageModel.Remote -> {}
-                        }
-                        viewModel.setRequestBody(requestBodyList)
-
                         viewModel.onSubmit()
                     },
                     modifier = Modifier
@@ -273,7 +251,7 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args,
             EmptyResultBackNavigator(),
-            MissionDetailViewModel(repository = FakeStampRepository, service = FakeS3Service)
+            MissionDetailViewModel(stampRepository = FakeStampRepository, imageUploaderRepository = FakeImageUploaderRepository)
         )
     }
 }

@@ -2,7 +2,7 @@ package org.sopt.official.data.soptamp.remote.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.domain.soptamp.model.S3URL
+import org.sopt.official.domain.soptamp.model.ImageUploadUrl
 
 @Serializable
 data class S3URLResponse(
@@ -11,7 +11,7 @@ data class S3URLResponse(
     @SerialName("imageURL")
     val imageURL: String
 ) {
-    fun toDomain() = S3URL(
+    fun toDomain() = ImageUploadUrl(
         preSignedURL = preSignedURL,
         imageURL = imageURL
     )

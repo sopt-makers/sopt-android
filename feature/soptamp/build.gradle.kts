@@ -53,7 +53,6 @@ android {
 
 dependencies {
     implementation(projects.domain.soptamp)
-    implementation(projects.data.soptamp)
     implementation(projects.domain.mypage)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
