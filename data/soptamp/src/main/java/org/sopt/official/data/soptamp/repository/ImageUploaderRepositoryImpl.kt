@@ -27,7 +27,7 @@ class ImageUploaderRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getS3URL(): Result<ImageUploadUrl> {
+    override suspend fun getImageUploadURL(): Result<ImageUploadUrl> {
         return runCatching { stampService.getS3URL().toDomain() }
     }
 }

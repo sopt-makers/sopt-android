@@ -10,5 +10,5 @@ object FakeImageUploaderRepository : ImageUploaderRepository {
     )
 
     override suspend fun uploadImage(preSignedURL: String, imageUri: String) {}
-    override suspend fun getS3URL(): Result<ImageUploadUrl> = runCatching { fakeImageUploadUrl }
+    override suspend fun getImageUploadURL(): Result<ImageUploadUrl> = runCatching { fakeImageUploadUrl }
 }

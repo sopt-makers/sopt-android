@@ -234,7 +234,7 @@ class MissionDetailViewModel @Inject constructor(
             if (imageUri is ImageModel.Remote) {
                 modifyMission(id, image, content, date)
             } else {
-                imageUploaderRepository.getS3URL().onSuccess { S3URL ->
+                imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
                     val preSignedURL = S3URL.preSignedURL
                     val imageURL = S3URL.imageURL
 
