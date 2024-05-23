@@ -40,9 +40,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import okhttp3.internal.immutableListOf
@@ -54,6 +51,9 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -298,7 +298,10 @@ fun DateItemsPicker(
         ) {
             items(items.size) {
                 val index = it % items.size
-                if (it == listState.firstVisibleItemIndex + 1) {
+                val firstVisibleItemIndex by remember {
+                    derivedStateOf { listState.firstVisibleItemIndex }
+                }
+                if (it == firstVisibleItemIndex + 1) {
                     currentValue.value = items[index]
                 }
 
@@ -306,7 +309,7 @@ fun DateItemsPicker(
 
                 Text(
                     text = items[index],
-                    modifier = Modifier.alpha(if (it == listState.firstVisibleItemIndex + 1) 1f else 0.3f),
+                    modifier = Modifier.alpha(if (it == firstVisibleItemIndex + 1) 1f else 0.3f),
                     style = SoptTheme.typography.h1,
                     textAlign = TextAlign.Center
                 )
@@ -348,9 +351,9 @@ private fun DatePickerPreview() {
 @DefaultPreview
 @Composable
 private fun CustomDatePickerPreview() {
-    val chosenYear = remember { mutableStateOf(currentYear) }
-    val chosenMonth = remember { mutableStateOf(currentMonth) }
-    val chosenDay = remember { mutableStateOf(currentDay) }
+    val chosenYear = remember { mutableIntStateOf(currentYear) }
+    val chosenMonth = remember { mutableIntStateOf(currentMonth) }
+    val chosenDay = remember { mutableIntStateOf(currentDay) }
     SoptTheme {
         DatePickerUI(
             isValidDate = true,

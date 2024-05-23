@@ -48,9 +48,9 @@ import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
 fun SoptampSegmentedFloatingButton(
-    modifier: Modifier = Modifier.padding(horizontal = 54.dp),
     option1: String,
     option2: String,
+    modifier: Modifier = Modifier,
     onClickFirstOption: () -> Unit = {},
     onClickSecondOption: () -> Unit = {}
 ) {

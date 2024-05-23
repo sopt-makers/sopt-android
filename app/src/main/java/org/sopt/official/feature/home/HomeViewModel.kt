@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -69,6 +68,7 @@ import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.poke.UiState
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -201,7 +201,7 @@ class HomeViewModel @Inject constructor(
     private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
     val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
-    private val _appServiceUiState = MutableStateFlow<AppServiceUiState>(AppServiceUiState())
+    private val _appServiceUiState = MutableStateFlow(AppServiceUiState())
     val appServiceUiState: StateFlow<AppServiceUiState>
         get() = _appServiceUiState
 

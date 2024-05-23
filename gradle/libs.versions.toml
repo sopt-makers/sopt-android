@@ -22,6 +22,7 @@ navigation = "2.7.7"
 startup = "1.1.1"
 security = "1.1.0-alpha06"
 customtab = "1.8.0"
+exifinterface = "1.3.7"
 compose-bom = "2024.05.00"
 desugarJdk = "2.0.4"
 
@@ -91,6 +92,7 @@ lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", versi
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 security = { module = "androidx.security:security-crypto", version.ref = "security" }
+exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
 
