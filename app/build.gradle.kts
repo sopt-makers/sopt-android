@@ -26,14 +26,12 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.Properties
 
 plugins {
-    alias(libs.plugins.kotlin.android)
     sopt("application")
     sopt("test")
     sopt("compose")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
@@ -160,7 +158,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)
-    ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.compose.test)
