@@ -24,11 +24,16 @@
  */
 package org.sopt.official.designsystem
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
 val PretendardBold = FontFamily(Font(R.font.pretendard_bold, FontWeight.Bold))
@@ -37,8 +42,201 @@ val PretendardMedium = FontFamily(Font(R.font.pretendard_medium, FontWeight.Medi
 val PretendardRegular = FontFamily(Font(R.font.pretendard_regular, FontWeight.Normal))
 val PretendardLight = FontFamily(Font(R.font.pretendard_light, FontWeight.Light))
 
+val SuitBold = FontFamily(Font(R.font.suit_bold, FontWeight.Bold))
+val SuitSemiBold = FontFamily(Font(R.font.suit_semibold, FontWeight.SemiBold))
+val SuitMedium = FontFamily(Font(R.font.suit_medium, FontWeight.Medium))
+val SuitRegular = FontFamily(Font(R.font.suit_medium, FontWeight.Normal))
+val SuitLight = FontFamily(Font(R.font.suit_medium, FontWeight.Light))
+
 @Stable
 class SoptTypography internal constructor(
+    heading48B: TextStyle,
+    heading40B: TextStyle,
+    heading32B: TextStyle,
+    heading28B: TextStyle,
+    heading24B: TextStyle,
+    heading20B: TextStyle,
+    heading18B: TextStyle,
+    heading16B: TextStyle,
+    title32SB: TextStyle,
+    title28SB: TextStyle,
+    title24SB: TextStyle,
+    title20SB: TextStyle,
+    title18SB: TextStyle,
+    title16SB: TextStyle,
+    title14SB: TextStyle,
+    body18M: TextStyle,
+    body16M: TextStyle,
+    body16R: TextStyle,
+    body14M: TextStyle,
+    body14R: TextStyle,
+    body14L: TextStyle,
+    body13M: TextStyle,
+    body13R: TextStyle,
+    body13L: TextStyle,
+    label18SB: TextStyle,
+    label16SB: TextStyle,
+    label14SB: TextStyle,
+    label12SB: TextStyle,
+    label11SB: TextStyle,
+) {
+    var heading48B: TextStyle by mutableStateOf(heading48B)
+        private set
+    var heading40B: TextStyle by mutableStateOf(heading40B)
+        private set
+    var heading32B: TextStyle by mutableStateOf(heading32B)
+        private set
+    var heading28B: TextStyle by mutableStateOf(heading28B)
+        private set
+    var heading24B: TextStyle by mutableStateOf(heading24B)
+        private set
+    var heading20B: TextStyle by mutableStateOf(heading20B)
+        private set
+    var heading18B: TextStyle by mutableStateOf(heading18B)
+        private set
+    var heading16B: TextStyle by mutableStateOf(heading16B)
+        private set
+    var title32SB: TextStyle by mutableStateOf(title32SB)
+        private set
+    var title28SB: TextStyle by mutableStateOf(title28SB)
+        private set
+    var title24SB: TextStyle by mutableStateOf(title24SB)
+        private set
+    var title20SB: TextStyle by mutableStateOf(title20SB)
+        private set
+    var title18SB: TextStyle by mutableStateOf(title18SB)
+        private set
+    var title16SB: TextStyle by mutableStateOf(title16SB)
+        private set
+    var title14SB: TextStyle by mutableStateOf(title14SB)
+        private set
+    var body18M: TextStyle by mutableStateOf(body18M)
+        private set
+    var body16M: TextStyle by mutableStateOf(body16M)
+        private set
+    var body16R: TextStyle by mutableStateOf(body16R)
+        private set
+    var body14M: TextStyle by mutableStateOf(body14M)
+        private set
+    var body14R: TextStyle by mutableStateOf(body14R)
+        private set
+    var body14L: TextStyle by mutableStateOf(body14L)
+        private set
+    var body13M: TextStyle by mutableStateOf(body13M)
+        private set
+    var body13R: TextStyle by mutableStateOf(body13R)
+        private set
+    var body13L: TextStyle by mutableStateOf(body13L)
+        private set
+    var label18SB: TextStyle by mutableStateOf(label18SB)
+        private set
+    var label16SB: TextStyle by mutableStateOf(label16SB)
+        private set
+    var label14SB: TextStyle by mutableStateOf(label14SB)
+        private set
+    var label12SB: TextStyle by mutableStateOf(label12SB)
+        private set
+    var label11SB: TextStyle by mutableStateOf(label11SB)
+        private set
+
+    fun copy(
+        heading48B: TextStyle = this.heading48B,
+        heading40B: TextStyle = this.heading40B,
+        heading32B: TextStyle = this.heading32B,
+        heading28B: TextStyle = this.heading28B,
+        heading24B: TextStyle = this.heading24B,
+        heading20B: TextStyle = this.heading20B,
+        heading18B: TextStyle = this.heading18B,
+        heading16B: TextStyle = this.heading16B,
+        title32SB: TextStyle = this.title32SB,
+        title28SB: TextStyle = this.title28SB,
+        title24SB: TextStyle = this.title24SB,
+        title20SB: TextStyle = this.title20SB,
+        title18SB: TextStyle = this.title18SB,
+        title16SB: TextStyle = this.title16SB,
+        title14SB: TextStyle = this.title14SB,
+        body18M: TextStyle = this.body18M,
+        body16M: TextStyle = this.body16M,
+        body16R: TextStyle = this.body16R,
+        body14M: TextStyle = this.body14M,
+        body14R: TextStyle = this.body14R,
+        body14L: TextStyle = this.body14L,
+        body13M: TextStyle = this.body13M,
+        body13R: TextStyle = this.body13R,
+        body13L: TextStyle = this.body13L,
+        label18SB: TextStyle = this.label18SB,
+        label16SB: TextStyle = this.label16SB,
+        label14SB: TextStyle = this.label14SB,
+        label12SB: TextStyle = this.label12SB,
+        label11SB: TextStyle = this.label11SB,
+    ): SoptTypography = SoptTypography(
+        heading48B,
+        heading40B,
+        heading32B,
+        heading28B,
+        heading24B,
+        heading20B,
+        heading18B,
+        heading16B,
+        title32SB,
+        title28SB,
+        title24SB,
+        title20SB,
+        title18SB,
+        title16SB,
+        title14SB,
+        body18M,
+        body16M,
+        body16R,
+        body14M,
+        body14R,
+        body14L,
+        body13M,
+        body13R,
+        body13L,
+        label18SB,
+        label16SB,
+        label14SB,
+        label12SB,
+        label11SB,
+    )
+
+    fun update(other: SoptTypography) {
+        heading48B = other.heading48B
+        heading40B = other.heading40B
+        heading32B = other.heading32B
+        heading28B = other.heading28B
+        heading24B = other.heading24B
+        heading20B = other.heading20B
+        heading18B = other.heading18B
+        heading16B = other.heading16B
+        title32SB = other.title32SB
+        title28SB = other.title28SB
+        title24SB = other.title24SB
+        title20SB = other.title20SB
+        title18SB = other.title18SB
+        title16SB = other.title16SB
+        title14SB = other.title14SB
+        body18M = other.body18M
+        body16M = other.body16M
+        body16R = other.body16R
+        body14M = other.body14M
+        body14R = other.body14R
+        body14L = other.body14L
+        body13M = other.body13M
+        body13R = other.body13R
+        body13L = other.body13L
+        label18SB = other.label18SB
+        label16SB = other.label16SB
+        label14SB = other.label14SB
+        label12SB = other.label12SB
+        label11SB = other.label11SB
+    }
+
+}
+
+@Stable
+class LegacySoptTypography internal constructor(
     h1: TextStyle,
     h2: TextStyle,
     h3: TextStyle,
@@ -134,7 +332,7 @@ class SoptTypography internal constructor(
         label3: TextStyle = this.label3,
         label4: TextStyle = this.label4,
         label5: TextStyle = this.label5
-    ): SoptTypography = SoptTypography(
+    ): LegacySoptTypography = LegacySoptTypography(
         h1,
         h2,
         h3,
@@ -160,7 +358,7 @@ class SoptTypography internal constructor(
         label5
     )
 
-    fun update(other: SoptTypography) {
+    fun update(other: LegacySoptTypography) {
         h1 = other.h1
         h2 = other.h2
         h3 = other.h3
@@ -190,6 +388,187 @@ class SoptTypography internal constructor(
 @Composable
 fun SoptTypography(): SoptTypography {
     return SoptTypography(
+        heading48B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 48.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 72.sp
+        ),
+        heading40B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 40.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 72.sp
+        ),
+        heading32B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 32.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 48.sp
+        ),
+        heading28B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 28.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 42.sp
+        ),
+        heading24B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 24.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 36.sp
+        ),
+        heading20B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 20.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 30.sp
+        ),
+        heading18B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 18.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 28.sp
+        ),
+        heading16B = TextStyle(
+            fontFamily = SuitBold,
+            fontSize = 16.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 24.sp
+        ),
+        title32SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 32.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 48.sp
+        ),
+        title28SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 28.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 42.sp
+        ),
+        title24SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 24.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 36.sp
+        ),
+        title20SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 20.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 30.sp
+        ),
+
+        title18SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 18.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 28.sp
+        ),
+        title16SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 16.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 24.sp
+        ),
+        title14SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 14.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 20.sp
+        ),
+        body18M = TextStyle(
+            fontFamily = SuitMedium,
+            fontSize = 18.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 30.sp
+        ),
+        body16M = TextStyle(
+            fontFamily = SuitMedium,
+            fontSize = 16.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 26.sp
+        ),
+        body16R = TextStyle(
+            fontFamily = SuitRegular,
+            fontSize = 16.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 26.sp
+        ),
+        body14M = TextStyle(
+            fontFamily = SuitMedium,
+            fontSize = 14.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 22.sp
+        ),
+        body14R = TextStyle(
+            fontFamily = SuitRegular,
+            fontSize = 14.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 22.sp
+        ),
+        body14L = TextStyle(
+            fontFamily = SuitLight,
+            fontSize = 14.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 22.sp
+        ),
+        body13M = TextStyle(
+            fontFamily = SuitMedium,
+            fontSize = 13.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 20.sp
+        ),
+        body13R = TextStyle(
+            fontFamily = SuitRegular,
+            fontSize = 13.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 20.sp
+        ),
+        body13L = TextStyle(
+            fontFamily = SuitLight,
+            fontSize = 13.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 20.sp
+        ),
+        label18SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 18.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 24.sp
+        ),
+        label16SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 16.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 22.sp
+        ),
+        label14SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 14.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 18.sp
+        ),
+        label12SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 12.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 16.sp
+        ),
+        label11SB = TextStyle(
+            fontFamily = SuitSemiBold,
+            fontSize = 11.sp,
+            letterSpacing = (-0.02).em,
+            lineHeight = 14.sp
+        ),
+    )
+}
+
+@Composable
+fun LegacySoptTypography(): LegacySoptTypography {
+    return LegacySoptTypography(
         h1 = TextStyle(
             fontFamily = PretendardBold,
             fontSize = 48.sp,

@@ -25,7 +25,15 @@
 package org.sopt.official.designsystem
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
 @Stable
@@ -224,11 +232,16 @@ private val LocalSoptTypography = staticCompositionLocalOf<SoptTypography> {
     error("No SoptTypography provided")
 }
 
+private val LocalLegacyTypography = staticCompositionLocalOf<LegacySoptTypography> {
+    error("No LegacyTypography provided")
+}
+
 /*
 * SoptTheme
 *
 * Color에 접근하고 싶을때 SoptTheme.colors.primary 이런식으로 접근하면 됩니다.
-* Typo를 변경하고 싶다면 SoptTheme.typography.h1 이런식으로 접근하면 됩니다.
+* Typo를 변경하고 싶다면 SoptTheme.typography.heading48B 혹은
+* SoptTheme.legacyTypography.h1 이런식으로 접근하면 됩니다.
 * */
 object SoptTheme {
     val colors: SoptColors
@@ -240,17 +253,29 @@ object SoptTheme {
         @Composable
         @ReadOnlyComposable
         get() = LocalSoptTypography.current
+
+    val legacyTypography: LegacySoptTypography
+        @Composable
+        @ReadOnlyComposable
+        get() = LocalLegacyTypography.current
 }
 
 @Composable
-fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypography, content: @Composable () -> Unit) {
+fun ProvideSoptColorsAndTypography(
+    colors: SoptColors,
+    typography: SoptTypography,
+    legacyTypography: LegacySoptTypography,
+    content: @Composable () -> Unit
+) {
     val provideColors = remember { colors.copy() }
     provideColors.update(colors)
-    val provideTypography = remember { typography.copy() }
-    provideTypography.update(typography)
+    val provideTypography = remember { typography.copy() }.apply { update(typography) }
+    val provideLegacyTypography = remember { legacyTypography.copy() }
+    provideLegacyTypography.update(legacyTypography)
     CompositionLocalProvider(
         LocalSoptColors provides provideColors,
         LocalSoptTypography provides provideTypography,
+        LocalLegacyTypography provides provideLegacyTypography,
         content = content
     )
 }
@@ -259,7 +284,8 @@ fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypograph
 fun SoptTheme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
     val colors = soptLightColors()
     val typography = SoptTypography()
-    ProvideSoptColorsAndTypography(colors, typography) {
+    val legacyTypography = LegacySoptTypography()
+    ProvideSoptColorsAndTypography(colors, typography, legacyTypography) {
         MaterialTheme(content = content)
     }
 }
