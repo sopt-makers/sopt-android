@@ -50,7 +50,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/image_onboarding_bottom_sheet"
+        android:background="@drawable/image_onboarding_anonymous_bottom_sheet"
         android:scaleType="center"
         app:layout_constraintDimensionRatio="1.7"
         app:layout_constraintEnd_toEndOf="@id/textView_title"

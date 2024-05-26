@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2024 SOPT Makers
@@ -26,8 +25,8 @@
     <!-- 온보딩 -->
     <string name="poke_title">콕 찌르기</string>
 
-    <string name="onboarding_bottom_sheet_title">콕 찌르기를 소개할게요</string>
-    <string name="onboarding_bottom_sheet_content">SOPT 내에서 아는 사람, 친해지고 싶은 친구를 콕 찔러 호감의 표시를 해보세요.</string>
+    <string name="onboarding_bottom_sheet_title">익명 콕 찌르기 기능이 추가되었어요!</string>
+    <string name="onboarding_bottom_sheet_content">친구 단계가 올라가면 익명 친구에 대한 힌트를 알 수 있어요.\n친구와 천생연분 단계가 되면 어떤 일이 일어날까요?\n더욱 재밌어진 콕찌르기를 만나보세요!</string>
     <string name="onboarding_bottom_sheet_confirm">확인</string>
 
     <string name="onboarding_title">아는 사람을 콕 찔러서 친구를 맺어보세요</string>
