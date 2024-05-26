@@ -137,6 +137,8 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)
+    baselineProfile(projects.baselineprofile)
+
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
@@ -171,7 +173,6 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
-    baselineProfile(projects.benchmark)
 }
 
 secrets {

@@ -66,9 +66,8 @@ process-pheonix = "3.0.0"
 amplitude = "1.16.7"
 spotless = "6.25.0"
 constraintlayout = "2.1.4"
-org-jetbrains-kotlin-jvm = "1.9.20"
-benchmark-macro-junit4 = "1.2.0"
-androidx-baselineprofile = "1.2.0"
+benchmark-macro-junit4 = "1.2.4"
+androidx-baselineprofile = "1.2.4"
 profileinstaller = "1.3.1"
 
 [libraries]
@@ -225,6 +224,6 @@ sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
-org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "org-jetbrains-kotlin-jvm" }
+org-jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 androidTest = { id = "com.android.test", version.ref = "gradleplugin" }
 androidx-baselineprofile = { id = "androidx.baselineprofile", version.ref = "androidx-baselineprofile" }
