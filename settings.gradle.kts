@@ -18,6 +18,7 @@ dependencyResolutionManagement {
 rootProject.name = "SOPT"
 include(
     ":app",
+    ":baselineprofile",
     ":core:network",
     ":core:analytics",
     ":core:auth",

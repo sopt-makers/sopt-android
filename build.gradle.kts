@@ -34,6 +34,8 @@ plugins {
     alias(libs.plugins.app.distribution) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.androidTest) apply false
+    alias(libs.plugins.androidx.baselineprofile) apply false
 }
 
 subprojects {
