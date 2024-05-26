@@ -36,11 +36,18 @@ class PokeLocalDataSource @Inject constructor(
         get() = dataStore.getBoolean(IS_NEW_IN_POKE_ONBOARDING, true)
         set(value) = dataStore.edit { putBoolean(IS_NEW_IN_POKE_ONBOARDING, value) }
 
+    var isNewInPokeAnonymousOnboarding: Boolean
+        get() = dataStore.getBoolean(IS_NEW_IN_POKE_ANONYMOUS_ONBOARDING, true)
+        set(value) = dataStore.edit { putBoolean(IS_NEW_IN_POKE_ANONYMOUS_ONBOARDING, value) }
+
+
     fun clear() {
         isNewInPokeOnboarding = true
+        isNewInPokeAnonymousOnboarding = true
     }
 
     companion object {
         private const val IS_NEW_IN_POKE_ONBOARDING = "is_new_in_poke_onboarding"
+        private const val IS_NEW_IN_POKE_ANONYMOUS_ONBOARDING = "is_new_in_poke_anonymous_onboarding"
     }
 }

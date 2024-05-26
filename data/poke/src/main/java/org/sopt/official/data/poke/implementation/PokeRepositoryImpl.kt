@@ -58,6 +58,14 @@ class PokeRepositoryImpl @Inject constructor(
         localDataSource.isNewInPokeOnboarding = false
     }
 
+    override suspend fun checkNewInPokeAnonymousOnboarding(): Boolean {
+        return localDataSource.isNewInPokeAnonymousOnboarding
+    }
+
+    override suspend fun updateNewInPokeAnonymousOnboarding() {
+        localDataSource.isNewInPokeAnonymousOnboarding = false
+    }
+
     override suspend fun checkNewInPoke(): CheckNewInPokeResponse {
         return remoteDataSource.checkNewInPoke()
     }
@@ -91,7 +99,7 @@ class PokeRepositoryImpl @Inject constructor(
         return remoteDataSource.getFriendListSummary()
     }
 
-    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int,): GetFriendListDetailResponse {
+    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse {
         return remoteDataSource.getFriendListDetail(
             getFriendListDetailRequest =
             GetFriendListDetailRequest(
@@ -110,7 +118,7 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun pokeUser(userId: Int, message: String,): PokeUserResponse {
+    override suspend fun pokeUser(userId: Int, message: String): PokeUserResponse {
         return remoteDataSource.pokeUser(
             pokeUserRequest =
             PokeUserRequest(
