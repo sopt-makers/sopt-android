@@ -2,8 +2,6 @@ name: Makers PR Builder
 
 on:
   pull_request_target:
-    types: [ labeled ]
-  pull_request:
     branches: [ develop, master ]
 
 defaults:
