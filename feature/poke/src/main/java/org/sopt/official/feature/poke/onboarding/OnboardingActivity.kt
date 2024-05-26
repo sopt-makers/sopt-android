@@ -90,7 +90,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initAppBar() {
         binding.includeAppBar.apply {
-            toolbar.setOnClickListener { onBackPressed() }
+            toolbar.setOnClickListener { finish() }
             textViewTitle.text = getString(R.string.poke_title)
         }
     }
