@@ -51,19 +51,11 @@ class PokeRepositoryImpl @Inject constructor(
 ) : PokeRepository {
 
     override suspend fun checkNewInPokeOnboarding(): Boolean {
-        return localDataSource.isNewInPokeOnboarding
+        return localDataSource.isAnonymousInPokeOnboarding
     }
 
     override suspend fun updateNewInPokeOnboarding() {
-        localDataSource.isNewInPokeOnboarding = false
-    }
-
-    override suspend fun checkNewInPokeAnonymousOnboarding(): Boolean {
-        return localDataSource.isNewInPokeAnonymousOnboarding
-    }
-
-    override suspend fun updateNewInPokeAnonymousOnboarding() {
-        localDataSource.isNewInPokeAnonymousOnboarding = false
+        localDataSource.isAnonymousInPokeOnboarding = false
     }
 
     override suspend fun checkNewInPoke(): CheckNewInPokeResponse {
