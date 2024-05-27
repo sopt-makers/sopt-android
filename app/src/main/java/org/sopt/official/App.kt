@@ -25,6 +25,7 @@
 package org.sopt.official
 
 import android.app.Application
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.coroutineScope
@@ -48,6 +49,7 @@ class App : Application() {
         super.onCreate()
         initFlipper()
         initMavericks()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch {
             ProcessLifecycleOwner.get().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 runCatching {
