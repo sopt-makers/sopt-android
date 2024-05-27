@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.designsystem.style
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -344,8 +345,7 @@ fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypograph
 }
 
 @Composable
-fun SoptTheme( darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+fun SoptTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) soptDarkColors() else soptLightColors()
     val typography = SoptTypography()
     ProvideSoptColorsAndTypography(colors, typography) {
