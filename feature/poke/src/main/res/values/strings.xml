@@ -31,7 +31,7 @@
 
     <string name="onboarding_title">아는 사람을 콕 찔러서 친구를 맺어보세요</string>
     <string name="onboarding_content">나와 같은 %1$d기를 하고 있어요</string>
-    <string name="onboarding_swipe_to_refresh">아는 사람이 없나요?\n화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
+    <string name="onboarding_swipe_to_refresh">화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
 
     <string name="message_bottom_sheet_title">보낼 메시지를 골라주세요</string>
 

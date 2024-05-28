@@ -275,7 +275,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun handleNewInPoke(isNewInPoke: Boolean) {
         startActivity(
-            when (isNewInPoke) {
+            when (true) {
                 true -> OnboardingActivity.getIntent(this, OnboardingActivity.StartArgs(currentGeneration, args?.userStatus?.value ?: ""))
                 false -> PokeMainActivity.getIntent(this, PokeMainActivity.StartArgs(args?.userStatus?.value ?: ""))
             }

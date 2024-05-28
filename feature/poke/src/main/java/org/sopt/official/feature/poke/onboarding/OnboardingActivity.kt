@@ -206,6 +206,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun updateRecyclerView(data: List<PokeUser>) {
         pokeUserListAdapter?.submitList(data)
+        binding.viewpager.adapter = OnboardingViewPagerAdapter(this, listOf(data.map { it.toParcelable() }, data.map { it.toParcelable() }, data.map { it.toParcelable() }) )
         binding.swipeRefreshLayout.isRefreshing = false
     }
 
