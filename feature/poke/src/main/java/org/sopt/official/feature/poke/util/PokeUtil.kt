@@ -32,6 +32,7 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import org.sopt.official.common.util.dp
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.R
@@ -68,6 +69,31 @@ fun Activity.showPokeToast(message: String) {
 
     toast?.cancel()
     toast = Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT)
+    binding.textViewAlertMessage.text = toastMessage
+    binding.imageViewIcon.setImageDrawable(toastIcon)
+
+    toast?.let {
+        it.view = binding.root
+        it.setGravity(Gravity.TOP, 0, 0)
+        it.show()
+    }
+}
+
+
+@SuppressLint("UseCompatLoadingForDrawables")
+fun Fragment.showPokeToast(message: String) {
+    val binding = ToastPokeBinding.inflate(LayoutInflater.from(requireContext()), null, false)
+    val toastMessage = when (message.isEmpty()) {
+        true -> getString(R.string.toast_poke_error)
+        false -> message
+    }
+    val toastIcon = when (message == getString(R.string.toast_poke_user_success)) {
+        true -> requireActivity().getDrawable(R.drawable.icon_success)
+        false -> requireActivity().getDrawable(R.drawable.icon_alert)
+    }
+
+    toast?.cancel()
+    toast = Toast.makeText(requireContext(), toastMessage, Toast.LENGTH_SHORT)
     binding.textViewAlertMessage.text = toastMessage
     binding.imageViewIcon.setImageDrawable(toastIcon)
 
