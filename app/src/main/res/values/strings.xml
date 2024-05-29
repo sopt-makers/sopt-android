@@ -88,6 +88,7 @@
     <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
+    <string name="text_no_schedule">오늘은 일정이 없는 날이에요</string>
     <string name="attendance_progress_first">1차 출석</string>
     <string name="attendance_progress_second">2차 출석</string>
     <string name="attendance_progress_before">출석 전</string>
