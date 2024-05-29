@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
@@ -37,7 +38,11 @@ fun TodayAttendanceCard(
                 tint = SoptTheme.colors.onSurface300,
             )
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = state.eventDate, color = SoptTheme.colors.onSurface300)
+            Text(
+                text = state.eventDate,
+                color = SoptTheme.colors.onSurface300,
+                style = SoptTheme.typography.body14M
+            )
         }
         Spacer(modifier = Modifier.height(7.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -47,13 +52,29 @@ fun TodayAttendanceCard(
                 tint = SoptTheme.colors.onSurface300,
             )
             Spacer(modifier = Modifier.width(4.dp))
-            Text(text = state.eventLocation, color = SoptTheme.colors.onSurface300)
+            Text(
+                text = state.eventLocation,
+                color = SoptTheme.colors.onSurface300,
+                style = SoptTheme.typography.body14M
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row {
-            Text(text = stringResource(R.string.attendance_event_info_prefix), color = SoptTheme.colors.onSurface10)
-            Text(text = state.eventName, color = SoptTheme.colors.onSurface10)
-            Text(text = stringResource(R.string.attendance_event_info_suffix), color = SoptTheme.colors.onSurface10)
+            Text(
+                text = stringResource(R.string.attendance_event_info_prefix),
+                color = SoptTheme.colors.onSurface10,
+                style = SoptTheme.typography.body18M
+            )
+            Text(
+                text = state.eventName,
+                color = SoptTheme.colors.onSurface10,
+                style = SoptTheme.typography.body18M.copy(fontWeight = FontWeight.ExtraBold)
+            )
+            Text(
+                text = stringResource(R.string.attendance_event_info_suffix),
+                color = SoptTheme.colors.onSurface10,
+                style = SoptTheme.typography.body18M
+            )
         }
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(

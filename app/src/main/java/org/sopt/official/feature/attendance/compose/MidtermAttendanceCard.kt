@@ -31,6 +31,7 @@ fun MidtermAttendanceCard(
         Text(
             text = midtermAttendance.description,
             color = if (midtermAttendance.isFinished) SoptTheme.colors.onSurface10 else SoptTheme.colors.onSurface500,
+            style = SoptTheme.typography.label14SB
         )
     }
 }

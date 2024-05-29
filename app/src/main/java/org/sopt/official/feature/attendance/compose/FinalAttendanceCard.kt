@@ -31,6 +31,7 @@ fun FinalAttendanceCard(
         Text(
             text = finalAttendance.result,
             color = if (finalAttendance.isFinished) SoptTheme.colors.onSurface10 else SoptTheme.colors.onSurface500,
+            style = SoptTheme.typography.label14SB
         )
     }
 }
