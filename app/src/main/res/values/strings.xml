@@ -99,6 +99,7 @@
     <string name="attendance_dialog_button">출석하기</string>
     <string name="go_back">뒤로 가기</string>
     <string name="refresh">새로고침</string>
+    <string name="attendance_app_bar_title">출석 조회하기</string>
 
     <!--    알림   -->
     <string name="toolbar_notification">알림</string>

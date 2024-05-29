@@ -22,7 +22,7 @@ fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier 
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = stringResource(R.string.attendance),
+                text = stringResource(R.string.attendance_app_bar_title),
                 color = SoptTheme.colors.primary,
                 style = SoptTheme.typography.body1
             )
