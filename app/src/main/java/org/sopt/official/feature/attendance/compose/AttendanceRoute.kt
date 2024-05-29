@@ -12,7 +12,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.official.feature.attendance.NewAttendanceViewModel
 import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBar
-import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBarActions
 import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
@@ -25,10 +24,8 @@ fun AttendanceRoute(onClickBackIcon: () -> Unit) {
     Scaffold(
         topBar = {
             AttendanceTopAppBar(
-                actions = AttendanceTopAppBarActions(
-                    onClickBackIcon = onClickBackIcon,
-                    onClickRefreshIcon = viewModel::fetchData,
-                )
+                onClickBackIcon = onClickBackIcon,
+                onClickRefreshIcon = viewModel::fetchData,
             )
         },
     ) { innerPaddingValues ->

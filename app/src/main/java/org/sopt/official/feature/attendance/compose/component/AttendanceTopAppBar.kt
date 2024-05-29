@@ -18,13 +18,17 @@ import org.sopt.official.designsystem.util.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier = Modifier) {
+fun AttendanceTopAppBar(
+    onClickBackIcon: () -> Unit,
+    onClickRefreshIcon: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = stringResource(R.string.attendance_app_bar_title),
-                color = SoptTheme.colors.primary,
-                style = SoptTheme.typography.body1
+                color = SoptTheme.colors.onSurface10,
+                style = SoptTheme.typography.body16M
             )
         },
         modifier = modifier,
@@ -34,7 +38,7 @@ fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier 
                 contentDescription = stringResource(R.string.go_back),
                 modifier = Modifier
                     .padding(start = 20.dp)
-                    .noRippleClickable(onClick = actions.onClickBackIcon)
+                    .noRippleClickable(onClick = onClickBackIcon)
             )
         },
         actions = {
@@ -43,7 +47,7 @@ fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier 
                 contentDescription = stringResource(R.string.refresh),
                 modifier = Modifier
                     .padding(end = 20.dp)
-                    .noRippleClickable(onClick = actions.onClickRefreshIcon)
+                    .noRippleClickable(onClick = onClickRefreshIcon)
             )
         },
         colors = TopAppBarColors(
@@ -56,20 +60,13 @@ fun AttendanceTopAppBar(actions: AttendanceTopAppBarActions, modifier: Modifier 
     )
 }
 
-class AttendanceTopAppBarActions(
-    val onClickBackIcon: () -> Unit,
-    val onClickRefreshIcon: () -> Unit,
-)
-
 @Preview
 @Composable
 private fun AttendanceTopAppBarPreview() {
     SoptTheme {
         AttendanceTopAppBar(
-            AttendanceTopAppBarActions(
-                onClickBackIcon = {},
-                onClickRefreshIcon = {},
-            )
+            onClickBackIcon = {},
+            onClickRefreshIcon = {},
         )
     }
 }
