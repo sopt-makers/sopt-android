@@ -34,7 +34,7 @@ fun AttendanceTopAppBar(
         modifier = modifier,
         navigationIcon = {
             Icon(
-                painter = painterResource(id = R.drawable.ic_attendance_arrow_left_white),
+                painter = painterResource(id = R.drawable.btn_arrow_left),
                 contentDescription = stringResource(R.string.go_back),
                 modifier = Modifier
                     .padding(start = 20.dp)
