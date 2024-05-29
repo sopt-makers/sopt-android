@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,7 +29,10 @@ fun TodayAttendanceCard(
     Column(
         modifier =
         modifier
-            .background(color = SoptTheme.colors.onSurface800)
+            .background(
+                color = SoptTheme.colors.onSurface800,
+                shape = RoundedCornerShape(16.dp)
+            )
             .padding(horizontal = 24.dp, vertical = 32.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -98,16 +102,20 @@ class TodayAttendanceCardState(
 @Composable
 private fun AttendanceHistoryCardPreview() {
     SoptTheme {
-        TodayAttendanceCard(
-            state =
-            TodayAttendanceCardState(
-                eventDate = "3월 23일 토요일 14:00 - 18:00",
-                eventLocation = "건국대학교 꽥꽥오리관",
-                eventName = "2차 세미나",
-                firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                secondAttendance = MidtermAttendance.Absent,
-                finalAttendance = FinalAttendance.LATE,
-            ),
-        )
+        Column(
+            modifier = Modifier.background(color = SoptTheme.colors.background)
+        ) {
+            TodayAttendanceCard(
+                state =
+                TodayAttendanceCardState(
+                    eventDate = "3월 23일 토요일 14:00 - 18:00",
+                    eventLocation = "건국대학교 꽥꽥오리관",
+                    eventName = "2차 세미나",
+                    firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+                    secondAttendance = MidtermAttendance.Absent,
+                    finalAttendance = FinalAttendance.LATE,
+                ),
+            )
+        }
     }
 }
