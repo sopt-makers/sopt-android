@@ -92,6 +92,10 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.pokeAnonymousCheckboxChecked.flowWithLifecycle(lifecycle).onEach { isChecked ->
             binding.checkBoxAnonymous.isChecked = isChecked
         }.launchIn(lifecycleScope)
+
+        viewModel.pokeAnonymousOffToast.flowWithLifecycle(lifecycle).onEach {
+            activity?.showPokeToast(getString(R.string.toast_poke_anonymous_off))
+        }.launchIn(lifecycleScope)
     }
 
     private val messageListItemClickListener =
