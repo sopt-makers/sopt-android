@@ -1,5 +1,6 @@
 package org.sopt.official.feature.attendance.compose.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -14,7 +15,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.util.noRippleClickable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +38,7 @@ fun AttendanceTopAppBar(
                 contentDescription = stringResource(R.string.go_back),
                 modifier = Modifier
                     .padding(start = 20.dp)
-                    .noRippleClickable(onClick = onClickBackIcon)
+                    .clickable(onClick = onClickBackIcon)
             )
         },
         actions = {
@@ -47,7 +47,7 @@ fun AttendanceTopAppBar(
                 contentDescription = stringResource(R.string.refresh),
                 modifier = Modifier
                     .padding(end = 20.dp)
-                    .noRippleClickable(onClick = onClickRefreshIcon)
+                    .clickable(onClick = onClickRefreshIcon)
             )
         },
         colors = TopAppBarColors(
