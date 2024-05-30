@@ -36,8 +36,6 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -57,6 +55,8 @@ import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -186,6 +186,7 @@ class PokeMainActivity : AppCompatActivity() {
                             setPokeFriendOfFriendVisible(it.data)
                             initPokeFriendOfFriendView(it.data)
                         }
+
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                         is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
@@ -206,13 +207,16 @@ class PokeMainActivity : AppCompatActivity() {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
+
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
+
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
+
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -452,7 +456,14 @@ class PokeMainActivity : AppCompatActivity() {
         messageListBottomSheet =
             MessageListBottomSheetFragment.Builder()
                 .setMessageListType(pokeMessageType)
-                .onClickMessageListItem { message -> viewModel.pokeUser(userId, isAnonymous = false, message, isFirstMeet) }
+                .onClickMessageListItem { message, isAnonymous ->
+                    viewModel.pokeUser(
+                        userId = userId,
+                        isAnonymous = isAnonymous,
+                        message = message,
+                        isFirstMeet = isFirstMeet
+                    )
+                }
                 .create()
 
         messageListBottomSheet?.let {

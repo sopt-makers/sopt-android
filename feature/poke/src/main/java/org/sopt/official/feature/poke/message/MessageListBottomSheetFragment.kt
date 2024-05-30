@@ -29,6 +29,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     private lateinit var viewModel: MessageListBottomSheetViewModel
 
     var pokeMessageType: PokeMessageType? = null
-    var onClickMessageListItem: ((message: String) -> Unit)? = null
+    var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[MessageListBottomSheetViewModel::class.java]
@@ -60,6 +61,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
         pokeMessageType?.let { viewModel.getPokeMessageList(it) }
         launchPokeMessageListUiStateFlow()
+        initCheckbox()
     }
 
     private fun launchPokeMessageListUiStateFlow() {
@@ -76,15 +78,25 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initMessageListContent(data: PokeMessageList) {
-        binding.apply {
+        with(binding) {
             textViewTitle.text = data.header
             recyclerView.adapter = MessageListRecyclerAdapter(data.messages, messageListItemClickListener)
         }
     }
 
+    private fun initCheckbox() {
+        binding.checkBoxAnonymous.setOnClickListener {
+            viewModel.setPokeAnonymousCheckboxClicked()
+        }
+
+        viewModel.pokeAnonymousCheckboxChecked.flowWithLifecycle(lifecycle).onEach { isChecked ->
+            binding.checkBoxAnonymous.isChecked = isChecked
+        }.launchIn(lifecycleScope)
+    }
+
     private val messageListItemClickListener =
         MessageItemClickListener { message ->
-            onClickMessageListItem?.let { it(message) }
+            onClickMessageListItem?.let { it(message, viewModel.pokeAnonymousCheckboxChecked.value) }
         }
 
     class Builder {
@@ -97,7 +109,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
             return this
         }
 
-        fun onClickMessageListItem(event: (message: String) -> Unit): Builder {
+        fun onClickMessageListItem(event: (message: String, isAnonymous: Boolean) -> Unit): Builder {
             bottomSheet.onClickMessageListItem = event
             return this
         }

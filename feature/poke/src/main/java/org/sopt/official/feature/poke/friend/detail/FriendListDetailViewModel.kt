@@ -89,7 +89,7 @@ class FriendListDetailViewModel @Inject constructor(
             }
     }
 
-    fun pokeUser(userId: Int, isAnonymous: Boolean = false, message: String,) {
+    fun pokeUser(userId: Int, isAnonymous: Boolean, message: String,) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(

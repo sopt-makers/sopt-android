@@ -144,10 +144,10 @@ class PokeNotificationActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(messageType)
-                        .onClickMessageListItem { message ->
+                        .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
-                                isAnonymous = false,
+                                isAnonymous = isAnonymous,
                                 message = message,
                                 isFirstMeet = user.isFirstMeet
                             )

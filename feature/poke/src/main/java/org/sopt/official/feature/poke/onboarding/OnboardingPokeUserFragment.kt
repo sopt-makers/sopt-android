@@ -164,10 +164,10 @@ class OnboardingPokeUserFragment : Fragment() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                        .onClickMessageListItem { message ->
+                        .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
-                                isAnonymous = false,
+                                isAnonymous = isAnonymous,
                                 message = message
                             )
                         }
