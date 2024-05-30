@@ -22,6 +22,7 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.FinalAttendance
 import org.sopt.official.feature.attendance.model.MidtermAttendance
+import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
 import org.sopt.official.feature.attendance.model.state.TodayAttendanceCardState
 
 @Composable
@@ -85,9 +86,11 @@ fun TodayAttendanceCard(
         }
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(
-            firstAttendance = state.firstAttendance,
-            secondAttendance = state.secondAttendance,
-            finalAttendance = state.finalAttendance,
+            state = AttendanceProgressBarState(
+                firstAttendance = state.firstAttendance,
+                secondAttendance = state.secondAttendance,
+                finalAttendance = state.finalAttendance,
+            )
         )
     }
 }

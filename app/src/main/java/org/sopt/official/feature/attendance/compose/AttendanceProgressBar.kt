@@ -1,6 +1,5 @@
 package org.sopt.official.feature.attendance.compose
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,25 +10,26 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.AttendanceType
 import org.sopt.official.feature.attendance.model.FinalAttendance
 import org.sopt.official.feature.attendance.model.MidtermAttendance
+import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
 
 @Composable
 fun AttendanceProgressBar(
-    firstAttendance: MidtermAttendance,
-    secondAttendance: MidtermAttendance,
-    finalAttendance: FinalAttendance,
+    state: AttendanceProgressBarState,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         LinearProgressIndicator(
             progress = {
                 calculateAttendanceProgress(
-                    firstAttendanceState = firstAttendance,
-                    secondAttendanceState = secondAttendance
+                    firstAttendance = state.firstAttendance,
+                    secondAttendance = state.secondAttendance
                 )
             },
             modifier = Modifier
@@ -44,76 +44,58 @@ fun AttendanceProgressBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MidtermAttendanceCard(
-                midtermAttendance = firstAttendance,
+                midtermAttendance = state.firstAttendance,
             )
             MidtermAttendanceCard(
-                midtermAttendance = secondAttendance,
+                midtermAttendance = state.secondAttendance,
             )
             FinalAttendanceCard(
-                finalAttendance = finalAttendance,
+                finalAttendance = state.finalAttendance,
             )
         }
     }
 }
 
 fun calculateAttendanceProgress(
-    firstAttendanceState: MidtermAttendance,
-    secondAttendanceState: MidtermAttendance
+    firstAttendance: MidtermAttendance,
+    secondAttendance: MidtermAttendance
 ): Float {
-    if (!firstAttendanceState.isFinished) return 0f
-    if (!secondAttendanceState.isFinished) return 0.5f
+    if (!firstAttendance.isFinished) return 0f
+    if (!secondAttendance.isFinished) return 0.5f
     else return 1f
 }
 
-@Preview
-@Composable
-private fun AttendanceProgressBarNotYetPreview() {
-    SoptTheme {
-        AttendanceProgressBar(
+class AttendanceProgressBarPreviewParameterProvider(
+    override val values: Sequence<AttendanceProgressBarState> = sequenceOf(
+        AttendanceProgressBarState(
             firstAttendance = MidtermAttendance.NotYet(AttendanceType.FIRST),
             secondAttendance = MidtermAttendance.NotYet(AttendanceType.SECOND),
             finalAttendance = FinalAttendance.NOT_YET,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800),
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AttendanceProgressBarLatePreview() {
-    SoptTheme {
-        AttendanceProgressBar(
+        ),
+        AttendanceProgressBarState(
             firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
             secondAttendance = MidtermAttendance.Absent,
             finalAttendance = FinalAttendance.LATE,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800),
-        )
-    }
-}
-
-
-@Preview
-@Composable
-private fun AttendanceProgressBarPresentPreview() {
-    SoptTheme {
-        AttendanceProgressBar(
+        ),
+        AttendanceProgressBarState(
             firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
             secondAttendance = MidtermAttendance.Present(attendanceAt = "16:00"),
             finalAttendance = FinalAttendance.PRESENT,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800),
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AttendanceProgressBarAbsentPreview() {
-    SoptTheme {
-        AttendanceProgressBar(
+        ),
+        AttendanceProgressBarState(
             firstAttendance = MidtermAttendance.Absent,
             secondAttendance = MidtermAttendance.Absent,
             finalAttendance = FinalAttendance.ABSENT,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800),
-        )
+        ),
+    )
+) : PreviewParameterProvider<AttendanceProgressBarState>
+
+@Preview(showBackground = true)
+@Composable
+private fun AttendanceProgressBarPreview(
+    @PreviewParameter(AttendanceProgressBarPreviewParameterProvider::class) attendanceProgressBarState: AttendanceProgressBarState
+) {
+    SoptTheme {
+        AttendanceProgressBar(state = attendanceProgressBarState)
     }
 }

@@ -10,6 +10,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.FinalAttendance
@@ -35,45 +37,23 @@ fun FinalAttendanceCard(
     }
 }
 
-@Preview
-@Composable
-private fun AttendanceProgressCheckCardNotYetPreview() {
-    SoptTheme {
-        FinalAttendanceCard(
-            finalAttendance = FinalAttendance.NOT_YET,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
-        )
-    }
-}
+class FinalAttendanceCardPreviewParameterProvider(
+    override val values: Sequence<FinalAttendance> = sequenceOf(
+        FinalAttendance.NOT_YET,
+        FinalAttendance.PRESENT,
+        FinalAttendance.LATE,
+        FinalAttendance.ABSENT,
+    )
+) : PreviewParameterProvider<FinalAttendance>
 
 @Preview
 @Composable
-private fun AttendanceProgressCheckCardPresentPreview() {
+private fun FinalAttendanceCardPreview(
+    @PreviewParameter(FinalAttendanceCardPreviewParameterProvider::class) finalAttendance: FinalAttendance
+) {
     SoptTheme {
         FinalAttendanceCard(
-            finalAttendance = FinalAttendance.PRESENT,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AttendanceProgressCheckCardLatePreview() {
-    SoptTheme {
-        FinalAttendanceCard(
-            finalAttendance = FinalAttendance.LATE,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AttendanceProgressCheckCardAbsentPreview() {
-    SoptTheme {
-        FinalAttendanceCard(
-            finalAttendance = FinalAttendance.ABSENT,
+            finalAttendance = finalAttendance,
             modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
         )
     }

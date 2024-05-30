@@ -1,7 +1,6 @@
 package org.sopt.official.feature.attendance.compose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -10,6 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.AttendanceType
@@ -36,35 +37,22 @@ fun MidtermAttendanceCard(
     }
 }
 
-@Preview
-@Composable
-private fun AttendanceProgressCheckCardNotYetPreview() {
-    SoptTheme {
-        MidtermAttendanceCard(
-            midtermAttendance = MidtermAttendance.NotYet(attendanceType = AttendanceType.FIRST),
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
-        )
-    }
-}
+class MidtermAttendanceCardPreviewParameterProvider(
+    override val values: Sequence<MidtermAttendance> = sequenceOf(
+        MidtermAttendance.NotYet(attendanceType = AttendanceType.FIRST),
+        MidtermAttendance.Present(attendanceAt = "14:00"),
+        MidtermAttendance.Absent,
+    )
+) : PreviewParameterProvider<MidtermAttendance>
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun AttendanceProgressCheckCardPresentPreview() {
+private fun MidtermAttendanceCardPreview(
+    @PreviewParameter(MidtermAttendanceCardPreviewParameterProvider::class) midtermAttendance: MidtermAttendance,
+) {
     SoptTheme {
         MidtermAttendanceCard(
-            midtermAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AttendanceProgressCheckCardAbsentPreview() {
-    SoptTheme {
-        MidtermAttendanceCard(
-            midtermAttendance = MidtermAttendance.Absent,
-            modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
+            midtermAttendance = midtermAttendance
         )
     }
 }
