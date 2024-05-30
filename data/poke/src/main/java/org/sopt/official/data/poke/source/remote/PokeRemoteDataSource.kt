@@ -24,10 +24,10 @@
  */
 package org.sopt.official.data.poke.source.remote
 
-import javax.inject.Inject
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
+import org.sopt.official.data.poke.dto.request.PokeMessageRequest
 import org.sopt.official.data.poke.dto.request.PokeUserRequest
 import org.sopt.official.data.poke.service.PokeService
 import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
@@ -40,6 +40,7 @@ import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
+import javax.inject.Inject
 
 class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
@@ -53,12 +54,12 @@ class PokeRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getOnboardingPokeUserList(): GetOnboardingPokeUserListResponse {
-        val call = service.getOnboardingPokeUserList()
+    suspend fun getOnboardingPokeUserList(randomType: String, size: Int): GetOnboardingPokeUserListResponse {
+        val call = service.getOnboardingPokeUserList(randomType, size)
         return GetOnboardingPokeUserListResponse().apply {
             statusCode = call.code().toString()
             responseMessage = call.message()
-            data = call.body()?.map { it.toEntity() }
+            data = call.body()?.toEntity()
         }
     }
 
@@ -89,7 +90,7 @@ class PokeRemoteDataSource @Inject constructor(
         }
     }
 
-    suspend fun getPokeNotificationList(getPokeNotificationListRequest: GetPokeNotificationListRequest,): GetPokeNotificationListResponse {
+    suspend fun getPokeNotificationList(getPokeNotificationListRequest: GetPokeNotificationListRequest): GetPokeNotificationListResponse {
         val call =
             service.getPokeNotificationList(
                 page = getPokeNotificationListRequest.page,
@@ -139,7 +140,10 @@ class PokeRemoteDataSource @Inject constructor(
         val call =
             service.pokeUser(
                 userId = pokeUserRequest.userId,
-                message = pokeUserRequest.message,
+                pokeMessageRequest = PokeMessageRequest(
+                    isAnonymous = pokeUserRequest.isAnonymous,
+                    message = pokeUserRequest.message,
+                ),
             )
         return PokeUserResponse().apply {
             statusCode = call.code().toString()

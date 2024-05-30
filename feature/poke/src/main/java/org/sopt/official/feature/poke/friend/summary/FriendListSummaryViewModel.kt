@@ -71,12 +71,13 @@ class FriendListSummaryViewModel @Inject constructor(
         }
     }
 
-    fun pokeUser(userId: Int, message: String) {
+    fun pokeUser(userId: Int, isAnonymous: Boolean, message: String) {
         viewModelScope.launch {
             _pokeUserUiState.emit(UiState.Loading)
             pokeUserUseCase.invoke(
-                message = message,
                 userId = userId,
+                isAnonymous = isAnonymous,
+                message = message
             )
                 .onSuccess { response ->
                     _pokeUserUiState.emit(UiState.Success(response))

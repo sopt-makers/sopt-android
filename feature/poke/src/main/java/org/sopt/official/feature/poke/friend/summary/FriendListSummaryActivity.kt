@@ -32,8 +32,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -58,6 +56,8 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -260,7 +260,13 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
-                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                        .onClickMessageListItem { message ->
+                            viewModel.pokeUser(
+                                userId = user.userId,
+                                isAnonymous = false,
+                                message = message
+                            )
+                        }
                         .create()
 
                 messageListBottomSheet?.let {

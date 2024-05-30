@@ -452,7 +452,7 @@ class PokeMainActivity : AppCompatActivity() {
         messageListBottomSheet =
             MessageListBottomSheetFragment.Builder()
                 .setMessageListType(pokeMessageType)
-                .onClickMessageListItem { message -> viewModel.pokeUser(userId, message, isFirstMeet) }
+                .onClickMessageListItem { message -> viewModel.pokeUser(userId, isAnonymous = false, message, isFirstMeet) }
                 .create()
 
         messageListBottomSheet?.let {
