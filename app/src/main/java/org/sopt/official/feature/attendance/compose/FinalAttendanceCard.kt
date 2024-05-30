@@ -1,6 +1,5 @@
 package org.sopt.official.feature.attendance.compose
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.model.FinalAttendance
 
 @Composable
 fun FinalAttendanceCard(
@@ -34,31 +33,6 @@ fun FinalAttendanceCard(
             style = SoptTheme.typography.label14SB
         )
     }
-}
-
-enum class FinalAttendance(
-    @DrawableRes val imageResId: Int, val isFinished: Boolean, val result: String,
-) {
-    NOT_YET(
-        imageResId = R.drawable.ic_attendance_state_nothing,
-        isFinished = false,
-        result = "출석 전"
-    ),
-    PRESENT(
-        imageResId = R.drawable.ic_attendance_state_done,
-        isFinished = true,
-        result = "출석완료!"
-    ),
-    LATE(
-        imageResId = R.drawable.ic_attendance_state_late,
-        isFinished = true,
-        result = "지각"
-    ),
-    ABSENT(
-        imageResId = R.drawable.ic_attendance_state_absence_black,
-        isFinished = true,
-        result = "결석"
-    )
 }
 
 @Preview

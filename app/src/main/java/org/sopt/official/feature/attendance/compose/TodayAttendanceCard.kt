@@ -20,6 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.model.FinalAttendance
+import org.sopt.official.feature.attendance.model.MidtermAttendance
+import org.sopt.official.feature.attendance.model.state.TodayAttendanceCardState
 
 @Composable
 fun TodayAttendanceCard(
@@ -88,15 +91,6 @@ fun TodayAttendanceCard(
         )
     }
 }
-
-class TodayAttendanceCardState(
-    val eventDate: String,
-    val eventLocation: String,
-    val eventName: String,
-    val firstAttendance: MidtermAttendance,
-    val secondAttendance: MidtermAttendance,
-    val finalAttendance: FinalAttendance,
-)
 
 @Preview
 @Composable

@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.model.state.TodayNoAttendanceCardState
 
 @Composable
 fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier = Modifier) {
@@ -85,12 +86,6 @@ fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier 
         )
     }
 }
-
-class TodayNoAttendanceCardState(
-    val eventDate: String,
-    val eventLocation: String,
-    val eventName: String,
-)
 
 @Preview
 @Composable

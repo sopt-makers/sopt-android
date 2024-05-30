@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.FinalAttendance
+import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
 fun AttendanceProgressBar(

@@ -1,6 +1,5 @@
 package org.sopt.official.feature.attendance.compose
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -12,8 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
 fun MidtermAttendanceCard(
@@ -34,35 +34,6 @@ fun MidtermAttendanceCard(
             style = SoptTheme.typography.label14SB
         )
     }
-}
-
-enum class AttendanceType(val type: String) {
-    FIRST("1차 출석"),
-    SECOND("2차 출석")
-}
-
-sealed class MidtermAttendance(
-    @DrawableRes val imageResId: Int,
-    val isFinished: Boolean,
-    val description: String
-) {
-    class NotYet(attendanceType: AttendanceType) : MidtermAttendance(
-        imageResId = R.drawable.ic_attendance_state_nothing,
-        isFinished = false,
-        description = attendanceType.type
-    )
-
-    class Present(attendanceAt: String) : MidtermAttendance(
-        imageResId = R.drawable.ic_attendance_state_yes,
-        isFinished = true,
-        description = attendanceAt
-    )
-
-    object Absent : MidtermAttendance(
-        imageResId = R.drawable.ic_attendance_state_absence_white,
-        isFinished = true,
-        description = "-"
-    )
 }
 
 @Preview
