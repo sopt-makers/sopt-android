@@ -34,6 +34,7 @@
     <string name="onboarding_swipe_to_refresh">화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
 
     <string name="message_bottom_sheet_title">보낼 메시지를 골라주세요</string>
+    <string name="message_bottom_sheet_anonymous">익명</string>
 
     <!-- 메인 / 찌르기 알림 /  -->
     <string name="someone_poke_me_title">누가 나를 찔렀어요</string>
