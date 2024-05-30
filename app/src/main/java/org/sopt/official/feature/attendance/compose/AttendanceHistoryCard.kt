@@ -17,6 +17,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.compose.component.AttendanceCountCard
 import org.sopt.official.feature.attendance.compose.component.AttendanceHistoryUserInfoCard
 import org.sopt.official.feature.attendance.model.AttendanceResultType
+import org.sopt.official.feature.attendance.model.state.AttendanceHistoryCardState
 
 @Composable
 fun AttendanceHistoryCard(state: AttendanceHistoryCardState, modifier: Modifier = Modifier) {
@@ -47,12 +48,6 @@ fun AttendanceHistoryCard(state: AttendanceHistoryCardState, modifier: Modifier 
         Spacer(modifier = Modifier.height(24.dp))
     }
 }
-
-class AttendanceHistoryCardState(
-    val userTitle: String,
-    val attendanceScore: Int,
-    val totalAttendanceResult: Map<AttendanceResultType, Int>
-)
 
 @Preview
 @Composable
