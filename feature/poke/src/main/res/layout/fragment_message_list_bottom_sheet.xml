@@ -59,10 +59,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/message_bottom_sheet_anonymous"
-        android:textAppearance="@style/TextAppearance.SOPT.HeadLineMedium"
+        android:textAppearance="@style/TextAppearance.SOPT.HeadLineMediumLarge"
         android:textColor="@color/mds_gray_30"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/checkBox_anonymous"
+        app:layout_constraintBottom_toBottomOf="@id/checkBox_anonymous"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
