@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose
+package org.sopt.official.feature.attendance.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,8 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.compose.component.AttendanceCountCard
-import org.sopt.official.feature.attendance.compose.component.AttendanceHistoryUserInfoCard
 import org.sopt.official.feature.attendance.model.AttendanceResultType
 import org.sopt.official.feature.attendance.model.state.AttendanceHistoryCardState
 
