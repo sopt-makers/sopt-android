@@ -15,6 +15,10 @@ class NewAttendanceViewModel @Inject constructor(
     private val attendanceRepository: AttendanceRepository
 ) : ViewModel() {
 
+    init {
+        fetchData()
+    }
+
     private val _uiState: MutableStateFlow<AttendanceUiState> = MutableStateFlow(AttendanceUiState.Loading)
     val uiState: StateFlow<AttendanceUiState> = _uiState
 
@@ -24,5 +28,18 @@ class NewAttendanceViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.emit(AttendanceUiState.Success(fakeTitle))
         }
+    }
+
+    fun fetchData() {
+        fetchSoptEvent()
+        fetchAttendanceHistory()
+    }
+
+    private fun fetchSoptEvent() {
+        // TODO
+    }
+
+    private fun fetchAttendanceHistory() {
+        // TODO
     }
 }
