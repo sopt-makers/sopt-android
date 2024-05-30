@@ -5,9 +5,6 @@
     android:id="@+id/constraintLayout_recyclerViewContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginHorizontal="16dp"
-    android:layout_marginTop="12dp"
-    android:layout_marginBottom="16dp"
     android:background="@drawable/rectangle_all_r8_gray_900"
     android:orientation="vertical"
     android:paddingHorizontal="16dp">
@@ -22,7 +19,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="우와 신기해요"
         tools:text="당신과 같은 공통점이 있어요!"/>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

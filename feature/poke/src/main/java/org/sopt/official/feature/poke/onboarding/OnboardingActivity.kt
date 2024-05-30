@@ -27,7 +27,6 @@ package org.sopt.official.feature.poke.onboarding
 import android.animation.Animator
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -43,16 +42,11 @@ import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
-import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.user.PokeUserListAdapter
-import org.sopt.official.feature.poke.user.PokeUserListClickListener
-import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
@@ -63,24 +57,18 @@ class OnboardingActivity : AppCompatActivity() {
     private val args by serializableExtra(StartArgs(0, ""))
 
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
     @Inject
     lateinit var tracker: AmplitudeTracker
-    private val pokeUserListAdapter
-        get() = binding.recyclerView.adapter as PokeUserListAdapter?
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initAppBar()
-        initView()
         initLottieAnimatorListener()
-
         launchCheckNewInPokeOnboardingStateFlow()
         launchOnboardingPokeUserListUiStateFlow()
-        launchPokeUserUiStateFlow()
     }
 
     override fun onResume() {
@@ -89,62 +77,14 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun initAppBar() {
-        binding.includeAppBar.apply {
+        with(binding.includeAppBar) {
             toolbar.setOnClickListener { finish() }
             textViewTitle.text = getString(R.string.poke_title)
         }
     }
 
-    private fun initView() {
-        binding.apply {
-            textViewContent.text = getString(R.string.onboarding_content, args?.currentGeneration)
-            swipeRefreshLayout.setOnRefreshListener {
-                viewModel.getOnboardingPokeUserList()
-            }
-            recyclerView.adapter =
-                PokeUserListAdapter(
-                    pokeUserListItemViewType = PokeUserListItemViewType.LARGE,
-                    clickListener = pokeUserListClickLister,
-                )
-        }
-    }
-
-    private val pokeUserListClickLister =
-        object : PokeUserListClickListener {
-            override fun onClickProfileImage(playgroundId: Int) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to playgroundId),
-                )
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
-            }
-
-            override fun onClickPokeButton(user: PokeUser) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
-                    properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "onboarding",
-                        "view_profile" to user.playgroundId,
-                    ),
-                )
-                messageListBottomSheet =
-                    MessageListBottomSheetFragment.Builder()
-                        .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
-                        .create()
-
-                messageListBottomSheet?.let {
-                    it.show(supportFragmentManager, it.tag)
-                }
-            }
-        }
-
     private fun initLottieAnimatorListener() {
-        binding.apply {
+        with(binding) {
             animationViewLottie.addAnimatorListener(
                 object : Animator.AnimatorListener {
                     override fun onAnimationStart(animation: Animator) {}
@@ -189,14 +129,7 @@ class OnboardingActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<List<PokeUser>> -> {
-                        val newFriend = it.data.find { user -> user.pokeNum >= 2 }
-                        when (newFriend == null) {
-                            true -> updateRecyclerView(it.data)
-                            false -> playLottieAnimation(newFriend.name)
-                        }
-                    }
-
+                    is UiState.Success<PokeRandomUserList> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
@@ -204,10 +137,15 @@ class OnboardingActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
     }
 
-    private fun updateRecyclerView(data: List<PokeUser>) {
-        pokeUserListAdapter?.submitList(data)
-        binding.viewpager.adapter = OnboardingViewPagerAdapter(this, listOf(data.map { it.toParcelable() }, data.map { it.toParcelable() }, data.map { it.toParcelable() }) )
-        binding.swipeRefreshLayout.isRefreshing = false
+    private fun updateRecyclerView(data: PokeRandomUserList) {
+        with(binding) {
+            viewpager.adapter = OnboardingViewPagerAdapter(
+                this@OnboardingActivity,
+                data,
+                args
+            )
+            dotsIndicator.attachTo(binding.viewpager)
+        }
     }
 
     private fun setIntentToPokeMain() {
@@ -216,35 +154,8 @@ class OnboardingActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun launchPokeUserUiStateFlow() {
-        viewModel.pokeUserUiState
-            .onEach {
-                when (it) {
-                    is UiState.Loading -> "Loading"
-                    is UiState.Success<PokeUser> -> {
-                        messageListBottomSheet?.dismiss()
-                        when (it.isFirstMeet && !it.data.isFirstMeet) {
-                            true -> playLottieAnimation(it.data.name)
-                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
-                        }
-                    }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_error))
-                    }
-
-                    is UiState.Failure -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
-                    }
-                }
-            }
-            .launchIn(lifecycleScope)
-    }
-
-    private fun playLottieAnimation(userName: String) {
-        binding.apply {
+    fun playLottieAnimation(userName: String) {
+        with(binding){
             layoutLottie.visibility = View.VISIBLE
             tvLottie.text = root.context.getString(R.string.friend_complete, userName)
             animationViewLottie.playAnimation()

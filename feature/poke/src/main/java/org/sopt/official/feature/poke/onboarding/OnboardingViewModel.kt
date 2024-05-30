@@ -31,13 +31,12 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
-import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
 
@@ -46,16 +45,12 @@ class OnboardingViewModel @Inject constructor(
     private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,
     private val updateNewInPokeOnboardingUseCase: UpdateNewInPokeOnboardingUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
-    private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
     private val _checkNewInPokeOnboardingState = MutableStateFlow<Boolean?>(null)
     val checkNewInPokeOnboardingState: StateFlow<Boolean?> get() = _checkNewInPokeOnboardingState
 
-    private val _onboardingPokeUserListUiState = MutableStateFlow<UiState<List<PokeUser>>>(UiState.Loading)
-    val onboardingPokeUserListUiState: StateFlow<UiState<List<PokeUser>>> get() = _onboardingPokeUserListUiState
-
-    private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
-    val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
+    private val _onboardingPokeUserListUiState = MutableStateFlow<UiState<PokeRandomUserList>>(UiState.Loading)
+    val onboardingPokeUserListUiState: StateFlow<UiState<PokeRandomUserList>> get() = _onboardingPokeUserListUiState
 
     init {
         checkNewInPokeOnboarding()
@@ -74,10 +69,10 @@ class OnboardingViewModel @Inject constructor(
         }
     }
 
-    fun getOnboardingPokeUserList() {
+    private fun getOnboardingPokeUserList() {
         viewModelScope.launch {
             _onboardingPokeUserListUiState.emit(UiState.Loading)
-            getOnboardingPokeUserListUseCase.invoke()
+            getOnboardingPokeUserListUseCase.invoke(size = 6)
                 .onSuccess { response ->
                     _onboardingPokeUserListUiState.emit(UiState.Success(response))
                 }
@@ -87,49 +82,6 @@ class OnboardingViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _onboardingPokeUserListUiState.emit(UiState.Failure(throwable))
                 }
-        }
-    }
-
-    fun pokeUser(userId: Int, message: String) {
-        viewModelScope.launch {
-            _pokeUserUiState.emit(UiState.Loading)
-            pokeUserUseCase.invoke(
-                message = message,
-                userId = userId,
-            )
-                .onSuccess { response ->
-                    updatePokeUserState(response.userId)
-                    _pokeUserUiState.emit(UiState.Success(response))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
-                .onFailure { throwable ->
-                    _pokeUserUiState.emit(UiState.Failure(throwable))
-                }
-        }
-    }
-
-    private suspend fun updatePokeUserState(userId: Int) {
-        viewModelScope.launch {
-            if (_onboardingPokeUserListUiState.value is UiState.Success<List<PokeUser>>) {
-                val newList =
-                    (_onboardingPokeUserListUiState.value as UiState.Success<List<PokeUser>>).data
-                        .map { pokeUser ->
-                            when (pokeUser.userId != userId) {
-                                true -> pokeUser
-                                false ->
-                                    pokeUser.copy(
-                                        pokeNum = pokeUser.pokeNum + 1,
-                                        isAlreadyPoke = true,
-                                    )
-                            }
-                        }
-                _onboardingPokeUserListUiState.emit(UiState.Loading)
-                launch {
-                    _onboardingPokeUserListUiState.emit(UiState.Success(newList))
-                }
-            }
         }
     }
 }
