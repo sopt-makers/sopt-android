@@ -5,15 +5,6 @@ import android.os.Bundle
 import android.os.Parcelable
 import java.io.Serializable
 
-inline fun <reified T : Parcelable> Bundle.getVersioningParcelableArrayCompat(key: String): Array<T>? {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        getParcelableArray(key, T::class.java)
-    } else {
-        @Suppress("DEPRECATION")
-        getParcelableArray(key)?.filterIsInstance<T>()?.toTypedArray()
-    }
-}
-
 inline fun <reified T : Serializable> Bundle.getVersioningSerializable(key: String): T? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getSerializable(key, T::class.java)
