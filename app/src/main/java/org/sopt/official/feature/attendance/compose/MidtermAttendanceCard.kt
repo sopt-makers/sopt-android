@@ -17,10 +17,7 @@ import org.sopt.official.feature.attendance.model.AttendanceType
 import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
-fun MidtermAttendanceCard(
-    midtermAttendance: MidtermAttendance,
-    modifier: Modifier = Modifier,
-) {
+fun MidtermAttendanceCard(midtermAttendance: MidtermAttendance, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

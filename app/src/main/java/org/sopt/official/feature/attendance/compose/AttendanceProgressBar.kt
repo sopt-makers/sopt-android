@@ -20,10 +20,7 @@ import org.sopt.official.feature.attendance.model.MidtermAttendance
 import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
 
 @Composable
-fun AttendanceProgressBar(
-    state: AttendanceProgressBarState,
-    modifier: Modifier = Modifier,
-) {
+fun AttendanceProgressBar(state: AttendanceProgressBarState, modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         LinearProgressIndicator(
             progress = {
@@ -61,8 +58,11 @@ fun calculateAttendanceProgress(
     secondAttendance: MidtermAttendance
 ): Float {
     if (!firstAttendance.isFinished) return 0f
-    if (!secondAttendance.isFinished) return 0.5f
-    else return 1f
+    if (!secondAttendance.isFinished) {
+        return 0.5f
+    } else {
+        return 1f
+    }
 }
 
 class AttendanceProgressBarPreviewParameterProvider(

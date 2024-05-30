@@ -4,7 +4,9 @@ import androidx.annotation.DrawableRes
 import org.sopt.official.R
 
 enum class FinalAttendance(
-    @DrawableRes val imageResId: Int, val isFinished: Boolean, val result: String,
+    @DrawableRes val imageResId: Int,
+    val isFinished: Boolean,
+    val result: String,
 ) {
     NOT_YET(
         imageResId = R.drawable.ic_attendance_state_nothing,

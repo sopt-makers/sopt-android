@@ -26,10 +26,7 @@ import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarSta
 import org.sopt.official.feature.attendance.model.state.TodayAttendanceCardState
 
 @Composable
-fun TodayAttendanceCard(
-    state: TodayAttendanceCardState,
-    modifier: Modifier = Modifier,
-) {
+fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Modifier) {
     Column(
         modifier =
         modifier
