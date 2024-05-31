@@ -1,8 +1,8 @@
 package org.sopt.official.feature.poke.onboarding.model
 
+import java.io.Serializable
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
-import java.io.Serializable
 
 data class PokeOnboardingUiState(
     val randomType: String,

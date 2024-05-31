@@ -29,7 +29,6 @@ import android.app.Activity
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -79,7 +78,6 @@ fun Activity.showPokeToast(message: String) {
         it.show()
     }
 }
-
 
 @SuppressLint("UseCompatLoadingForDrawables")
 fun Fragment.showPokeToast(message: String) {

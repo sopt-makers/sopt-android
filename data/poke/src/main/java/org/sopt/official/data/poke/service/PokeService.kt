@@ -45,7 +45,10 @@ interface PokeService {
     suspend fun checkNewInPoke(): Response<CheckNewInPokeResult>
 
     @GET("poke/random")
-    suspend fun getOnboardingPokeUserList(@Query("randomType") randomType: String, @Query("size") size: Int): Response<PokeRandomUserListResult>
+    suspend fun getOnboardingPokeUserList(
+        @Query("randomType") randomType: String,
+        @Query("size") size: Int
+    ): Response<PokeRandomUserListResult>
 
     @GET("poke/to/me")
     suspend fun getPokeMe(): Response<PokeUserResult>

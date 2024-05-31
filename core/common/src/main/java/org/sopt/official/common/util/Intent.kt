@@ -48,9 +48,10 @@ inline fun <reified S : Serializable> serializableExtra(defaultValue: S? = null)
     thisRef.intent.serializableExtra(property.name) ?: defaultValue
 }
 
-inline fun <reified S : Serializable> serializableExtraFragment(defaultValue: S? = null) = ReadOnlyProperty<Fragment, S?> { thisRef, property ->
-    thisRef.requireActivity().intent.serializableExtra(property.name) ?: defaultValue
-}
+inline fun <reified S : Serializable> serializableExtraFragment(defaultValue: S? = null) =
+    ReadOnlyProperty<Fragment, S?> { thisRef, property ->
+        thisRef.requireActivity().intent.serializableExtra(property.name) ?: defaultValue
+    }
 
 inline fun <reified T : Parcelable> parcelableExtra(defaultValue: T? = null) = ReadOnlyProperty<Activity, T?> { thisRef, property ->
     IntentCompat.getParcelableExtra(thisRef.intent, property.name, T::class.java) ?: defaultValue

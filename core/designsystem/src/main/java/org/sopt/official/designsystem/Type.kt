@@ -232,7 +232,6 @@ class SoptTypography internal constructor(
         label12SB = other.label12SB
         label11SB = other.label11SB
     }
-
 }
 
 @Stable

@@ -155,7 +155,7 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     fun playLottieAnimation(userName: String) {
-        with(binding){
+        with(binding) {
             layoutLottie.visibility = View.VISIBLE
             tvLottie.text = root.context.getString(R.string.friend_complete, userName)
             animationViewLottie.playAnimation()

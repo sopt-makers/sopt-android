@@ -38,6 +38,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -58,7 +59,6 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
@@ -102,11 +102,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 mapOf(
                     "view_type" to userStatus,
                     "friend_type" to
-                            when (it) {
-                                PokeFriendType.NEW -> "newFriend"
-                                PokeFriendType.BEST_FRIEND -> "bestFriend"
-                                PokeFriendType.SOULMATE -> "soulmate"
-                            },
+                        when (it) {
+                            PokeFriendType.NEW -> "newFriend"
+                            PokeFriendType.BEST_FRIEND -> "bestFriend"
+                            PokeFriendType.SOULMATE -> "soulmate"
+                        },
                 ),
             )
         }

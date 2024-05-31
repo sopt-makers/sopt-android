@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.poke.source.remote
 
+import javax.inject.Inject
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
@@ -40,7 +41,6 @@ import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
-import javax.inject.Inject
 
 class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
