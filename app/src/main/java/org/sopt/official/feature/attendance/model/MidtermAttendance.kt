@@ -8,19 +8,19 @@ sealed class MidtermAttendance(
     val isFinished: Boolean,
     val description: String
 ) {
-    class NotYet(attendanceType: AttendanceType) : MidtermAttendance(
+    data class NotYet(val attendanceType: AttendanceType) : MidtermAttendance(
         imageResId = R.drawable.ic_attendance_state_nothing,
         isFinished = false,
         description = attendanceType.type
     )
 
-    class Present(attendanceAt: String) : MidtermAttendance(
+    data class Present(val attendanceAt: String) : MidtermAttendance(
         imageResId = R.drawable.ic_attendance_state_yes,
         isFinished = true,
         description = attendanceAt
     )
 
-    object Absent : MidtermAttendance(
+    data object Absent : MidtermAttendance(
         imageResId = R.drawable.ic_attendance_state_absence_white,
         isFinished = true,
         description = "-"
