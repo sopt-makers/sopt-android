@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.designsystem.style
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -249,6 +250,67 @@ fun soptLightColors(
     isLight = true
 )
 
+fun soptDarkColors(
+    white: Color = Color.White,
+    black: Color = Color.Black,
+    black100: Color = Black100,
+    purple300: Color = Purple300,
+    purple200: Color = Purple200,
+    purple100: Color = Purple100,
+    pink300: Color = Pink300,
+    pink200: Color = Pink200,
+    pink100: Color = Pink100,
+    mint300: Color = Mint300,
+    mint200: Color = Mint200,
+    mint100: Color = Mint100,
+    error300: Color = Red300,
+    error200: Color = Red200,
+    error100: Color = Red100,
+    access300: Color = Access300,
+    onSurface: Color = Black,
+    onSurface95: Color = MdsGray950,
+    onSurface90: Color = Gray900,
+    onSurface80: Color = Gray800,
+    onSurface70: Color = Gray700,
+    onSurface60: Color = Gray600,
+    onSurface50: Color = Gray500,
+    onSurface40: Color = Gray400,
+    onSurface30: Color = Gray300,
+    onSurface20: Color = Gray200,
+    onSurface10: Color = Gray100,
+    onSurface5: Color = Gray50
+) = SoptColors(
+    white,
+    black,
+    black100,
+    purple300,
+    purple200,
+    purple100,
+    pink300,
+    pink200,
+    pink100,
+    mint300,
+    mint200,
+    mint100,
+    error300,
+    error200,
+    error100,
+    access300,
+    onSurface,
+    onSurface95,
+    onSurface90,
+    onSurface80,
+    onSurface70,
+    onSurface60,
+    onSurface50,
+    onSurface40,
+    onSurface30,
+    onSurface20,
+    onSurface10,
+    onSurface5,
+    isLight = false
+)
+
 private val LocalSoptColors = staticCompositionLocalOf<SoptColors> {
     error("No SoptColors provided")
 }
@@ -283,8 +345,8 @@ fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypograph
 }
 
 @Composable
-fun SoptTheme(darkTheme: Boolean = false, content: @Composable () -> Unit) {
-    val colors = soptLightColors()
+fun SoptTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
+    val colors = if (darkTheme) soptDarkColors() else soptLightColors()
     val typography = SoptTypography()
     ProvideSoptColorsAndTypography(colors, typography) {
         MaterialTheme(content = content)
