@@ -22,7 +22,7 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentOnboardingFriendsBinding
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
-import org.sopt.official.feature.poke.onboarding.model.PokeRandomUsers
+import org.sopt.official.feature.poke.onboarding.model.PokeOnboardingUiState
 import org.sopt.official.feature.poke.onboarding.model.toSerializable
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
@@ -89,7 +89,7 @@ class OnboardingPokeUserFragment : Fragment() {
 
     private fun getPokeUserListFromArguments() {
         val pokeUser =
-            BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeRandomUsers::class.java)
+            BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeOnboardingUiState::class.java)
         updateRecyclerView(pokeUser?.randomTitle.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
     }
 

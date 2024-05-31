@@ -4,7 +4,7 @@ import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import java.io.Serializable
 
-data class PokeRandomUsers(
+data class PokeOnboardingUiState(
     val randomType: String,
     val randomTitle: String,
     val userInfoList: List<PokeUsers>,
@@ -40,13 +40,13 @@ data class PokeRandomUsers(
     }
 }
 
-fun PokeRandomUserList.PokeRandomUsers.toSerializable() = PokeRandomUsers(
+fun PokeRandomUserList.PokeRandomUsers.toSerializable() = PokeOnboardingUiState(
     randomType = randomType,
     randomTitle = randomTitle,
     userInfoList = userInfoList.map { it.toSerializable() },
 )
 
-fun PokeUser.toSerializable() = PokeRandomUsers.PokeUsers(
+fun PokeUser.toSerializable() = PokeOnboardingUiState.PokeUsers(
     userId = userId,
     playgroundId = playgroundId,
     profileImage = profileImage,
