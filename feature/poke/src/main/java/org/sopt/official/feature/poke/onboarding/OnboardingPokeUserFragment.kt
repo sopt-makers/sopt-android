@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +15,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
-import org.sopt.official.common.util.getVersioningSerializable
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -38,7 +38,7 @@ class OnboardingPokeUserFragment : Fragment() {
 
     private val viewModel: OnboardingPokeUserViewModel by viewModels()
 
-    private val args by lazy { arguments?.getVersioningSerializable<OnboardingActivity.StartArgs>(ARG_ARGS) }
+    private val args by lazy { BundleCompat.getSerializable(arguments ?: Bundle(), ARG_ARGS, OnboardingActivity.StartArgs::class.java) }
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -89,7 +89,7 @@ class OnboardingPokeUserFragment : Fragment() {
 
     private fun getPokeUserListFromArguments() {
         val pokeUser =
-            arguments?.getVersioningSerializable<PokeRandomUsers>(ARG_PROFILES)
+            BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeRandomUsers::class.java)
         updateRecyclerView(pokeUser?.randomTitle.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
     }
 
