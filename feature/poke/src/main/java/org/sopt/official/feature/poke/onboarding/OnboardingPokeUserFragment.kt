@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.serializableExtraFragment
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -38,7 +39,7 @@ class OnboardingPokeUserFragment : Fragment() {
 
     private val viewModel: OnboardingPokeUserViewModel by viewModels()
 
-    private val args by lazy { BundleCompat.getSerializable(arguments ?: Bundle(), ARG_ARGS, OnboardingActivity.StartArgs::class.java) }
+    private val args by serializableExtraFragment(OnboardingActivity.StartArgs(0, ""))
 
     @Inject
     lateinit var tracker: AmplitudeTracker

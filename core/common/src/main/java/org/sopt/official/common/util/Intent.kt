@@ -28,6 +28,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
+import androidx.fragment.app.Fragment
 import java.io.Serializable
 import kotlin.properties.ReadOnlyProperty
 
@@ -45,6 +46,10 @@ inline fun <reified T : Serializable?> Intent.serializableExtra(key: String): T?
 
 inline fun <reified S : Serializable> serializableExtra(defaultValue: S? = null) = ReadOnlyProperty<Activity, S?> { thisRef, property ->
     thisRef.intent.serializableExtra(property.name) ?: defaultValue
+}
+
+inline fun <reified S : Serializable> serializableExtraFragment(defaultValue: S? = null) = ReadOnlyProperty<Fragment, S?> { thisRef, property ->
+    thisRef.requireActivity().intent.serializableExtra(property.name) ?: defaultValue
 }
 
 inline fun <reified T : Parcelable> parcelableExtra(defaultValue: T? = null) = ReadOnlyProperty<Activity, T?> { thisRef, property ->
