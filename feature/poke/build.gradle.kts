@@ -48,7 +48,7 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
-    implementation(project(":core:analytics"))
-    implementation("androidx.fragment:fragment-ktx:1.7.1")
-    implementation("com.tbuonomo:dotsindicator:5.0")
+    implementation(projects.core.analytics)
+    implementation(libs.fragment.ktx)
+    implementation(libs.dotsindicator)
 }
