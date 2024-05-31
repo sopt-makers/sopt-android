@@ -46,98 +46,98 @@ class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
 ) {
     suspend fun checkNewInPoke(): CheckNewInPokeResponse {
-        val call = service.checkNewInPoke()
+        val response = service.checkNewInPoke()
         return CheckNewInPokeResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getOnboardingPokeUserList(randomType: String, size: Int): GetOnboardingPokeUserListResponse {
-        val call = service.getOnboardingPokeUserList(randomType, size)
+        val response = service.getOnboardingPokeUserList(randomType, size)
         return GetOnboardingPokeUserListResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getPokeMe(): GetPokeMeResponse {
-        val call = service.getPokeMe()
+        val response = service.getPokeMe()
         return GetPokeMeResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getPokeFriend(): GetPokeFriendResponse {
-        val call = service.getPokeFriend()
+        val response = service.getPokeFriend()
         return GetPokeFriendResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.map { it.toEntity() }
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.map { it.toEntity() }
         }
     }
 
     suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {
-        val call = service.getPokeFriendOfFriendList()
+        val response = service.getPokeFriendOfFriendList()
         return GetPokeFriendOfFriendListResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.map { it.toEntity() }
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.map { it.toEntity() }
         }
     }
 
     suspend fun getPokeNotificationList(getPokeNotificationListRequest: GetPokeNotificationListRequest): GetPokeNotificationListResponse {
-        val call =
+        val response =
             service.getPokeNotificationList(
                 page = getPokeNotificationListRequest.page,
             )
         return GetPokeNotificationListResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getFriendListSummary(): GetFriendListSummaryResponse {
-        val call = service.getFriendListSummary()
+        val response = service.getFriendListSummary()
         return GetFriendListSummaryResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getFriendListDetail(getFriendListDetailRequest: GetFriendListDetailRequest): GetFriendListDetailResponse {
-        val call =
+        val response =
             service.getFriendListDetail(
                 type = getFriendListDetailRequest.type.typeName,
                 page = getFriendListDetailRequest.page,
             )
         return GetFriendListDetailResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun getPokeMessageList(getPokeMessageListRequest: GetPokeMessageListRequest): GetPokeMessageListResponse {
-        val call =
+        val response =
             service.getPokeMessageList(
                 messageType = getPokeMessageListRequest.messageType.typeName,
             )
         return GetPokeMessageListResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 
     suspend fun pokeUser(pokeUserRequest: PokeUserRequest): PokeUserResponse {
-        val call =
+        val response =
             service.pokeUser(
                 userId = pokeUserRequest.userId,
                 pokeMessageRequest = PokeMessageRequest(
@@ -146,9 +146,9 @@ class PokeRemoteDataSource @Inject constructor(
                 ),
             )
         return PokeUserResponse().apply {
-            statusCode = call.code().toString()
-            responseMessage = call.message()
-            data = call.body()?.toEntity()
+            statusCode = response.code().toString()
+            responseMessage = response.message()
+            data = response.body()?.toEntity()
         }
     }
 }
