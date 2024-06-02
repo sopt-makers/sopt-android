@@ -11,12 +11,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
-import org.sopt.official.common.util.serializableExtraFragment
+import org.sopt.official.common.util.serializableArgs
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -30,6 +29,7 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingPokeUserFragment : Fragment() {
@@ -39,7 +39,8 @@ class OnboardingPokeUserFragment : Fragment() {
 
     private val viewModel: OnboardingPokeUserViewModel by viewModels()
 
-    private val args by serializableExtraFragment(OnboardingActivity.StartArgs(0, ""))
+    private val args by serializableArgs<OnboardingActivity.StartArgs>()
+    // private val argss by serializableExtraFragment(OnboardingActivity.StartArgs(0, ""))
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -48,7 +49,7 @@ class OnboardingPokeUserFragment : Fragment() {
     private val pokeUserListAdapter
         get() = binding.recyclerView.adapter as PokeUserListAdapter?
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentOnboardingFriendsBinding.inflate(inflater, container, false)
         return binding.root
     }
