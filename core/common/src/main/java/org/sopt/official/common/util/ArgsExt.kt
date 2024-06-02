@@ -25,6 +25,6 @@ fun <P : Parcelable> parcelableArgs() = ReadOnlyProperty<Fragment, P?> { thisRef
     thisRef.requireArguments().getParcelable(property.name)
 }
 
-inline fun <reified S: Serializable>serializableArgs() = ReadOnlyProperty<Fragment, S?> { thisRef, property ->
+inline fun <reified S : Serializable> serializableArgs() = ReadOnlyProperty<Fragment, S?> { thisRef, property ->
     thisRef.requireArguments().getSerializable(property.name) as S?
 }
