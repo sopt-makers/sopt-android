@@ -32,11 +32,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.usecase.GetPokeFriendOfFriendListUseCase
+import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeFriendUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
@@ -45,10 +46,10 @@ import timber.log.Timber
 
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
-    private val getPokeMeUseCase: GetPokeMeUseCase,
-    private val getPokeFriendUseCase: GetPokeFriendUseCase,
-    private val getPokeFriendOfFriendListUseCase: GetPokeFriendOfFriendListUseCase,
-    private val pokeUserUseCase: PokeUserUseCase,
+    private val getPokeMeUseCase: GetPokeMeUseCase, // 누가 나를 찔렀어요
+    private val getPokeFriendUseCase: GetPokeFriendUseCase, // 내 친구를 찔러보세요
+    private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase, // 내 친구의 친구를 찔러보세요
+    private val pokeUserUseCase: PokeUserUseCase, // 콕 찌르기
 ) : ViewModel() {
     private val _pokeMeUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeMeUiState: StateFlow<UiState<PokeUser>> get() = _pokeMeUiState
@@ -56,8 +57,8 @@ class PokeMainViewModel @Inject constructor(
     private val _pokeFriendUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeFriendUiState: StateFlow<UiState<PokeUser>> get() = _pokeFriendUiState
 
-    private val _pokeFriendOfFriendUiState = MutableStateFlow<UiState<List<PokeFriendOfFriendList>>>(UiState.Loading)
-    val pokeFriendOfFriendUiState: StateFlow<UiState<List<PokeFriendOfFriendList>>> get() = _pokeFriendOfFriendUiState
+    private val _pokeFriendOfFriendUiState = MutableStateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>>(UiState.Loading)
+    val pokeFriendOfFriendUiState: StateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>> get() = _pokeFriendOfFriendUiState
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
@@ -99,9 +100,9 @@ class PokeMainViewModel @Inject constructor(
     fun getPokeFriendOfFriend() {
         viewModelScope.launch {
             _pokeFriendOfFriendUiState.emit(UiState.Loading)
-            getPokeFriendOfFriendListUseCase.invoke()
+            getOnboardingPokeUserListUseCase.invoke(randomType = "ALL", size = 6)
                 .onSuccess {
-                    _pokeFriendOfFriendUiState.emit(UiState.Success(it))
+                    _pokeFriendOfFriendUiState.emit(UiState.Success(it.randomInfoList))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _pokeFriendOfFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
@@ -157,10 +158,10 @@ class PokeMainViewModel @Inject constructor(
                     )
                 }
             }
-            if (_pokeFriendOfFriendUiState.value is UiState.Success<List<PokeFriendOfFriendList>>) {
-                val oldData = (_pokeFriendOfFriendUiState.value as UiState.Success<List<PokeFriendOfFriendList>>).data
+            if (_pokeFriendOfFriendUiState.value is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>) {
+                val oldData = (_pokeFriendOfFriendUiState.value as UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>).data
                 for (friend in oldData) {
-                    friend.friendList.find { it.userId == userId }?.isAlreadyPoke = true
+                    friend.userInfoList.find { it.userId == userId }?.isAlreadyPoke = true
                 }
                 _pokeFriendOfFriendUiState.emit(UiState.Loading)
                 _pokeFriendOfFriendUiState.emit(UiState.Success(oldData))

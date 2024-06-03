@@ -47,6 +47,7 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
@@ -86,9 +87,9 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        viewModel.getPokeMe()
+        // viewModel.getPokeMe()
         viewModel.getPokeFriend()
-        viewModel.getPokeFriendOfFriend()
+        // viewModel.getPokeFriendOfFriend()
     }
 
     private fun initListener() {
@@ -182,9 +183,9 @@ class PokeMainActivity : AppCompatActivity() {
                 .onEach {
                     when (it) {
                         is UiState.Loading -> "Loading"
-                        is UiState.Success<List<PokeFriendOfFriendList>> -> {
-                            setPokeFriendOfFriendVisible(it.data)
-                            initPokeFriendOfFriendView(it.data)
+                        is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
+                            // setPokeFriendOfFriendVisible(it.data)
+                            // initPokeFriendOfFriendView(it.data)
                         }
 
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
@@ -294,12 +295,18 @@ class PokeMainActivity : AppCompatActivity() {
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
-            pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+
+            if (pokeFriendItem.isAnonymous) {
+                imgUserProfilePokeMyFriend.load(pokeFriendItem.anonymousImage) { transformations(CircleCropTransformation()) }
+                tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
+            } else {
+                pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNamePokeMyFriend.text = pokeFriendItem.name
+                tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
+            }
             imgUserProfilePokeMyFriendOutline.setRelationStrokeColor(pokeFriendItem.relationName)
-            tvUserNamePokeMyFriend.text = pokeFriendItem.name
-            tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
             btnPokeMyFriend.setOnClickListener {
