@@ -70,8 +70,8 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
                 when (it) {
                     is UiState.Loading -> "Loading"
                     is UiState.Success<PokeMessageList> -> initMessageListContent(it.data)
-                    is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -94,7 +94,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
         }.launchIn(lifecycleScope)
 
         viewModel.pokeAnonymousOffToast.flowWithLifecycle(lifecycle).onEach {
-            activity?.showPokeToast(getString(R.string.toast_poke_anonymous_off))
+            showPokeToast(getString(R.string.toast_poke_anonymous_off))
         }.launchIn(lifecycleScope)
     }
 
