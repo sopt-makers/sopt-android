@@ -1,6 +1,8 @@
 package org.sopt.official.common.util
 
+import android.os.Bundle
 import android.os.Parcelable
+import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
 import java.io.Serializable
 import kotlin.properties.ReadOnlyProperty
@@ -21,10 +23,10 @@ fun stringArgs() = ReadOnlyProperty<Fragment, String> { thisRef, property ->
     thisRef.requireArguments().getString(property.name, "")
 }
 
-fun <P : Parcelable> parcelableArgs() = ReadOnlyProperty<Fragment, P?> { thisRef, property ->
-    thisRef.requireArguments().getParcelable(property.name)
+inline fun <reified P : Parcelable> parcelableArgs() = ReadOnlyProperty<Fragment, P?> { thisRef, property ->
+    BundleCompat.getParcelable(thisRef.requireArguments(), property.name, P::class.java)
 }
 
 inline fun <reified S : Serializable> serializableArgs() = ReadOnlyProperty<Fragment, S?> { thisRef, property ->
-    thisRef.requireArguments().getSerializable(property.name) as S?
+    BundleCompat.getSerializable(thisRef.requireArguments(), property.name, S::class.java)
 }
