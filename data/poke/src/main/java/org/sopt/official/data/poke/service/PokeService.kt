@@ -24,12 +24,14 @@
  */
 package org.sopt.official.data.poke.service
 
+import org.sopt.official.data.poke.dto.request.PokeMessageRequest
 import org.sopt.official.data.poke.dto.response.CheckNewInPokeResult
 import org.sopt.official.data.poke.dto.response.GetFriendListDetailResult
 import org.sopt.official.data.poke.dto.response.GetFriendListSummaryResult
 import org.sopt.official.data.poke.dto.response.GetPokeMessageListResult
 import org.sopt.official.data.poke.dto.response.PokeFriendOfFriendListResult
 import org.sopt.official.data.poke.dto.response.PokeNotificationResult
+import org.sopt.official.data.poke.dto.response.PokeRandomUserListResult
 import org.sopt.official.data.poke.dto.response.PokeUserResult
 import retrofit2.Response
 import retrofit2.http.Body
@@ -42,8 +44,11 @@ interface PokeService {
     @GET("poke/new")
     suspend fun checkNewInPoke(): Response<CheckNewInPokeResult>
 
-    @GET("poke/random-user")
-    suspend fun getOnboardingPokeUserList(): Response<List<PokeUserResult>>
+    @GET("poke/random")
+    suspend fun getOnboardingPokeUserList(
+        @Query("randomType") randomType: String,
+        @Query("size") size: Int
+    ): Response<PokeRandomUserListResult>
 
     @GET("poke/to/me")
     suspend fun getPokeMe(): Response<PokeUserResult>
@@ -67,5 +72,5 @@ interface PokeService {
     suspend fun getPokeMessageList(@Query("messageType") messageType: String,): Response<GetPokeMessageListResult>
 
     @PUT("poke/{userId}")
-    suspend fun pokeUser(@Path("userId") userId: Int, @Body message: String,): Response<PokeUserResult>
+    suspend fun pokeUser(@Path("userId") userId: Int, @Body pokeMessageRequest: PokeMessageRequest): Response<PokeUserResult>
 }

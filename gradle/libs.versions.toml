@@ -15,6 +15,7 @@ javax-inject = "1"
 corektx = "1.13.1"
 appcompat = "1.7.0"
 activity = "1.9.0"
+fragmentKtx = "1.7.1"
 lifecycle = "2.8.1"
 swipe-refresh-layout = "1.1.0"
 navigation = "2.7.7"
@@ -54,6 +55,7 @@ compose-destination = "1.10.2"
 mavericks = "3.0.9"
 coil = "2.6.0"
 lottie = "6.4.1"
+dotsindicator = "5.0"
 
 google-services = "4.4.2"
 crashlytics = "3.0.1"
@@ -83,6 +85,7 @@ javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "j
 
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
+fragment-ktx = {  module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
@@ -181,6 +184,7 @@ android-lottie = { module = "com.airbnb.android:lottie", version.ref = "lottie" 
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark-macro-junit4" }
 profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 
 [bundles]
 compose = [

@@ -88,11 +88,12 @@ class PokeNotificationViewModel @Inject constructor(
             }
     }
 
-    fun pokeUser(userId: Int, message: String, isFirstMeet: Boolean) {
+    fun pokeUser(userId: Int, isAnonymous: Boolean, message: String, isFirstMeet: Boolean) {
         viewModelScope.launch {
             pokeUserUseCase.invoke(
-                message = message,
                 userId = userId,
+                isAnonymous = isAnonymous,
+                message = message
             ).onSuccess { response ->
                 _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
             }.onApiError { statusCode, responseMessage ->

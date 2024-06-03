@@ -26,15 +26,16 @@
     <!-- 온보딩 -->
     <string name="poke_title">콕 찌르기</string>
 
-    <string name="onboarding_bottom_sheet_title">콕 찌르기를 소개할게요</string>
-    <string name="onboarding_bottom_sheet_content">SOPT 내에서 아는 사람, 친해지고 싶은 친구를 콕 찔러 호감의 표시를 해보세요.</string>
+    <string name="onboarding_bottom_sheet_title">익명 콕 찌르기 기능이 추가되었어요!</string>
+    <string name="onboarding_bottom_sheet_content">친구 단계가 올라가면 익명 친구에 대한 힌트를 알 수 있어요.\n친구와 천생연분 단계가 되면 어떤 일이 일어날까요?\n더욱 재밌어진 콕찌르기를 만나보세요!</string>
     <string name="onboarding_bottom_sheet_confirm">확인</string>
 
     <string name="onboarding_title">아는 사람을 콕 찔러서 친구를 맺어보세요</string>
     <string name="onboarding_content">나와 같은 %1$d기를 하고 있어요</string>
-    <string name="onboarding_swipe_to_refresh">아는 사람이 없나요?\n화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
+    <string name="onboarding_swipe_to_refresh">화면을 밑으로 당기면 다른 친구를 볼 수 있어요</string>
 
     <string name="message_bottom_sheet_title">보낼 메시지를 골라주세요</string>
+    <string name="message_bottom_sheet_anonymous">익명</string>
 
     <!-- 메인 / 찌르기 알림 /  -->
     <string name="someone_poke_me_title">누가 나를 찔렀어요</string>
@@ -75,5 +76,6 @@
     <!-- 토스트 메시지 -->
     <string name="toast_poke_error">문제가 발생했습니다.</string>
     <string name="toast_poke_user_success">콕 찌르기를 완료했어요.</string>
+    <string name="toast_poke_anonymous_off">익명 해제 시, 상대방이 나를 알 수 있어요.</string>
 
 </resources>

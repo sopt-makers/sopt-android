@@ -51,19 +51,19 @@ class PokeRepositoryImpl @Inject constructor(
 ) : PokeRepository {
 
     override suspend fun checkNewInPokeOnboarding(): Boolean {
-        return localDataSource.isNewInPokeOnboarding
+        return localDataSource.isAnonymousInPokeOnboarding
     }
 
     override suspend fun updateNewInPokeOnboarding() {
-        localDataSource.isNewInPokeOnboarding = false
+        localDataSource.isAnonymousInPokeOnboarding = false
     }
 
     override suspend fun checkNewInPoke(): CheckNewInPokeResponse {
         return remoteDataSource.checkNewInPoke()
     }
 
-    override suspend fun getOnboardingPokeUserList(): GetOnboardingPokeUserListResponse {
-        return remoteDataSource.getOnboardingPokeUserList()
+    override suspend fun getOnboardingPokeUserList(randomType: String, size: Int): GetOnboardingPokeUserListResponse {
+        return remoteDataSource.getOnboardingPokeUserList(randomType, size)
     }
 
     override suspend fun getPokeMe(): GetPokeMeResponse {
@@ -91,7 +91,7 @@ class PokeRepositoryImpl @Inject constructor(
         return remoteDataSource.getFriendListSummary()
     }
 
-    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int,): GetFriendListDetailResponse {
+    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse {
         return remoteDataSource.getFriendListDetail(
             getFriendListDetailRequest =
             GetFriendListDetailRequest(
@@ -110,11 +110,12 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun pokeUser(userId: Int, message: String,): PokeUserResponse {
+    override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String,): PokeUserResponse {
         return remoteDataSource.pokeUser(
             pokeUserRequest =
             PokeUserRequest(
                 userId = userId,
+                isAnonymous = isAnonymous,
                 message = message,
             ),
         )

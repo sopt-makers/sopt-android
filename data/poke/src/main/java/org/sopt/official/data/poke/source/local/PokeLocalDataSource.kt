@@ -32,15 +32,15 @@ import org.sopt.official.data.poke.di.Poke
 class PokeLocalDataSource @Inject constructor(
     @Poke private val dataStore: SharedPreferences,
 ) {
-    var isNewInPokeOnboarding: Boolean
-        get() = dataStore.getBoolean(IS_NEW_IN_POKE_ONBOARDING, true)
-        set(value) = dataStore.edit { putBoolean(IS_NEW_IN_POKE_ONBOARDING, value) }
+    var isAnonymousInPokeOnboarding: Boolean
+        get() = dataStore.getBoolean(IS_ANONYMOUS_IN_POKE_ONBOARDING, true)
+        set(value) = dataStore.edit { putBoolean(IS_ANONYMOUS_IN_POKE_ONBOARDING, value) }
 
     fun clear() {
-        isNewInPokeOnboarding = true
+        isAnonymousInPokeOnboarding = true
     }
 
     companion object {
-        private const val IS_NEW_IN_POKE_ONBOARDING = "is_new_in_poke_onboarding"
+        private const val IS_ANONYMOUS_IN_POKE_ONBOARDING = "is_anonymous_in_poke_onboarding"
     }
 }

@@ -144,7 +144,14 @@ class PokeNotificationActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(messageType)
-                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message, user.isFirstMeet) }
+                        .onClickMessageListItem { message, isAnonymous ->
+                            viewModel.pokeUser(
+                                userId = user.userId,
+                                isAnonymous = isAnonymous,
+                                message = message,
+                                isFirstMeet = user.isFirstMeet
+                            )
+                        }
                         .create()
 
                 messageListBottomSheet?.let {
@@ -209,13 +216,16 @@ class PokeNotificationActivity : AppCompatActivity() {
                                 binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
                                 binding.animationViewLottie.playAnimation()
                             }
+
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
+
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
+
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
                         showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))

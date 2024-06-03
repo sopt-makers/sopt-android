@@ -33,10 +33,11 @@ import org.sopt.official.domain.poke.repository.PokeRepository
 class PokeUserUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
-    suspend operator fun invoke(userId: Int, message: String,): ApiResult<PokeUser> {
+    suspend operator fun invoke(userId: Int, isAnonymous: Boolean, message: String,): ApiResult<PokeUser> {
         return apiResult {
             repository.pokeUser(
                 userId = userId,
+                isAnonymous = isAnonymous,
                 message = message,
             )
         }

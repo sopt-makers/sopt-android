@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.friend.summary
+package org.sopt.official.feature.poke.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,42 +31,39 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
-import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
+import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 
 @HiltViewModel
-class FriendListSummaryViewModel @Inject constructor(
-    private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
+class OnboardingPokeUserViewModel @Inject constructor(
+    private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
-    private val _friendListSummaryUiState = MutableStateFlow<UiState<FriendListSummary>>(UiState.Loading)
-    val friendListSummaryUiState: StateFlow<UiState<FriendListSummary>> get() = _friendListSummaryUiState
+    private val _onboardingPokeUserListUiState = MutableStateFlow<UiState<PokeRandomUserList.PokeRandomUsers>>(UiState.Loading)
+    val onboardingPokeUserListUiState: StateFlow<UiState<PokeRandomUserList.PokeRandomUsers>> get() = _onboardingPokeUserListUiState
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
+    private val randomType = MutableStateFlow("ALL")
 
-    init {
-        getFriendListSummary()
-    }
-
-    fun getFriendListSummary() {
+    fun getOnboardingPokeUserList() {
         viewModelScope.launch {
-            _friendListSummaryUiState.emit(UiState.Loading)
-            getFriendListSummaryUseCase.invoke()
+            _onboardingPokeUserListUiState.emit(UiState.Loading)
+            getOnboardingPokeUserListUseCase.invoke(randomType = randomType.value, size = 6)
                 .onSuccess { response ->
-                    _friendListSummaryUiState.emit(UiState.Success(response))
+                    _onboardingPokeUserListUiState.emit(UiState.Success(response.randomInfoList[0]))
                 }
                 .onApiError { statusCode, responseMessage ->
-                    _friendListSummaryUiState.emit(UiState.ApiError(statusCode, responseMessage))
+                    _onboardingPokeUserListUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure { throwable ->
-                    _friendListSummaryUiState.emit(UiState.Failure(throwable))
+                    _onboardingPokeUserListUiState.emit(UiState.Failure(throwable))
                 }
         }
     }
@@ -80,6 +77,7 @@ class FriendListSummaryViewModel @Inject constructor(
                 message = message
             )
                 .onSuccess { response ->
+                    updatePokeUserState(response.userId)
                     _pokeUserUiState.emit(UiState.Success(response))
                 }
                 .onApiError { statusCode, responseMessage ->
@@ -89,5 +87,41 @@ class FriendListSummaryViewModel @Inject constructor(
                     _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
         }
+    }
+
+    private suspend fun updatePokeUserState(userId: Int) {
+        viewModelScope.launch {
+            if (_onboardingPokeUserListUiState.value is UiState.Success<PokeRandomUserList.PokeRandomUsers>) {
+                val randomUsers = (_onboardingPokeUserListUiState.value as UiState.Success<PokeRandomUserList.PokeRandomUsers>).data
+                val newList =
+                    randomUsers.userInfoList
+                        .map { pokeUser ->
+                            when (pokeUser.userId != userId) {
+                                true -> pokeUser
+                                false ->
+                                    pokeUser.copy(
+                                        pokeNum = pokeUser.pokeNum + 1,
+                                        isAlreadyPoke = true,
+                                    )
+                            }
+                        }
+                _onboardingPokeUserListUiState.emit(UiState.Loading)
+                launch {
+                    _onboardingPokeUserListUiState.emit(
+                        UiState.Success(
+                            PokeRandomUserList.PokeRandomUsers(
+                                randomType = randomUsers.randomType,
+                                randomTitle = randomUsers.randomTitle,
+                                userInfoList = newList,
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    fun setRandomType(type: String) {
+        randomType.value = type
     }
 }

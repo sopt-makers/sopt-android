@@ -260,7 +260,13 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
-                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                        .onClickMessageListItem { message, isAnonymous ->
+                            viewModel.pokeUser(
+                                userId = user.userId,
+                                isAnonymous = isAnonymous,
+                                message = message
+                            )
+                        }
                         .create()
 
                 messageListBottomSheet?.let {

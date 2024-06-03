@@ -44,12 +44,14 @@ class MessageListRecyclerAdapter(
     override fun getItemCount(): Int = messageList.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.onBind(messageList[position])
-        holder.itemView.setOnClickListener {
-            val currentTime = System.currentTimeMillis()
-            if (currentTime - lastClickTime >= clickInterval) {
-                lastClickTime = currentTime
-                clickListener.onClickMessageItem(messageList[position].content)
+        with(holder) {
+            onBind(messageList[position])
+            itemView.setOnClickListener {
+                val currentTime = System.currentTimeMillis()
+                if (currentTime - lastClickTime >= clickInterval) {
+                    lastClickTime = currentTime
+                    clickListener.onClickMessageItem(messageList[position].content)
+                }
             }
         }
     }

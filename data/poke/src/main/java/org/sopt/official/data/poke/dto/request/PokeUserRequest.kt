@@ -31,6 +31,8 @@ import kotlinx.serialization.Serializable
 data class PokeUserRequest(
     @SerialName("userId")
     val userId: Int,
+    @SerialName("isAnonymous")
+    val isAnonymous: Boolean,
     @SerialName("message")
     val message: String,
 )

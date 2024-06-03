@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -46,6 +47,12 @@ class MessageListBottomSheetViewModel @Inject constructor(
     private val _pokeMessageListUiState = MutableStateFlow<UiState<PokeMessageList>>(UiState.Loading)
     val pokeMessageListUiState: StateFlow<UiState<PokeMessageList>> get() = _pokeMessageListUiState
 
+    private val _pokeAnonymousCheckboxChecked = MutableStateFlow(false)
+    val pokeAnonymousCheckboxChecked: StateFlow<Boolean>
+        get() = _pokeAnonymousCheckboxChecked
+
+    val pokeAnonymousOffToast = MutableSharedFlow<Unit>()
+
     fun getPokeMessageList(pokeMessageType: PokeMessageType) {
         viewModelScope.launch {
             _pokeMessageListUiState.emit(UiState.Loading)
@@ -61,6 +68,16 @@ class MessageListBottomSheetViewModel @Inject constructor(
                 .onFailure { throwable ->
                     _pokeMessageListUiState.emit(UiState.Failure(throwable))
                 }
+        }
+    }
+
+    fun setPokeAnonymousCheckboxClicked() {
+        _pokeAnonymousCheckboxChecked.value = !_pokeAnonymousCheckboxChecked.value
+
+        if (!_pokeAnonymousCheckboxChecked.value) {
+            viewModelScope.launch {
+                pokeAnonymousOffToast.emit(Unit)
+            }
         }
     }
 }

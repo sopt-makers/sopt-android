@@ -85,12 +85,12 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     var userStatus: String? = null
     var pokeFriendType: PokeFriendType? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[FriendListDetailViewModel::class.java]
         return FragmentFriendListDetailBottomSheetBinding.inflate(inflater, container, false).root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?,) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         pokeFriendType?.let {
@@ -154,7 +154,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val scrollListener =
         object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int,) {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
 
                 val lastVisibleItemPosition = pokeFriendListLayoutManager.findLastVisibleItemPosition()
@@ -195,7 +195,13 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
-                        .onClickMessageListItem { message -> viewModel.pokeUser(user.userId, message) }
+                        .onClickMessageListItem { message, isAnonymous ->
+                            viewModel.pokeUser(
+                                userId = user.userId,
+                                isAnonymous = isAnonymous,
+                                message = message
+                            )
+                        }
                         .create()
 
                 messageListBottomSheet?.let {
