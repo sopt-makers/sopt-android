@@ -28,7 +28,6 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
 import androidx.core.content.IntentCompat
-import androidx.fragment.app.Fragment
 import java.io.Serializable
 import kotlin.properties.ReadOnlyProperty
 

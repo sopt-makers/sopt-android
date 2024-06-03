@@ -1,6 +1,5 @@
 package org.sopt.official.common.util
 
-import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
