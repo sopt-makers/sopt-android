@@ -81,7 +81,6 @@ class PokeMainActivity : AppCompatActivity() {
         binding.recyclerViewPokeMain.adapter = PokeMainListAdapter(pokeUserListClickLister)
         initData()
         initListener()
-        initFriendOfFriendEmptyViewText()
         initStateFlowValues()
     }
 
@@ -91,7 +90,7 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun initData() {
-        // viewModel.getPokeMe()
+        viewModel.getPokeMe()
         viewModel.getPokeFriend()
         viewModel.getPokeSimilarFriends()
     }
@@ -151,14 +150,6 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFriendOfFriendEmptyViewText() {
-//        binding.apply {
-//            val emptyViewText = getString(R.string.poke_my_friend_of_friend_empty)
-//            includeFriendListEmptyView01.textView.text = emptyViewText
-//            includeFriendListEmptyView02.textView.text = emptyViewText
-//        }
-    }
-
     private fun initStateFlowValues() {
         viewModel.pokeMeUiState
             .onEach {
@@ -190,8 +181,6 @@ class PokeMainActivity : AppCompatActivity() {
                         is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
                             pokeMainListAdapter?.submitList(it.data)
                             binding.refreshLayoutPokeMain.isRefreshing = false
-                            // setPokeFriendOfFriendVisible(it.data)
-                            // initPokeFriendOfFriendView(it.data)
                         }
 
                         is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
@@ -249,19 +238,28 @@ class PokeMainActivity : AppCompatActivity() {
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
-            pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            if (pokeMeItem.isAnonymous) {
+                pokeMeItem.anonymousImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
+                tvFriendsStatusSomeonePokeMe.visibility = View.GONE
+                tvUserGenerationSomeonePokeMe.visibility = View.GONE
+            } else {
+                pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNameSomeonePokeMe.text = pokeMeItem.name
+                tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
+                tvFriendsStatusSomeonePokeMe.text =
+                    if (pokeMeItem.isFirstMeet) {
+                        pokeMeItem.mutualRelationMessage
+                    } else {
+                        "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
+                    }
+            }
             imgUserProfilePokeMeOutline.setRelationStrokeColor(pokeMeItem.relationName)
-            tvUserNameSomeonePokeMe.text = pokeMeItem.name
-            tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
-            tvFriendsStatusSomeonePokeMe.text =
-                if (pokeMeItem.isFirstMeet) {
-                    pokeMeItem.mutualRelationMessage
-                } else {
-                    "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
-                }
             btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
             btnSomeonePokeMe.setOnClickListener {
                 tracker.track(
@@ -283,6 +281,7 @@ class PokeMainActivity : AppCompatActivity() {
                     pokeMeItem.isFirstMeet,
                 )
             }
+
         }
     }
 
