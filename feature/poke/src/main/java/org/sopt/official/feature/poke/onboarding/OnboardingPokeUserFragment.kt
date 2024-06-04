@@ -40,7 +40,6 @@ class OnboardingPokeUserFragment : Fragment() {
     private val viewModel: OnboardingPokeUserViewModel by viewModels()
 
     private val args by serializableArgs<OnboardingActivity.StartArgs>()
-    // private val argss by serializableExtraFragment(OnboardingActivity.StartArgs(0, ""))
 
     @Inject
     lateinit var tracker: AmplitudeTracker

@@ -58,8 +58,8 @@ data class PokeUserResult(
     val isAnonymous: Boolean,
     @SerialName("anonymousName")
     val anonymousName: String,
-    @SerialName("anonymousImage")
-    val anonymousImage: String,
+//    @SerialName("anonymousImage")
+//    val anonymousImage: String,
 ) {
     fun toEntity(): PokeUser = PokeUser(
         userId = userId,
@@ -74,8 +74,8 @@ data class PokeUserResult(
         mutualRelationMessage = mutualRelationMessage,
         isFirstMeet = isFirstMeet,
         isAlreadyPoke = isAlreadyPoke,
-        isAnonymous = isAnonymous,
+        isAnonymous = true, // isAnonymous,
         anonymousName = anonymousName,
-        anonymousImage = anonymousImage,
+        anonymousImage = "anonymousImage",
     )
 }

@@ -31,7 +31,6 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
@@ -46,10 +45,10 @@ import timber.log.Timber
 
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
-    private val getPokeMeUseCase: GetPokeMeUseCase, // 누가 나를 찔렀어요
-    private val getPokeFriendUseCase: GetPokeFriendUseCase, // 내 친구를 찔러보세요
-    private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase, // 내 친구의 친구를 찔러보세요
-    private val pokeUserUseCase: PokeUserUseCase, // 콕 찌르기
+    private val getPokeMeUseCase: GetPokeMeUseCase,
+    private val getPokeFriendUseCase: GetPokeFriendUseCase,
+    private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
+    private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
     private val _pokeMeUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeMeUiState: StateFlow<UiState<PokeUser>> get() = _pokeMeUiState
@@ -97,10 +96,10 @@ class PokeMainViewModel @Inject constructor(
         }
     }
 
-    fun getPokeFriendOfFriend() {
+    fun getPokeSimilarFriends() {
         viewModelScope.launch {
             _pokeFriendOfFriendUiState.emit(UiState.Loading)
-            getOnboardingPokeUserListUseCase.invoke(randomType = "ALL", size = 6)
+            getOnboardingPokeUserListUseCase.invoke(randomType = "ALL", size = 2)
                 .onSuccess {
                     _pokeFriendOfFriendUiState.emit(UiState.Success(it.randomInfoList))
                 }
