@@ -287,7 +287,7 @@ class PokeMainActivity : AppCompatActivity() {
                     imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
                 tvUserNameSomeonePokeMe.text = pokeMeItem.name
-                tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
+                tvUserGenerationSomeonePokeMe.text = getString(R.string.poke_user_info, pokeMeItem.generation, pokeMeItem.part)
                 tvFriendsStatusSomeonePokeMe.text =
                     if (pokeMeItem.isFirstMeet) {
                         pokeMeItem.mutualRelationMessage
@@ -346,7 +346,7 @@ class PokeMainActivity : AppCompatActivity() {
                     imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
                 } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
                 tvUserNamePokeMyFriend.text = pokeFriendItem.name
-                tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
+                tvUserGenerationSomeonePokeMe.text = getString(R.string.poke_user_info, pokeFriendItem.generation, pokeFriendItem.part)
             }
             imgUserProfilePokeMyFriendOutline.setRelationStrokeColor(pokeFriendItem.relationName)
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"

@@ -98,7 +98,7 @@ class PokeNotificationAdapter(
                         imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
                     } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
                     tvUserName.text = item.name
-                    tvUserGeneration.text = "${item.generation}기 ${item.part}"
+                    tvUserGeneration.text = root.context.getString(R.string.poke_user_info, item.generation, item.part)
                     tvUserFriendsStatus.text =
                         if (item.isFirstMeet) {
                             item.mutualRelationMessage
