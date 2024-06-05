@@ -65,10 +65,12 @@
 
     <!-- 친구 아이템 -->
     <string name="poke_user_info">%1$d기 %2$s</string>
+    <string name="poke_user_info_part">%1$d기 %2$s파트</string>
     <string name="poke_user_poke_count">%1$d콕</string>
     <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
     <string name="poke_user_alert_exceeded">오늘은 콕 찌르기를 다 썼어요.</string>
     <string name="friend_complete">찌르기 답장으로\n%s님과 친구가 되었어요!</string>
+    <string name="anonymous_to_friend">%s님과\n%s 되었어요!</string>
 
     <!-- 찌르기 알림 -->
     <string name="poke_notification_title">찌르기 알림</string>

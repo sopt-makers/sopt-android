@@ -30,6 +30,62 @@
     tools:context=".notification.PokeNotificationActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_freind_lottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mds_gray_950_alpha80"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_freind_lottie"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/suit_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:textColor="@color/mds_gray_10"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="@id/animation_friend_view_lottie"
+            app:layout_constraintStart_toStartOf="@id/animation_friend_view_lottie"
+            app:layout_constraintBottom_toTopOf="@id/animation_friend_view_lottie"
+            tools:text="익명의 사자님과\n단짝친구가 되었어요" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_friend_view_lottie"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_rawRes="@raw/bestfriendtosoulmate" />
+
+        <TextView
+            android:id="@+id/tv_freind_lottie_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="34dp"
+            android:fontFamily="@font/suit_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:textColor="@color/mds_gray_10"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="@id/animation_friend_view_lottie"
+            app:layout_constraintStart_toStartOf="@id/animation_friend_view_lottie"
+            app:layout_constraintTop_toBottomOf="@id/animation_friend_view_lottie"
+            tools:text="34기 디자인파트" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -37,8 +37,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -53,6 +51,8 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBindin
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
@@ -105,6 +105,20 @@ class PokeNotificationActivity : AppCompatActivity() {
 
                     override fun onAnimationEnd(animation: Animator) {
                         layoutLottie.visibility = View.GONE
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
+
+            animationFriendViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        layoutFreindLottie.visibility = View.GONE
                     }
 
                     override fun onAnimationCancel(animation: Animator) {}
@@ -212,12 +226,35 @@ class PokeNotificationActivity : AppCompatActivity() {
                         pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
-                                binding.layoutLottie.visibility = View.VISIBLE
-                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                                binding.animationViewLottie.playAnimation()
+                                with(binding) {
+                                    layoutLottie.visibility = View.VISIBLE
+                                    tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                                    animationViewLottie.playAnimation()
+                                }
                             }
 
-                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
+                            false -> {
+                                if (it.data.pokeNum == 5 && it.data.isAnonymous) {
+                                    with(binding) {
+                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                        tvFreindLottieHint.text = getString(R.string.poke_user_info_part, it.data.generation, it.data.part)
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.friendtobestfriend)
+                                        }.playAnimation()
+                                    }
+                                } else if(it.data.pokeNum == 11 && it.data.isAnonymous) {
+                                    with(binding) {
+                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.bestfriendtosoulmate)
+                                        }.playAnimation()
+                                    }
+                                } else {
+                                    showPokeToast(getString(R.string.toast_poke_user_success))
+                                }
+                            }
                         }
                     }
 

@@ -144,6 +144,20 @@ class PokeMainActivity : AppCompatActivity() {
                 },
             )
 
+            animationFriendViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        layoutFreindLottie.visibility = View.GONE
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
+
             layoutLottie.setOnClickListener {
                 // do nothing
             }
@@ -199,12 +213,35 @@ class PokeMainActivity : AppCompatActivity() {
                         viewModel.updatePokeUserState(it.data.userId)
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
-                                binding.layoutLottie.visibility = View.VISIBLE
-                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                                binding.animationViewLottie.playAnimation()
+                                with(binding) {
+                                    layoutLottie.visibility = View.VISIBLE
+                                    tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                                    animationViewLottie.playAnimation()
+                                }
                             }
 
-                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
+                            false -> {
+                                if (it.data.pokeNum == 5 && it.data.isAnonymous) {
+                                    with(binding) {
+                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                        tvFreindLottieHint.text = getString(R.string.poke_user_info_part, it.data.generation, it.data.part)
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.friendtobestfriend)
+                                        }.playAnimation()
+                                    }
+                                } else if (it.data.pokeNum == 11 && it.data.isAnonymous) {
+                                    with(binding) {
+                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.bestfriendtosoulmate)
+                                        }.playAnimation()
+                                    }
+                                } else {
+                                    showPokeToast(getString(R.string.toast_poke_user_success))
+                                }
+                            }
                         }
                     }
 
