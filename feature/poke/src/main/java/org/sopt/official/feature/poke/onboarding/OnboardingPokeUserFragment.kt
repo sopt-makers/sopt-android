@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -30,6 +29,7 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingPokeUserFragment : Fragment() {
@@ -87,7 +87,9 @@ class OnboardingPokeUserFragment : Fragment() {
     private fun getPokeUserListFromArguments() {
         val pokeUser =
             BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeOnboardingUiState::class.java)
-        updateRecyclerView(pokeUser?.randomType.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
+        pokeUser?.let {
+            updateRecyclerView(it.randomType, it.randomTitle, it.userInfoList.map { pokeUser -> pokeUser.toEntity() })
+        }
     }
 
     private fun launchOnboardingPokeUserListUiStateFlow() {
@@ -95,7 +97,12 @@ class OnboardingPokeUserFragment : Fragment() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> "Loading"
-                    is UiState.Success<PokeRandomUserList.PokeRandomUsers> -> updateRecyclerView(it.data.randomType, it.data.userInfoList)
+                    is UiState.Success<PokeRandomUserList.PokeRandomUsers> -> updateRecyclerView(
+                        it.data.randomType,
+                        it.data.randomTitle,
+                        it.data.userInfoList
+                    )
+
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
@@ -128,9 +135,9 @@ class OnboardingPokeUserFragment : Fragment() {
             }.launchIn(lifecycleScope)
     }
 
-    private fun updateRecyclerView(textViewContent: String, data: List<PokeUser>) {
-        viewModel.setRandomType(textViewContent)
-        binding.textViewContent.text = textViewContent
+    private fun updateRecyclerView(randomType: String, randomTitle: String, data: List<PokeUser>) {
+        viewModel.setRandomType(randomType)
+        binding.textViewContent.text = randomTitle
         pokeUserListAdapter?.submitList(data)
         binding.swipeRefreshLayout.isRefreshing = false
     }

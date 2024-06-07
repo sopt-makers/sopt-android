@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -123,7 +122,6 @@ class OnboardingPokeUserViewModel @Inject constructor(
     }
 
     fun setRandomType(type: String) {
-        Log.e("TAG", "setRandomType: $type", )
         randomType.value = type
     }
 }
