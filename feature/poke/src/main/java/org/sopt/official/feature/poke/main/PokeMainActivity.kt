@@ -29,12 +29,15 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -78,7 +81,7 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.recyclerViewPokeMain.adapter = PokeMainListAdapter(pokeUserListClickLister)
+        initAdapter()
         initData()
         initListener()
         initStateFlowValues()
@@ -87,6 +90,10 @@ class PokeMainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         tracker.track(type = EventType.VIEW, name = "poke_main", properties = mapOf("view_type" to args?.userStatus))
+    }
+
+    private fun initAdapter() {
+        binding.recyclerViewPokeMain.adapter = PokeMainListAdapter(pokeUserListClickLister)
     }
 
     private fun initData() {
@@ -149,7 +156,28 @@ class PokeMainActivity : AppCompatActivity() {
                     override fun onAnimationStart(animation: Animator) {}
 
                     override fun onAnimationEnd(animation: Animator) {
-                        layoutFreindLottie.visibility = View.GONE
+                        if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                            // 로티
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                            val anonymousFriend = viewModel.anonymousFriend.value
+                            anonymousFriend?.let {
+                                tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                                tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                                it.profileImage.takeIf { image ->
+                                    image.isNotEmpty()
+                                }.run { imgAnonymousFriendOpen.load(this) { transformations(CircleCropTransformation()) } }
+                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                            }
+
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                layoutAnonymousFriendOpen.visibility = View.GONE
+                                viewModel.setAnonymousFriend(null)
+                            }, 2000)
+                        } else {
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                        }
                     }
 
                     override fun onAnimationCancel(animation: Animator) {}
@@ -211,28 +239,33 @@ class PokeMainActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
-                        when (it.isFirstMeet && !it.data.isFirstMeet) {
+                        when (it.isFirstMeet && !it.data.isFirstMeet) { // 친구
                             true -> {
                                 with(binding) {
                                     layoutLottie.visibility = View.VISIBLE
-                                    tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
+                                    tvLottie.text = binding.root.context.getString(
+                                        R.string.friend_complete,
+                                        if (it.data.isAnonymous) it.data.anonymousName else it.data.name
+                                    )
                                     animationViewLottie.playAnimation()
                                 }
                             }
 
                             false -> {
-                                if (it.data.pokeNum == 5 && it.data.isAnonymous) {
+                                if ((it.data.pokeNum == 5 || it.data.pokeNum == 6) && it.data.isAnonymous) { // 익명 베스트 프랜드 + 힌트
                                     with(binding) {
-                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
                                         tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
-                                        tvFreindLottieHint.text = getString(R.string.poke_user_info_part, it.data.generation, it.data.part)
+                                        tvFreindLottieHint.text =
+                                            getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
                                         animationFriendViewLottie.apply {
                                             setAnimation(R.raw.friendtobestfriend)
                                         }.playAnimation()
                                     }
-                                } else if (it.data.pokeNum == 11 && it.data.isAnonymous) {
+                                } else if ((it.data.pokeNum == 11 || it.data.pokeNum == 12) && it.data.isAnonymous) { // 익명 소울메이트 + 정체 공개
+                                    viewModel.setAnonymousFriend(it.data)
                                     with(binding) {
-                                        layoutFreindLottie.visibility = View.VISIBLE
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
                                         tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
                                         animationFriendViewLottie.apply {
                                             setAnimation(R.raw.bestfriendtosoulmate)

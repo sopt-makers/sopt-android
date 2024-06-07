@@ -29,13 +29,80 @@
     android:layout_height="match_parent"
     tools:context=".notification.PokeNotificationActivity">
 
+    <!-- 익명 친구 오픈 -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout_freind_lottie"
+        android:id="@+id/layout_anonymous_friend_open"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/mds_gray_950_alpha80"
         android:elevation="@dimen/cardview_compat_inset_shadow"
-        android:visibility="visible"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_anonymous_freind_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/suit_bold"
+            android:lineSpacingExtra="6dp"
+            android:textColor="@color/mds_gray_10"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@id/img_anonymous_friend_open"
+            app:layout_constraintEnd_toEndOf="@id/img_anonymous_friend_open"
+            app:layout_constraintStart_toStartOf="@id/img_anonymous_friend_open"
+            tools:text="익명의 사자님과\n단짝친구가 되었어요" />
+
+        <ImageView
+            android:id="@+id/img_anonymous_friend_open"
+            android:layout_width="154dp"
+            android:layout_height="154dp"
+            android:src="@drawable/ic_empty_profile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_anonymous_friend_open_outline"
+            android:layout_width="154dp"
+            android:layout_height="154dp"
+            android:background="@drawable/oval_stroke_2"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_anonymous_freind_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="56dp"
+            android:fontFamily="@font/suit_bold"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:textColor="@color/mds_gray_10"
+            android:textFontWeight="600"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="@id/img_anonymous_friend_open"
+            app:layout_constraintStart_toStartOf="@id/img_anonymous_friend_open"
+            app:layout_constraintTop_toBottomOf="@id/img_anonymous_friend_open"
+            tools:text="34기 디자인파트" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- 익명 친구 단계 상승 로티 -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_anonymous_friend_lottie"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/mds_gray_950_alpha80"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +119,9 @@
             android:textColor="@color/mds_gray_10"
             android:textFontWeight="600"
             android:textSize="18dp"
+            app:layout_constraintBottom_toTopOf="@id/animation_friend_view_lottie"
             app:layout_constraintEnd_toEndOf="@id/animation_friend_view_lottie"
             app:layout_constraintStart_toStartOf="@id/animation_friend_view_lottie"
-            app:layout_constraintBottom_toTopOf="@id/animation_friend_view_lottie"
             tools:text="익명의 사자님과\n단짝친구가 되었어요" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -82,18 +149,17 @@
             app:layout_constraintStart_toStartOf="@id/animation_friend_view_lottie"
             app:layout_constraintTop_toBottomOf="@id/animation_friend_view_lottie"
             tools:text="34기 디자인파트" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- 친구 성사 로티 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_lottie"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:elevation="1dp"
         android:background="@color/mds_gray_950_alpha80"
+        android:elevation="@dimen/cardview_compat_inset_shadow"
         android:visibility="gone"
-        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -104,6 +170,7 @@
             android:layout_width="108dp"
             android:layout_height="88dp"
             android:layout_marginTop="280dp"
+            app:layout_constraintBottom_toTopOf="@id/tv_lottie"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -116,16 +183,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/suit_bold"
-            android:lineSpacingExtra="6dp"
             android:gravity="center"
-            tools:text="찌르기 답장으로\n심유나님과 친구가 되었어요"
+            android:lineSpacingExtra="6dp"
             android:textColor="@color/mds_gray_10"
             android:textFontWeight="600"
             android:textSize="18dp"
             app:layout_constraintEnd_toEndOf="@id/animation_view_lottie"
             app:layout_constraintStart_toStartOf="@id/animation_view_lottie"
-            app:layout_constraintTop_toBottomOf="@id/animation_view_lottie" />
+            app:layout_constraintTop_toBottomOf="@id/animation_view_lottie"
+            tools:text="찌르기 답장으로\n김다혜님과 친구가 되었어요" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <include
         android:id="@+id/include_app_bar"

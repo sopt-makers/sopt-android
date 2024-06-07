@@ -87,7 +87,7 @@ class OnboardingPokeUserFragment : Fragment() {
     private fun getPokeUserListFromArguments() {
         val pokeUser =
             BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeOnboardingUiState::class.java)
-        updateRecyclerView(pokeUser?.randomTitle.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
+        updateRecyclerView(pokeUser?.randomType.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
     }
 
     private fun launchOnboardingPokeUserListUiStateFlow() {

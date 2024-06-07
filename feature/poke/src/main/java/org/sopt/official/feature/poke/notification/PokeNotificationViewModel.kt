@@ -27,7 +27,6 @@ package org.sopt.official.feature.poke.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,6 +38,7 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
+import javax.inject.Inject
 
 @HiltViewModel
 class PokeNotificationViewModel @Inject constructor(
@@ -50,6 +50,10 @@ class PokeNotificationViewModel @Inject constructor(
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
+
+    private val _anonymousFriend = MutableStateFlow<PokeUser?>(null)
+    val anonymousFriend: StateFlow<PokeUser?>
+        get() = _anonymousFriend
 
     private var totalPageSize = -1
     private var currentPaginationIndex = 0
@@ -102,5 +106,9 @@ class PokeNotificationViewModel @Inject constructor(
                 _pokeUserUiState.emit(UiState.Failure(throwable))
             }
         }
+    }
+
+    fun setAnonymousFriend(pokeUser: PokeUser?) {
+        _anonymousFriend.value = pokeUser
     }
 }

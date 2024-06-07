@@ -47,7 +47,7 @@ class MessageListBottomSheetViewModel @Inject constructor(
     private val _pokeMessageListUiState = MutableStateFlow<UiState<PokeMessageList>>(UiState.Loading)
     val pokeMessageListUiState: StateFlow<UiState<PokeMessageList>> get() = _pokeMessageListUiState
 
-    private val _pokeAnonymousCheckboxChecked = MutableStateFlow(false)
+    private val _pokeAnonymousCheckboxChecked = MutableStateFlow(true)
     val pokeAnonymousCheckboxChecked: StateFlow<Boolean>
         get() = _pokeAnonymousCheckboxChecked
 
