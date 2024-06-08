@@ -24,16 +24,20 @@
  */
 package org.sopt.official.feature.poke.friend.summary
 
+import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import coil.load
+import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -57,7 +61,10 @@ import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -89,6 +96,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         initAppBar()
+        initLottieListener()
         initFriendListBlock()
         launchFriendListSummaryUiStateFlow()
         launchPokeUserUiStateFlow()
@@ -103,6 +111,45 @@ class FriendListSummaryActivity : AppCompatActivity() {
         binding.includeAppBar.apply {
             toolbar.setOnClickListener { onBackPressed() }
             textViewTitle.text = getString(R.string.my_friend_title)
+        }
+    }
+
+    private fun initLottieListener() {
+        with(binding) {
+            animationFriendViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                            // 로티
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                            val anonymousFriend = viewModel.anonymousFriend.value
+                            anonymousFriend?.let {
+                                tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                                tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                                it.profileImage.takeIf { image ->
+                                    image.isNotEmpty()
+                                }.run { imgAnonymousFriendOpen.load(this) { transformations(CircleCropTransformation()) } }
+                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                            }
+
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                layoutAnonymousFriendOpen.visibility = View.GONE
+                                viewModel.setAnonymousFriend(null)
+                            }, 2000)
+                        } else {
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
         }
     }
 
@@ -283,7 +330,29 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.getFriendListSummary()
-                        showPokeToast(getString(R.string.toast_poke_user_success))
+
+                        if ((it.data.pokeNum == 5 || it.data.pokeNum == 6) && it.data.isAnonymous) { // 익명 베스트 프랜드 + 힌트
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                tvFreindLottieHint.text =
+                                    getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.friendtobestfriend)
+                                }.playAnimation()
+                            }
+                        } else if ((it.data.pokeNum == 11 || it.data.pokeNum == 12) && it.data.isAnonymous) { // 익명 소울메이트 + 정체 공개
+                            viewModel.setAnonymousFriend(it.data)
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.bestfriendtosoulmate)
+                                }.playAnimation()
+                            }
+                        } else {
+                            showPokeToast(getString(R.string.toast_poke_user_success))
+                        }
                     }
 
                     is UiState.ApiError -> {
