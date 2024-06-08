@@ -22,19 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.datastore.fake
+package org.sopt.official.network.di
 
-import java.security.SecureRandom
-import java.security.spec.AlgorithmParameterSpec
-import javax.crypto.KeyGenerator
-import javax.crypto.KeyGeneratorSpi
-import javax.crypto.SecretKey
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.common.di.LocalStore
+import javax.inject.Singleton
 
-class FakeAESKeyGenerator : KeyGeneratorSpi() {
-    private val wrapped = KeyGenerator.getInstance("AES")
-
-    override fun engineInit(random: SecureRandom?) = Unit
-    override fun engineInit(params: AlgorithmParameterSpec?, random: SecureRandom?) = Unit
-    override fun engineInit(keysize: Int, random: SecureRandom?) = Unit
-    override fun engineGenerateKey(): SecretKey = wrapped.generateKey()
+@Module
+@InstallIn(SingletonComponent::class)
+object DataStoreModule {
+    @Provides
+    @Singleton
+    @LocalStore
+    fun provideSoptDataStoreName(): String = "sampleKey"
 }

@@ -137,7 +137,6 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.startup)
-    implementation(libs.security)
     implementation(libs.swipe.refresh.layout)
 
     implementation(libs.inappupdate)

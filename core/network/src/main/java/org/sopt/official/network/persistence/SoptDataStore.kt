@@ -26,64 +26,18 @@ package org.sopt.official.network.persistence
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.security.KeyStore
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.di.LocalStore
-import timber.log.Timber
+import org.sopt.official.common.file.createSharedPreference
 
 @Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
     @LocalStore private val fileName: String,
-    masterKey: MasterKey,
 ) {
-    private val store = try {
-        createSharedPreference(
-            !BuildConfig.DEBUG,
-            fileName,
-            masterKey
-        )
-    } catch (e: Exception) {
-        Timber.e(e)
-        deleteMasterKeyEntry()
-        deleteEncryptedPreference()
-        createSharedPreference(
-            !BuildConfig.DEBUG,
-            fileName,
-            masterKey
-        )
-    }
-
-    private fun createSharedPreference(isEncrypted: Boolean, fileName: String, masterKey: MasterKey) = if (isEncrypted) {
-        EncryptedSharedPreferences.create(
-            context,
-            fileName,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    } else {
-        context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
-    }
-
-    /**
-     * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
-     */
-    private fun deleteMasterKeyEntry() {
-        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
-            load(null)
-            deleteEntry(KEY_ALIAS_AUTH)
-        }
-    }
-
-    private fun deleteEncryptedPreference() {
-        context.deleteSharedPreferences("sampleKey")
-    }
+    private val store = createSharedPreference(fileName, context)
 
     fun clear() {
         store.edit(true) {
