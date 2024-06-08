@@ -201,7 +201,7 @@ class HomeViewModel @Inject constructor(
     private val _checkNewInPokeUiState = MutableStateFlow<UiState<CheckNewInPoke>>(UiState.Loading)
     val checkNewInPokeUiState: StateFlow<UiState<CheckNewInPoke>> get() = _checkNewInPokeUiState
 
-    private val _appServiceUiState = MutableStateFlow<AppServiceUiState>(AppServiceUiState())
+    private val _appServiceUiState = MutableStateFlow(AppServiceUiState())
     val appServiceUiState: StateFlow<AppServiceUiState>
         get() = _appServiceUiState
 

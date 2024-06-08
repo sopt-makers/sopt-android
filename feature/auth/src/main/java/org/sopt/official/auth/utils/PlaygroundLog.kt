@@ -26,7 +26,7 @@ package org.sopt.official.auth.utils
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.util.Log
+import timber.log.Timber
 
 class PlaygroundLog private constructor(val isDebug: Boolean) {
 
@@ -51,23 +51,23 @@ class PlaygroundLog private constructor(val isDebug: Boolean) {
         }
 
         fun v(log: Any?) {
-            if (instance?.isDebug == true) Log.v(TAG, buildLogMessage(log))
+            if (instance?.isDebug == true) Timber.tag(TAG).v(buildLogMessage(log))
         }
 
         fun d(log: Any?) {
-            if (instance?.isDebug == true) Log.d(TAG, buildLogMessage(log))
+            if (instance?.isDebug == true) Timber.tag(TAG).d(buildLogMessage(log))
         }
 
         fun i(log: Any?) {
-            if (instance?.isDebug == true) Log.i(TAG, buildLogMessage(log))
+            if (instance?.isDebug == true) Timber.tag(TAG).i(buildLogMessage(log))
         }
 
         fun w(log: Any?) {
-            if (instance?.isDebug == true) Log.w(TAG, buildLogMessage(log))
+            if (instance?.isDebug == true) Timber.tag(TAG).w(buildLogMessage(log))
         }
 
         fun e(log: Any?) {
-            if (instance?.isDebug == true) Log.e(TAG, buildLogMessage(log))
+            if (instance?.isDebug == true) Timber.tag(TAG).e(buildLogMessage(log))
         }
 
         private fun buildLogMessage(log: Any?): String {

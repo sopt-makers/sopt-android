@@ -1,23 +1,5 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath(libs.kotlin.gradleplugin)
-        classpath(libs.hilt.plugin)
-        classpath(libs.agp)
-        classpath(libs.crashlytics.plugin)
-        classpath(libs.ktlint)
-        classpath(libs.secret.plugin)
-        classpath(libs.google.services)
-    }
-}
-
 plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
@@ -34,6 +16,7 @@ plugins {
     alias(libs.plugins.app.distribution) apply false
     alias(libs.plugins.spotless) apply false
     alias(libs.plugins.org.jetbrains.kotlin.jvm) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.androidTest) apply false
     alias(libs.plugins.androidx.baselineprofile) apply false
 }

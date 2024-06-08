@@ -2,6 +2,7 @@ package org.sopt.official.plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class KotlinJvmPlugin : Plugin<Project> {
@@ -12,8 +13,8 @@ class KotlinJvmPlugin : Plugin<Project> {
         }
 
         tasks.withType(KotlinCompile::class.java).configureEach {
-            kotlinOptions {
-                jvmTarget = "17"
+            compilerOptions {
+                jvmTarget.set(JvmTarget.JVM_17)
             }
         }
     }

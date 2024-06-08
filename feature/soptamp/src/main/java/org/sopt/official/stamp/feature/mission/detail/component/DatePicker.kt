@@ -298,7 +298,10 @@ fun DateItemsPicker(
         ) {
             items(items.size) {
                 val index = it % items.size
-                if (it == listState.firstVisibleItemIndex + 1) {
+                val firstVisibleItemIndex by remember {
+                    derivedStateOf { listState.firstVisibleItemIndex }
+                }
+                if (it == firstVisibleItemIndex + 1) {
                     currentValue.value = items[index]
                 }
 
@@ -306,7 +309,7 @@ fun DateItemsPicker(
 
                 Text(
                     text = items[index],
-                    modifier = Modifier.alpha(if (it == listState.firstVisibleItemIndex + 1) 1f else 0.3f),
+                    modifier = Modifier.alpha(if (it == firstVisibleItemIndex + 1) 1f else 0.3f),
                     style = SoptTheme.typography.h1,
                     textAlign = TextAlign.Center
                 )
@@ -348,9 +351,9 @@ private fun DatePickerPreview() {
 @DefaultPreview
 @Composable
 private fun CustomDatePickerPreview() {
-    val chosenYear = remember { mutableStateOf(currentYear) }
-    val chosenMonth = remember { mutableStateOf(currentMonth) }
-    val chosenDay = remember { mutableStateOf(currentDay) }
+    val chosenYear = remember { mutableIntStateOf(currentYear) }
+    val chosenMonth = remember { mutableIntStateOf(currentMonth) }
+    val chosenDay = remember { mutableIntStateOf(currentDay) }
     SoptTheme {
         DatePickerUI(
             isValidDate = true,

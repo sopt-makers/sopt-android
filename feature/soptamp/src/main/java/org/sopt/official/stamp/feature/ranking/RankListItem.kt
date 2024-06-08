@@ -84,7 +84,7 @@ fun RankListItem(
 
     var ranking: Int = -1
     var newRank = -1
-    var name: String = ""
+    var name = ""
     var description: String? = ""
     var scorePoint: Int = -1
 

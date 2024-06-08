@@ -28,10 +28,10 @@ import java.util.Properties
 plugins {
     sopt("application")
     sopt("test")
+    sopt("compose")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.secret)
     alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
@@ -111,12 +111,6 @@ android {
             }
         }
     }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
-    }
 }
 
 dependencies {
@@ -164,7 +158,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)
-    ksp(libs.compose.destination.ksp)
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.compose.test)

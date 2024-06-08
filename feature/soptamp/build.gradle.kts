@@ -24,6 +24,7 @@
  */
 plugins {
     sopt("feature")
+    sopt("compose")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.secret)
@@ -41,12 +42,6 @@ android {
                 java.srcDir("build/generated/ksp/$name/kotlin")
             }
         }
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
     }
     namespace = "org.sopt.official.stamp"
 }

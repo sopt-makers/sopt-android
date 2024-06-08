@@ -5,8 +5,9 @@ plugins {
 group = "org.sopt.official.buildlogic"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 kotlin {
@@ -16,6 +17,7 @@ kotlin {
 dependencies {
     compileOnly(libs.agp)
     compileOnly(libs.kotlin.gradleplugin)
+    compileOnly(libs.compose.compiler.extension)
 }
 
 gradlePlugin {
