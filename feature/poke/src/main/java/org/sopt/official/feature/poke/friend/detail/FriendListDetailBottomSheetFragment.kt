@@ -139,9 +139,10 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                             anonymousFriend?.let {
                                 tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
                                 tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                                it.profileImage.takeIf { image ->
-                                    image.isNotEmpty()
-                                }.run { imgAnonymousFriendOpen.load(this) { transformations(CircleCropTransformation()) } }
+                                imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                    transformations(CircleCropTransformation())
+                                }
+
                                 imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
                             }
 
