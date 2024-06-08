@@ -47,7 +47,7 @@ class SoptDataStoreTest {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
-    private val dataStore = SoptDataStore(context, "testPreference", masterKey)
+    private val dataStore = SoptDataStore(context, "testPreference")
 
     @Test
     fun `key-value 구조의 데이터를 입력했을 때 저장이 된다`() {

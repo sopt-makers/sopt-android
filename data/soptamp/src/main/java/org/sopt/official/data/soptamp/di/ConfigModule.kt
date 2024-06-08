@@ -26,23 +26,16 @@ package org.sopt.official.data.soptamp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import java.security.KeyStore
-import javax.inject.Singleton
-import org.sopt.official.data.soptamp.BuildConfig
+import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.domain.soptamp.constant.Constant
 import org.sopt.official.domain.soptamp.constant.Soptamp
 import org.sopt.official.domain.soptamp.constant.Strings
-import timber.log.Timber
-
-private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
-private const val ANDROID_KEY_STORE = "AndroidKeyStore"
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -53,40 +46,5 @@ object ConfigModule {
     fun provideSharedPreferences(
         @ApplicationContext context: Context,
         @Strings(Constant.SOPTAMP_DATA_STORE) fileName: String
-    ): SharedPreferences = try {
-        createSharedPreference(false, fileName, context)
-    } catch (e: Exception) {
-        Timber.e(e)
-        deleteMasterKeyEntry()
-        deleteEncryptedPreference(context)
-        createSharedPreference(false, fileName, context)
-    }
-
-    private fun createSharedPreference(isEncrypted: Boolean, fileName: String, context: Context) = if (isEncrypted) {
-        EncryptedSharedPreferences.create(
-            context,
-            fileName,
-            MasterKey.Builder(context, MasterKey.DEFAULT_MASTER_KEY_ALIAS)
-                .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-                .build(),
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    } else {
-        context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
-    }
-
-    /**
-     * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
-     */
-    private fun deleteMasterKeyEntry() {
-        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
-            load(null)
-            deleteEntry(KEY_ALIAS_AUTH)
-        }
-    }
-
-    private fun deleteEncryptedPreference(context: Context) {
-        context.deleteSharedPreferences("sampleKey")
-    }
+    ): SharedPreferences = createSharedPreference(fileName, context)
 }

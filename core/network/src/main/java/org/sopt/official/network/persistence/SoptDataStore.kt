@@ -26,12 +26,9 @@ package org.sopt.official.network.persistence
 
 import android.content.Context
 import androidx.core.content.edit
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.common.di.LocalStore
-import timber.log.Timber
-import java.security.KeyStore
+import org.sopt.official.common.file.createSharedPreference
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -39,50 +36,12 @@ import javax.inject.Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
     @LocalStore private val fileName: String,
-    masterKey: MasterKey,
 ) {
-    private val store = try {
-        createSharedPreference(
-            false,
-            fileName,
-            masterKey
-        )
-    } catch (e: Exception) {
-        Timber.e(e)
-        deleteMasterKeyEntry()
-        deleteEncryptedPreference()
-        createSharedPreference(
-            false,
-            fileName,
-            masterKey
-        )
-    }
-
-    private fun createSharedPreference(isEncrypted: Boolean, fileName: String, masterKey: MasterKey) = if (isEncrypted) {
-        EncryptedSharedPreferences.create(
-            context,
-            fileName,
-            masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
-    } else {
-        context.getSharedPreferences(DEBUG_FILE_NAME, Context.MODE_PRIVATE)
-    }
+    private val store = createSharedPreference(fileName, context)
 
     /**
      * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
      */
-    private fun deleteMasterKeyEntry() {
-        KeyStore.getInstance(ANDROID_KEY_STORE).apply {
-            load(null)
-            deleteEntry(KEY_ALIAS_AUTH)
-        }
-    }
-
-    private fun deleteEncryptedPreference() {
-        context.deleteSharedPreferences("sampleKey")
-    }
 
     fun clear() {
         store.edit(true) {
