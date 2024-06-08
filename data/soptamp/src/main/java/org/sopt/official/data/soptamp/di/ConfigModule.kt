@@ -54,12 +54,12 @@ object ConfigModule {
         @ApplicationContext context: Context,
         @Strings(Constant.SOPTAMP_DATA_STORE) fileName: String
     ): SharedPreferences = try {
-        createSharedPreference(!BuildConfig.DEBUG, fileName, context)
+        createSharedPreference(false, fileName, context)
     } catch (e: Exception) {
         Timber.e(e)
         deleteMasterKeyEntry()
         deleteEncryptedPreference(context)
-        createSharedPreference(!BuildConfig.DEBUG, fileName, context)
+        createSharedPreference(false, fileName, context)
     }
 
     private fun createSharedPreference(isEncrypted: Boolean, fileName: String, context: Context) = if (isEncrypted) {

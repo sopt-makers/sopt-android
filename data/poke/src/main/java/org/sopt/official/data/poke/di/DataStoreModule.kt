@@ -33,10 +33,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Singleton
-import org.sopt.official.data.poke.BuildConfig
-import timber.log.Timber
 
 private const val KEY_ALIAS_AUTH = "alias.preferences.poke"
 private const val ANDROID_KEY_STORE = "AndroidKeyStore"
@@ -51,12 +50,12 @@ object DataStoreModule {
         @ApplicationContext context: Context,
         @Strings(Constant.POKE_DATA_STORE) fileName: String
     ): SharedPreferences = try {
-        createSharedPreference(!BuildConfig.DEBUG, fileName, context)
+        createSharedPreference(false, fileName, context)
     } catch (e: Exception) {
         Timber.e(e)
         deleteMasterKeyEntry()
         deleteEncryptedPreference(context)
-        createSharedPreference(!BuildConfig.DEBUG, fileName, context)
+        createSharedPreference(false, fileName, context)
     }
 
     private fun createSharedPreference(isEncrypted: Boolean, fileName: String, context: Context) = if (isEncrypted) {

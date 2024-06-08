@@ -29,12 +29,11 @@ import androidx.core.content.edit
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import dagger.hilt.android.qualifiers.ApplicationContext
+import org.sopt.official.common.di.LocalStore
+import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 import javax.inject.Singleton
-import org.sopt.official.common.BuildConfig
-import org.sopt.official.common.di.LocalStore
-import timber.log.Timber
 
 @Singleton
 class SoptDataStore @Inject constructor(
@@ -44,7 +43,7 @@ class SoptDataStore @Inject constructor(
 ) {
     private val store = try {
         createSharedPreference(
-            !BuildConfig.DEBUG,
+            false,
             fileName,
             masterKey
         )
@@ -53,7 +52,7 @@ class SoptDataStore @Inject constructor(
         deleteMasterKeyEntry()
         deleteEncryptedPreference()
         createSharedPreference(
-            !BuildConfig.DEBUG,
+            false,
             fileName,
             masterKey
         )
