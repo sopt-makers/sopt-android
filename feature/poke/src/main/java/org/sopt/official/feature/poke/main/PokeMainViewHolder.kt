@@ -86,7 +86,6 @@ class PokeMainViewHolder(
             imageViewProfile.setOnClickListener {
                 clickListener.onClickProfileImage(user.playgroundId)
             }
-
         }
     }
 }

@@ -38,6 +38,8 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
@@ -58,8 +60,6 @@ import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -347,7 +347,6 @@ class PokeMainActivity : AppCompatActivity() {
                     pokeMeItem.isFirstMeet,
                 )
             }
-
         }
     }
 
