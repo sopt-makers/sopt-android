@@ -78,13 +78,15 @@ class PokeMainViewHolder(
             textViewUserName.text = user.name
             textViewUserInfo.text = root.context.getString(R.string.poke_user_info, user.generation, user.part)
 
-            imageViewProfile.setOnClickListener {
-                clickListener.onClickProfileImage(user.playgroundId)
-            }
+            imageButtonPoke.isEnabled = !user.isAlreadyPoke
             imageButtonPoke.setOnClickListener {
                 if (user.isAlreadyPoke) return@setOnClickListener
                 clickListener.onClickPokeButton(user)
             }
+            imageViewProfile.setOnClickListener {
+                clickListener.onClickProfileImage(user.playgroundId)
+            }
+
         }
     }
 }

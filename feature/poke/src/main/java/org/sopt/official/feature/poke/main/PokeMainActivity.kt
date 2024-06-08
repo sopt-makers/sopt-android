@@ -37,7 +37,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport.Session.User
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -215,22 +214,18 @@ class PokeMainActivity : AppCompatActivity() {
             }
             .launchIn(lifecycleScope)
 
-        viewModel.apply {
-            pokeFriendOfFriendUiState
-                .onEach {
-                    when (it) {
-                        is UiState.Loading -> "Loading"
-                        is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
-                            pokeMainListAdapter?.submitList(it.data)
-                            binding.refreshLayoutPokeMain.isRefreshing = false
-                        }
-
-                        is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                        is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
-                    }
+        viewModel.pokeSimilarFriendUiState.onEach {
+            when (it) {
+                is UiState.Loading -> "Loading"
+                is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
+                    pokeMainListAdapter?.submitList(it.data)
+                    binding.refreshLayoutPokeMain.isRefreshing = false
                 }
-                .launchIn(lifecycleScope)
-        }
+
+                is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+            }
+        }.launchIn(lifecycleScope)
 
         viewModel.pokeUserUiState
             .onEach {

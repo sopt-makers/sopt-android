@@ -38,10 +38,7 @@ class PokeMainListAdapter(
     ItemDiffCallback(
         onItemsTheSame = { old, new -> old == new },
         onContentsTheSame = { old, new ->
-            old.userInfoList[0].userId == new.userInfoList[0].userId &&
-                    old.userInfoList[0].name == new.userInfoList[0].name &&
-                    old.userInfoList[0].profileImage == new.userInfoList[0].profileImage &&
-                    old.userInfoList[0].generation == new.userInfoList[0].generation
+            old.userInfoList == new.userInfoList
         },
     ),
 ) {

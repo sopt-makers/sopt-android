@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.main
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,8 +56,8 @@ class PokeMainViewModel @Inject constructor(
     private val _pokeFriendUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeFriendUiState: StateFlow<UiState<PokeUser>> get() = _pokeFriendUiState
 
-    private val _pokeFriendOfFriendUiState = MutableStateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>>(UiState.Loading)
-    val pokeFriendOfFriendUiState: StateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>> get() = _pokeFriendOfFriendUiState
+    private val _pokeSimilarFriendUiState = MutableStateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>>(UiState.Loading)
+    val pokeSimilarFriendUiState: StateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>> get() = _pokeSimilarFriendUiState
 
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
@@ -103,16 +102,16 @@ class PokeMainViewModel @Inject constructor(
 
     fun getPokeSimilarFriends() {
         viewModelScope.launch {
-            _pokeFriendOfFriendUiState.emit(UiState.Loading)
+            _pokeSimilarFriendUiState.emit(UiState.Loading)
             getOnboardingPokeUserListUseCase.invoke(randomType = "ALL", size = 2)
                 .onSuccess {
-                    _pokeFriendOfFriendUiState.emit(UiState.Success(it.randomInfoList))
+                    _pokeSimilarFriendUiState.emit(UiState.Success(it.randomInfoList))
                 }
                 .onApiError { statusCode, responseMessage ->
-                    _pokeFriendOfFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
+                    _pokeSimilarFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure {
-                    _pokeFriendOfFriendUiState.emit(UiState.Failure(it))
+                    _pokeSimilarFriendUiState.emit(UiState.Failure(it))
                     Timber.e(it)
                 }
         }
@@ -162,13 +161,13 @@ class PokeMainViewModel @Inject constructor(
                     )
                 }
             }
-            if (_pokeFriendOfFriendUiState.value is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>) {
-                val oldData = (_pokeFriendOfFriendUiState.value as UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>).data
+            if (_pokeSimilarFriendUiState.value is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>) {
+                val oldData = (_pokeSimilarFriendUiState.value as UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>).data
                 for (friend in oldData) {
                     friend.userInfoList.find { it.userId == userId }?.isAlreadyPoke = true
                 }
-                _pokeFriendOfFriendUiState.emit(UiState.Loading)
-                _pokeFriendOfFriendUiState.emit(UiState.Success(oldData))
+                _pokeSimilarFriendUiState.emit(UiState.Loading)
+                _pokeSimilarFriendUiState.emit(UiState.Success(oldData))
             }
         }
     }
