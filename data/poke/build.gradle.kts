@@ -41,5 +41,4 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 
-    implementation(libs.security)
 }

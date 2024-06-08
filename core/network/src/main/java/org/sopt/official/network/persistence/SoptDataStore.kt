@@ -39,10 +39,6 @@ class SoptDataStore @Inject constructor(
 ) {
     private val store = createSharedPreference(fileName, context)
 
-    /**
-     * androidx.security.crypto.MasterKeys.ANDROID_KEYSTORE 참고
-     */
-
     fun clear() {
         store.edit(true) {
             clear()
