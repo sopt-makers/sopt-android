@@ -54,10 +54,6 @@ jobs:
       - name: Grant Permissions to gradlew
         run: chmod +x gradlew
 
-      # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
-
       - name: Add Local Properties
         env:
           API_KEY: ${{ secrets.SENTRY_DSN }}
@@ -90,6 +86,13 @@ jobs:
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+
+      - name: Build app and benchmark
+        run: ./gradlew :app:assembleBenchmark
+        
+      # Cleans managed device if previously settle and space currently is not available
+      - name: Clean Managed Devices
+        run: ./gradlew cleanManagedDevices --unused-only
 
       # Generates Baseline Profile
       - name: Generate Baseline Profile
