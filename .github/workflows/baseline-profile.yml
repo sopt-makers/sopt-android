@@ -9,6 +9,9 @@ run-name: ${{ github.actor }} requested a workflow
 # Read more at https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - develop
 
 # Environment variables (Optional)
 # Small projects might have signingConfigs locally. This could lead to failures on GitHub Actions.
@@ -51,18 +54,18 @@ jobs:
       - name: Grant Permissions to gradlew
         run: chmod +x gradlew
 
-      # This allows us to build most of what we need without the emulator running
-      # and using resources
-      - name: Build app and benchmark
-        run: ./gradlew :app:assembleBenchmark
-
       # Cleans managed device if previously settle and space currently is not available
       - name: Clean Managed Devices
         run: ./gradlew cleanManagedDevices --unused-only
 
       # Generates Baseline Profile
       - name: Generate Baseline Profile
-        run: ./gradlew generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20 -Dorg.gradle.workers.max=4
+        run: |
+          ./gradlew generateBaselineProfile \
+            -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" \
+            -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile \
+            -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20 \
+            -Dorg.gradle.workers.max=4
 
       # Create Pull Request
       - name: Create Pull Request
