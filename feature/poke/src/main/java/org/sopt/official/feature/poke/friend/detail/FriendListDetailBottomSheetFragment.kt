@@ -24,9 +24,12 @@
  */
 package org.sopt.official.feature.poke.friend.detail
 
+import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +37,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -58,6 +63,7 @@ import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
@@ -111,9 +117,49 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             )
         }
 
+        initLottieListener()
         initRecyclerView()
         launchPokeMessageListUiStateFlow()
         launchPokeUserUiStateFlow()
+    }
+
+    private fun initLottieListener() {
+        with(binding) {
+            animationFriendViewLottie.addAnimatorListener(
+                object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {}
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                            // 로티
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                            val anonymousFriend = viewModel.anonymousFriend.value
+                            anonymousFriend?.let {
+                                tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                                tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                                it.profileImage.takeIf { image ->
+                                    image.isNotEmpty()
+                                }.run { imgAnonymousFriendOpen.load(this) { transformations(CircleCropTransformation()) } }
+                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                            }
+
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                layoutAnonymousFriendOpen.visibility = View.GONE
+                                viewModel.setAnonymousFriend(null)
+                            }, 2000)
+                        } else {
+                            layoutAnonymousFriendLottie.visibility = View.GONE
+                        }
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {}
+
+                    override fun onAnimationRepeat(animation: Animator) {}
+                },
+            )
+        }
     }
 
     private fun initRecyclerView() {
