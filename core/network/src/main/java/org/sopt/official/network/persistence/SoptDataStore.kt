@@ -27,10 +27,10 @@ package org.sopt.official.network.persistence
 import android.content.Context
 import androidx.core.content.edit
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.sopt.official.common.di.LocalStore
-import org.sopt.official.common.file.createSharedPreference
 import javax.inject.Inject
 import javax.inject.Singleton
+import org.sopt.official.common.di.LocalStore
+import org.sopt.official.common.file.createSharedPreference
 
 @Singleton
 class SoptDataStore @Inject constructor(
