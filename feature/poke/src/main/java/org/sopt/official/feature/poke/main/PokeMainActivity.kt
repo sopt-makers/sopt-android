@@ -24,13 +24,10 @@
  */
 package org.sopt.official.feature.poke.main
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -38,14 +35,13 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
@@ -59,8 +55,11 @@ import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -81,6 +80,33 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        viewModel.setAnonymousFriend(
+            PokeUser(
+                userId = 0,
+                playgroundId = 0,
+                name = "",
+                anonymousName = "",
+                profileImage = "",
+                anonymousImage = "",
+                generation = 34,
+                part = "",
+                relationName = "",
+                mutualRelationMessage = "",
+                pokeNum = 0,
+                message = "",
+                isFirstMeet = false,
+                isAnonymous = false,
+                isAlreadyPoke = false,
+
+            )
+        )
+        with(binding) {
+            layoutAnonymousFriendLottie.visibility = View.VISIBLE
+            tvFreindLottie.text = getString(R.string.anonymous_to_friend, "익명의 떠포키", "천생연분이")
+            animationFriendViewLottie.apply {
+                setAnimation(R.raw.bestfriendtosoulmate)
+            }.playAnimation()
+        }
         initAdapter()
         initData()
         initListener()
@@ -137,31 +163,33 @@ class PokeMainActivity : AppCompatActivity() {
                 refreshLayoutPokeMain.isRefreshing = false
             }
 
-            animationViewLottie.addAnimatorEndListener {
+            animationViewLottie.addOnAnimationEndListener {
                 layoutLottie.visibility = View.GONE
             }
 
-            animationFriendViewLottie.addAnimatorEndListener {
-                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
-                    // 로티
-                    layoutAnonymousFriendLottie.visibility = View.GONE
-                    layoutAnonymousFriendOpen.visibility = View.VISIBLE
 
-                    val anonymousFriend = viewModel.anonymousFriend.value
-                    anonymousFriend?.let {
-                        tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
-                        tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                        imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                            transformations(CircleCropTransformation())
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                    lifecycleScope.launch {
+                        // 로티
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                        val anonymousFriend = viewModel.anonymousFriend.value
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
                         }
 
-                        imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                    }
-
-                    Handler(Looper.getMainLooper()).postDelayed({
+                        delay(2000)
                         layoutAnonymousFriendOpen.visibility = View.GONE
                         viewModel.setAnonymousFriend(null)
-                    }, 2000)
+                    }
                 } else {
                     layoutAnonymousFriendLottie.visibility = View.GONE
                 }

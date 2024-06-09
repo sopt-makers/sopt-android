@@ -37,17 +37,3 @@ inline fun View.setOnSingleClickListener(delay: Long = 500L, crossinline block: 
         }
     }
 }
-
-fun View.addAnimatorEndListener(action: () -> Unit) {
-    object : Animator.AnimatorListener {
-        override fun onAnimationStart(animation: Animator) {}
-
-        override fun onAnimationEnd(animation: Animator) {
-            action()
-        }
-
-        override fun onAnimationCancel(animation: Animator) {}
-
-        override fun onAnimationRepeat(animation: Animator) {}
-    }
-}

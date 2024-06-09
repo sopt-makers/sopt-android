@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.friend.summary
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -38,14 +37,11 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
@@ -64,8 +60,11 @@ import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -117,7 +116,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun initLottieListener() {
         with(binding) {
-            animationFriendViewLottie.addAnimatorEndListener {
+            animationFriendViewLottie.addOnAnimationEndListener {
                 if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
                     // 로티
                     layoutAnonymousFriendLottie.visibility = View.GONE

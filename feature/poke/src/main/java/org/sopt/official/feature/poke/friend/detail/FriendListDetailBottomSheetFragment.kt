@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.friend.detail
 
-import android.animation.Animator
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -43,12 +42,10 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
-import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
@@ -64,8 +61,10 @@ import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
@@ -109,11 +108,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 mapOf(
                     "view_type" to userStatus,
                     "friend_type" to
-                        when (it) {
-                            PokeFriendType.NEW -> "newFriend"
-                            PokeFriendType.BEST_FRIEND -> "bestFriend"
-                            PokeFriendType.SOULMATE -> "soulmate"
-                        },
+                            when (it) {
+                                PokeFriendType.NEW -> "newFriend"
+                                PokeFriendType.BEST_FRIEND -> "bestFriend"
+                                PokeFriendType.SOULMATE -> "soulmate"
+                            },
                 ),
             )
         }
@@ -126,7 +125,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initLottieListener() {
         with(binding) {
-            animationFriendViewLottie.addAnimatorEndListener {
+            animationFriendViewLottie.addOnAnimationEndListener {
                 if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
                     // 로티
                     layoutAnonymousFriendLottie.visibility = View.GONE

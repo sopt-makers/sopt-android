@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -34,13 +33,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
-import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
@@ -48,7 +44,10 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
@@ -86,7 +85,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initLottieAnimatorListener() {
         with(binding) {
-            animationViewLottie.addAnimatorEndListener {
+            animationViewLottie.addOnAnimationEndListener {
                 layoutLottie.visibility = View.GONE
                 setIntentToPokeMain()
             }
