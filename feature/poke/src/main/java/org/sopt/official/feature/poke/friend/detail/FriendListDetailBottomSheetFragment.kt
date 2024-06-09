@@ -56,6 +56,7 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
@@ -286,17 +287,38 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(getString(R.string.toast_poke_user_success))
+                        if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                tvFreindLottieHint.text =
+                                    getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.friendtobestfriend)
+                                }.playAnimation()
+                            }
+                        } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                            viewModel.setAnonymousFriend(it.data)
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.bestfriendtosoulmate)
+                                }.playAnimation()
+                            }
+                        } else {
+                            showPokeToast(getString(R.string.toast_poke_user_success))
+                        }
                     }
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(getString(R.string.poke_user_alert_exceeded))
+                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
             }

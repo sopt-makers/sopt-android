@@ -230,7 +230,7 @@ class PokeMainActivity : AppCompatActivity() {
                             }
 
                             false -> {
-                                if ((it.data.pokeNum == 5 || it.data.pokeNum == 6) && it.data.isAnonymous) { // 익명 베스트 프랜드 + 힌트
+                                if (isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
                                     with(binding) {
                                         layoutAnonymousFriendLottie.visibility = View.VISIBLE
                                         tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
@@ -240,7 +240,7 @@ class PokeMainActivity : AppCompatActivity() {
                                             setAnimation(R.raw.friendtobestfriend)
                                         }.playAnimation()
                                     }
-                                } else if ((it.data.pokeNum == 11 || it.data.pokeNum == 12) && it.data.isAnonymous) { // 익명 소울메이트 + 정체 공개
+                                } else if (isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
                                     viewModel.setAnonymousFriend(it.data)
                                     with(binding) {
                                         layoutAnonymousFriendLottie.visibility = View.VISIBLE
@@ -443,6 +443,11 @@ class PokeMainActivity : AppCompatActivity() {
     ) : Serializable
 
     companion object {
+        private val bestFriendRange = 5..6
+        private val soulMateRange = 11..12
+        fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
+        fun isSoulMate(pokeNum: Int, isAnonymous: Boolean) = pokeNum in soulMateRange && isAnonymous
+
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeMainActivity::class.java).apply {
             putExtra("args", args)

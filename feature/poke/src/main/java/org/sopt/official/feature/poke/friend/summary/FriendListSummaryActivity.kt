@@ -28,8 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -57,6 +55,7 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
 import org.sopt.official.feature.poke.friend.detail.FriendListDetailBottomSheetFragment
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
@@ -325,7 +324,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                         messageListBottomSheet?.dismiss()
                         viewModel.getFriendListSummary()
 
-                        if ((it.data.pokeNum == 5 || it.data.pokeNum == 6) && it.data.isAnonymous) { // 익명 베스트 프랜드 + 힌트
+                        if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
                             with(binding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
                                 tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
@@ -335,7 +334,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                                     setAnimation(R.raw.friendtobestfriend)
                                 }.playAnimation()
                             }
-                        } else if ((it.data.pokeNum == 11 || it.data.pokeNum == 12) && it.data.isAnonymous) { // 익명 소울메이트 + 정체 공개
+                        } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
                             viewModel.setAnonymousFriend(it.data)
                             with(binding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
