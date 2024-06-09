@@ -37,8 +37,10 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
@@ -118,25 +120,26 @@ class FriendListSummaryActivity : AppCompatActivity() {
         with(binding) {
             animationFriendViewLottie.addOnAnimationEndListener {
                 if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
-                    // 로티
-                    layoutAnonymousFriendLottie.visibility = View.GONE
-                    layoutAnonymousFriendOpen.visibility = View.VISIBLE
+                    lifecycleScope.launch {
+                        // 로티
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
 
-                    val anonymousFriend = viewModel.anonymousFriend.value
-                    anonymousFriend?.let {
-                        tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
-                        tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                        imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                            transformations(CircleCropTransformation())
+                        val anonymousFriend = viewModel.anonymousFriend.value
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
                         }
 
-                        imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                    }
-
-                    Handler(Looper.getMainLooper()).postDelayed({
+                        delay(2000)
                         layoutAnonymousFriendOpen.visibility = View.GONE
                         viewModel.setAnonymousFriend(null)
-                    }, 2000)
+                    }
                 } else {
                     layoutAnonymousFriendLottie.visibility = View.GONE
                 }
