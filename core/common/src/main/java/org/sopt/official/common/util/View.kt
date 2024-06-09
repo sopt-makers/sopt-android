@@ -24,7 +24,6 @@
  */
 package org.sopt.official.common.util
 
-import android.animation.Animator
 import android.view.View
 
 inline fun View.setOnSingleClickListener(delay: Long = 500L, crossinline block: (View) -> Unit) {

@@ -35,6 +35,8 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -58,8 +60,6 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -139,7 +139,6 @@ class PokeMainActivity : AppCompatActivity() {
             animationViewLottie.addOnAnimationEndListener {
                 layoutLottie.visibility = View.GONE
             }
-
 
             animationFriendViewLottie.addOnAnimationEndListener {
                 if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
