@@ -80,33 +80,6 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        viewModel.setAnonymousFriend(
-            PokeUser(
-                userId = 0,
-                playgroundId = 0,
-                name = "",
-                anonymousName = "",
-                profileImage = "",
-                anonymousImage = "",
-                generation = 34,
-                part = "",
-                relationName = "",
-                mutualRelationMessage = "",
-                pokeNum = 0,
-                message = "",
-                isFirstMeet = false,
-                isAnonymous = false,
-                isAlreadyPoke = false,
-
-            )
-        )
-        with(binding) {
-            layoutAnonymousFriendLottie.visibility = View.VISIBLE
-            tvFreindLottie.text = getString(R.string.anonymous_to_friend, "익명의 떠포키", "천생연분이")
-            animationFriendViewLottie.apply {
-                setAnimation(R.raw.bestfriendtosoulmate)
-            }.playAnimation()
-        }
         initAdapter()
         initData()
         initListener()
