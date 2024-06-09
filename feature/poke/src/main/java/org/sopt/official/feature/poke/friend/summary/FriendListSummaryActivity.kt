@@ -208,7 +208,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         viewModel.friendListSummaryUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<FriendListSummary> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -317,7 +317,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.getFriendListSummary()

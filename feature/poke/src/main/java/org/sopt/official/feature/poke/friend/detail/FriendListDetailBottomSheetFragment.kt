@@ -251,7 +251,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.friendListDetailUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<List<PokeUser>> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -282,7 +282,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         activity?.showPokeToast(getString(R.string.toast_poke_user_success))

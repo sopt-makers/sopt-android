@@ -205,7 +205,7 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.pokeMeUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> initPokeMeView(it.data)
                     is UiState.ApiError -> binding.layoutSomeonePokeMe.setVisible(false)
                     is UiState.Failure -> binding.layoutSomeonePokeMe.setVisible(false)
@@ -216,7 +216,7 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.pokeFriendUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -226,7 +226,7 @@ class PokeMainActivity : AppCompatActivity() {
 
         viewModel.pokeSimilarFriendUiState.onEach {
             when (it) {
-                is UiState.Loading -> "Loading"
+                is UiState.Loading -> {}
                 is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
                     pokeMainListAdapter?.submitList(it.data)
                     binding.refreshLayoutPokeMain.isRefreshing = false
@@ -240,7 +240,7 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)

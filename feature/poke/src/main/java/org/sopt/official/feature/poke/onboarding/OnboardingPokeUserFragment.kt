@@ -96,7 +96,7 @@ class OnboardingPokeUserFragment : Fragment() {
         viewModel.onboardingPokeUserListUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeRandomUserList.PokeRandomUsers> -> updateRecyclerView(
                         it.data.randomType,
                         it.data.randomTitle,
@@ -113,7 +113,7 @@ class OnboardingPokeUserFragment : Fragment() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         when (it.isFirstMeet && !it.data.isFirstMeet) {

@@ -119,7 +119,7 @@ class OnboardingActivity : AppCompatActivity() {
         viewModel.onboardingPokeUserListUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeRandomUserList> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
