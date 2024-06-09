@@ -24,6 +24,7 @@
  */
 package org.sopt.official.common.util
 
+import android.animation.Animator
 import android.view.View
 
 inline fun View.setOnSingleClickListener(delay: Long = 500L, crossinline block: (View) -> Unit) {
@@ -34,5 +35,19 @@ inline fun View.setOnSingleClickListener(delay: Long = 500L, crossinline block: 
             block(view)
             previousClickedTime = clickedTime
         }
+    }
+}
+
+fun View.addAnimatorEndListener(action: () -> Unit) {
+    object : Animator.AnimatorListener {
+        override fun onAnimationStart(animation: Animator) {}
+
+        override fun onAnimationEnd(animation: Animator) {
+            action()
+        }
+
+        override fun onAnimationCancel(animation: Animator) {}
+
+        override fun onAnimationRepeat(animation: Animator) {}
     }
 }

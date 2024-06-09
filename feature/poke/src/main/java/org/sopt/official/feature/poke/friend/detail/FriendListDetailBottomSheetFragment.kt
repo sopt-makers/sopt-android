@@ -48,6 +48,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
@@ -125,41 +126,31 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
     private fun initLottieListener() {
         with(binding) {
-            animationFriendViewLottie.addAnimatorListener(
-                object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
+            animationFriendViewLottie.addAnimatorEndListener {
+                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                    // 로티
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                    layoutAnonymousFriendOpen.visibility = View.VISIBLE
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
-                            // 로티
-                            layoutAnonymousFriendLottie.visibility = View.GONE
-                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
-
-                            val anonymousFriend = viewModel.anonymousFriend.value
-                            anonymousFriend?.let {
-                                tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
-                                tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                                imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                                    transformations(CircleCropTransformation())
-                                }
-
-                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                            }
-
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                layoutAnonymousFriendOpen.visibility = View.GONE
-                                viewModel.setAnonymousFriend(null)
-                            }, 2000)
-                        } else {
-                            layoutAnonymousFriendLottie.visibility = View.GONE
+                    val anonymousFriend = viewModel.anonymousFriend.value
+                    anonymousFriend?.let {
+                        tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                        tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                        imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                            transformations(CircleCropTransformation())
                         }
+
+                        imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
                     }
 
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                },
-            )
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
+                    }, 2000)
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
         }
     }
 

@@ -40,6 +40,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.addAnimatorEndListener
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
@@ -85,20 +86,11 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initLottieAnimatorListener() {
         with(binding) {
-            animationViewLottie.addAnimatorListener(
-                object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
+            animationViewLottie.addAnimatorEndListener {
+                layoutLottie.visibility = View.GONE
+                setIntentToPokeMain()
+            }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        layoutLottie.visibility = View.GONE
-                        setIntentToPokeMain()
-                    }
-
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                },
-            )
             layoutLottie.setOnClickListener {
                 // do nothing
             }
