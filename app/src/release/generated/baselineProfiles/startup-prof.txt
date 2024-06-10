@@ -3869,7 +3869,6 @@ HSPLcom/google/android/gms/common/internal/BaseGmsClient;->getUseDynamicLookup()
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->isConnected()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->isConnecting()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->onConnectedLocked(Landroid/os/IInterface;)V
-PLcom/google/android/gms/common/internal/BaseGmsClient;->onConnectionSuspended(I)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->onPostInitHandler(ILandroid/os/IBinder;Landroid/os/Bundle;I)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->requiresAccount()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->requiresSignIn()Z
@@ -3880,7 +3879,6 @@ HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zze()Ljava/lang/Strin
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzf(Lcom/google/android/gms/common/internal/BaseGmsClient;)Ljava/util/ArrayList;
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzg(Lcom/google/android/gms/common/internal/BaseGmsClient;Lcom/google/android/gms/common/ConnectionResult;)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzh(Lcom/google/android/gms/common/internal/BaseGmsClient;Lcom/google/android/gms/common/internal/IGmsServiceBroker;)V
-PLcom/google/android/gms/common/internal/BaseGmsClient;->zzi(Lcom/google/android/gms/common/internal/BaseGmsClient;ILandroid/os/IInterface;)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzj(Lcom/google/android/gms/common/internal/BaseGmsClient;Lcom/google/android/gms/common/internal/zzk;)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzl(ILandroid/os/Bundle;I)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->zzn(Lcom/google/android/gms/common/internal/BaseGmsClient;IILandroid/os/IInterface;)Z
@@ -3992,7 +3990,6 @@ HSPLcom/google/android/gms/common/internal/zzd;->zzc(ILandroid/os/IBinder;Lcom/g
 Lcom/google/android/gms/common/internal/zze;
 HSPLcom/google/android/gms/common/internal/zze;-><init>(Lcom/google/android/gms/common/internal/BaseGmsClient;I)V
 HSPLcom/google/android/gms/common/internal/zze;->onServiceConnected(Landroid/content/ComponentName;Landroid/os/IBinder;)V
-PLcom/google/android/gms/common/internal/zze;->onServiceDisconnected(Landroid/content/ComponentName;)V
 Lcom/google/android/gms/common/internal/zzf;
 HSPLcom/google/android/gms/common/internal/zzf;-><init>(Lcom/google/android/gms/common/internal/BaseGmsClient;ILandroid/os/IBinder;Landroid/os/Bundle;)V
 HSPLcom/google/android/gms/common/internal/zzf;->zzd()Z
@@ -4017,13 +4014,13 @@ HSPLcom/google/android/gms/common/internal/zzo;->zzb(Landroid/content/Context;)L
 Lcom/google/android/gms/common/internal/zzp;
 HSPLcom/google/android/gms/common/internal/zzp;-><init>(Lcom/google/android/gms/common/internal/zzs;Lcom/google/android/gms/common/internal/zzo;)V
 HSPLcom/google/android/gms/common/internal/zzp;->onServiceConnected(Landroid/content/ComponentName;Landroid/os/IBinder;)V
-PLcom/google/android/gms/common/internal/zzp;->onServiceDisconnected(Landroid/content/ComponentName;)V
 PLcom/google/android/gms/common/internal/zzp;->zza()I
 PLcom/google/android/gms/common/internal/zzp;->zzb()Landroid/content/ComponentName;
 PLcom/google/android/gms/common/internal/zzp;->zzc()Landroid/os/IBinder;
 HSPLcom/google/android/gms/common/internal/zzp;->zzd(Landroid/content/ServiceConnection;Landroid/content/ServiceConnection;Ljava/lang/String;)V
 HSPLcom/google/android/gms/common/internal/zzp;->zze(Ljava/lang/String;Ljava/util/concurrent/Executor;)V
 PLcom/google/android/gms/common/internal/zzp;->zzf(Landroid/content/ServiceConnection;Ljava/lang/String;)V
+PLcom/google/android/gms/common/internal/zzp;->zzg(Ljava/lang/String;)V
 PLcom/google/android/gms/common/internal/zzp;->zzh(Landroid/content/ServiceConnection;)Z
 PLcom/google/android/gms/common/internal/zzp;->zzi()Z
 HSPLcom/google/android/gms/common/internal/zzp;->zzj()Z
@@ -5761,7 +5758,6 @@ HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/g
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/gms/measurement/internal/zzfp;Lcom/google/android/gms/common/internal/safeparcel/AbstractSafeParcelable;Lcom/google/android/gms/measurement/internal/zzn;)V
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/gms/measurement/internal/zzkt;)V
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/gms/measurement/internal/zzlb;)Lcom/google/android/gms/measurement/internal/zzfp;
-PLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/gms/measurement/internal/zzlb;Landroid/content/ComponentName;)V
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Lcom/google/android/gms/measurement/internal/zzno;)V
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Ljava/lang/Runnable;)V
 HSPLcom/google/android/gms/measurement/internal/zzlb;->zza(Ljava/util/concurrent/atomic/AtomicReference;)V
@@ -5811,12 +5807,9 @@ HSPLcom/google/android/gms/measurement/internal/zzlt;->run()V
 Lcom/google/android/gms/measurement/internal/zzlw;
 HSPLcom/google/android/gms/measurement/internal/zzlw;-><init>(Lcom/google/android/gms/measurement/internal/zzlb;)V
 HSPLcom/google/android/gms/measurement/internal/zzlw;->onConnected(Landroid/os/Bundle;)V
-PLcom/google/android/gms/measurement/internal/zzlw;->onConnectionSuspended(I)V
 HSPLcom/google/android/gms/measurement/internal/zzlw;->zza()V
 HSPLcom/google/android/gms/measurement/internal/zzlw;->zza(Lcom/google/android/gms/measurement/internal/zzlw;Z)V
 PLcom/google/android/gms/measurement/internal/zzlw;->zzb()V
-PLcom/google/android/gms/measurement/internal/zzma;-><init>(Lcom/google/android/gms/measurement/internal/zzlw;)V
-PLcom/google/android/gms/measurement/internal/zzma;->run()V
 Lcom/google/android/gms/measurement/internal/zzmb;
 HSPLcom/google/android/gms/measurement/internal/zzmb;-><init>(Lcom/google/android/gms/measurement/internal/zzlw;Lcom/google/android/gms/measurement/internal/zzfp;)V
 HSPLcom/google/android/gms/measurement/internal/zzmb;->run()V
@@ -5952,6 +5945,7 @@ Lcom/google/android/gms/tasks/OnCompleteListener;
 Lcom/google/android/gms/tasks/OnFailureListener;
 Lcom/google/android/gms/tasks/OnSuccessListener;
 Lcom/google/android/gms/tasks/RuntimeExecutionException;
+HSPLcom/google/android/gms/tasks/RuntimeExecutionException;-><init>(Ljava/lang/Throwable;)V
 Lcom/google/android/gms/tasks/SuccessContinuation;
 Lcom/google/android/gms/tasks/Task;
 HSPLcom/google/android/gms/tasks/Task;-><init>()V
@@ -5972,6 +5966,7 @@ HSPLcom/google/android/gms/tasks/Tasks;->zza(Lcom/google/android/gms/tasks/Task;
 HSPLcom/google/android/gms/tasks/Tasks;->zzb(Lcom/google/android/gms/tasks/Task;Lcom/google/android/gms/tasks/zzae;)V
 Lcom/google/android/gms/tasks/zzad;
 HSPLcom/google/android/gms/tasks/zzad;-><init>(Lcom/google/android/gms/tasks/zzac;)V
+HSPLcom/google/android/gms/tasks/zzad;->onFailure(Ljava/lang/Exception;)V
 HSPLcom/google/android/gms/tasks/zzad;->onSuccess(Ljava/lang/Object;)V
 HSPLcom/google/android/gms/tasks/zzad;->zza()V
 HSPLcom/google/android/gms/tasks/zzad;->zzb(JLjava/util/concurrent/TimeUnit;)Z
@@ -5989,6 +5984,7 @@ HSPLcom/google/android/gms/tasks/zze;-><init>(Lcom/google/android/gms/tasks/zzf;
 HSPLcom/google/android/gms/tasks/zze;->run()V
 Lcom/google/android/gms/tasks/zzf;
 HSPLcom/google/android/gms/tasks/zzf;-><init>(Ljava/util/concurrent/Executor;Lcom/google/android/gms/tasks/Continuation;Lcom/google/android/gms/tasks/zzw;)V
+HSPLcom/google/android/gms/tasks/zzf;->onFailure(Ljava/lang/Exception;)V
 HSPLcom/google/android/gms/tasks/zzf;->onSuccess(Ljava/lang/Object;)V
 HSPLcom/google/android/gms/tasks/zzf;->zza(Lcom/google/android/gms/tasks/zzf;)Lcom/google/android/gms/tasks/Continuation;
 HSPLcom/google/android/gms/tasks/zzf;->zzd(Lcom/google/android/gms/tasks/Task;)V
@@ -6003,8 +5999,13 @@ HSPLcom/google/android/gms/tasks/zzj;-><init>(Ljava/util/concurrent/Executor;Lco
 HSPLcom/google/android/gms/tasks/zzj;->zza(Lcom/google/android/gms/tasks/zzj;)Lcom/google/android/gms/tasks/OnCompleteListener;
 HSPLcom/google/android/gms/tasks/zzj;->zzb(Lcom/google/android/gms/tasks/zzj;)Ljava/lang/Object;
 HSPLcom/google/android/gms/tasks/zzj;->zzd(Lcom/google/android/gms/tasks/Task;)V
+Lcom/google/android/gms/tasks/zzk;
+HSPLcom/google/android/gms/tasks/zzk;-><init>(Lcom/google/android/gms/tasks/zzl;Lcom/google/android/gms/tasks/Task;)V
+HSPLcom/google/android/gms/tasks/zzk;->run()V
 Lcom/google/android/gms/tasks/zzl;
 HSPLcom/google/android/gms/tasks/zzl;-><init>(Ljava/util/concurrent/Executor;Lcom/google/android/gms/tasks/OnFailureListener;)V
+HSPLcom/google/android/gms/tasks/zzl;->zza(Lcom/google/android/gms/tasks/zzl;)Lcom/google/android/gms/tasks/OnFailureListener;
+HSPLcom/google/android/gms/tasks/zzl;->zzb(Lcom/google/android/gms/tasks/zzl;)Ljava/lang/Object;
 HSPLcom/google/android/gms/tasks/zzl;->zzd(Lcom/google/android/gms/tasks/Task;)V
 Lcom/google/android/gms/tasks/zzm;
 HSPLcom/google/android/gms/tasks/zzm;-><init>(Lcom/google/android/gms/tasks/zzn;Lcom/google/android/gms/tasks/Task;)V
@@ -6019,6 +6020,7 @@ HSPLcom/google/android/gms/tasks/zzo;-><init>(Lcom/google/android/gms/tasks/zzp;
 HSPLcom/google/android/gms/tasks/zzo;->run()V
 Lcom/google/android/gms/tasks/zzp;
 HSPLcom/google/android/gms/tasks/zzp;-><init>(Ljava/util/concurrent/Executor;Lcom/google/android/gms/tasks/SuccessContinuation;Lcom/google/android/gms/tasks/zzw;)V
+HSPLcom/google/android/gms/tasks/zzp;->onFailure(Ljava/lang/Exception;)V
 HSPLcom/google/android/gms/tasks/zzp;->onSuccess(Ljava/lang/Object;)V
 HSPLcom/google/android/gms/tasks/zzp;->zza(Lcom/google/android/gms/tasks/zzp;)Lcom/google/android/gms/tasks/SuccessContinuation;
 HSPLcom/google/android/gms/tasks/zzp;->zzd(Lcom/google/android/gms/tasks/Task;)V
@@ -8016,6 +8018,7 @@ HSPLcom/google/firebase/messaging/GmsRpc;->getHashedFirebaseAppName()Ljava/lang/
 HSPLcom/google/firebase/messaging/GmsRpc;->getProxyNotificationData()Lcom/google/android/gms/tasks/Task;
 HSPLcom/google/firebase/messaging/GmsRpc;->getToken()Lcom/google/android/gms/tasks/Task;
 HSPLcom/google/firebase/messaging/GmsRpc;->handleResponse(Landroid/os/Bundle;)Ljava/lang/String;
+HSPLcom/google/firebase/messaging/GmsRpc;->isErrorMessageForRetryableError(Ljava/lang/String;)Z
 HSPLcom/google/firebase/messaging/GmsRpc;->lambda$extractResponseWhenComplete$0$com-google-firebase-messaging-GmsRpc(Lcom/google/android/gms/tasks/Task;)Ljava/lang/String;
 HSPLcom/google/firebase/messaging/GmsRpc;->setDefaultAttributesToBundle(Ljava/lang/String;Ljava/lang/String;Landroid/os/Bundle;)V
 HSPLcom/google/firebase/messaging/GmsRpc;->setRetainProxiedNotifications(Z)Lcom/google/android/gms/tasks/Task;
@@ -8975,6 +8978,7 @@ Lio/sentry/Hub;
 HSPLio/sentry/Hub;-><init>(Lio/sentry/SentryOptions;)V
 HSPLio/sentry/Hub;-><init>(Lio/sentry/SentryOptions;Lio/sentry/Stack$StackItem;)V
 HSPLio/sentry/Hub;-><init>(Lio/sentry/SentryOptions;Lio/sentry/Stack;)V
+HSPLio/sentry/Hub;->addBreadcrumb(Lio/sentry/Breadcrumb;)V
 HSPLio/sentry/Hub;->addBreadcrumb(Lio/sentry/Breadcrumb;Lio/sentry/Hint;)V
 HSPLio/sentry/Hub;->captureEnvelope(Lio/sentry/SentryEnvelope;Lio/sentry/Hint;)Lio/sentry/protocol/SentryId;
 HSPLio/sentry/Hub;->configureScope(Lio/sentry/ScopeCallback;)V
@@ -9086,7 +9090,7 @@ HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/Boolean;)Lio/sentry/JsonObject
 HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/Boolean;)Lio/sentry/ObjectWriter;
 HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/Number;)Lio/sentry/JsonObjectWriter;
 HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/Number;)Lio/sentry/ObjectWriter;
-HPLio/sentry/JsonObjectWriter;->value(Ljava/lang/String;)Lio/sentry/JsonObjectWriter;
+HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/String;)Lio/sentry/JsonObjectWriter;
 HSPLio/sentry/JsonObjectWriter;->value(Ljava/lang/String;)Lio/sentry/ObjectWriter;
 HSPLio/sentry/JsonObjectWriter;->value(Z)Lio/sentry/JsonObjectWriter;
 HSPLio/sentry/JsonObjectWriter;->value(Z)Lio/sentry/ObjectWriter;
@@ -9219,6 +9223,7 @@ HSPLio/sentry/SendFireAndForgetOutboxSender;-><init>(Lio/sentry/SendCachedEnvelo
 HSPLio/sentry/SendFireAndForgetOutboxSender;->create(Lio/sentry/IHub;Lio/sentry/SentryOptions;)Lio/sentry/SendCachedEnvelopeFireAndForgetIntegration$SendFireAndForget;
 Lio/sentry/Sentry;
 HSPLio/sentry/Sentry;-><clinit>()V
+HSPLio/sentry/Sentry;->addBreadcrumb(Lio/sentry/Breadcrumb;)V
 HSPLio/sentry/Sentry;->addBreadcrumb(Lio/sentry/Breadcrumb;Lio/sentry/Hint;)V
 HSPLio/sentry/Sentry;->applyOptionsConfiguration(Lio/sentry/Sentry$OptionsConfiguration;Lio/sentry/SentryOptions;)V
 HSPLio/sentry/Sentry;->configureScope(Lio/sentry/ScopeCallback;)V
@@ -9907,6 +9912,10 @@ Lio/sentry/android/core/SentryInitProvider;
 HSPLio/sentry/android/core/SentryInitProvider;-><init>()V
 HSPLio/sentry/android/core/SentryInitProvider;->attachInfo(Landroid/content/Context;Landroid/content/pm/ProviderInfo;)V
 HSPLio/sentry/android/core/SentryInitProvider;->onCreate()Z
+Lio/sentry/android/core/SentryLogcatAdapter;
+HSPLio/sentry/android/core/SentryLogcatAdapter;->addAsBreadcrumb(Ljava/lang/String;Lio/sentry/SentryLevel;Ljava/lang/String;)V
+HSPLio/sentry/android/core/SentryLogcatAdapter;->addAsBreadcrumb(Ljava/lang/String;Lio/sentry/SentryLevel;Ljava/lang/String;Ljava/lang/Throwable;)V
+HSPLio/sentry/android/core/SentryLogcatAdapter;->e(Ljava/lang/String;Ljava/lang/String;)I
 Lio/sentry/android/core/SentryPerformanceProvider;
 HSPLio/sentry/android/core/SentryPerformanceProvider;-><clinit>()V
 HSPLio/sentry/android/core/SentryPerformanceProvider;-><init>()V
@@ -10705,14 +10714,14 @@ HSPLio/sentry/vendor/gson/stream/JsonToken;->values()[Lio/sentry/vendor/gson/str
 Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;-><clinit>()V
 HSPLio/sentry/vendor/gson/stream/JsonWriter;-><init>(Ljava/io/Writer;)V
-HPLio/sentry/vendor/gson/stream/JsonWriter;->beforeName()V
+HSPLio/sentry/vendor/gson/stream/JsonWriter;->beforeName()V
 HPLio/sentry/vendor/gson/stream/JsonWriter;->beforeValue()V
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->beginArray()Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->beginObject()Lio/sentry/vendor/gson/stream/JsonWriter;
-HPLio/sentry/vendor/gson/stream/JsonWriter;->close(IIC)Lio/sentry/vendor/gson/stream/JsonWriter;
+HSPLio/sentry/vendor/gson/stream/JsonWriter;->close(IIC)Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->endArray()Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->endObject()Lio/sentry/vendor/gson/stream/JsonWriter;
-HPLio/sentry/vendor/gson/stream/JsonWriter;->name(Ljava/lang/String;)Lio/sentry/vendor/gson/stream/JsonWriter;
+HSPLio/sentry/vendor/gson/stream/JsonWriter;->name(Ljava/lang/String;)Lio/sentry/vendor/gson/stream/JsonWriter;
 HPLio/sentry/vendor/gson/stream/JsonWriter;->newline()V
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->open(IC)Lio/sentry/vendor/gson/stream/JsonWriter;
 HPLio/sentry/vendor/gson/stream/JsonWriter;->peek()I
@@ -10722,7 +10731,7 @@ HPLio/sentry/vendor/gson/stream/JsonWriter;->string(Ljava/lang/String;)V
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->value(J)Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->value(Ljava/lang/Boolean;)Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->value(Ljava/lang/Number;)Lio/sentry/vendor/gson/stream/JsonWriter;
-HPLio/sentry/vendor/gson/stream/JsonWriter;->value(Ljava/lang/String;)Lio/sentry/vendor/gson/stream/JsonWriter;
+HSPLio/sentry/vendor/gson/stream/JsonWriter;->value(Ljava/lang/String;)Lio/sentry/vendor/gson/stream/JsonWriter;
 HSPLio/sentry/vendor/gson/stream/JsonWriter;->value(Z)Lio/sentry/vendor/gson/stream/JsonWriter;
 HPLio/sentry/vendor/gson/stream/JsonWriter;->writeDeferredName()V
 Ljavax/inject/Provider;
@@ -11918,7 +11927,7 @@ HSPLkotlinx/coroutines/JobNode;-><init>()V
 HSPLkotlinx/coroutines/JobNode;->dispose()V
 HSPLkotlinx/coroutines/JobNode;->getJob()Lkotlinx/coroutines/JobSupport;
 HSPLkotlinx/coroutines/JobNode;->getList()Lkotlinx/coroutines/NodeList;
-PLkotlinx/coroutines/JobNode;->isActive()Z
+HSPLkotlinx/coroutines/JobNode;->isActive()Z
 HSPLkotlinx/coroutines/JobNode;->setJob(Lkotlinx/coroutines/JobSupport;)V
 Lkotlinx/coroutines/JobSupport;
 HSPLkotlinx/coroutines/JobSupport;-><clinit>()V
@@ -12495,7 +12504,7 @@ HSPLkotlinx/coroutines/internal/ContextScope;->getCoroutineContext()Lkotlin/coro
 Lkotlinx/coroutines/internal/DispatchedContinuation;
 HSPLkotlinx/coroutines/internal/DispatchedContinuation;-><clinit>()V
 HSPLkotlinx/coroutines/internal/DispatchedContinuation;-><init>(Lkotlinx/coroutines/CoroutineDispatcher;Lkotlin/coroutines/Continuation;)V
-HPLkotlinx/coroutines/internal/DispatchedContinuation;->awaitReusability$kotlinx_coroutines_core()V
+HSPLkotlinx/coroutines/internal/DispatchedContinuation;->awaitReusability$kotlinx_coroutines_core()V
 HSPLkotlinx/coroutines/internal/DispatchedContinuation;->claimReusableCancellableContinuation$kotlinx_coroutines_core()Lkotlinx/coroutines/CancellableContinuationImpl;
 HSPLkotlinx/coroutines/internal/DispatchedContinuation;->getContext()Lkotlin/coroutines/CoroutineContext;
 HSPLkotlinx/coroutines/internal/DispatchedContinuation;->getDelegate$kotlinx_coroutines_core()Lkotlin/coroutines/Continuation;
