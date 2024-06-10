@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.main
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -38,15 +37,17 @@ import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
@@ -55,6 +56,8 @@ import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
 import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
+import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
@@ -67,6 +70,9 @@ class PokeMainActivity : AppCompatActivity() {
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
+    private val pokeMainListAdapter
+        get() = binding.recyclerViewPokeMain.adapter as PokeMainListAdapter?
+
     @Inject
     lateinit var tracker: AmplitudeTracker
 
@@ -74,9 +80,9 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initAdapter()
         initData()
         initListener()
-        initFriendOfFriendEmptyViewText()
         initStateFlowValues()
     }
 
@@ -85,10 +91,14 @@ class PokeMainActivity : AppCompatActivity() {
         tracker.track(type = EventType.VIEW, name = "poke_main", properties = mapOf("view_type" to args?.userStatus))
     }
 
+    private fun initAdapter() {
+        binding.recyclerViewPokeMain.adapter = PokeMainListAdapter(pokeUserListClickLister)
+    }
+
     private fun initData() {
         viewModel.getPokeMe()
         viewModel.getPokeFriend()
-        viewModel.getPokeFriendOfFriend()
+        viewModel.getPokeSimilarFriends()
     }
 
     private fun initListener() {
@@ -126,19 +136,36 @@ class PokeMainActivity : AppCompatActivity() {
                 refreshLayoutPokeMain.isRefreshing = false
             }
 
-            animationViewLottie.addAnimatorListener(
-                object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
+            animationViewLottie.addOnAnimationEndListener {
+                layoutLottie.visibility = View.GONE
+            }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        layoutLottie.visibility = View.GONE
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                    lifecycleScope.launch {
+                        // 로티
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                        val anonymousFriend = viewModel.anonymousFriend.value
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                        }
+
+                        delay(2000)
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
                     }
-
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                },
-            )
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
 
             layoutLottie.setOnClickListener {
                 // do nothing
@@ -146,19 +173,11 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun initFriendOfFriendEmptyViewText() {
-        binding.apply {
-            val emptyViewText = getString(R.string.poke_my_friend_of_friend_empty)
-            includeFriendListEmptyView01.textView.text = emptyViewText
-            includeFriendListEmptyView02.textView.text = emptyViewText
-        }
-    }
-
     private fun initStateFlowValues() {
         viewModel.pokeMeUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> initPokeMeView(it.data)
                     is UiState.ApiError -> binding.layoutSomeonePokeMe.setVisible(false)
                     is UiState.Failure -> binding.layoutSomeonePokeMe.setVisible(false)
@@ -169,7 +188,7 @@ class PokeMainActivity : AppCompatActivity() {
         viewModel.pokeFriendUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -177,38 +196,62 @@ class PokeMainActivity : AppCompatActivity() {
             }
             .launchIn(lifecycleScope)
 
-        viewModel.apply {
-            pokeFriendOfFriendUiState
-                .onEach {
-                    when (it) {
-                        is UiState.Loading -> "Loading"
-                        is UiState.Success<List<PokeFriendOfFriendList>> -> {
-                            setPokeFriendOfFriendVisible(it.data)
-                            initPokeFriendOfFriendView(it.data)
-                        }
-
-                        is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                        is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
-                    }
+        viewModel.pokeSimilarFriendUiState.onEach {
+            when (it) {
+                is UiState.Loading -> {}
+                is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>> -> {
+                    pokeMainListAdapter?.submitList(it.data)
+                    binding.refreshLayoutPokeMain.isRefreshing = false
                 }
-                .launchIn(lifecycleScope)
-        }
+
+                is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+                is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+            }
+        }.launchIn(lifecycleScope)
 
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         viewModel.updatePokeUserState(it.data.userId)
-                        when (it.isFirstMeet && !it.data.isFirstMeet) {
+                        when (it.isFirstMeet && !it.data.isFirstMeet) { // 친구
                             true -> {
-                                binding.layoutLottie.visibility = View.VISIBLE
-                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                                binding.animationViewLottie.playAnimation()
+                                with(binding) {
+                                    layoutLottie.visibility = View.VISIBLE
+                                    tvLottie.text = binding.root.context.getString(
+                                        R.string.friend_complete,
+                                        if (it.data.isAnonymous) it.data.anonymousName else it.data.name
+                                    )
+                                    animationViewLottie.playAnimation()
+                                }
                             }
 
-                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
+                            false -> {
+                                if (isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                                    with(binding) {
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                        tvFreindLottieHint.text =
+                                            getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.friendtobestfriend)
+                                        }.playAnimation()
+                                    }
+                                } else if (isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                                    viewModel.setAnonymousFriend(it.data)
+                                    with(binding) {
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.bestfriendtosoulmate)
+                                        }.playAnimation()
+                                    }
+                                } else {
+                                    showPokeToast(getString(R.string.toast_poke_user_success))
+                                }
+                            }
                         }
                     }
 
@@ -242,19 +285,28 @@ class PokeMainActivity : AppCompatActivity() {
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
-            pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            if (pokeMeItem.isAnonymous) {
+                pokeMeItem.anonymousImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
+                tvFriendsStatusSomeonePokeMe.visibility = View.GONE
+                tvUserGenerationSomeonePokeMe.visibility = View.GONE
+            } else {
+                pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNameSomeonePokeMe.text = pokeMeItem.name
+                tvUserGenerationSomeonePokeMe.text = getString(R.string.poke_user_info, pokeMeItem.generation, pokeMeItem.part)
+                tvFriendsStatusSomeonePokeMe.text =
+                    if (pokeMeItem.isFirstMeet) {
+                        pokeMeItem.mutualRelationMessage
+                    } else {
+                        "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
+                    }
+            }
             imgUserProfilePokeMeOutline.setRelationStrokeColor(pokeMeItem.relationName)
-            tvUserNameSomeonePokeMe.text = pokeMeItem.name
-            tvUserGenerationSomeonePokeMe.text = "${pokeMeItem.generation}기 ${pokeMeItem.part}"
             tvUserMsgSomeonePokeMe.text = pokeMeItem.message
-            tvFriendsStatusSomeonePokeMe.text =
-                if (pokeMeItem.isFirstMeet) {
-                    pokeMeItem.mutualRelationMessage
-                } else {
-                    "${pokeMeItem.relationName} ${pokeMeItem.pokeNum}콕"
-                }
             btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
             btnSomeonePokeMe.setOnClickListener {
                 tracker.track(
@@ -294,12 +346,18 @@ class PokeMainActivity : AppCompatActivity() {
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
-            pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+
+            if (pokeFriendItem.isAnonymous) {
+                imgUserProfilePokeMyFriend.load(pokeFriendItem.anonymousImage) { transformations(CircleCropTransformation()) }
+                tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
+            } else {
+                pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
+                    imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
+                } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+                tvUserNamePokeMyFriend.text = pokeFriendItem.name
+                tvUserGenerationSomeonePokeMe.text = getString(R.string.poke_user_info, pokeFriendItem.generation, pokeFriendItem.part)
+            }
             imgUserProfilePokeMyFriendOutline.setRelationStrokeColor(pokeFriendItem.relationName)
-            tvUserNamePokeMyFriend.text = pokeFriendItem.name
-            tvUserGenerationPokeMyFriend.text = "${pokeFriendItem.generation}기 ${pokeFriendItem.part}"
             tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
             btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
             btnPokeMyFriend.setOnClickListener {
@@ -314,140 +372,6 @@ class PokeMainActivity : AppCompatActivity() {
                     ),
                 )
                 showMessageListBottomSheet(pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
-            }
-        }
-    }
-
-    private fun setPokeFriendOfFriendVisible(list: List<PokeFriendOfFriendList>) {
-        with(binding) {
-            fun setVisibility(box1: View, box2: View, emptyBox: View, friendListSize: Int) {
-                box1.visibility = if (friendListSize >= 1) View.VISIBLE else View.GONE
-                box2.visibility = if (friendListSize == 2) View.VISIBLE else View.GONE
-                emptyBox.visibility = if (friendListSize == 0) View.VISIBLE else View.GONE
-            }
-
-            when (list.size) {
-                1 -> {
-                    box2FriendOfFriend.visibility = View.GONE
-                    val friendListSize = list[0].friendList.size
-                    setVisibility(groupFriend1Box1, groupFriend2Box1, includeFriendListEmptyView01.root, friendListSize)
-                }
-
-                2 -> {
-                    box2FriendOfFriend.visibility = View.VISIBLE
-                    val friendListSize1 = list[0].friendList.size
-                    val friendListSize2 = list[1].friendList.size
-                    setVisibility(groupFriend1Box1, groupFriend2Box1, includeFriendListEmptyView01.root, friendListSize1)
-                    setVisibility(groupFriend3Box2, groupFriend4Box2, includeFriendListEmptyView02.root, friendListSize2)
-                }
-            }
-        }
-    }
-
-    private fun initPokeFriendOfFriendView(list: List<PokeFriendOfFriendList>) {
-        with(binding) {
-            val myFriendNameTextViews = listOf(tvMyFriendName1, tvMyFriendName2)
-            val myFriendProfileImageViews = listOf(imgMyFriendProfile1, imgMyFriendProfile2)
-
-            val friendProfileImageViews =
-                listOf(
-                    imgFriendProfile1OfMyFriend,
-                    imgFriendProfile2OfMyFriend,
-                    imgFriendProfile3OfMyFriend,
-                    imgFriendProfile4OfMyFriend,
-                )
-            val friendTextViews =
-                listOf(
-                    tvFriendName1OfMyFriend,
-                    tvFriendName2OfMyFriend,
-                    tvFriendName3OfMyFriend,
-                    tvFriendName4OfMyFriend,
-                )
-            val friendGenerationTextViews =
-                listOf(
-                    tvFriendGeneration1OfMyFriend,
-                    tvFriendGeneration2OfMyFriend,
-                    tvFriendGeneration3OfMyFriend,
-                    tvFriendGeneration4OfMyFriend,
-                )
-            val btnPokeImageViews =
-                listOf(
-                    btnFriendPoke1OfMyFriend,
-                    btnFriendPoke2OfMyFriend,
-                    btnFriendPoke3OfMyFriend,
-                    btnFriendPoke4OfMyFriend,
-                )
-
-            list.take(2).forEachIndexed { index, friend ->
-                myFriendNameTextViews[index].text = friend.friendName
-                myFriendProfileImageViews[index].setOnClickListener {
-                    tracker.track(
-                        type = EventType.CLICK,
-                        name = "memberprofile",
-                        properties =
-                        mapOf(
-                            "view_type" to args?.userStatus,
-                            "click_view_type" to "poke_main_recommend_myfriend",
-                            "view_profile" to friend.playgroundId,
-                        ),
-                    )
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, friend.playgroundId))))
-                }
-                friend.friendProfileImage.takeIf { it.isNotEmpty() }?.let {
-                    myFriendProfileImageViews[index].load(it) { transformations(CircleCropTransformation()) }
-                } ?: run {
-                    myFriendProfileImageViews[index].setImageResource(R.drawable.ic_empty_profile)
-                }
-
-                (0 until 2).forEach { friendIndex ->
-                    val friendOfFriend = friend.friendList.getOrNull(friendIndex)
-                    val friendProfileImageView = friendProfileImageViews[2 * index + friendIndex]
-                    val friendNameTextView = friendTextViews[2 * index + friendIndex]
-                    val friendGenerationTextView = friendGenerationTextViews[2 * index + friendIndex]
-                    val btnPokeImageView = btnPokeImageViews[2 * index + friendIndex]
-
-                    friendOfFriend?.let { myFriendOfFriend ->
-                        friendProfileImageView.setOnClickListener {
-                            tracker.track(
-                                type = EventType.CLICK,
-                                name = "memberprofile",
-                                properties =
-                                mapOf(
-                                    "view_type" to args?.userStatus,
-                                    "click_view_type" to "poke_main_recommend_notmyfriend",
-                                    "view_profile" to friend.playgroundId,
-                                ),
-                            )
-                            startActivity(
-                                Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse(getString(R.string.poke_user_profile_url, myFriendOfFriend.playgroundId)),
-                                ),
-                            )
-                        }
-                        myFriendOfFriend.profileImage.takeIf { it.isNotEmpty() }?.let { url ->
-                            friendProfileImageView.load(url) { transformations(CircleCropTransformation()) }
-                        } ?: run {
-                            friendProfileImageView.setImageResource(R.drawable.ic_empty_profile)
-                        }
-                        friendNameTextView.text = myFriendOfFriend.name
-                        friendGenerationTextView.text = "${myFriendOfFriend.generation}기 ${myFriendOfFriend.part}"
-                        btnPokeImageView.isEnabled = !myFriendOfFriend.isAlreadyPoke
-                        btnPokeImageView.setOnClickListener {
-                            tracker.track(
-                                type = EventType.CLICK,
-                                name = "poke_icon",
-                                properties =
-                                mapOf(
-                                    "view_type" to args?.userStatus,
-                                    "click_view_type" to "poke_main_recommend_notmyfriend",
-                                    "view_profile" to myFriendOfFriend.playgroundId,
-                                ),
-                            )
-                            showMessageListBottomSheet(myFriendOfFriend.userId, PokeMessageType.POKE_SOMEONE)
-                        }
-                    }
-                }
             }
         }
     }
@@ -471,11 +395,58 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
+    private val pokeUserListClickLister =
+        object : PokeUserListClickListener {
+            override fun onClickProfileImage(playgroundId: Int) {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "memberprofile",
+                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to playgroundId),
+                )
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+            }
+
+            override fun onClickPokeButton(user: PokeUser) {
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "poke_icon",
+                    properties =
+                    mapOf(
+                        "view_type" to args?.userStatus,
+                        "click_view_type" to "onboarding",
+                        "view_profile" to user.playgroundId,
+                    ),
+                )
+
+                messageListBottomSheet =
+                    MessageListBottomSheetFragment.Builder()
+                        .setMessageListType(PokeMessageType.POKE_SOMEONE)
+                        .onClickMessageListItem { message, isAnonymous ->
+                            viewModel.pokeUser(
+                                userId = user.userId,
+                                isAnonymous = isAnonymous,
+                                message = message,
+                                isFirstMeet = false,
+                            )
+                        }
+                        .create()
+
+                messageListBottomSheet?.let {
+                    it.show(supportFragmentManager, it.tag)
+                }
+            }
+        }
+
     data class StartArgs(
         val userStatus: String,
     ) : Serializable
 
     companion object {
+        private val bestFriendRange = 5..6
+        private val soulMateRange = 11..12
+        fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
+        fun isSoulMate(pokeNum: Int, isAnonymous: Boolean) = pokeNum in soulMateRange && isAnonymous
+
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeMainActivity::class.java).apply {
             putExtra("args", args)

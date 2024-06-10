@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2024 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="20dp"
+    android:layout_marginVertical="7dp"
+    android:background="@drawable/rectangle_gray900_radius_12"
+    android:paddingHorizontal="12dp"
+    android:paddingVertical="8dp">
+
+    <TextView
+        android:id="@+id/tv_random_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/suit_bold"
+        android:textColor="@color/mds_gray_30"
+        android:textFontWeight="600"
+        android:textSize="14dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="나와 MBTI가 같은 친구" />
+
+    <include
+        android:id="@+id/item_poke_user_large_first"
+        layout="@layout/item_poke_user_large"
+        android:layout_width="146dp"
+        android:layout_height="172dp"
+        android:layout_margin="8dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/tv_random_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_random_title" />
+
+    <include
+        android:id="@+id/item_poke_user_large_second"
+        layout="@layout/item_poke_user_large"
+        android:layout_width="146dp"
+        android:layout_height="172dp"
+        android:layout_margin="8dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_random_title" />
+
+    <include
+        android:id="@+id/include_friend_list_empty_view"
+        layout="@layout/include_friend_list_empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="36dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_random_title" />
+</androidx.constraintlayout.widget.ConstraintLayout>

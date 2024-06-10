@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.poke.user
 
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import coil.load
@@ -45,21 +46,23 @@ sealed class PokeUserViewHolder(
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
-                when (pokeUser.profileImage.isBlank()) {
-                    true ->
-                        imageViewProfile.load(null) {
+                if (pokeUser.isAnonymous) {
+                    imageViewProfile.load(pokeUser.anonymousImage) {
+                        crossfade(true)
+                        transformations(CircleCropTransformation())
+                    }
+                    textViewUserName.text = pokeUser.anonymousName
+                    textViewUserInfo.isVisible = false
+                } else {
+                    pokeUser.profileImage.takeIf { it.isNotEmpty() }?.let {
+                        imageViewProfile.load(it) {
                             crossfade(true)
                             transformations(CircleCropTransformation())
                         }
-                    false ->
-                        imageViewProfile.load(pokeUser.profileImage) {
-                            crossfade(true)
-                            transformations(CircleCropTransformation())
-                        }
+                    } ?: imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+                    textViewUserName.text = pokeUser.name
+                    textViewUserInfo.text = root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
                 }
-
-                textViewUserName.text = pokeUser.name
-                textViewUserInfo.text = root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
                 textViewPokeCount.text = root.context.getString(R.string.poke_user_poke_count, pokeUser.pokeNum)
                 imageButtonPoke.isEnabled = !pokeUser.isAlreadyPoke
             }

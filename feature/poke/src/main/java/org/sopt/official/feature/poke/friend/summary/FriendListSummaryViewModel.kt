@@ -51,6 +51,10 @@ class FriendListSummaryViewModel @Inject constructor(
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
+    private val _anonymousFriend = MutableStateFlow<PokeUser?>(null)
+    val anonymousFriend: StateFlow<PokeUser?>
+        get() = _anonymousFriend
+
     init {
         getFriendListSummary()
     }
@@ -89,5 +93,9 @@ class FriendListSummaryViewModel @Inject constructor(
                     _pokeUserUiState.emit(UiState.Failure(throwable))
                 }
         }
+    }
+
+    fun setAnonymousFriend(pokeUser: PokeUser?) {
+        _anonymousFriend.value = pokeUser
     }
 }

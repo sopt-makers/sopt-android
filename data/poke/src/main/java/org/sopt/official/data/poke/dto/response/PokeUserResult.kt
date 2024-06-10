@@ -54,6 +54,12 @@ data class PokeUserResult(
     val isFirstMeet: Boolean,
     @SerialName("isAlreadyPoke")
     val isAlreadyPoke: Boolean,
+    @SerialName("isAnonymous")
+    val isAnonymous: Boolean,
+    @SerialName("anonymousName")
+    val anonymousName: String,
+    @SerialName("anonymousImage")
+    val anonymousImage: String,
 ) {
     fun toEntity(): PokeUser = PokeUser(
         userId = userId,
@@ -68,5 +74,8 @@ data class PokeUserResult(
         mutualRelationMessage = mutualRelationMessage,
         isFirstMeet = isFirstMeet,
         isAlreadyPoke = isAlreadyPoke,
+        isAnonymous = isAnonymous,
+        anonymousName = anonymousName,
+        anonymousImage = anonymousImage
     )
 }

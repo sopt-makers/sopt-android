@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -47,6 +46,7 @@ import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
@@ -85,20 +85,11 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun initLottieAnimatorListener() {
         with(binding) {
-            animationViewLottie.addAnimatorListener(
-                object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
+            animationViewLottie.addOnAnimationEndListener {
+                layoutLottie.visibility = View.GONE
+                setIntentToPokeMain()
+            }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        layoutLottie.visibility = View.GONE
-                        setIntentToPokeMain()
-                    }
-
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                },
-            )
             layoutLottie.setOnClickListener {
                 // do nothing
             }
@@ -128,7 +119,7 @@ class OnboardingActivity : AppCompatActivity() {
         viewModel.onboardingPokeUserListUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeRandomUserList> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))

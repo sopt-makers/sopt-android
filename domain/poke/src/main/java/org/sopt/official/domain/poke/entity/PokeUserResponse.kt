@@ -39,4 +39,7 @@ data class PokeUser(
     val mutualRelationMessage: String,
     val isFirstMeet: Boolean,
     var isAlreadyPoke: Boolean,
+    val isAnonymous: Boolean,
+    val anonymousName: String,
+    val anonymousImage: String,
 )

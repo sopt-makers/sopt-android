@@ -34,13 +34,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.colorOf
@@ -53,11 +57,14 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
@@ -111,9 +118,41 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             )
         }
 
+        initLottieListener()
         initRecyclerView()
         launchPokeMessageListUiStateFlow()
         launchPokeUserUiStateFlow()
+    }
+
+    private fun initLottieListener() {
+        with(binding) {
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                    lifecycleScope.launch {
+                        // 로티
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                        val anonymousFriend = viewModel.anonymousFriend.value
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                        }
+
+                        delay(2000)
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
+                    }
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun initRecyclerView() {
@@ -214,7 +253,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.friendListDetailUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<List<PokeUser>> -> updateRecyclerView(it.data)
                     is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -245,20 +284,41 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(getString(R.string.toast_poke_user_success))
+                        if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                tvFreindLottieHint.text =
+                                    getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.friendtobestfriend)
+                                }.playAnimation()
+                            }
+                        } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                            viewModel.setAnonymousFriend(it.data)
+                            with(binding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                animationFriendViewLottie.apply {
+                                    setAnimation(R.raw.bestfriendtosoulmate)
+                                }.playAnimation()
+                            }
+                        } else {
+                            showPokeToast(getString(R.string.toast_poke_user_success))
+                        }
                     }
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(getString(R.string.poke_user_alert_exceeded))
+                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
                     }
 
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                     }
                 }
             }

@@ -25,6 +25,7 @@
 package org.sopt.official.feature.poke.notification
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.ListAdapter
@@ -85,19 +86,28 @@ class PokeNotificationAdapter(
     ) : RecyclerView.ViewHolder(viewBinding.root) {
         fun onBind(item: PokeUser) {
             with(viewBinding) {
-                item.profileImage.takeIf { it.isNotEmpty() }?.let {
-                    imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
-                } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
+                if (item.isAnonymous) {
+                    item.anonymousImage.takeIf { it.isNotEmpty() }?.let {
+                        imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
+                    } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
+                    tvUserName.text = item.anonymousName
+                    tvUserGeneration.visibility = View.GONE
+                    tvUserFriendsStatus.visibility = View.GONE
+                } else {
+                    item.profileImage.takeIf { it.isNotEmpty() }?.let {
+                        imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
+                    } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
+                    tvUserName.text = item.name
+                    tvUserGeneration.text = root.context.getString(R.string.poke_user_info, item.generation, item.part)
+                    tvUserFriendsStatus.text =
+                        if (item.isFirstMeet) {
+                            item.mutualRelationMessage
+                        } else {
+                            "친한친구 ${item.pokeNum}콕"
+                        }
+                }
                 imgUserProfileOutline.setRelationStrokeColor(item.relationName)
-                tvUserName.text = item.name
-                tvUserGeneration.text = "${item.generation}기 ${item.part}"
                 tvUserMessage.text = item.message
-                tvUserFriendsStatus.text =
-                    if (item.isFirstMeet) {
-                        item.mutualRelationMessage
-                    } else {
-                        "친한친구 ${item.pokeNum}콕"
-                    }
                 imgPoke.isEnabled = !item.isAlreadyPoke
             }
         }

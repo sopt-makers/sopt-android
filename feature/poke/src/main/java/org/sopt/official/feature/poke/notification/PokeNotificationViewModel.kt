@@ -51,6 +51,10 @@ class PokeNotificationViewModel @Inject constructor(
     private val _pokeUserUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeUserUiState: StateFlow<UiState<PokeUser>> get() = _pokeUserUiState
 
+    private val _anonymousFriend = MutableStateFlow<PokeUser?>(null)
+    val anonymousFriend: StateFlow<PokeUser?>
+        get() = _anonymousFriend
+
     private var totalPageSize = -1
     private var currentPaginationIndex = 0
     private var pokeNotificationJob: Job? = null
@@ -102,5 +106,9 @@ class PokeNotificationViewModel @Inject constructor(
                 _pokeUserUiState.emit(UiState.Failure(throwable))
             }
         }
+    }
+
+    fun setAnonymousFriend(pokeUser: PokeUser?) {
+        _anonymousFriend.value = pokeUser
     }
 }

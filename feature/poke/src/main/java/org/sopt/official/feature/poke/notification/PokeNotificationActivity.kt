@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.poke.notification
 
-import android.animation.Animator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -36,11 +35,15 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
 import javax.inject.Inject
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
@@ -50,8 +53,11 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
+import org.sopt.official.feature.poke.util.addOnAnimationEndListener
+import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @AndroidEntryPoint
@@ -99,19 +105,36 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            animationViewLottie.addAnimatorListener(
-                object : Animator.AnimatorListener {
-                    override fun onAnimationStart(animation: Animator) {}
+            animationViewLottie.addOnAnimationEndListener {
+                layoutLottie.visibility = View.GONE
+            }
 
-                    override fun onAnimationEnd(animation: Animator) {
-                        layoutLottie.visibility = View.GONE
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+                    lifecycleScope.launch {
+                        // 로티
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                        val anonymousFriend = viewModel.anonymousFriend.value
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                        }
+
+                        delay(2000)
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
                     }
-
-                    override fun onAnimationCancel(animation: Animator) {}
-
-                    override fun onAnimationRepeat(animation: Animator) {}
-                },
-            )
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
 
             layoutLottie.setOnClickListener {
                 // do nothing
@@ -194,7 +217,7 @@ class PokeNotificationActivity : AppCompatActivity() {
         viewModel.pokeNotification
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<List<PokeUser>> -> pokeNotificationAdapter.updatePokeNotification(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
@@ -206,18 +229,46 @@ class PokeNotificationActivity : AppCompatActivity() {
             .flowWithLifecycle(lifecycle)
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
                             true -> {
-                                binding.layoutLottie.visibility = View.VISIBLE
-                                binding.tvLottie.text = binding.root.context.getString(R.string.friend_complete, it.data.name)
-                                binding.animationViewLottie.playAnimation()
+                                with(binding) {
+                                    layoutLottie.visibility = View.VISIBLE
+                                    tvLottie.text = binding.root.context.getString(
+                                        R.string.friend_complete,
+                                        if (it.data.isAnonymous) it.data.anonymousName else it.data.name
+                                    )
+                                    animationViewLottie.playAnimation()
+                                }
                             }
 
-                            false -> showPokeToast(getString(R.string.toast_poke_user_success))
+                            false -> {
+                                if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                                    with(binding) {
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                                        tvFreindLottieHint.text =
+                                            getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.friendtobestfriend)
+                                        }.playAnimation()
+                                    }
+                                } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                                    viewModel.setAnonymousFriend(it.data)
+                                    with(binding) {
+                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                                        animationFriendViewLottie.apply {
+                                            setAnimation(R.raw.bestfriendtosoulmate)
+                                        }.playAnimation()
+                                    }
+                                } else {
+                                    showPokeToast(getString(R.string.toast_poke_user_success))
+                                }
+                            }
                         }
                     }
 

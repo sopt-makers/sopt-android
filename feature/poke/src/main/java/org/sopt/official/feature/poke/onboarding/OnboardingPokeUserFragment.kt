@@ -40,7 +40,6 @@ class OnboardingPokeUserFragment : Fragment() {
     private val viewModel: OnboardingPokeUserViewModel by viewModels()
 
     private val args by serializableArgs<OnboardingActivity.StartArgs>()
-    // private val argss by serializableExtraFragment(OnboardingActivity.StartArgs(0, ""))
 
     @Inject
     lateinit var tracker: AmplitudeTracker
@@ -88,15 +87,22 @@ class OnboardingPokeUserFragment : Fragment() {
     private fun getPokeUserListFromArguments() {
         val pokeUser =
             BundleCompat.getSerializable(arguments ?: Bundle(), ARG_PROFILES, PokeOnboardingUiState::class.java)
-        updateRecyclerView(pokeUser?.randomTitle.orEmpty(), pokeUser?.userInfoList.orEmpty().map { it.toEntity() })
+        pokeUser?.let {
+            updateRecyclerView(it.randomType, it.randomTitle, it.userInfoList.map { pokeUser -> pokeUser.toEntity() })
+        }
     }
 
     private fun launchOnboardingPokeUserListUiStateFlow() {
         viewModel.onboardingPokeUserListUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
-                    is UiState.Success<PokeRandomUserList.PokeRandomUsers> -> updateRecyclerView(it.data.randomType, it.data.userInfoList)
+                    is UiState.Loading -> {}
+                    is UiState.Success<PokeRandomUserList.PokeRandomUsers> -> updateRecyclerView(
+                        it.data.randomType,
+                        it.data.randomTitle,
+                        it.data.userInfoList
+                    )
+
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
@@ -107,7 +113,7 @@ class OnboardingPokeUserFragment : Fragment() {
         viewModel.pokeUserUiState
             .onEach {
                 when (it) {
-                    is UiState.Loading -> "Loading"
+                    is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
                         when (it.isFirstMeet && !it.data.isFirstMeet) {
@@ -129,9 +135,9 @@ class OnboardingPokeUserFragment : Fragment() {
             }.launchIn(lifecycleScope)
     }
 
-    private fun updateRecyclerView(textViewContent: String, data: List<PokeUser>) {
-        viewModel.setRandomType(textViewContent)
-        binding.textViewContent.text = textViewContent
+    private fun updateRecyclerView(randomType: String, randomTitle: String, data: List<PokeUser>) {
+        viewModel.setRandomType(randomType)
+        binding.textViewContent.text = randomTitle
         pokeUserListAdapter?.submitList(data)
         binding.swipeRefreshLayout.isRefreshing = false
     }
