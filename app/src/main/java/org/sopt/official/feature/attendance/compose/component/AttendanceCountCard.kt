@@ -32,7 +32,7 @@ fun AttendanceCountCard(resultType: String, count: Int, modifier: Modifier = Mod
     }
 }
 
-fun Int.toFormattedNumber(): String = "%02d회".format(this)
+private fun Int.toFormattedNumber(): String = "%02d회".format(this)
 
 @Preview
 @Composable
