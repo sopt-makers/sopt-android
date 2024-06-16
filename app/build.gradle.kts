@@ -131,7 +131,6 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)
-    implementation(libs.androidx.lifecycle.runtime.compose.android)
     baselineProfile(projects.baselineprofile)
 
     implementation(libs.kotlin.coroutines.google.play)
