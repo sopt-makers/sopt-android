@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose
+package org.sopt.official.feature.attendance.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -20,13 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.FinalAttendance
-import org.sopt.official.feature.attendance.model.MidtermAttendance
-import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
-import org.sopt.official.feature.attendance.model.state.TodayAttendanceCardState
+import org.sopt.official.feature.attendance.model.state.TodayNoAttendanceCardState
 
 @Composable
-fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Modifier) {
+fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier = Modifier) {
     Column(
         modifier =
         modifier
@@ -81,33 +78,26 @@ fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Mo
                 style = SoptTheme.typography.body18M
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
-        AttendanceProgressBar(
-            state = AttendanceProgressBarState(
-                firstAttendance = state.firstAttendance,
-                secondAttendance = state.secondAttendance,
-                finalAttendance = state.finalAttendance,
-            )
+        Spacer(modifier = Modifier.height(24.dp))
+        Text(
+            text = stringResource(id = R.string.text_not_awarded),
+            color = SoptTheme.colors.onSurface100,
+            style = SoptTheme.typography.body14M,
         )
     }
 }
 
 @Preview
 @Composable
-private fun AttendanceHistoryCardPreview() {
+private fun TodayNoAttendanceCardPreview() {
     SoptTheme {
-        Column(
-            modifier = Modifier.background(color = SoptTheme.colors.background)
-        ) {
-            TodayAttendanceCard(
+        Column(modifier = Modifier.background(color = SoptTheme.colors.background)) {
+            TodayNoAttendanceCard(
                 state =
-                TodayAttendanceCardState(
-                    eventDate = "3월 23일 토요일 14:00 - 18:00",
-                    eventLocation = "건국대학교 꽥꽥오리관",
-                    eventName = "2차 세미나",
-                    firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                    secondAttendance = MidtermAttendance.Absent,
-                    finalAttendance = FinalAttendance.LATE,
+                TodayNoAttendanceCardState(
+                    eventDate = "5월 12일 일요일 14:00 - 18:00",
+                    eventLocation = "배달의민족주문~",
+                    eventName = "데모데이",
                 ),
             )
         }
