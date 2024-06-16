@@ -21,6 +21,7 @@ class WebViewActivity : AppCompatActivity() {
 
         handleLinkUrl()
         handleOnBackPressed()
+        handleOnPullToRefresh()
     }
 
     private fun handleLinkUrl() {
@@ -35,6 +36,12 @@ class WebViewActivity : AppCompatActivity() {
             } else {
                 if (!isFinishing) finish()
             }
+        }
+    }
+
+    private fun handleOnPullToRefresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.webView.reload()
         }
     }
 }

@@ -27,6 +27,7 @@ package org.sopt.official.webview.view
 import android.graphics.Bitmap
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.sopt.official.network.persistence.SoptDataStore
 
 class SoptWebViewClient(
@@ -39,5 +40,10 @@ class SoptWebViewClient(
             window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
         """.trimIndent()
         view?.evaluateJavascript(script) {}
+    }
+
+    override fun onPageFinished(view: WebView?, url: String?) {
+        super.onPageFinished(view, url)
+        (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
     }
 }
