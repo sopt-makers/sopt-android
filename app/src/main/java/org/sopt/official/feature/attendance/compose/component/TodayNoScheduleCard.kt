@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose
+package org.sopt.official.feature.attendance.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
