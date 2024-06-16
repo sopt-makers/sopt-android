@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.google.common.collect.ImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.AttendanceHistory
 import org.sopt.official.feature.attendance.model.AttendanceResultType
@@ -24,7 +25,7 @@ fun AttendanceHistoryCard(
     userTitle: String,
     attendanceScore: Int,
     totalAttendanceResult: Map<AttendanceResultType, Int>,
-    attendanceHistoryList: List<AttendanceHistory>,
+    attendanceHistoryList: ImmutableList<AttendanceHistory>,
     scrollState: ScrollState, modifier: Modifier = Modifier
 ) {
     Column(
@@ -73,7 +74,7 @@ private fun AttendanceHistoryCardPreview() {
                 Pair(AttendanceResultType.LATE, 0),
                 Pair(AttendanceResultType.ABSENT, 11)
             ),
-            attendanceHistoryList = listOf(
+            attendanceHistoryList = ImmutableList.of(
                 AttendanceHistory(
                     status = "출석", eventName = "1차 세미나", date = "00월 00일"
                 ),
