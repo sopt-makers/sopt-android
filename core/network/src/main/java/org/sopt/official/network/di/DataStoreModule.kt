@@ -28,8 +28,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.common.di.LocalStore
 import javax.inject.Singleton
+import org.sopt.official.common.di.LocalStore
 
 @Module
 @InstallIn(SingletonComponent::class)

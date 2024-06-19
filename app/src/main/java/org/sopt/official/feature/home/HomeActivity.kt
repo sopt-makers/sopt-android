@@ -159,110 +159,93 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUserInfo() {
-        viewModel.title
-            .flowWithLifecycle(lifecycle)
-            .onEach { user ->
-                binding.title.text = when (user) {
-                    is UserUiState.User -> {
-                        val (id, userName, period) = user
-                        stringOf(id, userName, period)
-                    }
-
-                    is UserUiState.InactiveUser -> stringOf(user.title)
-                    is UserUiState.UnauthenticatedUser -> stringOf(user.title)
-                }
-            }.launchIn(lifecycleScope)
-        viewModel.description
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                binding.subtitle.text = it.topDescription.ifEmpty {
-                    this@HomeActivity.getString(R.string.main_subtitle_non_member)
-                }
-                binding.bottomDescription.text = it.bottomDescription.ifEmpty {
-                    this@HomeActivity.getString(R.string.main_content_header)
-                }
-            }.launchIn(lifecycleScope)
-        viewModel.userActiveState
-            .flowWithLifecycle(lifecycle)
-            .onEach { userActiveState ->
-                binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
-                binding.contentPoke.root.setOnSingleClickListener {
-                    tracker.setNotificationStateToUserProperties(NotificationManagerCompat.from(this).areNotificationsEnabled())
-                    tracker.track(type = EventType.CLICK, name = "poke", properties = mapOf("view_type" to args?.userStatus?.value))
-                    when (userActiveState == UserActiveState.ACTIVE) {
-                        true -> viewModel.checkNewInPoke()
-                        false -> AlertDialogOneButton(this)
-                            .setTitle(R.string.poke_dialog_preparing_title)
-                            .setSubtitle(R.string.poke_dialog_preparing_body)
-                            .setPositiveButton(R.string.poke_dialog_confirm_button)
-                            .show()
-                    }
+        viewModel.title.flowWithLifecycle(lifecycle).onEach { user ->
+            binding.title.text = when (user) {
+                is UserUiState.User -> {
+                    val (id, userName, period) = user
+                    stringOf(id, userName, period)
                 }
 
-                binding.contentSoptamp.root.setOnSingleClickListener {
-                    tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
-                    when (userActiveState != UserActiveState.UNAUTHENTICATED) {
-                        true -> startActivity(Intent(this, SoptampActivity::class.java))
-                        false -> AlertDialogOneButton(this)
-                            .setTitle(R.string.soptamp_dialog_can_not_enter_title)
-                            .setSubtitle(R.string.soptamp_dialog_can_not_enter_body)
-                            .setPositiveButton(R.string.soptamp_dialog_confirm_button)
-                            .show()
-                    }
-                }
+                is UserUiState.InactiveUser -> stringOf(user.title)
+                is UserUiState.UnauthenticatedUser -> stringOf(user.title)
+            }
+        }.launchIn(lifecycleScope)
 
-                val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
-                binding.imageViewNotificationBadge.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
-                binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
-                binding.imageViewNotificationHistory.setOnClickListener {
-                    tracker.track(type = EventType.CLICK, name = "alarm", properties = mapOf("view_type" to args?.userStatus?.value))
-                    val intent = Intent(this, NotificationHistoryActivity::class.java)
-                    startActivity(intent)
-                }
-            }.launchIn(lifecycleScope)
-        viewModel.isAllNotificationsConfirm.flowWithLifecycle(lifecycle)
-            .onEach {
-                if (viewModel.userActiveState.value == UserActiveState.UNAUTHENTICATED) return@onEach
-                binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE
-            }.launchIn(lifecycleScope)
-        viewModel.generatedTagText
-            .flowWithLifecycle(lifecycle)
-            .onEach { (id, text) ->
-                binding.tagMemberState.text = if (text == null) stringOf(id) else stringOf(id, text)
-            }.launchIn(lifecycleScope)
-        viewModel.generationList
-            .flowWithLifecycle(lifecycle)
-            .onEach { generationList ->
-                currentGeneration = generationList?.first?.toInt() ?: 0
-                binding.memberGeneration.generation1.setGenerationText(generationList, 2)
-                binding.memberGeneration.generation2.setGenerationText(generationList, 3)
-                binding.memberGeneration.generation3.setGenerationText(generationList, 4)
-                binding.memberGeneration.generation4.setGenerationText(generationList, 5)
-                binding.memberGeneration.generation5.setGenerationText(generationList, 6)
-                binding.memberGeneration.generationAddition.setVisible(
+        viewModel.description.flowWithLifecycle(lifecycle).onEach {
+            binding.subtitle.text = it.topDescription.ifEmpty {
+                this@HomeActivity.getString(R.string.main_subtitle_non_member)
+            }
+            binding.bottomDescription.text = it.bottomDescription.ifEmpty {
+                this@HomeActivity.getString(R.string.main_content_header)
+            }
+        }.launchIn(lifecycleScope)
+
+        viewModel.userActiveState.flowWithLifecycle(lifecycle).onEach { userActiveState ->
+            binding.tagMemberState.isEnabled = userActiveState == UserActiveState.ACTIVE
+            binding.contentPoke.root.setOnSingleClickListener {
+                tracker.setNotificationStateToUserProperties(NotificationManagerCompat.from(this).areNotificationsEnabled())
+                tracker.track(type = EventType.CLICK, name = "poke", properties = mapOf("view_type" to args?.userStatus?.value))
+
+                viewModel.checkNewInPoke()
+            }
+
+            binding.contentSoptamp.root.setOnSingleClickListener {
+                tracker.track(type = EventType.CLICK, name = "soptamp", properties = mapOf("view_type" to args?.userStatus?.value))
+
+                startActivity(Intent(this, SoptampActivity::class.java))
+            }
+
+            val isAuthenticated = userActiveState != UserActiveState.UNAUTHENTICATED
+            binding.imageViewNotificationBadge.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
+            binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
+            binding.imageViewNotificationHistory.setOnClickListener {
+                tracker.track(type = EventType.CLICK, name = "alarm", properties = mapOf("view_type" to args?.userStatus?.value))
+                val intent = Intent(this, NotificationHistoryActivity::class.java)
+                startActivity(intent)
+            }
+        }.launchIn(lifecycleScope)
+
+        viewModel.isAllNotificationsConfirm.flowWithLifecycle(lifecycle).onEach {
+            if (viewModel.userActiveState.value == UserActiveState.UNAUTHENTICATED) return@onEach
+            binding.imageViewNotificationBadge.visibility = if (it) View.GONE else View.VISIBLE
+        }.launchIn(lifecycleScope)
+
+        viewModel.generatedTagText.flowWithLifecycle(lifecycle).onEach { (id, text) ->
+            binding.tagMemberState.text = if (text == null) stringOf(id) else stringOf(id, text)
+        }.launchIn(lifecycleScope)
+
+        viewModel.generationList.flowWithLifecycle(lifecycle).onEach { generationList ->
+            currentGeneration = generationList?.first?.toInt() ?: 0
+            with(binding.memberGeneration) {
+                generation1.setGenerationText(generationList, 2)
+                generation2.setGenerationText(generationList, 3)
+                generation3.setGenerationText(generationList, 4)
+                generation4.setGenerationText(generationList, 5)
+                generation5.setGenerationText(generationList, 6)
+                generationAddition.setVisible(
                     generationList?.isLongerOrEqual(7) == true
                 )
-                val additionalGeneration = generationList?.length?.minus(5) ?: return@onEach
-                if (generationList.isLongerOrEqual(7)) {
-                    binding.memberGeneration.generationAddition.text = stringOf(
-                        R.string.main_additional_generation,
-                        additionalGeneration.toString()
-                    )
-                }
-            }.launchIn(lifecycleScope)
-
-        viewModel.checkNewInPokeUiState
-            .onEach {
-                when (it) {
-                    is UiState.Loading -> "Loading"
-                    is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
-                    is UiState.ApiError -> showPokeToast(getString(org.sopt.official.feature.poke.R.string.toast_poke_error))
-                    is UiState.Failure -> showPokeToast(
-                        it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.toast_poke_error)
-                    )
-                }
             }
-            .launchIn(lifecycleScope)
+
+            val additionalGeneration = generationList?.length?.minus(5) ?: return@onEach
+            if (generationList.isLongerOrEqual(7)) {
+                binding.memberGeneration.generationAddition.text = stringOf(
+                    R.string.main_additional_generation,
+                    additionalGeneration.toString()
+                )
+            }
+        }.launchIn(lifecycleScope)
+
+        viewModel.checkNewInPokeUiState.onEach {
+            when (it) {
+                is UiState.Loading -> {}
+                is UiState.Success<CheckNewInPoke> -> handleNewInPoke(it.data.isNew)
+                is UiState.ApiError -> showPokeToast(getString(org.sopt.official.feature.poke.R.string.toast_poke_error))
+                is UiState.Failure -> showPokeToast(
+                    it.throwable.message ?: getString(org.sopt.official.feature.poke.R.string.toast_poke_error)
+                )
+            }
+        }.launchIn(lifecycleScope)
 
         viewModel.appServiceUiState.flowWithLifecycle(lifecycle).onEach {
             with(binding) {
