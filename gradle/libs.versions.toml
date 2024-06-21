@@ -57,7 +57,7 @@ lottie = "6.4.1"
 dotsindicator = "5.0"
 
 google-services = "4.4.2"
-crashlytics = "3.0.1"
+crashlytics = "3.0.2"
 firebase = "33.1.1"
 app-distribution = "5.0.0"
 ktlint = "12.1.1"
