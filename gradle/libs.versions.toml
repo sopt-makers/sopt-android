@@ -30,7 +30,7 @@ in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
 
 junit = "4.13.2"
-androidx-test-junit = "1.1.5"
+androidx-test-junit = "1.2.0"
 androidx-test-espresso = "3.6.0"
 junit5-plugin = "1.10.0.0"
 junit5-jupiter = "5.10.2"
