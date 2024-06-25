@@ -37,7 +37,7 @@ junit5-jupiter = "5.10.2"
 truth = "1.4.2"
 robolectric = "4.12.2"
 androidx-uiautomator = "2.3.0"
-androidx-test = "1.5.2"
+androidx-test = "1.6.0"
 androidx-test-rules = "1.5.0"
 
 gradleplugin = "8.5.0"
