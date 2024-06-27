@@ -38,7 +38,7 @@ truth = "1.4.2"
 robolectric = "4.12.2"
 androidx-uiautomator = "2.3.0"
 androidx-test = "1.6.1"
-androidx-test-rules = "1.6.0"
+androidx-test-rules = "1.6.1"
 
 gradleplugin = "8.5.0"
 kspplugin = "2.0.0-1.0.22"
