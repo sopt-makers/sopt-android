@@ -27,6 +27,7 @@ package org.sopt.official.data.service.home
 import org.sopt.official.data.model.home.AppServiceResponse
 import org.sopt.official.data.model.home.DescriptionViewResponse
 import org.sopt.official.data.model.home.HomeResponse
+import org.sopt.official.data.model.home.HotPostResponse
 import retrofit2.http.GET
 
 interface HomeService {
@@ -38,4 +39,7 @@ interface HomeService {
 
     @GET("user/app-service")
     suspend fun getAppService(): List<AppServiceResponse>
+
+    @GET("user/playground/hot-post")
+    suspend fun getHotPost(): HotPostResponse
 }

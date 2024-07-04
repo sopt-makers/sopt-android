@@ -45,8 +45,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -81,6 +79,8 @@ import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.webview.view.WebViewActivity
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -254,6 +254,18 @@ class HomeActivity : AppCompatActivity() {
                 contentPoke.root.isVisible = it.showPoke
             }
         }.launchIn(lifecycleScope)
+
+        viewModel.hotPost.flowWithLifecycle(lifecycle).onEach { post ->
+            with(binding) {
+                hotTitle.text = post.title
+                hotContent.text = post.content
+
+                hotPost.setOnSingleClickListener {
+                    tracker.track(type = EventType.CLICK, name = "hotpost", properties = mapOf("view_type" to args?.userStatus?.value))
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.url)))
+                }
+            }
+        }
     }
 
     private fun handleNewInPoke(isNewInPoke: Boolean) {
