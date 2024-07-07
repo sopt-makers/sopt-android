@@ -257,6 +257,12 @@ class HomeViewModel @Inject constructor(
                                 )
                             }
 
+                            AppServiceEnum.HOTBOARD.name -> {
+                                appService = appService.copy(
+                                    showHotboard = showActiveUser || showInactiveUser
+                                )
+                            }
+
                             else -> {}
                         }
                     }

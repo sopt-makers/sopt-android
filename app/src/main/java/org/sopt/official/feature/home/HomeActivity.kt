@@ -249,6 +249,7 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel.appServiceUiState.flowWithLifecycle(lifecycle).onEach {
             with(binding) {
+                hotPost.isVisible = it.showHotboard
                 bottomDescription.isVisible = it.showPoke || it.showSoptamp
                 contentSoptamp.root.isVisible = it.showSoptamp
                 contentPoke.root.isVisible = it.showPoke
