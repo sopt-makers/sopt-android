@@ -58,7 +58,7 @@ dotsindicator = "5.0"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"
-firebase = "33.1.1"
+firebase = "33.1.2"
 app-distribution = "5.0.0"
 ktlint = "12.1.1"
 sentry = "4.9.0"
