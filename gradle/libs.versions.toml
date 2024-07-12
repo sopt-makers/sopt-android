@@ -40,7 +40,7 @@ androidx-uiautomator = "2.3.0"
 androidx-test = "1.6.1"
 androidx-test-rules = "1.6.1"
 
-gradleplugin = "8.5.0"
+gradleplugin = "8.5.1"
 kspplugin = "2.0.0-1.0.23"
 
 dagger-hilt = "2.51.1"
