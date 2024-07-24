@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,6 +47,7 @@ import org.sopt.official.common.util.calculateGenerationStartDate
 import org.sopt.official.common.util.systemNow
 import org.sopt.official.common.util.toDefaultLocalDate
 import org.sopt.official.domain.entity.home.HomeSection
+import org.sopt.official.domain.entity.home.HotPostEntity
 import org.sopt.official.domain.entity.home.SoptActiveGeneration
 import org.sopt.official.domain.entity.home.SoptActiveRecord
 import org.sopt.official.domain.entity.home.SoptUser
@@ -69,6 +69,7 @@ import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.poke.UiState
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -205,6 +206,10 @@ class HomeViewModel @Inject constructor(
     val appServiceUiState: StateFlow<AppServiceUiState>
         get() = _appServiceUiState
 
+    private val _hotPost = MutableStateFlow(HotPostEntity())
+    val hotPost
+        get() = _hotPost.asStateFlow()
+
     fun initHomeUi(userStatus: UserStatus) {
         viewModelScope.launch {
             if (userStatus != UserStatus.UNAUTHENTICATED) {
@@ -252,12 +257,24 @@ class HomeViewModel @Inject constructor(
                                 )
                             }
 
+                            AppServiceEnum.HOTBOARD.name -> {
+                                appService = appService.copy(
+                                    showHotboard = showActiveUser || showInactiveUser
+                                )
+                            }
+
                             else -> {}
                         }
                     }
 
                     _appServiceUiState.value = appService
                 }
+
+            homeRepository.getHotPost()
+                .onSuccess {
+                    _hotPost.value = it
+                }
+                .onFailure(Timber::e)
         }
     }
 

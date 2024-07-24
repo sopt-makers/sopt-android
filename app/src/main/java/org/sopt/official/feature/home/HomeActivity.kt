@@ -45,8 +45,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -81,6 +79,8 @@ import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.stamp.SoptampActivity
 import org.sopt.official.util.AlertDialogOneButton
 import org.sopt.official.webview.view.WebViewActivity
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
@@ -249,6 +249,7 @@ class HomeActivity : AppCompatActivity() {
 
         viewModel.appServiceUiState.flowWithLifecycle(lifecycle).onEach {
             with(binding) {
+                hotPost.isVisible = it.showHotboard
                 bottomDescription.isVisible = it.showPoke || it.showSoptamp
                 contentSoptamp.root.isVisible = it.showSoptamp
                 contentPoke.root.isVisible = it.showPoke
@@ -273,6 +274,18 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initBlock() {
+        viewModel.hotPost.flowWithLifecycle(lifecycle).onEach { hotPost ->
+            binding.hotTitle.text = hotPost.title
+            binding.hotContent.text = hotPost.content
+            binding.hotPost.setOnSingleClickListener {
+                tracker.track(type = EventType.CLICK, name = "hotpost", properties = mapOf("view_type" to args?.userStatus?.value))
+                val intent = Intent(this@HomeActivity, WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.INTENT_URL, hotPost.url)
+                }
+                startActivity(intent)
+            }
+        }.launchIn(lifecycleScope)
+
         binding.smallBlockList.apply {
             adapter = SmallBlockAdapter()
             addItemDecoration(object : RecyclerView.ItemDecoration() {
