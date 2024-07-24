@@ -279,7 +279,10 @@ class HomeActivity : AppCompatActivity() {
             binding.hotContent.text = hotPost.content
             binding.hotPost.setOnSingleClickListener {
                 tracker.track(type = EventType.CLICK, name = "hotpost", properties = mapOf("view_type" to args?.userStatus?.value))
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(hotPost.url)))
+                val intent = Intent(this@HomeActivity, WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.INTENT_URL, hotPost.url)
+                }
+                startActivity(intent)
             }
         }.launchIn(lifecycleScope)
 
