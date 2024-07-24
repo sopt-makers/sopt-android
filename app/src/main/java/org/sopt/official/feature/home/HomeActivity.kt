@@ -255,18 +255,6 @@ class HomeActivity : AppCompatActivity() {
                 contentPoke.root.isVisible = it.showPoke
             }
         }.launchIn(lifecycleScope)
-
-        viewModel.hotPost.flowWithLifecycle(lifecycle).onEach { post ->
-            with(binding) {
-                hotTitle.text = post.title
-                hotContent.text = post.content
-
-                hotPost.setOnSingleClickListener {
-                    tracker.track(type = EventType.CLICK, name = "hotpost", properties = mapOf("view_type" to args?.userStatus?.value))
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(post.url)))
-                }
-            }
-        }
     }
 
     private fun handleNewInPoke(isNewInPoke: Boolean) {
