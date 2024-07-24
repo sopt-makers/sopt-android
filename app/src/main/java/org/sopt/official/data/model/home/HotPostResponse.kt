@@ -11,7 +11,7 @@ data class HotPostResponse(
     @SerialName("content")
     val content: String,
     @SerialName("url")
-    val url: String,
+    val url: String
 ) {
     fun toEntity(): HotPostEntity = HotPostEntity(
         title = this.title,

@@ -286,6 +286,15 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initBlock() {
+        viewModel.hotPost.flowWithLifecycle(lifecycle).onEach { hotPost ->
+            binding.hotTitle.text = hotPost.title
+            binding.hotContent.text = hotPost.content
+            binding.hotPost.setOnSingleClickListener {
+                tracker.track(type = EventType.CLICK, name = "hotpost", properties = mapOf("view_type" to args?.userStatus?.value))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(hotPost.url)))
+            }
+        }.launchIn(lifecycleScope)
+
         binding.smallBlockList.apply {
             adapter = SmallBlockAdapter()
             addItemDecoration(object : RecyclerView.ItemDecoration() {
