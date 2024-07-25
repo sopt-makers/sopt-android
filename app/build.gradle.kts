@@ -33,7 +33,6 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.secret)
-    alias(libs.plugins.sentry)
     alias(libs.plugins.app.distribution)
     alias(libs.plugins.androidx.baselineprofile)
 }
@@ -150,7 +149,6 @@ dependencies {
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
-    implementation(libs.sentry.compose)
     implementation(libs.process.phoenix)
 
     implementation(libs.compose.destination.core)

@@ -11,7 +11,6 @@ local.properties
 keystore/releaseKey
 keystore/releaseKey.jks
 keystore/private_key.pepk
-sentry.properties
 
 # Log/OS Files
 *.log

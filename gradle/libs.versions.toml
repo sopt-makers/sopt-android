@@ -61,8 +61,6 @@ crashlytics = "3.0.2"
 firebase = "33.1.2"
 app-distribution = "5.0.0"
 ktlint = "12.1.1"
-sentry = "4.10.0"
-sentry-android = "7.12.0"
 process-pheonix = "3.0.0"
 amplitude = "1.16.8"
 spotless = "6.25.0"
@@ -176,8 +174,6 @@ firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
-sentry-compose = { module = "io.sentry:sentry-compose-android", version.ref = "sentry-android" }
-
 process-phoenix = { module = "com.jakewharton:process-phoenix", version.ref = "process-pheonix" }
 androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
 amplitude-android = { module = "com.amplitude:analytics-android", version.ref = "amplitude" }
@@ -225,7 +221,6 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspplugin" }
 secret = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-sentry = { id = "io.sentry.android.gradle", version.ref = "sentry" }
 junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "junit5-plugin" }
 app-distribution = { id = "com.google.firebase.appdistribution", version.ref = "app-distribution" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

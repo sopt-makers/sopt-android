@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.secret) apply false
     alias(libs.plugins.kotlinx.serialization) apply false
-    alias(libs.plugins.sentry) apply false
     alias(libs.plugins.junit5) apply false
     alias(libs.plugins.app.distribution) apply false
     alias(libs.plugins.spotless) apply false

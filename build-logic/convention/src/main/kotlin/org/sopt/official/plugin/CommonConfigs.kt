@@ -32,7 +32,6 @@ internal fun Project.configureAndroidCommonPlugin() {
             val operationUrl = properties["operationApi"] as? String ?: ""
             val devAmplitudeKey = properties["devAmplitudeKey"] as? String ?: ""
             val amplitudeKey = properties["amplitudeKey"] as? String ?: ""
-            manifestPlaceholders["sentryDsn"] = properties["sentryDsn"] as String
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
             buildConfigField("String", "POKE_DATA_STORE_KEY", pokeDataStoreKey)
