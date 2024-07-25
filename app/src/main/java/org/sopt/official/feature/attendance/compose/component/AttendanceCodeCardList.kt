@@ -23,7 +23,7 @@ fun AttendanceCodeCardList(
                 onTextChange = onTextChange,
                 onTextFieldFull = onTextFieldFull
             )
-            if (index != codes.size - 1) {
+            if (index < codes.size) {
                 Spacer(modifier = Modifier.width(width = 12.dp))
             }
         }
