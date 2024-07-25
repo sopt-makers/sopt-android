@@ -109,7 +109,6 @@
 -keepattributes SourceFile, LineNumberTable, Annotation
 -dontwarn org.slf4j.**
 -dontwarn javax.**
--keep class io.sentry.event.Event { *; }
 
 # JSR 305 annotations are for embedding nullability information.
 -dontwarn javax.annotation.**
