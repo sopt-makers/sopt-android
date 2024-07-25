@@ -29,15 +29,32 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.ResultReceiver
+import android.provider.Browser
+import androidx.browser.customtabs.CustomTabsIntent
 
 internal object AuthIntentFactory {
-    fun authIntentWithAuthTab(context: Context, uri: Uri, state: String, resultReceiver: ResultReceiver): Intent = Bundle().apply {
-        putParcelable(Constants.AUTH_URI_KEY, uri)
-        putString(Constants.STATE, state)
-        putParcelable(Constants.RESULT_RECEIVER, resultReceiver)
-    }.run {
-        Intent(context, AuthCodeHandlerActivity::class.java)
-            .putExtra(Constants.AUTH_INTENT_BUNDLE_KEY, this)
+    fun authIntentWithAuthTab(context: Context, uri: Uri, state: String, resultReceiver: ResultReceiver): Intent {
+        val bundle = Bundle().apply {
+            putParcelable(Constants.AUTH_URI_KEY, uri)
+            putString(Constants.STATE, state)
+            putParcelable(Constants.RESULT_RECEIVER, resultReceiver)
+        }
+
+        val customTabsIntent = CustomTabsIntent.Builder()
+            .setShowTitle(true)
+            .build()
+
+        customTabsIntent.intent.putExtra(
+            Browser.EXTRA_HEADERS,
+            Bundle().apply {
+                putString(Constants.USER_AGENT, Constants.CHROME_USER_AGENT)
+            }
+        )
+
+        customTabsIntent.intent.data = uri
+
+        return Intent(context, AuthCodeHandlerActivity::class.java)
+            .putExtra(Constants.AUTH_INTENT_BUNDLE_KEY, bundle)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
 }

@@ -35,4 +35,6 @@ internal object Constants {
 
     const val AUTH_INTENT_BUNDLE_KEY = "auth.intent.bundle.key"
     const val AUTH_URI_KEY = "auth.uri.key"
+    const val USER_AGENT = "User-Agent"
+    const val CHROME_USER_AGENT = "Chrome/56.0.0.0 Mobile"
 }
