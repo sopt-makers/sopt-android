@@ -41,14 +41,14 @@ open class SoptWebView : WebView {
     constructor(
         context: Context,
         attrs: AttributeSet?,
-        defStyleAttr: Int
+        defStyleAttr: Int,
     ) : super(context, attrs, defStyleAttr)
 
     constructor(
         context: Context,
         attrs: AttributeSet?,
         defStyleAttr: Int,
-        defStyleRes: Int
+        defStyleRes: Int,
     ) : super(
         context,
         attrs,
@@ -77,6 +77,7 @@ open class SoptWebView : WebView {
             javaScriptCanOpenWindowsAutomatically = true
             setSupportZoom(false)
             webViewClient = SoptWebViewClient(dataStore)
+            userAgentString = "Chrome/56.0.0.0 Mobile"
         }
         initWebView()
     }
