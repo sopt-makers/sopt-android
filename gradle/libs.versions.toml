@@ -2,8 +2,8 @@
 compileSdk = "34"
 minSdk = "28"
 targetSdk = "34"
-appVersion = "2.3.1"
-versionCode = "20301"
+appVersion = "2.3.2"
+versionCode = "20302"
 
 kotlin = "2.0.0"
 kotlinx-serialization-json = "1.7.1"
@@ -77,12 +77,12 @@ kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-s
 kotlin-coroutines-google-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlin-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinx-datetime" }
-kotlin-collections-immutable = {group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable"}
+kotlin-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinx-collections-immutable" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javax-inject" }
 
 activity = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
 core-ktx = { module = "androidx.core:core-ktx", version.ref = "corektx" }
-fragment-ktx = {  module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
+fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
