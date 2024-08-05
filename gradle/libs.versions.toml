@@ -43,7 +43,7 @@ androidx-test-rules = "1.6.1"
 gradleplugin = "8.5.1"
 kspplugin = "2.0.0-1.0.24"
 
-dagger-hilt = "2.51.1"
+dagger-hilt = "2.52"
 dagger-hilt-navigation-compose = "1.2.0"
 flipper = "0.261.0"
 soloader = "0.11.0"
