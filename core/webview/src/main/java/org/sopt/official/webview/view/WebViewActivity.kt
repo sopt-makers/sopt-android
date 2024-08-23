@@ -24,8 +24,16 @@
  */
 package org.sopt.official.webview.view
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.webkit.ValueCallback
+import android.webkit.WebChromeClient
+import android.webkit.WebView
 import androidx.activity.addCallback
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.common.util.viewBinding
@@ -33,16 +41,38 @@ import org.sopt.official.webview.databinding.ActivityWebViewBinding
 
 @AndroidEntryPoint
 class WebViewActivity : AppCompatActivity() {
-    companion object {
-        const val INTENT_URL = "_intent_url"
-    }
-
     private val binding by viewBinding(ActivityWebViewBinding::inflate)
+    private var filePathCallback: ValueCallback<Array<Uri>>? = null
+    private val imageResult = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
+        if (uri == null) {
+            filePathCallback?.onReceiveValue(null)
+            filePathCallback = null
+        } else {
+            val data = Intent().apply { data = uri }
+            filePathCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(Activity.RESULT_OK, data))
+            filePathCallback = null
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        binding.webView.webChromeClient = object : WebChromeClient() {
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?
+            ): Boolean {
+                if (filePathCallback != null) {
+                    this@WebViewActivity.filePathCallback = filePathCallback
+                }
 
+                imageResult.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+                return true
+            }
+        }
         handleLinkUrl()
         handleOnBackPressed()
         handleOnPullToRefresh()
@@ -67,5 +97,9 @@ class WebViewActivity : AppCompatActivity() {
         binding.swipeRefreshLayout.setOnRefreshListener {
             binding.webView.reload()
         }
+    }
+
+    companion object {
+        const val INTENT_URL = "_intent_url"
     }
 }
