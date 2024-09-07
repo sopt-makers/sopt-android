@@ -30,6 +30,7 @@ include(
     ":data:soptamp",
     ":data:poke",
     ":domain:mypage",
+    ":domain:notification",
     ":domain:soptamp",
     ":domain:poke",
     ":feature:auth",
