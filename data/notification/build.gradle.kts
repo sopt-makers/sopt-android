@@ -22,15 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.notification.usecase
+plugins {
+    sopt("feature")
+}
 
-import org.sopt.official.domain.notification.repository.NotificationRepository
-import javax.inject.Inject
+android {
+    namespace = "org.sopt.official.data.notification"
+}
 
-class DeletePushTokenUseCase @Inject constructor(
-    private val notificationRepository: NotificationRepository
-) {
-    suspend operator fun invoke(pushToken: String) {
-        return notificationRepository.deleteToken(pushToken)
-    }
+dependencies {
+    implementation(projects.domain.notification)
+    implementation(projects.core.network)
+    implementation(projects.core.common)
+    implementation(projects.core.auth)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.bundles.okhttp)
 }

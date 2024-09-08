@@ -27,6 +27,7 @@ include(
     ":core:designsystem",
     ":core:webview",
     ":data:mypage",
+    ":data:notification",
     ":data:soptamp",
     ":data:poke",
     ":domain:mypage",

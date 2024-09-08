@@ -22,15 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.notification.usecase
+package org.sopt.official.data.notification.model.response
 
-import org.sopt.official.domain.notification.repository.NotificationRepository
-import javax.inject.Inject
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class DeletePushTokenUseCase @Inject constructor(
-    private val notificationRepository: NotificationRepository
-) {
-    suspend operator fun invoke(pushToken: String) {
-        return notificationRepository.deleteToken(pushToken)
-    }
-}
+@Serializable
+data class NotificationReadingStateResponse(
+  @SerialName("id")
+  val id: Int,
+  @SerialName("isRead")
+  val isRead: Boolean,
+  @SerialName("createdAt")
+  val createdAt: String,
+  @SerialName("updatedAt")
+  val updatedAt: String
+)
