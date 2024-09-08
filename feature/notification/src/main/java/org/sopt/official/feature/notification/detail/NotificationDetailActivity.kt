@@ -22,44 +22,145 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@file:Suppress("DEPRECATION")
 
 package org.sopt.official.feature.notification.detail
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import org.sopt.official.common.util.stringExtra
-import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityNotificationDetailBinding
-import org.sopt.official.domain.notification.entity.Notification
-import org.sopt.official.feature.notification.R
-import java.io.Serializable
+import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.designsystem.SoptTheme
+
+private val navigator by lazy {
+  EntryPointAccessors.fromApplication(
+    appContext,
+    NavigatorEntryPoint::class.java
+  ).navigatorProvider()
+}
 
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {
-  private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
   private val viewModel by viewModels<NotificationDetailViewModel>()
 
-  private val notificationId by stringExtra("")
-
+  @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    setContentView(binding.root)
-
-    binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
-    viewModel.getNotificationDetail(notificationId.orEmpty())
-
-    initStateFlowValues()
-    initClickListeners()
+    setContent {
+      val notification by viewModel.notificationDetail.collectAsStateWithLifecycle()
+      val context = LocalContext.current
+      SoptTheme {
+        Scaffold(modifier = Modifier
+          .fillMaxSize()
+          .background(SoptTheme.colors.background),
+          topBar = {
+            CenterAlignedTopAppBar(title = {
+              Text(
+                text = "알림",
+                style = SoptTheme.typography.body16M
+              )
+            },
+              navigationIcon = {
+                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                  Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = SoptTheme.colors.onBackground
+                  )
+                }
+              })
+          }) { innerPadding ->
+          Column(
+            modifier = Modifier
+              .fillMaxSize()
+              .padding(innerPadding)
+              .padding(top = 20.dp)
+              .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+          ) {
+            Column(
+              modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(10.dp))
+                .background(SoptTheme.colors.onSurface800)
+                .padding(
+                  vertical = 24.dp,
+                  horizontal = 12.dp
+                )
+            ) {
+              Text(
+                notification?.title.orEmpty(),
+                style = SoptTheme.typography.heading18B,
+                color = SoptTheme.colors.onSurface10
+              )
+              Spacer(modifier = Modifier.padding(14.dp))
+              HorizontalDivider(color = SoptTheme.colors.onSurface400)
+              Text(
+                notification?.content.orEmpty(),
+                style = SoptTheme.typography.body16M,
+                color = SoptTheme.colors.onSurface10,
+                modifier = Modifier.padding(top = 24.dp)
+              )
+            }
+            if (!notification?.deepLink.isNullOrBlank() || !notification?.webLink.isNullOrBlank()) {
+              Button(
+                onClick = {
+                  context.startActivity(
+                    navigator.getSchemeActivityIntent(
+                      notificationId = notification?.notificationId.orEmpty(),
+                      link = notification?.webLink ?: notification?.deepLink ?: ""
+                    )
+                  )
+                },
+                colors = ButtonDefaults.buttonColors(
+                  containerColor = SoptTheme.colors.primary,
+                  contentColor = SoptTheme.colors.onPrimary
+                ),
+                modifier = Modifier
+                  .fillMaxWidth()
+                  .height(56.dp)
+              ) {
+                Text(
+                  text = "바로가기 >",
+                  style = SoptTheme.typography.body16M
+                )
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   override fun onNewIntent(intent: Intent) {
@@ -68,55 +169,17 @@ class NotificationDetailActivity : AppCompatActivity() {
     viewModel.getNotificationDetail(notificationId)
   }
 
-  private fun initStateFlowValues() {
-    viewModel.apply {
-      notificationDetail.flowWithLifecycle(lifecycle).onEach { it?.let { notification -> initNotificationDetail(notification) } }
-        .launchIn(lifecycleScope)
-    }
-  }
-
-  private fun initNotificationDetail(notification: Notification) {
-    binding.apply {
-      textViewNotificationTitle.text = notification.title
-      textViewNotificationContent.text = notification.content
-      linearLayoutLinkButton.visibility = when (notification.deepLink.isNullOrBlank() && notification.webLink.isNullOrBlank()) {
-        true -> View.GONE
-        false -> View.VISIBLE
-      }
-    }
-  }
-
-  private fun initClickListeners() {
-    binding.apply {
-      includeAppBarBackArrow.toolbar.setOnClickListener(clickListener)
-      linearLayoutLinkButton.setOnClickListener(clickListener)
-    }
-  }
-
-  private val clickListener = View.OnClickListener {
-    binding.apply {
-      when (it) {
-        includeAppBarBackArrow.toolbar -> onBackPressed()
-        linearLayoutLinkButton -> viewModel.notificationDetail.value?.let {
-          startActivity(
-            SchemeActivity.getIntent(
-              this@NotificationDetailActivity, SchemeActivity.StartArgs(
-                notificationId = it.notificationId, link = it.webLink ?: it.deepLink ?: ""
-              )
-            )
-          )
-        }
-      }
-    }
-  }
-
-  data class StartArgs(
-    val notificationId: String
-  ) : Serializable
-
   companion object {
     @JvmStatic
-    fun getIntent(context: Context, notificationId: String) =
-      Intent(context, NotificationDetailActivity::class.java).putExtra("notificationId", notificationId)
+    fun getIntent(
+      context: Context,
+      notificationId: String
+    ) = Intent(
+      context,
+      NotificationDetailActivity::class.java
+    ).putExtra(
+      "notificationId",
+      notificationId
+    )
   }
 }

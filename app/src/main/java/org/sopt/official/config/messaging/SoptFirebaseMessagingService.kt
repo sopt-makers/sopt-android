@@ -86,7 +86,7 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
     notificationId: String, link: String, notifyId: Int
   ): NotificationCompat.Builder {
     val intent = SchemeActivity.getIntent(
-      this@SoptFirebaseMessagingService, SchemeActivity.StartArgs(notificationId, link)
+      this@SoptFirebaseMessagingService, SchemeActivity.Argument(notificationId, link)
     )
 
     return this.setContentIntent(

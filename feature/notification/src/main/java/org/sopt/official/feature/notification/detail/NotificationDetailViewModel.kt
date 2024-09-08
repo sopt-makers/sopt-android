@@ -24,11 +24,13 @@
  */
 package org.sopt.official.feature.notification.detail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.notification.entity.Notification
 import org.sopt.official.domain.notification.usecase.GetNotificationDetailUseCase
@@ -40,22 +42,32 @@ import javax.inject.Inject
 class NotificationDetailViewModel @Inject constructor(
   private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
   private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
+  savedStateHandle: SavedStateHandle
 ) : ViewModel() {
+  private val notificationId = savedStateHandle.get<String>("notificationId").orEmpty()
   private val _notificationDetail = MutableStateFlow<Notification?>(null)
-  val notificationDetail: StateFlow<Notification?> get() = _notificationDetail
+  val notificationDetail: StateFlow<Notification?> = _notificationDetail.asStateFlow()
+
+  init {
+    getNotificationDetail(notificationId)
+  }
 
   fun getNotificationDetail(id: String) {
     viewModelScope.launch {
-      getNotificationDetailUseCase.invoke(id).onSuccess {
+      getNotificationDetailUseCase(id).onSuccess {
         _notificationDetail.value = it
         updateNotificationReadingState(it.notificationId)
-      }.onFailure { Timber.e(it) }
+      }.onFailure {
+        Timber.e(it)
+      }
     }
   }
 
-  private fun updateNotificationReadingState(id: String) {
-    viewModelScope.launch {
-      updateNotificationReadingStateUseCase.invoke(id)
+  private suspend fun updateNotificationReadingState(id: String) {
+    runCatching {
+      updateNotificationReadingStateUseCase(id)
+    }.onFailure {
+      Timber.e(it)
     }
   }
 }

@@ -38,7 +38,15 @@ interface NavigatorProvider {
   fun getAttendanceActivityIntent(): Intent
   fun getSoptampActivityIntent(): Intent
   fun getPokeNotificationActivityIntent(name: String): Intent
-  fun getHomeActivityIntent(userStatus: UserStatus, deepLinkType: DeepLinkType?): Intent
+  fun getHomeActivityIntent(
+    userStatus: UserStatus,
+    deepLinkType: DeepLinkType?
+  ): Intent
+
+  fun getSchemeActivityIntent(
+    notificationId: String,
+    link: String
+  ): Intent
 }
 
 @InstallIn(SingletonComponent::class)

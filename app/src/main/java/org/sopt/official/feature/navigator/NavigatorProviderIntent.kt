@@ -35,6 +35,7 @@ import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
+import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
@@ -46,17 +47,44 @@ class NavigatorProviderIntent @Inject constructor(
 ) : NavigatorProvider {
   override fun getAuthActivityIntent(): Intent = AuthActivity.newInstance(context)
   override fun getNotificationActivityIntent() = NotificationActivity.newInstance(context)
-  override fun getNotificationDetailActivityIntent(notificationId: String) = NotificationDetailActivity.getIntent(context, notificationId)
-  override fun getMyPageActivityIntent(name: String) =
-    MyPageActivity.getIntent(context, MyPageActivity.Argument(UserActiveState.valueOf(name)))
+  override fun getNotificationDetailActivityIntent(notificationId: String) = NotificationDetailActivity.getIntent(
+    context,
+    notificationId
+  )
+
+  override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
+    context,
+    MyPageActivity.Argument(UserActiveState.valueOf(name))
+  )
 
   override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
 
   override fun getSoptampActivityIntent() = SoptampActivity.getIntent(context)
 
-  override fun getPokeNotificationActivityIntent(name: String) =
-    PokeNotificationActivity.getIntent(context, PokeNotificationActivity.Argument(name))
+  override fun getPokeNotificationActivityIntent(name: String) = PokeNotificationActivity.getIntent(
+    context,
+    PokeNotificationActivity.Argument(name)
+  )
 
-  override fun getHomeActivityIntent(userStatus: UserStatus, deepLinkType: DeepLinkType) =
-    HomeActivity.getIntent(context, HomeActivity.StartArgs(userStatus, deepLinkType))
+  override fun getSchemeActivityIntent(
+    notificationId: String,
+    link: String
+  ) = SchemeActivity.getIntent(
+    context,
+    SchemeActivity.Argument(
+      notificationId,
+      link
+    )
+  )
+
+  override fun getHomeActivityIntent(
+    userStatus: UserStatus,
+    deepLinkType: DeepLinkType?
+  ) = HomeActivity.getIntent(
+    context,
+    HomeActivity.StartArgs(
+      userStatus,
+      deepLinkType
+    )
+  )
 }
