@@ -71,7 +71,7 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.NotificationActivity
+import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity

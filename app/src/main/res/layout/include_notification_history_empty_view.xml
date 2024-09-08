@@ -33,7 +33,7 @@
         android:layout_width="124dp"
         android:layout_height="124dp"
         android:layout_gravity="center"
-        android:src="@drawable/icon_notification_history_empty_view" />
+        android:src="@drawable/icon_notification_empty" />
 
     <TextView
         style="@style/TextAppearance.SOPT.HeadLineLarge"

@@ -133,11 +133,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.notification.NotificationActivity"
+            android:name=".feature.notification.all.NotificationActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".feature.notification.NotificationDetailActivity"
+            android:name=".feature.notification.detail.NotificationDetailActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity

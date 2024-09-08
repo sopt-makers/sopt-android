@@ -24,7 +24,7 @@
  */
 @file:Suppress("DEPRECATION")
 
-package org.sopt.official.feature.notification
+package org.sopt.official.feature.notification.detail
 
 import android.content.Context
 import android.content.Intent
@@ -37,11 +37,11 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.R
 import org.sopt.official.common.util.stringExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
 import org.sopt.official.domain.notification.entity.Notification
+import org.sopt.official.feature.notification.R
 import java.io.Serializable
 
 @AndroidEntryPoint

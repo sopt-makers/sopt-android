@@ -35,8 +35,8 @@ import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.NotificationActivity
-import org.sopt.official.feature.notification.NotificationDetailActivity
+import org.sopt.official.feature.notification.all.NotificationActivity
+import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.stamp.SoptampActivity
 import javax.inject.Inject
