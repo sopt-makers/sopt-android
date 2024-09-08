@@ -26,6 +26,9 @@ package org.sopt.official.feature.notification.all
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +36,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.notification.entity.NotificationItem
+import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.notification.usecase.GetNotificationHistoryUseCase
 import org.sopt.official.domain.notification.usecase.UpdateEntireNotificationReadingStateUseCase
 import timber.log.Timber
@@ -40,9 +44,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationHistoryViewModel @Inject constructor(
+  private val repository: NotificationRepository,
   private val getNotificationHistoryUseCase: GetNotificationHistoryUseCase,
   private val updateEntireNotificationReadingStateUseCase: UpdateEntireNotificationReadingStateUseCase
 ) : ViewModel() {
+  val notifications = Pager(
+    PagingConfig(pageSize = 10)
+  ) {
+    NotificationPagingSource(repository)
+  }.flow.cachedIn(viewModelScope)
   private val _notificationHistoryList = MutableStateFlow<List<NotificationItem>>(arrayListOf())
   val notificationHistoryList: StateFlow<List<NotificationItem>> get() = _notificationHistoryList.asStateFlow()
 

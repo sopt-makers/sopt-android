@@ -54,7 +54,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,7 +62,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.common.navigator.NavigatorEntryPoint
@@ -80,57 +79,85 @@ class NotificationActivity : AppCompatActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContent {
-      val notifications by viewModel.notificationHistoryList.collectAsStateWithLifecycle()
+      val notifications = viewModel.notifications.collectAsLazyPagingItems()
       val context = LocalContext.current
       val navigator = remember {
-        EntryPointAccessors.fromApplication(context, NavigatorEntryPoint::class.java).navigatorProvider()
+        EntryPointAccessors.fromApplication(
+          context,
+          NavigatorEntryPoint::class.java
+        ).navigatorProvider()
       }
       SoptTheme {
         Scaffold(modifier = Modifier
           .fillMaxSize()
-          .background(SoptTheme.colors.background), topBar = {
-          CenterAlignedTopAppBar(title = { Text(text = "알림", style = SoptTheme.typography.body16M) }, navigationIcon = {
-            IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
-              Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null, tint = SoptTheme.colors.onBackground)
-            }
-          }, actions = {
-            Text(text = "모두 읽음",
-              style = SoptTheme.typography.body16M,
-              color = SoptTheme.colors.primary,
-              modifier = Modifier.clickable { viewModel.updateEntireNotificationReadingState() })
-          })
-        }) { innerPadding ->
-          if (notifications.isNotEmpty()) {
+          .background(SoptTheme.colors.background),
+          topBar = {
+            CenterAlignedTopAppBar(title = {
+              Text(
+                text = "알림",
+                style = SoptTheme.typography.body16M
+              )
+            },
+              navigationIcon = {
+                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                  Icon(
+                    Icons.AutoMirrored.Filled.ArrowBack,
+                    contentDescription = null,
+                    tint = SoptTheme.colors.onBackground
+                  )
+                }
+              },
+              actions = {
+                Text(text = "모두 읽음",
+                  style = SoptTheme.typography.body16M,
+                  color = SoptTheme.colors.primary,
+                  modifier = Modifier.clickable { viewModel.updateEntireNotificationReadingState() })
+              })
+          }) { innerPadding ->
+          if (notifications.itemCount > 0) {
             LazyColumn(
               modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
             ) {
-              items(notifications.size, key = { notifications[it].notificationId }) {
+              items(notifications.itemCount) {
                 val item = notifications[it]
                 Column(modifier = Modifier
                   .fillMaxWidth()
                   .height(100.dp)
-                  .clickable { context.startActivity(navigator.getNotificationDetailActivityIntent(item.notificationId)) }
+                  .clickable {
+                    context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
+                  }
                   .background(
-                    if (item.isRead) {
+                    if (item?.isRead == true) {
                       SoptTheme.colors.onSurface800
                     } else {
                       SoptTheme.colors.background
                     }
                   )
-                  .padding(horizontal = 20.dp, vertical = 16.dp)) {
+                  .padding(
+                    horizontal = 20.dp,
+                    vertical = 16.dp
+                  )) {
                   Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                   ) {
-                    Text(item.title, style = SoptTheme.typography.body16M, color = SoptTheme.colors.onSurface30)
-                    Text(item.createdAt, style = SoptTheme.typography.body16M, color = SoptTheme.colors.onSurface30)
+                    Text(
+                      item?.title.orEmpty(),
+                      style = SoptTheme.typography.body16M,
+                      color = SoptTheme.colors.onSurface30
+                    )
+                    Text(
+                      item?.createdAt.orEmpty(),
+                      style = SoptTheme.typography.body16M,
+                      color = SoptTheme.colors.onSurface30
+                    )
                   }
                   Spacer(modifier = Modifier.height(4.dp))
                   Text(
-                    item.content.orEmpty(),
+                    item?.content.orEmpty(),
                     style = SoptTheme.typography.body16M,
                     color = SoptTheme.colors.onSurface30,
                     maxLines = 2,
@@ -148,9 +175,16 @@ class NotificationActivity : AppCompatActivity() {
               verticalArrangement = Arrangement.Center,
               horizontalAlignment = Alignment.CenterHorizontally
             ) {
-              Image(imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty), contentDescription = "알림이 없습니다.")
+              Image(
+                imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
+                contentDescription = "알림이 없습니다."
+              )
               Spacer(modifier = Modifier.height(24.dp))
-              Text(text = "아직 도착한 알림이 없어요.", style = SoptTheme.typography.heading18B, color = SoptTheme.colors.onSurface800)
+              Text(
+                text = "아직 도착한 알림이 없어요.",
+                style = SoptTheme.typography.heading18B,
+                color = SoptTheme.colors.onSurface800
+              )
             }
           }
         }
@@ -159,7 +193,10 @@ class NotificationActivity : AppCompatActivity() {
   }
 
   private fun String.convertToTimesAgo(): String {
-    val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.KOREA)
+    val dateFormat: DateFormat = SimpleDateFormat(
+      "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
+      Locale.KOREA
+    )
     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
 
     val currentDate = Date()
@@ -177,9 +214,13 @@ class NotificationActivity : AppCompatActivity() {
       else -> "방금"
     }
   }
-  
+
   companion object {
-    fun newInstance(context: Context) = Intent(context, NotificationActivity::class.java)
+    fun newInstance(context: Context) = Intent(
+      context,
+      NotificationActivity::class.java
+    )
+
     const val ONE_DAY_IN_MILLISECONDS = 86400000L
     const val ONE_HOUR_IN_MILLISECONDS = 3600000L
     const val ONE_MINUTE_IN_MILLISECONDS = 60000L
