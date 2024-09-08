@@ -24,6 +24,8 @@
  */
 package org.sopt.official.feature.notification
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
@@ -121,5 +123,9 @@ class NotificationActivity : AppCompatActivity() {
         notificationHistoryAdapter?.updateNotificationHistoryList(it)
       }
     }
+  }
+
+  companion object {
+    fun newInstance(context: Context) = Intent(context, NotificationActivity::class.java)
   }
 }

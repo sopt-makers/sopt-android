@@ -38,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
-import org.sopt.official.common.util.serializableExtra
+import org.sopt.official.common.util.stringExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityNotificationDetailBinding
 import org.sopt.official.domain.notification.entity.Notification
@@ -49,14 +49,14 @@ class NotificationDetailActivity : AppCompatActivity() {
   private val binding by viewBinding(ActivityNotificationDetailBinding::inflate)
   private val viewModel by viewModels<NotificationDetailViewModel>()
 
-  private val args by serializableExtra(StartArgs(""))
+  private val notificationId by stringExtra("")
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(binding.root)
 
     binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
-    viewModel.getNotificationDetail(args?.notificationId ?: "")
+    viewModel.getNotificationDetail(notificationId.orEmpty())
 
     initStateFlowValues()
     initClickListeners()
@@ -64,8 +64,8 @@ class NotificationDetailActivity : AppCompatActivity() {
 
   override fun onNewIntent(intent: Intent) {
     super.onNewIntent(intent)
-    val newArgs = intent.getSerializableExtra("args") as StartArgs
-    viewModel.getNotificationDetail(newArgs.notificationId)
+    val notificationId = intent.getStringExtra("notificationId").orEmpty()
+    viewModel.getNotificationDetail(notificationId)
   }
 
   private fun initStateFlowValues() {
@@ -116,8 +116,7 @@ class NotificationDetailActivity : AppCompatActivity() {
 
   companion object {
     @JvmStatic
-    fun getIntent(context: Context, args: StartArgs) = Intent(context, NotificationDetailActivity::class.java).apply {
-      putExtra("args", args)
-    }
+    fun getIntent(context: Context, notificationId: String) =
+      Intent(context, NotificationDetailActivity::class.java).putExtra("notificationId", notificationId)
   }
 }

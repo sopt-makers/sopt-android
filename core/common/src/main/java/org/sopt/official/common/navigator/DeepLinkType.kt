@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.notification.enums
+package org.sopt.official.common.navigator
 
 import android.content.Context
 import android.content.Intent
@@ -148,7 +148,7 @@ enum class DeepLinkType(
       )
     }
 
-    operator fun invoke(deepLink: String): DeepLinkType {
+    fun of(deepLink: String): DeepLinkType {
       return try {
         val link = deepLink.split("?")[0]
         entries.find { it.link == link } ?: UNKNOWN

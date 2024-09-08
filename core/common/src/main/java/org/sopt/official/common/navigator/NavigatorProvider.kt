@@ -25,7 +25,15 @@
 package org.sopt.official.common.navigator
 
 import android.content.Intent
+import org.sopt.official.auth.model.UserStatus
 
 interface NavigatorProvider {
-    fun getAuthActivityIntent(): Intent
+  fun getAuthActivityIntent(): Intent
+  fun getNotificationActivityIntent(): Intent
+  fun getNotificationDetailActivityIntent(notificationId: String): Intent
+  fun getMyPageActivityIntent(name: String): Intent
+  fun getAttendanceActivityIntent(): Intent
+  fun getSoptampActivityIntent(): Intent
+  fun getPokeNotificationActivityIntent(name: String): Intent
+  fun getHomeActivityIntent(userStatus: UserStatus, deepLinkType: DeepLinkType): Intent
 }

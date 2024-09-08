@@ -53,6 +53,7 @@ import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.util.serializableExtra
@@ -71,7 +72,6 @@ import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationActivity
-import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
@@ -152,7 +152,7 @@ class HomeActivity : AppCompatActivity() {
             tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
-                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
+                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.Argument(viewModel.userActiveState.value))
                 )
             }
         }
