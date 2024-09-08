@@ -110,8 +110,6 @@ class SchemeActivity : AppCompatActivity() {
 
   companion object {
     @JvmStatic
-    fun getIntent(context: Context, args: StartArgs) = Intent(context, SchemeActivity::class.java).apply {
-      putExtra("args", args)
-    }
+    fun getIntent(context: Context, args: StartArgs) = Intent(context, SchemeActivity::class.java).putExtra("args", args)
   }
 }
