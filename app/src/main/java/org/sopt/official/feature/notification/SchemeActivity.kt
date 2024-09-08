@@ -70,7 +70,7 @@ class SchemeActivity : AppCompatActivity() {
       false -> TaskStackBuilder.create(this).apply {
         if (!isIntentToHome(linkIntent)) {
           addNextIntentWithParentStack(
-            DeepLinkType.getHomeIntent(this@SchemeActivity, UserStatus.of(dataStore.userStatus))
+            DeepLinkType.getHomeIntent(UserStatus.of(dataStore.userStatus))
           )
         }
         addNextIntent(linkIntent)
@@ -84,7 +84,7 @@ class SchemeActivity : AppCompatActivity() {
       val expiredAt = link.extractQueryParameter("expiredAt")
       when (expiredAt.isExpiredDate()) {
         true -> DeepLinkType.getHomeIntent(
-          this, UserStatus.of(dataStore.userStatus), DeepLinkType.EXPIRED
+          UserStatus.of(dataStore.userStatus), DeepLinkType.EXPIRED
         )
 
         else -> when (link.contains("http://") || link.contains("https://")) {
@@ -97,7 +97,7 @@ class SchemeActivity : AppCompatActivity() {
     } catch (exception: Exception) {
       Timber.e(exception)
       DeepLinkType.getHomeIntent(
-        this, UserStatus.of(dataStore.userStatus), DeepLinkType.UNKNOWN
+        UserStatus.of(dataStore.userStatus), DeepLinkType.UNKNOWN
       )
     }
   }

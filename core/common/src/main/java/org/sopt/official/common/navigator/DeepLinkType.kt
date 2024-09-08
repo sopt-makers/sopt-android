@@ -27,17 +27,9 @@ package org.sopt.official.common.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.util.extractQueryParameter
-import org.sopt.official.feature.attendance.AttendanceActivity
-import org.sopt.official.feature.home.HomeActivity
-import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.NotificationDetailActivity
-import org.sopt.official.feature.notification.NotificationHistoryActivity
-import org.sopt.official.feature.poke.notification.PokeNotificationActivity
-import org.sopt.official.stamp.SoptampActivity
 import timber.log.Timber
 
 internal val navigator by lazy {
@@ -48,89 +40,43 @@ enum class DeepLinkType(
   val link: String
 ) {
   HOME("home") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return getHomeIntent(context, userStatus)
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus)
   },
   NOTIFICATION_LIST("home/notification") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, NotificationHistoryActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getNotificationActivityIntent())
   },
   NOTIFICATION_DETAIL("home/notification/detail") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       val notificationId = deepLink.extractQueryParameter("id")
-      return userStatus.setIntent(
-        NotificationDetailActivity.getIntent(
-          context, NotificationDetailActivity.StartArgs(notificationId)
-        )
-      )
+      return userStatus.setIntent(navigator.getNotificationDetailActivityIntent(notificationId))
     }
   },
   MY_PAGE("home/mypage") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        MyPageActivity.getIntent(
-          context, MyPageActivity.StartArgs(UserActiveState.valueOf(userStatus.name))
-        )
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getMyPageActivityIntent(userStatus.name))
   },
   ATTENDANCE("home/attendance") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, AttendanceActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getAttendanceActivityIntent())
   },
   ATTENDANCE_MODAL("home/attendance/attendance-modal") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, AttendanceActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getAttendanceActivityIntent())
   },
   SOPTAMP("home/soptamp") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, SoptampActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getSoptampActivityIntent())
   },
   SOPTAMP_ENTIRE_RANKING("home/soptamp/entire-ranking") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, SoptampActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getSoptampActivityIntent())
   },
   SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        Intent(context, SoptampActivity::class.java)
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getSoptampActivityIntent())
   },
   POKE_NOTIFICATION_LIST("home/poke/notification-list") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return userStatus.setIntent(
-        PokeNotificationActivity.getIntent(
-          context, PokeNotificationActivity.StartArgs(userStatus.name)
-        )
-      )
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = userStatus.setIntent(navigator.getPokeNotificationActivityIntent(userStatus.name))
   },
   UNKNOWN("unknown-deep-link") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return getHomeIntent(context, userStatus, UNKNOWN)
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus, UNKNOWN)
   },
   EXPIRED("expired") {
-    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
-      return getHomeIntent(context, userStatus, EXPIRED)
-    }
+    override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus, EXPIRED)
   };
 
   abstract fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent
@@ -143,15 +89,7 @@ enum class DeepLinkType(
       }
     }
 
-    fun getHomeIntent(context: Context, userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent {
-      return userStatus.setIntent(
-        HomeActivity.getIntent(
-          context, HomeActivity.StartArgs(
-            userStatus = userStatus, deepLinkType = deepLinkType
-          )
-        )
-      )
-    }
+    fun getHomeIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null) = userStatus.setIntent(navigator.getHomeActivityIntent(userStatus, deepLinkType))
 
     fun of(deepLink: String): DeepLinkType {
       return try {
