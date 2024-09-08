@@ -22,15 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.notification.entity
+package org.sopt.official.data.notification.di
 
-data class Notification(
-  val notificationId: String,
-  val userId: Int,
-  val title: String,
-  val content: String?,
-  val deepLink: String?,
-  val webLink: String?,
-  val createdAt: String,
-  val updatedAt: String,
-)
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.data.notification.repository.DefaultNotificationRepository
+import org.sopt.official.domain.notification.repository.NotificationRepository
+import javax.inject.Singleton
+
+@Module
+@InstallIn(SingletonComponent::class)
+interface NotificationModule {
+  @Binds
+  @Singleton
+  fun bindNotificationRepository(
+    defaultNotificationRepository: DefaultNotificationRepository
+  ): NotificationRepository
+}

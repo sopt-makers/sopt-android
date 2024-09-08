@@ -26,23 +26,18 @@ package org.sopt.official.data.notification.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.notification.entity.Notification
 
 @Serializable
 data class NotificationDetailResponse(
-  @SerialName("notificationId")
-  val notificationId: String,
-  @SerialName("userId")
-  val userId: Int,
-  @SerialName("title")
-  val title: String,
-  @SerialName("content")
-  val content: String?,
-  @SerialName("deepLink")
-  val deepLink: String?,
-  @SerialName("webLink")
-  val webLink: String?,
-  @SerialName("createdAt")
-  val createdAt: String,
-  @SerialName("updatedAt")
-  val updatedAt: String,
-)
+  @SerialName("notificationId") val notificationId: String,
+  @SerialName("userId") val userId: Int,
+  @SerialName("title") val title: String,
+  @SerialName("content") val content: String?,
+  @SerialName("deepLink") val deepLink: String?,
+  @SerialName("webLink") val webLink: String?,
+  @SerialName("createdAt") val createdAt: String,
+  @SerialName("updatedAt") val updatedAt: String,
+) {
+  fun asDomain(): Notification = Notification(notificationId = notificationId, userId = userId, title = title)
+}

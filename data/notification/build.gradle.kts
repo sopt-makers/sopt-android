@@ -37,4 +37,5 @@ dependencies {
     implementation(projects.core.auth)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
+  implementation(project(":app"))
 }

@@ -26,21 +26,25 @@ package org.sopt.official.data.notification.model.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.notification.entity.NotificationItem
 
 @Serializable
 data class NotificationHistoryItemResponse(
-  @SerialName("notificationId")
-  val notificationId: String,
-  @SerialName("userId")
-  val userId: Int,
-  @SerialName("title")
-  val title: String,
-  @SerialName("content")
-  val content: String?,
-  @SerialName("category")
-  val category: String,
-  @SerialName("isRead")
-  val isRead: Boolean,
-  @SerialName("createdAt")
-  val createdAt: String,
-)
+  @SerialName("notificationId") val notificationId: String,
+  @SerialName("userId") val userId: Int,
+  @SerialName("title") val title: String,
+  @SerialName("content") val content: String?,
+  @SerialName("category") val category: String,
+  @SerialName("isRead") val isRead: Boolean,
+  @SerialName("createdAt") val createdAt: String,
+) {
+  fun asDomain(): NotificationItem = NotificationItem(
+    notificationId = notificationId,
+    userId = userId,
+    title = title,
+    content = content,
+    category = category,
+    isRead = isRead,
+    createdAt = createdAt
+  )
+}
