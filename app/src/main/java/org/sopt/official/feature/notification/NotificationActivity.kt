@@ -37,15 +37,15 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityNotificationHistoryBinding
+import org.sopt.official.databinding.ActivityNotificationBinding
 
 @AndroidEntryPoint
-class NotificationHistoryActivity : AppCompatActivity() {
-  private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
+class NotificationActivity : AppCompatActivity() {
+  private val binding by viewBinding(ActivityNotificationBinding::inflate)
   private val viewModel by viewModels<NotificationHistoryViewModel>()
 
   private val notificationHistoryAdapter
-    get() = binding.recyclerViewNotificationHistory.adapter as NotificationHistoryListViewAdapter?
+    get() = binding.recyclerViewNotificationHistory.adapter as NotificationListAdapter?
 
   private val notificationHistoryLayoutManager
     get() = binding.recyclerViewNotificationHistory.layoutManager as LinearLayoutManager
@@ -66,12 +66,12 @@ class NotificationHistoryActivity : AppCompatActivity() {
 
   private fun initRecyclerView() {
     binding.recyclerViewNotificationHistory.apply {
-      adapter = NotificationHistoryListViewAdapter(notificationHistoryItemClickListener)
+      adapter = NotificationListAdapter(notificationItemClickListener)
       addOnScrollListener(scrollListener)
     }
   }
 
-  private val notificationHistoryItemClickListener = NotificationHistoryItemClickListener { position ->
+  private val notificationItemClickListener = NotificationItemClickListener { position ->
     notificationHistoryAdapter?.updateNotificationReadingState(position)
     val notificationId = viewModel.notificationHistoryList.value[position].notificationId
 

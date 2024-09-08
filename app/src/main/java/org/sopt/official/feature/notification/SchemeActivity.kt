@@ -32,11 +32,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.home.HomeActivity
-import org.sopt.official.feature.notification.enums.DeepLinkType
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import java.io.Serializable
@@ -89,7 +89,7 @@ class SchemeActivity : AppCompatActivity() {
 
         else -> when (link.contains("http://") || link.contains("https://")) {
           true -> Intent(Intent.ACTION_VIEW, Uri.parse(link))
-          false -> DeepLinkType.invoke(link).getIntent(
+          false -> DeepLinkType.of(link).getIntent(
             this, UserStatus.of(dataStore.userStatus), link
           )
         }

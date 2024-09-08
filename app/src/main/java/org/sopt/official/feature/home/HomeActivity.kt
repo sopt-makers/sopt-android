@@ -70,8 +70,8 @@ import org.sopt.official.feature.home.model.HomeCTAType
 import org.sopt.official.feature.home.model.HomeMenuType
 import org.sopt.official.feature.home.model.UserUiState
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
-import org.sopt.official.feature.notification.NotificationHistoryActivity
-import org.sopt.official.feature.notification.enums.DeepLinkType
+import org.sopt.official.feature.notification.NotificationActivity
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
@@ -200,7 +200,7 @@ class HomeActivity : AppCompatActivity() {
             binding.imageViewNotificationHistory.visibility = if (isAuthenticated) View.VISIBLE else View.GONE
             binding.imageViewNotificationHistory.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "alarm", properties = mapOf("view_type" to args?.userStatus?.value))
-                val intent = Intent(this, NotificationHistoryActivity::class.java)
+                val intent = Intent(this, NotificationActivity::class.java)
                 startActivity(intent)
             }
         }.launchIn(lifecycleScope)
@@ -381,8 +381,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-        val userStatus: UserStatus,
-        val deepLinkType: DeepLinkType? = null,
+      val userStatus: UserStatus,
+      val deepLinkType: DeepLinkType? = null,
     ) : Serializable
 
     companion object {

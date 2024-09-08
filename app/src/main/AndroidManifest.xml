@@ -133,7 +133,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".feature.notification.NotificationHistoryActivity"
+            android:name=".feature.notification.NotificationActivity"
             android:exported="false"
             android:launchMode="singleTop" />
         <activity

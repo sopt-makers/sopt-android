@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.notification
 
+import android.annotation.SuppressLint
 import android.icu.text.DateFormat
 import android.icu.text.SimpleDateFormat
 import android.icu.util.TimeZone
@@ -33,27 +34,27 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.sopt.official.common.util.drawableOf
 import org.sopt.official.common.view.ItemDiffCallback
-import org.sopt.official.databinding.ItemNotificationHistoryBinding
+import org.sopt.official.databinding.ItemNotificationBinding
 import org.sopt.official.domain.notification.entity.NotificationItem
 import org.sopt.official.type.SoptColors
 import java.util.Date
 import java.util.Locale
 
-class NotificationHistoryListViewAdapter(
-  private val clickListener: NotificationHistoryItemClickListener,
-) : ListAdapter<NotificationItem, NotificationHistoryListViewAdapter.ViewHolder>(
+class NotificationListAdapter(
+  private val clickListener: NotificationItemClickListener,
+) : ListAdapter<NotificationItem, NotificationListAdapter.ViewHolder>(
   ItemDiffCallback(
     onContentsTheSame = { old, new -> old.notificationId == new.notificationId },
     onItemsTheSame = { old, new -> old == new },
   ),
 ) {
-  private var viewBinding: ItemNotificationHistoryBinding? = null
+  private var binding: ItemNotificationBinding? = null
 
   override fun getItemCount(): Int = currentList.size
 
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-    viewBinding = ItemNotificationHistoryBinding.inflate(LayoutInflater.from(parent.context))
-    return ViewHolder(viewBinding!!)
+    binding = ItemNotificationBinding.inflate(LayoutInflater.from(parent.context))
+    return ViewHolder(binding!!)
   }
 
   override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -67,7 +68,7 @@ class NotificationHistoryListViewAdapter(
 
   override fun onViewDetachedFromWindow(holder: ViewHolder) {
     super.onViewDetachedFromWindow(holder)
-    viewBinding = null
+    binding = null
   }
 
   fun updateNotificationReadingState(position: Int) {
@@ -86,13 +87,14 @@ class NotificationHistoryListViewAdapter(
     notifyItemRangeChanged(0, newList.size)
   }
 
+  @SuppressLint("NotifyDataSetChanged")
   fun updateNotificationHistoryList(newList: List<NotificationItem>) {
     submitList(newList)
     notifyDataSetChanged()
   }
 
   inner class ViewHolder(
-    private val viewBinding: ItemNotificationHistoryBinding,
+    private val viewBinding: ItemNotificationBinding,
   ) : RecyclerView.ViewHolder(viewBinding.root) {
     fun bind(item: NotificationItem) {
       viewBinding.apply {
