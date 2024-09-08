@@ -27,38 +27,35 @@ package org.sopt.official.feature.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.data.model.notification.response.NotificationDetailResponse
-import org.sopt.official.domain.usecase.notification.GetNotificationDetailUseCase
-import org.sopt.official.domain.usecase.notification.UpdateNotificationReadingStateUseCase
+import org.sopt.official.domain.notification.entity.Notification
+import org.sopt.official.domain.notification.usecase.GetNotificationDetailUseCase
+import org.sopt.official.domain.notification.usecase.UpdateNotificationReadingStateUseCase
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class NotificationDetailViewModel @Inject constructor(
-    private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
-    private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
+  private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
+  private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
 ) : ViewModel() {
+  private val _notificationDetail = MutableStateFlow<Notification?>(null)
+  val notificationDetail: StateFlow<Notification?> get() = _notificationDetail
 
-    private val _notificationDetail = MutableStateFlow<NotificationDetailResponse?>(null)
-    val notificationDetail: StateFlow<NotificationDetailResponse?> get() = _notificationDetail
-
-    fun getNotificationDetail(id: String) {
-        viewModelScope.launch {
-            getNotificationDetailUseCase.invoke(id)
-                .onSuccess {
-                    _notificationDetail.value = it
-                    updateNotificationReadingState(it.notificationId)
-                }
-                .onFailure { Timber.e(it) }
-        }
+  fun getNotificationDetail(id: String) {
+    viewModelScope.launch {
+      getNotificationDetailUseCase.invoke(id).onSuccess {
+        _notificationDetail.value = it
+        updateNotificationReadingState(it.notificationId)
+      }.onFailure { Timber.e(it) }
     }
+  }
 
-    private fun updateNotificationReadingState(id: String) {
-        viewModelScope.launch {
-            updateNotificationReadingStateUseCase.invoke(id)
-        }
+  private fun updateNotificationReadingState(id: String) {
+    viewModelScope.launch {
+      updateNotificationReadingStateUseCase.invoke(id)
     }
+  }
 }

@@ -41,87 +41,85 @@ import org.sopt.official.databinding.ActivityNotificationHistoryBinding
 
 @AndroidEntryPoint
 class NotificationHistoryActivity : AppCompatActivity() {
+  private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
+  private val viewModel by viewModels<NotificationHistoryViewModel>()
 
-    private val binding by viewBinding(ActivityNotificationHistoryBinding::inflate)
-    private val viewModel by viewModels<NotificationHistoryViewModel>()
+  private val notificationHistoryAdapter
+    get() = binding.recyclerViewNotificationHistory.adapter as NotificationHistoryListViewAdapter?
 
-    private val notificationHistoryAdapter
-        get() = binding.recyclerViewNotificationHistory.adapter as NotificationHistoryListViewAdapter?
+  private val notificationHistoryLayoutManager
+    get() = binding.recyclerViewNotificationHistory.layoutManager as LinearLayoutManager
 
-    private val notificationHistoryLayoutManager
-        get() = binding.recyclerViewNotificationHistory.layoutManager as LinearLayoutManager
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(binding.root)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    initToolbar()
+    initRecyclerView()
+    initClickListeners()
+    initStateFlowValues()
+  }
 
-        initToolbar()
-        initRecyclerView()
-        initClickListeners()
-        initStateFlowValues()
+  private fun initToolbar() {
+    binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
+  }
+
+  private fun initRecyclerView() {
+    binding.recyclerViewNotificationHistory.apply {
+      adapter = NotificationHistoryListViewAdapter(notificationHistoryItemClickListener)
+      addOnScrollListener(scrollListener)
     }
+  }
 
-    private fun initToolbar() {
-        binding.includeAppBarBackArrow.textViewTitle.text = getString(R.string.toolbar_notification)
+  private val notificationHistoryItemClickListener = NotificationHistoryItemClickListener { position ->
+    notificationHistoryAdapter?.updateNotificationReadingState(position)
+    val notificationId = viewModel.notificationHistoryList.value[position].notificationId
+
+    startActivity(
+      NotificationDetailActivity.getIntent(
+        this, NotificationDetailActivity.StartArgs(notificationId)
+      )
+    )
+  }
+
+  private val scrollListener = object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+      super.onScrolled(recyclerView, dx, dy)
+
+      val lastVisibleItemPosition = notificationHistoryLayoutManager.findLastVisibleItemPosition()
+      val totalItemCount = notificationHistoryLayoutManager.itemCount
+      if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
+        viewModel.getNotificationHistory()
+      }
     }
+  }
 
-    private fun initRecyclerView() {
-        binding.recyclerViewNotificationHistory.apply {
-            adapter = NotificationHistoryListViewAdapter(notificationHistoryItemClickListener)
-            addOnScrollListener(scrollListener)
+  private fun initClickListeners() {
+    binding.apply {
+      includeAppBarBackArrow.toolbar.setOnClickListener(clickListener)
+      textViewReadAll.setOnClickListener(clickListener)
+    }
+  }
+
+  private val clickListener = View.OnClickListener {
+    binding.apply {
+      when (it) {
+        includeAppBarBackArrow.toolbar -> onBackPressedDispatcher.onBackPressed()
+        textViewReadAll -> {
+          viewModel.updateEntireNotificationReadingState()
+          notificationHistoryAdapter?.updateEntireNotificationReadingState()
         }
+      }
     }
+  }
 
-    private val notificationHistoryItemClickListener = NotificationHistoryItemClickListener { position ->
-        notificationHistoryAdapter?.updateNotificationReadingState(position)
-        val notificationId = viewModel.notificationHistoryList.value[position].notificationId
-
-        startActivity(
-            NotificationDetailActivity.getIntent(
-                this,
-                NotificationDetailActivity.StartArgs(notificationId)
-            )
-        )
+  private fun initStateFlowValues() {
+    lifecycleScope.launch {
+      viewModel.notificationHistoryList.collectLatest {
+        binding.textViewReadAll.isVisible = it.isNotEmpty()
+        binding.includeNotificationHistoryEmptyView.root.isVisible = it.isEmpty()
+        notificationHistoryAdapter?.updateNotificationHistoryList(it)
+      }
     }
-
-    private val scrollListener = object : RecyclerView.OnScrollListener() {
-        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-            super.onScrolled(recyclerView, dx, dy)
-
-            val lastVisibleItemPosition = notificationHistoryLayoutManager.findLastVisibleItemPosition()
-            val totalItemCount = notificationHistoryLayoutManager.itemCount
-            if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
-                viewModel.getNotificationHistory()
-            }
-        }
-    }
-
-    private fun initClickListeners() {
-        binding.apply {
-            includeAppBarBackArrow.toolbar.setOnClickListener(clickListener)
-            textViewReadAll.setOnClickListener(clickListener)
-        }
-    }
-
-    private val clickListener = View.OnClickListener {
-        binding.apply {
-            when (it) {
-                includeAppBarBackArrow.toolbar -> onBackPressedDispatcher.onBackPressed()
-                textViewReadAll -> {
-                    viewModel.updateEntireNotificationReadingState()
-                    notificationHistoryAdapter?.updateEntireNotificationReadingState()
-                }
-            }
-        }
-    }
-
-    private fun initStateFlowValues() {
-        lifecycleScope.launch {
-            viewModel.notificationHistoryList.collectLatest {
-                binding.textViewReadAll.isVisible = it.isNotEmpty()
-                binding.includeNotificationHistoryEmptyView.root.isVisible = it.isEmpty()
-                notificationHistoryAdapter?.updateNotificationHistoryList(it)
-            }
-        }
-    }
+  }
 }

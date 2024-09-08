@@ -27,51 +27,48 @@ package org.sopt.official.feature.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.entity.notification.NotificationHistoryItem
-import org.sopt.official.domain.usecase.notification.GetNotificationHistoryUseCase
-import org.sopt.official.domain.usecase.notification.UpdateEntireNotificationReadingStateUseCase
+import org.sopt.official.domain.notification.entity.NotificationItem
+import org.sopt.official.domain.notification.usecase.GetNotificationHistoryUseCase
+import org.sopt.official.domain.notification.usecase.UpdateEntireNotificationReadingStateUseCase
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class NotificationHistoryViewModel @Inject constructor(
-    private val getNotificationHistoryUseCase: GetNotificationHistoryUseCase,
-    private val updateEntireNotificationReadingStateUseCase: UpdateEntireNotificationReadingStateUseCase
+  private val getNotificationHistoryUseCase: GetNotificationHistoryUseCase,
+  private val updateEntireNotificationReadingStateUseCase: UpdateEntireNotificationReadingStateUseCase
 ) : ViewModel() {
+  private val _notificationHistoryList = MutableStateFlow<List<NotificationItem>>(arrayListOf())
+  val notificationHistoryList: StateFlow<List<NotificationItem>> get() = _notificationHistoryList.asStateFlow()
 
-    private val _notificationHistoryList = MutableStateFlow<List<NotificationHistoryItem>>(arrayListOf())
-    val notificationHistoryList: StateFlow<List<NotificationHistoryItem>> get() = _notificationHistoryList.asStateFlow()
+  private var currentPaginationIndex = 0
+  private var notificationHistoryJob: Job? = null
 
-    private var currentPaginationIndex = 0
-    private var notificationHistoryJob: Job? = null
+  init {
+    getNotificationHistory()
+  }
 
-    init {
-        getNotificationHistory()
+  fun getNotificationHistory() {
+    notificationHistoryJob?.let {
+      if (it.isActive || !it.isCompleted) return
     }
 
-    fun getNotificationHistory() {
-        notificationHistoryJob?.let {
-            if (it.isActive || !it.isCompleted) return
-        }
-
-        notificationHistoryJob = viewModelScope.launch {
-            getNotificationHistoryUseCase.invoke(currentPaginationIndex)
-                .onSuccess {
-                    _notificationHistoryList.value = _notificationHistoryList.value.plus(it)
-                    currentPaginationIndex++
-                }
-                .onFailure { Timber.e(it) }
-        }
+    notificationHistoryJob = viewModelScope.launch {
+      getNotificationHistoryUseCase.invoke(currentPaginationIndex).onSuccess {
+        _notificationHistoryList.value = _notificationHistoryList.value.plus(it)
+        currentPaginationIndex++
+      }.onFailure { Timber.e(it) }
     }
+  }
 
-    fun updateEntireNotificationReadingState() {
-        viewModelScope.launch {
-            updateEntireNotificationReadingStateUseCase.invoke()
-        }
+  fun updateEntireNotificationReadingState() {
+    viewModelScope.launch {
+      updateEntireNotificationReadingStateUseCase.invoke()
     }
+  }
 }
