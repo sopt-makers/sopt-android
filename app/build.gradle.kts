@@ -93,7 +93,8 @@ android {
       matchingFallbacks.add("release")
       signingConfig = signingConfigs.getByName("debug")
       proguardFiles(
-        getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro"
       )
       isMinifyEnabled = true
       isDebuggable = false
@@ -155,6 +156,7 @@ dependencies {
   implementation(libs.androidx.lifecycle.process)
   implementation(libs.appcompat)
   implementation(libs.material)
+  implementation(libs.fragment.ktx)
 
   androidTestImplementation(platform(libs.compose.bom))
   androidTestImplementation(libs.bundles.compose.test)
