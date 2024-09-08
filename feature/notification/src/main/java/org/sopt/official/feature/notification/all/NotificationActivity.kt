@@ -44,6 +44,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -54,6 +55,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,6 +64,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
@@ -92,12 +95,13 @@ class NotificationActivity : AppCompatActivity() {
           .fillMaxSize()
           .background(SoptTheme.colors.background),
           topBar = {
-            CenterAlignedTopAppBar(title = {
-              Text(
-                text = "알림",
-                style = SoptTheme.typography.body16M
-              )
-            },
+            CenterAlignedTopAppBar(
+              title = {
+                Text(
+                  text = "알림",
+                  style = SoptTheme.typography.body16M
+                )
+              },
               navigationIcon = {
                 IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
                   Icon(
@@ -111,8 +115,16 @@ class NotificationActivity : AppCompatActivity() {
                 Text(text = "모두 읽음",
                   style = SoptTheme.typography.body16M,
                   color = SoptTheme.colors.primary,
-                  modifier = Modifier.clickable { viewModel.updateEntireNotificationReadingState() })
-              })
+                  modifier = Modifier
+                    .clickable { viewModel.updateEntireNotificationReadingState() }
+                    .padding(end = 24.dp))
+              },
+              colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = SoptTheme.colors.background,
+                titleContentColor = SoptTheme.colors.onBackground,
+                actionIconContentColor = SoptTheme.colors.primary
+              )
+            )
           }) { innerPadding ->
           if (notifications.itemCount > 0) {
             LazyColumn(
@@ -147,24 +159,30 @@ class NotificationActivity : AppCompatActivity() {
                     Text(
                       item?.title.orEmpty(),
                       style = SoptTheme.typography.body16M,
-                      color = SoptTheme.colors.onSurface30
+                      color = SoptTheme.colors.onSurface30,
+                      modifier = Modifier
+                        .weight(1f)
+                        .widthIn(max = 250.dp),
+                      maxLines = 1,
+                      overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                      item?.createdAt.orEmpty(),
-                      style = SoptTheme.typography.body16M,
-                      color = SoptTheme.colors.onSurface30
+                      item?.createdAt.orEmpty().convertToTimesAgo(),
+                      style = SoptTheme.typography.body13M.copy(fontSize = 12.sp),
+                      color = SoptTheme.colors.onSurface100
                     )
                   }
                   Spacer(modifier = Modifier.height(4.dp))
                   Text(
                     item?.content.orEmpty(),
                     style = SoptTheme.typography.body16M,
-                    color = SoptTheme.colors.onSurface30,
+                    color = SoptTheme.colors.onSurface400,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.weight(1f)
                   )
-                  HorizontalDivider(color = SoptTheme.colors.onSurface600)
                 }
+                HorizontalDivider(color = SoptTheme.colors.onSurface600)
               }
             }
           } else {

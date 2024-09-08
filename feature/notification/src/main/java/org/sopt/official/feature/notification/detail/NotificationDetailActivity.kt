@@ -51,6 +51,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -84,13 +85,15 @@ class NotificationDetailActivity : AppCompatActivity() {
         Scaffold(modifier = Modifier
           .fillMaxSize()
           .background(SoptTheme.colors.background),
+          containerColor = SoptTheme.colors.background,
           topBar = {
-            CenterAlignedTopAppBar(title = {
-              Text(
-                text = "알림",
-                style = SoptTheme.typography.body16M
-              )
-            },
+            CenterAlignedTopAppBar(
+              title = {
+                Text(
+                  text = "알림",
+                  style = SoptTheme.typography.body16M
+                )
+              },
               navigationIcon = {
                 IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
                   Icon(
@@ -99,11 +102,18 @@ class NotificationDetailActivity : AppCompatActivity() {
                     tint = SoptTheme.colors.onBackground
                   )
                 }
-              })
+              },
+              colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = SoptTheme.colors.background,
+                titleContentColor = SoptTheme.colors.onBackground,
+                navigationIconContentColor = SoptTheme.colors.onBackground
+              )
+            )
           }) { innerPadding ->
           Column(
             modifier = Modifier
               .fillMaxSize()
+              .background(SoptTheme.colors.background)
               .padding(innerPadding)
               .padding(top = 20.dp)
               .padding(horizontal = 20.dp),
@@ -134,28 +144,33 @@ class NotificationDetailActivity : AppCompatActivity() {
               )
             }
             if (!notification?.deepLink.isNullOrBlank() || !notification?.webLink.isNullOrBlank()) {
-              Button(
-                onClick = {
-                  context.startActivity(
-                    navigator.getSchemeActivityIntent(
-                      notificationId = notification?.notificationId.orEmpty(),
-                      link = notification?.webLink ?: notification?.deepLink ?: ""
+              Column {
+                Button(
+                  onClick = {
+                    context.startActivity(
+                      navigator.getSchemeActivityIntent(
+                        notificationId = notification?.notificationId.orEmpty(),
+                        link = notification?.webLink ?: notification?.deepLink ?: ""
+                      )
                     )
+                  },
+                  colors = ButtonDefaults.buttonColors(
+                    containerColor = SoptTheme.colors.primary,
+                    contentColor = SoptTheme.colors.onPrimary
+                  ),
+                  modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+                  shape = RoundedCornerShape(10.dp)
+                ) {
+                  Text(
+                    text = "바로가기 >",
+                    style = SoptTheme.typography.body16M
                   )
-                },
-                colors = ButtonDefaults.buttonColors(
-                  containerColor = SoptTheme.colors.primary,
-                  contentColor = SoptTheme.colors.onPrimary
-                ),
-                modifier = Modifier
-                  .fillMaxWidth()
-                  .height(56.dp)
-              ) {
-                Text(
-                  text = "바로가기 >",
-                  style = SoptTheme.typography.body16M
-                )
+                }
+                Spacer(modifier = Modifier.height(14.dp))
               }
+
             }
           }
         }
