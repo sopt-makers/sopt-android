@@ -42,6 +42,7 @@ dependencies {
 
   implementation(platform(libs.firebase))
   implementation(libs.bundles.firebase)
+  implementation(libs.compose.paging)
 
   implementation(libs.appcompat)
   implementation(libs.material)
