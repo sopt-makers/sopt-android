@@ -73,7 +73,7 @@ import java.util.Locale
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
-  private val viewModel by viewModels<NotificationHistoryViewModel>()
+  private val viewModel by viewModels<NotificationViewModel>()
 
   @OptIn(ExperimentalMaterial3Api::class)
   override fun onCreate(savedInstanceState: Bundle?) {

@@ -36,7 +36,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class NotificationHistoryViewModel @Inject constructor(
+class NotificationViewModel @Inject constructor(
   private val repository: NotificationRepository
 ) : ViewModel() {
   val notifications = Pager(
