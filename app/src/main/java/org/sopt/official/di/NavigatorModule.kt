@@ -26,7 +26,6 @@ package org.sopt.official.di
 
 import dagger.Binds
 import dagger.Module
-import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.navigator.NavigatorProvider
@@ -39,11 +38,5 @@ interface NavigationModule {
   @Binds
   @Singleton
   fun bindNavigatorIntent(navigatorProviderIntent: NavigatorProviderIntent): NavigatorProvider
-}
-
-@InstallIn(SingletonComponent::class)
-@EntryPoint
-interface NavigatorEntryPoint {
-  fun navigatorProvider(): NavigatorProvider
 }
 

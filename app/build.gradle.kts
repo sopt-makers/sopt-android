@@ -147,8 +147,6 @@ dependencies {
 
   implementation(libs.bundles.compose)
 
-  implementation(libs.bundles.mavericks)
-
   implementation(platform(libs.firebase))
   implementation(libs.bundles.firebase)
   implementation(libs.process.phoenix)

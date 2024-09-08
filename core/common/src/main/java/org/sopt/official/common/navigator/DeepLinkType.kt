@@ -26,11 +26,12 @@ package org.sopt.official.common.navigator
 
 import android.content.Context
 import android.content.Intent
+import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.context.appContext
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.feature.attendance.AttendanceActivity
-import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.NotificationDetailActivity
@@ -38,6 +39,10 @@ import org.sopt.official.feature.notification.NotificationHistoryActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.stamp.SoptampActivity
 import timber.log.Timber
+
+internal val navigator by lazy {
+  EntryPointAccessors.fromApplication(appContext, NavigatorEntryPoint::class.java).navigatorProvider()
+}
 
 enum class DeepLinkType(
   val link: String
@@ -50,7 +55,7 @@ enum class DeepLinkType(
   NOTIFICATION_LIST("home/notification") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, NotificationHistoryActivity::class.java)
+        Intent(context, NotificationHistoryActivity::class.java)
       )
     }
   },
@@ -58,7 +63,7 @@ enum class DeepLinkType(
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       val notificationId = deepLink.extractQueryParameter("id")
       return userStatus.setIntent(
-        context, NotificationDetailActivity.getIntent(
+        NotificationDetailActivity.getIntent(
           context, NotificationDetailActivity.StartArgs(notificationId)
         )
       )
@@ -67,7 +72,7 @@ enum class DeepLinkType(
   MY_PAGE("home/mypage") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, MyPageActivity.getIntent(
+        MyPageActivity.getIntent(
           context, MyPageActivity.StartArgs(UserActiveState.valueOf(userStatus.name))
         )
       )
@@ -76,42 +81,42 @@ enum class DeepLinkType(
   ATTENDANCE("home/attendance") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, AttendanceActivity::class.java)
+        Intent(context, AttendanceActivity::class.java)
       )
     }
   },
   ATTENDANCE_MODAL("home/attendance/attendance-modal") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, AttendanceActivity::class.java)
+        Intent(context, AttendanceActivity::class.java)
       )
     }
   },
   SOPTAMP("home/soptamp") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, SoptampActivity::class.java)
+        Intent(context, SoptampActivity::class.java)
       )
     }
   },
   SOPTAMP_ENTIRE_RANKING("home/soptamp/entire-ranking") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, SoptampActivity::class.java)
+        Intent(context, SoptampActivity::class.java)
       )
     }
   },
   SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, Intent(context, SoptampActivity::class.java)
+        Intent(context, SoptampActivity::class.java)
       )
     }
   },
   POKE_NOTIFICATION_LIST("home/poke/notification-list") {
     override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
       return userStatus.setIntent(
-        context, PokeNotificationActivity.getIntent(
+        PokeNotificationActivity.getIntent(
           context, PokeNotificationActivity.StartArgs(userStatus.name)
         )
       )
@@ -131,16 +136,16 @@ enum class DeepLinkType(
   abstract fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent
 
   companion object {
-    private fun UserStatus.setIntent(context: Context, intent: Intent): Intent {
+    private fun UserStatus.setIntent(intent: Intent): Intent {
       return when (this == UserStatus.UNAUTHENTICATED) {
-        true -> AuthActivity.newInstance(context)
+        true -> navigator.getAuthActivityIntent()
         false -> intent
       }
     }
 
     fun getHomeIntent(context: Context, userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent {
       return userStatus.setIntent(
-        context, HomeActivity.getIntent(
+        HomeActivity.getIntent(
           context, HomeActivity.StartArgs(
             userStatus = userStatus, deepLinkType = deepLinkType
           )

@@ -51,7 +51,6 @@ okhttp = "4.12.0"
 retrofit = "2.11.0"
 timber = "5.0.1"
 compose-destination = "1.11.6"
-mavericks = "3.0.9"
 coil = "2.7.0"
 lottie = "6.5.2"
 dotsindicator = "5.0"
@@ -155,11 +154,6 @@ retrofit-response-type-keeper = { module = "com.squareup.retrofit2:response-type
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-mavericks = { module = "com.airbnb.android:mavericks", version.ref = "mavericks" }
-mavericks-compose = { module = "com.airbnb.android:mavericks-compose", version.ref = "mavericks" }
-mavericks-navigation = { module = "com.airbnb.android:mavericks-navigation", version.ref = "mavericks" }
-mavericks-mockable = { module = "com.airbnb.android:mavericks-mocking", version.ref = "mavericks" }
-
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-ksp = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
@@ -208,7 +202,6 @@ android-test = ["androidx-test-junit", "androidx-test-espresso"]
 okhttp = ["okhttp", "okhttp-logging-interceptor"]
 flipper = ["flipper", "soloader"]
 firebase = ["firebase-analytics", "firebase-crashlytics", "firebase-messaging"]
-mavericks = ["mavericks", "mavericks-compose", "mavericks-navigation", "mavericks-mockable"]
 junit5-test = ["junit5", "junit5-engine", "junit5-params", "junit5-vintage"]
 androidx-android-test = ["androidx-test-runner", "androidx-test-rules", "androidx-uiautomator"]
 

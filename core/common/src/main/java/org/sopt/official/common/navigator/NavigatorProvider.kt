@@ -25,6 +25,9 @@
 package org.sopt.official.common.navigator
 
 import android.content.Intent
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import org.sopt.official.auth.model.UserStatus
 
 interface NavigatorProvider {
@@ -36,4 +39,10 @@ interface NavigatorProvider {
   fun getSoptampActivityIntent(): Intent
   fun getPokeNotificationActivityIntent(name: String): Intent
   fun getHomeActivityIntent(userStatus: UserStatus, deepLinkType: DeepLinkType): Intent
+}
+
+@InstallIn(SingletonComponent::class)
+@EntryPoint
+interface NavigatorEntryPoint {
+  fun navigatorProvider(): NavigatorProvider
 }
