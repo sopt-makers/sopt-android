@@ -37,112 +37,99 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.domain.usecase.notification.RegisterPushTokenUseCase
+import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptFirebaseMessagingService : FirebaseMessagingService(), LifecycleOwner {
 
-    @Inject
-    lateinit var dataStore: SoptDataStore
+  @Inject
+  lateinit var dataStore: SoptDataStore
 
-    @Inject
-    lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
+  @Inject
+  lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
 
-    private val dispatcher = ServiceLifecycleDispatcher(this)
+  private val dispatcher = ServiceLifecycleDispatcher(this)
 
-    override val lifecycle: Lifecycle
-        get() = dispatcher.lifecycle
+  override val lifecycle: Lifecycle
+    get() = dispatcher.lifecycle
 
-    @CallSuper
-    override fun onCreate() {
-        dispatcher.onServicePreSuperOnCreate()
-        super.onCreate()
+  @CallSuper
+  override fun onCreate() {
+    dispatcher.onServicePreSuperOnCreate()
+    super.onCreate()
+  }
+
+  @Deprecated("Deprecated in Java")
+  @Suppress("DEPRECATION")
+  @CallSuper
+  override fun onStart(intent: Intent?, startId: Int) {
+    dispatcher.onServicePreSuperOnStart()
+    super.onStart(intent, startId)
+  }
+
+  override fun onNewToken(token: String) {
+    if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
+    lifecycleScope.launch {
+      dataStore.pushToken = token
+      registerPushTokenUseCase.invoke(token)
     }
+  }
 
-    @Deprecated("Deprecated in Java")
-    @Suppress("DEPRECATION")
-    @CallSuper
-    override fun onStart(intent: Intent?, startId: Int) {
-        dispatcher.onServicePreSuperOnStart()
-        super.onStart(intent, startId)
-    }
+  override fun onMessageReceived(remoteMessage: RemoteMessage) {
+    super.onMessageReceived(remoteMessage)
+    if (remoteMessage.data.isEmpty()) return
 
-    override fun onNewToken(token: String) {
-        if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
-        lifecycleScope.launch {
-            dataStore.pushToken = token
-            registerPushTokenUseCase.invoke(token)
+    val receivedData = remoteMessage.data
+    val notificationId = receivedData["id"] ?: ""
+    val title = receivedData["title"] ?: ""
+    val body = receivedData["content"] ?: ""
+    val webLink = receivedData["webLink"] ?: ""
+    val deepLink = receivedData["deepLink"] ?: ""
+
+    val notifyId = System.currentTimeMillis().toInt()
+    val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
+      .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setSmallIcon(R.drawable.img_logo_small)
+      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setChannelId(getString(R.string.toolbar_notification)).setAutoCancel(true)
+
+    notificationBuilder.setNotificationContentIntent(
+      notificationId, webLink.ifBlank { deepLink.ifBlank { "" } }, notifyId
+    )
+
+    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    notificationManager.notify(notifyId, notificationBuilder.build())
+  }
+
+  private fun NotificationCompat.Builder.setNotificationContentIntent(
+    notificationId: String, link: String, notifyId: Int
+  ): NotificationCompat.Builder {
+    val intent = SchemeActivity.getIntent(
+      this@SoptFirebaseMessagingService, SchemeActivity.StartArgs(notificationId, link)
+    )
+
+    return this.setContentIntent(
+      PendingIntent.getActivity(
+        this@SoptFirebaseMessagingService, notifyId, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+        } else {
+          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         }
-    }
+      )
+    )
+  }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        super.onMessageReceived(remoteMessage)
-        if (remoteMessage.data.isEmpty()) return
+  @CallSuper
+  override fun onDestroy() {
+    dispatcher.onServicePreSuperOnDestroy()
+    super.onDestroy()
+  }
 
-        val receivedData = remoteMessage.data
-        val notificationId = receivedData["id"] ?: ""
-        val title = receivedData["title"] ?: ""
-        val body = receivedData["content"] ?: ""
-        val webLink = receivedData["webLink"] ?: ""
-        val deepLink = receivedData["deepLink"] ?: ""
-
-        val notifyId = System.currentTimeMillis().toInt()
-        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
-            .setContentTitle(title)
-            .setContentText(body)
-            .setStyle(NotificationCompat.BigTextStyle().bigText(body))
-            .setSmallIcon(R.drawable.img_logo_small)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setChannelId(getString(R.string.toolbar_notification))
-            .setAutoCancel(true)
-
-        notificationBuilder.setNotificationContentIntent(
-            notificationId,
-            webLink.ifBlank { deepLink.ifBlank { "" } },
-            notifyId
-        )
-
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notifyId, notificationBuilder.build())
-    }
-
-    private fun NotificationCompat.Builder.setNotificationContentIntent(
-        notificationId: String,
-        link: String,
-        notifyId: Int
-    ): NotificationCompat.Builder {
-        val intent = SchemeActivity.getIntent(
-            this@SoptFirebaseMessagingService,
-            SchemeActivity.StartArgs(notificationId, link)
-        )
-
-        return this.setContentIntent(
-            PendingIntent.getActivity(
-                this@SoptFirebaseMessagingService,
-                notifyId,
-                intent,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-                } else {
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                }
-            )
-        )
-    }
-
-    @CallSuper
-    override fun onDestroy() {
-        dispatcher.onServicePreSuperOnDestroy()
-        super.onDestroy()
-    }
-
-    companion object {
-        const val NOTIFICATION_CHANNEL_ID = "SOPT"
-    }
+  companion object {
+    const val NOTIFICATION_CHANNEL_ID = "SOPT"
+  }
 }
