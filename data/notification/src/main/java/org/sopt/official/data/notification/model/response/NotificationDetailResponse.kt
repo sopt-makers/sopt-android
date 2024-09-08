@@ -39,5 +39,14 @@ data class NotificationDetailResponse(
   @SerialName("createdAt") val createdAt: String,
   @SerialName("updatedAt") val updatedAt: String,
 ) {
-  fun asDomain(): Notification = Notification(notificationId = notificationId, userId = userId, title = title)
+  fun asDomain(): Notification = Notification(
+    notificationId = notificationId,
+    userId = userId,
+    title = title,
+    content = content,
+    deepLink = deepLink,
+    webLink = webLink,
+    createdAt = createdAt,
+    updatedAt = updatedAt,
+  )
 }

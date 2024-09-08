@@ -23,19 +23,18 @@
  * SOFTWARE.
  */
 plugins {
-    sopt("feature")
+  sopt("feature")
 }
 
 android {
-    namespace = "org.sopt.official.data.notification"
+  namespace = "org.sopt.official.data.notification"
 }
 
 dependencies {
-    implementation(projects.domain.notification)
-    implementation(projects.core.network)
-    implementation(projects.core.common)
-    implementation(projects.core.auth)
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.bundles.okhttp)
-  implementation(project(":app"))
+  implementation(projects.domain.notification)
+  implementation(projects.core.network)
+  implementation(projects.core.common)
+  implementation(projects.core.auth)
+  implementation(platform(libs.okhttp.bom))
+  implementation(libs.bundles.okhttp)
 }

@@ -56,12 +56,7 @@ class SchemeActivity : AppCompatActivity() {
   private fun handleDeepLink() {
     val link = args?.link
     val linkIntent = when (link.isNullOrBlank()) {
-      true -> NotificationDetailActivity.getIntent(
-        this, NotificationDetailActivity.StartArgs(
-          notificationId = args?.notificationId ?: ""
-        )
-      )
-
+      true -> NotificationDetailActivity.getIntent(this, args?.notificationId.orEmpty())
       false -> checkLinkExpiration(link)
     }
 
