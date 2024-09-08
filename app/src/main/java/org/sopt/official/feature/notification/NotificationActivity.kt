@@ -77,11 +77,7 @@ class NotificationActivity : AppCompatActivity() {
     notificationHistoryAdapter?.updateNotificationReadingState(position)
     val notificationId = viewModel.notificationHistoryList.value[position].notificationId
 
-    startActivity(
-      NotificationDetailActivity.getIntent(
-        this, NotificationDetailActivity.StartArgs(notificationId)
-      )
-    )
+    startActivity(NotificationDetailActivity.getIntent(this, notificationId))
   }
 
   private val scrollListener = object : RecyclerView.OnScrollListener() {
