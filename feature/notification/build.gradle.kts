@@ -28,12 +28,27 @@ plugins {
 }
 
 android {
-  namespace = "org.sopt.official.common"
+  namespace = "org.sopt.official.feature.notification"
 }
 
 dependencies {
+  implementation(projects.domain.notification)
+
   implementation(projects.core.auth)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.exifinterface)
+  implementation(projects.core.common)
+  implementation(projects.core.designsystem)
+  implementation(projects.core.analytics)
+
+  implementation(platform(libs.firebase))
+  implementation(libs.bundles.firebase)
+
+  implementation(libs.appcompat)
+  implementation(libs.material)
+  implementation(libs.swipe.refresh.layout)
+
+  implementation(libs.coil.core)
+  implementation(libs.android.lottie)
+  implementation(projects.core.analytics)
+  implementation(libs.fragment.ktx)
+  implementation(libs.dotsindicator)
 }

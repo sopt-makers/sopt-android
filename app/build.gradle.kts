@@ -131,6 +131,7 @@ dependencies {
   implementation(projects.feature.auth)
   implementation(projects.feature.mypage)
   implementation(projects.feature.poke)
+  implementation(projects.feature.notification)
   baselineProfile(projects.baselineprofile)
 
   implementation(libs.kotlin.coroutines.google.play)
