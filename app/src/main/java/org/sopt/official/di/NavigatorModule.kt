@@ -39,4 +39,3 @@ interface NavigationModule {
   @Singleton
   fun bindNavigatorIntent(navigatorProviderIntent: NavigatorProviderIntent): NavigatorProvider
 }
-
