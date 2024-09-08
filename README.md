@@ -74,6 +74,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/leeeyubin"><img src="https://avatars.githubusercontent.com/u/128459613?v=4?s=100" width="100px;" alt="LEE YOU BIN"/><br /><sub><b>LEE YOU BIN</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=leeeyubin" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/s9hn"><img src="https://avatars.githubusercontent.com/u/81347125?v=4?s=100" width="100px;" alt="SeHun"/><br /><sub><b>SeHun</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=s9hn" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
