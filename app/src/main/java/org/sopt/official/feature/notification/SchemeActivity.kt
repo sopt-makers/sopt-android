@@ -98,10 +98,8 @@ class SchemeActivity : AppCompatActivity() {
     }
   }
 
-  private fun isIntentToHome(intent: Intent): Boolean {
-    return when (intent.component?.className) {
-      HomeActivity::class.java.name -> true
-      else -> false
+  private fun Intent.isIntentToHome(): Boolean = 
+  intent.component?.className == HomeActivity::class.java.name  
     }
   }
 
