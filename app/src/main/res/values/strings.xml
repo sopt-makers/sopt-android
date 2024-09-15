@@ -103,6 +103,9 @@
     <string name="go_back">뒤로 가기</string>
     <string name="refresh">새로고침</string>
     <string name="attendance_app_bar_title">출석 조회하기</string>
+    <string name="attendance_do">%1$s하기</string>
+    <string name="attendance_code_description">출석 코드 다섯 자리를 입력해주세요.</string>
+    <string name="attendance_code_does_not_match">코드가 일치하지 않아요!</string>
 
     <!--    알림   -->
     <string name="toolbar_notification">알림</string>

@@ -49,22 +49,20 @@ fun AttendanceCodeDialog(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_close),
-                contentDescription = stringResource(
-                    id = R.string.close
-                ),
+                contentDescription = stringResource(id = R.string.close),
                 tint = SoptTheme.colors.onSurface10,
                 modifier = Modifier
                     .align(Alignment.End)
                     .clickable(onClick = onDismissRequest)
             )
             Text(
-                text = "${attendanceType.type}하기",
+                text = stringResource(R.string.attendance_do, attendanceType.type),
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10
             )
             Spacer(modifier = Modifier.height(10.dp))
             Text(
-                text = "출석 코드 다섯 자리를 입력해주세요.",
+                text = stringResource(R.string.attendance_code_description),
                 style = SoptTheme.typography.body13M,
                 color = SoptTheme.colors.onSurface300
             )
@@ -76,7 +74,7 @@ fun AttendanceCodeDialog(
             if (codes != inputCodes) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
-                    text = "코드가 일치하지 않아요!",
+                    text = stringResource(R.string.attendance_code_does_not_match),
                     style = SoptTheme.typography.label12SB,
                     color = SoptTheme.colors.error
                 )
@@ -96,7 +94,7 @@ fun AttendanceCodeDialog(
                 enabled = codes == inputCodes
             ) {
                 Text(
-                    text = "출석하기",
+                    text = stringResource(R.string.attendance_dialog_button),
                     style = SoptTheme.typography.body13M,
                 )
             }
