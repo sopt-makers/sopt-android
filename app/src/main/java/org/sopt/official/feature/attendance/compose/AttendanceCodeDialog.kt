@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,9 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import org.sopt.official.R
+import org.sopt.official.designsystem.Black40
+import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
 import org.sopt.official.feature.attendance.model.AttendanceType
@@ -68,8 +73,8 @@ fun AttendanceCodeDialog(
                 codes = inputCodes,
                 onTextChange = {},
                 onTextFieldFull = {})
-            Spacer(modifier = Modifier.height(24.dp))
             if (codes != inputCodes) {
+                Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = "코드가 일치하지 않아요!",
                     style = SoptTheme.typography.label12SB,
@@ -82,12 +87,18 @@ fun AttendanceCodeDialog(
                 modifier = Modifier
                     .fillMaxWidth(),
                 shape = RoundedCornerShape(size = 6.dp),
-//                colors = ButtonColors(
-//                    containerColor = SoptTheme.colors.onSurface10,
-//                    disabledContainerColor = TODO()
-//                )
+                colors = ButtonColors(
+                    containerColor = SoptTheme.colors.onSurface10,
+                    contentColor = SoptTheme.colors.onSurface950,
+                    disabledContainerColor = Black40,
+                    disabledContentColor = Gray60,
+                ),
+                enabled = codes == inputCodes
             ) {
-                Text("출석하기")
+                Text(
+                    text = "출석하기",
+                    style = SoptTheme.typography.body13M,
+                )
             }
         }
     }
@@ -95,14 +106,49 @@ fun AttendanceCodeDialog(
 
 @Preview
 @Composable
-private fun AttendanceCodeDialogPreview() {
+private fun AttendanceCodeDialogPreview(
+    @PreviewParameter(AttendanceCodeDialogPreviewParameterProvider::class) parameter: AttendanceCodeDialogPreviewParameter,
+) {
     SoptTheme {
         AttendanceCodeDialog(
-            codes = listOf("8", "8", "8", "8", "8"),
-            inputCodes = listOf("8", "8", "8", null, null),
-            attendanceType = AttendanceType.FIRST,
+            codes = parameter.codes,
+            inputCodes = parameter.inputCodes,
+            attendanceType = parameter.attendanceType,
             modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {}
         )
     }
+}
+
+data class AttendanceCodeDialogPreviewParameter(
+    val codes: List<String>,
+    val inputCodes: List<String?>,
+    val attendanceType: AttendanceType,
+)
+
+class AttendanceCodeDialogPreviewParameterProvider :
+    PreviewParameterProvider<AttendanceCodeDialogPreviewParameter> {
+    override val values: Sequence<AttendanceCodeDialogPreviewParameter> =
+        sequenceOf(
+            AttendanceCodeDialogPreviewParameter(
+                codes = listOf("1", "2", "3", "4", "5"),
+                inputCodes = listOf("1", "2", "3", null, null),
+                AttendanceType.FIRST,
+            ),
+            AttendanceCodeDialogPreviewParameter(
+                codes = listOf("1", "2", "3", "4", "5"),
+                inputCodes = listOf("1", "2", "3", "4", "5"),
+                AttendanceType.FIRST,
+            ),
+            AttendanceCodeDialogPreviewParameter(
+                codes = listOf("1", "2", "3", "4", "5"),
+                inputCodes = listOf("1", "2", "3", null, null),
+                AttendanceType.SECOND,
+            ),
+            AttendanceCodeDialogPreviewParameter(
+                codes = listOf("1", "2", "3", "4", "5"),
+                inputCodes = listOf("1", "2", "3", "4", "5"),
+                AttendanceType.SECOND,
+            ),
+        )
 }
