@@ -49,30 +49,27 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.common.util.viewBinding
 import org.sopt.official.designsystem.Black80
 import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageItem
-import org.sopt.official.feature.mypage.databinding.ActivityMyPageBinding
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
@@ -96,11 +93,26 @@ class MyPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            SoptTheme {
-                val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-                val scrollState = rememberScrollState()
-                val context = LocalContext.current
+            val context = LocalContext.current
+            val lifecycleOwner = LocalLifecycleOwner.current
 
+            val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
+            val scrollState = rememberScrollState()
+
+            LaunchedEffect(Unit) {
+                args?.userActiveState?.let {
+                    viewModel.setUserActiveState(MyPageUiState.User(it))
+                }
+            }
+
+            LaunchedEffect(viewModel.finish, lifecycleOwner) {
+                viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                    .collect {
+                        ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+                    }
+            }
+
+            SoptTheme {
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
@@ -204,22 +216,6 @@ class MyPageActivity : AppCompatActivity() {
             }
         }
 
-        initStartArgs()
-        initRestart()
-    }
-
-    private fun initStartArgs() {
-        args?.userActiveState?.let {
-            viewModel.setUserActiveState(MyPageUiState.User(it))
-        }
-    }
-
-    private fun initRestart() {
-        viewModel.finish
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                ProcessPhoenix.triggerRebirth(this, navigatorProvider.getAuthActivityIntent())
-            }.launchIn(lifecycleScope)
     }
 
     data class StartArgs(
