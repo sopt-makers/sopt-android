@@ -51,6 +51,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,8 +65,6 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.common.util.setOnSingleClickListener
-import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.designsystem.Black80
 import org.sopt.official.designsystem.Gray80
@@ -87,7 +86,6 @@ enum class ResultCode {
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
-    private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
     private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
 
@@ -101,6 +99,7 @@ class MyPageActivity : AppCompatActivity() {
             SoptTheme {
                 val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
                 val scrollState = rememberScrollState()
+                val context = LocalContext.current
 
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
@@ -138,28 +137,65 @@ class MyPageActivity : AppCompatActivity() {
                     ) {
                         Spacer(modifier = Modifier.height(20.dp))
                         ServiceInfo(
-                            onPrivateClick = { },
-                            onServiceClick = { },
-                            onOpinionClick = { }
+                            onPrivateClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
+                            },
+                            onServiceClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
+                            },
+                            onOpinionClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
+                            }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         if (isAuthenticated) {
                             NotificationSetting(
-                                onNotificationClick = { }
+                                onNotificationClick = {
+                                    Intent().apply {
+                                        action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                                        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                                        startActivity(this)
+                                    }
+                                }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             SoptampInfo(
-                                onSentenceClick = { },
-                                onResetStampClick = { }
+                                onAdjustSentenceClick = {
+                                    startActivity(AdjustSentenceActivity.getIntent(context))
+                                },
+                                onResetStampClick = {
+                                    AlertDialogPositiveNegative(context)
+                                        .setTitle(R.string.mypage_alert_soptamp_reset_title)
+                                        .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
+                                        .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
+                                            viewModel.resetSoptamp()
+                                        }
+                                        .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
+                                        .show()
+                                }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Etc(
-                                onLogoutClick = { },
-                                onSignOutClick = { }
+                                onLogoutClick = {
+                                    AlertDialogPositiveNegative(context)
+                                        .setTitle(R.string.mypage_alert_log_out_title)
+                                        .setSubtitle(R.string.mypage_alert_log_out_subtitle)
+                                        .setPositiveButton(R.string.mypage_alert_log_out_positive) {
+                                            viewModel.logOut()
+                                        }
+                                        .setNegativeButton(R.string.mypage_alert_log_out_negative)
+                                        .show()
+                                },
+                                onSignOutClick = {
+                                    startActivity(SignOutActivity.getIntent(context))
+                                }
                             )
                         } else {
                             EtcLogin(
-                                onLoginClick = {}
+                                onLoginClick = {
+                                    setResult(ResultCode.LOG_IN.ordinal)
+                                    onBackPressedDispatcher.onBackPressed()
+                                }
                             )
                         }
                         Spacer(modifier = Modifier.height(32.dp))
@@ -168,77 +204,13 @@ class MyPageActivity : AppCompatActivity() {
             }
         }
 
-
-//        setContentView(binding.root)
-//
         initStartArgs()
-//        initView()
-//        initClick()
         initRestart()
-//
-//        initNotificationSettingClickListener()
     }
 
     private fun initStartArgs() {
         args?.userActiveState?.let {
             viewModel.setUserActiveState(MyPageUiState.User(it))
-        }
-    }
-
-//    private fun initView() {
-//        viewModel.userActiveState
-//            .flowWithLifecycle(lifecycle)
-//            .onEach { isAuthenticated ->
-//                binding.containerNotificationSetting.setVisible(isAuthenticated)
-//                binding.containerSoptampInfo.setVisible(isAuthenticated)
-//                binding.textLogIn.setVisible(!isAuthenticated)
-//                binding.iconLogIn.setVisible(!isAuthenticated)
-//                binding.textLogOut.setVisible(isAuthenticated)
-//                binding.iconLogOut.setVisible(isAuthenticated)
-//                binding.textSignOut.setVisible(isAuthenticated)
-//                binding.iconSignOut.setVisible(isAuthenticated)
-//            }.launchIn(lifecycleScope)
-//    }
-
-    private fun initClick() {
-        binding.layoutPrivaceInfo.setOnSingleClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
-        }
-        binding.layoutServideRule.setOnSingleClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
-        }
-        binding.layoutSendOpinion.setOnSingleClickListener {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
-        }
-        binding.layoutAdjustSentence.setOnSingleClickListener {
-            startActivity(AdjustSentenceActivity.getIntent(this))
-        }
-        binding.layoutResetStamp.setOnSingleClickListener {
-            AlertDialogPositiveNegative(this)
-                .setTitle(R.string.mypage_alert_soptamp_reset_title)
-                .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
-                .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
-                    viewModel.resetSoptamp()
-                }
-                .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
-                .show()
-        }
-        binding.layoutLogOut.setOnSingleClickListener {
-            AlertDialogPositiveNegative(this)
-                .setTitle(R.string.mypage_alert_log_out_title)
-                .setSubtitle(R.string.mypage_alert_log_out_subtitle)
-                .setPositiveButton(R.string.mypage_alert_log_out_positive) {
-                    viewModel.logOut()
-                }
-                .setNegativeButton(R.string.mypage_alert_log_out_negative)
-                .show()
-        }
-        binding.layoutSignOut.setOnSingleClickListener {
-            startActivity(SignOutActivity.getIntent(this))
-        }
-        binding.layoutLogIn.setOnSingleClickListener {
-            setResult(ResultCode.LOG_IN.ordinal)
-            onBackPressedDispatcher.onBackPressed()
         }
     }
 
@@ -248,16 +220,6 @@ class MyPageActivity : AppCompatActivity() {
             .onEach {
                 ProcessPhoenix.triggerRebirth(this, navigatorProvider.getAuthActivityIntent())
             }.launchIn(lifecycleScope)
-    }
-
-    private fun initNotificationSettingClickListener() {
-        binding.linearLayoutNotificationSettingContainer.setOnClickListener {
-            Intent().apply {
-                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                startActivity(this)
-            }
-        }
     }
 
     data class StartArgs(
@@ -347,7 +309,7 @@ fun NotificationSetting(
 @Composable
 fun SoptampInfo(
     modifier: Modifier = Modifier,
-    onSentenceClick: () -> Unit,
+    onAdjustSentenceClick: () -> Unit,
     onResetStampClick: () -> Unit
 ) {
     Column(
@@ -369,7 +331,7 @@ fun SoptampInfo(
         Spacer(modifier = Modifier.height(23.dp))
         MyPageItem(
             text = stringResource(id = R.string.mypage_adjust_sentence),
-            onButtonClick = onSentenceClick
+            onButtonClick = onAdjustSentenceClick
         )
         Spacer(modifier = Modifier.height(22.dp))
         MyPageItem(
