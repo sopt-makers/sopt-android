@@ -63,4 +63,5 @@
     <!--    한 마디 편집하기   -->
     <string name="toolbar_adjust_sentence">한 마디 편집</string>
     <string name="adjust_sentence_button">저장</string>
+    <string name="adjust_sentence_hint">설정된 한 마디가 없습니다.</string>
 </resources>

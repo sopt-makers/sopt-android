@@ -32,7 +32,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -55,6 +57,7 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
+import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBinding
 
 @AndroidEntryPoint
@@ -93,13 +96,17 @@ class AdjustSentenceActivity : AppCompatActivity() {
                                 actionIconContentColor = SoptTheme.colors.primary
                             )
                         )
-                    }) { innerPadding ->
+                    }
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
                             .background(SoptTheme.colors.background)
                     ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        MyPageTextField(modifier = Modifier.padding(horizontal = 20.dp))
+                        Spacer(modifier = Modifier.height(52.dp))
                         MyPageButton(
                             paddingVertical = 16.dp,
                             style = SoptTheme.typography.body14R,
@@ -114,7 +121,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun initView() {
         viewModel.finish
