@@ -13,8 +13,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import org.sopt.official.designsystem.Black
-import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray300
+import org.sopt.official.designsystem.Gray600
 import org.sopt.official.designsystem.White
 
 @Composable
@@ -34,8 +34,8 @@ fun MyPageButton(
         colors = ButtonDefaults.buttonColors(
             containerColor = White,
             contentColor = Black,
-            disabledContainerColor = Black40,
-            disabledContentColor = Gray60
+            disabledContainerColor = Gray600,
+            disabledContentColor = Gray300
         ),
         shape = RoundedCornerShape(paddingShape),
         onClick = { onButtonClick() }

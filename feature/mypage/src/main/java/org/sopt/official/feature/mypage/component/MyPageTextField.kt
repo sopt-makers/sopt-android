@@ -17,8 +17,8 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Black80
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray300
+import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
@@ -26,8 +26,8 @@ import org.sopt.official.feature.mypage.R
 @Composable
 fun MyPageTextField(
     sentence: String,
+    onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onTextChange: (String) -> Unit
 ) {
     var isFocused by remember { mutableStateOf(false) }
 
@@ -36,7 +36,7 @@ fun MyPageTextField(
         onValueChange = onTextChange,
         modifier = modifier
             .fillMaxWidth()
-            .background(color = Black80, shape = RoundedCornerShape(12.dp))
+            .background(color = Gray800, shape = RoundedCornerShape(12.dp))
             .border(
                 width = 1.dp,
                 color = if (isFocused) White else Transparent,
@@ -45,14 +45,17 @@ fun MyPageTextField(
             .onFocusChanged { focusState ->
                 isFocused = focusState.isFocused
             }
-            .padding(horizontal = 20.dp)
-            .padding(vertical = 16.dp),
-        textStyle = SoptTheme.typography.body18M.copy(color = White),
+            .padding(
+                top = 16.dp,
+                bottom = 36.dp,
+                start = 20.dp
+            ),
+        textStyle = SoptTheme.typography.body16M.copy(color = White),
         decorationBox = { innerTextField ->
             if (sentence.isEmpty())
                 Text(
                     text = stringResource(id = R.string.adjust_sentence_hint),
-                    color = Gray60,
+                    color = Gray300,
                     style = SoptTheme.typography.body16M
                 )
             innerTextField()

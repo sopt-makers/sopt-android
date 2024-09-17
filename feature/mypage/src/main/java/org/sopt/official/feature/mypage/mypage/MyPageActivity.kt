@@ -64,7 +64,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.designsystem.Gray80
+import org.sopt.official.designsystem.Gray400
 import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
@@ -232,10 +232,10 @@ class MyPageActivity : AppCompatActivity() {
 
 @Composable
 fun ServiceInfo(
-    modifier: Modifier = Modifier,
     onPrivateClick: () -> Unit,
     onServiceClick: () -> Unit,
-    onOpinionClick: () -> Unit
+    onOpinionClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
@@ -246,11 +246,10 @@ fun ServiceInfo(
             )
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        //todo : style
         Text(
             text = stringResource(id = R.string.mypage_service_info_title),
             style = SoptTheme.typography.label12SB,
-            color = Gray80,
+            color = Gray400,
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(23.dp))
@@ -286,11 +285,10 @@ fun NotificationSetting(
             )
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        //todo : style
         Text(
             text = stringResource(id = R.string.mypage_notification_setting),
             style = SoptTheme.typography.label12SB,
-            color = Gray80,
+            color = Gray400,
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(23.dp))
@@ -317,11 +315,10 @@ fun SoptampInfo(
             )
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        //todo : style
         Text(
             text = stringResource(id = R.string.mypage_soptamp_setting_title),
             style = SoptTheme.typography.label12SB,
-            color = Gray80,
+            color = Gray400,
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(23.dp))
@@ -353,11 +350,10 @@ fun Etc(
             )
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        //todo : style
         Text(
             text = stringResource(id = R.string.mypage_etc_title),
             style = SoptTheme.typography.label12SB,
-            color = Gray80,
+            color = Gray400,
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(23.dp))
@@ -388,11 +384,10 @@ fun EtcLogin(
             )
     ) {
         Spacer(modifier = Modifier.height(16.dp))
-        //todo : style
         Text(
             text = stringResource(id = R.string.mypage_etc_title),
             style = SoptTheme.typography.label12SB,
-            color = Gray80,
+            color = Gray400,
             modifier = Modifier.padding(start = 16.dp)
         )
         Spacer(modifier = Modifier.height(23.dp))

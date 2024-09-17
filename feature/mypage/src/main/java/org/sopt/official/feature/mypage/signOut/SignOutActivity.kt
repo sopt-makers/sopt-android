@@ -32,15 +32,10 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -59,8 +54,7 @@ import androidx.lifecycle.flowWithLifecycle
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.designsystem.Black
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
@@ -122,30 +116,29 @@ class SignOutActivity : AppCompatActivity() {
                             .background(SoptTheme.colors.background)
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
-                        // todo: style
                         Text(
                             text = stringResource(id = R.string.sign_out_title),
                             color = White,
-                            style = SoptTheme.typography.body14M,
-                            modifier = Modifier.padding(start = 16.dp)
+                            style = SoptTheme.typography.heading16B,
+                            modifier = Modifier.padding(start = 20.dp)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(
                             text = stringResource(id = R.string.sign_out_subtitle),
-                            color = Gray60,
+                            color = Gray300,
                             style = SoptTheme.typography.body14R,
-                            modifier = Modifier.padding(start = 16.dp)
+                            modifier = Modifier.padding(horizontal = 20.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
                         MyPageButton(
                             paddingVertical = 16.dp,
-                            style = SoptTheme.typography.body16M,
+                            style = SoptTheme.typography.heading18B,
                             paddingShape = 10.dp,
                             modifier = Modifier.padding(20.dp),
-                            onButtonClick = {viewModel.signOut()},
+                            onButtonClick = { viewModel.signOut() },
                             text = R.string.sign_out_button
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(14.dp))
                     }
                 }
             }

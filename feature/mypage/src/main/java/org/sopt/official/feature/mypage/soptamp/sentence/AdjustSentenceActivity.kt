@@ -116,16 +116,16 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             .padding(innerPadding)
                             .background(SoptTheme.colors.background)
                     ) {
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(20.dp))
                         MyPageTextField(
                             sentence = sentence,
                             modifier = Modifier.padding(horizontal = 20.dp),
                             onTextChange = { viewModel.onChange(it) },
                         )
-                        Spacer(modifier = Modifier.height(52.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
                         MyPageButton(
                             paddingVertical = 16.dp,
-                            style = SoptTheme.typography.body14R,
+                            style = SoptTheme.typography.heading18B,
                             paddingShape = 10.dp,
                             modifier = Modifier.padding(20.dp),
                             onButtonClick = { viewModel.adjustSentence() },
