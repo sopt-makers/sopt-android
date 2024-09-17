@@ -105,7 +105,7 @@ fun MyPageDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun Dialog() {
+fun DialogPreview() {
     SoptTheme {
         MyPageDialog(
             onDismissRequest = {},

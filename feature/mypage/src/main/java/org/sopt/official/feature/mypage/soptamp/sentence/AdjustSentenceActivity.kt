@@ -36,36 +36,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.common.util.viewBinding
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
-import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBinding
+import org.sopt.official.feature.mypage.component.MyPageTopBar
 
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {
-    private val binding by viewBinding(ActivityAdjustSentenceBinding::inflate)
     private val viewModel by viewModels<AdjustSentenceViewModel>()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -86,27 +75,9 @@ class AdjustSentenceActivity : AppCompatActivity() {
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
                     topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(id = R.string.toolbar_adjust_sentence),
-                                    style = SoptTheme.typography.body16M
-                                )
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
-                                    Icon(
-                                        painterResource(R.drawable.btn_arrow_left),
-                                        contentDescription = null,
-                                        tint = SoptTheme.colors.onBackground
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = SoptTheme.colors.background,
-                                titleContentColor = SoptTheme.colors.onBackground,
-                                actionIconContentColor = SoptTheme.colors.primary
-                            )
+                        MyPageTopBar(
+                            title = R.string.toolbar_adjust_sentence,
+                            onIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }
                 ) { innerPadding ->

@@ -41,19 +41,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -71,6 +65,7 @@ import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageItem
+import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
@@ -90,7 +85,6 @@ class MyPageActivity : AppCompatActivity() {
     @Inject
     lateinit var navigatorProvider: NavigatorProvider
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -131,27 +125,9 @@ class MyPageActivity : AppCompatActivity() {
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
                     topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    text = stringResource(id = R.string.toolbar_mypage),
-                                    style = SoptTheme.typography.body16M
-                                )
-                            },
-                            navigationIcon = {
-                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
-                                    Icon(
-                                        painterResource(R.drawable.btn_arrow_left),
-                                        contentDescription = null,
-                                        tint = SoptTheme.colors.onBackground
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = SoptTheme.colors.background,
-                                titleContentColor = SoptTheme.colors.onBackground,
-                                actionIconContentColor = SoptTheme.colors.primary
-                            )
+                        MyPageTopBar(
+                            title = R.string.toolbar_mypage,
+                            onIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }) { innerPadding ->
                     Column(
@@ -237,7 +213,7 @@ class MyPageActivity : AppCompatActivity() {
 }
 
 @Composable
-fun ServiceInfo(
+private fun ServiceInfo(
     onPrivateClick: () -> Unit,
     onServiceClick: () -> Unit,
     onOpinionClick: () -> Unit,
@@ -278,7 +254,7 @@ fun ServiceInfo(
 }
 
 @Composable
-fun NotificationSetting(
+private fun NotificationSetting(
     modifier: Modifier = Modifier,
     onNotificationClick: () -> Unit,
 ) {
@@ -307,7 +283,7 @@ fun NotificationSetting(
 }
 
 @Composable
-fun SoptampInfo(
+private fun SoptampInfo(
     modifier: Modifier = Modifier,
     onAdjustSentenceClick: () -> Unit,
     onResetStampClick: () -> Unit
@@ -342,7 +318,7 @@ fun SoptampInfo(
 }
 
 @Composable
-fun Etc(
+private fun Etc(
     modifier: Modifier = Modifier,
     onLogoutClick: () -> Unit,
     onSignOutClick: () -> Unit
@@ -377,7 +353,7 @@ fun Etc(
 }
 
 @Composable
-fun EtcLogin(
+private fun EtcLogin(
     modifier: Modifier = Modifier,
     onLoginClick: () -> Unit,
 ) {
