@@ -39,11 +39,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -58,12 +55,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.designsystem.Gray400
-import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageDialog
-import org.sopt.official.feature.mypage.component.MyPageItem
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.model.MyPageUiModel
@@ -144,14 +138,21 @@ class MyPageActivity : AppCompatActivity() {
                     MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
                     MyPageUiModel.MyPageItem(
                         title = stringResource(R.string.mypage_log_out),
-                        onItemClick = {
-                            viewModel.updateLogoutDialog(true)
-                        }
+                        onItemClick = { viewModel.updateLogoutDialog(true) }
                     ),
                     MyPageUiModel.MyPageItem(
                         title = stringResource(R.string.mypage_sign_out),
+                        onItemClick = { startActivity(SignOutActivity.getIntent(context)) }
+                    )
+                )
+
+                val etcLoginSectionItems = listOf(
+                    MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_log_in),
                         onItemClick = {
-                            startActivity(SignOutActivity.getIntent(context))
+                            setResult(ResultCode.LOG_IN.ordinal)
+                            onBackPressedDispatcher.onBackPressed()
                         }
                     )
                 )
@@ -220,12 +221,7 @@ class MyPageActivity : AppCompatActivity() {
                             Spacer(modifier = Modifier.height(16.dp))
                             MyPageSection(items = etcSectionItems)
                         } else {
-                            EtcLogin(
-                                onLoginClick = {
-                                    setResult(ResultCode.LOG_IN.ordinal)
-                                    onBackPressedDispatcher.onBackPressed()
-                                }
-                            )
+                            MyPageSection(items = etcLoginSectionItems)
                         }
                         Spacer(modifier = Modifier.height(32.dp))
                     }
@@ -243,34 +239,5 @@ class MyPageActivity : AppCompatActivity() {
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
         }
-    }
-}
-
-@Composable
-private fun EtcLogin(
-    modifier: Modifier = Modifier,
-    onLoginClick: () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(10.dp)
-            )
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = R.string.mypage_etc_title),
-            style = SoptTheme.typography.label12SB,
-            color = Gray400,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(23.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_log_in),
-            onButtonClick = onLoginClick
-        )
-        Spacer(modifier = Modifier.height(27.dp))
     }
 }
