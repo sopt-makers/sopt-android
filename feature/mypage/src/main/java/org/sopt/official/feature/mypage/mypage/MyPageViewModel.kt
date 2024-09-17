@@ -86,4 +86,8 @@ class MyPageViewModel @Inject constructor(
                 .onFailure { Timber.e(it) }
         }
     }
+
+    fun updateSoptampDialog(state: Boolean) {
+        _dialogState.value = state
+    }
 }

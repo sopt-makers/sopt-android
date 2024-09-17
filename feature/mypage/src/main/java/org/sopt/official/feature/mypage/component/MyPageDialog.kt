@@ -1,5 +1,6 @@
 package org.sopt.official.feature.mypage.component
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,21 +32,27 @@ import org.sopt.official.feature.mypage.R
 @Composable
 fun MyPageDialog(
     onDismissRequest: () -> Unit,
+    @StringRes title: Int,
+    @StringRes subTitle: Int,
+    @StringRes negativeText: Int,
+    @StringRes positiveText: Int,
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false,
         decorFitsSystemWindows = true,
         dismissOnBackPress = true,
         dismissOnClickOutside = true,
     ),
-
-    ) {
+    onNegativeButtonClick: () -> Unit = {},
+    onPositiveButtonClick: () -> Unit = {}
+) {
     Dialog(
-        onDismissRequest = { onDismissRequest() },
+        onDismissRequest = onDismissRequest,
         properties = properties,
     ) {
         Column(
             modifier = Modifier
                 .wrapContentSize()
+                .padding(horizontal = 25.dp)
                 .background(
                     color = Gray700,
                     shape = RoundedCornerShape(10.dp)
@@ -54,17 +61,18 @@ fun MyPageDialog(
         ) {
             Spacer(modifier = Modifier.height(26.dp))
             Text(
-                text = stringResource(id = R.string.mypage_alert_soptamp_reset_title),
+                text = stringResource(id = title),
                 color = White,
                 style = SoptTheme.typography.heading16B
             )
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = stringResource(id = R.string.mypage_alert_soptamp_reset_subtitle),
+                text = stringResource(id = subTitle),
                 color = Gray100,
                 style = SoptTheme.typography.body14M,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(26.dp))
+            Spacer(modifier = Modifier.height(14.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,8 +83,8 @@ fun MyPageDialog(
                     paddingShape = 10.dp,
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
-                    text = R.string.mypage_alert_soptamp_reset_negative,
-                    onButtonClick = {},
+                    text = negativeText,
+                    onButtonClick = onNegativeButtonClick,
                     containerColor = Gray600,
                     contentColor = Gray10
                 )
@@ -86,10 +94,11 @@ fun MyPageDialog(
                     paddingShape = 10.dp,
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
-                    text = R.string.mypage_alert_soptamp_reset_positive,
-                    onButtonClick = {},
+                    text = positiveText,
+                    onButtonClick = onPositiveButtonClick,
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }
@@ -99,7 +108,11 @@ fun MyPageDialog(
 fun Dialog() {
     SoptTheme {
         MyPageDialog(
-            onDismissRequest = {}
+            onDismissRequest = {},
+            title = R.string.mypage_alert_soptamp_reset_title,
+            subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
+            negativeText = R.string.mypage_alert_soptamp_reset_negative,
+            positiveText = R.string.mypage_alert_soptamp_reset_positive
         )
     }
 }

@@ -69,6 +69,7 @@ import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
+import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageItem
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
@@ -93,27 +94,39 @@ class MyPageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context = LocalContext.current
-            val lifecycleOwner = LocalLifecycleOwner.current
-
-            val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-            val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
-            val scrollState = rememberScrollState()
-
-            LaunchedEffect(Unit) {
-                args?.userActiveState?.let {
-                    viewModel.setUserActiveState(MyPageUiState.User(it))
-                }
-            }
-
-            LaunchedEffect(viewModel.finish, lifecycleOwner) {
-                viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                    .collect {
-                        ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
-                    }
-            }
-
             SoptTheme {
+                val context = LocalContext.current
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
+                val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+                val scrollState = rememberScrollState()
+
+                LaunchedEffect(Unit) {
+                    args?.userActiveState?.let {
+                        viewModel.setUserActiveState(MyPageUiState.User(it))
+                    }
+                }
+
+                LaunchedEffect(viewModel.finish, lifecycleOwner) {
+                    viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect {
+                            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+                        }
+                }
+
+                if (dialogState) {
+                    MyPageDialog(
+                        onDismissRequest = { viewModel.updateSoptampDialog(false) },
+                        title = R.string.mypage_alert_soptamp_reset_title,
+                        subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
+                        negativeText = R.string.mypage_alert_soptamp_reset_negative,
+                        positiveText = R.string.mypage_alert_soptamp_reset_positive,
+                        onNegativeButtonClick = { viewModel.updateSoptampDialog(false) },
+                        onPositiveButtonClick = viewModel::resetSoptamp
+                    )
+                }
+
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
@@ -177,16 +190,7 @@ class MyPageActivity : AppCompatActivity() {
                                     startActivity(AdjustSentenceActivity.getIntent(context))
                                 },
                                 onResetStampClick = {
-
-
-                                    AlertDialogPositiveNegative(context)
-                                        .setTitle(R.string.mypage_alert_soptamp_reset_title)
-                                        .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)
-                                        .setPositiveButton(R.string.mypage_alert_soptamp_reset_positive) {
-                                            viewModel.resetSoptamp()
-                                        }
-                                        .setNegativeButton(R.string.mypage_alert_soptamp_reset_negative)
-                                        .show()
+                                    viewModel.updateSoptampDialog(true)
                                 }
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -218,7 +222,6 @@ class MyPageActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     data class StartArgs(

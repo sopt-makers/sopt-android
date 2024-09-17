@@ -69,19 +69,18 @@ class SignOutActivity : AppCompatActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
-            val context = LocalContext.current
-            val lifecycleOwner = LocalLifecycleOwner.current
-
-            LaunchedEffect(viewModel.event, lifecycleOwner) {
-                viewModel.event.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                    .collect {
-                        ProcessPhoenix.triggerRebirth(context)
-                    }
-            }
-
             SoptTheme {
+                val context = LocalContext.current
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                LaunchedEffect(viewModel.event, lifecycleOwner) {
+                    viewModel.event.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect {
+                            ProcessPhoenix.triggerRebirth(context)
+                        }
+                }
+
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),

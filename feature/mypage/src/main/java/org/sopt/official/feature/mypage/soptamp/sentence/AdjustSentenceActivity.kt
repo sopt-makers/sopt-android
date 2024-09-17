@@ -69,19 +69,19 @@ class AdjustSentenceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val lifecycleOwner = LocalLifecycleOwner.current
-
-            val sentence by viewModel.sentence.collectAsStateWithLifecycle()
-            val isConfirmed by viewModel.isConfirmed.collectAsStateWithLifecycle(initialValue = false)
-
-            LaunchedEffect(viewModel.finish, lifecycleOwner) {
-                viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                    .collect {
-                        onBackPressedDispatcher.onBackPressed()
-                    }
-            }
-
             SoptTheme {
+                val lifecycleOwner = LocalLifecycleOwner.current
+
+                val sentence by viewModel.sentence.collectAsStateWithLifecycle()
+                val isConfirmed by viewModel.isConfirmed.collectAsStateWithLifecycle(initialValue = false)
+
+                LaunchedEffect(viewModel.finish, lifecycleOwner) {
+                    viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect {
+                            onBackPressedDispatcher.onBackPressed()
+                        }
+                }
+
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
