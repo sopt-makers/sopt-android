@@ -30,6 +30,8 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -54,6 +56,9 @@ class MyPageViewModel @Inject constructor(
 
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
+
+    private val _dialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val dialogState: StateFlow<Boolean> get() = _dialogState.asStateFlow()
 
     fun setUserActiveState(new: MyPageUiState) {
         _userActiveState.value = new

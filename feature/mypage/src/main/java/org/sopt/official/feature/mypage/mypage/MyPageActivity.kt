@@ -97,6 +97,7 @@ class MyPageActivity : AppCompatActivity() {
             val lifecycleOwner = LocalLifecycleOwner.current
 
             val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
+            val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
             val scrollState = rememberScrollState()
 
             LaunchedEffect(Unit) {
@@ -176,6 +177,8 @@ class MyPageActivity : AppCompatActivity() {
                                     startActivity(AdjustSentenceActivity.getIntent(context))
                                 },
                                 onResetStampClick = {
+
+
                                     AlertDialogPositiveNegative(context)
                                         .setTitle(R.string.mypage_alert_soptamp_reset_title)
                                         .setSubtitle(R.string.mypage_alert_soptamp_reset_subtitle)

@@ -9,6 +9,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -26,14 +27,16 @@ fun MyPageButton(
     onButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
+    containerColor: Color = White,
+    contentColor: Color = Black
 ) {
     Button(
         contentPadding = PaddingValues(paddingVertical),
         modifier = modifier.fillMaxWidth(),
         enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = White,
-            contentColor = Black,
+            containerColor = containerColor,
+            contentColor = contentColor,
             disabledContainerColor = Gray600,
             disabledContentColor = Gray300
         ),
