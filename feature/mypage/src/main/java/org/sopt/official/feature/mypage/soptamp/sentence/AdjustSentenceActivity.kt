@@ -43,16 +43,16 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
@@ -69,6 +69,18 @@ class AdjustSentenceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val lifecycleOwner = LocalLifecycleOwner.current
+
+            val sentence by viewModel.sentence.collectAsStateWithLifecycle()
+            val isConfirmed by viewModel.isConfirmed.collectAsStateWithLifecycle(initialValue = false)
+
+            LaunchedEffect(viewModel.finish, lifecycleOwner) {
+                viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                    .collect {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
+            }
+
             SoptTheme {
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
@@ -105,7 +117,11 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             .background(SoptTheme.colors.background)
                     ) {
                         Spacer(modifier = Modifier.height(16.dp))
-                        MyPageTextField(modifier = Modifier.padding(horizontal = 20.dp))
+                        MyPageTextField(
+                            sentence = sentence,
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            onTextChange = { viewModel.onChange(it) },
+                        )
                         Spacer(modifier = Modifier.height(52.dp))
                         MyPageButton(
                             paddingVertical = 16.dp,
@@ -114,30 +130,12 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             modifier = Modifier.padding(20.dp),
                             onButtonClick = { viewModel.adjustSentence() },
                             text = R.string.adjust_sentence_button,
-                            isEnabled = false
+                            isEnabled = isConfirmed
                         )
                     }
                 }
             }
         }
-    }
-
-    private fun initView() {
-        viewModel.finish
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                this.onBackPressedDispatcher.onBackPressed()
-            }.launchIn(lifecycleScope)
-
-        binding.edittext.doAfterTextChanged {
-            viewModel.onChange(it.toString())
-        }
-
-        viewModel.isConfirmed
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                binding.confirmButton.isEnabled = it
-            }.launchIn(lifecycleScope)
     }
 
     companion object {

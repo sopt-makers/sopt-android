@@ -25,16 +25,15 @@ import org.sopt.official.feature.mypage.R
 
 @Composable
 fun MyPageTextField(
-    modifier: Modifier = Modifier
+    sentence: String,
+    modifier: Modifier = Modifier,
+    onTextChange: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
     var isFocused by remember { mutableStateOf(false) }
 
     BasicTextField(
-        value = text,
-        onValueChange = { newText ->
-            text = newText
-        },
+        value = sentence,
+        onValueChange = onTextChange,
         modifier = modifier
             .fillMaxWidth()
             .background(color = Black80, shape = RoundedCornerShape(12.dp))
@@ -50,7 +49,7 @@ fun MyPageTextField(
             .padding(vertical = 16.dp),
         textStyle = SoptTheme.typography.body18M.copy(color = White),
         decorationBox = { innerTextField ->
-            if (text.isEmpty())
+            if (sentence.isEmpty())
                 Text(
                     text = stringResource(id = R.string.adjust_sentence_hint),
                     color = Gray60,
