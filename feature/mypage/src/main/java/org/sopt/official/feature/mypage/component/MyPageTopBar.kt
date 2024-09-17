@@ -33,7 +33,7 @@ fun MyPageTopBar(
             IconButton(onClick = onIconClick) {
                 Icon(
                     painterResource(R.drawable.btn_arrow_left),
-                    contentDescription = null,
+                    contentDescription = "navigation icon",
                     tint = SoptTheme.colors.onBackground
                 )
             }

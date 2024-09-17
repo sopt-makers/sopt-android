@@ -37,9 +37,7 @@ fun MyPageDialog(
     @StringRes negativeText: Int,
     @StringRes positiveText: Int,
     modifier: Modifier = Modifier,
-    properties: DialogProperties = DialogProperties(
-        usePlatformDefaultWidth = false,
-    ),
+    properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     onPositiveButtonClick: () -> Unit = {}
 ) {
     Dialog(

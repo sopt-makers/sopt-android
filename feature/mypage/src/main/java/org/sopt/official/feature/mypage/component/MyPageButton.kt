@@ -41,7 +41,7 @@ fun MyPageButton(
             disabledContentColor = Gray300
         ),
         shape = RoundedCornerShape(paddingShape),
-        onClick = { onButtonClick() }
+        onClick = onButtonClick
     ) {
         Text(
             text = stringResource(id = text),
