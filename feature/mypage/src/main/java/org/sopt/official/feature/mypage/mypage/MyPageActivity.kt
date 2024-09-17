@@ -298,7 +298,7 @@ fun NotificationSetting(
             text = stringResource(id = R.string.mypage_notification),
             onButtonClick = onNotificationClick
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(27.dp))
     }
 }
 

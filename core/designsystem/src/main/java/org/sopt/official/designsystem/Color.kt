@@ -39,6 +39,7 @@ fun AlphaColor(color: Int, alphaPercentage: Int = 100): Color {
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)
 val Black80 = Color(0xFF1C1D1E)
+val Black40 = Color(0XFF3C3D40)
 val Gray950 = Color(0xFF0F1012)
 val Gray900 = Color(0xFF17181C)
 val Gray800 = Color(0xFF202025)

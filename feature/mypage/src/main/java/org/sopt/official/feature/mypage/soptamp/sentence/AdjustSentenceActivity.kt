@@ -27,16 +27,34 @@ package org.sopt.official.feature.mypage.soptamp.sentence
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.mypage.R
+import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.databinding.ActivityAdjustSentenceBinding
 
 @AndroidEntryPoint
@@ -44,20 +62,59 @@ class AdjustSentenceActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityAdjustSentenceBinding::inflate)
     private val viewModel by viewModels<AdjustSentenceViewModel>()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-
-        initToolbar()
-        initView()
-        initClick()
-    }
-
-    private fun initToolbar() {
-        binding.toolbar.setNavigationOnClickListener {
-            this.onBackPressedDispatcher.onBackPressed()
+        setContent {
+            SoptTheme {
+                Scaffold(modifier = Modifier
+                    .background(SoptTheme.colors.background)
+                    .fillMaxSize(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(id = R.string.toolbar_adjust_sentence),
+                                    style = SoptTheme.typography.body16M
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                                    Icon(
+                                        painterResource(R.drawable.btn_arrow_left),
+                                        contentDescription = null,
+                                        tint = SoptTheme.colors.onBackground
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = SoptTheme.colors.background,
+                                titleContentColor = SoptTheme.colors.onBackground,
+                                actionIconContentColor = SoptTheme.colors.primary
+                            )
+                        )
+                    }) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .background(SoptTheme.colors.background)
+                    ) {
+                        MyPageButton(
+                            paddingVertical = 16.dp,
+                            style = SoptTheme.typography.body14R,
+                            paddingShape = 10.dp,
+                            modifier = Modifier.padding(20.dp),
+                            onButtonClick = { viewModel.adjustSentence() },
+                            text = R.string.adjust_sentence_button,
+                            isEnabled = false
+                        )
+                    }
+                }
+            }
         }
     }
+
 
     private fun initView() {
         viewModel.finish
@@ -75,12 +132,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
             .onEach {
                 binding.confirmButton.isEnabled = it
             }.launchIn(lifecycleScope)
-    }
-
-    private fun initClick() {
-        binding.confirmButton.setOnSingleClickListener {
-            viewModel.adjustSentence()
-        }
     }
 
     companion object {

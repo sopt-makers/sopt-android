@@ -64,6 +64,7 @@ import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
+import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.databinding.ActivitySignOutBinding
 
 @AndroidEntryPoint
@@ -132,25 +133,18 @@ class SignOutActivity : AppCompatActivity() {
                         Text(
                             text = stringResource(id = R.string.sign_out_subtitle),
                             color = Gray60,
-                            style = SoptTheme.typography.label14SB,
+                            style = SoptTheme.typography.body14R,
                             modifier = Modifier.padding(start = 16.dp)
                         )
                         Spacer(modifier = Modifier.weight(1f))
-                        Button(
-                            contentPadding = PaddingValues(16.dp),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 20.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = White,
-                                contentColor = Black,
-                            ),
-                            shape = RoundedCornerShape(10.dp),
-                            onClick = { viewModel.signOut() }
-                        ) {
-                            // todo: style
-                            Text(text = stringResource(id = R.string.sign_out_button),)
-                        }
+                        MyPageButton(
+                            paddingVertical = 16.dp,
+                            style = SoptTheme.typography.body16M,
+                            paddingShape = 10.dp,
+                            modifier = Modifier.padding(20.dp),
+                            onButtonClick = {viewModel.signOut()},
+                            text = R.string.sign_out_button
+                        )
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
