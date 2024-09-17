@@ -64,8 +64,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.designsystem.Black80
 import org.sopt.official.designsystem.Gray80
+import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
@@ -241,7 +241,7 @@ fun ServiceInfo(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .background(
-                color = Black80,
+                color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
@@ -281,7 +281,7 @@ fun NotificationSetting(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .background(
-                color = Black80,
+                color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
@@ -312,7 +312,7 @@ fun SoptampInfo(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .background(
-                color = Black80,
+                color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
@@ -348,7 +348,7 @@ fun Etc(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .background(
-                color = Black80,
+                color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {
@@ -383,7 +383,7 @@ fun EtcLogin(
         modifier = modifier
             .padding(horizontal = 20.dp)
             .background(
-                color = Black80,
+                color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
     ) {

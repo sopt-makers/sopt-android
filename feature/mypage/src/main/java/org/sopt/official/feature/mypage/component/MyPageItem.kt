@@ -35,7 +35,7 @@ fun MyPageItem(
         Text(
             text = text,
             modifier = Modifier.padding(start = 16.dp),
-            style = SoptTheme.typography.body16M,
+            style = SoptTheme.typography.body14L,
             color = White
         )
         Icon(

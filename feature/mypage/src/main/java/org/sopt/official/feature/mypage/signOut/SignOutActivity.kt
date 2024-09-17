@@ -27,16 +27,43 @@ package org.sopt.official.feature.mypage.signOut
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.designsystem.Black
+import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.White
+import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.databinding.ActivitySignOutBinding
 
 @AndroidEntryPoint
@@ -44,33 +71,91 @@ class SignOutActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySignOutBinding::inflate)
     private val viewModel by viewModels<SignOutViewModel>()
 
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
 
-        initToolbar()
-        initClick()
-        initRestart()
-    }
+        setContent {
+            val context = LocalContext.current
+            val lifecycleOwner = LocalLifecycleOwner.current
 
-    private fun initToolbar() {
-        binding.toolbar.setNavigationOnClickListener {
-            this.onBackPressedDispatcher.onBackPressed()
+            LaunchedEffect(viewModel.event, lifecycleOwner) {
+                viewModel.event.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                    .collect {
+                        ProcessPhoenix.triggerRebirth(context)
+                    }
+            }
+
+            SoptTheme {
+                Scaffold(modifier = Modifier
+                    .background(SoptTheme.colors.background)
+                    .fillMaxSize(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    text = stringResource(id = R.string.toolbar_sign_out),
+                                    style = SoptTheme.typography.body16M
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                                    Icon(
+                                        painterResource(R.drawable.btn_arrow_left),
+                                        contentDescription = null,
+                                        tint = SoptTheme.colors.onBackground
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = SoptTheme.colors.background,
+                                titleContentColor = SoptTheme.colors.onBackground,
+                                actionIconContentColor = SoptTheme.colors.primary
+                            )
+                        )
+                    }) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .background(SoptTheme.colors.background)
+                    ) {
+                        Spacer(modifier = Modifier.height(16.dp))
+                        // todo: style
+                        Text(
+                            text = stringResource(id = R.string.sign_out_title),
+                            color = White,
+                            style = SoptTheme.typography.body14M,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = stringResource(id = R.string.sign_out_subtitle),
+                            color = Gray60,
+                            style = SoptTheme.typography.label14SB,
+                            modifier = Modifier.padding(start = 16.dp)
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Button(
+                            contentPadding = PaddingValues(16.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = White,
+                                contentColor = Black,
+                            ),
+                            shape = RoundedCornerShape(10.dp),
+                            onClick = { viewModel.signOut() }
+                        ) {
+                            // todo: style
+                            Text(text = stringResource(id = R.string.sign_out_button),)
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+            }
         }
-    }
-
-    private fun initClick() {
-        binding.confirmButton.setOnSingleClickListener {
-            viewModel.signOut()
-        }
-    }
-
-    private fun initRestart() {
-        viewModel.event
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                ProcessPhoenix.triggerRebirth(this)
-            }.launchIn(lifecycleScope)
     }
 
     companion object {
