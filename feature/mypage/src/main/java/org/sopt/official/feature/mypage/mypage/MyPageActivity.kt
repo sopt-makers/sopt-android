@@ -64,7 +64,9 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageItem
+import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
+import org.sopt.official.feature.mypage.model.MyPageUiModel
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
@@ -95,6 +97,64 @@ class MyPageActivity : AppCompatActivity() {
                 val soptampDialogState by viewModel.soptampDialogState.collectAsStateWithLifecycle()
                 val logoutDialogState by viewModel.logoutDialogState.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
+
+                val serviceSectionItems = listOf(
+                    MyPageUiModel.Header(title = stringResource(R.string.mypage_service_info_title)),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_private_info),
+                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))) }
+                    ),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_service_rule),
+                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))) }
+                    ),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_send_opinion),
+                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) }
+                    )
+                )
+
+                val notificationSectionItems = listOf(
+                    MyPageUiModel.Header(title = stringResource(R.string.mypage_notification_setting)),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_notification),
+                        onItemClick = {
+                            Intent().apply {
+                                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                                startActivity(this)
+                            }
+                        }
+                    )
+                )
+
+                val soptampSectionItems = listOf(
+                    MyPageUiModel.Header(title = stringResource(R.string.mypage_soptamp_setting_title)),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_adjust_sentence),
+                        onItemClick = { startActivity(AdjustSentenceActivity.getIntent(context)) }
+                    ),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_reset_stamp),
+                        onItemClick = { viewModel.updateSoptampDialog(true) }
+                    )
+                )
+
+                val etcSectionItems = listOf(
+                    MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_log_out),
+                        onItemClick = {
+                            viewModel.updateLogoutDialog(true)
+                        }
+                    ),
+                    MyPageUiModel.MyPageItem(
+                        title = stringResource(R.string.mypage_sign_out),
+                        onItemClick = {
+                            startActivity(SignOutActivity.getIntent(context))
+                        }
+                    )
+                )
 
                 LaunchedEffect(Unit) {
                     args?.userActiveState?.let {
@@ -151,46 +211,14 @@ class MyPageActivity : AppCompatActivity() {
                             .verticalScroll(scrollState)
                     ) {
                         Spacer(modifier = Modifier.height(20.dp))
-                        ServiceInfo(
-                            onPrivateClick = {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
-                            },
-                            onServiceClick = {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
-                            },
-                            onOpinionClick = {
-                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
-                            }
-                        )
+                        MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
                         if (isAuthenticated) {
-                            NotificationSetting(
-                                onNotificationClick = {
-                                    Intent().apply {
-                                        action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                                        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                                        startActivity(this)
-                                    }
-                                }
-                            )
+                            MyPageSection(items = notificationSectionItems)
                             Spacer(modifier = Modifier.height(16.dp))
-                            SoptampInfo(
-                                onAdjustSentenceClick = {
-                                    startActivity(AdjustSentenceActivity.getIntent(context))
-                                },
-                                onResetStampClick = {
-                                    viewModel.updateSoptampDialog(true)
-                                }
-                            )
+                            MyPageSection(items = soptampSectionItems)
                             Spacer(modifier = Modifier.height(16.dp))
-                            Etc(
-                                onLogoutClick = {
-                                    viewModel.updateLogoutDialog(true)
-                                },
-                                onSignOutClick = {
-                                    startActivity(SignOutActivity.getIntent(context))
-                                }
-                            )
+                            MyPageSection(items = etcSectionItems)
                         } else {
                             EtcLogin(
                                 onLoginClick = {
@@ -215,146 +243,6 @@ class MyPageActivity : AppCompatActivity() {
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
         }
-    }
-}
-
-@Composable
-private fun ServiceInfo(
-    onPrivateClick: () -> Unit,
-    onServiceClick: () -> Unit,
-    onOpinionClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(10.dp)
-            )
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = R.string.mypage_service_info_title),
-            style = SoptTheme.typography.label12SB,
-            color = Gray400,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(23.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_private_info),
-            onButtonClick = onPrivateClick
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_service_rule),
-            onButtonClick = onServiceClick
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_send_opinion),
-            onButtonClick = onOpinionClick
-        )
-        Spacer(modifier = Modifier.height(27.dp))
-    }
-}
-
-@Composable
-private fun NotificationSetting(
-    modifier: Modifier = Modifier,
-    onNotificationClick: () -> Unit,
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(10.dp)
-            )
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = R.string.mypage_notification_setting),
-            style = SoptTheme.typography.label12SB,
-            color = Gray400,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(23.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_notification),
-            onButtonClick = onNotificationClick
-        )
-        Spacer(modifier = Modifier.height(27.dp))
-    }
-}
-
-@Composable
-private fun SoptampInfo(
-    modifier: Modifier = Modifier,
-    onAdjustSentenceClick: () -> Unit,
-    onResetStampClick: () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(10.dp)
-            )
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = R.string.mypage_soptamp_setting_title),
-            style = SoptTheme.typography.label12SB,
-            color = Gray400,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(23.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_adjust_sentence),
-            onButtonClick = onAdjustSentenceClick
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_reset_stamp),
-            onButtonClick = onResetStampClick
-        )
-        Spacer(modifier = Modifier.height(27.dp))
-    }
-}
-
-@Composable
-private fun Etc(
-    modifier: Modifier = Modifier,
-    onLogoutClick: () -> Unit,
-    onSignOutClick: () -> Unit
-) {
-    Column(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(10.dp)
-            )
-    ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = stringResource(id = R.string.mypage_etc_title),
-            style = SoptTheme.typography.label12SB,
-            color = Gray400,
-            modifier = Modifier.padding(start = 16.dp)
-        )
-        Spacer(modifier = Modifier.height(23.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_log_out),
-            onButtonClick = onLogoutClick
-        )
-        Spacer(modifier = Modifier.height(22.dp))
-        MyPageItem(
-            text = stringResource(id = R.string.mypage_sign_out),
-            onButtonClick = onSignOutClick
-        )
-        Spacer(modifier = Modifier.height(27.dp))
     }
 }
 

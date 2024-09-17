@@ -36,11 +36,9 @@ fun MyPageDialog(
     @StringRes subTitle: Int,
     @StringRes negativeText: Int,
     @StringRes positiveText: Int,
+    modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false,
-        decorFitsSystemWindows = true,
-        dismissOnBackPress = true,
-        dismissOnClickOutside = true,
     ),
     onNegativeButtonClick: () -> Unit = {},
     onPositiveButtonClick: () -> Unit = {}
@@ -50,7 +48,7 @@ fun MyPageDialog(
         properties = properties,
     ) {
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .wrapContentSize()
                 .padding(horizontal = 25.dp)
                 .background(
