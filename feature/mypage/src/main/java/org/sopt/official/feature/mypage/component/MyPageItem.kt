@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray80
+import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
@@ -41,7 +41,7 @@ fun MyPageItem(
         Icon(
             painter = painterResource(R.drawable.btn_arrow_right),
             contentDescription = "arrow button",
-            tint = Gray80,
+            tint = Gray10,
             modifier = Modifier.padding(end = 8.dp)
         )
     }
