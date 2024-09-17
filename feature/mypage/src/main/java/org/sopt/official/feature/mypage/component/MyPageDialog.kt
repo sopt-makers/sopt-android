@@ -40,7 +40,6 @@ fun MyPageDialog(
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false,
     ),
-    onNegativeButtonClick: () -> Unit = {},
     onPositiveButtonClick: () -> Unit = {}
 ) {
     Dialog(
@@ -82,7 +81,7 @@ fun MyPageDialog(
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
                     text = negativeText,
-                    onButtonClick = onNegativeButtonClick,
+                    onButtonClick = onDismissRequest,
                     containerColor = Gray600,
                     contentColor = Gray10
                 )

@@ -41,6 +41,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -88,8 +89,7 @@ class MyPageActivity : AppCompatActivity() {
                 val lifecycleOwner = LocalLifecycleOwner.current
 
                 val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-                val soptampDialogState by viewModel.soptampDialogState.collectAsStateWithLifecycle()
-                val logoutDialogState by viewModel.logoutDialogState.collectAsStateWithLifecycle()
+                val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
                 val serviceSectionItems = listOf(
@@ -130,7 +130,7 @@ class MyPageActivity : AppCompatActivity() {
                     ),
                     MyPageUiModel.MyPageItem(
                         title = stringResource(R.string.mypage_reset_stamp),
-                        onItemClick = { viewModel.updateSoptampDialog(true) }
+                        onItemClick = { viewModel.showDialogState(MyPageAction.CLEAR_SOPTAMP) }
                     )
                 )
 
@@ -138,7 +138,7 @@ class MyPageActivity : AppCompatActivity() {
                     MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
                     MyPageUiModel.MyPageItem(
                         title = stringResource(R.string.mypage_log_out),
-                        onItemClick = { viewModel.updateLogoutDialog(true) }
+                        onItemClick = { viewModel.showDialogState(MyPageAction.LOGOUT) }
                     ),
                     MyPageUiModel.MyPageItem(
                         title = stringResource(R.string.mypage_sign_out),
@@ -170,27 +170,12 @@ class MyPageActivity : AppCompatActivity() {
                         }
                 }
 
-                if (soptampDialogState) {
-                    MyPageDialog(
-                        onDismissRequest = { viewModel.updateSoptampDialog(false) },
-                        title = R.string.mypage_alert_soptamp_reset_title,
-                        subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
-                        negativeText = R.string.mypage_alert_soptamp_reset_negative,
-                        positiveText = R.string.mypage_alert_soptamp_reset_positive,
-                        onNegativeButtonClick = { viewModel.updateSoptampDialog(false) },
-                        onPositiveButtonClick = viewModel::resetSoptamp
-                    )
-                }
-
-                if (logoutDialogState) {
-                    MyPageDialog(
-                        onDismissRequest = { viewModel.updateLogoutDialog(false) },
-                        title = R.string.mypage_alert_log_out_title,
-                        subTitle = R.string.mypage_alert_log_out_subtitle,
-                        negativeText = R.string.mypage_alert_log_out_negative,
-                        positiveText = R.string.mypage_alert_log_out_positive,
-                        onNegativeButtonClick = { viewModel.updateLogoutDialog(false) },
-                        onPositiveButtonClick = viewModel::logOut
+                if (dialogState is MyPageUiState.Dialog) {
+                    ShowMyPageDialog(
+                        action = (dialogState as MyPageUiState.Dialog).action,
+                        onDismissRequest = viewModel::onDismiss,
+                        onClearSoptampClick = viewModel::resetSoptamp,
+                        onLogoutClick = viewModel::logOut
                     )
                 }
 
@@ -238,6 +223,38 @@ class MyPageActivity : AppCompatActivity() {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
+        }
+    }
+}
+
+@Composable
+private fun ShowMyPageDialog(
+    action: MyPageAction,
+    onDismissRequest: () -> Unit,
+    onClearSoptampClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
+    when (action) {
+        MyPageAction.CLEAR_SOPTAMP -> {
+            MyPageDialog(
+                onDismissRequest = onDismissRequest,
+                title = R.string.mypage_alert_soptamp_reset_title,
+                subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
+                negativeText = R.string.mypage_alert_soptamp_reset_negative,
+                positiveText = R.string.mypage_alert_soptamp_reset_positive,
+                onPositiveButtonClick = onClearSoptampClick
+            )
+        }
+
+        MyPageAction.LOGOUT -> {
+            MyPageDialog(
+                onDismissRequest = onDismissRequest,
+                title = R.string.mypage_alert_log_out_title,
+                subTitle = R.string.mypage_alert_log_out_subtitle,
+                negativeText = R.string.mypage_alert_log_out_negative,
+                positiveText = R.string.mypage_alert_log_out_positive,
+                onPositiveButtonClick = onLogoutClick
+            )
         }
     }
 }

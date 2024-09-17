@@ -44,6 +44,10 @@ import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber
 import javax.inject.Inject
 
+enum class MyPageAction {
+    CLEAR_SOPTAMP, LOGOUT
+}
+
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
@@ -54,15 +58,11 @@ class MyPageViewModel @Inject constructor(
     val userActiveState = _userActiveState.filterIsInstance<MyPageUiState.User>()
         .map { it.activeState != UserActiveState.UNAUTHENTICATED }
 
+    private val _dialogState: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
+    val dialogState: StateFlow<MyPageUiState> get() = _dialogState.asStateFlow()
+
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
-
-    private val _soptampDialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val soptampDialogState: StateFlow<Boolean> get() = _soptampDialogState.asStateFlow()
-
-    private val _logoutDialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val logoutDialogState: StateFlow<Boolean> get() = _logoutDialogState.asStateFlow()
-
 
     fun setUserActiveState(new: MyPageUiState) {
         _userActiveState.value = new
@@ -91,11 +91,12 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun updateSoptampDialog(state: Boolean) {
-        _soptampDialogState.value = state
+    fun showDialogState(action: MyPageAction) {
+        _dialogState.tryEmit(MyPageUiState.Dialog(action))
     }
 
-    fun updateLogoutDialog(state: Boolean) {
-        _logoutDialogState.value = state
+    fun onDismiss() {
+        _dialogState.tryEmit(MyPageUiState.UnInitialized)
     }
+
 }
