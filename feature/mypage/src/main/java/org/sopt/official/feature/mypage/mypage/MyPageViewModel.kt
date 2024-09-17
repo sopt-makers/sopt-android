@@ -57,8 +57,12 @@ class MyPageViewModel @Inject constructor(
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
-    private val _dialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val dialogState: StateFlow<Boolean> get() = _dialogState.asStateFlow()
+    private val _soptampDialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val soptampDialogState: StateFlow<Boolean> get() = _soptampDialogState.asStateFlow()
+
+    private val _logoutDialogState: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val logoutDialogState: StateFlow<Boolean> get() = _logoutDialogState.asStateFlow()
+
 
     fun setUserActiveState(new: MyPageUiState) {
         _userActiveState.value = new
@@ -88,6 +92,10 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun updateSoptampDialog(state: Boolean) {
-        _dialogState.value = state
+        _soptampDialogState.value = state
+    }
+
+    fun updateLogoutDialog(state: Boolean) {
+        _logoutDialogState.value = state
     }
 }

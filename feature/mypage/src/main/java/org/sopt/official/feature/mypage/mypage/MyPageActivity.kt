@@ -61,7 +61,6 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.Gray400
 import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.AlertDialogPositiveNegative
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageItem
@@ -93,7 +92,8 @@ class MyPageActivity : AppCompatActivity() {
                 val lifecycleOwner = LocalLifecycleOwner.current
 
                 val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-                val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+                val soptampDialogState by viewModel.soptampDialogState.collectAsStateWithLifecycle()
+                val logoutDialogState by viewModel.logoutDialogState.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
                 LaunchedEffect(Unit) {
@@ -109,7 +109,7 @@ class MyPageActivity : AppCompatActivity() {
                         }
                 }
 
-                if (dialogState) {
+                if (soptampDialogState) {
                     MyPageDialog(
                         onDismissRequest = { viewModel.updateSoptampDialog(false) },
                         title = R.string.mypage_alert_soptamp_reset_title,
@@ -121,6 +121,18 @@ class MyPageActivity : AppCompatActivity() {
                     )
                 }
 
+                if (logoutDialogState) {
+                    MyPageDialog(
+                        onDismissRequest = { viewModel.updateLogoutDialog(false) },
+                        title = R.string.mypage_alert_log_out_title,
+                        subTitle = R.string.mypage_alert_log_out_subtitle,
+                        negativeText = R.string.mypage_alert_log_out_negative,
+                        positiveText = R.string.mypage_alert_log_out_positive,
+                        onNegativeButtonClick = { viewModel.updateLogoutDialog(false) },
+                        onPositiveButtonClick = viewModel::logOut
+                    )
+                }
+
                 Scaffold(modifier = Modifier
                     .background(SoptTheme.colors.background)
                     .fillMaxSize(),
@@ -129,7 +141,8 @@ class MyPageActivity : AppCompatActivity() {
                             title = R.string.toolbar_mypage,
                             onIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
-                    }) { innerPadding ->
+                    }
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -172,14 +185,7 @@ class MyPageActivity : AppCompatActivity() {
                             Spacer(modifier = Modifier.height(16.dp))
                             Etc(
                                 onLogoutClick = {
-                                    AlertDialogPositiveNegative(context)
-                                        .setTitle(R.string.mypage_alert_log_out_title)
-                                        .setSubtitle(R.string.mypage_alert_log_out_subtitle)
-                                        .setPositiveButton(R.string.mypage_alert_log_out_positive) {
-                                            viewModel.logOut()
-                                        }
-                                        .setNegativeButton(R.string.mypage_alert_log_out_negative)
-                                        .show()
+                                    viewModel.updateLogoutDialog(true)
                                 },
                                 onSignOutClick = {
                                     startActivity(SignOutActivity.getIntent(context))

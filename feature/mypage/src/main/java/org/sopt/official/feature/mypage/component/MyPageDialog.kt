@@ -65,14 +65,14 @@ fun MyPageDialog(
                 color = White,
                 style = SoptTheme.typography.heading16B
             )
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(28.dp))
             Text(
                 text = stringResource(id = subTitle),
                 color = Gray100,
                 style = SoptTheme.typography.body14M,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(14.dp))
+            Spacer(modifier = Modifier.height(34.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -105,7 +105,7 @@ fun MyPageDialog(
 
 @Preview(showBackground = true)
 @Composable
-fun DialogPreview() {
+fun MyPageDialogPreview() {
     SoptTheme {
         MyPageDialog(
             onDismissRequest = {},

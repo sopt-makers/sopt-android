@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageTopBar(

@@ -80,7 +80,8 @@ class SignOutActivity : AppCompatActivity() {
                             title = R.string.toolbar_sign_out,
                             onIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
-                    }) { innerPadding ->
+                    }
+                ) { innerPadding ->
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
