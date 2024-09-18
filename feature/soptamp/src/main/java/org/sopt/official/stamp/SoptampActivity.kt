@@ -24,6 +24,8 @@
  */
 package org.sopt.official.stamp
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -40,28 +42,34 @@ import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.stamp.feature.NavGraphs
 
 val LocalTracker = staticCompositionLocalOf<AmplitudeTracker> {
-    error("No AmplitudeTracker provided")
+  error("No AmplitudeTracker provided")
 }
 
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
-    @Inject
-    lateinit var tracker: AmplitudeTracker
+  @Inject
+  lateinit var tracker: AmplitudeTracker
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            val view = LocalView.current
-            if (!view.isInEditMode) {
-                SideEffect {
-                    window.statusBarColor = Color.WHITE
-                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
-                }
-            }
-
-            CompositionLocalProvider(LocalTracker provides tracker) {
-                DestinationsNavHost(navGraph = NavGraphs.root)
-            }
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      val view = LocalView.current
+      if (!view.isInEditMode) {
+        SideEffect {
+          window.statusBarColor = Color.WHITE
+          WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
         }
+      }
+
+      CompositionLocalProvider(LocalTracker provides tracker) {
+        DestinationsNavHost(navGraph = NavGraphs.root)
+      }
     }
+  }
+
+  companion object {
+    fun getIntent(context: Context): Intent {
+      return Intent(context, SoptampActivity::class.java)
+    }
+  }
 }

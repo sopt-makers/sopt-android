@@ -26,160 +26,163 @@ import com.google.firebase.appdistribution.gradle.firebaseAppDistribution
 import java.util.Properties
 
 plugins {
-    sopt("application")
-    sopt("test")
-    sopt("compose")
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.crashlytics)
-    alias(libs.plugins.ktlint)
-    alias(libs.plugins.secret)
-    alias(libs.plugins.app.distribution)
-    alias(libs.plugins.androidx.baselineprofile)
+  sopt("application")
+  sopt("test")
+  sopt("compose")
+  alias(libs.plugins.google.services)
+  alias(libs.plugins.crashlytics)
+  alias(libs.plugins.ktlint)
+  alias(libs.plugins.secret)
+  alias(libs.plugins.app.distribution)
+  alias(libs.plugins.androidx.baselineprofile)
 }
 
-val properties =
-    Properties().apply {
-        load(rootProject.file("local.properties").inputStream())
-    }
+val properties = Properties().apply {
+  load(rootProject.file("local.properties").inputStream())
+}
+
 android {
-    namespace = "org.sopt.official"
+  namespace = "org.sopt.official"
 
-    defaultConfig {
-        versionCode = libs.versions.versionCode.get().toInt()
-        versionName = libs.versions.appVersion.get()
-        applicationId = "org.sopt.official"
+  defaultConfig {
+    versionCode = libs.versions.versionCode.get().toInt()
+    versionName = libs.versions.appVersion.get()
+    applicationId = "org.sopt.official"
 
-        if (project.hasProperty("dev")) {
-            versionNameSuffix = "-Dev"
-        }
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    if (project.hasProperty("dev")) {
+      versionNameSuffix = "-Dev"
     }
 
-    signingConfigs {
-        getByName("debug") {
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
-            storeFile = File("${project.rootDir.absolutePath}/keystore/debug.keystore")
-            storePassword = "android"
-        }
-        create("release") {
-            keyAlias = properties.getProperty("keyAlias")
-            keyPassword = properties.getProperty("keyPassword")
-            storeFile = File("${project.rootDir.absolutePath}/keystore/releaseKey.jks")
-            storePassword = "soptandroid"
-        }
-    }
+    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+  }
 
-    buildTypes {
-        val debug by getting {
-            applicationIdSuffix = ".debug"
-            firebaseAppDistribution {
-                artifactType = "APK"
-                groups = "app-team"
-            }
-        }
-        val release by getting {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-            signingConfig = signingConfigs.getByName("release")
-        }
-        val benchmark by creating {
-            initWith(release)
-            matchingFallbacks.add("release")
-            signingConfig = signingConfigs.getByName("debug")
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            isMinifyEnabled = true
-            isDebuggable = false
-        }
+  signingConfigs {
+    getByName("debug") {
+      keyAlias = "androiddebugkey"
+      keyPassword = "android"
+      storeFile = File("${project.rootDir.absolutePath}/keystore/debug.keystore")
+      storePassword = "android"
     }
-    applicationVariants.all {
-        val variant = this
-        kotlin {
-            sourceSets {
-                getByName(variant.name) {
-                    kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
-                }
-            }
-        }
+    create("release") {
+      keyAlias = properties.getProperty("keyAlias")
+      keyPassword = properties.getProperty("keyPassword")
+      storeFile = File("${project.rootDir.absolutePath}/keystore/releaseKey.jks")
+      storePassword = "soptandroid"
     }
+  }
+
+  buildTypes {
+    val debug by getting {
+      applicationIdSuffix = ".debug"
+      firebaseAppDistribution {
+        artifactType = "APK"
+        groups = "app-team"
+      }
+    }
+    val release by getting {
+      isMinifyEnabled = true
+      isShrinkResources = true
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro",
+      )
+      signingConfig = signingConfigs.getByName("release")
+    }
+    val benchmark by creating {
+      initWith(release)
+      matchingFallbacks.add("release")
+      signingConfig = signingConfigs.getByName("debug")
+      proguardFiles(
+        getDefaultProguardFile("proguard-android-optimize.txt"),
+        "proguard-rules.pro"
+      )
+      isMinifyEnabled = true
+      isDebuggable = false
+    }
+  }
+  applicationVariants.all {
+    val variant = this
+    kotlin {
+      sourceSets {
+        getByName(variant.name) {
+          kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+        }
+      }
+    }
+  }
 }
 
 dependencies {
-    implementation(projects.core.designsystem)
-    implementation(projects.domain.soptamp)
-    implementation(projects.domain.mypage)
-    implementation(projects.domain.poke)
-    implementation(projects.feature.soptamp)
-    implementation(projects.data.soptamp)
-    implementation(projects.data.mypage)
-    implementation(projects.data.poke)
-    implementation(projects.core.common)
-    implementation(projects.core.analytics)
-    implementation(projects.core.network)
-    implementation(projects.core.auth)
-    implementation(projects.core.authimpl)
-    implementation(projects.core.webview)
-    implementation(projects.feature.auth)
-    implementation(projects.feature.mypage)
-    implementation(projects.feature.poke)
-    baselineProfile(projects.baselineprofile)
+  implementation(projects.core.designsystem)
+  implementation(projects.domain.soptamp)
+  implementation(projects.domain.mypage)
+  implementation(projects.domain.poke)
+  implementation(projects.domain.notification)
+  implementation(projects.feature.soptamp)
+  implementation(projects.data.soptamp)
+  implementation(projects.data.mypage)
+  implementation(projects.data.poke)
+  implementation(projects.data.notification)
+  implementation(projects.core.common)
+  implementation(projects.core.analytics)
+  implementation(projects.core.network)
+  implementation(projects.core.auth)
+  implementation(projects.core.authimpl)
+  implementation(projects.core.webview)
+  implementation(projects.feature.auth)
+  implementation(projects.feature.mypage)
+  implementation(projects.feature.poke)
+  implementation(projects.feature.notification)
+  baselineProfile(projects.baselineprofile)
 
-    implementation(libs.kotlin.coroutines.google.play)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
-    implementation(libs.startup)
-    implementation(libs.swipe.refresh.layout)
+  implementation(libs.kotlin.coroutines.google.play)
+  implementation(platform(libs.compose.bom))
+  implementation(libs.bundles.compose)
+  implementation(libs.startup)
+  implementation(libs.swipe.refresh.layout)
 
-    implementation(libs.inappupdate)
+  implementation(libs.inappupdate)
 
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.bundles.okhttp)
+  implementation(platform(libs.okhttp.bom))
+  implementation(libs.bundles.okhttp)
 
-    implementation(libs.bundles.compose)
+  implementation(libs.bundles.compose)
 
-    implementation(libs.bundles.mavericks)
+  implementation(platform(libs.firebase))
+  implementation(libs.bundles.firebase)
+  implementation(libs.process.phoenix)
 
-    implementation(platform(libs.firebase))
-    implementation(libs.bundles.firebase)
-    implementation(libs.process.phoenix)
+  implementation(libs.compose.destination.core)
+  implementation(libs.androidx.lifecycle.process)
+  implementation(libs.appcompat)
+  implementation(libs.material)
+  implementation(libs.fragment.ktx)
 
-    implementation(libs.compose.destination.core)
-    implementation(libs.androidx.lifecycle.process)
-    implementation(libs.appcompat)
-    implementation(libs.material)
+  androidTestImplementation(platform(libs.compose.bom))
+  androidTestImplementation(libs.bundles.compose.test)
+  androidTestImplementation(libs.bundles.android.test)
+  debugImplementation(libs.bundles.compose.android.test)
 
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.bundles.compose.test)
-    androidTestImplementation(libs.bundles.android.test)
-    debugImplementation(libs.bundles.compose.android.test)
-
-    implementation(libs.coil.core)
-    implementation(libs.profileinstaller)
+  implementation(libs.coil.core)
+  implementation(libs.profileinstaller)
+  implementation(libs.firebase.messaging.lifecycle.ktx)
 }
 
 secrets {
-    defaultPropertiesFileName = "secrets.defaults.properties"
+  defaultPropertiesFileName = "secrets.defaults.properties"
 
-    ignoreList.add("sdk.*")
+  ignoreList.add("sdk.*")
 }
 
 ktlint {
-    android.set(true)
-    debug.set(true)
-    coloredOutput.set(true)
-    verbose.set(true)
-    outputToConsole.set(true)
-    version.set("1.2.1")
-    filter {
-        exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
-        exclude { it.file.name.contains("gradle") }
-    }
+  android.set(true)
+  debug.set(true)
+  coloredOutput.set(true)
+  verbose.set(true)
+  outputToConsole.set(true)
+  version.set("1.2.1")
+  filter {
+    exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
+    exclude { it.file.name.contains("gradle") }
+  }
 }

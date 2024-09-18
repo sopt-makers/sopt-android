@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,32 @@
 package org.sopt.official.common.navigator
 
 import android.content.Intent
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.auth.model.UserStatus
 
 interface NavigatorProvider {
-    fun getAuthActivityIntent(): Intent
+  fun getAuthActivityIntent(): Intent
+  fun getNotificationActivityIntent(): Intent
+  fun getNotificationDetailActivityIntent(notificationId: String): Intent
+  fun getMyPageActivityIntent(name: String): Intent
+  fun getAttendanceActivityIntent(): Intent
+  fun getSoptampActivityIntent(): Intent
+  fun getPokeNotificationActivityIntent(name: String): Intent
+  fun getHomeActivityIntent(
+    userStatus: UserStatus,
+    deepLinkType: DeepLinkType?
+  ): Intent
+
+  fun getSchemeActivityIntent(
+    notificationId: String,
+    link: String
+  ): Intent
+}
+
+@InstallIn(SingletonComponent::class)
+@EntryPoint
+interface NavigatorEntryPoint {
+  fun navigatorProvider(): NavigatorProvider
 }

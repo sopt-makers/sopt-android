@@ -27,45 +27,45 @@ package org.sopt.official
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.coroutineScope
+import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.airbnb.mvrx.mocking.MockableMavericks
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.sopt.official.common.context.appContext
 import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
-    @Inject
-    lateinit var dataStore: SoptDataStore
+  @Inject
+  lateinit var dataStore: SoptDataStore
+  private val lifecycleOwner: LifecycleOwner
+    get() = ProcessLifecycleOwner.get()
 
-    override fun onCreate() {
-        super.onCreate()
-        initFlipper()
-        initMavericks()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        ProcessLifecycleOwner.get().lifecycle.coroutineScope.launch {
-            ProcessLifecycleOwner.get().lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                runCatching {
-                    FirebaseMessaging.getInstance().token.await()
-                }.onSuccess {
-                    dataStore.pushToken = it
-                }.onFailure(Timber::e)
-            }
-        }
-    }
+  override fun onCreate() {
+    super.onCreate()
+    appContext = this.applicationContext
 
-    private fun initMavericks() {
-        MockableMavericks.initialize(this)
+    initFlipper()
+    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    lifecycleOwner.lifecycleScope.launch {
+      lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+        runCatching {
+          FirebaseMessaging.getInstance().token.await()
+        }.onSuccess {
+          dataStore.pushToken = it
+        }.onFailure(Timber::e)
+      }
     }
+  }
 
-    private fun initFlipper() {
-        FlipperInitializer.init(this)
-    }
+  private fun initFlipper() {
+    FlipperInitializer.init(this)
+  }
 }
