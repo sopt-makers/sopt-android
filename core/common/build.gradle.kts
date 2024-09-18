@@ -24,15 +24,16 @@
  */
 
 plugins {
-    sopt("feature")
+  sopt("feature")
 }
 
 android {
-    namespace = "org.sopt.official.common"
+  namespace = "org.sopt.official.common"
 }
 
 dependencies {
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp)
-    implementation(libs.exifinterface)
+  implementation(projects.core.auth)
+  implementation(platform(libs.okhttp.bom))
+  implementation(libs.okhttp)
+  implementation(libs.exifinterface)
 }

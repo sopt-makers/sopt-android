@@ -35,8 +35,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.auth.model.UserActiveState
@@ -52,6 +50,8 @@ import org.sopt.official.feature.mypage.model.MyPageUiState
 import org.sopt.official.feature.mypage.signOut.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
+import java.io.Serializable
+import javax.inject.Inject
 
 enum class ResultCode {
     LOG_IN
@@ -61,7 +61,7 @@ enum class ResultCode {
 class MyPageActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityMyPageBinding::inflate)
     private val viewModel by viewModels<MyPageViewModel>()
-    private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
+    private val args by serializableExtra(Argument(UserActiveState.UNAUTHENTICATED))
 
     @Inject
     lateinit var navigatorProvider: NavigatorProvider
@@ -169,13 +169,13 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
-    data class StartArgs(
+    data class Argument(
         val userActiveState: UserActiveState
     ) : Serializable
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
+        fun getIntent(context: Context, args: Argument) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
         }
     }

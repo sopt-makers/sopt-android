@@ -38,8 +38,6 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -59,241 +57,225 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
-    private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
-    private val viewModel by viewModels<PokeNotificationViewModel>()
+  private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
+  private val viewModel by viewModels<PokeNotificationViewModel>()
 
-    private val args by serializableExtra(StartArgs(""))
+  private val args by serializableExtra(Argument(""))
 
-    @Inject
-    lateinit var tracker: AmplitudeTracker
-    private val pokeNotificationAdapter
-        get() = binding.recyclerviewPokeNotification.adapter as PokeNotificationAdapter
+  @Inject
+  lateinit var tracker: AmplitudeTracker
+  private val pokeNotificationAdapter
+    get() = binding.recyclerviewPokeNotification.adapter as PokeNotificationAdapter
 
-    private val pokeNotificationLayoutManager
-        get() = binding.recyclerviewPokeNotification.layoutManager as LinearLayoutManager
+  private val pokeNotificationLayoutManager
+    get() = binding.recyclerviewPokeNotification.layoutManager as LinearLayoutManager
 
-    private var messageListBottomSheet: MessageListBottomSheetFragment? = null
+  private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContentView(binding.root)
 
-        initAppBar()
-        initListener()
-        initRecyclerView()
-        initStateFlowValues()
+    initAppBar()
+    initListener()
+    initRecyclerView()
+    initStateFlowValues()
+  }
+
+  override fun onResume() {
+    super.onResume()
+    tracker.track(
+      EventType.VIEW,
+      name = "view_poke_alarm_detail",
+      properties = mapOf("view_type" to intent.getStringExtra("userStatus")),
+    )
+  }
+
+  private fun initAppBar() {
+    binding.includeAppBar.apply {
+      textViewTitle.text = getString(R.string.poke_notification_title)
+      toolbar.setOnClickListener { finish() }
     }
+  }
 
-    override fun onResume() {
-        super.onResume()
-        tracker.track(
-            EventType.VIEW,
-            name = "view_poke_alarm_detail",
-            properties = mapOf("view_type" to intent.getStringExtra("userStatus")),
-        )
-    }
+  private fun initListener() {
+    with(binding) {
+      animationViewLottie.addOnAnimationEndListener {
+        layoutLottie.visibility = View.GONE
+      }
 
-    private fun initAppBar() {
-        binding.includeAppBar.apply {
-            textViewTitle.text = getString(R.string.poke_notification_title)
-            toolbar.setOnClickListener { finish() }
-        }
-    }
+      animationFriendViewLottie.addOnAnimationEndListener {
+        if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
+          lifecycleScope.launch {
+            // 로티
+            layoutAnonymousFriendLottie.visibility = View.GONE
+            layoutAnonymousFriendOpen.visibility = View.VISIBLE
 
-    private fun initListener() {
-        with(binding) {
-            animationViewLottie.addOnAnimationEndListener {
-                layoutLottie.visibility = View.GONE
+            val anonymousFriend = viewModel.anonymousFriend.value
+            anonymousFriend?.let {
+              tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
+              tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+              imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                transformations(CircleCropTransformation())
+              }
+
+              imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
             }
 
-            animationFriendViewLottie.addOnAnimationEndListener {
-                if (viewModel.anonymousFriend.value != null) { // 천생연분 -> 정체 공개
-                    lifecycleScope.launch {
-                        // 로티
-                        layoutAnonymousFriendLottie.visibility = View.GONE
-                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+            delay(2000)
+            layoutAnonymousFriendOpen.visibility = View.GONE
+            viewModel.setAnonymousFriend(null)
+          }
+        } else {
+          layoutAnonymousFriendLottie.visibility = View.GONE
+        }
+      }
 
-                        val anonymousFriend = viewModel.anonymousFriend.value
-                        anonymousFriend?.let {
-                            tvAnonymousFreindName.text = getString(R.string.anonymous_user_identity, it.anonymousName)
-                            tvAnonymousFreindInfo.text = getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                                transformations(CircleCropTransformation())
-                            }
+      layoutLottie.setOnClickListener {
+        // do nothing
+      }
+    }
+  }
 
-                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                        }
+  private val pokeUserListClickLister = object : PokeUserListClickListener {
+    override fun onClickProfileImage(playgroundId: Int) {
+      startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+      tracker.track(
+        type = EventType.CLICK,
+        name = "memberprofile",
+        properties = mapOf(
+          "view_type" to args?.userStatus,
+          "click_view_type" to "poke_alarm",
+          "view_profile" to playgroundId,
+        ),
+      )
+    }
 
-                        delay(2000)
-                        layoutAnonymousFriendOpen.visibility = View.GONE
-                        viewModel.setAnonymousFriend(null)
-                    }
+    override fun onClickPokeButton(user: PokeUser) {
+      val messageType = when (user.isFirstMeet) {
+        true -> PokeMessageType.POKE_SOMEONE
+        false -> PokeMessageType.POKE_FRIEND
+      }
+      messageListBottomSheet =
+        MessageListBottomSheetFragment.Builder().setMessageListType(messageType).onClickMessageListItem { message, isAnonymous ->
+            viewModel.pokeUser(
+              userId = user.userId, isAnonymous = isAnonymous, message = message, isFirstMeet = user.isFirstMeet
+            )
+          }.create()
+
+      messageListBottomSheet?.let {
+        it.show(supportFragmentManager, it.tag)
+      }
+      tracker.track(
+        type = EventType.CLICK,
+        name = "poke_icon",
+        properties = mapOf(
+          "view_type" to args?.userStatus,
+          "click_view_type" to "poke_alarm",
+          "view_profile" to user.playgroundId,
+        ),
+      )
+    }
+  }
+
+  private val scrollListener = object : RecyclerView.OnScrollListener() {
+    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+      super.onScrolled(recyclerView, dx, dy)
+
+      val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
+      val totalItemCount = pokeNotificationLayoutManager.itemCount
+      if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
+        viewModel.getPokeNotification()
+      }
+    }
+  }
+
+  private fun initRecyclerView() {
+    with(binding.recyclerviewPokeNotification) {
+      adapter = PokeNotificationAdapter(pokeUserListClickLister)
+      addOnScrollListener(scrollListener)
+    }
+  }
+
+  private fun initStateFlowValues() {
+    viewModel.pokeNotification.onEach {
+        when (it) {
+          is UiState.Loading -> {}
+          is UiState.Success<List<PokeUser>> -> pokeNotificationAdapter.updatePokeNotification(it.data)
+          is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
+          is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+        }
+      }.launchIn(lifecycleScope)
+
+    viewModel.pokeUserUiState.flowWithLifecycle(lifecycle).onEach {
+        when (it) {
+          is UiState.Loading -> {}
+          is UiState.Success<PokeUser> -> {
+            messageListBottomSheet?.dismiss()
+            pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
+            when (it.isFirstMeet && !it.data.isFirstMeet) {
+              true -> {
+                with(binding) {
+                  layoutLottie.visibility = View.VISIBLE
+                  tvLottie.text = binding.root.context.getString(
+                    R.string.friend_complete, if (it.data.isAnonymous) it.data.anonymousName else it.data.name
+                  )
+                  animationViewLottie.playAnimation()
+                }
+              }
+
+              false -> {
+                if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                  with(binding) {
+                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                    tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
+                    tvFreindLottieHint.text = getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
+                    animationFriendViewLottie.apply {
+                      setAnimation(R.raw.friendtobestfriend)
+                    }.playAnimation()
+                  }
+                } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                  viewModel.setAnonymousFriend(it.data)
+                  with(binding) {
+                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                    tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
+                    animationFriendViewLottie.apply {
+                      setAnimation(R.raw.bestfriendtosoulmate)
+                    }.playAnimation()
+                  }
                 } else {
-                    layoutAnonymousFriendLottie.visibility = View.GONE
+                  showPokeToast(getString(R.string.toast_poke_user_success))
                 }
+              }
             }
+          }
 
-            layoutLottie.setOnClickListener {
-                // do nothing
-            }
+          is UiState.ApiError -> {
+            messageListBottomSheet?.dismiss()
+            showPokeToast(getString(R.string.poke_user_alert_exceeded))
+          }
+
+          is UiState.Failure -> {
+            messageListBottomSheet?.dismiss()
+            showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+          }
         }
+      }.launchIn(lifecycleScope)
+  }
+
+  data class Argument(
+    val userStatus: String,
+  ) : Serializable
+
+  companion object {
+    @JvmStatic
+    fun getIntent(context: Context, args: Argument) = Intent(context, PokeNotificationActivity::class.java).apply {
+      putExtra("args", args)
     }
-
-    private val pokeUserListClickLister =
-        object : PokeUserListClickListener {
-            override fun onClickProfileImage(playgroundId: Int) {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
-                    properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_alarm",
-                        "view_profile" to playgroundId,
-                    ),
-                )
-            }
-
-            override fun onClickPokeButton(user: PokeUser) {
-                val messageType =
-                    when (user.isFirstMeet) {
-                        true -> PokeMessageType.POKE_SOMEONE
-                        false -> PokeMessageType.POKE_FRIEND
-                    }
-                messageListBottomSheet =
-                    MessageListBottomSheetFragment.Builder()
-                        .setMessageListType(messageType)
-                        .onClickMessageListItem { message, isAnonymous ->
-                            viewModel.pokeUser(
-                                userId = user.userId,
-                                isAnonymous = isAnonymous,
-                                message = message,
-                                isFirstMeet = user.isFirstMeet
-                            )
-                        }
-                        .create()
-
-                messageListBottomSheet?.let {
-                    it.show(supportFragmentManager, it.tag)
-                }
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
-                    properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_alarm",
-                        "view_profile" to user.playgroundId,
-                    ),
-                )
-            }
-        }
-
-    private val scrollListener =
-        object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-
-                val lastVisibleItemPosition = pokeNotificationLayoutManager.findLastVisibleItemPosition()
-                val totalItemCount = pokeNotificationLayoutManager.itemCount
-                if (lastVisibleItemPosition == totalItemCount - 1 && totalItemCount % 10 == 0) {
-                    viewModel.getPokeNotification()
-                }
-            }
-        }
-
-    private fun initRecyclerView() {
-        with(binding.recyclerviewPokeNotification) {
-            adapter = PokeNotificationAdapter(pokeUserListClickLister)
-            addOnScrollListener(scrollListener)
-        }
-    }
-
-    private fun initStateFlowValues() {
-        viewModel.pokeNotification
-            .onEach {
-                when (it) {
-                    is UiState.Loading -> {}
-                    is UiState.Success<List<PokeUser>> -> pokeNotificationAdapter.updatePokeNotification(it.data)
-                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
-                }
-            }
-            .launchIn(lifecycleScope)
-
-        viewModel.pokeUserUiState
-            .flowWithLifecycle(lifecycle)
-            .onEach {
-                when (it) {
-                    is UiState.Loading -> {}
-                    is UiState.Success<PokeUser> -> {
-                        messageListBottomSheet?.dismiss()
-                        pokeNotificationAdapter.updatePokeUserItemPokeState(it.data.userId)
-                        when (it.isFirstMeet && !it.data.isFirstMeet) {
-                            true -> {
-                                with(binding) {
-                                    layoutLottie.visibility = View.VISIBLE
-                                    tvLottie.text = binding.root.context.getString(
-                                        R.string.friend_complete,
-                                        if (it.data.isAnonymous) it.data.anonymousName else it.data.name
-                                    )
-                                    animationViewLottie.playAnimation()
-                                }
-                            }
-
-                            false -> {
-                                if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
-                                    with(binding) {
-                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
-                                        tvFreindLottieHint.text =
-                                            getString(R.string.anonymous_user_info_part, it.data.generation, it.data.part)
-                                        animationFriendViewLottie.apply {
-                                            setAnimation(R.raw.friendtobestfriend)
-                                        }.playAnimation()
-                                    }
-                                } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
-                                    viewModel.setAnonymousFriend(it.data)
-                                    with(binding) {
-                                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                                        tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "천생연분이")
-                                        animationFriendViewLottie.apply {
-                                            setAnimation(R.raw.bestfriendtosoulmate)
-                                        }.playAnimation()
-                                    }
-                                } else {
-                                    showPokeToast(getString(R.string.toast_poke_user_success))
-                                }
-                            }
-                        }
-                    }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
-                    }
-
-                    is UiState.Failure -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
-                    }
-                }
-            }
-            .launchIn(lifecycleScope)
-    }
-
-    data class StartArgs(
-        val userStatus: String,
-    ) : Serializable
-
-    companion object {
-        @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) = Intent(context, PokeNotificationActivity::class.java).apply {
-            putExtra("args", args)
-        }
-    }
+  }
 }

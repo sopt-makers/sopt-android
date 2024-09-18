@@ -113,7 +113,7 @@ class PokeMainActivity : AppCompatActivity() {
                 startActivity(
                     PokeNotificationActivity.getIntent(
                         this@PokeMainActivity,
-                        PokeNotificationActivity.StartArgs(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name),
+                        PokeNotificationActivity.Argument(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name),
                     ),
                 )
             }
