@@ -3869,6 +3869,7 @@ HSPLcom/google/android/gms/common/internal/BaseGmsClient;->getUseDynamicLookup()
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->isConnected()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->isConnecting()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->onConnectedLocked(Landroid/os/IInterface;)V
+PLcom/google/android/gms/common/internal/BaseGmsClient;->onConnectionSuspended(I)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->onPostInitHandler(ILandroid/os/IBinder;Landroid/os/Bundle;I)V
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->requiresAccount()Z
 HSPLcom/google/android/gms/common/internal/BaseGmsClient;->requiresSignIn()Z
@@ -3990,6 +3991,7 @@ HSPLcom/google/android/gms/common/internal/zzd;->zzc(ILandroid/os/IBinder;Lcom/g
 Lcom/google/android/gms/common/internal/zze;
 HSPLcom/google/android/gms/common/internal/zze;-><init>(Lcom/google/android/gms/common/internal/BaseGmsClient;I)V
 HSPLcom/google/android/gms/common/internal/zze;->onServiceConnected(Landroid/content/ComponentName;Landroid/os/IBinder;)V
+PLcom/google/android/gms/common/internal/zze;->onServiceDisconnected(Landroid/content/ComponentName;)V
 Lcom/google/android/gms/common/internal/zzf;
 HSPLcom/google/android/gms/common/internal/zzf;-><init>(Lcom/google/android/gms/common/internal/BaseGmsClient;ILandroid/os/IBinder;Landroid/os/Bundle;)V
 HSPLcom/google/android/gms/common/internal/zzf;->zzd()Z
@@ -4014,6 +4016,7 @@ HSPLcom/google/android/gms/common/internal/zzo;->zzb(Landroid/content/Context;)L
 Lcom/google/android/gms/common/internal/zzp;
 HSPLcom/google/android/gms/common/internal/zzp;-><init>(Lcom/google/android/gms/common/internal/zzs;Lcom/google/android/gms/common/internal/zzo;)V
 HSPLcom/google/android/gms/common/internal/zzp;->onServiceConnected(Landroid/content/ComponentName;Landroid/os/IBinder;)V
+PLcom/google/android/gms/common/internal/zzp;->onServiceDisconnected(Landroid/content/ComponentName;)V
 HSPLcom/google/android/gms/common/internal/zzp;->zzd(Landroid/content/ServiceConnection;Landroid/content/ServiceConnection;Ljava/lang/String;)V
 HSPLcom/google/android/gms/common/internal/zzp;->zze(Ljava/lang/String;Ljava/util/concurrent/Executor;)V
 PLcom/google/android/gms/common/internal/zzp;->zzf(Landroid/content/ServiceConnection;Ljava/lang/String;)V
@@ -5328,6 +5331,7 @@ HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/g
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/gms/measurement/internal/zzgb;Lcom/google/android/gms/common/internal/safeparcel/AbstractSafeParcelable;Lcom/google/android/gms/measurement/internal/zzp;)V
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/gms/measurement/internal/zzlh;)V
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/gms/measurement/internal/zzlp;)Lcom/google/android/gms/measurement/internal/zzgb;
+PLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/gms/measurement/internal/zzlp;Landroid/content/ComponentName;)V
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Lcom/google/android/gms/measurement/internal/zzok;)V
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Ljava/lang/Runnable;)V
 HSPLcom/google/android/gms/measurement/internal/zzlp;->zza(Ljava/util/concurrent/atomic/AtomicReference;)V
@@ -5377,9 +5381,12 @@ HSPLcom/google/android/gms/measurement/internal/zzmj;->run()V
 Lcom/google/android/gms/measurement/internal/zzmm;
 HSPLcom/google/android/gms/measurement/internal/zzmm;-><init>(Lcom/google/android/gms/measurement/internal/zzlp;)V
 HSPLcom/google/android/gms/measurement/internal/zzmm;->onConnected(Landroid/os/Bundle;)V
+PLcom/google/android/gms/measurement/internal/zzmm;->onConnectionSuspended(I)V
 HSPLcom/google/android/gms/measurement/internal/zzmm;->zza()V
 HSPLcom/google/android/gms/measurement/internal/zzmm;->zza(Lcom/google/android/gms/measurement/internal/zzmm;Z)V
 PLcom/google/android/gms/measurement/internal/zzmm;->zzb()V
+PLcom/google/android/gms/measurement/internal/zzmq;-><init>(Lcom/google/android/gms/measurement/internal/zzmm;)V
+PLcom/google/android/gms/measurement/internal/zzmq;->run()V
 Lcom/google/android/gms/measurement/internal/zzmr;
 HSPLcom/google/android/gms/measurement/internal/zzmr;-><init>(Lcom/google/android/gms/measurement/internal/zzmm;Lcom/google/android/gms/measurement/internal/zzgb;)V
 HSPLcom/google/android/gms/measurement/internal/zzmr;->run()V
