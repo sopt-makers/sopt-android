@@ -133,6 +133,7 @@ dependencies {
   implementation(projects.feature.mypage)
   implementation(projects.feature.poke)
   implementation(projects.feature.notification)
+    implementation(projects.feature.fortune)
   baselineProfile(projects.baselineprofile)
 
   implementation(libs.kotlin.coroutines.google.play)
