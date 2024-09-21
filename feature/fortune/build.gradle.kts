@@ -25,9 +25,6 @@
 plugins {
     sopt("feature")
     sopt("compose")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.ktlint)
-    alias(libs.plugins.secret)
 }
 
 android {
@@ -42,10 +39,7 @@ dependencies {
 
     // compose
     implementation(libs.kotlin.collections.immutable)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.bundles.compose)
-    implementation(libs.compose.destination.core)
-    ksp(libs.compose.destination.ksp)
+    implementation(libs.compose.navigation)
 
     // etc
     implementation(libs.kotlin.datetime)
