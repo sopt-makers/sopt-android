@@ -27,6 +27,7 @@ package org.sopt.official.feature.fortune.feature.fortundDetail
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import kotlinx.serialization.Serializable
+import org.sopt.official.designsystem.SoptTheme
 
 @Serializable
 data class FortuneDetail(val date: String)
@@ -44,5 +45,8 @@ fun FortuneDetailRoute(
 fun FortuneDetailScreen(
     date: String,
 ) {
-    Text(text = "Fortune Detail Screen: $date")
+    Text(
+        text = "Fortune Detail Screen: $date",
+        color = SoptTheme.colors.onBackground
+    )
 }

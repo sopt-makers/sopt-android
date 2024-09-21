@@ -38,7 +38,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -51,7 +51,7 @@ import org.sopt.official.feature.fortune.feature.home.HomeRoute
 
 @Composable
 fun MainScreen(
-    navController: NavController = rememberNavController(),
+    navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -77,7 +77,7 @@ fun MainScreen(
                     .padding(paddingValue)
             ) {
                 NavHost(
-                    navController = rememberNavController(),
+                    navController = navController,
                     startDestination = Home
                 ) {
                     composable<Home> {
