@@ -61,6 +61,7 @@ fun MainScreen(
                     imageVector = Icons.Filled.Close,
                     contentDescription = null,
                     modifier = Modifier
+                        .padding(start = 8.dp, top = 2.dp, bottom = 2.dp)
                         .padding(8.dp)
                         .clickable {
                             // TODO: Navigate to NotificationActivity
