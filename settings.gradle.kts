@@ -39,4 +39,5 @@ include(
   ":feature:notification",
   ":feature:soptamp",
   ":feature:poke",
+    ":feature:fortune"
 )
