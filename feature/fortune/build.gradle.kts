@@ -38,7 +38,6 @@ dependencies {
     implementation(projects.core.analytics)
 
     // compose
-    implementation(libs.kotlin.collections.immutable)
     implementation(libs.compose.navigation)
 
     // etc
