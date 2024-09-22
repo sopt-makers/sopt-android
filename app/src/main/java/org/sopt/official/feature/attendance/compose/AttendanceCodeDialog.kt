@@ -22,6 +22,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
@@ -31,8 +33,8 @@ import org.sopt.official.feature.attendance.model.AttendanceType
 
 @Composable
 fun AttendanceCodeDialog(
-    codes: List<String>,
-    inputCodes: List<String?>,
+    codes: ImmutableList<String>,
+    inputCodes: ImmutableList<String?>,
     attendanceType: AttendanceType,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
@@ -70,7 +72,8 @@ fun AttendanceCodeDialog(
             AttendanceCodeCardList(
                 codes = inputCodes,
                 onTextChange = {},
-                onTextFieldFull = {})
+                onTextFieldFull = {},
+            )
             if (codes != inputCodes) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
@@ -119,8 +122,8 @@ private fun AttendanceCodeDialogPreview(
 }
 
 data class AttendanceCodeDialogPreviewParameter(
-    val codes: List<String>,
-    val inputCodes: List<String?>,
+    val codes: ImmutableList<String>,
+    val inputCodes: ImmutableList<String?>,
     val attendanceType: AttendanceType,
 )
 
@@ -129,23 +132,23 @@ class AttendanceCodeDialogPreviewParameterProvider :
     override val values: Sequence<AttendanceCodeDialogPreviewParameter> =
         sequenceOf(
             AttendanceCodeDialogPreviewParameter(
-                codes = listOf("1", "2", "3", "4", "5"),
-                inputCodes = listOf("1", "2", "3", null, null),
+                codes = persistentListOf("1", "2", "3", "4", "5"),
+                inputCodes = persistentListOf("1", "2", "3", null, null),
                 AttendanceType.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
-                codes = listOf("1", "2", "3", "4", "5"),
-                inputCodes = listOf("1", "2", "3", "4", "5"),
+                codes = persistentListOf("1", "2", "3", "4", "5"),
+                inputCodes = persistentListOf("1", "2", "3", "4", "5"),
                 AttendanceType.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
-                codes = listOf("1", "2", "3", "4", "5"),
-                inputCodes = listOf("1", "2", "3", null, null),
+                codes = persistentListOf("1", "2", "3", "4", "5"),
+                inputCodes = persistentListOf("1", "2", "3", null, null),
                 AttendanceType.SECOND,
             ),
             AttendanceCodeDialogPreviewParameter(
-                codes = listOf("1", "2", "3", "4", "5"),
-                inputCodes = listOf("1", "2", "3", "4", "5"),
+                codes = persistentListOf("1", "2", "3", "4", "5"),
+                inputCodes = persistentListOf("1", "2", "3", "4", "5"),
                 AttendanceType.SECOND,
             ),
         )

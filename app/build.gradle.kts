@@ -164,6 +164,7 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
+    implementation(libs.kotlin.collections.immutable)
 }
 
 secrets {
