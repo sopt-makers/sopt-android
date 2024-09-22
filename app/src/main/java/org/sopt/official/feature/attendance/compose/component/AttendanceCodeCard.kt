@@ -30,7 +30,8 @@ fun AttendanceCodeCard(
             } else {
                 onTextFieldFull()
             }
-        }, modifier = modifier
+        },
+        modifier = modifier
             .background(
                 color = if (text.isEmpty()) SoptTheme.colors.onSurface600
                 else SoptTheme.colors.onSurface800,
