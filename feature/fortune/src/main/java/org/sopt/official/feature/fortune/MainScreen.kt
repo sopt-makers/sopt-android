@@ -25,25 +25,20 @@
 package org.sopt.official.feature.fortune
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.component.FortuneTopBar
 import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetail
 import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetailRoute
 import org.sopt.official.feature.fortune.feature.home.Home
@@ -56,18 +51,8 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Icon(
-                    imageVector = Icons.Filled.Close,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 2.dp, bottom = 2.dp)
-                        .padding(8.dp)
-                        .clickable {
-                            // TODO: Navigate to NotificationActivity
-                        },
-                    tint = SoptTheme.colors.onBackground
-                )
+            FortuneTopBar {
+                // TODO: Navigate to NotificationActivity
             }
         },
         content = { paddingValue ->
