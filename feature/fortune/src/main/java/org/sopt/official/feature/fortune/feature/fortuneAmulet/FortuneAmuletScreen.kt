@@ -1,27 +1,22 @@
 package org.sopt.official.feature.fortune.feature.fortuneAmulet
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.component.RoundedCornerButton
 
 @Serializable
 data object FortuneAmulet
@@ -74,21 +69,17 @@ private fun FortuneAmuletScreen(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Box(
-            modifier = Modifier
-                .border(
-                    width = 1.dp,
-                    color = SoptTheme.colors.primary,
-                    shape = RoundedCornerShape(9999.dp)
-                ),
-            contentAlignment = Alignment.Center
+        RoundedCornerButton(
+            content = {
+                Text(
+                    text = "홈으로 돌아가기",
+                    style = SoptTheme.typography.label18SB,
+                    color = SoptTheme.colors.onBackground,
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
+                )
+            }
         ) {
-            Text(
-                text = "홈으로 돌아가기",
-                style = SoptTheme.typography.label18SB,
-                color = SoptTheme.colors.onBackground,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
-            )
+            // TODO: Navigate to Home
         }
 
         Spacer(modifier = Modifier.height(50.dp))
