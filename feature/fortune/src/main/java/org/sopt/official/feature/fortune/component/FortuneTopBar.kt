@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
@@ -27,5 +28,15 @@ fun FortuneTopBar(
                 .clickable(onClick = onClickNavigationIcon),
             tint = SoptTheme.colors.onBackground
         )
+    }
+}
+
+@Preview
+@Composable
+fun FortuneTopBarPreview() {
+    SoptTheme {
+        FortuneTopBar {
+
+        }
     }
 }
