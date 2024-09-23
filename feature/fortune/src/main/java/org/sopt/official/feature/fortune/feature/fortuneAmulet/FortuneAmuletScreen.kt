@@ -41,15 +41,14 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
+import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
 internal fun FortuneAmuletRoute(
     paddingValue: PaddingValues,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     FortuneAmuletScreen(
         paddingValue = paddingValue,
@@ -60,7 +59,7 @@ internal fun FortuneAmuletRoute(
 @Composable
 private fun FortuneAmuletScreen(
     paddingValue: PaddingValues,
-    navigateToHome: () -> Unit
+    navigateToHome: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -92,8 +91,8 @@ private fun FortuneAmuletScreen(
         )
         Spacer(modifier = Modifier.height(34.dp))
 
-        AsyncImage(
-            model = "https://어쩌구저쩌구/test_fortune_card.png", // 서버에서 받아온 이미지
+        UrlImage(
+            url = "https://어쩌구저쩌구/test_fortune_card.png", // 서버에서 받아온 이미지
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 33.dp)
