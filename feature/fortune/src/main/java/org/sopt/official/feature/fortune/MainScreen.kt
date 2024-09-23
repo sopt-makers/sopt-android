@@ -34,17 +34,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.FortuneTopBar
-import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetail
-import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetailRoute
-import org.sopt.official.feature.fortune.feature.fortuneAmulet.FortuneAmulet
-import org.sopt.official.feature.fortune.feature.fortuneAmulet.FortuneAmuletRoute
-import org.sopt.official.feature.fortune.feature.home.Home
-import org.sopt.official.feature.fortune.feature.home.HomeRoute
+import org.sopt.official.feature.fortune.feature.fortundDetail.navigation.FortuneDetail
+import org.sopt.official.feature.fortune.feature.fortundDetail.navigation.fortuneDetailNavGraph
+import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.FortuneAmulet
+import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.fortuneAmuletNavGraph
+import org.sopt.official.feature.fortune.feature.home.navigation.Home
+import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 
 @Composable
 fun MainScreen(
@@ -68,34 +66,26 @@ fun MainScreen(
                     navController = navController,
                     startDestination = Home
                 ) {
-                    composable<Home> {
-                        HomeRoute(
-                            paddingValue = paddingValue,
-                            navigateToFortuneDetail = { date ->
-                                navController.navigate(FortuneDetail(date))
-                            }
-                        )
-                    }
+                    homeNavGraph(
+                        paddingValue = paddingValue,
+                        navigateToFortuneDetail = { date ->
+                            navController.navigate(FortuneDetail(date))
+                        }
+                    )
 
-                    composable<FortuneDetail> { backStackEntry ->
-                        val items = backStackEntry.toRoute<FortuneDetail>()
-                        FortuneDetailRoute(
-                            paddingValue = paddingValue,
-                            date = items.date,
-                            navigateToFortuneAmulet = {
-                                navController.navigate(FortuneAmulet)
-                            }
-                        )
-                    }
+                    fortuneDetailNavGraph(
+                        paddingValue = paddingValue,
+                        navigateToFortuneAmulet = {
+                            navController.navigate(FortuneAmulet)
+                        }
+                    )
 
-                    composable<FortuneAmulet> {
-                        FortuneAmuletRoute(
-                            paddingValue = paddingValue,
-                            navigateToHome = {
-                                // TODO: Navigate to Home
-                            }
-                        )
-                    }
+                    fortuneAmuletNavGraph(
+                        paddingValue = paddingValue,
+                        navigateToHome = {
+                            // TODO: Navigate to Home
+                        }
+                    )
                 }
             }
         }

@@ -46,9 +46,6 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 
-@Serializable
-data object FortuneAmulet
-
 @Composable
 internal fun FortuneAmuletRoute(
     paddingValue: PaddingValues,

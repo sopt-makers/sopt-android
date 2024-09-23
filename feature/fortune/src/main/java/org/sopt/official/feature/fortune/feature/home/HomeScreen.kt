@@ -46,16 +46,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
-
-@Serializable
-data object Home
 
 @Composable
 internal fun HomeRoute(
