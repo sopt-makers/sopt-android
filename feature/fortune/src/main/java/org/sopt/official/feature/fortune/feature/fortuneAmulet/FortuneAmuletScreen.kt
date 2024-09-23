@@ -5,18 +5,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.component.RoundedCornerButton
+import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 
 @Serializable
 data object FortuneAmulet
@@ -44,7 +48,7 @@ private fun FortuneAmuletScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "어려움을 전부 극복할",
+            text = "어려움을 전부 극복할", // 서버에서 받아온 텍스트
             style = SoptTheme.typography.title16SB,
             color = SoptTheme.colors.onSurface300,
         )
@@ -52,24 +56,29 @@ private fun FortuneAmuletScreen(
         Spacer(modifier = Modifier.height(2.dp))
 
         Text(
-            text = "해결부적이 왔솝",
+            text = buildAnnotatedString {
+                withStyle(style = SpanStyle(color = SoptTheme.colors.attention /* 서버에서 받아온 색상 */)) {
+                    append("해결부적") // 서버에서 받아온 텍스트
+                }
+                withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
+                    append("이 왔솝")
+                }
+            },
             style = SoptTheme.typography.heading28B,
-            color = SoptTheme.colors.onBackground,
         )
-
         Spacer(modifier = Modifier.height(34.dp))
 
         AsyncImage(
-            model = "https://sopt.s3.ap-northeast-2.amazonaws.com/official/fortune/amulet.png",
+            model = "https://어쩌구저쩌구/test_fortune_card.png", // 서버에서 받아온 이미지
             contentDescription = null,
             modifier = Modifier
-                .padding(16.dp)
-                .height(200.dp),
+                .padding(horizontal = 33.dp)
+                .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        RoundedCornerButton(
+        CircleShapeBorderButton(
             content = {
                 Text(
                     text = "홈으로 돌아가기",
