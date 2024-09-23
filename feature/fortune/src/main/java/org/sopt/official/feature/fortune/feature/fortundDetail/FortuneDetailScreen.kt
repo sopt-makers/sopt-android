@@ -24,8 +24,19 @@
  */
 package org.sopt.official.feature.fortune.feature.fortundDetail
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import kotlinx.serialization.Serializable
 import org.sopt.official.designsystem.SoptTheme
 
@@ -34,19 +45,54 @@ data class FortuneDetail(val date: String)
 
 @Composable
 fun FortuneDetailRoute(
+    paddingValue: PaddingValues,
     date: String,
+    navigateToFortuneAmulet: () -> Unit,
 ) {
     FortuneDetailScreen(
+        paddingValue = paddingValue,
         date = date,
+        navigateToFortuneAmulet = navigateToFortuneAmulet
     )
 }
 
 @Composable
 fun FortuneDetailScreen(
+    paddingValue: PaddingValues,
     date: String,
+    navigateToFortuneAmulet: () -> Unit,
 ) {
-    Text(
-        text = "Fortune Detail Screen: $date",
-        color = SoptTheme.colors.onBackground
-    )
+    Column(
+        modifier = Modifier
+            .padding(paddingValue)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Fortune Detail Screen: $date",
+            color = SoptTheme.colors.onBackground
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Button(
+            onClick = navigateToFortuneAmulet
+        ) {
+            Text(text = "Go to Fortune Amulet")
+        }
+        Spacer(modifier = Modifier.height(50.dp))
+    }
+}
+
+
+@Preview
+@Composable
+fun FortuneDetailScreenPreview() {
+    SoptTheme {
+        FortuneDetailScreen(
+            paddingValue = PaddingValues(16.dp),
+            date = "2024-09-09",
+            navigateToFortuneAmulet = {}
+        )
+    }
 }
