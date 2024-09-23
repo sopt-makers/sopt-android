@@ -46,12 +46,7 @@ import javax.inject.Inject
 class SchemeActivity : AppCompatActivity() {
     @Inject
     lateinit var dataStore: SoptDataStore
-    private val args by serializableExtra(
-        Argument(
-            "",
-            ""
-        )
-    )
+    private val args by serializableExtra(Argument("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,7 +110,7 @@ class SchemeActivity : AppCompatActivity() {
     }
 
     private fun isIntentToHome(): Boolean {
-        return intent.action == Intent.ACTION_MAIN && intent.categories?.contains(Intent.CATEGORY_LAUNCHER) == true
+        return intent.action == Intent.ACTION_MAIN && (intent.categories?.contains(Intent.CATEGORY_LAUNCHER) == true)
     }
 
     data class Argument(
@@ -125,15 +120,7 @@ class SchemeActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(
-            context: Context,
-            args: Argument
-        ) = Intent(
-            context,
-            SchemeActivity::class.java
-        ).putExtra(
-            "args",
-            args
-        )
+        fun getIntent(context: Context, args: Argument) = Intent(context, SchemeActivity::class.java)
+            .putExtra("args", args)
     }
 }
