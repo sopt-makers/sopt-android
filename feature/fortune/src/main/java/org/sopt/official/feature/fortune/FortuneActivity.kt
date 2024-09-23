@@ -39,7 +39,7 @@ class FortuneActivity : AppCompatActivity() {
 
         setContent {
             SoptTheme {
-                MainScreen()
+                FoundationScreen()
             }
         }
     }

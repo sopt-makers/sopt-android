@@ -45,7 +45,7 @@ import org.sopt.official.feature.fortune.feature.home.navigation.Home
 import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 
 @Composable
-fun MainScreen(
+fun FoundationScreen(
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
@@ -94,8 +94,8 @@ fun MainScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun MainScreenPreview() {
+fun FoundationScreenPreview() {
     SoptTheme {
-        MainScreen()
+        FoundationScreen()
     }
 }
