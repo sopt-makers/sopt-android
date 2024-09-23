@@ -4,8 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -28,15 +28,18 @@ data object FortuneAmulet
 @Composable
 internal fun FortuneAmuletRoute(
     paddingValue: PaddingValues,
+    navigateToHome: () -> Unit
 ) {
     FortuneAmuletScreen(
         paddingValue = paddingValue,
+        navigateToHome = navigateToHome
     )
 }
 
 @Composable
 private fun FortuneAmuletScreen(
     paddingValue: PaddingValues,
+    navigateToHome: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -73,7 +76,7 @@ private fun FortuneAmuletScreen(
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 33.dp)
-                .fillMaxWidth()
+                .fillMaxHeight(0.55f)
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -86,10 +89,9 @@ private fun FortuneAmuletScreen(
                     color = SoptTheme.colors.onBackground,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
                 )
-            }
-        ) {
-            // TODO: Navigate to Home
-        }
+            },
+            onClick = navigateToHome
+        )
 
         Spacer(modifier = Modifier.height(50.dp))
     }
@@ -101,6 +103,7 @@ fun PreviewFortuneAmuletScreen() {
     SoptTheme {
         FortuneAmuletScreen(
             paddingValue = PaddingValues(16.dp),
+            navigateToHome = {}
         )
     }
 }
