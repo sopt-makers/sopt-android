@@ -41,6 +41,8 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.FortuneTopBar
 import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetail
 import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetailRoute
+import org.sopt.official.feature.fortune.feature.fortuneAmulet.FortuneAmulet
+import org.sopt.official.feature.fortune.feature.fortuneAmulet.FortuneAmuletRoute
 import org.sopt.official.feature.fortune.feature.home.Home
 import org.sopt.official.feature.fortune.feature.home.HomeRoute
 
@@ -78,7 +80,20 @@ fun MainScreen(
                     composable<FortuneDetail> { backStackEntry ->
                         val items = backStackEntry.toRoute<FortuneDetail>()
                         FortuneDetailRoute(
-                            date = items.date
+                            paddingValue = paddingValue,
+                            date = items.date,
+                            navigateToFortuneAmulet = {
+                                navController.navigate(FortuneAmulet)
+                            }
+                        )
+                    }
+
+                    composable<FortuneAmulet> {
+                        FortuneAmuletRoute(
+                            paddingValue = paddingValue,
+                            navigateToHome = {
+                                // TODO: Navigate to Home
+                            }
                         )
                     }
                 }
