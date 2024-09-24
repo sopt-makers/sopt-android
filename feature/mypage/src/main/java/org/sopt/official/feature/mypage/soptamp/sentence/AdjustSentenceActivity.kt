@@ -99,7 +99,7 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             style = SoptTheme.typography.heading18B,
                             paddingShape = 10.dp,
                             modifier = Modifier.padding(20.dp),
-                            onButtonClick = { viewModel.adjustSentence() },
+                            onClick = { viewModel.adjustSentence() },
                             text = R.string.adjust_sentence_button,
                             isEnabled = isConfirmed
                         )

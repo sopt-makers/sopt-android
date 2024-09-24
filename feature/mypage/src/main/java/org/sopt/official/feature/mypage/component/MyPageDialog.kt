@@ -103,7 +103,7 @@ fun MyPageDialog(
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
                     text = negativeText,
-                    onButtonClick = onDismissRequest,
+                    onClick = onDismissRequest,
                     containerColor = Gray600,
                     contentColor = Gray10
                 )
@@ -114,7 +114,7 @@ fun MyPageDialog(
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
                     text = positiveText,
-                    onButtonClick = onPositiveButtonClick,
+                    onClick = onPositiveButtonClick,
                 )
             }
             Spacer(modifier = Modifier.height(12.dp))

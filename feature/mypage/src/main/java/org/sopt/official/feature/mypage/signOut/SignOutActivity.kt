@@ -108,7 +108,7 @@ class SignOutActivity : AppCompatActivity() {
                             style = SoptTheme.typography.heading18B,
                             paddingShape = 10.dp,
                             modifier = Modifier.padding(20.dp),
-                            onButtonClick = { viewModel.signOut() },
+                            onClick = { viewModel.signOut() },
                             text = R.string.sign_out_button
                         )
                         Spacer(modifier = Modifier.height(14.dp))
