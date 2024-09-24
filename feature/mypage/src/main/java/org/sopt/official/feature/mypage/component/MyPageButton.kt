@@ -48,7 +48,7 @@ fun MyPageButton(
     style: TextStyle,
     paddingVertical: Dp,
     @StringRes text: Int,
-    onButtonClick: () -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
     containerColor: Color = White,
@@ -65,7 +65,7 @@ fun MyPageButton(
             disabledContentColor = Gray300
         ),
         shape = RoundedCornerShape(paddingShape),
-        onClick = onButtonClick
+        onClick = onClick
     ) {
         Text(
             text = stringResource(id = text),
