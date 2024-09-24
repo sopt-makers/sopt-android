@@ -26,11 +26,14 @@ package org.sopt.official.network.persistence
 
 import android.content.Context
 import androidx.core.content.edit
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class SoptDataStore @Inject constructor(
@@ -76,4 +79,10 @@ class SoptDataStore @Inject constructor(
         private const val PUSH_TOKEN = "push_token"
         private const val UNAUTHENTICATED = "UNAUTHENTICATED"
     }
+}
+
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface SoptDataStoreEntryPoint {
+    fun soptDataStore(): SoptDataStore
 }

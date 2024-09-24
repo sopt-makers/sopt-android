@@ -30,29 +30,24 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
-import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.network.persistence.SoptDataStoreEntryPoint
 import timber.log.Timber
 import java.io.Serializable
-import javax.inject.Inject
 
-@AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {
-    @Inject
-    lateinit var dataStore: SoptDataStore
-    private val args by serializableExtra(
-        Argument(
-            "",
-            ""
-        )
-    )
+    private val dataStore by lazy {
+        EntryPointAccessors
+            .fromApplication<SoptDataStoreEntryPoint>(applicationContext)
+            .soptDataStore()
+    }
+    private val args by serializableExtra(Argument("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,13 +56,13 @@ class SchemeActivity : AppCompatActivity() {
 
     private fun handleDeepLink() {
         val link = args?.link
-        val linkIntent = when (link.isNullOrBlank()) {
-            true -> NotificationDetailActivity.getIntent(
+        val linkIntent = if (link.isNullOrBlank()) {
+            NotificationDetailActivity.getIntent(
                 this,
                 args?.notificationId.orEmpty()
             )
-
-            false -> checkLinkExpiration(link)
+        } else {
+            checkLinkExpiration(link)
         }
 
         when (!isTaskRoot) {
@@ -115,7 +110,9 @@ class SchemeActivity : AppCompatActivity() {
         }
     }
 
-    private fun isIntentToHome(): Boolean = intent.component?.className == HomeActivity::class.java.name
+    private fun isIntentToHome(): Boolean {
+        return intent.action == Intent.ACTION_MAIN && (intent.categories?.contains(Intent.CATEGORY_LAUNCHER) == true)
+    }
 
     data class Argument(
         val notificationId: String,
@@ -124,15 +121,7 @@ class SchemeActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(
-            context: Context,
-            args: Argument
-        ) = Intent(
-            context,
-            SchemeActivity::class.java
-        ).putExtra(
-            "args",
-            args
-        )
+        fun getIntent(context: Context, args: Argument) = Intent(context, SchemeActivity::class.java)
+            .putExtra("args", args)
     }
 }
