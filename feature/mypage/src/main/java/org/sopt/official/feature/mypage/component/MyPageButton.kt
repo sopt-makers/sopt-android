@@ -57,7 +57,7 @@ fun MyPageButton(
     contentColor: Color = Black
 ) {
     Button(
-        contentPadding = PaddingValues(paddingVertical),
+        contentPadding = PaddingValues(vertical = paddingVertical),
         modifier = modifier.fillMaxWidth(),
         enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
