@@ -99,21 +99,27 @@ fun MyPageDialog(
             ) {
                 MyPageButton(
                     modifier = Modifier.weight(1f),
-                    style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
-                    text = negativeText,
                     onClick = onDismissRequest,
                     containerColor = Gray600,
-                    contentColor = Gray10
-                )
+                    contentColor = Gray10,
+                ) {
+                    Text(
+                        text = stringResource(negativeText),
+                        style = SoptTheme.typography.body14M
+                    )
+                }
                 Spacer(modifier = Modifier.width(6.dp))
                 MyPageButton(
                     modifier = Modifier.weight(1f),
-                    style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
-                    text = positiveText,
                     onClick = onPositiveButtonClick,
-                )
+                ) {
+                    Text(
+                        text = stringResource(positiveText),
+                        style = SoptTheme.typography.body14M
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(12.dp))
         }

@@ -46,15 +46,14 @@ import org.sopt.official.designsystem.White
 
 @Composable
 fun MyPageButton(
-    style: TextStyle,
     paddingVertical: Dp,
-    @StringRes text: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(10.dp),
     isEnabled: Boolean = true,
     containerColor: Color = White,
-    contentColor: Color = Black
+    contentColor: Color = Black,
+    content: @Composable () -> Unit,
 ) {
     Button(
         contentPadding = PaddingValues(vertical = paddingVertical),
@@ -69,9 +68,6 @@ fun MyPageButton(
         shape = shape,
         onClick = onClick
     ) {
-        Text(
-            text = stringResource(id = text),
-            style = style,
-        )
+        content()
     }
 }
