@@ -45,14 +45,12 @@ import org.sopt.official.feature.mypage.R
 fun MyPageItem(
     text: String,
     modifier: Modifier = Modifier,
-    onButtonClick: () -> Unit = {}
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable {
-                onButtonClick()
-            },
+            .clickable(onClick = onClick),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -34,9 +34,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray600
@@ -44,12 +46,12 @@ import org.sopt.official.designsystem.White
 
 @Composable
 fun MyPageButton(
-    paddingShape: Dp,
     style: TextStyle,
     paddingVertical: Dp,
     @StringRes text: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    shape: Shape = RoundedCornerShape(10.dp),
     isEnabled: Boolean = true,
     containerColor: Color = White,
     contentColor: Color = Black
@@ -64,7 +66,7 @@ fun MyPageButton(
             disabledContainerColor = Gray600,
             disabledContentColor = Gray300
         ),
-        shape = RoundedCornerShape(paddingShape),
+        shape = shape,
         onClick = onClick
     ) {
         Text(

@@ -99,7 +99,6 @@ fun MyPageDialog(
             ) {
                 MyPageButton(
                     modifier = Modifier.weight(1f),
-                    paddingShape = 10.dp,
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
                     text = negativeText,
@@ -110,7 +109,6 @@ fun MyPageDialog(
                 Spacer(modifier = Modifier.width(6.dp))
                 MyPageButton(
                     modifier = Modifier.weight(1f),
-                    paddingShape = 10.dp,
                     style = SoptTheme.typography.body14M,
                     paddingVertical = 9.dp,
                     text = positiveText,

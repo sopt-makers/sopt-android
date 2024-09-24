@@ -65,7 +65,7 @@ fun MyPageSection(items: List<MyPageUiModel>) {
                 is MyPageUiModel.MyPageItem -> {
                     MyPageItem(
                         text = item.title,
-                        onButtonClick = item.onItemClick
+                        onClick = item.onItemClick
                     )
                     Spacer(modifier = Modifier.height(22.dp))
                 }
