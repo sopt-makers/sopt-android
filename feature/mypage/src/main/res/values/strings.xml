@@ -26,14 +26,6 @@
     <!--    mypage    -->
     <string name="toolbar_mypage">마이페이지</string>
     <string name="mypage_change_nickname">닉네임 변경</string>
-    <string name="mypage_alert_soptamp_reset_title">미션을 초기화 하실건가요?</string>
-    <string name="mypage_alert_soptamp_reset_subtitle">사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.</string>
-    <string name="mypage_alert_soptamp_reset_positive">초기화</string>
-    <string name="mypage_alert_soptamp_reset_negative">취소</string>
-    <string name="mypage_alert_log_out_title">로그아웃</string>
-    <string name="mypage_alert_log_out_subtitle">정말 로그아웃을 하실 건가요?</string>
-    <string name="mypage_alert_log_out_positive">로그아웃</string>
-    <string name="mypage_alert_log_out_negative">취소</string>
 
     <!--    탈퇴하기    -->
     <string name="toolbar_sign_out">탈퇴하기</string>

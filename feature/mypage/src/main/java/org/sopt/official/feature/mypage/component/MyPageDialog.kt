@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.mypage.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +37,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,15 +48,14 @@ import org.sopt.official.designsystem.Gray600
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.mypage.R
 
 @Composable
 fun MyPageDialog(
     onDismissRequest: () -> Unit,
-    @StringRes title: Int,
-    @StringRes subTitle: Int,
-    @StringRes negativeText: Int,
-    @StringRes positiveText: Int,
+    title: String,
+    subTitle: String,
+    negativeText: String,
+    positiveText: String,
     modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
     onPositiveButtonClick: () -> Unit = {}
@@ -78,13 +75,13 @@ fun MyPageDialog(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                text = stringResource(id = title),
+                text = title,
                 color = White,
                 style = SoptTheme.typography.heading16B
             )
             Spacer(modifier = Modifier.height(28.dp))
             Text(
-                text = stringResource(id = subTitle),
+                text = subTitle,
                 color = Gray100,
                 style = SoptTheme.typography.body14M,
                 textAlign = TextAlign.Center,
@@ -104,7 +101,7 @@ fun MyPageDialog(
                     contentColor = Gray10,
                 ) {
                     Text(
-                        text = stringResource(negativeText),
+                        text = negativeText,
                         style = SoptTheme.typography.body14M
                     )
                 }
@@ -114,7 +111,7 @@ fun MyPageDialog(
                     onClick = onPositiveButtonClick,
                 ) {
                     Text(
-                        text = stringResource(positiveText),
+                        text = positiveText,
                         style = SoptTheme.typography.body14M
                     )
                 }
@@ -129,10 +126,10 @@ fun MyPageDialogPreview() {
     SoptTheme {
         MyPageDialog(
             onDismissRequest = {},
-            title = R.string.mypage_alert_soptamp_reset_title,
-            subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
-            negativeText = R.string.mypage_alert_soptamp_reset_negative,
-            positiveText = R.string.mypage_alert_soptamp_reset_positive
+            title = "미션을 초기화 하실건가요?",
+            subTitle = "사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
+            negativeText = "취소",
+            positiveText = "초기화"
         )
     }
 }

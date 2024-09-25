@@ -58,7 +58,6 @@ import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
@@ -249,10 +248,10 @@ private fun ShowMyPageDialog(
         MyPageAction.CLEAR_SOPTAMP -> {
             MyPageDialog(
                 onDismissRequest = onDismissRequest,
-                title = R.string.mypage_alert_soptamp_reset_title,
-                subTitle = R.string.mypage_alert_soptamp_reset_subtitle,
-                negativeText = R.string.mypage_alert_soptamp_reset_negative,
-                positiveText = R.string.mypage_alert_soptamp_reset_positive,
+                title = "미션을 초기화 하실건가요?",
+                subTitle = "사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
+                negativeText = "취소",
+                positiveText = "초기화",
                 onPositiveButtonClick = onClearSoptampClick
             )
         }
@@ -260,10 +259,10 @@ private fun ShowMyPageDialog(
         MyPageAction.LOGOUT -> {
             MyPageDialog(
                 onDismissRequest = onDismissRequest,
-                title = R.string.mypage_alert_log_out_title,
-                subTitle = R.string.mypage_alert_log_out_subtitle,
-                negativeText = R.string.mypage_alert_log_out_negative,
-                positiveText = R.string.mypage_alert_log_out_positive,
+                title = "로그아웃",
+                subTitle = "정말 로그아웃을 하실 건가요?",
+                negativeText = "취소",
+                positiveText = "로그아웃",
                 onPositiveButtonClick = onLogoutClick
             )
         }
