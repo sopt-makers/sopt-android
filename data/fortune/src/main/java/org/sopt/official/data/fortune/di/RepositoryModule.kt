@@ -1,18 +1,18 @@
 package org.sopt.official.data.fortune.di
 
+import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.data.fortune.remote.api.FortuneApi
 import org.sopt.official.data.fortune.repository.DefaultFortuneRepository
+import org.sopt.official.domain.fortune.repository.FortuneRepository
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object RepositoryModule {
+internal interface RepositoryModule {
 
-    @Provides
+    @Binds
     @Singleton
-    fun provideDefaultFortuneRepository(fortuneApi: FortuneApi): DefaultFortuneRepository = DefaultFortuneRepository(fortuneApi)
+    abstract fun bindDefaultFortuneRepository(defaultFortuneRepository: DefaultFortuneRepository): FortuneRepository
 }

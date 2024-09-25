@@ -1,17 +1,17 @@
 package org.sopt.official.data.fortune.repository
 
+import org.sopt.official.data.fortune.mapper.toDomain
 import org.sopt.official.data.fortune.remote.api.FortuneApi
+import org.sopt.official.domain.fortune.model.TodayFortuneCard
+import org.sopt.official.domain.fortune.model.TodayFortuneWord
+import org.sopt.official.domain.fortune.repository.FortuneRepository
 import javax.inject.Inject
 
-class DefaultFortuneRepository @Inject constructor(
+internal class DefaultFortuneRepository @Inject constructor(
     private val fortuneApi: FortuneApi,
-) {
+) : FortuneRepository {
 
-    suspend fun fetchTodayFortuneWord() {
-        fortuneApi
-    }
+    override suspend fun fetchTodayFortuneWord(date: String): TodayFortuneWord = fortuneApi.getTodayFortuneWord(date).toDomain()
 
-    suspend fun fetchTodayFortuneCard() {
-        fortuneApi
-    }
+    override suspend fun fetchTodayFortuneCard(): TodayFortuneCard = fortuneApi.getTodayFortuneCard().toDomain()
 }

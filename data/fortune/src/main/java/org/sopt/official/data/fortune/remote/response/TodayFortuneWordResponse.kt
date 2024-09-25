@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TodayFortuneWordResponse(
+internal data class TodayFortuneWordResponse(
     @SerialName("userName")
     val userName: String,
     @SerialName("title")

@@ -24,17 +24,13 @@
  */
 
 plugins {
-    sopt("feature")
+    sopt("kotlin")
 }
 
-android {
-    namespace = "org.sopt.official.data.fortune"
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
-    implementation(projects.domain.fortune)
-    implementation(projects.core.network)
-    implementation(projects.core.common)
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.bundles.okhttp)
+    implementation(libs.javax.inject)
 }

@@ -41,5 +41,5 @@ include(
     ":feature:poke",
     ":feature:fortune"
 )
-include(":domain:fortune")
 include(":data:fortune")
+include(":domain:fortune")
