@@ -195,7 +195,7 @@ class MyPageActivity : AppCompatActivity() {
                     .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
-                            title = R.string.toolbar_mypage,
+                            title = "마이페이지",
                             onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }

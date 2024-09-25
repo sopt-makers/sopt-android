@@ -78,7 +78,7 @@ class SignOutActivity : AppCompatActivity() {
                     .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
-                            title = R.string.toolbar_sign_out,
+                            title = "마이페이지",
                             onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }

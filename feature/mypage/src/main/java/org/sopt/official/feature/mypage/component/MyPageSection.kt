@@ -39,7 +39,6 @@ import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.model.MyPageUiModel
 import kotlinx.collections.immutable.ImmutableList
-
 @Composable
 fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
     Column(

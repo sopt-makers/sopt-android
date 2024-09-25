@@ -79,7 +79,7 @@ class AdjustSentenceActivity : AppCompatActivity() {
                     .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
-                            title = R.string.toolbar_adjust_sentence,
+                            title = "한 마디 편집",
                             onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }

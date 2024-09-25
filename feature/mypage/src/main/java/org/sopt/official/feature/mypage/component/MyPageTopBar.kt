@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.mypage.component
 
-import androidx.annotation.StringRes
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,14 +33,13 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageTopBar(
-    @StringRes title: Int,
+    title: String,
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -49,7 +47,7 @@ fun MyPageTopBar(
         modifier = modifier,
         title = {
             Text(
-                text = stringResource(id = title),
+                text = title,
                 style = SoptTheme.typography.body16M
             )
         },
