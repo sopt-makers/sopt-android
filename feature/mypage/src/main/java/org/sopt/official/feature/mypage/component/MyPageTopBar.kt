@@ -42,7 +42,7 @@ import org.sopt.official.feature.mypage.R
 @Composable
 fun MyPageTopBar(
     @StringRes title: Int,
-    onIconClick: () -> Unit,
+    onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     CenterAlignedTopAppBar(
@@ -54,7 +54,7 @@ fun MyPageTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onIconClick) {
+            IconButton(onClick = onNavigationIconClick) {
                 Icon(
                     painterResource(R.drawable.btn_arrow_left),
                     contentDescription = "navigation icon",

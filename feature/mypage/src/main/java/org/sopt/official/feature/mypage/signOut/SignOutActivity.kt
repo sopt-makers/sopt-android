@@ -78,7 +78,7 @@ class SignOutActivity : AppCompatActivity() {
                     topBar = {
                         MyPageTopBar(
                             title = R.string.toolbar_sign_out,
-                            onIconClick = { onBackPressedDispatcher.onBackPressed() }
+                            onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }
                 ) { innerPadding ->

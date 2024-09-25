@@ -80,7 +80,7 @@ class AdjustSentenceActivity : AppCompatActivity() {
                     topBar = {
                         MyPageTopBar(
                             title = R.string.toolbar_adjust_sentence,
-                            onIconClick = { onBackPressedDispatcher.onBackPressed() }
+                            onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }
                 ) { innerPadding ->

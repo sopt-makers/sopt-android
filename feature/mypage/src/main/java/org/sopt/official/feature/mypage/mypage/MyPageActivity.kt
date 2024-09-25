@@ -185,7 +185,7 @@ class MyPageActivity : AppCompatActivity() {
                     topBar = {
                         MyPageTopBar(
                             title = R.string.toolbar_mypage,
-                            onIconClick = { onBackPressedDispatcher.onBackPressed() }
+                            onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
                         )
                     }
                 ) { innerPadding ->
