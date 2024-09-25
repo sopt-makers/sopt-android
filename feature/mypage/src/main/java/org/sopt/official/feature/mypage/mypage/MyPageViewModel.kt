@@ -59,7 +59,7 @@ class MyPageViewModel @Inject constructor(
         .map { it.activeState != UserActiveState.UNAUTHENTICATED }
 
     private val _dialogState: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
-    val dialogState: StateFlow<MyPageUiState> get() = _dialogState.asStateFlow()
+    val dialogState: StateFlow<MyPageUiState> = _dialogState.asStateFlow()
 
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
