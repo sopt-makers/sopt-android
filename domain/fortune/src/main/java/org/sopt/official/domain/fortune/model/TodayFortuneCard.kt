@@ -1,6 +1,6 @@
 package org.sopt.official.domain.fortune.model
 
-internal data class TodayFortuneCard(
+data class TodayFortuneCard(
     val description: String,
     val imageColorCode: String,
     val imageUrl: String,
