@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortundDetail.component
+package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

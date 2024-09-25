@@ -1,4 +1,4 @@
-package org.sopt.official.feature.fortune.feature.fortundDetail.component
+package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

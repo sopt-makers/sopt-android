@@ -22,48 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortundDetail
+package org.sopt.official.feature.fortune.feature.fortuneDetail.navigation
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.feature.fortundDetail.component.TodayFortuneDashboard
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
+import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailRoute
 
-@Composable
-internal fun FortuneDetailScreen(
+@Serializable
+data class FortuneDetail(val date: String)
+
+fun NavGraphBuilder.fortuneDetailNavGraph(
     paddingValue: PaddingValues,
-    date: String,
     navigateToFortuneAmulet: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .padding(paddingValues = paddingValue)
-            .fillMaxSize(),
-    ) {
-        Spacer(modifier = Modifier.height(height = 16.dp))
-        TodayFortuneDashboard(date)
-    }
-}
-
-@Preview
-@Composable
-private fun FortuneDetailScreenPreview() {
-    SoptTheme {
-        FortuneDetailScreen(
-            paddingValue = PaddingValues(16.dp),
-            date = "2024-09-09",
-            navigateToFortuneAmulet = {},
+    composable<FortuneDetail> { backStackEntry ->
+        val items = backStackEntry.toRoute<FortuneDetail>()
+        FortuneDetailRoute(
+            paddingValue = paddingValue,
+            date = items.date,
+            navigateToFortuneAmulet = navigateToFortuneAmulet
         )
     }
 }

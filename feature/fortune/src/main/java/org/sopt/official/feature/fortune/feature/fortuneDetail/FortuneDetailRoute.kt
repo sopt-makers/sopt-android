@@ -1,4 +1,4 @@
-package org.sopt.official.feature.fortune.feature.fortundDetail
+package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
