@@ -26,13 +26,13 @@ package org.sopt.official.feature.mypage.component
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -73,10 +73,10 @@ fun MyPageDialog(
                 .background(
                     color = Gray700,
                     shape = RoundedCornerShape(10.dp)
-                ),
+                )
+                .padding(top = 26.dp, bottom = 12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(26.dp))
             Text(
                 text = stringResource(id = title),
                 color = White,
@@ -93,7 +93,8 @@ fun MyPageDialog(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 7.dp)
+                    .padding(horizontal = 7.dp),
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
                 MyPageButton(
                     modifier = Modifier.weight(1f),
@@ -107,7 +108,6 @@ fun MyPageDialog(
                         style = SoptTheme.typography.body14M
                     )
                 }
-                Spacer(modifier = Modifier.width(6.dp))
                 MyPageButton(
                     modifier = Modifier.weight(1f),
                     paddingVertical = 9.dp,
@@ -119,7 +119,6 @@ fun MyPageDialog(
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }

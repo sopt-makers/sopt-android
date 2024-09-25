@@ -24,6 +24,7 @@
 -->
 <resources>
     <!--    mypage    -->
+    <string name="toolbar_mypage">마이페이지</string>
     <string name="mypage_change_nickname">닉네임 변경</string>
     <string name="mypage_alert_soptamp_reset_title">미션을 초기화 하실건가요?</string>
     <string name="mypage_alert_soptamp_reset_subtitle">사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.</string>
