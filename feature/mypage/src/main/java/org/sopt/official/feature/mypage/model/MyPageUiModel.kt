@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.component
+package org.sopt.official.feature.mypage.model
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import coil.compose.AsyncImage
+import androidx.compose.runtime.Immutable
 
-@Composable
-fun UrlImage(
-    url: String,
-    modifier: Modifier = Modifier,
-    contentDescription: String? = null,
-) {
-    AsyncImage(
-        model = url,
-        contentDescription = contentDescription,
-        modifier = modifier
-    )
-}
+sealed interface MyPageUiModel {
+    @Immutable
+    data class Header(
+        val title: String
+    ) : MyPageUiModel
 
-@Preview
-@Composable
-fun UrlImagePreview() {
-    UrlImage(
-        url = ""
-    )
+    @Immutable
+    data class MyPageItem(
+        val title: String,
+        val onItemClick: () -> Unit
+    ) : MyPageUiModel
 }

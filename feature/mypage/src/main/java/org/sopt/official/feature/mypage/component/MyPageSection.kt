@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,73 +22,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortundDetail
+package org.sopt.official.feature.mypage.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Gray400
+import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.mypage.model.MyPageUiModel
+import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun FortuneDetailRoute(
-    paddingValue: PaddingValues,
-    date: String,
-    navigateToFortuneAmulet: () -> Unit,
-) {
-    FortuneDetailScreen(
-        paddingValue = paddingValue,
-        date = date,
-        navigateToFortuneAmulet = navigateToFortuneAmulet
-    )
-}
-
-@Composable
-fun FortuneDetailScreen(
-    paddingValue: PaddingValues,
-    date: String,
-    navigateToFortuneAmulet: () -> Unit,
-) {
+fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
     Column(
         modifier = Modifier
-            .padding(paddingValue)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 20.dp)
+            .background(
+                color = Gray900,
+                shape = RoundedCornerShape(10.dp)
+            )
+            .padding(top = 16.dp, bottom = 5.dp)
     ) {
-        Text(
-            text = "Fortune Detail Screen: $date",
-            color = SoptTheme.colors.onBackground
-        )
+        items.forEach { item ->
+            when (item) {
+                is MyPageUiModel.Header -> {
+                    Text(
+                        text = item.title,
+                        style = SoptTheme.typography.label12SB,
+                        color = Gray400,
+                        modifier = Modifier.padding(start = 16.dp)
+                    )
+                    Spacer(modifier = Modifier.height(23.dp))
+                }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = navigateToFortuneAmulet
-        ) {
-            Text(text = "Go to Fortune Amulet")
+                is MyPageUiModel.MyPageItem -> {
+                    MyPageItem(
+                        text = item.title,
+                        onClick = item.onItemClick
+                    )
+                    Spacer(modifier = Modifier.height(22.dp))
+                }
+            }
         }
-        Spacer(modifier = Modifier.height(50.dp))
-    }
-}
-
-
-@Preview
-@Composable
-fun FortuneDetailScreenPreview() {
-    SoptTheme {
-        FortuneDetailScreen(
-            paddingValue = PaddingValues(16.dp),
-            date = "2024-09-09",
-            navigateToFortuneAmulet = {}
-        )
     }
 }

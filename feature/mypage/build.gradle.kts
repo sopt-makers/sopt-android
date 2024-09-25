@@ -25,6 +25,7 @@
 
 plugins {
     sopt("feature")
+    sopt("compose")
 }
 
 android {
@@ -41,4 +42,5 @@ dependencies {
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
     implementation(libs.process.phoenix)
+    implementation(libs.kotlin.collections.immutable)
 }
