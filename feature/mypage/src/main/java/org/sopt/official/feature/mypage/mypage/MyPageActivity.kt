@@ -44,15 +44,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
@@ -92,70 +93,80 @@ class MyPageActivity : AppCompatActivity() {
                 val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
-                val serviceSectionItems = listOf(
-                    MyPageUiModel.Header(title = stringResource(R.string.mypage_service_info_title)),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_private_info),
-                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))) }
-                    ),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_service_rule),
-                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))) }
-                    ),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_send_opinion),
-                        onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) }
+                val serviceSectionItems = remember {
+                    persistentListOf(
+                        MyPageUiModel.Header(title = "서비스 이용 방침"),
+                        MyPageUiModel.MyPageItem(
+                            title = "개인정보 처리 방침",
+                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))) }
+                        ),
+                        MyPageUiModel.MyPageItem(
+                            title = "서비스 이용약관",
+                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))) }
+                        ),
+                        MyPageUiModel.MyPageItem(
+                            title = "의견 보내기",
+                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) }
+                        )
                     )
-                )
+                }
 
-                val notificationSectionItems = listOf(
-                    MyPageUiModel.Header(title = stringResource(R.string.mypage_notification_setting)),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_notification),
-                        onItemClick = {
-                            Intent().apply {
-                                action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
-                                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-                                startActivity(this)
+                val notificationSectionItems = remember {
+                    persistentListOf(
+                        MyPageUiModel.Header(title = "알림 설정"),
+                        MyPageUiModel.MyPageItem(
+                            title = "알림 설정하기",
+                            onItemClick = {
+                                Intent().apply {
+                                    action = Settings.ACTION_APP_NOTIFICATION_SETTINGS
+                                    putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                                    startActivity(this)
+                                }
                             }
-                        }
+                        )
                     )
-                )
+                }
 
-                val soptampSectionItems = listOf(
-                    MyPageUiModel.Header(title = stringResource(R.string.mypage_soptamp_setting_title)),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_adjust_sentence),
-                        onItemClick = { startActivity(AdjustSentenceActivity.getIntent(context)) }
-                    ),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_reset_stamp),
-                        onItemClick = { viewModel.showDialogState(MyPageAction.CLEAR_SOPTAMP) }
+                val soptampSectionItems = remember {
+                    persistentListOf(
+                        MyPageUiModel.Header(title = "솝탬프 설정"),
+                        MyPageUiModel.MyPageItem(
+                            title = "한 마디 편집",
+                            onItemClick = { startActivity(AdjustSentenceActivity.getIntent(context)) }
+                        ),
+                        MyPageUiModel.MyPageItem(
+                            title = "스탬프 초기화",
+                            onItemClick = { viewModel.showDialogState(MyPageAction.CLEAR_SOPTAMP) }
+                        )
                     )
-                )
+                }
 
-                val etcSectionItems = listOf(
-                    MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_log_out),
-                        onItemClick = { viewModel.showDialogState(MyPageAction.LOGOUT) }
-                    ),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_sign_out),
-                        onItemClick = { startActivity(SignOutActivity.getIntent(context)) }
+                val etcSectionItems = remember {
+                    persistentListOf(
+                        MyPageUiModel.Header(title = "기타"),
+                        MyPageUiModel.MyPageItem(
+                            title = "로그아웃",
+                            onItemClick = { viewModel.showDialogState(MyPageAction.LOGOUT) }
+                        ),
+                        MyPageUiModel.MyPageItem(
+                            title = "탈퇴하기",
+                            onItemClick = { startActivity(SignOutActivity.getIntent(context)) }
+                        )
                     )
-                )
+                }
 
-                val etcLoginSectionItems = listOf(
-                    MyPageUiModel.Header(title = stringResource(R.string.mypage_etc_title)),
-                    MyPageUiModel.MyPageItem(
-                        title = stringResource(R.string.mypage_log_in),
-                        onItemClick = {
-                            setResult(ResultCode.LOG_IN.ordinal)
-                            onBackPressedDispatcher.onBackPressed()
-                        }
+                val etcLoginSectionItems = remember {
+                    persistentListOf(
+                        MyPageUiModel.Header(title = "기타"),
+                        MyPageUiModel.MyPageItem(
+                            title = "로그인",
+                            onItemClick = {
+                                setResult(ResultCode.LOG_IN.ordinal)
+                                onBackPressedDispatcher.onBackPressed()
+                            }
+                        )
                     )
-                )
+                }
 
                 LaunchedEffect(Unit) {
                     args?.userActiveState?.let {
