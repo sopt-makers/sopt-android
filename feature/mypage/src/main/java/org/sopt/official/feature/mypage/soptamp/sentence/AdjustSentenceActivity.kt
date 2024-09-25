@@ -34,6 +34,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -98,7 +99,9 @@ class AdjustSentenceActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(32.dp))
                         MyPageButton(
                             paddingVertical = 16.dp,
-                            modifier = Modifier.padding(20.dp),
+                            modifier = Modifier
+                                .padding(20.dp)
+                                .fillMaxWidth(),
                             onClick = { viewModel.adjustSentence() },
                             isEnabled = isConfirmed
                         ) {

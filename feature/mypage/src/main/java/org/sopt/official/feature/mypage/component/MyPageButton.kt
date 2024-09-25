@@ -24,19 +24,15 @@
  */
 package org.sopt.official.feature.mypage.component
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Black
@@ -48,7 +44,7 @@ import org.sopt.official.designsystem.White
 fun MyPageButton(
     paddingVertical: Dp,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     shape: Shape = RoundedCornerShape(10.dp),
     isEnabled: Boolean = true,
     containerColor: Color = White,
@@ -57,7 +53,7 @@ fun MyPageButton(
 ) {
     Button(
         contentPadding = PaddingValues(vertical = paddingVertical),
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier,
         enabled = isEnabled,
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
