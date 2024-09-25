@@ -39,6 +39,7 @@ import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.model.MyPageUiModel
 import kotlinx.collections.immutable.ImmutableList
+
 @Composable
 fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
     Column(
@@ -48,8 +49,8 @@ fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
                 color = Gray900,
                 shape = RoundedCornerShape(10.dp)
             )
+            .padding(top = 16.dp, bottom = 5.dp)
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
         items.forEach { item ->
             when (item) {
                 is MyPageUiModel.Header -> {
@@ -71,6 +72,5 @@ fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
                 }
             }
         }
-        Spacer(modifier = Modifier.height(5.dp))
     }
 }
