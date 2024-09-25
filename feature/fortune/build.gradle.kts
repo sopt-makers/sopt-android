@@ -32,6 +32,9 @@ android {
 }
 
 dependencies {
+    // domain
+    implementation(projects.domain.fortune)
+
     // core
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
