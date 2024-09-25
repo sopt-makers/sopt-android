@@ -69,10 +69,6 @@ import org.sopt.official.feature.mypage.web.WebUrlConstant
 import java.io.Serializable
 import javax.inject.Inject
 
-enum class ResultCode {
-    LOG_IN
-}
-
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val viewModel by viewModels<MyPageViewModel>()
@@ -160,7 +156,6 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.MyPageItem(
                             title = "로그인",
                             onItemClick = {
-                                setResult(ResultCode.LOG_IN.ordinal)
                                 onBackPressedDispatcher.onBackPressed()
                             }
                         )
