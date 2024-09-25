@@ -30,65 +30,40 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.feature.fortundDetail.component.TodayFortuneDashboard
 
 @Composable
-fun FortuneDetailRoute(
+internal fun FortuneDetailScreen(
     paddingValue: PaddingValues,
     date: String,
     navigateToFortuneAmulet: () -> Unit,
-) {
-    FortuneDetailScreen(
-        paddingValue = paddingValue,
-        date = date,
-        navigateToFortuneAmulet = navigateToFortuneAmulet
-    )
-}
-
-@Composable
-fun FortuneDetailScreen(
-    paddingValue: PaddingValues,
-    date: String,
-    navigateToFortuneAmulet: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .padding(paddingValue)
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .padding(paddingValues = paddingValue)
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "Fortune Detail Screen: $date",
-            color = SoptTheme.colors.onBackground
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = navigateToFortuneAmulet
-        ) {
-            Text(text = "Go to Fortune Amulet")
-        }
-        Spacer(modifier = Modifier.height(50.dp))
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        TodayFortuneDashboard(date)
     }
 }
 
-
 @Preview
 @Composable
-fun FortuneDetailScreenPreview() {
+private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
             paddingValue = PaddingValues(16.dp),
             date = "2024-09-09",
-            navigateToFortuneAmulet = {}
+            navigateToFortuneAmulet = {},
         )
     }
 }
