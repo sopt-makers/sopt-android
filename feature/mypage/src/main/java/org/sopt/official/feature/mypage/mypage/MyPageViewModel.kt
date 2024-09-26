@@ -28,9 +28,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -41,15 +42,25 @@ import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber
+import javax.inject.Inject
+
+enum class MyPageAction {
+    CLEAR_SOPTAMP, LOGOUT
+}
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
+
     private val _userActiveState = MutableStateFlow<MyPageUiState>(MyPageUiState.UnInitialized)
     val userActiveState = _userActiveState.filterIsInstance<MyPageUiState.User>()
         .map { it.activeState != UserActiveState.UNAUTHENTICATED }
+
+    private val _dialogState: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
+    val dialogState: StateFlow<MyPageUiState> = _dialogState.asStateFlow()
+
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
@@ -79,4 +90,13 @@ class MyPageViewModel @Inject constructor(
                 .onFailure { Timber.e(it) }
         }
     }
+
+    fun showDialogState(action: MyPageAction) {
+        _dialogState.tryEmit(MyPageUiState.Dialog(action))
+    }
+
+    fun onDismiss() {
+        _dialogState.tryEmit(MyPageUiState.UnInitialized)
+    }
+
 }

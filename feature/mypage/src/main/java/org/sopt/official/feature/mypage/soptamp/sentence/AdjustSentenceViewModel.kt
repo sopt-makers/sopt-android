@@ -27,27 +27,30 @@ package org.sopt.official.feature.mypage.soptamp.sentence
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class AdjustSentenceViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val sentence = MutableStateFlow("")
+    private val _sentence: MutableStateFlow<String> = MutableStateFlow("")
+    val sentence: StateFlow<String> get() = _sentence.asStateFlow()
     val isConfirmed = sentence.map { it.isNotEmpty() }
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
     fun adjustSentence() {
         viewModelScope.launch {
-            userRepository.updateProfileMessage(sentence.value)
+            userRepository.updateProfileMessage(_sentence.value)
                 .onSuccess {
                     _finish.send(Unit)
                 }.onFailure {
@@ -58,6 +61,6 @@ class AdjustSentenceViewModel @Inject constructor(
     }
 
     fun onChange(new: String) {
-        sentence.value = new
+        _sentence.value = new
     }
 }

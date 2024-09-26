@@ -25,8 +25,10 @@
 package org.sopt.official.feature.mypage.model
 
 import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.feature.mypage.mypage.MyPageAction
 
 sealed interface MyPageUiState {
     data object UnInitialized : MyPageUiState
     data class User(val activeState: UserActiveState) : MyPageUiState
+    data class Dialog(val action: MyPageAction) : MyPageUiState
 }
