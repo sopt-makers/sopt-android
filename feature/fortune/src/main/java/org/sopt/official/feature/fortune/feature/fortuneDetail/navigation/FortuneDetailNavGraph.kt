@@ -43,7 +43,7 @@ fun NavGraphBuilder.fortuneDetailNavGraph(
         FortuneDetailRoute(
             paddingValue = paddingValue,
             date = items.date,
-            navigateToFortuneAmulet = navigateToFortuneAmulet
+            onFortuneAmuletClick = navigateToFortuneAmulet
         )
     }
 }
