@@ -66,7 +66,7 @@ class SoptColors(
     onSurface20: Color,
     onSurface10: Color,
     onSurface5: Color,
-    isLight: Boolean
+    isLight: Boolean,
 ) {
     var white by mutableStateOf(white)
         private set
@@ -217,7 +217,7 @@ fun soptLightColors(
     onSurface30: Color = Gray300,
     onSurface20: Color = Gray200,
     onSurface10: Color = Gray100,
-    onSurface5: Color = Gray50
+    onSurface5: Color = Gray50,
 ) = SoptColors(
     white,
     black,
@@ -278,7 +278,7 @@ fun soptDarkColors(
     onSurface30: Color = Gray300,
     onSurface20: Color = Gray200,
     onSurface10: Color = Gray100,
-    onSurface5: Color = Gray50
+    onSurface5: Color = Gray50,
 ) = SoptColors(
     white,
     black,
@@ -325,14 +325,18 @@ private val LocalSoptTypography = staticCompositionLocalOf<SoptTypography> {
 * Color에 접근하고 싶을때 SoptTheme.colors.primary 이런식으로 접근하면 됩니다.
 * Typo를 변경하고 싶다면 SoptTheme.typography.h1 이런식으로 접근하면 됩니다.
 * */
-object SoptTheme {
+internal object SoptTheme {
     val colors: SoptColors @Composable get() = LocalSoptColors.current
 
     val typography: SoptTypography @Composable get() = LocalSoptTypography.current
 }
 
 @Composable
-fun ProvideSoptColorsAndTypography(colors: SoptColors, typography: SoptTypography, content: @Composable () -> Unit) {
+fun ProvideSoptColorsAndTypography(
+    colors: SoptColors,
+    typography: SoptTypography,
+    content: @Composable () -> Unit,
+) {
     val provideColors = remember { colors.copy() }
     provideColors.update(colors)
     val provideTypography = remember { typography.copy() }
