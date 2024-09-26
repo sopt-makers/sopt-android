@@ -77,9 +77,13 @@ internal fun FortuneDetailScreen(
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
-            paddingValue = PaddingValues(vertical = 16.dp), date = "2024-09-09", onFortuneAmuletClick = {}, uiState = TodaySentence(
-                userName = "누누", content = "오늘 하루종일 기분 좋을 것 같은 날이네요."
-            )
+            paddingValue = PaddingValues(vertical = 16.dp),
+            date = "2024-09-09",
+            onFortuneAmuletClick = {},
+            uiState = TodaySentence(
+                userName = "누누",
+                content = "오늘 하루종일 기분 좋을 것 같은 날이네요.",
+            ),
         )
     }
 }
