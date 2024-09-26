@@ -178,6 +178,7 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
+    implementation(libs.kotlin.collections.immutable)
 }
 
 secrets {
