@@ -7,11 +7,11 @@ import retrofit2.http.Query
 
 internal interface FortuneApi {
 
-    @GET("api/v2/fortune/word")
+    @GET("fortune/word")
     suspend fun getTodayFortuneWord(
         @Query("todayDate") todayDate: String,
     ): TodayFortuneWordResponse
 
-    @GET("api/v2/fortune/card/today")
+    @GET("fortune/card/today")
     suspend fun getTodayFortuneCard(): TodayFortuneCardResponse
 }

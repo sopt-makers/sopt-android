@@ -16,5 +16,5 @@ internal object ApiModule {
 
     @Provides
     @Singleton
-    internal fun provideFortuneApi(@AppRetrofit retrofit: Retrofit): FortuneApi = retrofit.create()
+    internal fun provideFortuneApi(@AppRetrofit(true) retrofit: Retrofit): FortuneApi = retrofit.create()
 }
