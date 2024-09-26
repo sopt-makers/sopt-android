@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 
 @Stable
-sealed interface FortuneDetailUiState {
+internal sealed interface FortuneDetailUiState {
 
     @Immutable
     data class TodaySentence(

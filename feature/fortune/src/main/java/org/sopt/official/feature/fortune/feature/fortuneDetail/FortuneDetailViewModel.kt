@@ -16,7 +16,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import javax.inject.Inject
 
 @HiltViewModel
-class FortuneDetailViewModel @Inject constructor(
+internal class FortuneDetailViewModel @Inject constructor(
     getTodayFortuneUseCase: GetTodayFortuneUseCase,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
