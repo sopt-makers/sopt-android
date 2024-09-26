@@ -19,6 +19,7 @@ internal fun FortuneDetailRoute(
         paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
+        onPokeClick = {},
         uiState = uiState,
     )
 }

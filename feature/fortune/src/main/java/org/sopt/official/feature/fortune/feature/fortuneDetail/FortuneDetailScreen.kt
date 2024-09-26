@@ -41,13 +41,16 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFo
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
 
 @Composable
 internal fun FortuneDetailScreen(
     paddingValue: PaddingValues,
     date: String,
     onFortuneAmuletClick: () -> Unit,
+    onPokeClick: (userId: Long) -> Unit,
     modifier: Modifier = Modifier,
     uiState: FortuneDetailUiState = Loading,
 ) {
@@ -59,17 +62,17 @@ internal fun FortuneDetailScreen(
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
         when (uiState) {
-            is TodaySentence -> {
+            is Success -> {
                 TodayFortuneDashboard(
                     date = date,
-                    todaySentence = uiState.message,
+                    todaySentence = uiState.todaySentence.message,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 PokeRecommendationDashboard(
-                    profile = "",
-                    name = "",
-                    generation = "",
-                    onPokeClick = { -> },
+                    profile = uiState.userInfo.profile,
+                    name = uiState.userInfo.userName,
+                    userDescription = uiState.userInfo.userDescription,
+                    onPokeClick = { onPokeClick(uiState.userInfo.userId) },
                 )
             }
 
@@ -92,10 +95,20 @@ private fun FortuneDetailScreenPreview() {
             paddingValue = PaddingValues(vertical = 16.dp),
             date = "2024-09-09",
             onFortuneAmuletClick = {},
-            uiState = TodaySentence(
-                userName = "누누",
-                content = "오늘 하루종일 기분 좋을 것 같은 날이네요."
-            )
+            uiState = Success(
+                todaySentence = TodaySentence(
+                    userName = "이현우",
+                    content = "사과해요나한테사과해요나한테사과해요나한테"
+                ),
+                userInfo = UserInfo(
+                    userId = 0L,
+                    profile = "",
+                    userName = "동민",
+                    generation = 111,
+                    part = "기획 파트"
+                )
+            ),
+            onPokeClick = { },
         )
     }
 }

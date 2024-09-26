@@ -57,7 +57,7 @@ import org.sopt.official.feature.fortune.component.UrlImage
 internal fun PokeRecommendationDashboard(
     profile: String,
     name: String,
-    generation: String,
+    userDescription: String,
     onPokeClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -100,7 +100,7 @@ internal fun PokeRecommendationDashboard(
                             color = Gray30,
                         )
                         Text(
-                            text = generation,
+                            text = userDescription,
                             style = SoptTheme.typography.label12SB,
                             color = Gray300,
                         )
@@ -134,7 +134,7 @@ private fun PokeRecommendationDashboardPreview() {
             profile = "123",
             name = "이현우",
             onPokeClick = { },
-            generation = "1100기 iOS",
+            userDescription = "1100기 iOS",
         )
     }
 }
