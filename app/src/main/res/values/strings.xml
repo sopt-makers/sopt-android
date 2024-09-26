@@ -27,6 +27,7 @@
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT-AMP!</string>
     <string name="poke">콕 찌르기</string>
+    <string name="close">닫기</string>
 
     <!--    메인홈    -->
     <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
@@ -102,6 +103,9 @@
     <string name="go_back">뒤로 가기</string>
     <string name="refresh">새로고침</string>
     <string name="attendance_app_bar_title">출석 조회하기</string>
+    <string name="attendance_do">%1$s하기</string>
+    <string name="attendance_code_description">출석 코드 다섯 자리를 입력해주세요.</string>
+    <string name="attendance_code_does_not_match">코드가 일치하지 않아요!</string>
 
     <!--    알림   -->
     <string name="toolbar_notification">알림</string>
