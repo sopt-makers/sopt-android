@@ -41,7 +41,7 @@ interface PokeRepository {
     suspend fun checkNewInPokeOnboarding(): Boolean
     suspend fun updateNewInPokeOnboarding()
     suspend fun checkNewInPoke(): CheckNewInPokeResponse
-    suspend fun getOnboardingPokeUserList(randomType: String, size: Int): GetOnboardingPokeUserListResponse
+    suspend fun getOnboardingPokeUserList(randomType: String? = null, size: Int): GetOnboardingPokeUserListResponse
     suspend fun getPokeMe(): GetPokeMeResponse
     suspend fun getPokeFriend(): GetPokeFriendResponse
     suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse
@@ -49,9 +49,9 @@ interface PokeRepository {
 
     suspend fun getFriendListSummary(): GetFriendListSummaryResponse
 
-    suspend fun getFriendListDetail(type: PokeFriendType, page: Int,): GetFriendListDetailResponse
+    suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse
 
-    suspend fun getPokeMessageList(messageType: PokeMessageType,): GetPokeMessageListResponse
+    suspend fun getPokeMessageList(messageType: PokeMessageType): GetPokeMessageListResponse
 
-    suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String,): PokeUserResponse
+    suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): PokeUserResponse
 }

@@ -46,8 +46,8 @@ interface PokeService {
 
     @GET("poke/random")
     suspend fun getOnboardingPokeUserList(
-        @Query("randomType") randomType: String,
-        @Query("size") size: Int
+        @Query("randomType") randomType: String?,
+        @Query("size") size: Int,
     ): Response<PokeRandomUserListResult>
 
     @GET("poke/to/me")
@@ -60,16 +60,16 @@ interface PokeService {
     suspend fun getPokeFriendOfFriendList(): Response<List<PokeFriendOfFriendListResult>>
 
     @GET("poke/to/me/list")
-    suspend fun getPokeNotificationList(@Query("page") page: Int,): Response<PokeNotificationResult>
+    suspend fun getPokeNotificationList(@Query("page") page: Int): Response<PokeNotificationResult>
 
     @GET("poke/friend/list")
     suspend fun getFriendListSummary(): Response<GetFriendListSummaryResult>
 
     @GET("poke/friend/list")
-    suspend fun getFriendListDetail(@Query("type") type: String, @Query("page") page: Int,): Response<GetFriendListDetailResult>
+    suspend fun getFriendListDetail(@Query("type") type: String, @Query("page") page: Int): Response<GetFriendListDetailResult>
 
     @GET("poke/message")
-    suspend fun getPokeMessageList(@Query("messageType") messageType: String,): Response<GetPokeMessageListResult>
+    suspend fun getPokeMessageList(@Query("messageType") messageType: String): Response<GetPokeMessageListResult>
 
     @PUT("poke/{userId}")
     suspend fun pokeUser(@Path("userId") userId: Int, @Body pokeMessageRequest: PokeMessageRequest): Response<PokeUserResult>
