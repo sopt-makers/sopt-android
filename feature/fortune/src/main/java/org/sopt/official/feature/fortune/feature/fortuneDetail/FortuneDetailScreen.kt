@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeRecommendationDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
@@ -63,6 +64,13 @@ internal fun FortuneDetailScreen(
                     date = date,
                     todaySentence = uiState.message,
                 )
+                Spacer(modifier = Modifier.height(height = 20.dp))
+                PokeRecommendationDashboard(
+                    profile = "",
+                    name = "",
+                    generation = "",
+                    onPokeClick = { -> },
+                )
             }
 
             is Error -> {
@@ -76,7 +84,7 @@ internal fun FortuneDetailScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
