@@ -26,7 +26,6 @@ package org.sopt.official.auth.impl.api
 
 import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.impl.model.response.LogOutRequest
-import org.sopt.official.auth.impl.model.response.LogOutResponse
 import org.sopt.official.network.model.response.AuthResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -41,5 +40,5 @@ interface AuthService {
     suspend fun withdraw()
 
     @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
-    suspend fun logOut(@Body body: LogOutRequest): LogOutResponse
+    suspend fun logOut(@Body body: LogOutRequest)
 }

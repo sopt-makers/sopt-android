@@ -27,7 +27,6 @@ package org.sopt.official.auth.impl.remote
 import javax.inject.Inject
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.response.LogOutRequest
-import org.sopt.official.auth.impl.model.response.LogOutResponse
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
 import org.sopt.official.common.di.Auth
 import org.sopt.official.network.model.request.RefreshRequest
@@ -46,7 +45,7 @@ class DefaultRemoteAuthDataSource @Inject constructor(
         authService.withdraw()
     }
 
-    override suspend fun logout(request: LogOutRequest): LogOutResponse {
-        return authService.logOut(request)
+    override suspend fun logout(request: LogOutRequest) {
+        authService.logOut(request)
     }
 }
