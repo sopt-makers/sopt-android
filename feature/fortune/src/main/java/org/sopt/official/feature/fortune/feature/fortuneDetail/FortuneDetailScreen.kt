@@ -41,6 +41,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
+import timber.log.Timber
 
 @Composable
 internal fun FortuneDetailScreen(
@@ -52,9 +53,7 @@ internal fun FortuneDetailScreen(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(paddingValues = paddingValue),
+        modifier = modifier.fillMaxSize().padding(paddingValues = paddingValue),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
         when (uiState) {
@@ -65,10 +64,7 @@ internal fun FortuneDetailScreen(
                 )
             }
 
-            is Error -> {
-                // 오류 처리
-            }
-
+            is Error -> Timber.e(uiState.errorMessage)
             is Loading -> {
                 // 로딩 뷰
             }
@@ -81,12 +77,8 @@ internal fun FortuneDetailScreen(
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
-            paddingValue = PaddingValues(vertical = 16.dp),
-            date = "2024-09-09",
-            onFortuneAmuletClick = {},
-            uiState = TodaySentence(
-                userName = "누누",
-                content = "오늘 하루종일 기분 좋을 것 같은 날이네요."
+            paddingValue = PaddingValues(vertical = 16.dp), date = "2024-09-09", onFortuneAmuletClick = {}, uiState = TodaySentence(
+                userName = "누누", content = "오늘 하루종일 기분 좋을 것 같은 날이네요."
             )
         )
     }
