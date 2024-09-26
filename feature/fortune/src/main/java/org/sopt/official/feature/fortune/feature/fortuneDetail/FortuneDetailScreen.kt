@@ -37,13 +37,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
 
 @Composable
 internal fun FortuneDetailScreen(
     paddingValue: PaddingValues,
     date: String,
-    navigateToFortuneAmulet: () -> Unit,
+    onFortuneAmuletClick: () -> Unit,
     modifier: Modifier = Modifier,
+    uiState: FortuneDetailUiState = Loading,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,7 +57,22 @@ internal fun FortuneDetailScreen(
             .padding(paddingValues = paddingValue),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
-        TodayFortuneDashboard(date)
+        when (uiState) {
+            is TodaySentence -> {
+                TodayFortuneDashboard(
+                    date = date,
+                    todaySentence = uiState.message,
+                )
+            }
+
+            is Error -> {
+                // 오류 처리
+            }
+
+            is Loading -> {
+                // 로딩 뷰
+            }
+        }
     }
 }
 
@@ -63,7 +83,11 @@ private fun FortuneDetailScreenPreview() {
         FortuneDetailScreen(
             paddingValue = PaddingValues(vertical = 16.dp),
             date = "2024-09-09",
-            navigateToFortuneAmulet = {},
+            onFortuneAmuletClick = {},
+            uiState = TodaySentence(
+                userName = "누누",
+                content = "오늘 하루종일 기분 좋을 것 같은 날이네요."
+            )
         )
     }
 }
