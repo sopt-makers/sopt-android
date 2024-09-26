@@ -27,12 +27,15 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray100
@@ -43,6 +46,7 @@ import org.sopt.official.feature.fortune.R
 @Composable
 fun TodayFortuneDashboard(
     date: String,
+    todaySentence: String,
     modifier: Modifier = Modifier,
 ) {
     TodayFortuneBox(
@@ -64,9 +68,13 @@ fun TodayFortuneDashboard(
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 Text(
-                    text = date,
+                    text = todaySentence,
                     style = SoptTheme.typography.title24SB,
                     color = Gray30,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 68.dp),
                 )
                 Spacer(modifier = Modifier.height(height = 36.dp))
             }
@@ -78,6 +86,9 @@ fun TodayFortuneDashboard(
 @Composable
 private fun TodayFortuneDashboardPreview() {
     SoptTheme {
-        TodayFortuneDashboard(date = "123")
+        TodayFortuneDashboard(
+            date = "2024-09-09",
+            todaySentence = "안녕하세우안녕하세우안녕하세우안녕하세우안녕하세우안녕하세우",
+        )
     }
 }
