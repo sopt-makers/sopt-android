@@ -17,8 +17,7 @@ class NewAttendanceViewModel @Inject constructor(
         fetchData()
     }
 
-    private val _uiState: MutableStateFlow<AttendanceUiState> =
-        MutableStateFlow(AttendanceUiState.Loading)
+    private val _uiState: MutableStateFlow<AttendanceUiState> = MutableStateFlow(AttendanceUiState.Loading)
     val uiState: StateFlow<AttendanceUiState> = _uiState
 
 
