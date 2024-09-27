@@ -37,10 +37,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.FortuneTopBar
-import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.FortuneDetail
-import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.fortuneDetailNavGraph
 import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.FortuneAmulet
 import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.fortuneAmuletNavGraph
+import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.FortuneDetail
+import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.fortuneDetailNavGraph
 import org.sopt.official.feature.fortune.feature.home.navigation.Home
 import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 
@@ -67,7 +67,6 @@ fun FoundationScreen(
                     startDestination = Home
                 ) {
                     homeNavGraph(
-                        paddingValue = paddingValue,
                         navigateToFortuneDetail = { date ->
                             navController.navigate(FortuneDetail(date))
                         }
@@ -81,7 +80,6 @@ fun FoundationScreen(
                     )
 
                     fortuneAmuletNavGraph(
-                        paddingValue = paddingValue,
                         navigateToHome = {
                             // TODO: Navigate to Home
                         }
