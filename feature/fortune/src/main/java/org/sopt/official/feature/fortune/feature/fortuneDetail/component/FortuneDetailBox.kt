@@ -23,7 +23,6 @@ internal fun TodayFortuneBox(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp)
             .background(
                 color = Gray700,
                 shape = RoundedCornerShape(12.dp),

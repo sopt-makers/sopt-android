@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.feature.fortuneDetail.component.FortuneDetailButton
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeRecommendationDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
@@ -59,7 +60,8 @@ internal fun FortuneDetailScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues = paddingValue),
+            .padding(paddingValues = paddingValue)
+            .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
         when (uiState) {
@@ -74,6 +76,11 @@ internal fun FortuneDetailScreen(
                     name = uiState.userInfo.userName,
                     userDescription = uiState.userInfo.userDescription,
                     onPokeClick = { onPokeClick(uiState.userInfo.userId) },
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                FortuneDetailButton(
+                    onButtonClick = onFortuneAmuletClick,
+                    buttonTitle = "오늘의 부적 받기"
                 )
             }
 
