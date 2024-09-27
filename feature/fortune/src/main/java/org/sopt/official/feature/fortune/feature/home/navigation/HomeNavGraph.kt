@@ -34,12 +34,10 @@ import org.sopt.official.feature.fortune.feature.home.HomeRoute
 data object Home
 
 fun NavGraphBuilder.homeNavGraph(
-    paddingValue: PaddingValues,
     navigateToFortuneDetail: (String) -> Unit,
 ) {
     composable<Home> {
         HomeRoute(
-            paddingValue = paddingValue,
             navigateToFortuneDetail = navigateToFortuneDetail
         )
     }
