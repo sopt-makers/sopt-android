@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,10 +34,12 @@ internal class FortuneDetailViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             runCatching {
-                awaitAll(
-                    async { getTodayFortuneUseCase() },
-                    async { pokeRepository.getOnboardingPokeUserList(size = 1) }
-                )
+                coroutineScope {
+                    awaitAll(
+                        async { getTodayFortuneUseCase() },
+                        async { pokeRepository.getOnboardingPokeUserList(size = 1) }
+                    )
+                }
             }.onSuccess { result ->
                 val todayFortune = result[0] as TodayFortuneWord
                 val pokeUser = result[1] as GetOnboardingPokeUserListResponse
