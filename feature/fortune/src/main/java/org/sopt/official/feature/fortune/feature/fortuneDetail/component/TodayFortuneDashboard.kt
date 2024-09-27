@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -71,7 +72,9 @@ internal fun TodayFortuneDashboard(
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 Text(
                     text = todaySentence,
-                    style = SoptTheme.typography.title24SB,
+                    style = SoptTheme.typography.title24SB.copy(
+                        lineBreak = LineBreak.Simple,
+                    ),
                     color = Gray30,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
@@ -91,7 +94,7 @@ private fun TodayFortuneDashboardPreview() {
     SoptTheme {
         TodayFortuneDashboard(
             date = "2024-09-09",
-            todaySentence = "안녕하세우안녕하세우안녕하세우안녕하세우안녕하세우안녕하세우",
+            todaySentence = "hi my name is Sehun kim, nice to meet you",
         )
     }
 }

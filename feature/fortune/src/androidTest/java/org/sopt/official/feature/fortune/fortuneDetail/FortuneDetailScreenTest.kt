@@ -11,7 +11,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailScreen
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
 
 internal class FortuneDetailScreenTest {
 
@@ -26,17 +28,26 @@ internal class FortuneDetailScreenTest {
         val content = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요"
 
         // when:
-
         composeRule.setContent {
             SoptTheme {
                 FortuneDetailScreen(
                     paddingValue = PaddingValues(),
                     date = date,
                     onFortuneAmuletClick = { },
-                    uiState = FortuneDetailUiState.TodaySentence(
-                        userName = name,
-                        content = content,
-                    )
+                    onPokeClick = { },
+                    uiState = Success(
+                        todaySentence = TodaySentence(
+                            userName = name,
+                            content = content,
+                        ),
+                        userInfo = UserInfo(
+                            userId = 0L,
+                            profile = "",
+                            userName = "동민",
+                            generation = 111,
+                            part = "기획 파트",
+                        )
+                    ),
                 )
             }
         }

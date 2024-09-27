@@ -44,6 +44,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
+import timber.log.Timber
 
 @Composable
 internal fun FortuneDetailScreen(
@@ -76,10 +77,7 @@ internal fun FortuneDetailScreen(
                 )
             }
 
-            is Error -> {
-                // 오류 처리
-            }
-
+            is Error -> Timber.e(uiState.errorMessage)
             is Loading -> {
                 // 로딩 뷰
             }
@@ -87,7 +85,7 @@ internal fun FortuneDetailScreen(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
