@@ -39,7 +39,7 @@ internal fun PokeMessageBottomSheetScreen(
     onDismissRequest: () -> Unit,
     isSelected: Boolean,
     selectedIndex: Int,
-    onItemClick: (selectedIndex: Int) -> Unit,
+    onItemClick: (selectedIndex: Int, message: String) -> Unit,
     onIconClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -95,7 +95,7 @@ internal fun PokeMessageBottomSheetScreen(
                     PokeMessageItem(
                         message = message,
                         isSelected = index == selectedIndex,
-                        onItemClick = { onItemClick(index) },
+                        onItemClick = { onItemClick(index, message) },
                     )
                 }
             }
@@ -115,7 +115,7 @@ private fun PokeMessageBottomSheetScreenPreview() {
             onDismissRequest = { },
             isSelected = false,
             selectedIndex = 0,
-            onItemClick = { },
+            onItemClick = { _, _ -> },
             onIconClick = { },
         )
     }

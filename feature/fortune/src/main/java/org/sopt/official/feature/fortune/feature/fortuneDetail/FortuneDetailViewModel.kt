@@ -31,6 +31,9 @@ internal class FortuneDetailViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
 
+    private var isAnonymous: Boolean = false
+    private var userId = -1
+
     init {
         viewModelScope.launch {
             runCatching {
@@ -43,10 +46,9 @@ internal class FortuneDetailViewModel @Inject constructor(
             }.onSuccess { result ->
                 val todayFortune = result[0] as TodayFortuneWord
                 val pokeUser = result[1] as GetOnboardingPokeUserListResponse
-
+                val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()
+                userId = user.userId
                 _uiState.update {
-                    val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()
-
                     Success(
                         todaySentence = TodaySentence(
                             userName = todayFortune.userName,
@@ -62,9 +64,23 @@ internal class FortuneDetailViewModel @Inject constructor(
                     )
                 }
             }.onFailure { error ->
-                _uiState.update {
-                    Error(error)
-                }
+                _uiState.update { Error(error) }
+            }
+        }
+    }
+
+    fun poke(message: String) {
+        viewModelScope.launch {
+            runCatching {
+                pokeRepository.pokeUser(
+                    userId = userId,
+                    isAnonymous = isAnonymous,
+                    message = message
+                )
+            }.onSuccess {
+                _uiState.update { uiState.value as Success }
+            }.onFailure { error ->
+                _uiState.update { Error(error) }
             }
         }
     }

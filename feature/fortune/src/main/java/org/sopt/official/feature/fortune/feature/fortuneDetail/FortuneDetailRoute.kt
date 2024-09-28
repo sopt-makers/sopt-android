@@ -1,6 +1,5 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
-import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -9,9 +8,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -27,15 +28,20 @@ internal fun FortuneDetailRoute(
     var showBottomSheet by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
     val bottomSheetState = rememberModalBottomSheetState(confirmValueChange = { false })
+    val scope = rememberCoroutineScope()
 
     if (showBottomSheet) {
         PokeMessageBottomSheetScreen(
             sheetState = bottomSheetState,
-            onDismissRequest = {},
+            onDismissRequest = { showBottomSheet = false },
             isSelected = isSelected,
             selectedIndex = selectedIndex,
-            onItemClick = { newSelectedIndex ->
-                selectedIndex = newSelectedIndex
+            onItemClick = { newSelectedIndex, message ->
+                scope.launch {
+                    selectedIndex = newSelectedIndex
+                    viewModel.poke(message)
+                    showBottomSheet = false
+                }
             },
             onIconClick = { isSelected = !isSelected },
         )
@@ -45,7 +51,7 @@ internal fun FortuneDetailRoute(
         paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
-        onPokeClick = { showBottomSheet = !showBottomSheet },
+        onPokeClick = { showBottomSheet = true },
         uiState = uiState,
     )
 }
