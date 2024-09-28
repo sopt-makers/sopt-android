@@ -26,6 +26,7 @@ package org.sopt.official.feature.fortune.feature.fortuneAmulet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -67,8 +68,19 @@ internal fun FortuneAmuletRoute(
         else -> {
             FortuneAmuletScreen(
                 description = state.description,
-                name = state.name,
-                imageColor = state.imageColor,
+                amuletDescription = {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = state.imageColor)) {
+                                append(state.name)
+                            }
+                            withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
+                                append("이 왔솝")
+                            }
+                        },
+                        style = SoptTheme.typography.heading28B,
+                    )
+                },
                 imageUrl = state.imageUrl,
                 navigateToHome = navigateToHome
             )
@@ -79,8 +91,7 @@ internal fun FortuneAmuletRoute(
 @Composable
 private fun FortuneAmuletScreen(
     description: String,
-    name: String,
-    imageColor: Color,
+    amuletDescription: @Composable ColumnScope.() -> Unit,
     imageUrl: String,
     navigateToHome: () -> Unit,
 ) {
@@ -100,17 +111,8 @@ private fun FortuneAmuletScreen(
 
         Spacer(modifier = Modifier.height(2.dp))
 
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = imageColor)) {
-                    append(name)
-                }
-                withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
-                    append("이 왔솝")
-                }
-            },
-            style = SoptTheme.typography.heading28B,
-        )
+        amuletDescription()
+
         Spacer(modifier = Modifier.height(34.dp))
 
         UrlImage(
@@ -145,8 +147,19 @@ fun PreviewFortuneAmuletScreen() {
     SoptTheme {
         FortuneAmuletScreen(
             description = "배고픔을 전부 극복할",
-            name = "맛집부적",
-            imageColor = Color.Blue,
+            amuletDescription = {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Red)) {
+                            append("포만감")
+                        }
+                        withStyle(style = SpanStyle(color = Color.White)) {
+                            append("이 왔솝")
+                        }
+                    },
+                    style = SoptTheme.typography.heading28B,
+                )
+            },
             imageUrl = "https://sopt-makers.s3.ap-northeast-2.amazonaws.com/mainpage/makers-app-img/test_fortune_card.png",
             navigateToHome = {}
         )
