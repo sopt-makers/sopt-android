@@ -26,44 +26,77 @@ package org.sopt.official.feature.fortune.feature.fortuneAmulet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
 internal fun FortuneAmuletRoute(
-    paddingValue: PaddingValues,
     navigateToHome: () -> Unit,
+    viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
-    FortuneAmuletScreen(
-        paddingValue = paddingValue,
-        navigateToHome = navigateToHome
-    )
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    when {
+        state.isLoading -> {
+            // Loading View
+        }
+
+        state.isFailure -> {
+            // Error View
+        }
+
+        else -> {
+            FortuneAmuletScreen(
+                description = state.description,
+                amuletDescription = {
+                    Text(
+                        text = buildAnnotatedString {
+                            withStyle(style = SpanStyle(color = state.imageColor)) {
+                                append(state.name)
+                            }
+                            withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
+                                append("이 왔솝")
+                            }
+                        },
+                        style = SoptTheme.typography.heading28B,
+                    )
+                },
+                imageUrl = state.imageUrl,
+                navigateToHome = navigateToHome
+            )
+        }
+    }
 }
 
 @Composable
 private fun FortuneAmuletScreen(
-    paddingValue: PaddingValues,
+    description: String,
+    amuletDescription: @Composable ColumnScope.() -> Unit,
+    imageUrl: String,
     navigateToHome: () -> Unit,
 ) {
     Column(
         modifier = Modifier
-            .padding(paddingValue)
             .fillMaxSize()
             .background(SoptTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,32 +104,23 @@ private fun FortuneAmuletScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = "어려움을 전부 극복할", // 서버에서 받아온 텍스트
+            text = description,
             style = SoptTheme.typography.title16SB,
             color = SoptTheme.colors.onSurface300,
         )
 
         Spacer(modifier = Modifier.height(2.dp))
 
-        Text(
-            text = buildAnnotatedString {
-                withStyle(style = SpanStyle(color = SoptTheme.colors.attention /* 서버에서 받아온 색상 */)) {
-                    append("해결부적") // 서버에서 받아온 텍스트
-                }
-                withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
-                    append("이 왔솝")
-                }
-            },
-            style = SoptTheme.typography.heading28B,
-        )
+        amuletDescription()
+
         Spacer(modifier = Modifier.height(34.dp))
 
         UrlImage(
-            url = "https://어쩌구저쩌구/test_fortune_card.png", // 서버에서 받아온 이미지
+            url = imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 33.dp)
-                .fillMaxHeight(0.55f)
+                .fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -122,7 +146,21 @@ private fun FortuneAmuletScreen(
 fun PreviewFortuneAmuletScreen() {
     SoptTheme {
         FortuneAmuletScreen(
-            paddingValue = PaddingValues(16.dp),
+            description = "배고픔을 전부 극복할",
+            amuletDescription = {
+                Text(
+                    text = buildAnnotatedString {
+                        withStyle(style = SpanStyle(color = Color.Red)) {
+                            append("포만감")
+                        }
+                        withStyle(style = SpanStyle(color = Color.White)) {
+                            append("이 왔솝")
+                        }
+                    },
+                    style = SoptTheme.typography.heading28B,
+                )
+            },
+            imageUrl = "https://sopt-makers.s3.ap-northeast-2.amazonaws.com/mainpage/makers-app-img/test_fortune_card.png",
             navigateToHome = {}
         )
     }
