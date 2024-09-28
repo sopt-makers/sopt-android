@@ -56,7 +56,7 @@ import java.util.Locale
 internal fun HomeRoute(
     navigateToFortuneDetail: (String) -> Unit,
 ) {
-    val date = rememberSaveable { getTodayInfo() }
+    val date = rememberSaveable { getToday() }
 
     HomeScreen(
         date = date,
@@ -134,7 +134,7 @@ private fun HomeScreen(
     }
 }
 
-fun getTodayInfo(): String {
+fun getToday(): String {
     val today = LocalDate.now()
 
     val monthDay = today.format(DateTimeFormatter.ofPattern("M월 d일"))
@@ -151,7 +151,7 @@ fun getTodayInfo(): String {
 fun HomeScreenPreview() {
     SoptTheme {
         HomeScreen(
-            date = getTodayInfo()
+            date = getToday()
         )
     }
 }
