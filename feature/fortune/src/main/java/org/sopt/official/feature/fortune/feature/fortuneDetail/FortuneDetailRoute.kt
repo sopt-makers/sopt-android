@@ -1,6 +1,5 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -18,7 +17,6 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FortuneDetailRoute(
-    paddingValue: PaddingValues,
     date: String,
     onFortuneAmuletClick: () -> Unit,
     viewModel: FortuneDetailViewModel = hiltViewModel(),
@@ -48,7 +46,6 @@ internal fun FortuneDetailRoute(
     }
 
     FortuneDetailScreen(
-        paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
         onPokeClick = { showBottomSheet = true },

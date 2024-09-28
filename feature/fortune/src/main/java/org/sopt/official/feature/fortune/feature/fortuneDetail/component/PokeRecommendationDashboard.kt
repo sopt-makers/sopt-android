@@ -25,7 +25,6 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,10 +40,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Blue400
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray30
@@ -86,11 +85,9 @@ internal fun PokeRecommendationDashboard(
                     UrlImage(
                         url = profile,
                         contentDescription = "profileImage",
-                        modifier = Modifier.size(size = 70.dp).border(
-                            width = 2.dp,
-                            color = Blue400,
-                            shape = RoundedCornerShape(size = 100.dp),
-                        )
+                        modifier = Modifier
+                            .size(size = 70.dp)
+                            .clip(RoundedCornerShape(size = 100.dp)),
                     )
                     Spacer(modifier = Modifier.width(width = 8.dp))
                     Column {

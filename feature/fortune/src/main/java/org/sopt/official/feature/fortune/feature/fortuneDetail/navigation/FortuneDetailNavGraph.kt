@@ -35,13 +35,11 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailRout
 data class FortuneDetail(val date: String)
 
 fun NavGraphBuilder.fortuneDetailNavGraph(
-    paddingValue: PaddingValues,
     navigateToFortuneAmulet: () -> Unit,
 ) {
     composable<FortuneDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<FortuneDetail>()
         FortuneDetailRoute(
-            paddingValue = paddingValue,
             date = items.date,
             onFortuneAmuletClick = navigateToFortuneAmulet
         )
