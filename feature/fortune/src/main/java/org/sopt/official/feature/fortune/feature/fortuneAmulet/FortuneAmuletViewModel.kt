@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.fortune.usecase.GetTodayFortuneCardUseCase
 import javax.inject.Inject
 
+typealias GraphicColor = android.graphics.Color
+
 @HiltViewModel
 internal class FortuneAmuletViewModel @Inject constructor(
     getTodayFortuneCardUseCase: GetTodayFortuneCardUseCase,
@@ -40,13 +42,9 @@ internal class FortuneAmuletViewModel @Inject constructor(
         }
     }
 
-    private fun parseColor(colorCode: String): Color {
-        val color: Color = try {
-            Color(android.graphics.Color.parseColor(colorCode))
-        } catch (e: IllegalArgumentException) {
-            Color.White
-        }
-
-        return color
+    private fun parseColor(colorCode: String): Color = try {
+        Color(GraphicColor.parseColor(colorCode))
+    } catch (e: IllegalArgumentException) {
+        Color.White
     }
 }
