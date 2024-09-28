@@ -1,6 +1,8 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -36,9 +37,10 @@ import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_on
 internal fun PokeMessageBottomSheetScreen(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    isPressed: Boolean,
+    isSelected: Boolean,
     selectedIndex: Int,
     onItemClick: (selectedIndex: Int) -> Unit,
+    onIconClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
@@ -64,9 +66,11 @@ internal fun PokeMessageBottomSheetScreen(
                     color = Gray30,
                 )
                 Spacer(modifier = Modifier.weight(weight = 1f))
-                Icon(
-                    painter = if (isPressed) painterResource(id = ic_checkbox_on) else painterResource(ic_checkbox_off),
-                    contentDescription = "익명 체크박스"
+                Image(
+                    painter = if (isSelected) painterResource(id = ic_checkbox_on)
+                    else painterResource(id = ic_checkbox_off),
+                    contentDescription = "익명 체크박스",
+                    modifier = Modifier.clickable { onIconClick() }
                 )
                 Spacer(modifier = Modifier.width(width = 8.dp))
                 Text(
@@ -109,9 +113,10 @@ private fun PokeMessageBottomSheetScreenPreview() {
                 confirmValueChange = { true },
             ),
             onDismissRequest = { },
-            isPressed = false,
+            isSelected = false,
             selectedIndex = 0,
             onItemClick = { },
+            onIconClick = { },
         )
     }
 }

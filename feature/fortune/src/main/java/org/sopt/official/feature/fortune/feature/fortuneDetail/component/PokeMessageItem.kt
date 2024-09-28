@@ -30,7 +30,10 @@ internal fun PokeMessageItem(
                 color = if (isSelected) Gray700 else Gray800,
                 shape = RoundedCornerShape(size = 6.dp),
             )
-            .clickable { onItemClick() },
+            .clickable(
+                indication = null,
+                interactionSource = null,
+            ) { onItemClick() },
     ) {
         Text(
             text = message,

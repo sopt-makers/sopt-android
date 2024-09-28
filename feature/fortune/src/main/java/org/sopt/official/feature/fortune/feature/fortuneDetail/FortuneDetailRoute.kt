@@ -1,12 +1,12 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -23,18 +23,21 @@ internal fun FortuneDetailRoute(
     viewModel: FortuneDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
+    var isSelected by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
+    var selectedIndex by remember { mutableIntStateOf(-1) }
     val bottomSheetState = rememberModalBottomSheetState(confirmValueChange = { false })
 
     if (showBottomSheet) {
         PokeMessageBottomSheetScreen(
             sheetState = bottomSheetState,
             onDismissRequest = {},
-            isPressed = isPressed,
-            selectedIndex = 3,
-            onItemClick = {},
+            isSelected = isSelected,
+            selectedIndex = selectedIndex,
+            onItemClick = { newSelectedIndex ->
+                selectedIndex = newSelectedIndex
+            },
+            onIconClick = { isSelected = !isSelected },
         )
     }
 
