@@ -46,14 +46,16 @@ import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 
 @Composable
 fun FoundationScreen(
+    navigateToNotification: () -> Unit,
+    navigateToHome: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            FortuneTopBar {
-                // TODO: Navigate to NotificationActivity
-            }
+            FortuneTopBar(
+                onClickNavigationIcon = navigateToNotification
+            )
         },
         content = { paddingValue ->
             Box(
@@ -80,9 +82,7 @@ fun FoundationScreen(
                     )
 
                     fortuneAmuletNavGraph(
-                        navigateToHome = {
-                            // TODO: Navigate to Home
-                        }
+                        navigateToHome = navigateToHome
                     )
                 }
             }
@@ -94,6 +94,9 @@ fun FoundationScreen(
 @Composable
 fun FoundationScreenPreview() {
     SoptTheme {
-        FoundationScreen()
+        FoundationScreen(
+            navigateToNotification = {},
+            navigateToHome = {}
+        )
     }
 }

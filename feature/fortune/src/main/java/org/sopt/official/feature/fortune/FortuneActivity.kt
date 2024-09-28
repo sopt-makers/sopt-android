@@ -30,7 +30,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+
+private val navigator by lazy {
+    EntryPointAccessors.fromApplication(
+        appContext,
+        NavigatorEntryPoint::class.java
+    ).navigatorProvider()
+}
 
 @AndroidEntryPoint
 class FortuneActivity : AppCompatActivity() {
@@ -39,7 +49,14 @@ class FortuneActivity : AppCompatActivity() {
 
         setContent {
             SoptTheme {
-                FoundationScreen()
+                FoundationScreen(
+                    navigateToNotification = {
+                        startActivity(navigator.getNotificationActivityIntent())
+                    },
+                    navigateToHome = {
+                        startActivity(navigator.getAuthActivityIntent())
+                    },
+                )
             }
         }
     }
