@@ -46,7 +46,7 @@ fun MyPageButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier.fillMaxWidth(),
     shape: Shape = RoundedCornerShape(10.dp),
-    isEnabled: Boolean = true,
+    isEnabled: Boolean = false,
     containerColor: Color = White,
     contentColor: Color = Black,
     content: @Composable () -> Unit,

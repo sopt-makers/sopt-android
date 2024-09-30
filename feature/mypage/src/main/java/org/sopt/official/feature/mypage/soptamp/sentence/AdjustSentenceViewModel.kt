@@ -45,7 +45,12 @@ class AdjustSentenceViewModel @Inject constructor(
     private val _sentence: MutableStateFlow<String> = MutableStateFlow("")
     val sentence: StateFlow<String> get() = _sentence.asStateFlow()
 
-    val isConfirmed = sentence.map { it.isNotEmpty() }
+    private var initSentence: String = ""
+
+    val isConfirmed = sentence.map { sentence ->
+        initSentence != sentence
+    }
+
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
@@ -58,6 +63,7 @@ class AdjustSentenceViewModel @Inject constructor(
             userRepository.getUserInfo()
                 .onSuccess { response ->
                     _sentence.value = response.profileMessage
+                    initSentence = response.profileMessage
                 }.onFailure(Timber::e)
         }
     }
