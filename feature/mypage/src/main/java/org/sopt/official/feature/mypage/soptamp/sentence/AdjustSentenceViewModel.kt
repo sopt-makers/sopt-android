@@ -44,9 +44,23 @@ class AdjustSentenceViewModel @Inject constructor(
 ) : ViewModel() {
     private val _sentence: MutableStateFlow<String> = MutableStateFlow("")
     val sentence: StateFlow<String> get() = _sentence.asStateFlow()
+
     val isConfirmed = sentence.map { it.isNotEmpty() }
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
+
+    init {
+        initAdjustSentence()
+    }
+
+    private fun initAdjustSentence() {
+        viewModelScope.launch {
+            userRepository.getUserInfo()
+                .onSuccess { response ->
+                    _sentence.value = response.profileMessage
+                }.onFailure(Timber::e)
+        }
+    }
 
     fun adjustSentence() {
         viewModelScope.launch {
