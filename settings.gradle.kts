@@ -30,6 +30,8 @@ include(
     ":data:notification",
     ":data:soptamp",
     ":data:poke",
+    ":data:fortune",
+    ":domain:fortune",
     ":domain:mypage",
     ":domain:notification",
     ":domain:soptamp",

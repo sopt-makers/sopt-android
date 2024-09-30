@@ -22,25 +22,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.home.navigation
+package org.sopt.official.feature.fortune.feature.fortuneDetail.model
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
-import org.sopt.official.feature.fortune.feature.home.HomeRoute
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 
-@Serializable
-data object Home
+@Stable
+internal sealed interface FortuneDetailUiState {
 
-fun NavGraphBuilder.homeNavGraph(
-    paddingValue: PaddingValues,
-    navigateToFortuneDetail: (String) -> Unit,
-) {
-    composable<Home> {
-        HomeRoute(
-            paddingValue = paddingValue,
-            navigateToFortuneDetail = navigateToFortuneDetail
-        )
+    @Immutable
+    data class TodaySentence(
+        val userName: String,
+        val content: String,
+    ) : FortuneDetailUiState {
+        val message: String
+            get() = "${userName}님,\n${content}"
     }
+
+    @Immutable
+    data object Loading : FortuneDetailUiState
+
+    @Immutable
+    data class Error(val errorMessage: Throwable) : FortuneDetailUiState
 }

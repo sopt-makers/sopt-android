@@ -22,28 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortundDetail.navigation
+package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import kotlinx.serialization.Serializable
-import org.sopt.official.feature.fortune.feature.fortundDetail.FortuneDetailRoute
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-@Serializable
-data class FortuneDetail(val date: String)
-
-fun NavGraphBuilder.fortuneDetailNavGraph(
+@Composable
+internal fun FortuneDetailRoute(
     paddingValue: PaddingValues,
-    navigateToFortuneAmulet: () -> Unit,
+    date: String,
+    onFortuneAmuletClick: () -> Unit,
+    viewModel: FortuneDetailViewModel = hiltViewModel(),
 ) {
-    composable<FortuneDetail> { backStackEntry ->
-        val items = backStackEntry.toRoute<FortuneDetail>()
-        FortuneDetailRoute(
-            paddingValue = paddingValue,
-            date = items.date,
-            navigateToFortuneAmulet = navigateToFortuneAmulet
-        )
-    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    FortuneDetailScreen(
+        paddingValue = paddingValue,
+        date = date,
+        onFortuneAmuletClick = onFortuneAmuletClick,
+        uiState = uiState,
+    )
 }
