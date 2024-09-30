@@ -54,7 +54,7 @@ timber = "5.0.1"
 compose-destination = "1.11.6"
 coil = "2.7.0"
 lottie = "6.5.2"
-dotsindicator = "5.0"
+dotsindicator = "5.1.0"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"

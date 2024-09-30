@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortundDetail
+package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,65 +30,60 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
+import timber.log.Timber
 
 @Composable
-fun FortuneDetailRoute(
+internal fun FortuneDetailScreen(
     paddingValue: PaddingValues,
     date: String,
-    navigateToFortuneAmulet: () -> Unit,
-) {
-    FortuneDetailScreen(
-        paddingValue = paddingValue,
-        date = date,
-        navigateToFortuneAmulet = navigateToFortuneAmulet
-    )
-}
-
-@Composable
-fun FortuneDetailScreen(
-    paddingValue: PaddingValues,
-    date: String,
-    navigateToFortuneAmulet: () -> Unit,
+    onFortuneAmuletClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    uiState: FortuneDetailUiState = Loading,
 ) {
     Column(
-        modifier = Modifier
-            .padding(paddingValue)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.fillMaxSize().padding(paddingValues = paddingValue),
     ) {
-        Text(
-            text = "Fortune Detail Screen: $date",
-            color = SoptTheme.colors.onBackground
-        )
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        when (uiState) {
+            is TodaySentence -> {
+                TodayFortuneDashboard(
+                    date = date,
+                    todaySentence = uiState.message,
+                )
+            }
 
-        Spacer(modifier = Modifier.weight(1f))
-
-        Button(
-            onClick = navigateToFortuneAmulet
-        ) {
-            Text(text = "Go to Fortune Amulet")
+            is Error -> Timber.e(uiState.errorMessage)
+            is Loading -> {
+                // 로딩 뷰
+            }
         }
-        Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
-
 @Preview
 @Composable
-fun FortuneDetailScreenPreview() {
+private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
-            paddingValue = PaddingValues(16.dp),
+            paddingValue = PaddingValues(vertical = 16.dp),
             date = "2024-09-09",
-            navigateToFortuneAmulet = {}
+            onFortuneAmuletClick = {},
+            uiState = TodaySentence(
+                userName = "누누",
+                content = "오늘 하루종일 기분 좋을 것 같은 날이네요.",
+            ),
         )
     }
 }

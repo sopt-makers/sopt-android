@@ -22,25 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.home.navigation
+package org.sopt.official.feature.fortune.feature.fortuneDetail.navigation
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
-import org.sopt.official.feature.fortune.feature.home.HomeRoute
+import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailRoute
 
 @Serializable
-data object Home
+data class FortuneDetail(val date: String)
 
-fun NavGraphBuilder.homeNavGraph(
+fun NavGraphBuilder.fortuneDetailNavGraph(
     paddingValue: PaddingValues,
-    navigateToFortuneDetail: (String) -> Unit,
+    navigateToFortuneAmulet: () -> Unit,
 ) {
-    composable<Home> {
-        HomeRoute(
+    composable<FortuneDetail> { backStackEntry ->
+        val items = backStackEntry.toRoute<FortuneDetail>()
+        FortuneDetailRoute(
             paddingValue = paddingValue,
-            navigateToFortuneDetail = navigateToFortuneDetail
+            date = items.date,
+            onFortuneAmuletClick = navigateToFortuneAmulet
         )
     }
 }

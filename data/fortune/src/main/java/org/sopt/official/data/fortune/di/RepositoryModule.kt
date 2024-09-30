@@ -22,25 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.home.navigation
+package org.sopt.official.data.fortune.di
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import kotlinx.serialization.Serializable
-import org.sopt.official.feature.fortune.feature.home.HomeRoute
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.data.fortune.repository.DefaultFortuneRepository
+import org.sopt.official.domain.fortune.repository.FortuneRepository
+import javax.inject.Singleton
 
-@Serializable
-data object Home
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface RepositoryModule {
 
-fun NavGraphBuilder.homeNavGraph(
-    paddingValue: PaddingValues,
-    navigateToFortuneDetail: (String) -> Unit,
-) {
-    composable<Home> {
-        HomeRoute(
-            paddingValue = paddingValue,
-            navigateToFortuneDetail = navigateToFortuneDetail
-        )
-    }
+    @Binds
+    @Singleton
+    abstract fun bindDefaultFortuneRepository(defaultFortuneRepository: DefaultFortuneRepository): FortuneRepository
 }
