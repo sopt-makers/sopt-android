@@ -36,7 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray700
+import org.sopt.official.designsystem.Gray900
 
 @Composable
 internal fun TodayFortuneBox(
@@ -49,7 +49,7 @@ internal fun TodayFortuneBox(
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .background(
-                color = Gray700,
+                color = Gray900,
                 shape = RoundedCornerShape(12.dp),
             ),
     ) {
