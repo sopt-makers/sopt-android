@@ -50,7 +50,7 @@ import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.R
+import org.sopt.official.feature.fortune.R.drawable.ic_poke
 
 @Composable
 internal fun PokeRecommendationDashboard(
@@ -63,9 +63,7 @@ internal fun PokeRecommendationDashboard(
     modifier: Modifier = Modifier,
 ) {
     TodayFortuneBox(content = {
-        Column(
-            modifier = modifier.fillMaxWidth().padding(all = 20.dp),
-        ) {
+        Column(modifier = modifier.fillMaxWidth().padding(all = 20.dp)) {
             Text(
                 text = "콕 찌르기",
                 style = SoptTheme.typography.body14R,
@@ -77,9 +75,7 @@ internal fun PokeRecommendationDashboard(
                 color = Gray30,
             )
             Spacer(modifier = Modifier.height(height = 28.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 PokeRecommendationUserProfileImage(
                     profile = profile,
                     isEmptyProfile = isEmptyProfile,
@@ -109,7 +105,7 @@ internal fun PokeRecommendationDashboard(
                     ),
                 ) {
                     Icon(
-                        painter = painterResource(R.drawable.ic_poke),
+                        painter = painterResource(ic_poke),
                         contentDescription = "콕 찌르기",
                     )
                 }
