@@ -25,6 +25,7 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -58,69 +59,63 @@ internal fun PokeRecommendationDashboard(
     name: String,
     userDescription: String,
     onPokeClick: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TodayFortuneBox(
-        content = {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(all = 20.dp),
+    TodayFortuneBox(content = {
+        Column(
+            modifier = modifier.fillMaxWidth().padding(all = 20.dp),
+        ) {
+            Text(
+                text = "콕 찌르기",
+                style = SoptTheme.typography.body14R,
+                color = Gray100,
+            )
+            Text(
+                text = "행운이 2배가 될 솝트인을 찔러보세요",
+                style = SoptTheme.typography.title18SB,
+                color = Gray30,
+            )
+            Spacer(modifier = Modifier.height(height = 28.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "콕 찌르기",
-                    style = SoptTheme.typography.body14R,
-                    color = Gray100,
+                UrlImage(
+                    url = profile,
+                    contentDescription = "profileImage",
+                    modifier = Modifier.size(size = 72.dp).clip(shape = RoundedCornerShape(size = 100.dp)).clickable { onProfileClick() },
                 )
-                Text(
-                    text = "행운이 2배가 될 솝트인을 찔러보세요",
-                    style = SoptTheme.typography.title18SB,
-                    color = Gray30,
-                )
-                Spacer(modifier = Modifier.height(height = 20.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
+                Spacer(modifier = Modifier.width(width = 8.dp))
+                Column(
+                    modifier = Modifier.weight(1f),
                 ) {
-                    UrlImage(
-                        url = profile,
-                        contentDescription = "profileImage",
-                        modifier = Modifier
-                            .size(size = 72.dp)
-                            .clip(shape = RoundedCornerShape(size = 100.dp)),
+                    Text(
+                        text = name,
+                        style = SoptTheme.typography.body18M,
+                        color = Gray30,
                     )
-                    Spacer(modifier = Modifier.width(width = 8.dp))
-                    Column {
-                        Text(
-                            text = name,
-                            style = SoptTheme.typography.body18M,
-                            color = Gray30,
-                        )
-                        Text(
-                            text = userDescription,
-                            style = SoptTheme.typography.label12SB,
-                            color = Gray300,
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    IconButton(
-                        onClick = onPokeClick,
-                        modifier = Modifier
-                            .size(size = 44.dp)
-                            .background(
-                                color = Gray10,
-                                shape = RoundedCornerShape(size = 18.dp),
-                            ),
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_poke),
-                            contentDescription = "콕 찌르기",
-                        )
-                    }
+                    Text(
+                        text = userDescription,
+                        style = SoptTheme.typography.label12SB,
+                        color = Gray300,
+                    )
+                }
+                IconButton(
+                    onClick = onPokeClick,
+                    modifier = Modifier.size(size = 44.dp).background(
+                        color = Gray10,
+                        shape = RoundedCornerShape(size = 18.dp),
+                    ),
+                ) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_poke),
+                        contentDescription = "콕 찌르기",
+                    )
                 }
             }
         }
-    )
+    })
 }
 
 @Preview
@@ -131,6 +126,7 @@ private fun PokeRecommendationDashboardPreview() {
             profile = "123",
             name = "이현우",
             onPokeClick = { },
+            onProfileClick = { },
             userDescription = "1100기 iOS",
         )
     }
