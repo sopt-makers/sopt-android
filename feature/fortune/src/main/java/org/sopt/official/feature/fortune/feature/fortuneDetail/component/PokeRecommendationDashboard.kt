@@ -51,13 +51,13 @@ import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.R
-import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
 internal fun PokeRecommendationDashboard(
     profile: String,
     name: String,
     userDescription: String,
+    isEmptyProfile: Boolean,
     onPokeClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -79,17 +79,16 @@ internal fun PokeRecommendationDashboard(
             Spacer(modifier = Modifier.height(height = 28.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
             ) {
-                UrlImage(
-                    url = profile,
-                    contentDescription = "profileImage",
-                    modifier = Modifier.size(size = 72.dp).clip(shape = RoundedCornerShape(size = 100.dp)).clickable { onProfileClick() },
+                PokeRecommendationUserProfileImage(
+                    profile = profile,
+                    isEmptyProfile = isEmptyProfile,
+                    modifier = Modifier.size(size = 72.dp)
+                        .clip(shape = RoundedCornerShape(size = 100.dp))
+                        .clickable { onProfileClick() },
                 )
                 Spacer(modifier = Modifier.width(width = 8.dp))
-                Column(
-                    modifier = Modifier.weight(1f),
-                ) {
+                Column {
                     Text(
                         text = name,
                         style = SoptTheme.typography.body18M,
@@ -101,6 +100,7 @@ internal fun PokeRecommendationDashboard(
                         color = Gray300,
                     )
                 }
+                Spacer(modifier = Modifier.weight(weight = 1f))
                 IconButton(
                     onClick = onPokeClick,
                     modifier = Modifier.size(size = 44.dp).background(
@@ -125,6 +125,7 @@ private fun PokeRecommendationDashboardPreview() {
         PokeRecommendationDashboard(
             profile = "123",
             name = "이현우",
+            isEmptyProfile = false,
             onPokeClick = { },
             onProfileClick = { },
             userDescription = "1100기 iOS",
