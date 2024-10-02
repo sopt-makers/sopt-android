@@ -9,4 +9,5 @@ data class FortuneAmuletState(
     val imageColor: Color = Color.White,
     val imageUrl: String = "",
     val name: String = "",
+    val nameSuffix: String = "이 왔솝"
 )
