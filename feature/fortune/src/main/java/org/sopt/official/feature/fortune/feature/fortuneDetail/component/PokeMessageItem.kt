@@ -39,9 +39,7 @@ internal fun PokeMessageItem(
             text = message,
             style = SoptTheme.typography.body16M,
             color = Gray10,
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .padding(horizontal = 8.dp),
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
         )
     }
 }

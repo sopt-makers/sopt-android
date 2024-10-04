@@ -31,26 +31,27 @@ import dagger.hilt.components.SingletonComponent
 import org.sopt.official.auth.model.UserStatus
 
 interface NavigatorProvider {
-  fun getAuthActivityIntent(): Intent
-  fun getNotificationActivityIntent(): Intent
-  fun getNotificationDetailActivityIntent(notificationId: String): Intent
-  fun getMyPageActivityIntent(name: String): Intent
-  fun getAttendanceActivityIntent(): Intent
-  fun getSoptampActivityIntent(): Intent
-  fun getPokeNotificationActivityIntent(name: String): Intent
-  fun getHomeActivityIntent(
-    userStatus: UserStatus,
-    deepLinkType: DeepLinkType?
-  ): Intent
+    fun getAuthActivityIntent(): Intent
+    fun getNotificationActivityIntent(): Intent
+    fun getNotificationDetailActivityIntent(notificationId: String): Intent
+    fun getMyPageActivityIntent(name: String): Intent
+    fun getAttendanceActivityIntent(): Intent
+    fun getSoptampActivityIntent(): Intent
+    fun getPokeNotificationActivityIntent(name: String): Intent
+    fun getFortuneActivityIntent(): Intent
+    fun getHomeActivityIntent(
+        userStatus: UserStatus,
+        deepLinkType: DeepLinkType?,
+    ): Intent
 
-  fun getSchemeActivityIntent(
-    notificationId: String,
-    link: String
-  ): Intent
+    fun getSchemeActivityIntent(
+        notificationId: String,
+        link: String,
+    ): Intent
 }
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint
 interface NavigatorEntryPoint {
-  fun navigatorProvider(): NavigatorProvider
+    fun navigatorProvider(): NavigatorProvider
 }

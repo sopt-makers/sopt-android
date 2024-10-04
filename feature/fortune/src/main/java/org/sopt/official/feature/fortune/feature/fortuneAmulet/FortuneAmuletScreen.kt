@@ -117,7 +117,7 @@ private fun FortuneAmuletScreen(
 
         UrlImage(
             url = imageUrl,
-            contentDescription = null,
+            contentDescription = "Fortune Amulet",
             modifier = Modifier
                 .padding(horizontal = 33.dp)
                 .fillMaxWidth()

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -111,10 +111,12 @@ internal fun PokeRecommendationDashboard(
                 }
                 IconButton(
                     onClick = onPokeClick,
-                    modifier = Modifier.size(size = 44.dp).background(
-                        color = Gray10,
-                        shape = RoundedCornerShape(size = 18.dp),
-                    ),
+                    modifier = Modifier
+                        .size(size = 44.dp)
+                        .background(
+                            color = Gray10,
+                            shape = RoundedCornerShape(size = 18.dp),
+                        ),
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(ic_poke),
