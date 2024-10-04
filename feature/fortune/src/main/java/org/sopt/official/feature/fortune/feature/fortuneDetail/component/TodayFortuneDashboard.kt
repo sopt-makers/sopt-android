@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.LineBreak
@@ -60,7 +61,7 @@ internal fun TodayFortuneDashboard(
             ) {
                 Spacer(modifier = Modifier.height(height = 32.dp))
                 Image(
-                    painter = painterResource(img_fortune_title),
+                    imageVector = ImageVector.vectorResource(img_fortune_title),
                     contentDescription = "오늘의 솝마디",
                 )
                 Spacer(modifier = Modifier.height(height = 10.dp))
