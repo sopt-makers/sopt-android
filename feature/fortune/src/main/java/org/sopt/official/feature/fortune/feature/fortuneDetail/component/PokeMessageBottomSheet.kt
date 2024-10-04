@@ -22,7 +22,8 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.immutableListOf
@@ -38,7 +39,7 @@ import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_on
 internal fun PokeMessageBottomSheetScreen(
     sheetState: SheetState,
     onDismissRequest: () -> Unit,
-    isSelected: Boolean,
+    isAnonymous: Boolean,
     selectedIndex: Int,
     onItemClick: (selectedIndex: Int, message: String) -> Unit,
     onIconClick: () -> Unit,
@@ -68,8 +69,8 @@ internal fun PokeMessageBottomSheetScreen(
                 )
                 Spacer(modifier = Modifier.weight(weight = 1f))
                 Image(
-                    painter = if (isSelected) painterResource(id = ic_checkbox_on)
-                    else painterResource(id = ic_checkbox_off),
+                    imageVector = if (isAnonymous) ImageVector.vectorResource(id = ic_checkbox_on)
+                    else ImageVector.vectorResource(id = ic_checkbox_off),
                     contentDescription = "익명 체크박스",
                     modifier = Modifier.clickable { onIconClick() }
                 )
@@ -114,7 +115,7 @@ private fun PokeMessageBottomSheetScreenPreview() {
                 confirmValueChange = { true },
             ),
             onDismissRequest = { },
-            isSelected = false,
+            isAnonymous = false,
             selectedIndex = 0,
             onItemClick = { _, _ -> },
             onIconClick = { },

@@ -26,7 +26,7 @@ internal fun FortuneDetailRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var isItemSelected by remember { mutableStateOf(false) }
+    var isAnonymous by remember { mutableStateOf(true) }
     var isShowBottomSheet by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
     val bottomSheetState = rememberModalBottomSheetState(confirmValueChange = { false })
@@ -36,7 +36,6 @@ internal fun FortuneDetailRoute(
         PokeMessageBottomSheetScreen(
             sheetState = bottomSheetState,
             onDismissRequest = { isShowBottomSheet = false },
-            isSelected = isItemSelected,
             selectedIndex = selectedIndex,
             onItemClick = { newSelectedIndex, message ->
                 scope.launch {
@@ -47,7 +46,8 @@ internal fun FortuneDetailRoute(
                     if (!bottomSheetState.isVisible) isShowBottomSheet = false
                 }
             },
-            onIconClick = { isItemSelected = !isItemSelected },
+            onIconClick = { isAnonymous = !isAnonymous },
+            isAnonymous = isAnonymous,
         )
     }
 
