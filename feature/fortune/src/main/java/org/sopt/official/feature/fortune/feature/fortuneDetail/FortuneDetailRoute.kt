@@ -50,26 +50,28 @@ internal fun FortuneDetailRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var isSelected by remember { mutableStateOf(false) }
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var isItemSelected by remember { mutableStateOf(false) }
+    var isShowBottomSheet by remember { mutableStateOf(false) }
     var selectedIndex by remember { mutableIntStateOf(-1) }
     val bottomSheetState = rememberModalBottomSheetState(confirmValueChange = { false })
     val scope = rememberCoroutineScope()
 
-    if (showBottomSheet) {
+    if (isShowBottomSheet) {
         PokeMessageBottomSheetScreen(
             sheetState = bottomSheetState,
-            onDismissRequest = { showBottomSheet = false },
-            isSelected = isSelected,
+            onDismissRequest = { isShowBottomSheet = false },
+            isSelected = isItemSelected,
             selectedIndex = selectedIndex,
             onItemClick = { newSelectedIndex, message ->
                 scope.launch {
                     selectedIndex = newSelectedIndex
                     viewModel.poke(message)
-                    showBottomSheet = false
+                    bottomSheetState.hide()
+                }.invokeOnCompletion {
+                    if (!bottomSheetState.isVisible) isShowBottomSheet = false
                 }
             },
-            onIconClick = { isSelected = !isSelected },
+            onIconClick = { isItemSelected = !isItemSelected },
         )
     }
 
@@ -81,7 +83,7 @@ internal fun FortuneDetailRoute(
                 Intent(Intent.ACTION_VIEW, Uri.parse("https://playground.sopt.org/members/${userId}"))
             )
         },
-        onPokeClick = { showBottomSheet = true },
+        onPokeClick = { isShowBottomSheet = true },
         uiState = uiState,
     )
 }
