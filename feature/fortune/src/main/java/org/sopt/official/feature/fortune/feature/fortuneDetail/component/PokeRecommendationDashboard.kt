@@ -25,7 +25,7 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,17 +41,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Blue400
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.R
-import org.sopt.official.feature.fortune.component.UrlImage
+import org.sopt.official.feature.fortune.R.drawable.ic_poke
 
 @Composable
 internal fun PokeRecommendationDashboard(
@@ -59,71 +59,70 @@ internal fun PokeRecommendationDashboard(
     name: String,
     userDescription: String,
     onPokeClick: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    TodayFortuneBox(
-        content = {
-            Column(
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(all = 20.dp),
+    TodayFortuneBox(content = {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(all = 20.dp),
+        ) {
+            Text(
+                text = "콕 찌르기",
+                style = SoptTheme.typography.body14R,
+                color = Gray100,
+            )
+            Text(
+                text = "행운이 2배가 될 솝트인을 찔러보세요",
+                style = SoptTheme.typography.title18SB,
+                color = Gray30,
+            )
+            Spacer(modifier = Modifier.height(height = 28.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
             ) {
-                Text(
-                    text = "콕 찌르기",
-                    style = SoptTheme.typography.body14R,
-                    color = Gray100,
+                PokeRecommendationUserProfileImage(
+                    profile = profile,
+                    modifier = Modifier.size(size = 72.dp)
+                        .clip(shape = RoundedCornerShape(size = 100.dp))
+                        .clickable { onProfileClick() },
                 )
-                Text(
-                    text = "행운이 2배가 될 솝트인을 찔러보세요",
-                    style = SoptTheme.typography.title18SB,
-                    color = Gray30,
-                )
-                Spacer(modifier = Modifier.height(height = 20.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
+                Spacer(modifier = Modifier.width(width = 8.dp))
+                Column(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(end = 30.dp),
                 ) {
-                    UrlImage(
-                        url = profile,
-                        contentDescription = "profileImage",
-                        modifier = Modifier.size(size = 70.dp).border(
-                            width = 2.dp,
-                            color = Blue400,
-                            shape = RoundedCornerShape(size = 100.dp),
-                        )
+                    Text(
+                        text = name,
+                        style = SoptTheme.typography.body18M,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
+                        color = Gray30,
                     )
-                    Spacer(modifier = Modifier.width(width = 8.dp))
-                    Column {
-                        Text(
-                            text = name,
-                            style = SoptTheme.typography.body18M,
-                            color = Gray30,
-                        )
-                        Text(
-                            text = userDescription,
-                            style = SoptTheme.typography.label12SB,
-                            color = Gray300,
-                        )
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    IconButton(
-                        onClick = onPokeClick,
-                        modifier = Modifier
-                            .size(size = 44.dp)
-                            .background(
-                                color = Gray10,
-                                shape = RoundedCornerShape(size = 18.dp),
-                            ),
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_poke),
-                            contentDescription = "콕 찌르기",
-                        )
-                    }
+                    Text(
+                        text = userDescription,
+                        style = SoptTheme.typography.label12SB,
+                        color = Gray300,
+                    )
+                }
+                IconButton(
+                    onClick = onPokeClick,
+                    modifier = Modifier.size(size = 44.dp).background(
+                        color = Gray10,
+                        shape = RoundedCornerShape(size = 18.dp),
+                    ),
+                ) {
+                    Icon(
+                        painter = painterResource(ic_poke),
+                        contentDescription = "콕 찌르기",
+                    )
                 }
             }
         }
-    )
+    })
 }
 
 @Preview
@@ -132,8 +131,9 @@ private fun PokeRecommendationDashboardPreview() {
     SoptTheme {
         PokeRecommendationDashboard(
             profile = "123",
-            name = "이현우",
+            name = "이현우이현우이현우이현우이현우",
             onPokeClick = { },
+            onProfileClick = { },
             userDescription = "1100기 iOS",
         )
     }

@@ -59,6 +59,7 @@ internal class FortuneDetailScreenTest {
                     date = date,
                     onFortuneAmuletClick = { },
                     onPokeClick = { },
+                    onProfileClick = { },
                     uiState = Success(
                         todaySentence = TodaySentence(
                             userName = name,

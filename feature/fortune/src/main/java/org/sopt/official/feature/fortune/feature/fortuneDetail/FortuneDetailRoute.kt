@@ -24,11 +24,14 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +50,7 @@ internal fun FortuneDetailRoute(
     onFortuneAmuletClick: () -> Unit,
     viewModel: FortuneDetailViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isSelected by remember { mutableStateOf(false) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -75,6 +79,11 @@ internal fun FortuneDetailRoute(
         paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
+        onProfileClick = { userId ->
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://playground.sopt.org/members/${userId}"))
+            )
+        },
         onPokeClick = { showBottomSheet = true },
         uiState = uiState,
     )

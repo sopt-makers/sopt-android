@@ -54,6 +54,7 @@ internal fun FortuneDetailScreen(
     date: String,
     onFortuneAmuletClick: () -> Unit,
     onPokeClick: (userId: Long) -> Unit,
+    onProfileClick: (userId: Long) -> Unit,
     modifier: Modifier = Modifier,
     uiState: FortuneDetailUiState = Loading,
 ) {
@@ -77,6 +78,7 @@ internal fun FortuneDetailScreen(
                     name = uiState.userInfo.userName,
                     userDescription = uiState.userInfo.userDescription,
                     onPokeClick = { onPokeClick(uiState.userInfo.userId) },
+                    onProfileClick = { onProfileClick(uiState.userInfo.userId) },
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 FortuneDetailButton(
@@ -115,6 +117,7 @@ private fun FortuneDetailScreenPreview() {
                 )
             ),
             onPokeClick = { },
+            onProfileClick = { },
         )
     }
 }
