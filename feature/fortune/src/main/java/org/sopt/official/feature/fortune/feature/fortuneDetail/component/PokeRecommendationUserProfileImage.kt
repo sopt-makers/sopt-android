@@ -28,6 +28,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.official.designsystem.SoptTheme
@@ -52,6 +53,7 @@ internal fun PokeRecommendationUserProfileImage(
             UrlImage(
                 url = profile,
                 contentDescription = "profileImage",
+                contentScale = ContentScale.Crop,
                 modifier = modifier,
             )
         }
