@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import okhttp3.internal.immutableListOf
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray800
@@ -83,7 +84,7 @@ internal fun PokeMessageBottomSheetScreen(
             LazyColumn(
                 contentPadding = PaddingValues(vertical = 4.dp),
             ) {
-                val messages = listOf(
+                val messages = immutableListOf(
                     "안녕하세요? I AM 35기에요",
                     "친해지고 싶어서 DM 드려요 ^^~",
                     "이야기 해보고 싶었어요!!",
