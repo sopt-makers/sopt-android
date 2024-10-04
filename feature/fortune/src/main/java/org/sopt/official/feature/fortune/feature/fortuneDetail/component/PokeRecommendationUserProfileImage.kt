@@ -12,10 +12,9 @@ import org.sopt.official.feature.fortune.component.UrlImage
 @Composable
 internal fun PokeRecommendationUserProfileImage(
     profile: String,
-    isEmptyProfile: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    when (isEmptyProfile) {
+    when (profile.isEmpty()) {
         true -> {
             Image(
                 painter = painterResource(ic_empty_profile),
@@ -38,9 +37,6 @@ internal fun PokeRecommendationUserProfileImage(
 @Composable
 private fun PokeRecommendationUserProfileImagePreview() {
     SoptTheme {
-        PokeRecommendationUserProfileImage(
-            profile = "",
-            isEmptyProfile = false,
-        )
+        PokeRecommendationUserProfileImage(profile = "")
     }
 }

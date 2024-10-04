@@ -58,7 +58,6 @@ internal fun PokeRecommendationDashboard(
     profile: String,
     name: String,
     userDescription: String,
-    isEmptyProfile: Boolean,
     onPokeClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -86,7 +85,6 @@ internal fun PokeRecommendationDashboard(
             ) {
                 PokeRecommendationUserProfileImage(
                     profile = profile,
-                    isEmptyProfile = isEmptyProfile,
                     modifier = Modifier.size(size = 72.dp)
                         .clip(shape = RoundedCornerShape(size = 100.dp))
                         .clickable { onProfileClick() },
@@ -134,7 +132,6 @@ private fun PokeRecommendationDashboardPreview() {
         PokeRecommendationDashboard(
             profile = "123",
             name = "이현우이현우이현우이현우이현우",
-            isEmptyProfile = false,
             onPokeClick = { },
             onProfileClick = { },
             userDescription = "1100기 iOS",
