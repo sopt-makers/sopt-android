@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.poke.implementation
 
-import javax.inject.Inject
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
@@ -44,6 +43,7 @@ import org.sopt.official.domain.poke.entity.PokeUserResponse
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
+import javax.inject.Inject
 
 class PokeRepositoryImpl @Inject constructor(
     private val localDataSource: PokeLocalDataSource,
@@ -62,7 +62,7 @@ class PokeRepositoryImpl @Inject constructor(
         return remoteDataSource.checkNewInPoke()
     }
 
-    override suspend fun getOnboardingPokeUserList(randomType: String, size: Int): GetOnboardingPokeUserListResponse {
+    override suspend fun getOnboardingPokeUserList(randomType: String?, size: Int): GetOnboardingPokeUserListResponse {
         return remoteDataSource.getOnboardingPokeUserList(randomType, size)
     }
 
@@ -110,7 +110,7 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String,): PokeUserResponse {
+    override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): PokeUserResponse {
         return remoteDataSource.pokeUser(
             pokeUserRequest =
             PokeUserRequest(

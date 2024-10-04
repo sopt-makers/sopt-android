@@ -24,44 +24,44 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray900
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
+import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
-internal fun TodayFortuneBox(
-    content: @Composable () -> Unit,
+internal fun PokeRecommendationUserProfileImage(
+    profile: String,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .background(
-                color = Gray900,
-                shape = RoundedCornerShape(12.dp),
-            ),
-    ) {
-        content()
+    when (profile.isEmpty()) {
+        true -> {
+            Image(
+                imageVector = ImageVector.vectorResource(ic_empty_profile),
+                contentDescription = "profileImageEmpty",
+                modifier = modifier,
+            )
+        }
+
+        false -> {
+            UrlImage(
+                url = profile,
+                contentDescription = "profileImage",
+                modifier = modifier,
+            )
+        }
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun TodayFortuneBoxPreview() {
-    TodayFortuneBox(
-        content = { Text("123") },
-        modifier = Modifier.background(color = Color.White),
-    )
+private fun PokeRecommendationUserProfileImagePreview() {
+    SoptTheme {
+        PokeRecommendationUserProfileImage(profile = "")
+    }
 }
