@@ -45,6 +45,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
 import timber.log.Timber
 
 @Composable
