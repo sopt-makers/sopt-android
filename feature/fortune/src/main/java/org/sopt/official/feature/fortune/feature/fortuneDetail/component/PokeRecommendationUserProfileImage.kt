@@ -3,7 +3,8 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 import androidx.compose.foundation.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
@@ -17,7 +18,7 @@ internal fun PokeRecommendationUserProfileImage(
     when (profile.isEmpty()) {
         true -> {
             Image(
-                painter = painterResource(ic_empty_profile),
+                imageVector = ImageVector.vectorResource(ic_empty_profile),
                 contentDescription = "profileImageEmpty",
                 modifier = modifier,
             )
