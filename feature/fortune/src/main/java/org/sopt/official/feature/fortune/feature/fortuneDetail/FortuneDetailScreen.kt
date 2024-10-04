@@ -45,12 +45,10 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.TodaySentence
 import timber.log.Timber
 
 @Composable
 internal fun FortuneDetailScreen(
-    paddingValue: PaddingValues,
     date: String,
     onFortuneAmuletClick: () -> Unit,
     onPokeClick: (userId: Long) -> Unit,
@@ -62,7 +60,6 @@ internal fun FortuneDetailScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues = paddingValue)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
@@ -100,7 +97,6 @@ internal fun FortuneDetailScreen(
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
-            paddingValue = PaddingValues(vertical = 16.dp),
             date = "2024-09-09",
             onFortuneAmuletClick = {},
             uiState = Success(

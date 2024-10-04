@@ -75,7 +75,6 @@ fun FoundationScreen(
                     )
 
                     fortuneDetailNavGraph(
-                        paddingValue = paddingValue,
                         navigateToFortuneAmulet = {
                             navController.navigate(FortuneAmulet)
                         }

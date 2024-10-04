@@ -26,17 +26,16 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -45,7 +44,6 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun FortuneDetailRoute(
-    paddingValue: PaddingValues,
     date: String,
     onFortuneAmuletClick: () -> Unit,
     viewModel: FortuneDetailViewModel = hiltViewModel(),
@@ -76,7 +74,6 @@ internal fun FortuneDetailRoute(
     }
 
     FortuneDetailScreen(
-        paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
         onProfileClick = { userId ->
