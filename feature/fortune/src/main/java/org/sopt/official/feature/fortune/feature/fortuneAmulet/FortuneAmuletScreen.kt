@@ -75,7 +75,7 @@ internal fun FortuneAmuletRoute(
                                 append(state.name)
                             }
                             withStyle(style = SpanStyle(color = SoptTheme.colors.onBackground)) {
-                                append("이 왔솝")
+                                append(state.nameSuffix)
                             }
                         },
                         style = SoptTheme.typography.heading28B,
@@ -117,7 +117,7 @@ private fun FortuneAmuletScreen(
 
         UrlImage(
             url = imageUrl,
-            contentDescription = "Fortune Amulet",
+            contentDescription = null,
             modifier = Modifier
                 .padding(horizontal = 33.dp)
                 .fillMaxWidth()

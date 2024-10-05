@@ -50,7 +50,9 @@ class FortuneActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 FoundationScreen(
-                    finishActivity = this::finish,
+                    navigateToNotification = {
+                        startActivity(navigator.getNotificationActivityIntent())
+                    },
                     navigateToHome = {
                         startActivity(navigator.getAuthActivityIntent())
                     },
