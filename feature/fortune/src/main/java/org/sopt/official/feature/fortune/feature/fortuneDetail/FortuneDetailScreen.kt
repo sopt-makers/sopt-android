@@ -74,7 +74,6 @@ internal fun FortuneDetailScreen(
                     profile = uiState.userInfo.profile,
                     name = uiState.userInfo.userName,
                     userDescription = uiState.userInfo.userDescription,
-                    isEmptyProfile = uiState.userInfo.isEmptyProfile,
                     onPokeClick = { onPokeClick(uiState.userInfo.userId) },
                     onProfileClick = { onProfileClick(uiState.userInfo.userId) }
                 )

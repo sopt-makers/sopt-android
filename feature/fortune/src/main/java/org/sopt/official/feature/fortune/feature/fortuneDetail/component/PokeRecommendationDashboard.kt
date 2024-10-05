@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray10
@@ -57,13 +59,16 @@ internal fun PokeRecommendationDashboard(
     profile: String,
     name: String,
     userDescription: String,
-    isEmptyProfile: Boolean,
     onPokeClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TodayFortuneBox(content = {
-        Column(modifier = modifier.fillMaxWidth().padding(all = 20.dp)) {
+        Column(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(all = 20.dp),
+        ) {
             Text(
                 text = "콕 찌르기",
                 style = SoptTheme.typography.body14R,
@@ -75,19 +80,27 @@ internal fun PokeRecommendationDashboard(
                 color = Gray30,
             )
             Spacer(modifier = Modifier.height(height = 28.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 PokeRecommendationUserProfileImage(
                     profile = profile,
-                    isEmptyProfile = isEmptyProfile,
                     modifier = Modifier.size(size = 72.dp)
                         .clip(shape = RoundedCornerShape(size = 100.dp))
                         .clickable { onProfileClick() },
                 )
                 Spacer(modifier = Modifier.width(width = 8.dp))
-                Column {
+                Column(
+                    modifier = Modifier
+                        .weight(weight = 1f)
+                        .padding(end = 30.dp),
+                ) {
                     Text(
                         text = name,
                         style = SoptTheme.typography.body18M,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
                         color = Gray30,
                     )
                     Text(
@@ -96,7 +109,6 @@ internal fun PokeRecommendationDashboard(
                         color = Gray300,
                     )
                 }
-                Spacer(modifier = Modifier.weight(weight = 1f))
                 IconButton(
                     onClick = onPokeClick,
                     modifier = Modifier.size(size = 44.dp).background(
@@ -105,7 +117,7 @@ internal fun PokeRecommendationDashboard(
                     ),
                 ) {
                     Icon(
-                        painter = painterResource(ic_poke),
+                        imageVector = ImageVector.vectorResource(ic_poke),
                         contentDescription = "콕 찌르기",
                     )
                 }
@@ -120,8 +132,7 @@ private fun PokeRecommendationDashboardPreview() {
     SoptTheme {
         PokeRecommendationDashboard(
             profile = "123",
-            name = "이현우",
-            isEmptyProfile = false,
+            name = "이현우이현우이현우이현우이현우",
             onPokeClick = { },
             onProfileClick = { },
             userDescription = "1100기 iOS",

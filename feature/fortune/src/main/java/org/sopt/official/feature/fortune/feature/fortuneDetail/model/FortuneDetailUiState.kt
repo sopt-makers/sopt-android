@@ -53,7 +53,6 @@ internal sealed interface FortuneDetailUiState {
             val part: String,
         ) {
             val userDescription = "${generation}기 $part"
-            val isEmptyProfile = profile.isEmpty()
         }
     }
 
