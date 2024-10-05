@@ -39,7 +39,10 @@ internal fun PokeMessageBottomSheetScreen(
     Column(
         modifier = modifier.fillMaxWidth()
             .padding(horizontal = 20.dp)
-            .padding(top = 24.dp, bottom = 12.dp),
+            .padding(
+                top = 24.dp,
+                bottom = 12.dp,
+            ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -66,9 +69,7 @@ internal fun PokeMessageBottomSheetScreen(
             )
         }
         Spacer(modifier = Modifier.height(height = 12.dp))
-        LazyColumn(
-            contentPadding = PaddingValues(vertical = 4.dp),
-        ) {
+        LazyColumn(contentPadding = PaddingValues(vertical = 4.dp)) {
             val messages = immutableListOf(
                 "안녕하세요? I AM 35기에요",
                 "친해지고 싶어서 DM 드려요 ^^~",
