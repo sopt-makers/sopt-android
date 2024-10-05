@@ -15,14 +15,14 @@ javax-inject = "1"
 corektx = "1.13.1"
 appcompat = "1.7.0"
 activity = "1.9.2"
-fragmentKtx = "1.8.3"
+fragmentKtx = "1.8.4"
 lifecycle = "2.8.6"
 swipe-refresh-layout = "1.1.0"
-navigation = "2.8.1"
+navigation = "2.8.2"
 startup = "1.2.0"
 customtab = "1.8.0"
 exifinterface = "1.3.7"
-compose-bom = "2024.09.02"
+compose-bom = "2024.09.03"
 androidx-paging = "3.3.2"
 desugarJdk = "2.1.2"
 
@@ -33,20 +33,20 @@ secret-gradle-plugin = "2.0.1"
 junit = "4.13.2"
 androidx-test-junit = "1.2.1"
 androidx-test-espresso = "3.6.1"
-junit5-plugin = "1.11.0.0"
-junit5-jupiter = "5.11.1"
+junit5-plugin = "1.11.2.0"
+junit5-jupiter = "5.11.2"
 truth = "1.4.4"
 robolectric = "4.13"
 androidx-uiautomator = "2.3.0"
 androidx-test = "1.6.2"
 androidx-test-rules = "1.6.1"
 
-gradleplugin = "8.6.1"
+gradleplugin = "8.7.0"
 kspplugin = "2.0.20-1.0.25"
 
 dagger-hilt = "2.52"
 dagger-hilt-navigation-compose = "1.2.0"
-flipper = "0.267.1"
+flipper = "0.268.0"
 soloader = "0.12.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
@@ -58,17 +58,17 @@ dotsindicator = "5.1.0"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"
-firebase = "33.3.0"
+firebase = "33.4.0"
 firebaseMessagingLifecycleKtx = "0.2.0"
 app-distribution = "5.0.0"
 ktlint = "12.1.1"
 process-pheonix = "3.0.0"
-amplitude = "1.18.0"
+amplitude = "1.19.1"
 spotless = "6.25.0"
 constraintlayout = "2.1.4"
-benchmark-macro-junit4 = "1.3.1"
-androidx-baselineprofile = "1.3.1"
-profileinstaller = "1.4.0"
+benchmark-macro-junit4 = "1.3.2"
+androidx-baselineprofile = "1.3.2"
+profileinstaller = "1.4.1"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
@@ -131,8 +131,8 @@ junit5 = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5
 junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5-jupiter" }
 junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5-jupiter" }
 junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-jupiter" }
-junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core", version = "1.5.0" }
-junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.5.0" }
+junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core", version = "1.6.0" }
+junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.6.0" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

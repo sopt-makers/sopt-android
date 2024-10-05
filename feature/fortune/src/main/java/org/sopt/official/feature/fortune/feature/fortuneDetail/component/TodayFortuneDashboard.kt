@@ -34,7 +34,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.LineBreak
@@ -44,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.R
+import org.sopt.official.feature.fortune.R.drawable.img_fortune_title
 
 @Composable
 internal fun TodayFortuneDashboard(
@@ -60,7 +62,7 @@ internal fun TodayFortuneDashboard(
             ) {
                 Spacer(modifier = Modifier.height(height = 32.dp))
                 Image(
-                    painter = painterResource(R.drawable.img_fortune_title),
+                    imageVector = ImageVector.vectorResource(img_fortune_title),
                     contentDescription = "오늘의 솝마디",
                 )
                 Spacer(modifier = Modifier.height(height = 10.dp))

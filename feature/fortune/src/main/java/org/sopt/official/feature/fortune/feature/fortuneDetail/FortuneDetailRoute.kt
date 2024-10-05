@@ -24,9 +24,12 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -37,12 +40,19 @@ internal fun FortuneDetailRoute(
     onFortuneAmuletClick: () -> Unit,
     viewModel: FortuneDetailViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     FortuneDetailScreen(
         paddingValue = paddingValue,
         date = date,
         onFortuneAmuletClick = onFortuneAmuletClick,
+        onPokeClick = {},
+        onProfileClick = { userId ->
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://playground.sopt.org/members/${userId}"))
+            )
+        },
         uiState = uiState,
     )
 }

@@ -35,6 +35,7 @@ android {
 dependencies {
     // domain
     implementation(projects.domain.fortune)
+    implementation(projects.domain.poke)
 
     // core
     implementation(projects.core.common)

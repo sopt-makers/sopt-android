@@ -24,11 +24,11 @@
  */
 package org.sopt.official.domain.poke.usecase
 
-import javax.inject.Inject
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
+import javax.inject.Inject
 
 class GetOnboardingPokeUserListUseCase @Inject constructor(
     private val repository: PokeRepository,
