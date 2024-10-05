@@ -29,7 +29,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,13 +54,11 @@ import java.util.Locale
 
 @Composable
 internal fun HomeRoute(
-    paddingValue: PaddingValues,
     navigateToFortuneDetail: (String) -> Unit,
 ) {
-    val date = remember { getTodayInfo() }
+    val date = rememberSaveable { getToday() }
 
     HomeScreen(
-        paddingValue = paddingValue,
         date = date,
         navigateToFortuneDetail = {
             navigateToFortuneDetail(date)
@@ -71,13 +68,11 @@ internal fun HomeRoute(
 
 @Composable
 private fun HomeScreen(
-    paddingValue: PaddingValues,
     date: String,
     navigateToFortuneDetail: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
-            .padding(paddingValue)
             .fillMaxSize()
             .background(SoptTheme.colors.background),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -139,7 +134,7 @@ private fun HomeScreen(
     }
 }
 
-fun getTodayInfo(): String {
+fun getToday(): String {
     val today = LocalDate.now()
 
     val monthDay = today.format(DateTimeFormatter.ofPattern("M월 d일"))
@@ -156,8 +151,7 @@ fun getTodayInfo(): String {
 fun HomeScreenPreview() {
     SoptTheme {
         HomeScreen(
-            paddingValue = PaddingValues(0.dp),
-            date = getTodayInfo()
+            date = getToday()
         )
     }
 }
