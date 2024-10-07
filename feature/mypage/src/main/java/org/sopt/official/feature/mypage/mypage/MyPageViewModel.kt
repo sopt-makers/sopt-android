@@ -87,6 +87,9 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
+                .onSuccess {
+
+                }
                 .onFailure { Timber.e(it) }
         }
     }

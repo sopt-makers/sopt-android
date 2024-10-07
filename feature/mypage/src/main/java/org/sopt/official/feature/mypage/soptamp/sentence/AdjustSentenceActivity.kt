@@ -78,7 +78,7 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             when (sideEffect) {
                                 is AdjustSentenceSideEffect.NavigateToMyPage -> {
                                     keyboardController?.hide()
-                                    // todo: delay(10)
+                                     delay(10)
                                     toast("한마디가 변경되었습니다")
                                     onBackPressedDispatcher.onBackPressed()
                                 }
