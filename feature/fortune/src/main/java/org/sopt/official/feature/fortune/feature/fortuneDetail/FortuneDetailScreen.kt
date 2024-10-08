@@ -66,7 +66,8 @@ internal fun FortuneDetailScreen(
             is Success -> {
                 TodayFortuneDashboard(
                     date = date,
-                    todaySentence = uiState.todaySentence.message,
+                    todaySentence = uiState.todaySentence.content,
+                    name = uiState.todaySentence.userName,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 PokeRecommendationDashboard(

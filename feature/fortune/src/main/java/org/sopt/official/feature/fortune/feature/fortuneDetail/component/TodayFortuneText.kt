@@ -1,0 +1,97 @@
+package org.sopt.official.feature.fortune.feature.fortuneDetail.component
+
+import android.graphics.Paint
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.Gray30
+import org.sopt.official.designsystem.SoptTheme
+
+@Composable
+internal fun TodayFortuneText(
+    todaySentence: String,
+    name: String,
+    modifier: Modifier = Modifier,
+) {
+    val currentDensity = LocalDensity.current
+    val currentConfiguration = LocalConfiguration.current
+    val textPaint = remember { Paint().apply { textSize = with(currentDensity) { 24.sp.toPx() } } }
+    val screenWidth = remember { with(currentDensity) { (currentConfiguration.screenWidthDp.dp - (88.dp * 2)).toPx() } }
+    val formattedSentence = remember { todaySentence.toLineBreakingSentence(textPaint, screenWidth) }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 68.dp)
+            .semantics { contentDescription = "todaySentence" },
+    ) {
+        Text(
+            text = "${name}님,",
+            style = SoptTheme.typography.title24SB,
+            color = Gray30,
+            maxLines = 1,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = formattedSentence,
+            style = SoptTheme.typography.title24SB.copy(
+                lineBreak = LineBreak.Simple,
+            ),
+            color = Gray30,
+            maxLines = 4,
+            textAlign = TextAlign.Center,
+            softWrap = true,
+        )
+    }
+}
+
+private fun String.toLineBreakingSentence(textPaint: Paint, screenWidth: Float): String {
+    var resultSentence = ""
+    var sentenceLineWidth = 0f
+    val words = split(" ")
+    val spaceWidth = textPaint.measureText(" ")
+
+    words.forEach { word ->
+        val wordWidth = textPaint.measureText(word)
+
+        when (sentenceLineWidth + wordWidth + spaceWidth > screenWidth) {
+            true -> {
+                resultSentence += "\n$word"
+                sentenceLineWidth = wordWidth
+            }
+
+            false -> {
+                resultSentence = if (resultSentence.isBlank()) word else "$resultSentence $word"
+                sentenceLineWidth += wordWidth + spaceWidth
+            }
+        }
+    }
+
+    return resultSentence
+}
+
+@Preview
+@Composable
+private fun TodayFortuneTextPreview() {
+    SoptTheme {
+        TodayFortuneText(
+            todaySentence = "저 근데 진짜 발 딛는 것도 처음이라 좀 수치스러울 것 같은데 옆에서 카공하다",
+            name = "김세훈",
+        )
+    }
+}

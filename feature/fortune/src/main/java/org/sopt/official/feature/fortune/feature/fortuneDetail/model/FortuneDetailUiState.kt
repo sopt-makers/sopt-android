@@ -40,9 +40,7 @@ internal sealed interface FortuneDetailUiState {
         data class TodaySentence(
             val userName: String,
             val content: String,
-        ) {
-            val message: String get() = "${userName}님,\n${content}"
-        }
+        )
 
         @Immutable
         data class UserInfo(
