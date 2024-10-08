@@ -56,7 +56,7 @@ internal class FortuneDetailViewModel @Inject constructor(
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
 
     private var isAnonymous: Boolean = false
-    private var userId = -1
+    private var userId = DEFAULT_ID
 
     init {
         viewModelScope.launch {
@@ -107,5 +107,9 @@ internal class FortuneDetailViewModel @Inject constructor(
                 _uiState.update { Error(error) }
             }
         }
+    }
+
+    companion object {
+        private const val DEFAULT_ID = -1
     }
 }
