@@ -34,9 +34,6 @@ interface HomeService {
     @GET("user/main")
     suspend fun getMainView(): HomeResponse
 
-    @GET("description/main")
-    suspend fun getMainDescription(): DescriptionViewResponse
-
     @GET("user/app-service")
     suspend fun getAppService(): List<AppServiceResponse>
 

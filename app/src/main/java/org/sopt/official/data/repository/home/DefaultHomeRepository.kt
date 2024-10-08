@@ -41,12 +41,6 @@ class DefaultHomeRepository @Inject constructor(
         }
     }
 
-    override suspend fun getMainDescription(): Result<HomeSection> {
-        return runCatching {
-            homeService.getMainDescription().toEntity()
-        }
-    }
-
     override suspend fun getAppService(): Result<List<AppService>> {
         return runCatching {
             homeService.getAppService().map { it.toEntity() }
