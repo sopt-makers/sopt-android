@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
@@ -34,5 +35,13 @@ fun FortuneButton(
             color = SoptTheme.colors.onPrimary,
             modifier = Modifier.padding(horizontal = 26.dp, vertical = 16.dp)
         )
+    }
+}
+
+@Preview
+@Composable
+fun FortuneButtonPreview() {
+    SoptTheme {
+        FortuneButton(title = "오늘의 부적 받기", onClick = {})
     }
 }
