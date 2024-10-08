@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,23 +39,31 @@ import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
     private val rankingRepository: RankingRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
     private val _nickname = MutableStateFlow("")
     val nickname = _nickname.asStateFlow()
+    private val _generation = MutableStateFlow(-1)
+    val generation = _generation.asStateFlow()
+
 
     fun initUser() {
         viewModelScope.launch {
             userRepository.getUserInfo()
                 .onSuccess { _nickname.value = it.nickname }
+                .onFailure(Timber::e)
+
+            userRepository.getUserGeneration()
+                .onSuccess { _generation.value = it }
                 .onFailure(Timber::e)
         }
     }

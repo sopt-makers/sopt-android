@@ -27,6 +27,7 @@ package org.sopt.official.data.mypage.remote.api
 import org.sopt.official.data.mypage.model.request.UpdateNicknameRequest
 import org.sopt.official.data.mypage.model.request.UpdateProfileMessageRequest
 import org.sopt.official.data.mypage.model.response.UpdateProfileMessageResponse
+import org.sopt.official.data.mypage.model.response.UserGenerationResponse
 import org.sopt.official.data.mypage.model.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -40,6 +41,9 @@ interface SoptampUserService {
 
     @GET("user/soptamp")
     suspend fun getUserInformation(): UserResponse
+
+    @GET("user/generation")
+    suspend fun getGeneration(): UserGenerationResponse
 
     // 닉네임 변경
     @PATCH("user/nickname")

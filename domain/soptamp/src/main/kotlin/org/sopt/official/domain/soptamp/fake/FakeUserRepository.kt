@@ -35,6 +35,7 @@ object FakeUserRepository : UserRepository {
 
     override suspend fun logout(): Result<Unit> = runCatching {}
     override suspend fun getUserInfo(): Result<SoptampUser> = runCatching { fakeUser }
+    override suspend fun getUserGeneration(): Result<Int> = runCatching { 1 }
 
     override suspend fun updateProfileMessage(profileMessage: String): Result<Unit> = runCatching {}
 

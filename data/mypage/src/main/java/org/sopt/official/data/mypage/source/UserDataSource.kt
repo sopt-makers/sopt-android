@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.mypage.source
 
+import org.sopt.official.data.mypage.model.response.UserGenerationResponse
 import org.sopt.official.data.mypage.model.response.UserResponse
 
 interface UserDataSource {
@@ -31,4 +32,5 @@ interface UserDataSource {
     suspend fun updateNickname(new: String)
     suspend fun updateProfileMessage(new: String)
     suspend fun getUserInfo(): UserResponse
+    suspend fun getUserGeneration(): UserGenerationResponse
 }
