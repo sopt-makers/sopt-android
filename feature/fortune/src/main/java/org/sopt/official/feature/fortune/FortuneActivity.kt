@@ -50,7 +50,7 @@ class FortuneActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 FoundationScreen(
-                    navigateToNotification = {
+                    onClickLeadingIcon = {
                         startActivity(navigator.getNotificationActivityIntent())
                     },
                     navigateToHome = {
