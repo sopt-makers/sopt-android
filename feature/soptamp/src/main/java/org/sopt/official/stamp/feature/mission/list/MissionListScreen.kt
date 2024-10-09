@@ -99,6 +99,7 @@ fun MissionListScreen(
     missionsViewModel: MissionsViewModel = hiltViewModel()
 ) {
     val state by missionsViewModel.state.collectAsState()
+    val generation by missionsViewModel.generation.collectAsState()
     val nickname by missionsViewModel.nickname.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -127,6 +128,7 @@ fun MissionListScreen(
 
             is MissionsState.Success -> MissionListScreen(
                 nickname = nickname,
+                generation = generation,
                 missionListUiModel = (state as MissionsState.Success).missionListUiModel,
                 menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
                 onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
@@ -146,6 +148,7 @@ fun MissionListScreen(
 @Composable
 fun MissionListScreen(
     nickname: String,
+    generation: Int,
     missionListUiModel: MissionListUiModel,
     menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
@@ -165,7 +168,7 @@ fun MissionListScreen(
         },
         floatingActionButton = {
             SoptampSegmentedFloatingButton(
-                option1 = "34기 랭킹",
+                option1 = "${generation}기 랭킹",
                 option2 = "파트별 랭킹",
                 modifier = Modifier.padding(horizontal = 54.dp),
                 onClickFirstOption = onCurrentRankingButtonClick,
@@ -395,6 +398,7 @@ fun PreviewMissionListScreen() {
     SoptTheme {
         MissionListScreen(
             nickname = "Nunu",
+            generation = 35,
             missionListUiModel,
             persistentListOf("전체 미션", "완료 미션", "미완료 미션")
         )

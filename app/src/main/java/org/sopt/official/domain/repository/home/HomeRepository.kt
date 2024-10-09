@@ -31,7 +31,6 @@ import org.sopt.official.domain.entity.home.SoptUser
 
 interface HomeRepository {
     suspend fun getMainView(): Result<SoptUser>
-    suspend fun getMainDescription(): Result<HomeSection>
     suspend fun getAppService(): Result<List<AppService>>
     suspend fun getHotPost(): Result<HotPostEntity>
 }

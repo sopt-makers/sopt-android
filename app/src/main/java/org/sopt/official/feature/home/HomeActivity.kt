@@ -143,8 +143,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun initUserStatus() {
-        viewModel.initMainDescription(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
         viewModel.registerPushToken(args?.userStatus ?: UserStatus.UNAUTHENTICATED)
+        binding.subtitle.isVisible = args?.userStatus == UserStatus.UNAUTHENTICATED
     }
 
     private fun initToolbar() {
@@ -381,8 +381,8 @@ class HomeActivity : AppCompatActivity() {
     }
 
     data class StartArgs(
-      val userStatus: UserStatus,
-      val deepLinkType: DeepLinkType? = null,
+        val userStatus: UserStatus,
+        val deepLinkType: DeepLinkType? = null,
     ) : Serializable
 
     companion object {

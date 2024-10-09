@@ -24,15 +24,16 @@
  */
 package org.sopt.official.data.mypage.remote
 
-import javax.inject.Inject
 import org.sopt.official.data.mypage.model.request.UpdateNicknameRequest
 import org.sopt.official.data.mypage.model.request.UpdateProfileMessageRequest
+import org.sopt.official.data.mypage.model.response.UserGenerationResponse
 import org.sopt.official.data.mypage.model.response.UserResponse
 import org.sopt.official.data.mypage.remote.api.SoptampUserService
 import org.sopt.official.data.mypage.source.UserDataSource
+import javax.inject.Inject
 
 internal class RemoteUserDataSource @Inject constructor(
-    private val soptampUserService: SoptampUserService
+    private val soptampUserService: SoptampUserService,
 ) : UserDataSource {
 
     override suspend fun checkNickname(nickname: String) {
@@ -49,5 +50,9 @@ internal class RemoteUserDataSource @Inject constructor(
 
     override suspend fun getUserInfo(): UserResponse {
         return soptampUserService.getUserInformation()
+    }
+
+    override suspend fun getUserGeneration(): UserGenerationResponse {
+        return soptampUserService.getGeneration()
     }
 }
