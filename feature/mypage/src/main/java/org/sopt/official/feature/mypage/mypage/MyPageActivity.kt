@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.auth.model.UserActiveState
@@ -156,7 +155,7 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.MyPageItem(
                             title = "로그인",
                             onItemClick = {
-                                onBackPressedDispatcher.onBackPressed()
+                                startActivity(navigatorProvider.getAuthActivityIntent())
                             }
                         )
                     )
@@ -171,7 +170,7 @@ class MyPageActivity : AppCompatActivity() {
                 LaunchedEffect(viewModel.finish, lifecycleOwner) {
                     viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
                         .collect {
-                            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+                            startActivity(navigatorProvider.getAuthActivityIntent())
                         }
                 }
 
