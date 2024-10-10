@@ -40,6 +40,7 @@ import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber
 import javax.inject.Inject
@@ -87,9 +88,7 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
-                .onSuccess {
-
-                }
+                .onSuccess { onDismiss() }
                 .onFailure { Timber.e(it) }
         }
     }
