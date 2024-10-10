@@ -27,8 +27,6 @@ package org.sopt.official.network.authenticator
 import android.content.Context
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
@@ -39,6 +37,8 @@ import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshService
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class SoptAuthenticator @Inject constructor(
@@ -50,6 +50,10 @@ class SoptAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
             val refreshToken = dataStore.refreshToken
+            if (refreshToken.isEmpty()) {
+                Timber.e("refreshToken is empty")
+                return null
+            }
             val newTokens = runCatching {
                 runBlocking {
                     refreshService.refresh(RefreshRequest(refreshToken))
