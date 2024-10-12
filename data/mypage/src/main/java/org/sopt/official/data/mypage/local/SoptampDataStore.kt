@@ -26,15 +26,19 @@ package org.sopt.official.data.mypage.local
 
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import javax.inject.Inject
 import org.sopt.official.domain.soptamp.constant.Soptamp
+import javax.inject.Inject
 
 class SoptampDataStore @Inject constructor(
-    @Soptamp private val dataStore: SharedPreferences
+    @Soptamp private val dataStore: SharedPreferences,
 ) {
     var userId: Int
         get() = dataStore.getInt("user_id", -1)
         set(value) = dataStore.edit { putInt("user_id", value) }
+
+    var generation: Int
+        get() = dataStore.getInt("generation", -1)
+        set(value) = dataStore.edit { putInt("generation", value) }
 
     var profileMessage: String
         get() = dataStore.getString("profile_message", "") ?: "String"
@@ -50,6 +54,7 @@ class SoptampDataStore @Inject constructor(
 
     fun clear() {
         userId = -1
+        generation = -1
         profileMessage = ""
         nickname = ""
     }

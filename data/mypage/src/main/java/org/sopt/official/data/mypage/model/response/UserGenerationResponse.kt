@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.service.home
+package org.sopt.official.data.mypage.model.response
 
-import org.sopt.official.data.model.home.AppServiceResponse
-import org.sopt.official.data.model.home.DescriptionViewResponse
-import org.sopt.official.data.model.home.HomeResponse
-import org.sopt.official.data.model.home.HotPostResponse
-import retrofit2.http.GET
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface HomeService {
-    @GET("user/main")
-    suspend fun getMainView(): HomeResponse
-
-    @GET("user/app-service")
-    suspend fun getAppService(): List<AppServiceResponse>
-
-    @GET("user/playground/hot-post")
-    suspend fun getHotPost(): HotPostResponse
+@Serializable
+data class UserGenerationResponse(
+    @SerialName("currentGeneration")
+    val currentGeneration: Int,
+    @SerialName("status")
+    val status: String,
+) {
+    fun toDomain() = currentGeneration
 }

@@ -247,16 +247,6 @@ class HomeViewModel @Inject constructor(
     }
   }
 
-  fun initMainDescription(userStatus: UserStatus) {
-    viewModelScope.launch {
-      if (userStatus != UserStatus.UNAUTHENTICATED) {
-        homeRepository.getMainDescription().onSuccess {
-          _description.value = it
-        }
-      }
-    }
-  }
-
   fun registerPushToken(userStatus: UserStatus) {
     if (userStatus == UserStatus.UNAUTHENTICATED) return
     viewModelScope.launch {

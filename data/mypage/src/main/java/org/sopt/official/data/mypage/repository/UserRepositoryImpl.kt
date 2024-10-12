@@ -24,11 +24,11 @@
  */
 package org.sopt.official.data.mypage.repository
 
-import javax.inject.Inject
 import org.sopt.official.data.mypage.local.SoptampDataStore
 import org.sopt.official.data.mypage.source.UserDataSource
 import org.sopt.official.data.poke.source.local.PokeLocalDataSource
 import org.sopt.official.domain.mypage.repository.UserRepository
+import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
     private val remote: UserDataSource,
@@ -50,6 +50,12 @@ class UserRepositoryImpl @Inject constructor(
     }.onSuccess {
         soptampLocal.nickname = it.nickname
         soptampLocal.profileMessage = it.profileMessage
+    }
+
+    override suspend fun getUserGeneration(): Result<Int> = runCatching {
+        remote.getUserGeneration().toDomain()
+    }.onSuccess {
+        soptampLocal.generation = it
     }
 
     override suspend fun updateProfileMessage(profileMessage: String) = runCatching {
