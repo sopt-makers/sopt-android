@@ -32,15 +32,13 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
-import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.model.MyPageUiState
 import timber.log.Timber
 import javax.inject.Inject
@@ -55,18 +53,15 @@ class MyPageViewModel @Inject constructor(
     private val stampRepository: StampRepository,
 ) : ViewModel() {
 
-    private val _userActiveState = MutableStateFlow<MyPageUiState>(MyPageUiState.UnInitialized)
-    val userActiveState = _userActiveState.filterIsInstance<MyPageUiState.User>()
-        .map { it.activeState != UserActiveState.UNAUTHENTICATED }
-
-    private val _dialogState: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
-    val dialogState: StateFlow<MyPageUiState> = _dialogState.asStateFlow()
+    private val _state: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
+    val state: StateFlow<MyPageUiState> = _state.asStateFlow()
 
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
-    fun setUserActiveState(new: MyPageUiState) {
-        _userActiveState.value = new
+    fun setUserActiveState(activeState: UserActiveState) {
+        if (activeState == UserActiveState.UNAUTHENTICATED) _state.value = MyPageUiState.UnAuthenticated
+        else _state.value = MyPageUiState.Authenticated(activeState)
     }
 
     fun logOut() {
@@ -94,11 +89,14 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun showDialogState(action: MyPageAction) {
-        _dialogState.tryEmit(MyPageUiState.Dialog(action))
+        _state.update { currentState ->
+            (currentState as MyPageUiState.Authenticated).copy(action = action)
+        }
     }
 
     fun onDismiss() {
-        _dialogState.tryEmit(MyPageUiState.UnInitialized)
+        _state.update { currentState ->
+            (currentState as MyPageUiState.Authenticated).copy(action = null)
+        }
     }
-
 }

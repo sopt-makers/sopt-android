@@ -41,7 +41,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -83,8 +82,7 @@ class MyPageActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-                val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+                val state by viewModel.state.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
                 val serviceSectionItems = remember {
@@ -163,7 +161,7 @@ class MyPageActivity : AppCompatActivity() {
 
                 LaunchedEffect(Unit) {
                     args?.userActiveState?.let {
-                        viewModel.setUserActiveState(MyPageUiState.User(it))
+                        viewModel.setUserActiveState(it)
                     }
                 }
 
@@ -172,15 +170,6 @@ class MyPageActivity : AppCompatActivity() {
                         .collect {
                             startActivity(navigatorProvider.getAuthActivityIntent())
                         }
-                }
-
-                if (dialogState is MyPageUiState.Dialog) {
-                    ShowMyPageDialog(
-                        action = (dialogState as MyPageUiState.Dialog).action,
-                        onDismissRequest = viewModel::onDismiss,
-                        onClearSoptampClick = viewModel::resetSoptamp,
-                        onLogoutClick = viewModel::logOut
-                    )
                 }
 
                 Scaffold(modifier = Modifier
@@ -203,14 +192,45 @@ class MyPageActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(20.dp))
                         MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
-                        if (isAuthenticated) {
-                            MyPageSection(items = notificationSectionItems)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            MyPageSection(items = soptampSectionItems)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            MyPageSection(items = etcSectionItems)
-                        } else {
-                            MyPageSection(items = etcLoginSectionItems)
+                        when (state) {
+                            is MyPageUiState.Authenticated -> {
+                                when ((state as MyPageUiState.Authenticated).action) {
+                                    MyPageAction.CLEAR_SOPTAMP -> {
+                                        MyPageDialog(
+                                            onDismissRequest = viewModel::onDismiss,
+                                            title = "미션을 초기화 하실건가요?",
+                                            subTitle = "사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
+                                            negativeText = "취소",
+                                            positiveText = "초기화",
+                                            onPositiveButtonClick = viewModel::resetSoptamp
+                                        )
+                                    }
+
+                                    MyPageAction.LOGOUT -> {
+                                        MyPageDialog(
+                                            onDismissRequest = viewModel::onDismiss,
+                                            title = "로그아웃",
+                                            subTitle = "정말 로그아웃을 하실 건가요?",
+                                            negativeText = "취소",
+                                            positiveText = "로그아웃",
+                                            onPositiveButtonClick = viewModel::logOut
+                                        )
+                                    }
+
+                                    else -> {}
+                                }
+                                MyPageSection(items = notificationSectionItems)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                MyPageSection(items = soptampSectionItems)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                MyPageSection(items = etcSectionItems)
+                            }
+
+                            is MyPageUiState.UnAuthenticated -> {
+                                MyPageSection(items = etcLoginSectionItems)
+                            }
+
+                            is MyPageUiState.UnInitialized -> {}
                         }
                         Spacer(modifier = Modifier.height(32.dp))
                     }
@@ -227,38 +247,6 @@ class MyPageActivity : AppCompatActivity() {
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
             putExtra("args", args)
-        }
-    }
-}
-
-@Composable
-private fun ShowMyPageDialog(
-    action: MyPageAction,
-    onDismissRequest: () -> Unit,
-    onClearSoptampClick: () -> Unit,
-    onLogoutClick: () -> Unit
-) {
-    when (action) {
-        MyPageAction.CLEAR_SOPTAMP -> {
-            MyPageDialog(
-                onDismissRequest = onDismissRequest,
-                title = "미션을 초기화 하실건가요?",
-                subTitle = "사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
-                negativeText = "취소",
-                positiveText = "초기화",
-                onPositiveButtonClick = onClearSoptampClick
-            )
-        }
-
-        MyPageAction.LOGOUT -> {
-            MyPageDialog(
-                onDismissRequest = onDismissRequest,
-                title = "로그아웃",
-                subTitle = "정말 로그아웃을 하실 건가요?",
-                negativeText = "취소",
-                positiveText = "로그아웃",
-                onPositiveButtonClick = onLogoutClick
-            )
         }
     }
 }

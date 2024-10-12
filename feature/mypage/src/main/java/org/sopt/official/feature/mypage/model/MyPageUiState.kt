@@ -24,15 +24,23 @@
  */
 package org.sopt.official.feature.mypage.model
 
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.feature.mypage.mypage.MyPageAction
 
 @Stable
 sealed interface MyPageUiState {
-    data object UnInitialized : MyPageUiState
-    data class User(val activeState: UserActiveState) : MyPageUiState
 
-    // todo: side effect
-    data class Dialog(val action: MyPageAction) : MyPageUiState
+    @Immutable
+    data object UnInitialized : MyPageUiState
+
+    @Immutable
+    data class Authenticated(
+        val activeState: UserActiveState,
+        val action: MyPageAction? = null
+    ) : MyPageUiState
+
+    @Immutable
+    data object UnAuthenticated : MyPageUiState
 }
