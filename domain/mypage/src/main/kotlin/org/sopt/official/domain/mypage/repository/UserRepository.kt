@@ -31,6 +31,7 @@ interface UserRepository {
     suspend fun checkNickname(nickname: String): Result<Unit>
     suspend fun logout(): Result<Unit>
     suspend fun getUserInfo(): Result<SoptampUser>
+    suspend fun getUserGeneration(): Result<Int>
     suspend fun updateProfileMessage(profileMessage: String): Result<Unit>
     suspend fun updateNickname(nickname: String): Result<Unit>
     fun updateLocalUserInfo(profileMessage: String)
