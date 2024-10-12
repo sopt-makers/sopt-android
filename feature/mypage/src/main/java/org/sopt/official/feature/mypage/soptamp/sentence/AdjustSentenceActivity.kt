@@ -49,7 +49,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
@@ -78,7 +77,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             when (sideEffect) {
                                 is AdjustSentenceSideEffect.NavigateToMyPage -> {
                                     keyboardController?.hide()
-                                     delay(10)
                                     toast("한마디가 변경되었습니다")
                                     onBackPressedDispatcher.onBackPressed()
                                 }
