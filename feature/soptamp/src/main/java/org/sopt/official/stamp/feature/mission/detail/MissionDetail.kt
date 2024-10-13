@@ -119,7 +119,9 @@ fun MissionDetailScreen(
         }
     }
     LaunchedEffect(isDeleteSuccess) {
-        resultNavigator.navigateBack(true)
+        if (isDeleteSuccess) {
+            resultNavigator.navigateBack(true)
+        }
     }
 
     SoptTheme {
