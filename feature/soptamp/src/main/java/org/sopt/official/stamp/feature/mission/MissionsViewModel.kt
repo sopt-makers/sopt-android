@@ -55,6 +55,11 @@ class MissionsViewModel @Inject constructor(
     private val _generation = MutableStateFlow(-1)
     val generation = _generation.asStateFlow()
 
+    init {
+        initUser()
+        fetchMissions()
+    }
+
 
     fun initUser() {
         viewModelScope.launch {

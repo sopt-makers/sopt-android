@@ -112,10 +112,6 @@ fun MissionListScreen(
     val nickname by missionsViewModel.nickname.collectAsState()
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        missionsViewModel.initUser()
-        missionsViewModel.fetchMissions()
-    }
 
     resultRecipient.onNavResult { result ->
         when (result) {

@@ -57,7 +57,7 @@ internal class RemoteMissionsRepository @Inject constructor(
     }
 
     override suspend fun getInCompleteMissions(): Result<List<Mission>> {
-        val result = remote.getAllMission().mapCatching { it.toDomain() }
+        val result = remote.getIncompleteMissions().map { it.toDomain() }
 
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {

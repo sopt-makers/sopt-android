@@ -30,7 +30,6 @@ import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.remote.api.SoptampService
 import org.sopt.official.data.soptamp.remote.mapper.toData
 import org.sopt.official.data.soptamp.remote.model.MissionData
-import org.sopt.official.data.soptamp.remote.model.response.InCompleteMissionResponse
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 
 internal class RemoteMissionsDataSource @Inject constructor(
@@ -46,7 +45,7 @@ internal class RemoteMissionsDataSource @Inject constructor(
     }
 
     override suspend fun getCompleteMissions(): Result<List<MissionData>> = runCatching {
-        soptampService.getCompleteMissions().toData()
+        soptampService.getCompleteMissions().toData(true)
     }
 
     override suspend fun getIncompleteMissions(): Result<List<MissionData>> = runCatching {
