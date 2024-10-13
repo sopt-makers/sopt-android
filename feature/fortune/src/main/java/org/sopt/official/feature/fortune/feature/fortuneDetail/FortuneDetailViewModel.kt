@@ -71,7 +71,7 @@ internal class FortuneDetailViewModel @Inject constructor(
                 val todayFortune = result[0] as TodayFortuneWord
                 val pokeUser = result[1] as GetOnboardingPokeUserListResponse
                 val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()
-                userId = user.userId
+
                 _uiState.update {
                     Success(
                         todaySentence = TodaySentence(
@@ -86,6 +86,8 @@ internal class FortuneDetailViewModel @Inject constructor(
                             part = user.part,
                         )
                     )
+                }.also {
+                    userId = user.userId
                 }
             }.onFailure { error ->
                 _uiState.update { Error(error) }
@@ -107,9 +109,5 @@ internal class FortuneDetailViewModel @Inject constructor(
                 _uiState.update { Error(error) }
             }
         }
-    }
-
-    companion object {
-        private const val DEFAULT_ID = -1
     }
 }

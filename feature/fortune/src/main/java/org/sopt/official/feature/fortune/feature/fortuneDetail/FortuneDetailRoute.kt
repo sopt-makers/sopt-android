@@ -48,6 +48,8 @@ import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.Gray800
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 
+internal const val DEFAULT_ID = -1
+
 @Composable
 internal fun FortuneDetailRoute(
     date: String,
@@ -59,12 +61,12 @@ internal fun FortuneDetailRoute(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isAnonymous by remember { mutableStateOf(true) }
-    var selectedIndex by remember { mutableIntStateOf(-1) }
+    var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(bottomSheetState.currentValue) {
-        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) isBottomSheetVisible(false)
+    LaunchedEffect(bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
+        isBottomSheetVisible(false)
     }
 
     ModalBottomSheetLayout(
