@@ -79,6 +79,7 @@ import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.PartRankingScreenDestination
@@ -180,6 +181,7 @@ fun MissionListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(White)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
