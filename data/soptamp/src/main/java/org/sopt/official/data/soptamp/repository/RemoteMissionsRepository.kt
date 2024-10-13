@@ -24,15 +24,15 @@
  */
 package org.sopt.official.data.soptamp.repository
 
-import javax.inject.Inject
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 import org.sopt.official.domain.soptamp.model.Mission
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
+import javax.inject.Inject
 
 internal class RemoteMissionsRepository @Inject constructor(
-    private val remote: MissionsDataSource
+    private val remote: MissionsDataSource,
 ) : MissionsRepository {
     override suspend fun getAllMissions(): Result<List<Mission>> {
         val result = remote.getAllMission()
@@ -46,10 +46,8 @@ internal class RemoteMissionsRepository @Inject constructor(
     }
 
     override suspend fun getCompleteMissions(): Result<List<Mission>> {
-        val result = remote.getAllMission()
-            .mapCatching {
-                it.filter { mission -> mission.isCompleted }.toDomain()
-            }
+        val result = remote.getCompleteMissions().map { it.toDomain() }
+
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {
             Result.failure(exception.toDomain())
@@ -59,8 +57,8 @@ internal class RemoteMissionsRepository @Inject constructor(
     }
 
     override suspend fun getInCompleteMissions(): Result<List<Mission>> {
-        val result = remote.getAllMission()
-            .mapCatching { it.filter { mission -> !mission.isCompleted }.toDomain() }
+        val result = remote.getAllMission().mapCatching { it.toDomain() }
+
         val exception = result.exceptionOrNull()
         return if (exception is ErrorData) {
             Result.failure(exception.toDomain())
