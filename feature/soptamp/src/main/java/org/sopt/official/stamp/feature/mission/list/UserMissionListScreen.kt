@@ -129,6 +129,7 @@ fun UserMissionListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(SoptTheme.colors.white)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -153,7 +154,7 @@ fun DescriptionText(description: String) {
     val descriptionText = if (description.length > 21) {
         StringBuilder(description).insert(21, "\n").toString()
     } else {
-        description
+        description.ifBlank { "설정된 한 마디가 없습니다" }
     }
     Text(
         modifier = Modifier
