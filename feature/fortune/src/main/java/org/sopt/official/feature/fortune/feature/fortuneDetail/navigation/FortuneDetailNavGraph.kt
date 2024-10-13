@@ -24,7 +24,7 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
@@ -35,15 +35,17 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailRout
 data class FortuneDetail(val date: String)
 
 fun NavGraphBuilder.fortuneDetailNavGraph(
-    paddingValue: PaddingValues,
     navigateToFortuneAmulet: () -> Unit,
+    snackBarHostState: SnackbarHostState,
+    isBottomSheetVisible: (isVisible: Boolean) -> Unit,
 ) {
     composable<FortuneDetail> { backStackEntry ->
         val items = backStackEntry.toRoute<FortuneDetail>()
         FortuneDetailRoute(
-            paddingValue = paddingValue,
             date = items.date,
-            onFortuneAmuletClick = navigateToFortuneAmulet
+            onFortuneAmuletClick = navigateToFortuneAmulet,
+            isBottomSheetVisible = isBottomSheetVisible,
+            snackBarHostState = snackBarHostState,
         )
     }
 }

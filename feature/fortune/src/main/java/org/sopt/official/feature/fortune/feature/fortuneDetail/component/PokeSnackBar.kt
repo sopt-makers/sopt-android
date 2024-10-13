@@ -25,41 +25,59 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
+import androidx.compose.material.Icon
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.*
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray900
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.R.drawable.ic_alert
 
 @Composable
-internal fun TodayFortuneBox(
-    content: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
+internal fun PokeSnackBar() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
             .fillMaxWidth()
+            .padding(horizontal = 16.dp)
             .background(
-                color = Gray900,
-                shape = RoundedCornerShape(12.dp),
-            ),
+                color = Gray10,
+                shape = RoundedCornerShape(18.dp),
+            )
     ) {
-        content()
+        Spacer(modifier = Modifier.width(width = 16.dp))
+        Icon(
+            imageVector = ImageVector.vectorResource(ic_alert),
+            tint = Color.Unspecified,
+            contentDescription = null,
+        )
+        Spacer(modifier = Modifier.width(width = 8.dp))
+        Text(
+            text = "익명 해제 시, 상대방이 나를 알 수 있어요.",
+            style = SoptTheme.typography.title14SB,
+            color = Gray900,
+            modifier = Modifier.padding(vertical = 16.dp),
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun TodayFortuneBoxPreview() {
-    TodayFortuneBox(
-        content = { Text("123") },
-        modifier = Modifier.background(color = Color.White),
-    )
+private fun PokeSnackBarPreview() {
+    SoptTheme {
+        PokeSnackBar()
+    }
 }

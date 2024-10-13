@@ -24,46 +24,61 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Gray10
+import org.sopt.official.designsystem.Gray700
+import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
-import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
-internal fun PokeRecommendationUserProfileImage(
-    profile: String,
+internal fun PokeMessageItem(
+    message: String,
+    isSelected: Boolean,
+    onItemClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (profile.isEmpty()) {
-        true -> {
-            Image(
-                imageVector = ImageVector.vectorResource(ic_empty_profile),
-                contentDescription = "profileImageEmpty",
-                modifier = modifier,
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = if (isSelected) Gray700 else Gray800,
+                shape = RoundedCornerShape(size = 6.dp),
             )
-        }
-
-        false -> {
-            UrlImage(
-                url = profile,
-                contentDescription = "profileImage",
-                contentScale = ContentScale.Crop,
-                modifier = modifier,
-            )
-        }
+            .clickable(
+                indication = null,
+                interactionSource = null,
+            ) { onItemClick() },
+    ) {
+        Text(
+            text = message,
+            style = SoptTheme.typography.body16M,
+            color = Gray10,
+            modifier = Modifier.padding(
+                vertical = 14.dp,
+                horizontal = 8.dp,
+            ),
+        )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun PokeRecommendationUserProfileImagePreview() {
+private fun PokeMessageItemPreview() {
     SoptTheme {
-        PokeRecommendationUserProfileImage(profile = "")
+        PokeMessageItem(
+            message = "123",
+            isSelected = true,
+            onItemClick = { },
+        )
     }
 }

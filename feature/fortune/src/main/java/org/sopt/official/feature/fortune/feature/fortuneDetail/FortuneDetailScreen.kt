@@ -25,7 +25,6 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -36,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.component.FortuneButton
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeRecommendationDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
@@ -48,7 +48,6 @@ import timber.log.Timber
 
 @Composable
 internal fun FortuneDetailScreen(
-    paddingValue: PaddingValues,
     date: String,
     onFortuneAmuletClick: () -> Unit,
     onPokeClick: (userId: Long) -> Unit,
@@ -60,14 +59,15 @@ internal fun FortuneDetailScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues = paddingValue),
+            .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
         when (uiState) {
             is Success -> {
                 TodayFortuneDashboard(
                     date = date,
-                    todaySentence = uiState.todaySentence.message,
+                    todaySentence = uiState.todaySentence.content,
+                    name = uiState.todaySentence.userName,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 PokeRecommendationDashboard(
@@ -75,8 +75,14 @@ internal fun FortuneDetailScreen(
                     name = uiState.userInfo.userName,
                     userDescription = uiState.userInfo.userDescription,
                     onPokeClick = { onPokeClick(uiState.userInfo.userId) },
-                    onProfileClick = { onProfileClick(uiState.userInfo.userId) }
+                    onProfileClick = { onProfileClick(uiState.userInfo.userId) },
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                FortuneButton(
+                    title = "오늘의 부적 받기",
+                    onClick = onFortuneAmuletClick,
+                )
+                Spacer(modifier = Modifier.height(height = 14.dp))
             }
 
             is Error -> Timber.e(uiState.errorMessage)
@@ -92,7 +98,6 @@ internal fun FortuneDetailScreen(
 private fun FortuneDetailScreenPreview() {
     SoptTheme {
         FortuneDetailScreen(
-            paddingValue = PaddingValues(vertical = 16.dp),
             date = "2024-09-09",
             onFortuneAmuletClick = {},
             uiState = Success(
