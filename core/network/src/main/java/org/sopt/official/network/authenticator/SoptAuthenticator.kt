@@ -50,10 +50,7 @@ class SoptAuthenticator @Inject constructor(
     override fun authenticate(route: Route?, response: Response): Request? {
         if (response.code == 401) {
             val refreshToken = dataStore.refreshToken
-            if (refreshToken.isEmpty()) {
-                Timber.e("refreshToken is empty")
-                return null
-            }
+            if (refreshToken.isEmpty()) return null
             val newTokens = runCatching {
                 runBlocking {
                     refreshService.refresh(RefreshRequest(refreshToken))
