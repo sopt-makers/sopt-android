@@ -29,11 +29,15 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import javax.inject.Inject
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -42,21 +46,30 @@ private val navigator by lazy {
     ).navigatorProvider()
 }
 
+internal val LocalAmplitudeTracker = staticCompositionLocalOf<AmplitudeTracker> {
+    error("No AmplitudeTracker provided")
+}
+
 @AndroidEntryPoint
 class FortuneActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var amplitudeTracker: AmplitudeTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContent {
             SoptTheme {
-                FoundationScreen(
-                    onClickLeadingIcon = {
-                        startActivity(navigator.getNotificationActivityIntent())
-                    },
-                    navigateToHome = {
-                        startActivity(navigator.getAuthActivityIntent())
-                    },
-                )
+                CompositionLocalProvider(LocalAmplitudeTracker provides amplitudeTracker) {
+                    FoundationScreen(
+                        onClickLeadingIcon = {
+                            startActivity(navigator.getNotificationActivityIntent())
+                        },
+                        navigateToHome = {
+                            startActivity(navigator.getAuthActivityIntent())
+                        },
+                    )
+                }
             }
         }
     }
