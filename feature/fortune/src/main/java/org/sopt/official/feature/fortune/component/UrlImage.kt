@@ -26,6 +26,7 @@ package org.sopt.official.feature.fortune.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import coil.compose.AsyncImage
 
@@ -33,11 +34,13 @@ import coil.compose.AsyncImage
 fun UrlImage(
     url: String,
     modifier: Modifier = Modifier,
+    contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String? = null,
 ) {
     AsyncImage(
         model = url,
         contentDescription = contentDescription,
+        contentScale = contentScale,
         modifier = modifier
     )
 }

@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.fortune.fortuneDetail
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.assertIsDisplayed
@@ -55,7 +54,6 @@ internal class FortuneDetailScreenTest {
         composeRule.setContent {
             SoptTheme {
                 FortuneDetailScreen(
-                    paddingValue = PaddingValues(),
                     date = date,
                     onFortuneAmuletClick = { },
                     onPokeClick = { },

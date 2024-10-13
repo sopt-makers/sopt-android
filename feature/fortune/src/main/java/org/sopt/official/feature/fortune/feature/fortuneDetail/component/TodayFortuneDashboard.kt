@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,24 +27,16 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray100
-import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.R.drawable.img_fortune_title
 
@@ -52,6 +44,7 @@ import org.sopt.official.feature.fortune.R.drawable.img_fortune_title
 internal fun TodayFortuneDashboard(
     date: String,
     todaySentence: String,
+    name: String,
     modifier: Modifier = Modifier,
 ) {
     TodayFortuneBox(
@@ -72,17 +65,9 @@ internal fun TodayFortuneDashboard(
                     color = Gray100,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
-                Text(
-                    text = todaySentence,
-                    style = SoptTheme.typography.title24SB.copy(
-                        lineBreak = LineBreak.Simple,
-                    ),
-                    color = Gray30,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 68.dp)
-                        .semantics { contentDescription = "todaySentence" },
+                TodayFortuneText(
+                    todaySentence = todaySentence,
+                    name = name,
                 )
                 Spacer(modifier = Modifier.height(height = 36.dp))
             }
@@ -90,13 +75,15 @@ internal fun TodayFortuneDashboard(
     )
 }
 
+
 @Preview(showBackground = true)
 @Composable
 private fun TodayFortuneDashboardPreview() {
     SoptTheme {
         TodayFortuneDashboard(
             date = "2024-09-09",
-            todaySentence = "hi my name is Sehun kim, nice to meet you",
+            todaySentence = "예상치 못한 칭찬을 받게 되겠솝",
+            name = "김세훈",
         )
     }
 }

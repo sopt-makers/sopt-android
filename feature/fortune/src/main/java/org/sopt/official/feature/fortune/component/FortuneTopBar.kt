@@ -35,32 +35,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Gray200
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun FortuneTopBar(
-    modifier: Modifier = Modifier,
     onClickNavigationIcon: () -> Unit,
+    modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
         Icon(
             imageVector = Icons.Filled.Close,
+            tint = if (!isEnabled) Gray200 else SoptTheme.colors.onBackground,
             contentDescription = null,
-            modifier = Modifier
-                .padding(start = 8.dp, top = 2.dp, bottom = 2.dp)
-                .padding(8.dp)
-                .clickable(onClick = onClickNavigationIcon),
-            tint = SoptTheme.colors.onBackground
+            modifier = Modifier.padding(start = 8.dp, top = 2.dp, bottom = 2.dp).padding(8.dp)
+                .clickable { if (isEnabled) onClickNavigationIcon() },
         )
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun FortuneTopBarPreview() {
     SoptTheme {
-        FortuneTopBar {
-
-        }
+        FortuneTopBar(
+            onClickNavigationIcon = { },
+            isEnabled = false,
+        )
     }
 }
