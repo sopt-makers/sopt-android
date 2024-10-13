@@ -24,22 +24,27 @@
  */
 package org.sopt.official.stamp.feature.mission.list
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.WarningAmber
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -55,10 +60,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -90,6 +97,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.mission.model.toArgs
+import org.sopt.official.webview.view.WebViewActivity
 
 @MissionNavGraph(true)
 @Destination("list")
@@ -97,11 +105,12 @@ import org.sopt.official.stamp.feature.mission.model.toArgs
 fun MissionListScreen(
     navigator: DestinationsNavigator,
     resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>,
-    missionsViewModel: MissionsViewModel = hiltViewModel()
+    missionsViewModel: MissionsViewModel = hiltViewModel(),
 ) {
     val state by missionsViewModel.state.collectAsState()
     val generation by missionsViewModel.generation.collectAsState()
     val nickname by missionsViewModel.nickname.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         missionsViewModel.initUser()
@@ -139,8 +148,17 @@ fun MissionListScreen(
                     )
                 },
                 onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
-                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("34기")) },
-                onOnboadingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
+                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("${generation}기")) },
+                onReportButtonClick = {
+                    Intent(context, WebViewActivity::class.java).apply { // TODO: URL 하드코딩 수정하기
+                        putExtra(
+                            WebViewActivity.INTENT_URL,
+                            "https://docs.google.com/forms/d/e/1FAIpQLSf2iSXhOYcFpY8GtoORyHK2i9QTyafLe9h5pL_614YDM4Bg6A/viewform"
+                        )
+                        startActivity(context, this, null)
+                    }
+                },
+                onOnboardingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
             )
         }
     }
@@ -156,15 +174,17 @@ fun MissionListScreen(
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onPartRankingButtonClick: () -> Unit = {},
     onCurrentRankingButtonClick: () -> Unit = {},
-    onOnboadingButtonClick: () -> Unit = {},
+    onReportButtonClick: () -> Unit = {},
+    onOnboardingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             MissionListHeader(
                 title = missionListUiModel.title,
                 menuTexts = menuTexts,
-                onMenuClick = { onMenuClick(it) },
-                onOnboadingButtonClick = { onOnboadingButtonClick() }
+                onMenuClick = onMenuClick,
+                onReportButtonClick = onReportButtonClick,
+                onOnboardingButtonClick = onOnboardingButtonClick
             )
         },
         floatingActionButton = {
@@ -194,7 +214,7 @@ fun MissionListScreen(
             } else {
                 MissionsGridComponent(
                     missions = missionListUiModel.missionList.toImmutableList(),
-                    onMissionItemClick = { onMissionItemClick(it) },
+                    onMissionItemClick = onMissionItemClick,
                     isMe = true,
                     nickname = nickname
                 )
@@ -208,7 +228,7 @@ fun MissionsGridComponent(
     missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
-    nickname: String
+    nickname: String,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -255,9 +275,11 @@ fun MissionListHeader(
     title: String,
     menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
-    onOnboadingButtonClick: () -> Unit = {}
+    onReportButtonClick: () -> Unit = {},
+    onOnboardingButtonClick: () -> Unit = {},
 ) {
     var currentText by remember { mutableStateOf(title) }
+
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
         dropDownButton = {
@@ -270,10 +292,23 @@ fun MissionListHeader(
             )
         },
         actions = {
-            SoptampIconButton(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide)
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                onOnboadingButtonClick()
+                SoptampIconButton(
+                    imageVector = Icons.Rounded.WarningAmber,
+                    modifier = Modifier.padding(4.dp),
+                    tint = SoptTheme.colors.onSurface90,
+                    onClick = onReportButtonClick
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                SoptampIconButton(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide),
+                    tint = SoptTheme.colors.onSurface90,
+                    onClick = onOnboardingButtonClick
+                )
             }
         }
     )
