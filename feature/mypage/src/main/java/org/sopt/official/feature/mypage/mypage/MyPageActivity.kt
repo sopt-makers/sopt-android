@@ -214,7 +214,7 @@ class MyPageActivity : AppCompatActivity() {
                     if (myPageAction != null) {
                         ShowMyPageDialog(
                             action = myPageAction ?: return@Scaffold,
-                            onDismissRequest = viewModel::onDismiss,
+                            onDismissRequest = viewModel::closeDialog,
                             onClearSoptampClick = viewModel::resetSoptamp,
                             onLogoutClick = viewModel::logOut
                         )

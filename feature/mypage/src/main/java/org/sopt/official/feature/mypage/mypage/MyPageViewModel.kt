@@ -85,7 +85,7 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
-                .onSuccess { onDismiss() }
+                .onSuccess { closeDialog() }
                 .onFailure { Timber.e(it) }
         }
     }
@@ -94,7 +94,7 @@ class MyPageViewModel @Inject constructor(
         _action.value = action
     }
 
-    fun onDismiss() {
+    fun closeDialog() {
         _action.value = null
     }
 }
