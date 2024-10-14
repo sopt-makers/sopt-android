@@ -29,8 +29,10 @@ import android.net.Uri
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.ModalBottomSheetValue.Hidden
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,7 +48,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
-import org.sopt.official.designsystem.Gray800
+import org.sopt.official.analytics.EventType.CLICK
+import org.sopt.official.analytics.EventType.VIEW
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 
@@ -64,16 +69,16 @@ internal fun FortuneDetailRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isAnonymous by remember { mutableStateOf(true) }
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
-    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
     val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
         it.track(
-            type = EventType.VIEW,
+            type = VIEW,
             name = "view_soptmadi_todays",
         )
     }
 
-    LaunchedEffect(bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
+    LaunchedEffect(key1 = bottomSheetState.currentValue == Hidden) {
         isBottomSheetVisible(false)
     }
 
@@ -83,13 +88,13 @@ internal fun FortuneDetailRoute(
             topStart = 20.dp,
             topEnd = 20.dp,
         ),
-        sheetBackgroundColor = Gray800,
+        sheetBackgroundColor = colors.onSurface800,
         sheetContent = {
             PokeMessageBottomSheetScreen(
                 selectedIndex = selectedIndex,
                 onItemClick = { newSelectedIndex, message ->
                     amplitudeTracker.track(
-                        type = EventType.CLICK,
+                        type = CLICK,
                         name = "send_choice${newSelectedIndex + 1}",
                     )
                     scope.launch {
@@ -102,14 +107,14 @@ internal fun FortuneDetailRoute(
                 },
                 onIconClick = {
                     amplitudeTracker.track(
-                        type = EventType.CLICK,
+                        type = CLICK,
                         name = "uncheck_anonymity",
                     )
                     isAnonymous = !isAnonymous
                     if (isAnonymous.not()) scope.launch {
                         snackBarHostState.showSnackbar(
                             message = "",
-                            duration = SnackbarDuration.Short,
+                            duration = Short,
                         )
                     }
                 },
@@ -121,7 +126,7 @@ internal fun FortuneDetailRoute(
             date = date,
             onFortuneAmuletClick = {
                 amplitudeTracker.track(
-                    type = EventType.CLICK,
+                    type = CLICK,
                     name = "click_get_charmcard",
                 )
                 onFortuneAmuletClick()
@@ -133,7 +138,7 @@ internal fun FortuneDetailRoute(
             },
             onPokeClick = {
                 amplitudeTracker.track(
-                    type = EventType.CLICK,
+                    type = CLICK,
                     name = "click_randomepeople",
                 )
                 scope.launch {
