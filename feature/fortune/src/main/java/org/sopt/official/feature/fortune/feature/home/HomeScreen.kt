@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.analytics.EventType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.R
 import org.sopt.official.feature.fortune.component.FortuneButton
 import java.time.LocalDate
@@ -52,12 +55,22 @@ import java.util.Locale
 internal fun HomeRoute(
     navigateToFortuneDetail: (String) -> Unit,
 ) {
+    val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
+        it.track(
+            type = EventType.VIEW,
+            name = "view_soptmadi_title",
+        )
+    }
     val date = rememberSaveable { getToday() }
 
     HomeScreen(
         date = date,
         navigateToFortuneDetail = {
             navigateToFortuneDetail(date)
+            amplitudeTracker.track(
+                type = EventType.CLICK,
+                name = "click_check_todaysoptmadi",
+            )
         }
     )
 }

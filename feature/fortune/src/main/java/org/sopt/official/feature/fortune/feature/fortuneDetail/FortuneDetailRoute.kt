@@ -45,7 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.EventType
 import org.sopt.official.designsystem.Gray800
+import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 
 internal const val DEFAULT_ID = -1
@@ -64,6 +66,12 @@ internal fun FortuneDetailRoute(
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
     val scope = rememberCoroutineScope()
+    val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
+        it.track(
+            type = EventType.VIEW,
+            name = "view_soptmadi_todays",
+        )
+    }
 
     LaunchedEffect(bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) {
         isBottomSheetVisible(false)
@@ -80,6 +88,10 @@ internal fun FortuneDetailRoute(
             PokeMessageBottomSheetScreen(
                 selectedIndex = selectedIndex,
                 onItemClick = { newSelectedIndex, message ->
+                    amplitudeTracker.track(
+                        type = EventType.CLICK,
+                        name = "send_choice${newSelectedIndex + 1}",
+                    )
                     scope.launch {
                         selectedIndex = newSelectedIndex
                         bottomSheetState.hide()
@@ -89,6 +101,10 @@ internal fun FortuneDetailRoute(
                     }
                 },
                 onIconClick = {
+                    amplitudeTracker.track(
+                        type = EventType.CLICK,
+                        name = "uncheck_anonymity",
+                    )
                     isAnonymous = !isAnonymous
                     if (isAnonymous.not()) scope.launch {
                         snackBarHostState.showSnackbar(
@@ -103,13 +119,23 @@ internal fun FortuneDetailRoute(
     ) {
         FortuneDetailScreen(
             date = date,
-            onFortuneAmuletClick = onFortuneAmuletClick,
+            onFortuneAmuletClick = {
+                amplitudeTracker.track(
+                    type = EventType.CLICK,
+                    name = "click_get_charmcard",
+                )
+                onFortuneAmuletClick()
+            },
             onProfileClick = { userId ->
                 context.startActivity(
                     Intent(Intent.ACTION_VIEW, Uri.parse("https://playground.sopt.org/members/${userId}"))
                 )
             },
             onPokeClick = {
+                amplitudeTracker.track(
+                    type = EventType.CLICK,
+                    name = "click_randomepeople",
+                )
                 scope.launch {
                     bottomSheetState.show()
                 }.invokeOnCompletion {

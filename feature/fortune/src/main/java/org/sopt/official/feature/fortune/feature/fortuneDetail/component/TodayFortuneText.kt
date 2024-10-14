@@ -26,7 +26,9 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import android.graphics.Paint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,6 +73,7 @@ internal fun TodayFortuneText(
             maxLines = 1,
             textAlign = TextAlign.Center,
         )
+        Spacer(modifier = Modifier.height(height = 6.dp))
         Text(
             text = formattedSentence,
             style = SoptTheme.typography.title24SB.copy(

@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -45,7 +46,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.sopt.official.analytics.EventType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 import org.sopt.official.feature.fortune.component.UrlImage
 
@@ -54,6 +57,12 @@ internal fun FortuneAmuletRoute(
     navigateToHome: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
+    val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
+        it.track(
+            type = EventType.VIEW,
+            name = "view_soptmadi_charmcard",
+        )
+    }
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when {
@@ -82,7 +91,13 @@ internal fun FortuneAmuletRoute(
                     )
                 },
                 imageUrl = state.imageUrl,
-                navigateToHome = navigateToHome
+                onHomeClick = {
+                    amplitudeTracker.track(
+                        type = EventType.CLICK,
+                        name = "click_done_home",
+                    )
+                    navigateToHome()
+                }
             )
         }
     }
@@ -93,7 +108,7 @@ private fun FortuneAmuletScreen(
     description: String,
     amuletDescription: @Composable ColumnScope.() -> Unit,
     imageUrl: String,
-    navigateToHome: () -> Unit,
+    onHomeClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -134,7 +149,7 @@ private fun FortuneAmuletScreen(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
                 )
             },
-            onClick = navigateToHome
+            onClick = onHomeClick
         )
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -161,7 +176,7 @@ fun PreviewFortuneAmuletScreen() {
                 )
             },
             imageUrl = "https://sopt-makers.s3.ap-northeast-2.amazonaws.com/mainpage/makers-app-img/test_fortune_card.png",
-            navigateToHome = {}
+            onHomeClick = {}
         )
     }
 }
