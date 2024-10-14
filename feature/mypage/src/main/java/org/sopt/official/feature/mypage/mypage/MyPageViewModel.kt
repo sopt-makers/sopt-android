@@ -33,7 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
@@ -55,6 +54,9 @@ class MyPageViewModel @Inject constructor(
 
     private val _state: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
     val state: StateFlow<MyPageUiState> = _state.asStateFlow()
+
+    private val _action = MutableStateFlow<MyPageAction?>(null)
+    val action: StateFlow<MyPageAction?> = _action.asStateFlow()
 
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
@@ -89,14 +91,10 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun showDialogState(action: MyPageAction) {
-        _state.update { currentState ->
-            (currentState as MyPageUiState.Authenticated).copy(action = action)
-        }
+        _action.value = action
     }
 
     fun onDismiss() {
-        _state.update { currentState ->
-            (currentState as MyPageUiState.Authenticated).copy(action = null)
-        }
+        _action.value = null
     }
 }
