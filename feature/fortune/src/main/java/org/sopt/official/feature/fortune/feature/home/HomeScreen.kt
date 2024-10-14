@@ -53,7 +53,7 @@ import java.util.Locale
 
 @Composable
 internal fun HomeRoute(
-    navigateToFortuneDetail: (String) -> Unit,
+    onFortuneDetailClick: (String) -> Unit,
 ) {
     val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
         it.track(
@@ -65,8 +65,8 @@ internal fun HomeRoute(
 
     HomeScreen(
         date = date,
-        navigateToFortuneDetail = {
-            navigateToFortuneDetail(date)
+        onFortuneDetailClick = {
+            onFortuneDetailClick(date)
             amplitudeTracker.track(
                 type = EventType.CLICK,
                 name = "click_check_todaysoptmadi",
@@ -78,7 +78,7 @@ internal fun HomeRoute(
 @Composable
 private fun HomeScreen(
     date: String,
-    navigateToFortuneDetail: () -> Unit = {},
+    onFortuneDetailClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -124,7 +124,7 @@ private fun HomeScreen(
 
         FortuneButton(
             title = "오늘의 운세 보러 가기",
-            onClick = navigateToFortuneDetail,
+            onClick = onFortuneDetailClick,
         )
 
         Spacer(modifier = Modifier.height(36.dp))

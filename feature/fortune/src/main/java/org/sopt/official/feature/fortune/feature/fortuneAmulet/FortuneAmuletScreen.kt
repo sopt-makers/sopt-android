@@ -54,7 +54,7 @@ import org.sopt.official.feature.fortune.component.UrlImage
 
 @Composable
 internal fun FortuneAmuletRoute(
-    navigateToHome: () -> Unit,
+    onHomeClick: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
     val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
@@ -96,7 +96,7 @@ internal fun FortuneAmuletRoute(
                         type = EventType.CLICK,
                         name = "click_done_home",
                     )
-                    navigateToHome()
+                    onHomeClick()
                 }
             )
         }
