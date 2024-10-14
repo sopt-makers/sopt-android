@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
@@ -62,8 +63,10 @@ class MyPageViewModel @Inject constructor(
     val finish = _finish.receiveAsFlow()
 
     fun setUserActiveState(activeState: UserActiveState) {
-        if (activeState == UserActiveState.UNAUTHENTICATED) _state.value = MyPageUiState.UnAuthenticated
-        else _state.value = MyPageUiState.Authenticated(activeState)
+        _state.update {
+            if (activeState == UserActiveState.UNAUTHENTICATED) MyPageUiState.UnAuthenticated
+            else MyPageUiState.Authenticated(activeState)
+        }
     }
 
     fun logOut() {
@@ -91,10 +94,10 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun showDialogState(action: MyPageAction) {
-        _action.value = action
+        _action.update { action }
     }
 
     fun closeDialog() {
-        _action.value = null
+        _action.update { null }
     }
 }
