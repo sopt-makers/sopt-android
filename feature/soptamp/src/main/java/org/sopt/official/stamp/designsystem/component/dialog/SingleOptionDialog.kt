@@ -31,13 +31,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.designsystem.style.SoptTheme
@@ -53,33 +55,34 @@ fun SingleOptionDialog(onConfirm: () -> Unit) {
         AlertDialog(
             onDismissRequest = { onConfirm() },
             title = {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = 7.dp, vertical = 12.dp)
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Column {
-                        Text(
-                            text = "네트워크가 원활하지 않습니다.",
-                            style = SoptTheme.typography.sub1,
-                            color = Color.Black
-                        )
-                        Spacer(modifier = Modifier.size(13.dp))
-                        Text(
-                            text = "인터넷 연결을 확인하고 다시 시도해 주세요.",
-                            style = SoptTheme.typography.caption3,
-                            color = SoptTheme.colors.onSurface50
-                        )
-                        Spacer(modifier = Modifier.size(28.dp))
-                    }
+                    Text(
+                        text = "네트워크가 원활하지 않습니다.",
+                        style = SoptTheme.typography.sub1,
+                        color = Color.Black
+                    )
+                    Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                    Text(
+                        text = "인터넷 연결을 확인하고 다시 시도해 주세요.",
+                        style = SoptTheme.typography.caption3,
+                        color = SoptTheme.colors.onSurface90
+                    )
                 }
             },
             buttons = {
                 Box(
                     modifier = Modifier
+                        .padding(horizontal = 7.dp, vertical = 12.dp)
                         .fillMaxWidth()
-                        .background(color = Color(0xFFFF8080))
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(color = SoptTheme.colors.black)
                         .noRippleClickable { onConfirm() }
-                        .padding(vertical = 15.dp),
+                        .padding(vertical = 10.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -90,5 +93,13 @@ fun SingleOptionDialog(onConfirm: () -> Unit) {
                 }
             }
         )
+    }
+}
+
+@Preview
+@Composable
+fun SingleOptionDialogPreview() {
+    SoptTheme {
+        SingleOptionDialog(onConfirm = { })
     }
 }
