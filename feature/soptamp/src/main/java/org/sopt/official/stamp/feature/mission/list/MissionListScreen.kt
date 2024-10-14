@@ -49,7 +49,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -110,6 +109,7 @@ fun MissionListScreen(
     val state by missionsViewModel.state.collectAsState()
     val generation by missionsViewModel.generation.collectAsState()
     val nickname by missionsViewModel.nickname.collectAsState()
+    val reportUrl by missionsViewModel.reportUrl.collectAsState()
     val context = LocalContext.current
 
 
@@ -146,10 +146,10 @@ fun MissionListScreen(
                 onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
                 onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("${generation}기")) },
                 onReportButtonClick = {
-                    Intent(context, WebViewActivity::class.java).apply { // TODO: URL 하드코딩 수정하기
+                    Intent(context, WebViewActivity::class.java).apply {
                         putExtra(
                             WebViewActivity.INTENT_URL,
-                            "https://docs.google.com/forms/d/e/1FAIpQLSf2iSXhOYcFpY8GtoORyHK2i9QTyafLe9h5pL_614YDM4Bg6A/viewform"
+                            reportUrl
                         )
                         startActivity(context, this, null)
                     }

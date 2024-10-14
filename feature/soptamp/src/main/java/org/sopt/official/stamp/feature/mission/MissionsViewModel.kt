@@ -36,6 +36,7 @@ import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
 import org.sopt.official.domain.soptamp.repository.RankingRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
@@ -46,6 +47,7 @@ class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
     private val rankingRepository: RankingRepository,
     private val userRepository: UserRepository,
+    private val stampRepository: StampRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
@@ -54,14 +56,16 @@ class MissionsViewModel @Inject constructor(
     val nickname = _nickname.asStateFlow()
     private val _generation = MutableStateFlow(-1)
     val generation = _generation.asStateFlow()
+    val reportUrl = MutableStateFlow("")
 
     init {
         initUser()
+        getReportUrl()
         fetchMissions()
     }
 
 
-    fun initUser() {
+    private fun initUser() {
         viewModelScope.launch {
             userRepository.getUserInfo()
                 .onSuccess { _nickname.value = it.nickname }
@@ -69,6 +73,14 @@ class MissionsViewModel @Inject constructor(
 
             userRepository.getUserGeneration()
                 .onSuccess { _generation.value = it }
+                .onFailure(Timber::e)
+        }
+    }
+
+    private fun getReportUrl() {
+        viewModelScope.launch {
+            stampRepository.getReportUrl()
+                .onSuccess { reportUrl.value = it }
                 .onFailure(Timber::e)
         }
     }
