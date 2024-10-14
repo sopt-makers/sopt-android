@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.AttendanceSession
 import org.sopt.official.feature.attendance.model.FinalAttendance
 import org.sopt.official.feature.attendance.model.MidtermAttendance
 import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
@@ -55,7 +55,7 @@ fun AttendanceProgressBar(state: AttendanceProgressBarState, modifier: Modifier 
 
 fun calculateAttendanceProgress(
     firstAttendance: MidtermAttendance,
-    secondAttendance: MidtermAttendance
+    secondAttendance: MidtermAttendance,
 ): Float {
     if (!firstAttendance.isFinished) return 0f
     if (!secondAttendance.isFinished) {
@@ -68,8 +68,8 @@ fun calculateAttendanceProgress(
 class AttendanceProgressBarPreviewParameterProvider(
     override val values: Sequence<AttendanceProgressBarState> = sequenceOf(
         AttendanceProgressBarState(
-            firstAttendance = MidtermAttendance.NotYet(AttendanceType.FIRST),
-            secondAttendance = MidtermAttendance.NotYet(AttendanceType.SECOND),
+            firstAttendance = MidtermAttendance.NotYet(AttendanceSession.FIRST),
+            secondAttendance = MidtermAttendance.NotYet(AttendanceSession.SECOND),
             finalAttendance = FinalAttendance.NOT_YET,
         ),
         AttendanceProgressBarState(
@@ -87,13 +87,13 @@ class AttendanceProgressBarPreviewParameterProvider(
             secondAttendance = MidtermAttendance.Absent,
             finalAttendance = FinalAttendance.ABSENT,
         ),
-    )
+    ),
 ) : PreviewParameterProvider<AttendanceProgressBarState>
 
 @Preview(showBackground = true)
 @Composable
 private fun AttendanceProgressBarPreview(
-    @PreviewParameter(AttendanceProgressBarPreviewParameterProvider::class) attendanceProgressBarState: AttendanceProgressBarState
+    @PreviewParameter(AttendanceProgressBarPreviewParameterProvider::class) attendanceProgressBarState: AttendanceProgressBarState,
 ) {
     SoptTheme {
         AttendanceProgressBar(state = attendanceProgressBarState)

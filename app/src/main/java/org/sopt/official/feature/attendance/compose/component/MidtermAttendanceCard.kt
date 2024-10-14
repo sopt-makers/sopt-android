@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.AttendanceSession
 import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
@@ -36,10 +36,10 @@ fun MidtermAttendanceCard(midtermAttendance: MidtermAttendance, modifier: Modifi
 
 class MidtermAttendanceCardPreviewParameterProvider(
     override val values: Sequence<MidtermAttendance> = sequenceOf(
-        MidtermAttendance.NotYet(attendanceType = AttendanceType.FIRST),
+        MidtermAttendance.NotYet(attendanceSession = AttendanceSession.FIRST),
         MidtermAttendance.Present(attendanceAt = "14:00"),
         MidtermAttendance.Absent,
-    )
+    ),
 ) : PreviewParameterProvider<MidtermAttendance>
 
 @Preview(showBackground = true)

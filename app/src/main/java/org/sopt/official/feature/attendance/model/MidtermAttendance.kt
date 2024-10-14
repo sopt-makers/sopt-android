@@ -6,12 +6,12 @@ import org.sopt.official.R
 sealed class MidtermAttendance(
     @DrawableRes val imageResId: Int,
     val isFinished: Boolean,
-    val description: String
+    val description: String,
 ) {
-    data class NotYet(val attendanceType: AttendanceType) : MidtermAttendance(
+    data class NotYet(val attendanceSession: AttendanceSession) : MidtermAttendance(
         imageResId = R.drawable.ic_attendance_state_nothing,
         isFinished = false,
-        description = attendanceType.type
+        description = attendanceSession.type
     )
 
     data class Present(val attendanceAt: String) : MidtermAttendance(
