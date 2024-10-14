@@ -37,4 +37,6 @@ interface StampRepository {
     suspend fun deleteMission(missionId: Int): Result<Unit>
 
     suspend fun deleteAllStamps(): Result<Unit>
+
+    suspend fun getReportUrl(): Result<String>
 }
