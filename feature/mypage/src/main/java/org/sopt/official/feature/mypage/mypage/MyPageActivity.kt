@@ -83,7 +83,7 @@ class MyPageActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val state by viewModel.state.collectAsStateWithLifecycle()
+                val myPageState by viewModel.state.collectAsStateWithLifecycle()
                 val myPageAction by viewModel.action.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
@@ -194,7 +194,7 @@ class MyPageActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(20.dp))
                         MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
-                        when (state) {
+                        when (myPageState) {
                             is MyPageUiState.Authenticated -> {
                                 MyPageSection(items = notificationSectionItems)
                                 Spacer(modifier = Modifier.height(16.dp))
