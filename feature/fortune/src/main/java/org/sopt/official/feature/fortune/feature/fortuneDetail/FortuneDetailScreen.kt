@@ -24,19 +24,26 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.component.FortuneButton
+import org.sopt.official.feature.fortune.feature.fortuneDetail.component.FortuneDetailErrorDialog
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeRecommendationDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
@@ -53,6 +60,7 @@ internal fun FortuneDetailScreen(
     onFortuneAmuletClick: () -> Unit,
     onPokeClick: (userId: Long) -> Unit,
     onProfileClick: (userId: Long) -> Unit,
+    onErrorDialogCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
     uiState: FortuneDetailUiState = Loading,
 ) {
@@ -63,32 +71,51 @@ internal fun FortuneDetailScreen(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 16.dp))
-        when (uiState) {
-            is Success -> {
-                TodayFortuneDashboard(
-                    date = date,
-                    todaySentence = uiState.todaySentence.content,
-                    name = uiState.todaySentence.userName,
-                )
-                Spacer(modifier = Modifier.height(height = 20.dp))
-                PokeRecommendationDashboard(
-                    profile = uiState.userInfo.profile,
-                    name = uiState.userInfo.userName,
-                    userDescription = uiState.userInfo.userDescription,
-                    onPokeClick = { onPokeClick(uiState.userInfo.userId) },
-                    onProfileClick = { onProfileClick(uiState.userInfo.userId) },
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                FortuneButton(
-                    title = "오늘의 부적 받기",
-                    onClick = onFortuneAmuletClick,
-                )
-                Spacer(modifier = Modifier.height(height = 14.dp))
-            }
 
-            is Error -> Timber.e(uiState.errorMessage)
-            is Loading -> {
-                // 로딩 뷰
+        if (uiState is Success) {
+            TodayFortuneDashboard(
+                date = date,
+                todaySentence = uiState.todaySentence.content,
+                name = uiState.todaySentence.userName,
+            )
+            Spacer(modifier = Modifier.height(height = 20.dp))
+            PokeRecommendationDashboard(
+                profile = uiState.userInfo.profile,
+                name = uiState.userInfo.userName,
+                userDescription = uiState.userInfo.userDescription,
+                onPokeClick = { onPokeClick(uiState.userInfo.userId) },
+                onProfileClick = { onProfileClick(uiState.userInfo.userId) },
+            )
+            Spacer(modifier = Modifier.weight(weight = 1f))
+            FortuneButton(
+                title = "오늘의 부적 받기",
+                onClick = onFortuneAmuletClick,
+            )
+            Spacer(modifier = Modifier.height(height = 14.dp))
+        } else {
+            Box(
+                contentAlignment = Center,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = colors.background.copy(alpha = 0.55f)),
+            ) {
+                when (uiState) {
+                    is Error -> FortuneDetailErrorDialog(
+                        onCheckClick = {
+                            onErrorDialogCheckClick()
+                            Timber.e(uiState.errorMessage)
+                        }
+                    )
+
+                    is Loading -> CircularProgressIndicator(
+                        modifier = Modifier.width(width = 32.dp),
+                        color = colorScheme.secondary,
+                        trackColor = colorScheme.surfaceVariant,
+                        strokeWidth = 4.dp,
+                    )
+
+                    else -> Unit
+                }
             }
         }
     }
@@ -116,6 +143,7 @@ private fun FortuneDetailScreenPreview() {
             ),
             onPokeClick = { },
             onProfileClick = { },
+            onErrorDialogCheckClick = { },
         )
     }
 }

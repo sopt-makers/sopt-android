@@ -28,10 +28,8 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.ModalBottomSheetValue.Hidden
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -47,10 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.EventType.CLICK
 import org.sopt.official.analytics.EventType.VIEW
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
@@ -71,15 +67,15 @@ internal fun FortuneDetailRoute(
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
-    val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
+    val amplitudeTracker = LocalAmplitudeTracker.current.also {
         it.track(
             type = VIEW,
             name = "view_soptmadi_todays",
         )
     }
 
-    LaunchedEffect(key1 = bottomSheetState.currentValue == Hidden) {
-        isBottomSheetVisible(false)
+    LaunchedEffect(key1 = bottomSheetState.currentValue) {
+        if (bottomSheetState.currentValue == Hidden) isBottomSheetVisible(false)
     }
 
     ModalBottomSheetLayout(
@@ -147,6 +143,7 @@ internal fun FortuneDetailRoute(
                     isBottomSheetVisible(true)
                 }
             },
+            onErrorDialogCheckClick = viewModel::refresh,
             uiState = uiState,
         )
     }

@@ -49,16 +49,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FortuneDetailViewModel @Inject constructor(
-    getTodayFortuneUseCase: GetTodayFortuneUseCase,
+    private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
-
     private var isAnonymous: Boolean = false
     private var userId = DEFAULT_ID
 
     init {
+        refresh()
+    }
+
+    fun refresh() {
         viewModelScope.launch {
             runCatching {
                 coroutineScope {
