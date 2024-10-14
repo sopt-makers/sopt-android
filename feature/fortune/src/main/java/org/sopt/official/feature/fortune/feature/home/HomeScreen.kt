@@ -33,7 +33,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,7 +54,7 @@ import java.util.Locale
 internal fun HomeRoute(
     onFortuneDetailClick: (String) -> Unit,
 ) {
-    val amplitudeTracker = remember { LocalAmplitudeTracker.current }.also {
+    val amplitudeTracker = LocalAmplitudeTracker.current.also {
         it.track(
             type = EventType.VIEW,
             name = "view_soptmadi_title",

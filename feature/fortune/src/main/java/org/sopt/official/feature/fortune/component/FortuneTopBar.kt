@@ -32,13 +32,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.analytics.EventType
-import org.sopt.official.designsystem.Gray200
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 
 @Composable
@@ -47,12 +46,12 @@ fun FortuneTopBar(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
-    val amplitudeTracker = remember { LocalAmplitudeTracker.current }
+    val amplitudeTracker = LocalAmplitudeTracker.current
 
     Box(modifier = modifier.fillMaxWidth()) {
         Icon(
             imageVector = Icons.Filled.Close,
-            tint = if (!isEnabled) Gray200 else SoptTheme.colors.onBackground,
+            tint = colors.onBackground,
             contentDescription = null,
             modifier = Modifier.padding(start = 8.dp, top = 2.dp, bottom = 2.dp).padding(8.dp)
                 .clickable {
