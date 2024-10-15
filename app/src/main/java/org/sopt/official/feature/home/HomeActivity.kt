@@ -326,7 +326,9 @@ class HomeActivity : AppCompatActivity() {
             val intent = if (item.url == null) {
                 Intent(this@HomeActivity, AttendanceActivity::class.java)
             } else {
-                Intent(Intent.ACTION_VIEW, Uri.parse(item.url))
+                Intent(this@HomeActivity, WebViewActivity::class.java).apply {
+                    putExtra(WebViewActivity.INTENT_URL, item.url)
+                }
             }
             largeBlock.root.setOnSingleClickListener {
                 tracker.track(type = EventType.CLICK, name = "attendance", properties = mapOf("view_type" to args?.userStatus?.value))
