@@ -36,7 +36,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -45,6 +44,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
@@ -74,10 +74,10 @@ fun UserMissionListScreen(
     missionsViewModel: MissionsViewModel = hiltViewModel(),
     args: RankerNavArg,
     resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
-    val state by missionsViewModel.state.collectAsState()
-    val nickname by missionsViewModel.nickname.collectAsState()
+    val state by missionsViewModel.state.collectAsStateWithLifecycle()
+    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         missionsViewModel.fetchMissions(
@@ -116,7 +116,7 @@ fun UserMissionListScreen(
     missionListUiModel: MissionListUiModel,
     isMe: Boolean,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
-    onClickBack: () -> Unit = {}
+    onClickBack: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {

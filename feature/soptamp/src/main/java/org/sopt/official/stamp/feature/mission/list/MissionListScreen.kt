@@ -66,6 +66,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.NavResult
@@ -106,10 +107,10 @@ fun MissionListScreen(
     resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>,
     missionsViewModel: MissionsViewModel = hiltViewModel(),
 ) {
-    val state by missionsViewModel.state.collectAsState()
-    val generation by missionsViewModel.generation.collectAsState()
-    val nickname by missionsViewModel.nickname.collectAsState()
-    val reportUrl by missionsViewModel.reportUrl.collectAsState()
+    val state by missionsViewModel.state.collectAsStateWithLifecycle()
+    val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
+    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
+    val reportUrl by missionsViewModel.reportUrl.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
 
