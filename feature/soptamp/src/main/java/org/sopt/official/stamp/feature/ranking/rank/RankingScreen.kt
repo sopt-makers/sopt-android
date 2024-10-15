@@ -89,6 +89,7 @@ fun RankingScreen(
 ) {
     val isCurrent = type.first().isDigit()
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
+
     LaunchedEffect(true) {
         rankingViewModel.fetchRanking(isCurrent, type)
     }

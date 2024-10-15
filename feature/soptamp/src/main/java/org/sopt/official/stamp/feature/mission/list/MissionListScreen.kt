@@ -111,6 +111,7 @@ fun MissionListScreen(
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
     val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
     val reportUrl by missionsViewModel.reportUrl.collectAsStateWithLifecycle()
+
     val context = LocalContext.current
 
 
