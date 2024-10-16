@@ -33,7 +33,7 @@ import org.sopt.official.data.soptamp.remote.model.MissionData
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 
 internal class RemoteMissionsDataSource @Inject constructor(
-    private val soptampService: SoptampService
+    private val soptampService: SoptampService,
 ) : MissionsDataSource {
     override suspend fun getAllMission(): Result<List<MissionData>> {
         val result = kotlin.runCatching { soptampService.getAllMissions().toData() }
@@ -42,5 +42,13 @@ internal class RemoteMissionsDataSource @Inject constructor(
             is UnknownHostException -> return Result.failure(ErrorData.NetworkUnavailable)
             else -> Result.failure(exception)
         }
+    }
+
+    override suspend fun getCompleteMissions(): Result<List<MissionData>> = runCatching {
+        soptampService.getCompleteMissions().toData(true)
+    }
+
+    override suspend fun getIncompleteMissions(): Result<List<MissionData>> = runCatching {
+        soptampService.getIncompleteMissions().toData()
     }
 }

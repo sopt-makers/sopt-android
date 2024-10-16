@@ -38,12 +38,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
@@ -83,17 +83,17 @@ fun MissionDetailScreen(
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
-    val content by viewModel.content.collectAsState("")
-    val date by viewModel.date.collectAsState("")
-    val imageModel by viewModel.imageModel.collectAsState(ImageModel.Empty)
-    val isSuccess by viewModel.isSuccess.collectAsState(false)
-    val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsState(false)
-    val toolbarIconType by viewModel.toolbarIconType.collectAsState(ToolbarIconType.NONE)
-    val isEditable by viewModel.isEditable.collectAsState(true)
-    val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsState(false)
-    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsState(false)
-    val isError by viewModel.isError.collectAsState(false)
-    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsState(false)
+    val content by viewModel.content.collectAsStateWithLifecycle("")
+    val date by viewModel.date.collectAsStateWithLifecycle("")
+    val imageModel by viewModel.imageModel.collectAsStateWithLifecycle(ImageModel.Empty)
+    val isSuccess by viewModel.isSuccess.collectAsStateWithLifecycle(false)
+    val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
+    val toolbarIconType by viewModel.toolbarIconType.collectAsStateWithLifecycle(ToolbarIconType.NONE)
+    val isEditable by viewModel.isEditable.collectAsStateWithLifecycle(true)
+    val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsStateWithLifecycle(false)
+    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsStateWithLifecycle(false)
+    val isError by viewModel.isError.collectAsStateWithLifecycle(false)
+    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsStateWithLifecycle(false)
     val lottieResId = remember(level) {
         when (level.value) {
             1 -> R.raw.pinkstamps
@@ -119,7 +119,9 @@ fun MissionDetailScreen(
         }
     }
     LaunchedEffect(isDeleteSuccess) {
-        resultNavigator.navigateBack(true)
+        if (isDeleteSuccess) {
+            resultNavigator.navigateBack(true)
+        }
     }
 
     SoptTheme {
