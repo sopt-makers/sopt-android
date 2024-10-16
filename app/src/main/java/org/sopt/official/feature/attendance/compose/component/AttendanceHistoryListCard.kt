@@ -16,7 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.common.collect.ImmutableList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.AttendanceHistory
 
@@ -24,7 +25,7 @@ import org.sopt.official.feature.attendance.model.AttendanceHistory
 fun AttendanceHistoryListCard(
     attendanceHistoryList: ImmutableList<AttendanceHistory>,
     scrollState: ScrollState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
         Text(
@@ -74,7 +75,7 @@ fun AttendanceHistoryListCard(
 private fun AttendanceHistoryListCardPreview() {
     SoptTheme {
         AttendanceHistoryListCard(
-            attendanceHistoryList = ImmutableList.of(
+            attendanceHistoryList = persistentListOf(
                 AttendanceHistory(
                     status = "출석", eventName = "1차 세미나", date = "00월 00일"
                 ),
