@@ -26,7 +26,7 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,16 +39,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.immutableListOf
-import org.sopt.official.designsystem.Gray10
-import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_off
 import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_on
 
@@ -61,7 +61,8 @@ internal fun PokeMessageBottomSheetScreen(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .padding(horizontal = 20.dp)
             .padding(
                 top = 24.dp,
@@ -69,14 +70,14 @@ internal fun PokeMessageBottomSheetScreen(
             ),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = CenterVertically,
+            horizontalArrangement = SpaceBetween,
             modifier = Modifier.fillMaxWidth(),
         ) {
             Text(
                 text = "함께 보낼 메시지를 선택해주세요",
-                style = SoptTheme.typography.heading20B,
-                color = Gray30,
+                style = typography.heading20B,
+                color = colors.onSurface30,
             )
             Spacer(modifier = Modifier.weight(weight = 1f))
             Image(
@@ -88,8 +89,8 @@ internal fun PokeMessageBottomSheetScreen(
             Spacer(modifier = Modifier.width(width = 8.dp))
             Text(
                 text = "익명",
-                style = SoptTheme.typography.title16SB,
-                color = Gray10,
+                style = typography.title16SB,
+                color = colors.onSurface10,
             )
         }
         Spacer(modifier = Modifier.height(height = 12.dp))

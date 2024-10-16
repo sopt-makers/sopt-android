@@ -28,9 +28,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetValue
+import androidx.compose.material.ModalBottomSheetValue.Hidden
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,8 +45,14 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.sopt.official.designsystem.Gray800
+import org.sopt.official.analytics.EventType.CLICK
+import org.sopt.official.analytics.EventType.VIEW
+import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
+
+internal const val DEFAULT_ID = -1
 
 @Composable
 internal fun FortuneDetailRoute(
@@ -59,12 +65,22 @@ internal fun FortuneDetailRoute(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isAnonymous by remember { mutableStateOf(true) }
-    var selectedIndex by remember { mutableIntStateOf(-1) }
-    val bottomSheetState = rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden)
+    var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
+    val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
+    val amplitudeTracker = LocalAmplitudeTracker.current
 
-    LaunchedEffect(bottomSheetState.currentValue) {
-        if (bottomSheetState.currentValue == ModalBottomSheetValue.Hidden) isBottomSheetVisible(false)
+    LaunchedEffect(key1 = uiState) {
+        if (uiState is Success) {
+            amplitudeTracker.track(
+                type = VIEW,
+                name = "view_soptmadi_todays",
+            )
+        }
+    }
+
+    LaunchedEffect(key1 = bottomSheetState.currentValue) {
+        if (bottomSheetState.currentValue == Hidden) isBottomSheetVisible(false)
     }
 
     ModalBottomSheetLayout(
@@ -73,11 +89,19 @@ internal fun FortuneDetailRoute(
             topStart = 20.dp,
             topEnd = 20.dp,
         ),
-        sheetBackgroundColor = Gray800,
+        sheetBackgroundColor = colors.onSurface800,
         sheetContent = {
             PokeMessageBottomSheetScreen(
                 selectedIndex = selectedIndex,
                 onItemClick = { newSelectedIndex, message ->
+                    amplitudeTracker.track(
+                        type = CLICK,
+                        name = "send_choice",
+                        properties = mapOf(
+                            "index" to newSelectedIndex + 1,
+                            "message" to message,
+                        ),
+                    )
                     scope.launch {
                         selectedIndex = newSelectedIndex
                         bottomSheetState.hide()
@@ -88,10 +112,15 @@ internal fun FortuneDetailRoute(
                 },
                 onIconClick = {
                     isAnonymous = !isAnonymous
+                    amplitudeTracker.track(
+                        type = CLICK,
+                        name = "click_anonymity",
+                        properties = mapOf("isAnonymous" to isAnonymous),
+                    )
                     if (isAnonymous.not()) scope.launch {
                         snackBarHostState.showSnackbar(
                             message = "",
-                            duration = SnackbarDuration.Short,
+                            duration = Short,
                         )
                     }
                 },
@@ -101,19 +130,30 @@ internal fun FortuneDetailRoute(
     ) {
         FortuneDetailScreen(
             date = date,
-            onFortuneAmuletClick = onFortuneAmuletClick,
+            onFortuneAmuletClick = {
+                amplitudeTracker.track(
+                    type = CLICK,
+                    name = "click_get_charmcard",
+                )
+                onFortuneAmuletClick()
+            },
             onProfileClick = { userId ->
                 context.startActivity(
                     Intent(Intent.ACTION_VIEW, Uri.parse("https://playground.sopt.org/members/${userId}"))
                 )
             },
             onPokeClick = {
+                amplitudeTracker.track(
+                    type = CLICK,
+                    name = "click_randomepeople",
+                )
                 scope.launch {
                     bottomSheetState.show()
                 }.invokeOnCompletion {
                     isBottomSheetVisible(true)
                 }
             },
+            onErrorDialogCheckClick = viewModel::updateUi,
             uiState = uiState,
         )
     }
