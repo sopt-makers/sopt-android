@@ -20,10 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.state.TodayNoAttendanceCardState
 
 @Composable
-fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier = Modifier) {
+fun TodayNoAttendanceCard(
+    eventDate: String,
+    eventLocation: String,
+    eventName: String, modifier: Modifier = Modifier,
+) {
     Column(
         modifier =
         modifier
@@ -41,7 +44,7 @@ fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier 
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = state.eventDate,
+                text = eventDate,
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.body14M
             )
@@ -55,7 +58,7 @@ fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier 
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = state.eventLocation,
+                text = eventLocation,
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.body14M
             )
@@ -68,7 +71,7 @@ fun TodayNoAttendanceCard(state: TodayNoAttendanceCardState, modifier: Modifier 
                 style = SoptTheme.typography.body18M
             )
             Text(
-                text = state.eventName,
+                text = eventName,
                 color = SoptTheme.colors.onSurface10,
                 style = SoptTheme.typography.body18M.copy(fontWeight = FontWeight.ExtraBold)
             )
@@ -93,12 +96,9 @@ private fun TodayNoAttendanceCardPreview() {
     SoptTheme {
         Column(modifier = Modifier.background(color = SoptTheme.colors.background)) {
             TodayNoAttendanceCard(
-                state =
-                TodayNoAttendanceCardState(
-                    eventDate = "5월 12일 일요일 14:00 - 18:00",
-                    eventLocation = "배달의민족주문~",
-                    eventName = "데모데이",
-                ),
+                eventDate = "5월 12일 일요일 14:00 - 18:00",
+                eventLocation = "배달의민족주문~",
+                eventName = "데모데이",
             )
         }
     }

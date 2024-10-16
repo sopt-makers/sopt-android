@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,19 +22,18 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.FinalAttendance
 import org.sopt.official.feature.attendance.model.MidtermAttendance
 import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
-import org.sopt.official.feature.attendance.model.state.TodayAttendanceCardState
 
 @Composable
-fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Modifier) {
-    Column(
-        modifier =
-        modifier
-            .background(
-                color = SoptTheme.colors.onSurface800,
-                shape = RoundedCornerShape(16.dp)
-            )
-            .padding(horizontal = 24.dp, vertical = 32.dp),
-    ) {
+fun TodayAttendanceCard(
+    eventDate: String,
+    eventLocation: String,
+    eventName: String,
+    firstAttendance: MidtermAttendance,
+    secondAttendance: MidtermAttendance,
+    finalAttendance: FinalAttendance,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier.padding(horizontal = 24.dp, vertical = 32.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_attendance_event_date),
@@ -44,7 +42,7 @@ fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Mo
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = state.eventDate,
+                text = eventDate,
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.body14M
             )
@@ -58,7 +56,7 @@ fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Mo
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                text = state.eventLocation,
+                text = eventLocation,
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.body14M
             )
@@ -71,7 +69,7 @@ fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Mo
                 style = SoptTheme.typography.body18M
             )
             Text(
-                text = state.eventName,
+                text = eventName,
                 color = SoptTheme.colors.onSurface10,
                 style = SoptTheme.typography.body18M.copy(fontWeight = FontWeight.ExtraBold)
             )
@@ -84,9 +82,9 @@ fun TodayAttendanceCard(state: TodayAttendanceCardState, modifier: Modifier = Mo
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(
             state = AttendanceProgressBarState(
-                firstAttendance = state.firstAttendance,
-                secondAttendance = state.secondAttendance,
-                finalAttendance = state.finalAttendance,
+                firstAttendance = firstAttendance,
+                secondAttendance = secondAttendance,
+                finalAttendance = finalAttendance,
             )
         )
     }
@@ -100,15 +98,12 @@ private fun TodayAttendanceCardPreview() {
             modifier = Modifier.background(color = SoptTheme.colors.background)
         ) {
             TodayAttendanceCard(
-                state =
-                TodayAttendanceCardState(
-                    eventDate = "3월 23일 토요일 14:00 - 18:00",
-                    eventLocation = "건국대학교 꽥꽥오리관",
-                    eventName = "2차 세미나",
-                    firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                    secondAttendance = MidtermAttendance.Absent,
-                    finalAttendance = FinalAttendance.LATE,
-                ),
+                eventDate = "3월 23일 토요일 14:00 - 18:00",
+                eventLocation = "건국대학교 꽥꽥오리관",
+                eventName = "2차 세미나",
+                firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+                secondAttendance = MidtermAttendance.Absent,
+                finalAttendance = FinalAttendance.LATE,
             )
         }
     }
