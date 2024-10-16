@@ -41,6 +41,7 @@ import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
@@ -51,23 +52,20 @@ internal class FortuneDetailViewModel @Inject constructor(
     private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Error(Throwable("123")))
+    private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
     private var isAnonymous: Boolean = false
     private var userId = DEFAULT_ID
 
     init {
-      //  refresh()
+        updateUi()
     }
 
-    fun refresh() {
+    fun updateUi() {
         viewModelScope.launch {
             runCatching {
                 coroutineScope {
-                    awaitAll(
-                        async { getTodayFortuneUseCase() },
-                        async { pokeRepository.getOnboardingPokeUserList(size = 1) }
-                    )
+                    awaitAll(async { getTodayFortuneUseCase() }, async { pokeRepository.getOnboardingPokeUserList(size = 1) })
                 }
             }.onSuccess { result ->
                 val todayFortune = result[0] as TodayFortuneWord
@@ -79,8 +77,7 @@ internal class FortuneDetailViewModel @Inject constructor(
                         todaySentence = TodaySentence(
                             userName = todayFortune.userName,
                             content = todayFortune.title,
-                        ),
-                        userInfo = UserInfo(
+                        ), userInfo = UserInfo(
                             userId = user.userId.toLong(),
                             profile = user.profileImage,
                             userName = user.name,
@@ -101,9 +98,7 @@ internal class FortuneDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 pokeRepository.pokeUser(
-                    userId = userId,
-                    isAnonymous = isAnonymous,
-                    message = message
+                    userId = userId, isAnonymous = isAnonymous, message = message
                 )
             }.onSuccess {
                 _uiState.update { uiState.value as Success }

@@ -153,7 +153,7 @@ internal fun FortuneDetailRoute(
                     isBottomSheetVisible(true)
                 }
             },
-            onErrorDialogCheckClick = viewModel::refresh,
+            onErrorDialogCheckClick = viewModel::updateUi,
             uiState = uiState,
         )
     }
