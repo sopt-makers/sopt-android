@@ -54,13 +54,13 @@ import java.util.Locale
 internal fun HomeRoute(
     onFortuneDetailClick: (String) -> Unit,
 ) {
+    val date = rememberSaveable { getToday() }
     val amplitudeTracker = LocalAmplitudeTracker.current.also {
         it.track(
             type = EventType.VIEW,
             name = "view_soptmadi_title",
         )
     }
-    val date = rememberSaveable { getToday() }
 
     HomeScreen(
         date = date,

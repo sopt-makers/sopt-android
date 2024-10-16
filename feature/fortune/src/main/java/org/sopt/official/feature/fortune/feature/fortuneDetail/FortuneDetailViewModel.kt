@@ -41,7 +41,6 @@ import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Loading
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
@@ -52,13 +51,13 @@ internal class FortuneDetailViewModel @Inject constructor(
     private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,
 ) : ViewModel() {
-    private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
+    private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Error(Throwable("123")))
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
     private var isAnonymous: Boolean = false
     private var userId = DEFAULT_ID
 
     init {
-        refresh()
+      //  refresh()
     }
 
     fun refresh() {

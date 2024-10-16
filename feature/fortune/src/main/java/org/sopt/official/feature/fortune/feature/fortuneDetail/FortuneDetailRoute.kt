@@ -50,6 +50,7 @@ import org.sopt.official.analytics.EventType.VIEW
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 
 internal const val DEFAULT_ID = -1
 
@@ -67,11 +68,15 @@ internal fun FortuneDetailRoute(
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
-    val amplitudeTracker = LocalAmplitudeTracker.current.also {
-        it.track(
-            type = VIEW,
-            name = "view_soptmadi_todays",
-        )
+    val amplitudeTracker = LocalAmplitudeTracker.current
+
+    LaunchedEffect(key1 = uiState) {
+        if (uiState is Success) {
+            amplitudeTracker.track(
+                type = VIEW,
+                name = "view_soptmadi_todays",
+            )
+        }
     }
 
     LaunchedEffect(key1 = bottomSheetState.currentValue) {
@@ -91,7 +96,11 @@ internal fun FortuneDetailRoute(
                 onItemClick = { newSelectedIndex, message ->
                     amplitudeTracker.track(
                         type = CLICK,
-                        name = "send_choice${newSelectedIndex + 1}",
+                        name = "send_choice",
+                        properties = mapOf(
+                            "index" to newSelectedIndex + 1,
+                            "message" to message,
+                        ),
                     )
                     scope.launch {
                         selectedIndex = newSelectedIndex
@@ -102,11 +111,12 @@ internal fun FortuneDetailRoute(
                     }
                 },
                 onIconClick = {
+                    isAnonymous = !isAnonymous
                     amplitudeTracker.track(
                         type = CLICK,
-                        name = "uncheck_anonymity",
+                        name = "click_anonymity",
+                        properties = mapOf("isAnonymous" to isAnonymous),
                     )
-                    isAnonymous = !isAnonymous
                     if (isAnonymous.not()) scope.launch {
                         snackBarHostState.showSnackbar(
                             message = "",

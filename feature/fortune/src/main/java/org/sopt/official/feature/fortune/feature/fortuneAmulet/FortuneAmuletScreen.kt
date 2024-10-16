@@ -56,12 +56,7 @@ internal fun FortuneAmuletRoute(
     onHomeClick: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
-    val amplitudeTracker = LocalAmplitudeTracker.current.also {
-        it.track(
-            type = EventType.VIEW,
-            name = "view_soptmadi_charmcard",
-        )
-    }
+    val amplitudeTracker = LocalAmplitudeTracker.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when {
@@ -97,7 +92,12 @@ internal fun FortuneAmuletRoute(
                     )
                     onHomeClick()
                 }
-            )
+            ).also {
+                amplitudeTracker.track(
+                    type = EventType.VIEW,
+                    name = "view_soptmadi_charmcard",
+                )
+            }
         }
     }
 }
