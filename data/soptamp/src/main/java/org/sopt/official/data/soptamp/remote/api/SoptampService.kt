@@ -25,6 +25,7 @@
 package org.sopt.official.data.soptamp.remote.api
 
 import org.sopt.official.data.soptamp.remote.model.response.MissionResponse
+import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 import retrofit2.http.GET
 
 internal interface SoptampService {
@@ -32,8 +33,8 @@ internal interface SoptampService {
     suspend fun getAllMissions(): List<MissionResponse>
 
     @GET("mission/complete")
-    suspend fun getCompleteMissions(): List<MissionResponse>
+    suspend fun getCompleteMissions(): List<MissionStatusResponse>
 
     @GET("mission/incomplete")
-    suspend fun getIncompleteMissions(): List<MissionResponse>
+    suspend fun getIncompleteMissions(): List<MissionStatusResponse>
 }

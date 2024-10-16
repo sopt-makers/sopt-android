@@ -47,10 +47,15 @@ android {
 }
 
 dependencies {
+    // domain
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
+
+    // core
     implementation(projects.core.common)
     implementation(projects.core.analytics)
+    implementation(projects.core.webview)
+
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.collections.immutable)
     implementation(platform(libs.compose.bom))

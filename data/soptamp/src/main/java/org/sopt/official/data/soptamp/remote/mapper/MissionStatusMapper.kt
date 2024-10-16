@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.soptamp.repository
 
-import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.Stamp
+package org.sopt.official.data.soptamp.remote.mapper
 
-interface StampRepository {
-    suspend fun completeMission(stamp: Stamp): Result<Archive>
+import org.sopt.official.data.soptamp.remote.model.MissionData
+import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 
-    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
+internal fun List<MissionStatusResponse>.toData(isCompleted: Boolean = false): List<MissionData> = this.map { it.toData(isCompleted) }
 
-    suspend fun modifyMission(stamp: Stamp): Result<Unit>
-
-    suspend fun deleteMission(missionId: Int): Result<Unit>
-
-    suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getReportUrl(): Result<String>
-}
+internal fun MissionStatusResponse.toData(isCompleted: Boolean = false): MissionData = MissionData(
+    id = this.id,
+    title = this.title,
+    level = this.level,
+    profileImage = this.profileImage,
+    isCompleted = isCompleted
+)

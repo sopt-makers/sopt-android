@@ -26,6 +26,7 @@ package org.sopt.official.data.soptamp.remote.api
 
 import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
+import org.sopt.official.data.soptamp.remote.model.response.ReportUrlResponse
 import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 import retrofit2.http.Body
@@ -51,6 +52,9 @@ interface StampService {
 
     @DELETE("stamp/all")
     suspend fun deleteAllStamps()
+
+    @GET("stamp/report")
+    suspend fun getReportUrl(): ReportUrlResponse
 
     @GET("s3/stamp")
     suspend fun getS3URL(): S3URLResponse

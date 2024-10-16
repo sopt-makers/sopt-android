@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.setting.component.section
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+package org.sopt.official.data.soptamp.remote.model.response
 
-@Composable
-fun Header(modifier: Modifier, title: String) {
-    Text(
-        text = title,
-        style = SoptTheme.typography.caption1,
-        color = SoptTheme.colors.onSurface50,
-        modifier = modifier.padding(bottom = 4.dp)
-    )
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ReportUrlResponse(
+    @SerialName("reportUrl")
+    val reportUrl: String
+)

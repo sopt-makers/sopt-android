@@ -28,4 +28,6 @@ import org.sopt.official.data.soptamp.remote.model.MissionData
 
 interface MissionsDataSource {
     suspend fun getAllMission(): Result<List<MissionData>>
+    suspend fun getCompleteMissions(): Result<List<MissionData>>
+    suspend fun getIncompleteMissions(): Result<List<MissionData>>
 }

@@ -134,7 +134,7 @@ fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDe
             val description = if (onClickRankerDescriptionState.length > maxLength) {
                 "${onClickRankerDescriptionState.substring(0 until maxLength)}..."
             } else {
-                onClickRankerDescriptionState
+                onClickRankerDescriptionState.ifBlank { "설정된 한 마디가 없습니다" }
             }
             Text(
                 text = description,
