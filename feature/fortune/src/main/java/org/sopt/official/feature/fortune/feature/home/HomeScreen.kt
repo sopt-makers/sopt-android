@@ -105,7 +105,7 @@ private fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.img_fortune_title),
+            imageVector = ImageVector.vectorResource(id = R.drawable.img_fortune_title_large),
             contentDescription = null,
             modifier = Modifier.padding(horizontal = 25.dp)
         )
