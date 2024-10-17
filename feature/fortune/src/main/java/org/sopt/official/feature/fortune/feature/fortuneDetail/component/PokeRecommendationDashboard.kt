@@ -58,6 +58,7 @@ internal fun PokeRecommendationDashboard(
     profile: String,
     name: String,
     userDescription: String,
+    isEnabled: Boolean,
     onPokeClick: () -> Unit,
     onProfileClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -113,9 +114,9 @@ internal fun PokeRecommendationDashboard(
                     modifier = Modifier
                         .size(size = 44.dp)
                         .background(
-                            color = colors.onSurface10,
+                            color = if (isEnabled) colors.onSurface10 else colors.onSurface700,
                             shape = RoundedCornerShape(size = 18.dp),
-                        ).clickable { onPokeClick() },
+                        ).clickable { if (isEnabled) onPokeClick() },
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = ic_poke),
@@ -134,6 +135,7 @@ private fun PokeRecommendationDashboardPreview() {
         PokeRecommendationDashboard(
             profile = "123",
             name = "이현우이현우이현우이현우이현우",
+            isEnabled = true,
             onPokeClick = { },
             onProfileClick = { },
             userDescription = "1100기 iOS",

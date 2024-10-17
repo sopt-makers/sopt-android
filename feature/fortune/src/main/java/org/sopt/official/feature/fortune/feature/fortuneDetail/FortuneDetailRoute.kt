@@ -69,6 +69,7 @@ internal fun FortuneDetailRoute(
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isAnonymous by remember { mutableStateOf(true) }
+    var isPokeEnabled by remember { mutableStateOf(true) }
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
@@ -108,6 +109,7 @@ internal fun FortuneDetailRoute(
                     )
                     scope.launch {
                         selectedIndex = newSelectedIndex
+                        isPokeEnabled = false
                         bottomSheetState.hide()
                         viewModel.poke(message)
                         showSnackBar(Poke)
@@ -165,6 +167,7 @@ internal fun FortuneDetailRoute(
             },
             onErrorDialogCheckClick = viewModel::updateUi,
             uiState = uiState,
+            isEnabled = isPokeEnabled,
         )
     }
 }
