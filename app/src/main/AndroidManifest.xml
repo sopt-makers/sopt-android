@@ -94,10 +94,6 @@
             android:exported="false"
             android:theme="@style/Theme.SOPT" />
         <activity
-            android:name=".feature.mypage.soptamp.nickName.ChangeNickNameActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
-        <activity
             android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
             android:exported="false"
             android:theme="@style/Theme.SOPT" />

@@ -27,12 +27,14 @@ package org.sopt.official.feature.mypage.soptamp.sentence
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
@@ -44,19 +46,36 @@ class AdjustSentenceViewModel @Inject constructor(
 ) : ViewModel() {
     private val _sentence: MutableStateFlow<String> = MutableStateFlow("")
     val sentence: StateFlow<String> get() = _sentence.asStateFlow()
-    val isConfirmed = sentence.map { it.isNotEmpty() }
-    private val _finish = Channel<Unit>()
-    val finish = _finish.receiveAsFlow()
+
+    private var previousSentence: String = ""
+
+    val isConfirmed : Flow<Boolean> = sentence.map { sentence ->
+        previousSentence != sentence
+    }
+
+    private val _sideEffect = MutableSharedFlow<AdjustSentenceSideEffect>()
+    val sideEffect: SharedFlow<AdjustSentenceSideEffect> = _sideEffect.asSharedFlow()
+
+    init {
+        initAdjustSentence()
+    }
+
+    private fun initAdjustSentence() {
+        viewModelScope.launch {
+            userRepository.getUserInfo()
+                .onSuccess { response ->
+                    _sentence.value = response.profileMessage
+                    previousSentence = response.profileMessage
+                }.onFailure(Timber::e)
+        }
+    }
 
     fun adjustSentence() {
         viewModelScope.launch {
             userRepository.updateProfileMessage(_sentence.value)
                 .onSuccess {
-                    _finish.send(Unit)
-                }.onFailure {
-                    _finish.send(Unit)
-                    Timber.e(it)
-                }
+                    _sideEffect.emit(AdjustSentenceSideEffect.NavigateToMyPage)
+                }.onFailure(Timber::e)
         }
     }
 

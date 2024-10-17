@@ -32,9 +32,8 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
@@ -54,18 +53,20 @@ class MyPageViewModel @Inject constructor(
     private val stampRepository: StampRepository,
 ) : ViewModel() {
 
-    private val _userActiveState = MutableStateFlow<MyPageUiState>(MyPageUiState.UnInitialized)
-    val userActiveState = _userActiveState.filterIsInstance<MyPageUiState.User>()
-        .map { it.activeState != UserActiveState.UNAUTHENTICATED }
+    private val _state: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
+    val state: StateFlow<MyPageUiState> = _state.asStateFlow()
 
-    private val _dialogState: MutableStateFlow<MyPageUiState> = MutableStateFlow(MyPageUiState.UnInitialized)
-    val dialogState: StateFlow<MyPageUiState> = _dialogState.asStateFlow()
+    private val _action = MutableStateFlow<MyPageAction?>(null)
+    val action: StateFlow<MyPageAction?> = _action.asStateFlow()
 
     private val _finish = Channel<Unit>()
     val finish = _finish.receiveAsFlow()
 
-    fun setUserActiveState(new: MyPageUiState) {
-        _userActiveState.value = new
+    fun setUserActiveState(activeState: UserActiveState) {
+        _state.update {
+            if (activeState == UserActiveState.UNAUTHENTICATED) MyPageUiState.UnAuthenticated
+            else MyPageUiState.Authenticated(activeState)
+        }
     }
 
     fun logOut() {
@@ -87,16 +88,16 @@ class MyPageViewModel @Inject constructor(
     fun resetSoptamp() {
         viewModelScope.launch {
             stampRepository.deleteAllStamps()
+                .onSuccess { closeDialog() }
                 .onFailure { Timber.e(it) }
         }
     }
 
     fun showDialogState(action: MyPageAction) {
-        _dialogState.tryEmit(MyPageUiState.Dialog(action))
+        _action.update { action }
     }
 
-    fun onDismiss() {
-        _dialogState.tryEmit(MyPageUiState.UnInitialized)
+    fun closeDialog() {
+        _action.update { null }
     }
-
 }

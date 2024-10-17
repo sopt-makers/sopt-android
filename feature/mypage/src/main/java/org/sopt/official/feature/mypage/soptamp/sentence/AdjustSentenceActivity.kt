@@ -42,12 +42,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
@@ -67,16 +69,25 @@ class AdjustSentenceActivity : AppCompatActivity() {
                 val sentence by viewModel.sentence.collectAsStateWithLifecycle()
                 val isConfirmed by viewModel.isConfirmed.collectAsStateWithLifecycle(initialValue = false)
 
-                LaunchedEffect(viewModel.finish, lifecycleOwner) {
-                    viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect {
-                            onBackPressedDispatcher.onBackPressed()
+                val keyboardController = LocalSoftwareKeyboardController.current
+
+                LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+                    viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect { sideEffect ->
+                            when (sideEffect) {
+                                is AdjustSentenceSideEffect.NavigateToMyPage -> {
+                                    keyboardController?.hide()
+                                    toast("한마디가 변경되었습니다")
+                                    onBackPressedDispatcher.onBackPressed()
+                                }
+                            }
                         }
                 }
 
-                Scaffold(modifier = Modifier
-                    .background(SoptTheme.colors.background)
-                    .fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier
+                        .background(SoptTheme.colors.background)
+                        .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
                             title = "한 마디 편집",

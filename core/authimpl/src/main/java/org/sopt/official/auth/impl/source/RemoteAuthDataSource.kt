@@ -25,12 +25,11 @@
 package org.sopt.official.auth.impl.source
 
 import org.sopt.official.auth.impl.model.response.LogOutRequest
-import org.sopt.official.auth.impl.model.response.LogOutResponse
 import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.model.response.AuthResponse
 
 interface RemoteAuthDataSource {
     suspend fun refresh(token: RefreshRequest): AuthResponse
     suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest): LogOutResponse
+    suspend fun deleteUserInfo(request: LogOutRequest)
 }
