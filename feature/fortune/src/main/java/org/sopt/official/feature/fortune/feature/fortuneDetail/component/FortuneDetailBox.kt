@@ -30,12 +30,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray900
+import org.sopt.official.designsystem.SoptTheme.colors
 
 @Composable
 internal fun TodayFortuneBox(
@@ -43,12 +43,12 @@ internal fun TodayFortuneBox(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        contentAlignment = Alignment.Center,
+        contentAlignment = Center,
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = Gray900,
-                shape = RoundedCornerShape(12.dp),
+                color = colors.onSurface900,
+                shape = RoundedCornerShape(size = 12.dp),
             ),
     ) {
         content()
@@ -59,7 +59,7 @@ internal fun TodayFortuneBox(
 @Composable
 private fun TodayFortuneBoxPreview() {
     TodayFortuneBox(
-        content = { Text("123") },
+        content = { Text(text = "123") },
         modifier = Modifier.background(color = Color.White),
     )
 }

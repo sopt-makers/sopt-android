@@ -24,12 +24,14 @@
  */
 package org.sopt.official.stamp.feature.ranking.part
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -52,6 +54,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
@@ -76,9 +79,9 @@ import org.sopt.official.stamp.feature.ranking.rank.RankingHeader
 fun PartRankingScreen(
     partRankingViewModel: PartRankingViewModel = hiltViewModel(),
     resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
-    val state by partRankingViewModel.state.collectAsState()
+    val state by partRankingViewModel.state.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
     LaunchedEffect(true) {
         tracker.track(
@@ -115,7 +118,7 @@ fun PartRankingScreen(
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
-    onClickPart: (String) -> Unit = {}
+    onClickPart: (String) -> Unit = {},
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -138,7 +141,10 @@ fun PartRankingScreen(
             end = 16.dp
         )
         Box(
-            modifier = Modifier.pullRefresh(refreshingState)
+            modifier = Modifier
+                .pullRefresh(refreshingState)
+                .background(SoptTheme.colors.white)
+                .fillMaxSize()
         ) {
             LazyColumn(
                 state = listState,

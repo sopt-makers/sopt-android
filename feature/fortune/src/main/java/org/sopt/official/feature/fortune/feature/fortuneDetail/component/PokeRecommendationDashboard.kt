@@ -39,19 +39,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.style.TextOverflow.Companion.Ellipsis
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray10
-import org.sopt.official.designsystem.Gray100
-import org.sopt.official.designsystem.Gray30
-import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.ic_poke
 
 @Composable
@@ -71,17 +70,17 @@ internal fun PokeRecommendationDashboard(
         ) {
             Text(
                 text = "콕 찌르기",
-                style = SoptTheme.typography.body14R,
-                color = Gray100,
+                style = typography.body14R,
+                color = colors.onSurface100,
             )
             Text(
                 text = "행운이 2배가 될 솝트인을 찔러보세요",
-                style = SoptTheme.typography.title18SB,
-                color = Gray30,
+                style = typography.title18SB,
+                color = colors.onSurface30,
             )
             Spacer(modifier = Modifier.height(height = 28.dp))
             Row(
-                verticalAlignment = Alignment.CenterVertically,
+                verticalAlignment = CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 PokeRecommendationUserProfileImage(
@@ -98,28 +97,28 @@ internal fun PokeRecommendationDashboard(
                 ) {
                     Text(
                         text = name,
-                        style = SoptTheme.typography.body18M,
-                        overflow = TextOverflow.Ellipsis,
+                        style = typography.body18M,
+                        overflow = Ellipsis,
                         maxLines = 1,
-                        color = Gray30,
+                        color = colors.onSurface30,
                     )
                     Text(
                         text = userDescription,
-                        style = SoptTheme.typography.label12SB,
-                        color = Gray300,
+                        style = typography.label12SB,
+                        color = colors.onSurface300,
                     )
                 }
                 Box(
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Center,
                     modifier = Modifier
                         .size(size = 44.dp)
                         .background(
-                            color = Gray10,
+                            color = colors.onSurface10,
                             shape = RoundedCornerShape(size = 18.dp),
                         ).clickable { onPokeClick() },
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(ic_poke),
+                        imageVector = ImageVector.vectorResource(id = ic_poke),
                         contentDescription = "콕 찌르기",
                     )
                 }

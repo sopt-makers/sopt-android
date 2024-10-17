@@ -22,21 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.setting.component.section
+package org.sopt.official.data.soptamp.remote.mapper
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.data.soptamp.remote.model.MissionData
+import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 
-@Composable
-fun Header(modifier: Modifier, title: String) {
-    Text(
-        text = title,
-        style = SoptTheme.typography.caption1,
-        color = SoptTheme.colors.onSurface50,
-        modifier = modifier.padding(bottom = 4.dp)
-    )
-}
+internal fun List<MissionStatusResponse>.toData(isCompleted: Boolean = false): List<MissionData> = this.map { it.toData(isCompleted) }
+
+internal fun MissionStatusResponse.toData(isCompleted: Boolean = false): MissionData = MissionData(
+    id = this.id,
+    title = this.title,
+    level = this.level,
+    profileImage = this.profileImage,
+    isCompleted = isCompleted
+)

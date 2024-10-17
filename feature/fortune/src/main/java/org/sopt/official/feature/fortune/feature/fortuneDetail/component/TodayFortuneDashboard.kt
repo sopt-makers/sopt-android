@@ -30,14 +30,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.R.drawable.img_fortune_title
 
 @Composable
@@ -50,19 +50,19 @@ internal fun TodayFortuneDashboard(
     TodayFortuneBox(
         content = {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = CenterHorizontally,
                 modifier = modifier,
             ) {
                 Spacer(modifier = Modifier.height(height = 32.dp))
                 Image(
-                    imageVector = ImageVector.vectorResource(img_fortune_title),
+                    imageVector = ImageVector.vectorResource(id = img_fortune_title),
                     contentDescription = "오늘의 솝마디",
                 )
                 Spacer(modifier = Modifier.height(height = 10.dp))
                 Text(
                     text = date,
                     style = SoptTheme.typography.title18SB,
-                    color = Gray100,
+                    color = colors.onSurface100,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))
                 TodayFortuneText(

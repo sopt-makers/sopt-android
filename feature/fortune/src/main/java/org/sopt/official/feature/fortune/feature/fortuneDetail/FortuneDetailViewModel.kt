@@ -49,36 +49,35 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class FortuneDetailViewModel @Inject constructor(
-    getTodayFortuneUseCase: GetTodayFortuneUseCase,
+    private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
-
     private var isAnonymous: Boolean = false
     private var userId = DEFAULT_ID
 
     init {
+        updateUi()
+    }
+
+    fun updateUi() {
         viewModelScope.launch {
             runCatching {
                 coroutineScope {
-                    awaitAll(
-                        async { getTodayFortuneUseCase() },
-                        async { pokeRepository.getOnboardingPokeUserList(size = 1) }
-                    )
+                    awaitAll(async { getTodayFortuneUseCase() }, async { pokeRepository.getOnboardingPokeUserList(size = 1) })
                 }
             }.onSuccess { result ->
                 val todayFortune = result[0] as TodayFortuneWord
                 val pokeUser = result[1] as GetOnboardingPokeUserListResponse
                 val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()
-                userId = user.userId
+
                 _uiState.update {
                     Success(
                         todaySentence = TodaySentence(
                             userName = todayFortune.userName,
                             content = todayFortune.title,
-                        ),
-                        userInfo = UserInfo(
+                        ), userInfo = UserInfo(
                             userId = user.userId.toLong(),
                             profile = user.profileImage,
                             userName = user.name,
@@ -86,6 +85,8 @@ internal class FortuneDetailViewModel @Inject constructor(
                             part = user.part,
                         )
                     )
+                }.also {
+                    userId = user.userId
                 }
             }.onFailure { error ->
                 _uiState.update { Error(error) }
@@ -97,9 +98,7 @@ internal class FortuneDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 pokeRepository.pokeUser(
-                    userId = userId,
-                    isAnonymous = isAnonymous,
-                    message = message
+                    userId = userId, isAnonymous = isAnonymous, message = message
                 )
             }.onSuccess {
                 _uiState.update { uiState.value as Success }
@@ -107,9 +106,5 @@ internal class FortuneDetailViewModel @Inject constructor(
                 _uiState.update { Error(error) }
             }
         }
-    }
-
-    companion object {
-        private const val DEFAULT_ID = -1
     }
 }

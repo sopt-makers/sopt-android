@@ -51,7 +51,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.auth.model.UserActiveState
@@ -84,8 +83,8 @@ class MyPageActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val isAuthenticated by viewModel.userActiveState.collectAsStateWithLifecycle(initialValue = false)
-                val dialogState by viewModel.dialogState.collectAsStateWithLifecycle()
+                val myPageState by viewModel.state.collectAsStateWithLifecycle()
+                val myPageAction by viewModel.action.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
                 val serviceSectionItems = remember {
@@ -156,7 +155,7 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.MyPageItem(
                             title = "로그인",
                             onItemClick = {
-                                onBackPressedDispatcher.onBackPressed()
+                                startActivity(navigatorProvider.getAuthActivityIntent())
                             }
                         )
                     )
@@ -164,24 +163,15 @@ class MyPageActivity : AppCompatActivity() {
 
                 LaunchedEffect(Unit) {
                     args?.userActiveState?.let {
-                        viewModel.setUserActiveState(MyPageUiState.User(it))
+                        viewModel.setUserActiveState(it)
                     }
                 }
 
                 LaunchedEffect(viewModel.finish, lifecycleOwner) {
                     viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
                         .collect {
-                            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+                            startActivity(navigatorProvider.getAuthActivityIntent())
                         }
-                }
-
-                if (dialogState is MyPageUiState.Dialog) {
-                    ShowMyPageDialog(
-                        action = (dialogState as MyPageUiState.Dialog).action,
-                        onDismissRequest = viewModel::onDismiss,
-                        onClearSoptampClick = viewModel::resetSoptamp,
-                        onLogoutClick = viewModel::logOut
-                    )
                 }
 
                 Scaffold(modifier = Modifier
@@ -204,16 +194,30 @@ class MyPageActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(20.dp))
                         MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
-                        if (isAuthenticated) {
-                            MyPageSection(items = notificationSectionItems)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            MyPageSection(items = soptampSectionItems)
-                            Spacer(modifier = Modifier.height(16.dp))
-                            MyPageSection(items = etcSectionItems)
-                        } else {
-                            MyPageSection(items = etcLoginSectionItems)
+                        when (myPageState) {
+                            is MyPageUiState.Authenticated -> {
+                                MyPageSection(items = notificationSectionItems)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                MyPageSection(items = soptampSectionItems)
+                                Spacer(modifier = Modifier.height(16.dp))
+                                MyPageSection(items = etcSectionItems)
+                            }
+
+                            is MyPageUiState.UnAuthenticated -> {
+                                MyPageSection(items = etcLoginSectionItems)
+                            }
+
+                            is MyPageUiState.UnInitialized -> {}
                         }
                         Spacer(modifier = Modifier.height(32.dp))
+                    }
+                    if (myPageAction != null) {
+                        ShowMyPageDialog(
+                            action = myPageAction ?: return@Scaffold,
+                            onDismissRequest = viewModel::closeDialog,
+                            onClearSoptampClick = viewModel::resetSoptamp,
+                            onLogoutClick = viewModel::logOut
+                        )
                     }
                 }
             }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 package org.sopt.official.data.soptamp.remote.api
 
 import org.sopt.official.data.soptamp.remote.model.response.MissionResponse
+import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 import retrofit2.http.GET
 
 internal interface SoptampService {
@@ -32,8 +33,8 @@ internal interface SoptampService {
     suspend fun getAllMissions(): List<MissionResponse>
 
     @GET("mission/complete")
-    suspend fun getCompleteMissions(): List<MissionResponse>
+    suspend fun getCompleteMissions(): List<MissionStatusResponse>
 
     @GET("mission/incomplete")
-    suspend fun getIncompleteMissions(): List<MissionResponse>
+    suspend fun getIncompleteMissions(): List<MissionStatusResponse>
 }

@@ -24,9 +24,11 @@
  */
 package org.sopt.official.stamp.feature.ranking.rank
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -51,6 +53,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
@@ -82,10 +85,11 @@ fun RankingScreen(
     type: String,
     rankingViewModel: RankingViewModel = hiltViewModel(),
     resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator
+    navigator: DestinationsNavigator,
 ) {
-    val isCurrent = type == "34기"
-    val state by rankingViewModel.state.collectAsState()
+    val isCurrent = type.first().isDigit()
+    val state by rankingViewModel.state.collectAsStateWithLifecycle()
+
     LaunchedEffect(true) {
         rankingViewModel.fetchRanking(isCurrent, type)
     }
@@ -117,7 +121,7 @@ fun RankingScreen(
     rankingListUiModel: RankingListUiModel,
     nickname: String,
     onClickBack: () -> Unit = {},
-    onClickUser: (RankerNavArg) -> Unit = {}
+    onClickUser: (RankerNavArg) -> Unit = {},
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -165,7 +169,10 @@ fun RankingScreen(
             end = 16.dp
         )
         Box(
-            modifier = Modifier.pullRefresh(refreshingState)
+            modifier = Modifier
+                .pullRefresh(refreshingState)
+                .background(SoptTheme.colors.white)
+                .fillMaxSize()
         ) {
             LazyColumn(
                 state = listState,

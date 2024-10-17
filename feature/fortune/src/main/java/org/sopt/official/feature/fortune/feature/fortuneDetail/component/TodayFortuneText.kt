@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,28 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import android.graphics.Paint
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.LineBreak
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.LineBreak.Companion.Simple
+import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
 internal fun TodayFortuneText(
@@ -58,7 +62,7 @@ internal fun TodayFortuneText(
     val formattedSentence = remember { todaySentence.toLineBreakingSentence(textPaint, screenWidth) }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = CenterHorizontally,
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 68.dp)
@@ -66,19 +70,20 @@ internal fun TodayFortuneText(
     ) {
         Text(
             text = "${name}님,",
-            style = SoptTheme.typography.title24SB,
-            color = Gray30,
+            style = typography.title24SB,
+            color = colors.onSurface30,
             maxLines = 1,
-            textAlign = TextAlign.Center,
+            textAlign = Center,
         )
+        Spacer(modifier = Modifier.height(height = 6.dp))
         Text(
             text = formattedSentence,
-            style = SoptTheme.typography.title24SB.copy(
-                lineBreak = LineBreak.Simple,
+            style = typography.title24SB.copy(
+                lineBreak = Simple,
             ),
-            color = Gray30,
+            color = colors.onSurface30,
             maxLines = 4,
-            textAlign = TextAlign.Center,
+            textAlign = Center,
             softWrap = true,
         )
     }

@@ -40,7 +40,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.analytics.EventType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.R
 import org.sopt.official.feature.fortune.component.FortuneButton
 import java.time.LocalDate
@@ -50,14 +52,24 @@ import java.util.Locale
 
 @Composable
 internal fun HomeRoute(
-    navigateToFortuneDetail: (String) -> Unit,
+    onFortuneDetailClick: (String) -> Unit,
 ) {
     val date = rememberSaveable { getToday() }
+    val amplitudeTracker = LocalAmplitudeTracker.current.also {
+        it.track(
+            type = EventType.VIEW,
+            name = "view_soptmadi_title",
+        )
+    }
 
     HomeScreen(
         date = date,
-        navigateToFortuneDetail = {
-            navigateToFortuneDetail(date)
+        onFortuneDetailClick = {
+            onFortuneDetailClick(date)
+            amplitudeTracker.track(
+                type = EventType.CLICK,
+                name = "click_check_todaysoptmadi",
+            )
         }
     )
 }
@@ -65,7 +77,7 @@ internal fun HomeRoute(
 @Composable
 private fun HomeScreen(
     date: String,
-    navigateToFortuneDetail: () -> Unit = {},
+    onFortuneDetailClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier
@@ -111,7 +123,7 @@ private fun HomeScreen(
 
         FortuneButton(
             title = "오늘의 운세 보러 가기",
-            onClick = navigateToFortuneDetail,
+            onClick = onFortuneDetailClick,
         )
 
         Spacer(modifier = Modifier.height(36.dp))

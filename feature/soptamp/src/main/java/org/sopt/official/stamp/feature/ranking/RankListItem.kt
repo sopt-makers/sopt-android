@@ -167,7 +167,7 @@ fun RankerInformation(modifier: Modifier = Modifier, user: String, description: 
         if (description != null) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = description,
+                text = description.ifBlank { "설정된 한 마디가 없습니다" },
                 style = SoptTheme.typography.caption1,
                 color = SoptTheme.colors.onSurface70,
                 maxLines = 1,
