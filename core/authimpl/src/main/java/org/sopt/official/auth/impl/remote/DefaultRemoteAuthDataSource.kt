@@ -45,7 +45,7 @@ class DefaultRemoteAuthDataSource @Inject constructor(
         authService.withdraw()
     }
 
-    override suspend fun logout(request: LogOutRequest) {
-        authService.logOut(request)
+    override suspend fun deleteUserInfo(request: LogOutRequest) {
+        authService.deleteUserInfo(request)
     }
 }

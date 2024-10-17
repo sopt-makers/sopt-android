@@ -31,5 +31,5 @@ import org.sopt.official.network.model.response.AuthResponse
 interface RemoteAuthDataSource {
     suspend fun refresh(token: RefreshRequest): AuthResponse
     suspend fun withdraw()
-    suspend fun logout(request: LogOutRequest)
+    suspend fun deleteUserInfo(request: LogOutRequest)
 }

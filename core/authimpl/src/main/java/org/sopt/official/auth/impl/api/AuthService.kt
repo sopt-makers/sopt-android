@@ -40,5 +40,5 @@ interface AuthService {
     suspend fun withdraw()
 
     @HTTP(method = "DELETE", path = "user/logout", hasBody = true)
-    suspend fun logOut(@Body body: LogOutRequest)
+    suspend fun deleteUserInfo(@Body body: LogOutRequest)
 }

@@ -55,7 +55,7 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun logout(pushToken: String) = runCatching {
-        remoteAuthDataSource.logout(
+        remoteAuthDataSource.deleteUserInfo(
             LogOutRequest(
                 platform = "Android",
                 pushToken = pushToken
