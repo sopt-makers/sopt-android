@@ -38,7 +38,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.feature.fortune.R.drawable.img_fortune_title
+import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.feature.fortune.R.drawable.img_fortune_title_small
 
 @Composable
 internal fun TodayFortuneDashboard(
@@ -55,13 +56,13 @@ internal fun TodayFortuneDashboard(
             ) {
                 Spacer(modifier = Modifier.height(height = 32.dp))
                 Image(
-                    imageVector = ImageVector.vectorResource(id = img_fortune_title),
+                    imageVector = ImageVector.vectorResource(id = img_fortune_title_small),
                     contentDescription = "오늘의 솝마디",
                 )
                 Spacer(modifier = Modifier.height(height = 10.dp))
                 Text(
                     text = date,
-                    style = SoptTheme.typography.title18SB,
+                    style = typography.title18SB,
                     color = colors.onSurface100,
                 )
                 Spacer(modifier = Modifier.height(height = 20.dp))

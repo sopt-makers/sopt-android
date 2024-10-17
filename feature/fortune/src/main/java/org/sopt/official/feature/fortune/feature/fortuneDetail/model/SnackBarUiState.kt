@@ -22,33 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.feature.fortuneDetail.navigation
+package org.sopt.official.feature.fortune.feature.fortuneDetail.model
 
-import androidx.compose.material3.SnackbarHostState
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
-import kotlinx.serialization.Serializable
-import org.sopt.official.feature.fortune.feature.fortuneDetail.FortuneDetailRoute
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 
-@Serializable
-data class FortuneDetail(val date: String)
+@Stable
+sealed interface SnackBarUiState {
 
-fun NavGraphBuilder.fortuneDetailNavGraph(
-    navigateToFortuneAmulet: () -> Unit,
-    snackBarHostState: SnackbarHostState,
-    isBottomSheetVisible: (isVisible: Boolean) -> Unit,
-    showSnackBar: (case: SnackBarUiState) -> Unit,
-) {
-    composable<FortuneDetail> { backStackEntry ->
-        val items = backStackEntry.toRoute<FortuneDetail>()
-        FortuneDetailRoute(
-            date = items.date,
-            onFortuneAmuletClick = navigateToFortuneAmulet,
-            isBottomSheetVisible = isBottomSheetVisible,
-            snackBarHostState = snackBarHostState,
-            showSnackBar = showSnackBar,
-        )
-    }
+    @Immutable
+    data object Anonymous : SnackBarUiState
+
+    @Immutable
+    data object Poke : SnackBarUiState
 }
