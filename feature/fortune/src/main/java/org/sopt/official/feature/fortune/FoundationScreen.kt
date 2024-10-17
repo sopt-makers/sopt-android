@@ -36,7 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,10 +44,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.fortune.R.drawable.ic_alert
+import org.sopt.official.feature.fortune.R.drawable.ic_poke_check
 import org.sopt.official.feature.fortune.component.FortuneTopBar
 import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.FortuneAmulet
 import org.sopt.official.feature.fortune.feature.fortuneAmulet.navigation.fortuneAmuletNavGraph
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeSnackBar
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Anonymous
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Poke
 import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.FortuneDetail
 import org.sopt.official.feature.fortune.feature.fortuneDetail.navigation.fortuneDetailNavGraph
 import org.sopt.official.feature.fortune.feature.home.navigation.Home
@@ -60,6 +65,7 @@ fun FoundationScreen(
     navController: NavHostController = rememberNavController(),
 ) {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
+    var snackBarUiState by remember { mutableStateOf<SnackBarUiState>(Anonymous) }
     val snackBarHostState = remember { SnackbarHostState() }
 
     Scaffold(
@@ -69,8 +75,19 @@ fun FoundationScreen(
                     hostState = snackBarHostState,
                     modifier = Modifier
                         .padding(top = 16.dp)
-                        .align(alignment = Alignment.TopCenter),
-                    snackbar = { PokeSnackBar() },
+                        .align(alignment = TopCenter),
+                    snackbar = {
+                        PokeSnackBar(
+                            icon = when (snackBarUiState) {
+                                is Poke -> ic_poke_check
+                                is Anonymous -> ic_alert
+                            },
+                            title = when (snackBarUiState) {
+                                is Poke -> "콕 찌르기를 완료했어요."
+                                is Anonymous -> "익명 해제 시, 상대방이 나를 알 수 있어요."
+                            },
+                        )
+                    },
                 )
             }
         },
@@ -106,6 +123,9 @@ fun FoundationScreen(
                             isBottomSheetVisible = it
                         },
                         snackBarHostState = snackBarHostState,
+                        showSnackBar = { case ->
+                            snackBarUiState = case
+                        },
                     )
 
                     fortuneAmuletNavGraph(
