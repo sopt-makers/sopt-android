@@ -63,7 +63,7 @@ class FortuneActivity : AppCompatActivity() {
                 CompositionLocalProvider(LocalAmplitudeTracker provides amplitudeTracker) {
                     FoundationScreen(
                         onClickLeadingIcon = {
-                            startActivity(navigator.getNotificationActivityIntent())
+                            finish()
                         },
                         navigateToHome = {
                             startActivity(navigator.getAuthActivityIntent())
