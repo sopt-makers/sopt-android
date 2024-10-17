@@ -37,7 +37,7 @@ fun NavGraphBuilder.fortuneAmuletNavGraph(
 ) {
     composable<FortuneAmulet> {
         FortuneAmuletRoute(
-            navigateToHome = navigateToHome
+            onHomeClick = navigateToHome
         )
     }
 }

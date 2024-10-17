@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,4 +28,6 @@ import org.sopt.official.data.soptamp.remote.model.MissionData
 
 interface MissionsDataSource {
     suspend fun getAllMission(): Result<List<MissionData>>
+    suspend fun getCompleteMissions(): Result<List<MissionData>>
+    suspend fun getIncompleteMissions(): Result<List<MissionData>>
 }

@@ -22,21 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.soptamp.repository
+package org.sopt.official.data.soptamp.remote.mapper
 
-import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.data.soptamp.remote.model.MissionData
+import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 
-interface StampRepository {
-    suspend fun completeMission(stamp: Stamp): Result<Archive>
+internal fun List<MissionStatusResponse>.toData(isCompleted: Boolean = false): List<MissionData> = this.map { it.toData(isCompleted) }
 
-    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
-
-    suspend fun modifyMission(stamp: Stamp): Result<Unit>
-
-    suspend fun deleteMission(missionId: Int): Result<Unit>
-
-    suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getReportUrl(): Result<String>
-}
+internal fun MissionStatusResponse.toData(isCompleted: Boolean = false): MissionData = MissionData(
+    id = this.id,
+    title = this.title,
+    level = this.level,
+    profileImage = this.profileImage,
+    isCompleted = isCompleted
+)

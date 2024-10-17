@@ -35,10 +35,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray10
-import org.sopt.official.designsystem.Gray700
-import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
 internal fun PokeMessageItem(
@@ -51,7 +50,7 @@ internal fun PokeMessageItem(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = if (isSelected) Gray700 else Gray800,
+                color = if (isSelected) colors.onSurface700 else colors.onSurface800,
                 shape = RoundedCornerShape(size = 6.dp),
             )
             .clickable(
@@ -61,8 +60,8 @@ internal fun PokeMessageItem(
     ) {
         Text(
             text = message,
-            style = SoptTheme.typography.body16M,
-            color = Gray10,
+            style = typography.body16M,
+            color = colors.onSurface10,
             modifier = Modifier.padding(
                 vertical = 14.dp,
                 horizontal = 8.dp,

@@ -22,21 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.soptamp.repository
+package org.sopt.official.data.soptamp.remote.model.response
 
-import org.sopt.official.domain.soptamp.model.Archive
-import org.sopt.official.domain.soptamp.model.Stamp
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface StampRepository {
-    suspend fun completeMission(stamp: Stamp): Result<Archive>
-
-    suspend fun getMissionContent(missionId: Int, nickname: String): Result<Archive>
-
-    suspend fun modifyMission(stamp: Stamp): Result<Unit>
-
-    suspend fun deleteMission(missionId: Int): Result<Unit>
-
-    suspend fun deleteAllStamps(): Result<Unit>
-
-    suspend fun getReportUrl(): Result<String>
-}
+@Serializable
+data class ReportUrlResponse(
+    @SerialName("reportUrl")
+    val reportUrl: String
+)

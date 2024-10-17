@@ -46,4 +46,6 @@ object FakeStampRepository : StampRepository {
     override suspend fun deleteMission(missionId: Int) = runCatching { }
 
     override suspend fun deleteAllStamps(): Result<Unit> = runCatching { }
+
+    override suspend fun getReportUrl(): Result<String> = runCatching { "" }
 }

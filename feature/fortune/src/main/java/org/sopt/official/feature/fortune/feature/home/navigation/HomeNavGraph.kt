@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.fortune.feature.home.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
@@ -38,7 +37,7 @@ fun NavGraphBuilder.homeNavGraph(
 ) {
     composable<Home> {
         HomeRoute(
-            navigateToFortuneDetail = navigateToFortuneDetail
+            onFortuneDetailClick = navigateToFortuneDetail
         )
     }
 }
