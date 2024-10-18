@@ -169,7 +169,7 @@ class NotificationDetailActivity : AppCompatActivity() {
                                         modifier = Modifier.padding(top = 24.dp)
                                     )
                                 }
-                                if (!notification?.deepLink.isNullOrBlank() || !notification?.webLink.isNullOrBlank()) {
+                                if (isValidLinks(deepLink = notification?.deepLink, webLink = notification?.webLink)) {
                                     Column {
                                         Button(
                                             onClick = {
@@ -222,6 +222,9 @@ class NotificationDetailActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun isValidLinks(deepLink: String?, webLink: String?): Boolean =
+        !deepLink.isNullOrBlank() || !webLink.isNullOrBlank()
 
     private fun isToday(date: String?): Boolean = LocalDate.now().toString() == date
 
