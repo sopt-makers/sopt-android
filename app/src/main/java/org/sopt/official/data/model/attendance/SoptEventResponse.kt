@@ -86,14 +86,14 @@ data class SoptEventResponse(
             val endAtDateTime = LocalDateTime.parse(endAt)
 
             if (startAtDateTime.date == endAtDateTime.date) {
-                "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 " +
-                    "${timeFormat.format(startAtDateTime)} - " +
-                    timeFormat.format(endAtDateTime)
+                "${startAtDateTime.monthNumber}\uC6D4 ${startAtDateTime.dayOfMonth}\uC77C " +
+                    "${getTimeFormat().format(startAtDateTime)} - " +
+                    getTimeFormat().format(endAtDateTime)
             } else {
-                "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 " +
-                    "${timeFormat.format(startAtDateTime)} - " +
-                    "${endAtDateTime.monthNumber}월 ${endAtDateTime.dayOfMonth}일 " +
-                    timeFormat.format(endAtDateTime)
+                "${startAtDateTime.monthNumber}\uC6D4 ${startAtDateTime.dayOfMonth}\uC77C " +
+                    "${getTimeFormat().format(startAtDateTime)} - " +
+                    "${endAtDateTime.monthNumber}\uC6D4 ${endAtDateTime.dayOfMonth}\uC77C " +
+                    getTimeFormat().format(endAtDateTime)
             }
         } else {
             ""
