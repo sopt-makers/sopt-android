@@ -25,15 +25,15 @@
 package org.sopt.official.data.model.attendance
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.DateTimeFormat
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.data.model.attendance.TimeFormat.timeFormat
+import org.sopt.official.data.model.attendance.TimeFormat.getTimeFormat
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
 import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
-
 
 @Serializable
 data class SoptEventResponse(
@@ -62,20 +62,20 @@ data class SoptEventResponse(
         @SerialName("attendedAt")
         val attendedAt: String = ""
     ) {
-
         fun toEntity(index: Int): SoptEvent.Attendance {
-            val attendedAtTime = if (this.status == "ATTENDANCE") {
-                LocalDateTime.parse(attendedAt).run {
-                    val localDateTime = LocalDateTime.parse(attendedAt)
-                    timeFormat.format(localDateTime)
+            val attendedAtTime =
+                if (this.status == "ATTENDANCE") {
+                    LocalDateTime.parse(attendedAt).run {
+                        val localDateTime = LocalDateTime.parse(attendedAt)
+                        getTimeFormat().format(localDateTime)
+                    }
+                } else {
+                    "${index + 1}차 출석"
                 }
-            } else {
-                "${index + 1}차 출석"
-            }
 
             return SoptEvent.Attendance(
                 AttendanceStatus.valueOf(this.status),
-                attendedAtTime
+                attendedAtTime,
             )
         }
     }
@@ -107,17 +107,18 @@ data class SoptEventResponse(
             eventName = this.eventName,
             message = this.message,
             isAttendancePointAwardedEvent = type == "HAS_ATTENDANCE",
-            attendances = this.attendances.mapIndexed { index, attendanceResponse -> attendanceResponse.toEntity(index) }
+            attendances = this.attendances.mapIndexed { index, attendanceResponse -> attendanceResponse.toEntity(index) },
         )
     }
-
 }
 
-object TimeFormat{
-    private const val FORMAT_PATTERN = "HH:mm"
+object TimeFormat {
+    private const val DEFAULT_FORMAT_PATTERN = "HH:mm"
 
     @OptIn(FormatStringsInDatetimeFormats::class)
-    val timeFormat = LocalDateTime.Format {
-        byUnicodePattern(FORMAT_PATTERN)
+    fun getTimeFormat(pattern: String = DEFAULT_FORMAT_PATTERN): DateTimeFormat<LocalDateTime> {
+        return LocalDateTime.Format {
+            byUnicodePattern(pattern)
+        }
     }
 }
