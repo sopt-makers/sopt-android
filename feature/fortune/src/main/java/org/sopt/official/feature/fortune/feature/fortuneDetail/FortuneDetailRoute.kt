@@ -51,6 +51,9 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Anonymous
+import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Poke
 
 internal const val DEFAULT_ID = -1
 
@@ -60,11 +63,13 @@ internal fun FortuneDetailRoute(
     onFortuneAmuletClick: () -> Unit,
     isBottomSheetVisible: (isVisible: Boolean) -> Unit,
     snackBarHostState: SnackbarHostState,
+    showSnackBar: (case: SnackBarUiState) -> Unit,
     viewModel: FortuneDetailViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var isAnonymous by remember { mutableStateOf(true) }
+    var isPokeEnabled by remember { mutableStateOf(true) }
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
@@ -104,8 +109,14 @@ internal fun FortuneDetailRoute(
                     )
                     scope.launch {
                         selectedIndex = newSelectedIndex
+                        isPokeEnabled = false
                         bottomSheetState.hide()
                         viewModel.poke(message)
+                        showSnackBar(Poke)
+                        snackBarHostState.showSnackbar(
+                            message = "",
+                            duration = Short,
+                        )
                     }.invokeOnCompletion {
                         isBottomSheetVisible(false)
                     }
@@ -118,6 +129,7 @@ internal fun FortuneDetailRoute(
                         properties = mapOf("isAnonymous" to isAnonymous),
                     )
                     if (isAnonymous.not()) scope.launch {
+                        showSnackBar(Anonymous)
                         snackBarHostState.showSnackbar(
                             message = "",
                             duration = Short,
@@ -155,6 +167,7 @@ internal fun FortuneDetailRoute(
             },
             onErrorDialogCheckClick = viewModel::updateUi,
             uiState = uiState,
+            isEnabled = isPokeEnabled,
         )
     }
 }

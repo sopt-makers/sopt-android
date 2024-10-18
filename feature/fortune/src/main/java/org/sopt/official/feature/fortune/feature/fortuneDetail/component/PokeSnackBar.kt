@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,10 +48,14 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.ic_alert
 
 @Composable
-internal fun PokeSnackBar() {
+internal fun PokeSnackBar(
+    @SuppressLint("ResourceType") icon: Int,
+    title: String,
+    modifier: Modifier = Modifier,
+) {
     Row(
         verticalAlignment = CenterVertically,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(
@@ -60,13 +65,13 @@ internal fun PokeSnackBar() {
     ) {
         Spacer(modifier = Modifier.width(width = 16.dp))
         Icon(
-            imageVector = ImageVector.vectorResource(id = ic_alert),
+            imageVector = ImageVector.vectorResource(id = icon),
             tint = Unspecified,
             contentDescription = null,
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         Text(
-            text = "익명 해제 시, 상대방이 나를 알 수 있어요.",
+            text = title,
             style = typography.title14SB,
             color = colors.onSurface900,
             modifier = Modifier.padding(vertical = 16.dp),
@@ -78,6 +83,9 @@ internal fun PokeSnackBar() {
 @Composable
 private fun PokeSnackBarPreview() {
     SoptTheme {
-        PokeSnackBar()
+        PokeSnackBar(
+            icon = ic_alert,
+            title = "익명 해제 시, 상대방이 나를 알 수 있어요.",
+        )
     }
 }
