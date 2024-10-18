@@ -176,7 +176,7 @@ class NotificationDetailActivity : AppCompatActivity() {
                                                 val link = notification?.webLink ?: notification?.deepLink
 
                                                 when {
-                                                    link == HOME_FORTUNE && notification?.createdAt?.split("T")?.get(0) != LocalDate.now().toString() -> {
+                                                    link == HOME_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
                                                         onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
                                                     }
 
@@ -215,13 +215,15 @@ class NotificationDetailActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .padding(top = 16.dp)
                         ) {
-                            ErrorSnackBar(message = "앗, 오늘의 솝마디만 볼 수 있어요.")
+                            ErrorSnackBar(message = it.visuals.message)
                         }
                     }
                 }
             }
         }
     }
+
+    private fun isToday(date: String?): Boolean = LocalDate.now().toString() == date
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
