@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(projects.core.common)
+    implementation(projects.core.security)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.process.phoenix)

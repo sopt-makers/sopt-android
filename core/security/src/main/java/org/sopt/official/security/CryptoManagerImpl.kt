@@ -6,7 +6,7 @@ import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
-import javax.crypto.spec.IvParameterSpec
+import javax.crypto.spec.GCMParameterSpec
 import javax.inject.Inject
 
 class CryptoManagerImpl @Inject constructor() : CryptoManager {
@@ -18,7 +18,7 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
 
     private fun getDecryptCipherForIv(keyAlias: String, iv: ByteArray): Cipher =
         Cipher.getInstance(TRANSFORMATION)
-            .apply { init(Cipher.DECRYPT_MODE, getOrCreateSecretKey(keyAlias = keyAlias), IvParameterSpec(iv)) }
+            .apply { init(Cipher.DECRYPT_MODE, getOrCreateSecretKey(keyAlias = keyAlias), GCMParameterSpec(T_LEN, iv)) }
 
     private fun getOrCreateSecretKey(keyAlias: String): SecretKey =
         (keyStore.getEntry(keyAlias, null) as? KeyStore.SecretKeyEntry)?.secretKey ?: createSecretKey(keyAlias = keyAlias)
@@ -45,7 +45,8 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
         private const val KEY_STORE_TYPE = "AndroidKeyStore"
         private const val KEY_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
         private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
-        private const val PADDING = KeyProperties.ENCRYPTION_PADDING_PKCS7
+        private const val PADDING = "NoPadding"
         private const val TRANSFORMATION = "$KEY_ALGORITHM/$BLOCK_MODE/$PADDING"
+        private const val T_LEN = 128
     }
 }
