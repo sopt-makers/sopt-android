@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.common.util
 
-plugins {
-    sopt("feature")
-}
+import android.util.Base64
 
-android {
-    namespace = "org.sopt.official.network"
+fun Pair<ByteArray, ByteArray>.combineToOneByteArray(): ByteArray = this.first + this.second
 
-}
+fun ByteArray.splitToIvAndEncryptedData(ivSize: Int): Pair<ByteArray, ByteArray> = Pair(this.copyOfRange(0, ivSize), this.copyOfRange(ivSize, this.size))
 
-dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.security)
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.process.phoenix)
-    debugImplementation(libs.bundles.flipper)
-    releaseImplementation(libs.flipper.noop)
-    debugImplementation(libs.flipper.network) {
-        exclude(group = "com.squareup.okhttp3", module = "okhttp")
-    }
-}
+fun ByteArray.toBase64(): String = Base64.encodeToString(this, Base64.DEFAULT)
+
+fun String.toByteArray(): ByteArray = Base64.decode(this, Base64.DEFAULT)

@@ -130,6 +130,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.auth)
     implementation(projects.core.authimpl)
+    implementation(projects.core.security)
     implementation(projects.core.webview)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
