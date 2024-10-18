@@ -125,7 +125,7 @@ class NotificationDetailActivity : AppCompatActivity() {
                                 navigationIcon = {
                                     IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
                                         Icon(
-                                            Icons.AutoMirrored.Filled.ArrowBack,
+                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                             contentDescription = null,
                                             tint = SoptTheme.colors.onBackground
                                         )
@@ -156,14 +156,14 @@ class NotificationDetailActivity : AppCompatActivity() {
                                         )
                                 ) {
                                     Text(
-                                        notification?.title.orEmpty(),
+                                        text = notification?.title.orEmpty(),
                                         style = SoptTheme.typography.heading18B,
                                         color = SoptTheme.colors.onSurface10
                                     )
                                     Spacer(modifier = Modifier.padding(14.dp))
                                     HorizontalDivider(color = SoptTheme.colors.onSurface400)
                                     Text(
-                                        notification?.content.orEmpty(),
+                                        text = notification?.content.orEmpty(),
                                         style = SoptTheme.typography.body16M,
                                         color = SoptTheme.colors.onSurface10,
                                         modifier = Modifier.padding(top = 24.dp)
