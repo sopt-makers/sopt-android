@@ -1,19 +1,22 @@
 package org.sopt.official.feature.attendance.compose
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,18 +50,25 @@ import org.sopt.official.feature.attendance.model.MidtermAttendance
 fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction) {
     val scrollState = rememberScrollState()
     Box(
-        modifier = Modifier.padding(horizontal = 20.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 20.dp),
         contentAlignment = Alignment.BottomCenter
     ) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.fillMaxHeight(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Spacer(Modifier.height(16.dp))
             when (state.attendanceDayType) {
                 is AttendanceDayType.AttendanceDay -> {
                     TodayAttendanceCard(
-                        modifier = Modifier.background(
-                            color = SoptTheme.colors.onSurface800,
-                            shape = RoundedCornerShape(16.dp)
-                        ),
+                        modifier = Modifier
+                            .background(
+                                color = SoptTheme.colors.onSurface800,
+                                shape = RoundedCornerShape(16.dp)
+                            )
+                            .fillMaxWidth(),
                         eventDate = state.attendanceDayType.eventDate,
                         eventLocation = state.attendanceDayType.eventLocation,
                         eventName = state.attendanceDayType.eventName,
@@ -70,6 +80,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
 
                 is AttendanceDayType.Event -> {
                     TodayNoAttendanceCard(
+                        modifier = Modifier.fillMaxWidth(),
                         eventDate = state.attendanceDayType.eventDate,
                         eventLocation = state.attendanceDayType.eventLocation,
                         eventName = state.attendanceDayType.eventLocation,
@@ -77,7 +88,9 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                 }
 
                 AttendanceDayType.NONE -> {
-                    TodayNoScheduleCard()
+                    TodayNoScheduleCard(
+                        modifier = Modifier.fillMaxWidth()
+                    )
                 }
             }
             Spacer(Modifier.height(20.dp))
@@ -101,11 +114,13 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                         )
                     )
                 )
+                .padding(bottom = 41.dp)
         )
-        Button(
+        TextButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = 9.dp),
             shape = RoundedCornerShape(size = 6.dp),
             colors = ButtonColors(
                 containerColor = SoptTheme.colors.onSurface10,
@@ -113,10 +128,11 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                 disabledContainerColor = Black40,
                 disabledContentColor = Gray60,
             ),
+            contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             Text(
                 text = stringResource(R.string.attendance_dialog_button),
-                style = SoptTheme.typography.body13M,
+                style = SoptTheme.typography.label18SB,
             )
         }
     }
@@ -160,6 +176,15 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                             ),
                             AttendanceHistory(
                                 status = "출석", eventName = "3차 세미나", date = "00월 00일"
+                            ),
+                            AttendanceHistory(
+                                status = "출석", eventName = "4차 세미나", date = "00월 00일"
+                            ),
+                            AttendanceHistory(
+                                status = "출석", eventName = "5차 세미나", date = "00월 00일"
+                            ),
+                            AttendanceHistory(
+                                status = "출석", eventName = "6차 세미나", date = "00월 00일"
                             ),
                         ),
                     ),
