@@ -63,12 +63,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
             when (state.attendanceDayType) {
                 is AttendanceDayType.AttendanceDay -> {
                     TodayAttendanceCard(
-                        modifier = Modifier
-                            .background(
-                                color = SoptTheme.colors.onSurface800,
-                                shape = RoundedCornerShape(16.dp)
-                            )
-                            .fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         eventDate = state.attendanceDayType.eventDate,
                         eventLocation = state.attendanceDayType.eventLocation,
                         eventName = state.attendanceDayType.eventName,
