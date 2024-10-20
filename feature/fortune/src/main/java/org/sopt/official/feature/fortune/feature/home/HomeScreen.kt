@@ -122,7 +122,7 @@ private fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         FortuneButton(
-            title = "오늘의 운세 보러 가기",
+            title = "오늘의 운세 확인하기",
             onClick = onFortuneDetailClick,
         )
 
