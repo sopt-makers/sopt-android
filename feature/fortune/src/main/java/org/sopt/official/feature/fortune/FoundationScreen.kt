@@ -67,6 +67,12 @@ fun FoundationScreen(
     var isBottomSheetVisible by remember { mutableStateOf(false) }
     var snackBarUiState by remember { mutableStateOf<SnackBarUiState>(Anonymous) }
     val snackBarHostState = remember { SnackbarHostState() }
+    val (icon, title) = remember {
+        when (snackBarUiState) {
+            is Poke -> ic_poke_check to "콕 찌르기를 완료했어요."
+            is Anonymous -> ic_alert to "익명 해제 시, 상대방이 나를 알 수 있어요."
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -78,14 +84,8 @@ fun FoundationScreen(
                         .align(alignment = TopCenter),
                     snackbar = {
                         PokeSnackBar(
-                            icon = when (snackBarUiState) {
-                                is Poke -> ic_poke_check
-                                is Anonymous -> ic_alert
-                            },
-                            title = when (snackBarUiState) {
-                                is Poke -> "콕 찌르기를 완료했어요."
-                                is Anonymous -> "익명 해제 시, 상대방이 나를 알 수 있어요."
-                            },
+                            icon = icon,
+                            title = title,
                         )
                     },
                 )
