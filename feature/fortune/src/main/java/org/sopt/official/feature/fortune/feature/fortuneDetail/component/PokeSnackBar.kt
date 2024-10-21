@@ -25,6 +25,7 @@
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
 import android.annotation.SuppressLint
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,7 +50,7 @@ import org.sopt.official.feature.fortune.R.drawable.ic_alert
 
 @Composable
 internal fun PokeSnackBar(
-    @SuppressLint("ResourceType") icon: Int,
+    @DrawableRes icon: Int,
     title: String,
     modifier: Modifier = Modifier,
 ) {
