@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.security.di
 
-plugins {
-    sopt("feature")
-}
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.security.CryptoManager
+import org.sopt.official.security.CryptoManagerImpl
+import javax.inject.Singleton
 
-android {
-    namespace = "org.sopt.official.network"
-
-}
-
-dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.security)
-    implementation(platform(libs.okhttp.bom))
-    implementation(libs.okhttp.logging.interceptor)
-    implementation(libs.process.phoenix)
-    debugImplementation(libs.bundles.flipper)
-    releaseImplementation(libs.flipper.noop)
-    debugImplementation(libs.flipper.network) {
-        exclude(group = "com.squareup.okhttp3", module = "okhttp")
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class SecurityModule {
+    @Singleton
+    @Binds
+    abstract fun bindsCryptoManager(cryptoManagerImpl: CryptoManagerImpl): CryptoManager
 }

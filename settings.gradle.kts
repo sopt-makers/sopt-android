@@ -25,6 +25,7 @@ include(
     ":core:authimpl",
     ":core:common",
     ":core:designsystem",
+    ":core:security",
     ":core:webview",
     ":data:mypage",
     ":data:notification",
