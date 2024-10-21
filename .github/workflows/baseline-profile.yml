@@ -1,75 +1,86 @@
-# Workflow name
-name: baseline-profiles
+name: NightlyBaselineProfiles
 
-# Workflow title
-run-name: ${{ github.actor }} requested a workflow
-
-# This should be a manual trigger so this actions gets executed every time make a new pull request.
-# Change this event to what suits your project best.
-# Read more at https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows
 on:
-  workflow_dispatch:
+    schedule:
+        -   cron: '42 4 * * *'
+    workflow_dispatch:
 
-# Environment variables (Optional)
-# Small projects might have signingConfigs locally. This could lead to failures on GitHub Actions.
-# If that's the case, upload your properties defined locally to GitHub Secrets.
-
-# On your signingConfigs, you can recover GitHub Secrets using: variable = System.getenv("VARIABLE")
-
-# Then uncomment this block properly defining your uploaded variables
-# env:
-#  VARIABLE: ${{ secrets.VARIABLE }}
-
-# Read more at https://docs.github.com/en/actions/security-guides/encrypted-secrets
-
-# Jobs to executed on GitHub machines
 jobs:
+    baseline_profiles:
+        name: "Generate Baseline Profiles"
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        timeout-minutes: 60
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
 
-  # Job name
-  generate-baseline-profiles:
+            -   name: Validate Gradle Wrapper
+                uses: gradle/wrapper-validation-action@v1
 
-    # Operating system where the job gets to be executed
-    runs-on: macos-latest
+            -   name: Set up JDK 17
+                uses: actions/setup-java@v4
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
 
-    # Job steps
-    steps:
+            -   name: Setup Gradle
+                uses: gradle/gradle-build-action@v2.9.0
 
-      # Checks your code out on the machine
-      - uses: actions/checkout@v4
+            -   name: Grant Permissions to gradlew
+                run: chmod +x gradlew
 
-      # Sets java up
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
 
-      # Sets gradle up
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3.5.0
+            -   name: Add Local Properties
+                env:
+                    API_KEY: ${{ secrets.SENTRY_DSN }}
+                    DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+                    SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
+                    SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
+                    DEV_API: ${{ secrets.SENTRY_DSN }}
+                    NEW_API: ${{ secrets.SENTRY_DSN }}
+                    KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    KEY_PASSWORD: ${{ secrets.SENTRY_DSN }}
+                    STORE_PASSWORD: ${{ secrets.SENTRY_DSN }}
+                    DEV_AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
+                    AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
+                    POKE_DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+                run: |
+                    echo apiKey=\"$API_KEY\" >> ./local.properties
+                    echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
+                    echo devOperationApi=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
+                    echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
+                    echo devApi=\"$DEV_API\" >> ./local.properties
+                    echo newApi=\"$NEW_API\" >> ./local.properties
+                    echo keyAlias=\"KEY_ALIAS\" >> ./local.properties
+                    echo keyPassword=\"KEY_PASSWORD\" >> ./local.properties
+                    echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
+                    echo devAmplitudeKey=\"$DEV_AMPLITUDE_KEY\" >> ./local.properties
+                    echo amplitudeKey=\"$AMPLITUDE_KEY\" >> ./local.properties
+                    echo pokeDataStoreKey=\"$POKE_DATA_STORE_KEY\" >> ./local.properties
 
-      # Grants execute permission to gradle (safety step)
-      - name: Grant Permissions to gradlew
-        run: chmod +x gradlew
+            -   name: Access Firebase Service
+                run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
-      # This allows us to build most of what we need without the emulator running
-      # and using resources
-      - name: Build app and benchmark
-        run: ./gradlew :app:assembleBenchmark
+            -   name: Generate Keystore File
+                run: |
+                    echo ${{ secrets.KEYSTORE }} > ./keystore/keystore.b64
+                    base64 -d -i ./keystore/keystore.b64 > ./keystore/releaseKey.jks
 
-      # Cleans managed device if previously settle and space currently is not available
-      - name: Clean Managed Devices
-        run: ./gradlew cleanManagedDevices --unused-only
+            -   name: Build app and benchmark
+                run: ./gradlew :app:assembleBenchmark # change the 'app' with your app module's name
 
-      # Generates Baseline Profile
-      - name: Generate Baseline Profile
-        run: ./gradlew generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20 -Dorg.gradle.workers.max=4
+            -   name: Clean Managed Devices
+                run: ./gradlew cleanManagedDevices --unused-only
 
-      # Create Pull Request
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          commit-message: "Generate baseline profiles"
-          title: "Generate baseline profiles"
-          delete-branch: true
-          reviewers: l2hyunwoo
-          branch: actions/baseline-profiles
+            -   name: Generate Baseline Profile
+                run: ./gradlew generateBaselineProfile -Pandroid.testoptions.manageddevices.emulator.gpu="swiftshader_indirect" -Pandroid.testInstrumentationRunnerArguments.androidx.benchmark.enabledRules=BaselineProfile -Pandroid.experimental.testOptions.managedDevices.setupTimeoutMinutes=20 -Dorg.gradle.workers.max=4
+
+            -   name: Create Pull Request
+                uses: peter-evans/create-pull-request@v5
+                with:
+                    commit-message: "Generate baseline profiles"
+                    title: "Generate baseline profiles"
+                    delete-branch: true
+                    branch: actions/baseline-profiles
