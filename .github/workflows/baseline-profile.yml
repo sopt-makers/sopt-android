@@ -26,7 +26,7 @@ jobs:
                     java-version: 17
 
             -   name: Setup Gradle
-                uses: gradle/gradle-build-action@v2.9.0
+                uses: gradle/gradle-build-action@v3.5.0
 
             -   name: Grant Permissions to gradlew
                 run: chmod +x gradlew
