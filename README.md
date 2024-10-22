@@ -6,7 +6,7 @@
 **국내 최대 IT 벤처창업동아리 SOPT의 공식 Android 앱**
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Kotlin-2.0.20-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Kotlin-2.0.21-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
     <img src="https://img.shields.io/badge/all_contributors-16-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -22,11 +22,10 @@
 
 <h2>Tech Stack</h2>
 
-- [Android App Architecture](https://developer.android.com/topic/architecture)
 - [App Modularization](https://developer.android.com/topic/modularization)
 - [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android)
 - [Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html), [Flow](https://kotlinlang.org/docs/flow.html)
-- [Jetpack Compose](https://developer.android.com/jetpack/compose) (SOPTAMP)
+- [Jetpack Compose](https://developer.android.com/jetpack/compose)
 - [Material 3](https://m3.material.io/)
 - [Gradle Version Catalog](https://docs.gradle.org/current/userguide/platforms.html) and [Custom Convention Plugins](https://docs.gradle.org/current/samples/sample_convention_plugins.html)
 
@@ -41,9 +40,6 @@
 ```shell
 ./gradlew spotlessApply -PspotlessSetLicenseHeaderYearsFromGitHistory=true
 ```
-
-- 본 프로젝트는 squash merge를 사용합니다. 따라서 PR 병합을 하실 때에는 머지 옵션을 `Squash and merge`를 선택해주세요.
-<img src="https://github.com/sopt-makers/sopt-android/assets/54518925/6b06b8e3-c778-4a0b-b995-9d949276c5bb" width="60%" />
 
 ## Contributors ✨
 

@@ -57,6 +57,7 @@ import timber.log.Timber
 @Composable
 internal fun FortuneDetailScreen(
     date: String,
+    isEnabled: Boolean,
     onFortuneAmuletClick: () -> Unit,
     onPokeClick: (userId: Long) -> Unit,
     onProfileClick: (userId: Long) -> Unit,
@@ -82,6 +83,7 @@ internal fun FortuneDetailScreen(
             PokeRecommendationDashboard(
                 profile = uiState.userInfo.profile,
                 name = uiState.userInfo.userName,
+                isEnabled = isEnabled,
                 userDescription = uiState.userInfo.userDescription,
                 onPokeClick = { onPokeClick(uiState.userInfo.userId) },
                 onProfileClick = { onProfileClick(uiState.userInfo.userId) },
@@ -128,6 +130,7 @@ private fun FortuneDetailScreenPreview() {
         FortuneDetailScreen(
             date = "2024-09-09",
             onFortuneAmuletClick = {},
+            isEnabled = true,
             uiState = Success(
                 todaySentence = TodaySentence(
                     userName = "이현우",

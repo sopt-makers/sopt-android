@@ -105,7 +105,7 @@ private fun HomeScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.img_fortune_title),
+            imageVector = ImageVector.vectorResource(id = R.drawable.img_fortune_title_large),
             contentDescription = null,
             modifier = Modifier.padding(horizontal = 25.dp)
         )
@@ -122,7 +122,7 @@ private fun HomeScreen(
         Spacer(modifier = Modifier.weight(1f))
 
         FortuneButton(
-            title = "오늘의 운세 보러 가기",
+            title = "오늘의 운세 확인하기",
             onClick = onFortuneDetailClick,
         )
 
