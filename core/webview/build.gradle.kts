@@ -47,4 +47,5 @@ dependencies {
     implementation(libs.material)
     implementation(libs.constraintlayout)
     implementation(libs.swipe.refresh.layout)
+    implementation(libs.mozilla.component.utils)
 }
