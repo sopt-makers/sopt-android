@@ -26,6 +26,7 @@ plugins {
     sopt("feature")
     sopt("compose")
     sopt("test")
+    sopt("deeplink")
 }
 
 android {

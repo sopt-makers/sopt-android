@@ -29,6 +29,7 @@ plugins {
     sopt("application")
     sopt("test")
     sopt("compose")
+    sopt("deeplink")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)
