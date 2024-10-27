@@ -53,7 +53,7 @@ retrofit = "2.11.0"
 timber = "5.0.1"
 compose-destination = "1.11.7"
 coil = "2.7.0"
-lottie = "6.5.2"
+lottie = "6.6.0"
 dotsindicator = "5.1.0"
 
 google-services = "4.4.2"
