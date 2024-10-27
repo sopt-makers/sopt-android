@@ -62,8 +62,7 @@
 
         <activity
             android:name=".feature.auth.AuthActivity"
-            android:exported="true"
-            android:theme="@style/Theme.SOPT">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -72,43 +71,34 @@
         <activity
             android:name=".feature.attendance.AttendanceActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.SOPT" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".stamp.SoptampActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.SOPT" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.home.HomeActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.SOPT" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.mypage.mypage.MyPageActivity"
             android:exported="false"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.SOPT" />
+            android:launchMode="singleTop" />
         <activity
             android:name=".feature.mypage.signOut.SignOutActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
+            android:exported="false" />
         <activity
             android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
+            android:exported="false" />
         <activity
             android:name=".feature.poke.onboarding.OnboardingActivity"
-            android:exported="false"
-            android:theme="@style/Theme.SOPT" />
+            android:exported="false" />
         <activity
             android:name=".feature.poke.main.PokeMainActivity"
-            android:exported="false"
-            android:launchMode="singleTop" />
+            android:exported="false" />
         <activity
             android:name=".feature.poke.notification.PokeNotificationActivity"
-            android:exported="false"
-            android:launchMode="singleTop" />
+            android:exported="false" />
         <activity
             android:name=".feature.poke.friend.summary.FriendListSummaryActivity"
             android:exported="false" />
