@@ -33,6 +33,11 @@ android {
     namespace = "org.sopt.official.feature.fortune"
 }
 
+ksp {
+    arg("deepLink.incremental", "true")
+    arg("deepLink.customAnnotations", "com.airbnb.AppDeepLink|com.airbnb.WebDeepLink")
+}
+
 dependencies {
     // domain
     implementation(projects.domain.fortune)

@@ -25,6 +25,7 @@
 
 plugins {
     sopt("feature")
+    sopt("deeplink")
 }
 
 android {
@@ -32,6 +33,11 @@ android {
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
+}
+
+ksp {
+    arg("deepLink.incremental", "true")
+    arg("deepLink.customAnnotations", "com.airbnb.AppDeepLink|com.airbnb.WebDeepLink")
 }
 
 dependencies {

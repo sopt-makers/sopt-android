@@ -69,6 +69,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".feature.deeplink.DeepLinkSchemeActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.NoDisplay">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="sopt" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".feature.attendance.AttendanceActivity"
             android:exported="false"
             android:launchMode="singleTop" />

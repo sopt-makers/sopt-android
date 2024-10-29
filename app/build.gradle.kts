@@ -113,6 +113,11 @@ android {
     }
 }
 
+ksp {
+    arg("deepLink.incremental", "true")
+    arg("deepLink.customAnnotations", "com.airbnb.AppDeepLink|com.airbnb.WebDeepLink")
+}
+
 dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.domain.soptamp)

@@ -29,7 +29,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Rect
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -44,6 +43,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -83,6 +83,7 @@ import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
+@DeepLink("sopt://home")
 class HomeActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivitySoptMainBinding::inflate)
     private val viewModel by viewModels<HomeViewModel>()
