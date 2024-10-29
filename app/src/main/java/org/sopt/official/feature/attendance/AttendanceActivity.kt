@@ -45,6 +45,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -65,6 +66,7 @@ import org.sopt.official.feature.attendance.model.AttendanceState
 import org.sopt.official.type.SoptColors
 
 @AndroidEntryPoint
+@DeepLink("sopt://attendance")
 class AttendanceActivity : AppCompatActivity() {
   private lateinit var binding: ActivityAttendanceBinding
   private val viewModel by viewModels<AttendanceViewModel>()

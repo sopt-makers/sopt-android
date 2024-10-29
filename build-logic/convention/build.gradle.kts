@@ -62,5 +62,9 @@ gradlePlugin {
             id = "org.sopt.official.retrofit"
             implementationClass = "org.sopt.official.plugin.RetrofitPlugin"
         }
+        create("deeplink") {
+            id = "org.sopt.official.deeplink"
+            implementationClass = "org.sopt.official.plugin.DeeplinkPlugin"
+        }
     }
 }

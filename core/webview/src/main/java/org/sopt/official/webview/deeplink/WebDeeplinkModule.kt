@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-    sopt("test")
-    sopt("deeplink")
-}
+package org.sopt.official.webview.deeplink
 
-android {
-    namespace = "org.sopt.official.feature.fortune"
-}
+import com.airbnb.deeplinkdispatch.DeepLinkModule
 
-ksp {
-    arg("deepLink.incremental", "true")
-    arg("deepLink.customAnnotations", "com.airbnb.AppDeepLink|com.airbnb.WebDeepLink")
-}
-
-dependencies {
-    // domain
-    implementation(projects.domain.fortune)
-    implementation(projects.domain.poke)
-
-    // core
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.analytics)
-
-    // compose
-    implementation(libs.compose.navigation)
-
-    // etc
-    implementation(libs.kotlin.datetime)
-    implementation(libs.coil.compose)
-
-    // test
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.bundles.compose.test)
-    androidTestImplementation(libs.bundles.android.test)
-    debugImplementation(libs.bundles.compose.android.test)
-}
+@DeepLinkModule
+class WebDeeplinkModule

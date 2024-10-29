@@ -55,6 +55,7 @@ compose-destination = "1.11.7"
 coil = "2.7.0"
 lottie = "6.6.0"
 dotsindicator = "5.1.0"
+deepLinkDispatch = "6.2.2"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"
@@ -180,6 +181,8 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchmark-macro-junit4", version.ref = "benchmark-macro-junit4" }
 profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
+deeplink-dispatch = { group = "com.airbnb", name = "deeplinkdispatch", version.ref = "deepLinkDispatch" }
+deeplink-dispatch-processor = { group = "com.airbnb", name = "deeplinkdispatch-processor", version.ref = "deepLinkDispatch" }
 
 [bundles]
 compose = [

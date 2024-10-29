@@ -31,6 +31,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.staticCompositionLocalOf
+import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.analytics.AmplitudeTracker
@@ -51,6 +52,7 @@ internal val LocalAmplitudeTracker = staticCompositionLocalOf<AmplitudeTracker> 
 }
 
 @AndroidEntryPoint
+@DeepLink("sopt://fortune")
 class FortuneActivity : AppCompatActivity() {
 
     @Inject
