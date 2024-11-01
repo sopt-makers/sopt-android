@@ -49,7 +49,6 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -64,7 +63,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
@@ -114,7 +112,6 @@ fun MissionListScreen(
 
     val context = LocalContext.current
 
-
     resultRecipient.onNavResult { result ->
         when (result) {
             is NavResult.Canceled -> Unit
@@ -123,6 +120,7 @@ fun MissionListScreen(
             }
         }
     }
+
     SoptTheme {
         when (state) {
             MissionsState.Loading -> LoadingScreen()
@@ -153,7 +151,7 @@ fun MissionListScreen(
                             WebViewActivity.INTENT_URL,
                             reportUrl
                         )
-                        startActivity(context, this, null)
+                        context.startActivity(this)
                     }
                 },
                 onOnboardingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
