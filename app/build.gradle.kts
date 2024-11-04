@@ -149,6 +149,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.startup)
     implementation(libs.swipe.refresh.layout)
+    implementation(libs.compose.ui.tooling)
 
     implementation(libs.inappupdate)
 
@@ -175,8 +176,6 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
-
-    implementation(libs.compose.ui.tooling)
 }
 
 secrets {
