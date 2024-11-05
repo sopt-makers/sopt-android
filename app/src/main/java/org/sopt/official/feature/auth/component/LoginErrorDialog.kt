@@ -53,44 +53,10 @@ fun LoginErrorDialog(
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
-//        LoginDialogText(
-//
-//        )
-        Text(
-            text = "로그인한 계정을 알고 싶어요.",
-            color = White,
-            modifier = Modifier
-                .clickable { }
-                .clip(RoundedCornerShape(8.dp))
-                .background(Gray700)
-                .fillMaxWidth()
-                .padding(10.dp),
-            style = SoptTheme.typography.body16R
+        LoginDialogText(
+
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "소셜 계정을 재설정하고 싶어요.",
-            color = White,
-            modifier = Modifier
-                .clickable { }
-                .clip(RoundedCornerShape(8.dp))
-                .background(Gray700)
-                .fillMaxWidth()
-                .padding(10.dp),
-            style = SoptTheme.typography.body16R
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = "카카오톡 채널에 문의할게요.",
-            color = White,
-            modifier = Modifier
-                .clickable { }
-                .clip(RoundedCornerShape(8.dp))
-                .background(Gray700)
-                .fillMaxWidth()
-                .padding(10.dp),
-            style = SoptTheme.typography.body16R
-        )
+       //TODO:  Spacer(modifier = Modifier.height(4.dp))
     }
 }
 
