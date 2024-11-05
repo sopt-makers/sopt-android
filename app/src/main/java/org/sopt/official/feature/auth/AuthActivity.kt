@@ -42,12 +42,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
 import org.sopt.official.R
@@ -66,6 +64,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -84,6 +83,7 @@ class AuthActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 val context = LocalContext.current
+                val lifecycleOwner = LocalLifecycleOwner.current
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
@@ -107,28 +107,24 @@ class AuthActivity : AppCompatActivity() {
                     }
                 }
 
+                LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
+                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect { event ->
+                            when (event) {
+                                is AuthUiEvent.Success -> startActivity(
+                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(event.userStatus))
+                                )
+
+                                is AuthUiEvent.Failure -> startActivity(
+                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                                )
+                            }
+                        }
+                }
+
                 AuthScreen()
             }
         }
-
-        initAnimation()
-        collectUiEvent()
-    }
-
-    private fun collectUiEvent() {
-        viewModel.uiEvent
-            .flowWithLifecycle(lifecycle)
-            .onEach { event ->
-                when (event) {
-                    is AuthUiEvent.Success -> startActivity(
-                        HomeActivity.getIntent(this, HomeActivity.StartArgs(event.userStatus))
-                    )
-
-                    is AuthUiEvent.Failure -> startActivity(
-                        HomeActivity.getIntent(this, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
-                    )
-                }
-            }.launchIn(lifecycleScope)
     }
 
     private fun initAnimation() {
