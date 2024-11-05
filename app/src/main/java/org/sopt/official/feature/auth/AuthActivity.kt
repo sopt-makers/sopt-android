@@ -32,8 +32,14 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.animation.AnimationUtils
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
@@ -56,6 +62,7 @@ import org.sopt.official.common.util.setOnAnimationEndListener
 import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -74,31 +81,38 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (dataStore.accessToken.isNotEmpty()) {
-            startActivity(
-                HomeActivity.getIntent(this, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-            )
-        }
-        setContentView(binding.root)
-        initNotificationChannel()
+        setContent {
+            SoptTheme {
+                val context = LocalContext.current
 
-        initUi()
+                LaunchedEffect(true) {
+                    if (dataStore.accessToken.isNotEmpty()) {
+                        startActivity(
+                            HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                        )
+                    }
+                }
+
+                LaunchedEffect(true) {
+                    NotificationChannel(
+                        getString(R.string.toolbar_notification),
+                        getString(R.string.toolbar_notification),
+                        NotificationManager.IMPORTANCE_HIGH
+                    ).apply {
+                        setSound(null, null)
+                        enableLights(false)
+                        enableVibration(false)
+                        lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
+                    }
+                }
+
+                AuthScreen()
+            }
+        }
+
         initAnimation()
         collectUiEvent()
-    }
-
-    private fun initNotificationChannel() {
-        NotificationChannel(
-            getString(R.string.toolbar_notification),
-            getString(R.string.toolbar_notification),
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            setSound(null, null)
-            enableLights(false)
-            enableVibration(false)
-            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
-        }
     }
 
     private fun collectUiEvent() {
@@ -178,10 +192,25 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
+    @Composable
+    fun AuthScreen(
+        modifier: Modifier = Modifier
+    ) {
+
+    }
+
     companion object {
         @JvmStatic
         fun newInstance(context: Context) = Intent(context, AuthActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+    }
+
+    @Preview(showBackground = true)
+    @Composable
+    fun AuthScreenPreview() {
+        SoptTheme {
+            AuthScreen()
         }
     }
 }
