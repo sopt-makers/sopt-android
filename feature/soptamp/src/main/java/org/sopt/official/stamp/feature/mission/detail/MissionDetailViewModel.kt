@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +43,7 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -88,7 +88,6 @@ class MissionDetailViewModel @Inject constructor(
     val isSubmitEnabled = combine(content, imageModel, isMe) { content, image, isMe ->
         content.isNotEmpty() && !image.isEmpty() && isMe
     }
-    val isCompleted = uiState.map { it.isCompleted }
     val toolbarIconType = uiState.map { it.toolbarIconType }
     val isEditable = toolbarIconType.map {
         it != ToolbarIconType.WRITE
@@ -210,97 +209,99 @@ class MissionDetailViewModel @Inject constructor(
     }
 
     private suspend fun handleSubmit() {
-        viewModelScope.launch {
-            val currentState = uiState.value
-            val (id, imageUri, content, date) = currentState
-            uiState.update {
-                it.copy(isError = false, error = null, isLoading = true)
+        val currentState = uiState.value
+        val (id, imageUri, content, date) = currentState
+        uiState.update {
+            it.copy(isError = false, error = null, isLoading = true)
+        }
+
+        val image = when (imageUri) {
+            ImageModel.Empty -> {
+                "ERROR"
             }
 
-            val image = when (imageUri) {
-                ImageModel.Empty -> {
-                    "ERROR"
-                }
-
-                is ImageModel.Local -> {
-                    imageUri.uri[0]
-                }
-
-                is ImageModel.Remote -> {
-                    imageUri.url[0]
-                }
+            is ImageModel.Local -> {
+                imageUri.uri[0]
             }
 
-            if (imageUri is ImageModel.Remote) {
-                modifyMission(id, image, content, date)
-            } else {
-                imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
-                    val preSignedURL = S3URL.preSignedURL
-                    val imageURL = S3URL.imageURL
+            is ImageModel.Remote -> {
+                imageUri.url[0]
+            }
+        }
 
-                    runCatching {
-                        imageUploaderRepository.uploadImage(
-                            preSignedURL = preSignedURL,
-                            imageUri = image
-                        )
-                    }.onFailure {
-                        Timber.e(it.toString())
-                    }
+        if (imageUri is ImageModel.Remote) {
+            modifyMission(id, image, content, date)
+        } else {
+            imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
+                val preSignedURL = S3URL.preSignedURL
+                val imageURL = S3URL.imageURL
 
-                    if (uiState.value.isCompleted) {
-                        modifyMission(id, imageURL, content, date)
-                    } else {
-                        stampRepository.completeMission(
-                            Stamp(
-                                missionId = id,
-                                image = imageURL,
-                                contents = content,
-                                activityDate = date
-                            )
-                        ).onSuccess {
-                            uiState.update {
-                                it.copy(isLoading = false, isSuccess = true)
-                            }
-                        }.onFailure { error ->
-                            uiState.update {
-                                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                            }
-                        }
-                    }
-                }.onFailure { error ->
-                    uiState.update {
-                        it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                    }
+                runCatching {
+                    imageUploaderRepository.uploadImage(
+                        preSignedURL = preSignedURL,
+                        imageUri = image
+                    )
+                }.onFailure {
+                    Timber.e(it.toString())
+                }
+
+                if (uiState.value.isCompleted) {
+                    modifyMission(id, imageURL, content, date)
+                } else {
+                    completeMission(id, imageURL, content, date)
+                }
+            }.onFailure { error ->
+                uiState.update {
+                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                 }
             }
         }
     }
 
-    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) = stampRepository.modifyMission(
-        Stamp(
-            missionId = id,
-            image = image,
-            contents = content,
-            activityDate = date
-        )
-    ).onSuccess {
-        uiState.update {
-            it.copy(isLoading = false, isSuccess = true)
+    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) {
+        stampRepository.modifyMission(
+            Stamp(
+                missionId = id,
+                image = image,
+                contents = content,
+                activityDate = date
+            )
+        ).onSuccess {
+            uiState.update {
+                it.copy(isLoading = false, isSuccess = true)
+            }
+        }.onFailure { error ->
+            uiState.update {
+                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+            }
         }
-    }.onFailure { error ->
-        uiState.update {
-            it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+    }
+
+    private suspend fun completeMission(id: Int, image: String, content: String, date: String) {
+        stampRepository.completeMission(
+            Stamp(
+                missionId = id,
+                image = image,
+                contents = content,
+                activityDate = date
+            )
+        ).onSuccess {
+            uiState.update {
+                it.copy(isLoading = false, isSuccess = true)
+            }
+        }.onFailure { error ->
+            uiState.update {
+                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+            }
         }
     }
 
     fun onDelete() {
         viewModelScope.launch {
-            val currentState = uiState.value
-            val (id) = currentState
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)
             }
-            stampRepository.deleteMission(id)
+            stampRepository.deleteMission(uiState.value.stampId)
                 .onSuccess {
                     uiState.update {
                         it.copy(isLoading = false, isDeleteSuccess = true)

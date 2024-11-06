@@ -41,6 +41,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -64,9 +65,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import okhttp3.internal.immutableListOf
@@ -78,6 +76,9 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -149,14 +150,15 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
 
     val formatter = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
     var chosenYear by remember { mutableIntStateOf(currentYear) }
-    var chosenMonth by remember { mutableIntStateOf(currentMonth) }
+    var chosenMonth by remember { mutableIntStateOf(currentMonth + 1) }
     var chosenDay by remember { mutableIntStateOf(currentDay) }
 
     val isValidDate by remember { derivedStateOf { calculateValidDate(chosenYear, chosenMonth, chosenDay) } }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
-        sheetState = sheetState
+        sheetState = sheetState,
+        containerColor = White
     ) {
         DatePickerUI(
             isValidDate = isValidDate,
@@ -245,8 +247,8 @@ fun DateSelectionSection(
     ) {
         DateItemsPicker(
             isValidDate = isValidDate,
-            max = currentYear - 1950,
-            items = years.toImmutableList(),
+            max = YEAR_INDEX,
+            items = years,
             firstIndex = (chosenYear - START_YEAR),
             onItemSelected = onYearChosen
         )
@@ -254,7 +256,7 @@ fun DateSelectionSection(
         DateItemsPicker(
             isValidDate = isValidDate,
             max = currentMonth,
-            items = monthsNumber.toImmutableList(),
+            items = monthsNumber,
             firstIndex = chosenMonth,
             onItemSelected = onMonthChosen
         )
@@ -263,10 +265,10 @@ fun DateSelectionSection(
             isValidDate = isValidDate,
             max = currentDay - 1,
             items = when {
-                (chosenYear % 4 == 0) && chosenMonth == 2 -> days29.toImmutableList()
-                chosenMonth == 2 -> days28.toImmutableList()
-                days30Months.contains(chosenMonth) -> days30.toImmutableList()
-                else -> days31.toImmutableList()
+                (chosenYear % 4 == 0) && chosenMonth == 2 -> days29
+                chosenMonth == 2 -> days28
+                days30Months.contains(chosenMonth) -> days30
+                else -> days31
             },
             firstIndex = chosenDay - 1,
             onItemSelected = onDayChosen
@@ -281,17 +283,19 @@ fun DateItemsPicker(
     items: ImmutableList<String>,
     firstIndex: Int,
     onItemSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
     LaunchedEffect(!listState.isScrollInProgress, isValidDate) {
         if (isValidDate) {
-            onItemSelected(currentValue.value)
-            listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
-        } else {
-            if (max < currentValue.value.toInt()) {
+            if (currentValue.value.isNotEmpty()) {
+                onItemSelected(currentValue.value)
+                listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
+            }
+        } else { // 오늘 이후의 날짜 선택시
+            if (currentValue.value.isNotEmpty() && max < currentValue.value.toInt()) {
                 listState.animateScrollToItem(index = max)
                 onItemSelected(currentValue.value)
             }
@@ -299,7 +303,7 @@ fun DateItemsPicker(
     }
 
     Box(
-        modifier = Modifier.height(108.dp),
+        modifier = modifier.height(108.dp),
         contentAlignment = Alignment.Center
     ) {
         Column(
@@ -316,7 +320,7 @@ fun DateItemsPicker(
             )
         }
         LazyColumn(
-            modifier = modifier,
+            modifier = Modifier,
             horizontalAlignment = Alignment.CenterHorizontally,
             state = listState,
         ) {
@@ -348,14 +352,15 @@ private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 private val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 private val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
-private const val START_YEAR = 1950
-private const val END_YEAR = 2100
+private const val YEAR_INDEX = 50 // 현재 년도의 +- 50년까지 Date Picker에 표시
+private val START_YEAR = currentYear - YEAR_INDEX
+private val END_YEAR = currentYear + YEAR_INDEX
 private val years = (listOf("") + (START_YEAR..END_YEAR).map { it.toString() } + listOf("")).toImmutableList()
 private val monthsNumber = (listOf("") + (1..12).map { it.toString() } + listOf("")).toImmutableList()
-private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList()
-private val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList()
-private val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 4,6,9,11
-private val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 1,3,5,7,8,10.12
+private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 2
+private val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 윤년 2월
+private val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 4,6,9,11
+private val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 1,3,5,7,8,10.12
 private val days30Months = immutableListOf(4, 6, 9, 11)
 
 @DefaultPreview
