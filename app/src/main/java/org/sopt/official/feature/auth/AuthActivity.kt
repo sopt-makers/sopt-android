@@ -80,8 +80,6 @@ import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
@@ -96,7 +94,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
-    private val binding by viewBinding(ActivityAuthBinding::inflate)
     private val viewModel by viewModels<AuthViewModel>()
 
     @Auth
@@ -207,7 +204,6 @@ class AuthActivity : AppCompatActivity() {
         onLoginLaterClick: () -> Unit
     ) {
         // TODO: state,side effect
-        // TODO: delete XML file
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
 
