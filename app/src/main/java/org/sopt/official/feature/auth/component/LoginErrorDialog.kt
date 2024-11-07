@@ -5,9 +5,11 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,12 +19,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import org.sopt.official.R
+import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
@@ -30,32 +35,43 @@ import org.sopt.official.designsystem.White
 
 @Composable
 fun LoginErrorDialog(
-    modifier: Modifier = Modifier
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier
-            .padding(20.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(Gray800)
-            .padding(8.dp)
-            .fillMaxWidth()
-    ) {
-        DialogTitle()
-        Spacer(modifier = Modifier.height(12.dp))
-        LoginDialogText(
-            text = "로그인한 계정을 알고 싶어요.",
-            onClick = {}
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        LoginDialogText(
-            text = "소셜 계정을 재설정하고 싶어요.",
-            onClick = {}
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        LoginDialogText(
-            text = "카카오톡 채널에 문의할게요.",
-            onClick = {}
-        )
+    Popup {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Black.copy(alpha = 0.5f))
+                .clickable(onClick = onDismissRequest)
+        ) {
+            Column(
+                modifier = modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(20.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(Gray800)
+                    .padding(8.dp)
+                    .fillMaxWidth()
+            ) {
+                DialogTitle()
+                Spacer(modifier = Modifier.height(12.dp))
+                LoginDialogText(
+                    text = "로그인한 계정을 알고 싶어요.",
+                    onClick = {}
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                LoginDialogText(
+                    text = "소셜 계정을 재설정하고 싶어요.",
+                    onClick = {}
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                LoginDialogText(
+                    text = "카카오톡 채널에 문의할게요.",
+                    onClick = {}
+                )
+            }
+        }
     }
 }
 
@@ -108,6 +124,8 @@ private fun LoginDialogText(
 @Composable
 private fun LoginErrorDialogPreview() {
     SoptTheme {
-        LoginErrorDialog()
+        LoginErrorDialog(
+            onDismissRequest = {}
+        )
     }
 }

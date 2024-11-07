@@ -31,6 +31,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.view.WindowManager
 import android.view.animation.AnimationUtils
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -42,6 +43,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -69,6 +71,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -92,6 +95,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
+import org.sopt.official.feature.auth.component.LoginErrorDialog
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -153,7 +157,17 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
-                AuthScreen()
+                val action by viewModel.action.collectAsStateWithLifecycle()
+
+                if (action == true) {
+                    LoginErrorDialog(
+                        onDismissRequest = { viewModel.showLoginErrorDialog(false) }
+                    )
+                }
+
+                AuthScreen(
+                    showDialog = { viewModel.showLoginErrorDialog(true) }
+                )
             }
         }
     }
@@ -220,7 +234,11 @@ class AuthActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun AuthScreen() {
+    fun AuthScreen(
+        showDialog: () -> Unit
+    ) {
+        // TODO: state
+        // TODO: delete XML file
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
 
@@ -257,13 +275,17 @@ class AuthActivity : AppCompatActivity() {
                 ),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
-                AuthBottom()
+                AuthBottom(
+                    showDialog = showDialog
+                )
             }
         }
     }
 
     @Composable
-    private fun AuthBottom() {
+    private fun AuthBottom(
+        showDialog: () -> Unit
+    ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AuthButton(
                 paddingVertical = 12.dp,
@@ -284,7 +306,10 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            AuthTextWithArrow(text = "로그인이 안 되나요?")
+            AuthTextWithArrow(
+                text = "로그인이 안 되나요?",
+                modifier = Modifier.clickable { (showDialog()) }
+            )
             Spacer(modifier = Modifier.height(44.dp))
             AuthDivider()
             Spacer(modifier = Modifier.height(16.dp))
@@ -344,7 +369,9 @@ class AuthActivity : AppCompatActivity() {
     @Composable
     private fun AuthScreenPreview() {
         SoptTheme {
-            AuthScreen()
+            AuthScreen(
+                showDialog = {}
+            )
         }
     }
 }
