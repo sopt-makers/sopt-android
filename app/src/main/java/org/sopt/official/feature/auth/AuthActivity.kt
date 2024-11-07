@@ -195,9 +195,7 @@ class AuthActivity : AppCompatActivity() {
     fun AuthScreen(
         modifier: Modifier = Modifier
     ) {
-        Column {
-            Text("hi", color = White)
-        }
+
     }
 
     companion object {
