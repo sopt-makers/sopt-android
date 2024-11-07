@@ -24,15 +24,11 @@
  */
 package org.sopt.official.feature.auth
 
-import android.animation.ObjectAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
 import android.os.Bundle
-import android.view.WindowManager
-import android.view.animation.AnimationUtils
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -69,7 +65,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -85,8 +80,6 @@ import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.util.setOnAnimationEndListener
-import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.designsystem.Gray300
@@ -119,6 +112,8 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
+
+                val action by viewModel.action.collectAsStateWithLifecycle()
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
@@ -157,8 +152,6 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
-                val action by viewModel.action.collectAsStateWithLifecycle()
-
                 if (action == true) {
                     LoginErrorDialog(
                         onDismissRequest = { viewModel.showLoginErrorDialog(false) }
@@ -166,56 +159,54 @@ class AuthActivity : AppCompatActivity() {
                 }
 
                 AuthScreen(
-                    showDialog = { viewModel.showLoginErrorDialog(true) }
-                )
-            }
-        }
-    }
-
-    private fun initUi() {
-        binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.btnSoptLogin.setOnSingleClickListener {
-            PlaygroundAuth.authorizeWithWebTab(
-                context = this,
-                isDebug = BuildConfig.DEBUG,
-                authDataSource = object : PlaygroundAuthDatasource {
-                    override suspend fun oauth(code: String): Result<OAuthToken> {
-                        return kotlin.runCatching {
-                            authService
-                                .authenticate(AuthRequest(code, dataStore.pushToken))
-                                .toOAuthToken()
+                    showDialog = { viewModel.showLoginErrorDialog(true) },
+                    onGoogleLoginCLick = {
+                        PlaygroundAuth.authorizeWithWebTab(
+                            context = context,
+                            isDebug = BuildConfig.DEBUG,
+                            authDataSource = object : PlaygroundAuthDatasource {
+                                override suspend fun oauth(code: String): Result<OAuthToken> {
+                                    return kotlin.runCatching {
+                                        authService
+                                            .authenticate(AuthRequest(code, dataStore.pushToken))
+                                            .toOAuthToken()
+                                    }
+                                }
+                            }
+                        ) {
+                            it.onSuccess { token ->
+                                lifecycleScope.launch {
+                                    viewModel.onLogin(token.toEntity())
+                                }
+                            }.onFailure {
+                                lifecycleScope.launch {
+                                    viewModel.onFailure(it)
+                                }
+                            }
                         }
+                    },
+                    onLoginLaterClick = {
+                        startActivity(
+                            HomeActivity.getIntent(
+                                this,
+                                HomeActivity.StartArgs(
+                                    UserStatus.UNAUTHENTICATED
+                                )
+                            )
+                        )
                     }
-                }
-            ) {
-                it.onSuccess { token ->
-                    lifecycleScope.launch {
-                        viewModel.onLogin(token.toEntity())
-                    }
-                }.onFailure {
-                    lifecycleScope.launch {
-                        viewModel.onFailure(it)
-                    }
-                }
-            }
-        }
-        binding.btnSoptNotMember.setOnSingleClickListener {
-            startActivity(
-                HomeActivity.getIntent(
-                    this,
-                    HomeActivity.StartArgs(
-                        UserStatus.UNAUTHENTICATED
-                    )
                 )
-            )
+            }
         }
     }
 
     @Composable
     fun AuthScreen(
-        showDialog: () -> Unit
+        showDialog: () -> Unit,
+        onGoogleLoginCLick: () -> Unit,
+        onLoginLaterClick: () -> Unit
     ) {
-        // TODO: state
+        // TODO: state,side effect
         // TODO: delete XML file
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
@@ -254,7 +245,9 @@ class AuthActivity : AppCompatActivity() {
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 AuthBottom(
-                    showDialog = showDialog
+                    showDialog = showDialog,
+                    onGoogleLoginCLick = onGoogleLoginCLick,
+                    onLoginLaterClick = onLoginLaterClick
                 )
             }
         }
@@ -262,12 +255,14 @@ class AuthActivity : AppCompatActivity() {
 
     @Composable
     private fun AuthBottom(
-        showDialog: () -> Unit
+        showDialog: () -> Unit,
+        onGoogleLoginCLick: () -> Unit,
+        onLoginLaterClick: () -> Unit
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AuthButton(
                 paddingVertical = 12.dp,
-                onClick = {},
+                onClick = onGoogleLoginCLick,
                 shape = RoundedCornerShape(10.dp),
                 modifier = Modifier
                     .fillMaxWidth()
@@ -286,7 +281,7 @@ class AuthActivity : AppCompatActivity() {
             Spacer(modifier = Modifier.height(16.dp))
             AuthTextWithArrow(
                 text = "로그인이 안 되나요?",
-                modifier = Modifier.clickable { (showDialog()) }
+                modifier = Modifier.clickable(onClick = showDialog)
             )
             Spacer(modifier = Modifier.height(44.dp))
             AuthDivider()
@@ -307,7 +302,10 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            AuthTextWithArrow(text = "나중에 로그인할래요.")
+            AuthTextWithArrow(
+                text = "나중에 로그인할래요.",
+                modifier = Modifier.clickable(onClick = onLoginLaterClick)
+            )
             Spacer(modifier = Modifier.height(28.dp))
         }
     }
@@ -348,7 +346,9 @@ class AuthActivity : AppCompatActivity() {
     private fun AuthScreenPreview() {
         SoptTheme {
             AuthScreen(
-                showDialog = {}
+                showDialog = {},
+                onGoogleLoginCLick = {},
+                onLoginLaterClick = {}
             )
         }
     }
