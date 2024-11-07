@@ -35,13 +35,28 @@ import android.view.animation.AnimationUtils
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -57,13 +72,12 @@ import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.setOnAnimationEndListener
 import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
+import org.sopt.official.feature.auth.component.AuthTextWithButton
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -140,7 +154,7 @@ class AuthActivity : AppCompatActivity() {
         ObjectAnimator.ofFloat(
             binding.imgSoptLogo,
             "translationY",
-            -140.dp.toFloat()
+            //  -140.dp.toFloat()
         ).apply {
             duration = 1000
             startDelay = 700
@@ -192,10 +206,44 @@ class AuthActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun AuthScreen(
-        modifier: Modifier = Modifier
-    ) {
+    fun AuthScreen() {
+        var showAuthBottom by remember { mutableStateOf(false) }
+        val offsetY = remember { Animatable(0f) }
 
+        LaunchedEffect(showAuthBottom) {
+            offsetY.animateTo(
+                targetValue = -140f,
+                animationSpec = tween(durationMillis = 700)
+            )
+            showAuthBottom = true
+        }
+
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    painter = painterResource(id = R.drawable.img_logo),
+                    contentDescription = "sopt_logo",
+                    modifier = Modifier.offset(y = offsetY.value.dp)
+                )
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            AnimatedVisibility(
+                visible = showAuthBottom,
+                enter = fadeIn(initialAlpha = 0.3f),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Column {
+                    AuthTextWithButton(text = "로그인이 안 되나요?")
+                    AuthTextWithButton(text = "나중에 로그인할래요.")
+                }
+            }
+        }
     }
 
     companion object {
