@@ -40,22 +40,7 @@ fun LoginErrorDialog(
             .padding(8.dp)
             .fillMaxWidth()
     ) {
-        Row(
-            modifier = Modifier.padding(top = 8.dp),
-            horizontalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_auth_alert_circle),
-                contentDescription = "로그인 에러 아이콘",
-                tint = White,
-                modifier = Modifier.padding(start = 4.dp)
-            )
-            Text(
-                text = "로그인이 안 되나요?",
-                color = White,
-                style = SoptTheme.typography.title20SB
-            )
-        }
+        DialogTitle()
         Spacer(modifier = Modifier.height(12.dp))
         LoginDialogText(
             text = "로그인한 계정을 알고 싶어요.",
@@ -70,6 +55,26 @@ fun LoginErrorDialog(
         LoginDialogText(
             text = "카카오톡 채널에 문의할게요.",
             onClick = {}
+        )
+    }
+}
+
+@Composable
+fun DialogTitle() {
+    Row(
+        modifier = Modifier.padding(top = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(4.dp)
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_auth_alert_circle),
+            contentDescription = "로그인 에러 아이콘",
+            tint = White,
+            modifier = Modifier.padding(start = 4.dp)
+        )
+        Text(
+            text = "로그인이 안 되나요?",
+            color = White,
+            style = SoptTheme.typography.title20SB
         )
     }
 }
