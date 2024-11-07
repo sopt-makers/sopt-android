@@ -2,6 +2,8 @@ package org.sopt.official.feature.auth.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,6 +15,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -54,26 +58,44 @@ fun LoginErrorDialog(
         }
         Spacer(modifier = Modifier.height(12.dp))
         LoginDialogText(
-
+            text = "로그인한 계정을 알고 싶어요.",
+            onClick = {}
         )
-       //TODO:  Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(4.dp))
+        LoginDialogText(
+            text = "소셜 계정을 재설정하고 싶어요.",
+            onClick = {}
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        LoginDialogText(
+            text = "카카오톡 채널에 문의할게요.",
+            onClick = {}
+        )
     }
 }
 
 @Composable
 private fun LoginDialogText(
+    text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val backgroundColor = if (isPressed) Gray700 else Gray800
+
     Text(
-        text = "로그인한 계정을 알고 싶어요.",
+        text = text,
         color = White,
         modifier = modifier
-            .clickable { }
+            .clickable(interactionSource = interactionSource, indication = null) {
+                onClick()
+            }
             .clip(RoundedCornerShape(8.dp))
-            .background(Gray700)
+            .background(backgroundColor)
             .fillMaxWidth()
             .padding(10.dp),
-        style = SoptTheme.typography.body16R
+        style = SoptTheme.typography.body16R,
     )
 }
 

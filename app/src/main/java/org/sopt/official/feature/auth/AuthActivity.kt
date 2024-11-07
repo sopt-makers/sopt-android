@@ -35,6 +35,8 @@ import android.view.animation.AnimationUtils
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -61,6 +63,7 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.White
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -192,7 +195,9 @@ class AuthActivity : AppCompatActivity() {
     fun AuthScreen(
         modifier: Modifier = Modifier
     ) {
-
+        Column {
+            Text("hi", color = White)
+        }
     }
 
     companion object {
