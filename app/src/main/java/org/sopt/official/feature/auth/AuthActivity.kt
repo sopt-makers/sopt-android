@@ -42,9 +42,16 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -53,6 +60,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,7 +84,11 @@ import org.sopt.official.common.util.setOnAnimationEndListener
 import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.designsystem.Gray300
+import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.White
+import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithButton
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
@@ -218,9 +230,7 @@ class AuthActivity : AppCompatActivity() {
             showAuthBottom = true
         }
 
-        Box(
-            modifier = Modifier.fillMaxSize()
-        ) {
+        Box(modifier = Modifier.fillMaxSize()) {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -228,7 +238,7 @@ class AuthActivity : AppCompatActivity() {
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
                     painter = painterResource(id = R.drawable.img_logo),
-                    contentDescription = "sopt_logo",
+                    contentDescription = "솝트 로고",
                     modifier = Modifier.offset(y = offsetY.value.dp)
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -238,11 +248,81 @@ class AuthActivity : AppCompatActivity() {
                 enter = fadeIn(initialAlpha = 0.3f),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
-                Column {
-                    AuthTextWithButton(text = "로그인이 안 되나요?")
-                    AuthTextWithButton(text = "나중에 로그인할래요.")
-                }
+                AuthBottom()
             }
+        }
+    }
+
+    @Composable
+    private fun AuthBottom() {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            AuthButton(
+                paddingVertical = 12.dp,
+                onClick = {},
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_auth_google),
+                    contentDescription = "구글 로고",
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+                Text(
+                    text = "Google로 로그인",
+                    style = SoptTheme.typography.label16SB
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            AuthTextWithButton(text = "로그인이 안 되나요?")
+            Spacer(modifier = Modifier.height(44.dp))
+            AuthDivider()
+            Spacer(modifier = Modifier.height(16.dp))
+            AuthButton(
+                paddingVertical = 12.dp,
+                onClick = {},
+                shape = RoundedCornerShape(10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                containerColor = Gray700,
+                contentColor = White
+            ) {
+                Text(
+                    text = "SOPT 회원가입",
+                    style = SoptTheme.typography.label16SB
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            AuthTextWithButton(text = "나중에 로그인할래요.")
+            Spacer(modifier = Modifier.height(28.dp))
+        }
+    }
+
+    @Composable
+    private fun AuthDivider() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HorizontalDivider(
+                thickness = 0.6.dp,
+                color = Gray300,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "또는",
+                color = Gray300,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            HorizontalDivider(
+                thickness = 0.6.dp,
+                color = Gray300,
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 
@@ -255,7 +335,7 @@ class AuthActivity : AppCompatActivity() {
 
     @Preview(showBackground = true)
     @Composable
-    fun AuthScreenPreview() {
+    private fun AuthScreenPreview() {
         SoptTheme {
             AuthScreen()
         }
