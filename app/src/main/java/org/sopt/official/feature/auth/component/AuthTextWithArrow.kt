@@ -15,7 +15,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 
 @Composable
-fun AuthTextWithButton(
+fun AuthTextWithArrow(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = SoptTheme.typography.label14SB,
@@ -42,7 +42,7 @@ fun AuthTextWithButton(
 @Composable
 private fun AuthTextWithButtonPreview() {
     SoptTheme {
-        AuthTextWithButton(
+        AuthTextWithArrow(
             text = "text",
             textColor = White,
             textStyle = SoptTheme.typography.label12SB

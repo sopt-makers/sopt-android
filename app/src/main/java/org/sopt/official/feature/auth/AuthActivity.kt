@@ -60,7 +60,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -89,7 +88,7 @@ import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
-import org.sopt.official.feature.auth.component.AuthTextWithButton
+import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -275,7 +274,7 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            AuthTextWithButton(text = "로그인이 안 되나요?")
+            AuthTextWithArrow(text = "로그인이 안 되나요?")
             Spacer(modifier = Modifier.height(44.dp))
             AuthDivider()
             Spacer(modifier = Modifier.height(16.dp))
@@ -295,7 +294,7 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
-            AuthTextWithButton(text = "나중에 로그인할래요.")
+            AuthTextWithArrow(text = "나중에 로그인할래요.")
             Spacer(modifier = Modifier.height(28.dp))
         }
     }
@@ -303,9 +302,7 @@ class AuthActivity : AppCompatActivity() {
     @Composable
     private fun AuthDivider() {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+            modifier = Modifier.padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             HorizontalDivider(
