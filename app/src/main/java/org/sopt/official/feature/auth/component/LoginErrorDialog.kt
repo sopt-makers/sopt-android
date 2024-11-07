@@ -60,7 +60,7 @@ fun LoginErrorDialog(
 }
 
 @Composable
-fun DialogTitle() {
+private fun DialogTitle() {
     Row(
         modifier = Modifier.padding(top = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(4.dp)

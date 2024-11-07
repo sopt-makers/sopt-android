@@ -37,6 +37,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.EaseIn
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
@@ -70,6 +72,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.sopt.official.BuildConfig
 import org.sopt.official.R
@@ -221,12 +224,16 @@ class AuthActivity : AppCompatActivity() {
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
 
-        LaunchedEffect(showAuthBottom) {
+        LaunchedEffect(Unit) {
+            delay(700)
+            showAuthBottom = true
             offsetY.animateTo(
                 targetValue = -140f,
-                animationSpec = tween(durationMillis = 700)
+                animationSpec = tween(
+                    durationMillis = 1500,
+                    easing = FastOutSlowInEasing
+                )
             )
-            showAuthBottom = true
         }
 
         Box(modifier = Modifier.fillMaxSize()) {
@@ -244,7 +251,10 @@ class AuthActivity : AppCompatActivity() {
             }
             AnimatedVisibility(
                 visible = showAuthBottom,
-                enter = fadeIn(initialAlpha = 0.3f),
+                enter = fadeIn(
+                    initialAlpha = 0.1f,
+                    animationSpec = tween(easing = EaseIn)
+                ),
                 modifier = Modifier.align(Alignment.BottomCenter)
             ) {
                 AuthBottom()
