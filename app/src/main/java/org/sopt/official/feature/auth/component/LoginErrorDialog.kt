@@ -52,7 +52,6 @@ fun LoginErrorDialog(
                     .clip(RoundedCornerShape(12.dp))
                     .background(Gray800)
                     .padding(8.dp)
-                    .fillMaxWidth()
             ) {
                 DialogTitle()
                 Spacer(modifier = Modifier.height(12.dp))
