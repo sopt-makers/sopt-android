@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.security.util
+package org.sopt.official.common.util
 
 import android.util.Base64
 import org.sopt.official.security.model.EncryptedContent

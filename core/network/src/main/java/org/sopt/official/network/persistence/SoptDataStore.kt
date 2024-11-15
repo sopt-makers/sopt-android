@@ -32,10 +32,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
+import org.sopt.official.common.file.getSharedPreferenceData
+import org.sopt.official.common.file.setSharedPreferenceData
 import org.sopt.official.security.CryptoManager
-import org.sopt.official.security.util.toBase64
-import org.sopt.official.security.util.toByteArray
-import org.sopt.official.security.util.toEncryptedContent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -54,77 +53,57 @@ class SoptDataStore @Inject constructor(
     }
 
     var accessToken: String
-        set(value) = store.edit {
-            putString(
-                ACCESS_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
-            )
-        }
-        get() = store.getString(ACCESS_TOKEN, null)?.toByteArray()?.let {
-            cryptoManager.decrypt(
-                keyAlias = SOPT_KEY_ALIAS,
-                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
-            ).toString(Charsets.UTF_8)
-        } ?: ""
+        set(value) = store.setSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = ACCESS_TOKEN,
+            value = value
+        )
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = ACCESS_TOKEN)
 
     var refreshToken: String
-        set(value) = store.edit {
-            putString(
-                REFRESH_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
-            )
-        }
-        get() = store.getString(REFRESH_TOKEN, null)?.toByteArray()?.let {
-            cryptoManager.decrypt(
-                keyAlias = SOPT_KEY_ALIAS,
-                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
-            ).toString(Charsets.UTF_8)
-        } ?: ""
+        set(value) = store.setSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = REFRESH_TOKEN,
+            value = value
+        )
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = REFRESH_TOKEN)
 
     var playgroundToken: String
-        set(value) = store.edit {
-            putString(
-                PLAYGROUND_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
-            )
-        }
-        get() = store.getString(PLAYGROUND_TOKEN, null)?.toByteArray()?.let {
-            cryptoManager.decrypt(
-                keyAlias = SOPT_KEY_ALIAS,
-                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
-            ).toString(Charsets.UTF_8)
-        } ?: ""
+        set(value) = store.setSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = PLAYGROUND_TOKEN,
+            value = value
+        )
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = PLAYGROUND_TOKEN)
 
     var userStatus: String
-        set(value) = store.edit {
-            putString(
-                USER_STATUS,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
-            )
-        }
-        get() = store.getString(USER_STATUS, null)?.toByteArray()?.let {
-            cryptoManager.decrypt(
-                keyAlias = SOPT_KEY_ALIAS,
-                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
-            ).toString(Charsets.UTF_8)
-        } ?: UNAUTHENTICATED
+        set(value) = store.setSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = PLAYGROUND_TOKEN,
+            value = value
+        )
+        get() = store.getSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = PLAYGROUND_TOKEN,
+            defaultValue = UNAUTHENTICATED
+        )
 
     var pushToken: String
-        set(value) = store.edit {
-            putString(
-                PUSH_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
-            )
-        }
-        get() = store.getString(PUSH_TOKEN, null)?.toByteArray()?.let {
-            cryptoManager.decrypt(
-                keyAlias = SOPT_KEY_ALIAS,
-                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
-            ).toString(Charsets.UTF_8)
-        } ?: ""
+        set(value) = store.setSharedPreferenceData(
+            cryptoManager = cryptoManager,
+            keyAlias = SOPT_KEY_ALIAS,
+            key = PUSH_TOKEN,
+            value = value
+        )
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = PUSH_TOKEN)
 
     companion object {
-        private const val IV_SIZE = 12
+        private const val INITIALIZATION_VECTOR_SIZE = 12
         private const val SOPT_KEY_ALIAS = "sopt_key_alias"
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"

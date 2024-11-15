@@ -26,6 +26,37 @@ package org.sopt.official.common.file
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
+import org.sopt.official.common.BuildConfig
+import org.sopt.official.common.util.toBase64
+import org.sopt.official.common.util.toByteArray
+import org.sopt.official.common.util.toEncryptedContent
+import org.sopt.official.security.CryptoManager
 
 fun createSharedPreference(fileName: String, context: Context): SharedPreferences =
     context.getSharedPreferences(fileName, Context.MODE_PRIVATE)
+
+fun SharedPreferences.setSharedPreferenceData(cryptoManager: CryptoManager, keyAlias: String, key: String, value: String) {
+    edit {
+        putString(
+            key,
+            if (BuildConfig.DEBUG) value else cryptoManager.encrypt(
+                keyAlias = keyAlias,
+                bytes = value.toByteArray(Charsets.UTF_8)
+            ).concatenate().toBase64()
+        )
+    }
+}
+
+fun SharedPreferences.getSharedPreferenceData(
+    cryptoManager: CryptoManager,
+    keyAlias: String,
+    key: String,
+    defaultValue: String = "",
+    initializationVectorSize: Int = 12
+): String = getString(key, null)?.let { sharedPreferenceData ->
+        if (BuildConfig.DEBUG) sharedPreferenceData else cryptoManager.decrypt(
+            keyAlias = keyAlias,
+            encryptedContent = sharedPreferenceData.toByteArray().toEncryptedContent(initializationVectorSize = initializationVectorSize)
+        ).toString(Charsets.UTF_8)
+} ?: defaultValue
