@@ -22,13 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.common.util
+package org.sopt.official.security.util
 
 import android.util.Base64
+import org.sopt.official.security.model.EncryptedContent
 
-fun Pair<ByteArray, ByteArray>.combineToOneByteArray(): ByteArray = this.first + this.second
-
-fun ByteArray.splitToIvAndEncryptedData(ivSize: Int): Pair<ByteArray, ByteArray> = Pair(this.copyOfRange(0, ivSize), this.copyOfRange(ivSize, this.size))
+fun ByteArray.toEncryptedContent(initializationVectorSize: Int): EncryptedContent =
+    EncryptedContent(
+        initializationVector = this.copyOfRange(0, initializationVectorSize),
+        data = this.copyOfRange(initializationVectorSize, this.size)
+    )
 
 fun ByteArray.toBase64(): String = Base64.encodeToString(this, Base64.DEFAULT)
 

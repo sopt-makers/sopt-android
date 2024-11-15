@@ -24,7 +24,9 @@
  */
 package org.sopt.official.security
 
+import org.sopt.official.security.model.EncryptedContent
+
 interface CryptoManager {
-    fun encrypt(keyAlias: String, bytes: ByteArray): Pair<ByteArray, ByteArray>
-    fun decrypt(keyAlias: String, iv: ByteArray, encryptedBytes: ByteArray): ByteArray
+    fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent
+    fun decrypt(keyAlias: String, encryptedContent: EncryptedContent): ByteArray
 }

@@ -32,11 +32,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
-import org.sopt.official.common.util.combineToOneByteArray
-import org.sopt.official.common.util.splitToIvAndEncryptedData
-import org.sopt.official.common.util.toBase64
-import org.sopt.official.common.util.toByteArray
 import org.sopt.official.security.CryptoManager
+import org.sopt.official.security.util.toBase64
+import org.sopt.official.security.util.toByteArray
+import org.sopt.official.security.util.toEncryptedContent
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -58,86 +57,71 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit {
             putString(
                 ACCESS_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).combineToOneByteArray()
-                    .toBase64()
+                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
             )
         }
-        get() {
-            val combined = store.getString(ACCESS_TOKEN, null)?.toByteArray()
-
-            return combined?.splitToIvAndEncryptedData(ivSize = IV_SIZE)
-                ?.let { (iv, encryptedBytes) ->
-                    cryptoManager.decrypt(keyAlias = SOPT_KEY_ALIAS, iv = iv, encryptedBytes = encryptedBytes).toString(Charsets.UTF_8)
-                } ?: ""
-        }
+        get() = store.getString(ACCESS_TOKEN, null)?.toByteArray()?.let {
+            cryptoManager.decrypt(
+                keyAlias = SOPT_KEY_ALIAS,
+                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
+            ).toString(Charsets.UTF_8)
+        } ?: ""
 
     var refreshToken: String
         set(value) = store.edit {
             putString(
                 REFRESH_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).combineToOneByteArray()
-                    .toBase64()
+                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
             )
         }
-        get() {
-            val combined = store.getString(REFRESH_TOKEN, null)?.toByteArray()
-
-            return combined?.splitToIvAndEncryptedData(ivSize = IV_SIZE)
-                ?.let { (iv, encryptedBytes) ->
-                    cryptoManager.decrypt(keyAlias = SOPT_KEY_ALIAS, iv = iv, encryptedBytes = encryptedBytes).toString(Charsets.UTF_8)
-                } ?: ""
-        }
+        get() = store.getString(REFRESH_TOKEN, null)?.toByteArray()?.let {
+            cryptoManager.decrypt(
+                keyAlias = SOPT_KEY_ALIAS,
+                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
+            ).toString(Charsets.UTF_8)
+        } ?: ""
 
     var playgroundToken: String
         set(value) = store.edit {
             putString(
                 PLAYGROUND_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).combineToOneByteArray()
-                    .toBase64()
+                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
             )
         }
-        get() {
-            val combined = store.getString(PLAYGROUND_TOKEN, null)?.toByteArray()
-
-            return combined?.splitToIvAndEncryptedData(ivSize = IV_SIZE)
-                ?.let { (iv, encryptedBytes) ->
-                    cryptoManager.decrypt(keyAlias = SOPT_KEY_ALIAS, iv = iv, encryptedBytes = encryptedBytes).toString(Charsets.UTF_8)
-                } ?: ""
-        }
+        get() = store.getString(PLAYGROUND_TOKEN, null)?.toByteArray()?.let {
+            cryptoManager.decrypt(
+                keyAlias = SOPT_KEY_ALIAS,
+                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
+            ).toString(Charsets.UTF_8)
+        } ?: ""
 
     var userStatus: String
         set(value) = store.edit {
             putString(
                 USER_STATUS,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).combineToOneByteArray()
-                    .toBase64()
+                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
             )
         }
-        get() {
-            val combined = store.getString(USER_STATUS, null)?.toByteArray()
-
-            return combined?.splitToIvAndEncryptedData(ivSize = IV_SIZE)
-                ?.let { (iv, encryptedBytes) ->
-                    cryptoManager.decrypt(keyAlias = SOPT_KEY_ALIAS, iv = iv, encryptedBytes = encryptedBytes).toString(Charsets.UTF_8)
-                } ?: UNAUTHENTICATED
-        }
+        get() = store.getString(USER_STATUS, null)?.toByteArray()?.let {
+            cryptoManager.decrypt(
+                keyAlias = SOPT_KEY_ALIAS,
+                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
+            ).toString(Charsets.UTF_8)
+        } ?: UNAUTHENTICATED
 
     var pushToken: String
         set(value) = store.edit {
             putString(
                 PUSH_TOKEN,
-                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).combineToOneByteArray()
-                    .toBase64()
+                cryptoManager.encrypt(keyAlias = SOPT_KEY_ALIAS, bytes = value.toByteArray(Charsets.UTF_8)).concatenate().toBase64()
             )
         }
-        get() {
-            val combined = store.getString(PUSH_TOKEN, null)?.toByteArray()
-
-            return combined?.splitToIvAndEncryptedData(ivSize = IV_SIZE)
-                ?.let { (iv, encryptedBytes) ->
-                    cryptoManager.decrypt(keyAlias = SOPT_KEY_ALIAS, iv = iv, encryptedBytes = encryptedBytes).toString(Charsets.UTF_8)
-                } ?: ""
-        }
+        get() = store.getString(PUSH_TOKEN, null)?.toByteArray()?.let {
+            cryptoManager.decrypt(
+                keyAlias = SOPT_KEY_ALIAS,
+                encryptedContent = it.toEncryptedContent(initializationVectorSize = IV_SIZE)
+            ).toString(Charsets.UTF_8)
+        } ?: ""
 
     companion object {
         private const val IV_SIZE = 12

@@ -26,6 +26,7 @@ package org.sopt.official.security
 
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import org.sopt.official.security.model.EncryptedContent
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -40,9 +41,9 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
 
     private val cipher by lazy { Cipher.getInstance(TRANSFORMATION) }
 
-    private fun getDecryptCipherForIv(keyAlias: String, iv: ByteArray): Cipher =
+    private fun getDecryptCipherForInitializationVector(keyAlias: String, initializationVector: ByteArray): Cipher =
         Cipher.getInstance(TRANSFORMATION)
-            .apply { init(Cipher.DECRYPT_MODE, getOrCreateSecretKey(keyAlias = keyAlias), GCMParameterSpec(T_LEN, iv)) }
+            .apply { init(Cipher.DECRYPT_MODE, getOrCreateSecretKey(keyAlias = keyAlias), GCMParameterSpec(T_LEN, initializationVector)) }
 
     private fun getOrCreateSecretKey(keyAlias: String): SecretKey =
         (keyStore.getEntry(keyAlias, null) as? KeyStore.SecretKeyEntry)?.secretKey ?: createSecretKey(keyAlias = keyAlias)
@@ -56,14 +57,16 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
         )
     }.generateKey()
 
-    override fun encrypt(keyAlias: String, bytes: ByteArray): Pair<ByteArray, ByteArray> {
+    override fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent {
         val secretKey = getOrCreateSecretKey(keyAlias = keyAlias)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return Pair(cipher.iv, cipher.doFinal(bytes))
+        return EncryptedContent(initializationVector = cipher.iv, data = cipher.doFinal(bytes))
     }
 
-    override fun decrypt(keyAlias: String, iv: ByteArray, encryptedBytes: ByteArray): ByteArray =
-        getDecryptCipherForIv(keyAlias = keyAlias, iv = iv).doFinal(encryptedBytes)
+    override fun decrypt(keyAlias: String, encryptedContent: EncryptedContent): ByteArray =
+        getDecryptCipherForInitializationVector(keyAlias = keyAlias, initializationVector = encryptedContent.initializationVector).doFinal(
+            encryptedContent.data
+        )
 
     companion object {
         private const val KEY_STORE_TYPE = "AndroidKeyStore"
