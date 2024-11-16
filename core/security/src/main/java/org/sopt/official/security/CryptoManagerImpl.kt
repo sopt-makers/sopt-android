@@ -39,7 +39,8 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
 
     private val keyGenerator by lazy { KeyGenerator.getInstance(KEY_ALGORITHM, KEY_STORE_TYPE) }
 
-    private val cipher by lazy { Cipher.getInstance(TRANSFORMATION) }
+    private fun getEncryptCipher(keyAlias: String): Cipher =
+        Cipher.getInstance(TRANSFORMATION).apply { init(Cipher.ENCRYPT_MODE, getSecretKey(keyAlias = keyAlias)) }
 
     private fun getDecryptCipherForInitializationVector(keyAlias: String, initializationVector: ByteArray): Cipher =
         Cipher.getInstance(TRANSFORMATION)
@@ -57,11 +58,13 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
         )
     }.generateKey()
 
-    override fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent {
-        val secretKey = getSecretKey(keyAlias = keyAlias)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey)
-        return EncryptedContent(initializationVector = cipher.iv, data = cipher.doFinal(bytes))
-    }
+    override fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent =
+        getEncryptCipher(keyAlias = keyAlias).let { encryptCipher ->
+            EncryptedContent(
+                initializationVector = encryptCipher.iv,
+                data = encryptCipher.doFinal(bytes)
+            )
+        }
 
     override fun decrypt(keyAlias: String, encryptedContent: EncryptedContent): ByteArray =
         getDecryptCipherForInitializationVector(keyAlias = keyAlias, initializationVector = encryptedContent.initializationVector).doFinal(
