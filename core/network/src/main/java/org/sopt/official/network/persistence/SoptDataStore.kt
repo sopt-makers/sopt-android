@@ -83,7 +83,7 @@ class SoptDataStore @Inject constructor(
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
             keyAlias = SOPT_KEY_ALIAS,
-            key = PLAYGROUND_TOKEN,
+            key = USER_STATUS,
             value = value
         )
         get() = store.getSharedPreferenceData(
@@ -103,7 +103,6 @@ class SoptDataStore @Inject constructor(
         get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = PUSH_TOKEN)
 
     companion object {
-        private const val INITIALIZATION_VECTOR_SIZE = 12
         private const val SOPT_KEY_ALIAS = "sopt_key_alias"
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"
