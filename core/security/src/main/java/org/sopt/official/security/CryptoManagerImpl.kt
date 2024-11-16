@@ -43,9 +43,9 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
 
     private fun getDecryptCipherForInitializationVector(keyAlias: String, initializationVector: ByteArray): Cipher =
         Cipher.getInstance(TRANSFORMATION)
-            .apply { init(Cipher.DECRYPT_MODE, getOrCreateSecretKey(keyAlias = keyAlias), GCMParameterSpec(T_LEN, initializationVector)) }
+            .apply { init(Cipher.DECRYPT_MODE, getSecretKey(keyAlias = keyAlias), GCMParameterSpec(T_LEN, initializationVector)) }
 
-    private fun getOrCreateSecretKey(keyAlias: String): SecretKey =
+    private fun getSecretKey(keyAlias: String): SecretKey =
         (keyStore.getEntry(keyAlias, null) as? KeyStore.SecretKeyEntry)?.secretKey ?: createSecretKey(keyAlias = keyAlias)
 
     private fun createSecretKey(keyAlias: String): SecretKey = keyGenerator.apply {
@@ -58,7 +58,7 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
     }.generateKey()
 
     override fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent {
-        val secretKey = getOrCreateSecretKey(keyAlias = keyAlias)
+        val secretKey = getSecretKey(keyAlias = keyAlias)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)
         return EncryptedContent(initializationVector = cipher.iv, data = cipher.doFinal(bytes))
     }
