@@ -34,6 +34,11 @@ import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.common.file.getSharedPreferenceData
 import org.sopt.official.common.file.setSharedPreferenceData
+import org.sopt.official.security.BuildConfig.ACCESS_TOKEN_KEY_ALIAS
+import org.sopt.official.security.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
+import org.sopt.official.security.BuildConfig.PUSH_TOKEN_KEY_ALIAS
+import org.sopt.official.security.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
+import org.sopt.official.security.BuildConfig.USER_STATUS_KEY_ALIAS
 import org.sopt.official.security.CryptoManager
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,40 +60,40 @@ class SoptDataStore @Inject constructor(
     var accessToken: String
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = ACCESS_TOKEN_KEY_ALIAS,
             key = ACCESS_TOKEN,
             value = value
         )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = ACCESS_TOKEN)
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = ACCESS_TOKEN_KEY_ALIAS, key = ACCESS_TOKEN)
 
     var refreshToken: String
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = REFRESH_TOKEN_KEY_ALIAS,
             key = REFRESH_TOKEN,
             value = value
         )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = REFRESH_TOKEN)
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = REFRESH_TOKEN_KEY_ALIAS, key = REFRESH_TOKEN)
 
     var playgroundToken: String
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS,
             key = PLAYGROUND_TOKEN,
             value = value
         )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = PLAYGROUND_TOKEN)
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS, key = PLAYGROUND_TOKEN)
 
     var userStatus: String
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = USER_STATUS_KEY_ALIAS,
             key = USER_STATUS,
             value = value
         )
         get() = store.getSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = USER_STATUS_KEY_ALIAS,
             key = PLAYGROUND_TOKEN,
             defaultValue = UNAUTHENTICATED
         )
@@ -96,14 +101,13 @@ class SoptDataStore @Inject constructor(
     var pushToken: String
         set(value) = store.setSharedPreferenceData(
             cryptoManager = cryptoManager,
-            keyAlias = SOPT_KEY_ALIAS,
+            keyAlias = PUSH_TOKEN_KEY_ALIAS,
             key = PUSH_TOKEN,
             value = value
         )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = SOPT_KEY_ALIAS, key = PUSH_TOKEN)
+        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = PUSH_TOKEN_KEY_ALIAS, key = PUSH_TOKEN)
 
     companion object {
-        private const val SOPT_KEY_ALIAS = "sopt_key_alias"
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"
         private const val PLAYGROUND_TOKEN = "pg_token"
