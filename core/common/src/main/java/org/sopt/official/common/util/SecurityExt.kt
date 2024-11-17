@@ -25,6 +25,8 @@
 package org.sopt.official.common.util
 
 import android.util.Base64
+import org.sopt.official.common.BuildConfig
+import org.sopt.official.security.CryptoManager
 import org.sopt.official.security.model.EncryptedContent
 
 fun ByteArray.toEncryptedContent(initializationVectorSize: Int): EncryptedContent =
@@ -36,3 +38,18 @@ fun ByteArray.toEncryptedContent(initializationVectorSize: Int): EncryptedConten
 fun ByteArray.toBase64(): String = Base64.encodeToString(this, Base64.DEFAULT)
 
 fun String.toByteArray(): ByteArray = Base64.decode(this, Base64.DEFAULT)
+
+fun String.getEncryptedDataOrDefault(keyAlias: String) = if (BuildConfig.DEBUG) this else CryptoManager.encrypt(
+    keyAlias = keyAlias,
+    bytes = this.toByteArray(Charsets.UTF_8)
+).onSuccess { encryptedContent ->
+    encryptedContent.concatenate().toBase64()
+}.getOrDefault(this).toString()
+
+fun String.getDecryptedDataOrDefault(keyAlias: String, initializationVectorSize: Int = 12) =
+    if (BuildConfig.DEBUG) this else CryptoManager.decrypt(
+        keyAlias = keyAlias,
+        encryptedContent = this.toByteArray().toEncryptedContent(initializationVectorSize = initializationVectorSize)
+    ).onSuccess { decryptedContent ->
+        decryptedContent.toString(Charsets.UTF_8)
+    }.getOrDefault(this).toString()

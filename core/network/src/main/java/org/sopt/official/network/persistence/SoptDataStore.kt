@@ -32,22 +32,20 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
-import org.sopt.official.common.file.getSharedPreferenceData
-import org.sopt.official.common.file.setSharedPreferenceData
-import org.sopt.official.security.BuildConfig.ACCESS_TOKEN_KEY_ALIAS
-import org.sopt.official.security.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
-import org.sopt.official.security.BuildConfig.PUSH_TOKEN_KEY_ALIAS
-import org.sopt.official.security.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
-import org.sopt.official.security.BuildConfig.USER_STATUS_KEY_ALIAS
-import org.sopt.official.security.CryptoManager
+import org.sopt.official.common.util.getDecryptedDataOrDefault
+import org.sopt.official.common.util.getEncryptedDataOrDefault
+import org.sopt.official.network.BuildConfig.ACCESS_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.PUSH_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.USER_STATUS_KEY_ALIAS
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
-    @LocalStore private val fileName: String,
-    private val cryptoManager: CryptoManager
+    @LocalStore private val fileName: String
 ) {
     private val store = createSharedPreference(fileName, context)
 
@@ -58,54 +56,26 @@ class SoptDataStore @Inject constructor(
     }
 
     var accessToken: String
-        set(value) = store.setSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = ACCESS_TOKEN_KEY_ALIAS,
-            key = ACCESS_TOKEN,
-            value = value
-        )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = ACCESS_TOKEN_KEY_ALIAS, key = ACCESS_TOKEN)
+        set(value) = store.edit { putString(ACCESS_TOKEN, value.getEncryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(ACCESS_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     var refreshToken: String
-        set(value) = store.setSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = REFRESH_TOKEN_KEY_ALIAS,
-            key = REFRESH_TOKEN,
-            value = value
-        )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = REFRESH_TOKEN_KEY_ALIAS, key = REFRESH_TOKEN)
+        set(value) = store.edit { putString(REFRESH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(REFRESH_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
+            ?: DEFAULT_VALUE
 
     var playgroundToken: String
-        set(value) = store.setSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS,
-            key = PLAYGROUND_TOKEN,
-            value = value
-        )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS, key = PLAYGROUND_TOKEN)
+        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PLAYGROUND_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
+            ?: DEFAULT_VALUE
 
     var userStatus: String
-        set(value) = store.setSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = USER_STATUS_KEY_ALIAS,
-            key = USER_STATUS,
-            value = value
-        )
-        get() = store.getSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = USER_STATUS_KEY_ALIAS,
-            key = PLAYGROUND_TOKEN,
-            defaultValue = UNAUTHENTICATED
-        )
+        set(value) = store.edit { putString(USER_STATUS, value.getEncryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS)) }
+        get() = store.getString(USER_STATUS, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
 
     var pushToken: String
-        set(value) = store.setSharedPreferenceData(
-            cryptoManager = cryptoManager,
-            keyAlias = PUSH_TOKEN_KEY_ALIAS,
-            key = PUSH_TOKEN,
-            value = value
-        )
-        get() = store.getSharedPreferenceData(cryptoManager = cryptoManager, keyAlias = PUSH_TOKEN_KEY_ALIAS, key = PUSH_TOKEN)
+        set(value) = store.edit { putString(PUSH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PUSH_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     companion object {
         private const val ACCESS_TOKEN = "access_token"
@@ -114,6 +84,7 @@ class SoptDataStore @Inject constructor(
         private const val USER_STATUS = "user_status"
         private const val PUSH_TOKEN = "push_token"
         private const val UNAUTHENTICATED = "UNAUTHENTICATED"
+        private const val DEFAULT_VALUE = ""
     }
 }
 
