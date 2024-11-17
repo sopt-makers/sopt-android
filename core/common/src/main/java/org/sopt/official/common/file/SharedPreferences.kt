@@ -43,7 +43,9 @@ fun SharedPreferences.setSharedPreferenceData(cryptoManager: CryptoManager, keyA
             if (BuildConfig.DEBUG) value else cryptoManager.encrypt(
                 keyAlias = keyAlias,
                 bytes = value.toByteArray(Charsets.UTF_8)
-            ).concatenate().toBase64()
+            ).onSuccess { encryptedContent ->
+                encryptedContent.concatenate().toBase64()
+            }.getOrDefault(value).toString()
         )
     }
 }
@@ -55,8 +57,10 @@ fun SharedPreferences.getSharedPreferenceData(
     defaultValue: String = "",
     initializationVectorSize: Int = 12
 ): String = getString(key, null)?.let { sharedPreferenceData ->
-        if (BuildConfig.DEBUG) sharedPreferenceData else cryptoManager.decrypt(
-            keyAlias = keyAlias,
-            encryptedContent = sharedPreferenceData.toByteArray().toEncryptedContent(initializationVectorSize = initializationVectorSize)
-        ).toString(Charsets.UTF_8)
+    if (BuildConfig.DEBUG) sharedPreferenceData else cryptoManager.decrypt(
+        keyAlias = keyAlias,
+        encryptedContent = sharedPreferenceData.toByteArray().toEncryptedContent(initializationVectorSize = initializationVectorSize)
+    ).onSuccess { decryptedContent ->
+        decryptedContent.toString(Charsets.UTF_8)
+    }.getOrDefault(defaultValue).toString()
 } ?: defaultValue

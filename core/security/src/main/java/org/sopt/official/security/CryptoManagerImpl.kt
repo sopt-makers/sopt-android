@@ -58,18 +58,25 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
         )
     }.generateKey()
 
-    override fun encrypt(keyAlias: String, bytes: ByteArray): EncryptedContent =
-        getEncryptCipher(keyAlias = keyAlias).let { encryptCipher ->
-            EncryptedContent(
-                initializationVector = encryptCipher.iv,
-                data = encryptCipher.doFinal(bytes)
-            )
+    override fun encrypt(keyAlias: String, bytes: ByteArray): Result<EncryptedContent> =
+        runCatching {
+            getEncryptCipher(keyAlias = keyAlias).let { encryptCipher ->
+                EncryptedContent(
+                    initializationVector = encryptCipher.iv,
+                    data = encryptCipher.doFinal(bytes)
+                )
+            }
         }
 
-    override fun decrypt(keyAlias: String, encryptedContent: EncryptedContent): ByteArray =
-        getDecryptCipherForInitializationVector(keyAlias = keyAlias, initializationVector = encryptedContent.initializationVector).doFinal(
-            encryptedContent.data
-        )
+    override fun decrypt(keyAlias: String, encryptedContent: EncryptedContent): Result<ByteArray> =
+        runCatching {
+            getDecryptCipherForInitializationVector(
+                keyAlias = keyAlias,
+                initializationVector = encryptedContent.initializationVector
+            ).doFinal(
+                encryptedContent.data
+            )
+        }
 
     companion object {
         private const val KEY_STORE_TYPE = "AndroidKeyStore"
