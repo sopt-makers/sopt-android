@@ -32,9 +32,15 @@ import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
-import javax.inject.Inject
 
-class CryptoManagerImpl @Inject constructor() : CryptoManager {
+object CryptoManagerImpl : CryptoManager {
+    private const val KEY_STORE_TYPE = "AndroidKeyStore"
+    private const val KEY_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
+    private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
+    private const val PADDING = "NoPadding"
+    private const val TRANSFORMATION = "$KEY_ALGORITHM/$BLOCK_MODE/$PADDING"
+    private const val T_LEN = 128
+
     private val keyStore = KeyStore.getInstance(KEY_STORE_TYPE).apply { load(null) }
 
     private val keyGenerator by lazy { KeyGenerator.getInstance(KEY_ALGORITHM, KEY_STORE_TYPE) }
@@ -77,13 +83,4 @@ class CryptoManagerImpl @Inject constructor() : CryptoManager {
                 encryptedContent.data
             )
         }
-
-    companion object {
-        private const val KEY_STORE_TYPE = "AndroidKeyStore"
-        private const val KEY_ALGORITHM = KeyProperties.KEY_ALGORITHM_AES
-        private const val BLOCK_MODE = KeyProperties.BLOCK_MODE_GCM
-        private const val PADDING = "NoPadding"
-        private const val TRANSFORMATION = "$KEY_ALGORITHM/$BLOCK_MODE/$PADDING"
-        private const val T_LEN = 128
-    }
 }
