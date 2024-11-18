@@ -57,25 +57,25 @@ class SoptDataStore @Inject constructor(
 
     var accessToken: String
         set(value) = store.edit { putString(ACCESS_TOKEN, value.getEncryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(ACCESS_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+        get() = store.getString(ACCESS_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     var refreshToken: String
         set(value) = store.edit { putString(REFRESH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(REFRESH_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
+        get() = store.getString(REFRESH_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
             ?: DEFAULT_VALUE
 
     var playgroundToken: String
         set(value) = store.edit { putString(PLAYGROUND_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(PLAYGROUND_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
+        get() = store.getString(PLAYGROUND_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
             ?: DEFAULT_VALUE
 
     var userStatus: String
         set(value) = store.edit { putString(USER_STATUS, value.getEncryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS)) }
-        get() = store.getString(USER_STATUS, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
+        get() = store.getString(USER_STATUS, null)?.getDecryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
 
     var pushToken: String
         set(value) = store.edit { putString(PUSH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(PUSH_TOKEN, DEFAULT_VALUE)?.getDecryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+        get() = store.getString(PUSH_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     companion object {
         private const val ACCESS_TOKEN = "access_token"
