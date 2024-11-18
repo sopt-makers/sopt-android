@@ -24,6 +24,7 @@
  */
 plugins {
     sopt("feature")
+    sopt("test")
 }
 
 android {
