@@ -32,8 +32,8 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
-import org.sopt.official.common.util.getDecryptedDataOrDefault
-import org.sopt.official.common.util.getEncryptedDataOrDefault
+import org.sopt.official.common.util.decryptInReleaseMode
+import org.sopt.official.common.util.encryptInReleaseMode
 import org.sopt.official.network.BuildConfig.ACCESS_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.PUSH_TOKEN_KEY_ALIAS
@@ -56,26 +56,26 @@ class SoptDataStore @Inject constructor(
     }
 
     var accessToken: String
-        set(value) = store.edit { putString(ACCESS_TOKEN, value.getEncryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(ACCESS_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+        set(value) = store.edit { putString(ACCESS_TOKEN, value.encryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(ACCESS_TOKEN, null)?.decryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     var refreshToken: String
-        set(value) = store.edit { putString(REFRESH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(REFRESH_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
+        set(value) = store.edit { putString(REFRESH_TOKEN, value.encryptInReleaseMode(keyAlias = REFRESH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(REFRESH_TOKEN, null)?.decryptInReleaseMode(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
             ?: DEFAULT_VALUE
 
     var playgroundToken: String
-        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(PLAYGROUND_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
+        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value.encryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PLAYGROUND_TOKEN, null)?.decryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
             ?: DEFAULT_VALUE
 
     var userStatus: String
-        set(value) = store.edit { putString(USER_STATUS, value.getEncryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS)) }
-        get() = store.getString(USER_STATUS, null)?.getDecryptedDataOrDefault(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
+        set(value) = store.edit { putString(USER_STATUS, value.encryptInReleaseMode(keyAlias = USER_STATUS_KEY_ALIAS)) }
+        get() = store.getString(USER_STATUS, null)?.decryptInReleaseMode(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
 
     var pushToken: String
-        set(value) = store.edit { putString(PUSH_TOKEN, value.getEncryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
-        get() = store.getString(PUSH_TOKEN, null)?.getDecryptedDataOrDefault(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+        set(value) = store.edit { putString(PUSH_TOKEN, value.encryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PUSH_TOKEN, null)?.decryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     companion object {
         private const val ACCESS_TOKEN = "access_token"
