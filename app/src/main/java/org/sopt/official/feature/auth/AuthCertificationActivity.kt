@@ -43,13 +43,13 @@ class AuthCertificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                AuthCertification()
+                AuthCertificationScreen()
             }
         }
     }
 
     @Composable
-    private fun AuthCertification(
+    private fun AuthCertificationScreen(
         modifier: Modifier = Modifier
     ) {
         Column(
@@ -200,7 +200,7 @@ class AuthCertificationActivity : AppCompatActivity() {
     @Composable
     private fun AuthCertificationPreview() {
         SoptTheme {
-            AuthCertification()
+            AuthCertificationScreen()
         }
     }
 }
