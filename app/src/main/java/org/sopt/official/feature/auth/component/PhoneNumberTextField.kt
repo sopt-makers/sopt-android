@@ -21,6 +21,7 @@ import org.sopt.official.designsystem.SoptTheme
 @Composable
 fun PhoneNumberTextField(
     text: String,
+    hintText: String,
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -39,7 +40,7 @@ fun PhoneNumberTextField(
         decorationBox = { innerTextField ->
             if (text.isEmpty())
                 Text(
-                    text = "010-XXXX-XXXX",
+                    text = hintText,
                     color = Gray100,
                     style = SoptTheme.typography.body14M
                 )

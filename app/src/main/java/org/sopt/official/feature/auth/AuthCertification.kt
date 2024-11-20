@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R.drawable.ic_auth_process
+import org.sopt.official.designsystem.Black80
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray60
@@ -29,6 +30,7 @@ import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
+import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.PhoneNumberTextField
 
 @Composable
@@ -41,12 +43,11 @@ fun AuthCertification(
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // todo: 비율 맞추기
-        Spacer(modifier = Modifier.weight(1f))
+        // todo: 화면 비율 계산
+        Spacer(modifier = Modifier.height(72.dp))
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification()
-        Spacer(modifier = Modifier.weight(2f))
     }
 }
 
@@ -93,14 +94,13 @@ private fun TopBar(
 @Composable
 fun PhoneCertification(
     modifier: Modifier = Modifier,
-    phoneNumber: String = ""
+    phoneNumber: String = "",
+    certificateNumber: String = ""
 ) {
     //todo: state로 빼기
     val isEnable by remember { mutableStateOf(true) }
 
-    Column(
-        modifier = modifier
-    ) {
+    Column(modifier = modifier) {
         Text(
             text = "전화번호",
             color = Gray80,
@@ -116,6 +116,7 @@ fun PhoneCertification(
                     .fillMaxWidth()
                     .weight(1f),
                 text = phoneNumber,
+                hintText = "010-XXXX-XXXX",
                 onTextChange = {}
             )
             AuthButton(
@@ -132,6 +133,49 @@ fun PhoneCertification(
                     style = SoptTheme.typography.body14M
                 )
             }
+        }
+        CertificationResult()
+    }
+}
+
+@Composable
+private fun CertificationResult() {
+    //todo: state로 빼기
+    val isEnable by remember { mutableStateOf(true) }
+
+    Spacer(modifier = Modifier.height(20.dp))
+    AuthButton(
+        modifier = Modifier.fillMaxWidth(),
+        paddingVertical = 16.dp,
+        onClick = {},
+        containerColor = Gray10,
+        contentColor = Gray950,
+        disabledContentColor = Gray60,
+        isEnabled = isEnable
+    ) {
+        Text(
+            text = "SOPT 회원 인증 완료",
+            style = SoptTheme.typography.body14M
+        )
+    }
+    Spacer(modifier = Modifier.height(40.dp))
+    AuthButton(
+        modifier = Modifier.fillMaxWidth(),
+        paddingVertical = 16.dp,
+        paddingHorizontal = 15.dp,
+        onClick = {},
+        containerColor = Black80,
+    ) {
+        Column {
+            AuthTextWithArrow(
+                text = "전화번호로 SOPT 회원 인증에 실패하셨나요?",
+                textStyle = SoptTheme.typography.body14M
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(
+                text = "전화번호가 바뀌었거나, 전화번호 인증이 어려우신 경우\n추가 정보 인증을 통해 가입을 도와드리고 있어요!",
+                color = Gray60
+            )
         }
     }
 }

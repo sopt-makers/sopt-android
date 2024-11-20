@@ -28,10 +28,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black
+import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 
 @Composable
 fun LoginErrorDialog(
@@ -83,12 +83,12 @@ private fun DialogTitle() {
         Icon(
             painter = painterResource(R.drawable.ic_auth_alert_circle),
             contentDescription = "로그인 에러 아이콘",
-            tint = White,
+            tint = Gray10,
             modifier = Modifier.padding(start = 4.dp)
         )
         Text(
             text = "로그인이 안 되나요?",
-            color = White,
+            color = Gray10,
             style = SoptTheme.typography.title20SB
         )
     }
@@ -106,7 +106,7 @@ private fun LoginDialogText(
 
     Text(
         text = text,
-        color = White,
+        color = Gray10,
         modifier = modifier
             .clickable(interactionSource = interactionSource, indication = null) {
                 onClick()

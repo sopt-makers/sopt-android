@@ -11,15 +11,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.official.R
+import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 
 @Composable
 fun AuthTextWithArrow(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = SoptTheme.typography.label14SB,
-    textColor: Color = White,
+    textColor: Color = Gray30,
 ) {
     Row(
         modifier = modifier,
@@ -33,7 +33,7 @@ fun AuthTextWithArrow(
         Icon(
             painter = painterResource(R.drawable.ic_auth_arrow_right),
             contentDescription = "화살표 버튼",
-            tint = White
+            tint = Gray30
         )
     }
 }
@@ -44,7 +44,7 @@ private fun AuthTextWithButtonPreview() {
     SoptTheme {
         AuthTextWithArrow(
             text = "text",
-            textColor = White,
+            textColor = Gray30,
             textStyle = SoptTheme.typography.label12SB
         )
     }
