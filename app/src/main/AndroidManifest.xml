@@ -146,14 +146,6 @@
             android:name=".feature.fortune.FortuneActivity"
             android:exported="true"
             android:launchMode="singleTop" />
-        <activity
-            android:name=".feature.auth.AuthErrorActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".feature.auth.AuthCertificationActivity"
-            android:exported="true"
-            android:launchMode="singleTop" />
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">

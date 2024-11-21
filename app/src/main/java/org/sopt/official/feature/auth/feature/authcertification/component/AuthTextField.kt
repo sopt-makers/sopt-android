@@ -1,4 +1,4 @@
-package org.sopt.official.feature.auth.component
+package org.sopt.official.feature.auth.feature.authcertification.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
