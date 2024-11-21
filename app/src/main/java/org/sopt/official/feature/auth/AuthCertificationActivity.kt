@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,10 +37,6 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
-
-enum class AuthError {
-    NUMBER_ERROR, PHONE_ERROR
-}
 
 @AndroidEntryPoint
 class AuthCertificationActivity : AppCompatActivity() {
@@ -72,54 +65,20 @@ class AuthCertificationActivity : AppCompatActivity() {
             Spacer(modifier = Modifier.height(44.dp))
             PhoneCertification()
 
-            when (true) {
-                true -> {
-                    Spacer(modifier = Modifier.height(10.dp))
-                    AuthTextField(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "",
-                        hintText = "인증번호를 입력해 주세요.",
-                        onTextChange = {}
-                    )
+            Spacer(modifier = Modifier.height(10.dp))
+            AuthTextField(
+                modifier = Modifier.fillMaxWidth(),
+                text = "",
+                hintText = "인증번호를 입력해 주세요.",
+                onTextChange = {}
+            )
 
-                    if (true) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 10.dp),
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Image(
-                                painterResource(id = ic_auth_certification_error),
-                                contentDescription = "에러 아이콘",
-                            )
-                            Text(
-                                text = "인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요.",
-                                color = Color(0XFFBD372F),
-                                style = SoptTheme.typography.label12SB
-                            )
-                        }
-                    }
-                }
+            if (true) {
+                ErrorText(text = "인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요.")
+            }
 
-                false -> {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        Image(
-                            painterResource(id = ic_auth_certification_error),
-                            contentDescription = "에러 아이콘",
-                        )
-                        Text(
-                            text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.",
-                            color = Color(0XFFBD372F),
-                            style = SoptTheme.typography.label12SB
-                        )
-                    }
-                }
+            if (true) {
+                ErrorText(text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.")
             }
 
             Spacer(modifier = Modifier.height(20.dp))
@@ -235,12 +194,12 @@ class AuthCertificationActivity : AppCompatActivity() {
         Spacer(modifier = Modifier.height(40.dp))
         AuthButton(
             modifier = Modifier
-                .fillMaxWidth()
-                .border(
-                    color = Gray10,
-                    width = 1.dp,
-                    shape = RoundedCornerShape(10.dp)
-                ),
+                .fillMaxWidth(),
+//                .border(
+//                    color = Gray10,
+//                    width = 1.dp,
+//                    shape = RoundedCornerShape(10.dp)
+//                ),
             paddingVertical = 16.dp,
             paddingHorizontal = 15.dp,
             onClick = {},
@@ -261,24 +220,9 @@ class AuthCertificationActivity : AppCompatActivity() {
     }
 
     @Composable
-    fun AuthErrorText(
-        error: AuthError
+    private fun ErrorText(
+        text: String
     ) {
-        when (error) {
-            AuthError.NUMBER_ERROR -> {
-                ErrorText(text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.")
-            }
-            AuthError.PHONE_ERROR -> {
-                ErrorText(text = "")
-            }
-        }
-
-    }
-
-    @Composable
-    fun ErrorText(
-        text : String
-    ){
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -290,7 +234,7 @@ class AuthCertificationActivity : AppCompatActivity() {
                 contentDescription = "에러 아이콘",
             )
             Text(
-                text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.",
+                text = text,
                 color = Color(0XFFBD372F),
                 style = SoptTheme.typography.label12SB
             )
