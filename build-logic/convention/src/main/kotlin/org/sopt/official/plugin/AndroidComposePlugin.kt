@@ -21,7 +21,6 @@ class AndroidComposePlugin : Plugin<Project> {
             }
         }
         extensions.configure<ComposeCompilerGradlePluginExtension> {
-            enableStrongSkippingMode.set(true)
             includeSourceInformation.set(true)
         }
         dependencies {
