@@ -32,6 +32,11 @@ internal fun Project.configureAndroidCommonPlugin() {
             val operationUrl = properties["operationApi"] as? String ?: ""
             val devAmplitudeKey = properties["devAmplitudeKey"] as? String ?: ""
             val amplitudeKey = properties["amplitudeKey"] as? String ?: ""
+            val accessTokenKeyAlias = properties["accessTokenKeyAlias"] as? String ?: ""
+            val refreshTokenKeyAlias = properties["refreshTokenKeyAlias"] as? String ?: ""
+            val playgroundTokenKeyAlias = properties["playgroundTokenKeyAlias"] as? String ?: ""
+            val userStatusKeyAlias = properties["userStatusKeyAlias"] as? String ?: ""
+            val pushTokenKeyAlias = properties["pushTokenKeyAlias"] as? String ?: ""
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
             buildConfigField("String", "POKE_DATA_STORE_KEY", pokeDataStoreKey)
@@ -41,6 +46,12 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "SOPT_OPERATION_BASE_URL", operationUrl)
             buildConfigField("String", "DEV_AMPLITUDE_KEY", devAmplitudeKey)
             buildConfigField("String", "AMPLITUDE_KEY", amplitudeKey)
+            buildConfigField("String", "ACCESS_TOKEN_KEY_ALIAS", accessTokenKeyAlias)
+            buildConfigField("String", "REFRESH_TOKEN_KEY_ALIAS", refreshTokenKeyAlias)
+            buildConfigField("String", "PLAYGROUND_TOKEN_KEY_ALIAS", playgroundTokenKeyAlias)
+            buildConfigField("String", "USER_STATUS_KEY_ALIAS", userStatusKeyAlias)
+            buildConfigField("String", "PUSH_TOKEN_KEY_ALIAS", pushTokenKeyAlias)
+
         }
         buildFeatures.apply {
             viewBinding = true
