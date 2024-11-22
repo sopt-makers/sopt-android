@@ -27,17 +27,17 @@ fun SoptlogIntroduction(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {},
 ) {
-    val backgroundColor = if (introduction == null) {
-        SoptTheme.colors.onSurface700
-    } else {
-        SoptTheme.colors.onSurface800
-    }
-
     Box(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(8.dp))
-            .background(backgroundColor)
+            .background(
+                if (introduction == null) {
+                    SoptTheme.colors.onSurface700
+                } else {
+                    SoptTheme.colors.onSurface800
+                }
+            )
             .run {
                 if (introduction != null) {
                     clickable {
