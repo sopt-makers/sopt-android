@@ -15,4 +15,11 @@ ksp {
 }
 
 dependencies {
+    // core
+    implementation(projects.core.common)
+    implementation(projects.core.designsystem)
+
+    // etc
+    implementation(libs.coil3.compose)
+    implementation(libs.coil3.test)
 }
