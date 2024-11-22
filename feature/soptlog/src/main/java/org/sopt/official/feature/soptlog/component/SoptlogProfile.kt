@@ -15,11 +15,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.annotation.ExperimentalCoilApi
-import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.UrlImage
 
 @Composable
 fun SoptlogProfile(
@@ -32,12 +32,12 @@ fun SoptlogProfile(
         modifier = modifier,
         verticalAlignment = androidx.compose.ui.Alignment.CenterVertically
     ) {
-        AsyncImage(
-            model = profileImageUrl,
-            contentDescription = "Profile Image",
+        UrlImage(
+            url = profileImageUrl,
             modifier = Modifier
                 .size(80.dp)
-                .clip(CircleShape)
+                .clip(CircleShape),
+            contentDescription = "프로필 사진"
         )
 
         Spacer(modifier = Modifier.width(16.dp))

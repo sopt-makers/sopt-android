@@ -49,7 +49,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
-import org.sopt.official.feature.fortune.component.UrlImage
+import org.sopt.official.designsystem.component.UrlImage
 
 @Composable
 internal fun FortuneAmuletRoute(

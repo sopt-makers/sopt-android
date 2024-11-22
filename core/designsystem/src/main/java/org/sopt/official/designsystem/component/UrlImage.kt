@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.fortune.component
+package org.sopt.official.designsystem.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
