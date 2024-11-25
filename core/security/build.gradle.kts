@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 plugins {
-  sopt("feature")
+    sopt("feature")
+    sopt("test")
 }
 
 android {
-  namespace = "org.sopt.official.common"
-}
-
-dependencies {
-  implementation(projects.core.auth)
-  implementation(projects.core.security)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.exifinterface)
+    namespace = "org.sopt.official.security"
 }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.security.model
 
-plugins {
-  sopt("feature")
-}
+data class EncryptedContent(
+    val initializationVector: ByteArray,
+    val data: ByteArray
+) {
+    override fun equals(other: Any?): Boolean = when {
+        this === other -> true
+        other !is EncryptedContent -> false
+        !initializationVector.contentEquals(other.initializationVector) -> false
+        !data.contentEquals(other.data) -> false
+        else -> true
+    }
 
-android {
-  namespace = "org.sopt.official.common"
-}
+    override fun hashCode(): Int = HASH_PRIME * initializationVector.contentHashCode() + data.contentHashCode()
 
-dependencies {
-  implementation(projects.core.auth)
-  implementation(projects.core.security)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.exifinterface)
+    fun concatenate() = initializationVector + data
+
+    companion object {
+        private const val HASH_PRIME = 31
+    }
 }

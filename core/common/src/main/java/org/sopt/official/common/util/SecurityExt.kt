@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.common.util
 
-plugins {
-  sopt("feature")
-}
+import org.sopt.official.common.BuildConfig
+import org.sopt.official.security.util.getDecryptedDataOrDefault
+import org.sopt.official.security.util.getEncryptedDataOrDefault
 
-android {
-  namespace = "org.sopt.official.common"
-}
+fun String.encryptInReleaseMode(keyAlias: String) = if (BuildConfig.DEBUG) this else this.getEncryptedDataOrDefault(keyAlias = keyAlias)
 
-dependencies {
-  implementation(projects.core.auth)
-  implementation(projects.core.security)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.exifinterface)
-}
+fun String.decryptInReleaseMode(keyAlias: String, initializationVectorSize: Int = 12) =
+    if (BuildConfig.DEBUG) this else this.getDecryptedDataOrDefault(
+        keyAlias = keyAlias,
+        initializationVectorSize = initializationVectorSize
+    )

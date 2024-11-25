@@ -50,6 +50,11 @@ jobs:
           DEV_AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
           AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
           POKE_DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+          ACCESS_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+          REFRESH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+          PLAYGROUND_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+          USER_STATUS_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+          PUSH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
         run: |
           echo apiKey=\"$API_KEY\" >> ./local.properties
           echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
@@ -63,6 +68,11 @@ jobs:
           echo devAmplitudeKey=\"$DEV_AMPLITUDE_KEY\" >> ./local.properties
           echo amplitudeKey=\"$AMPLITUDE_KEY\" >> ./local.properties
           echo pokeDataStoreKey=\"$POKE_DATA_STORE_KEY\" >> ./local.properties
+          echo accessTokenKeyAlias=\"ACCESS_TOKEN_KEY_ALIAS\" >> ./local.properties
+          echo refreshTokenKeyAlias=\"REFRESH_TOKEN_KEY_ALIAS\" >> ./local.properties
+          echo playgroundTokenKeyAlias=\"PLAYGROUND_TOKEN_KEY_ALIAS\" >> ./local.properties
+          echo userStatusKeyAlias=\"USER_STATUS_KEY_ALIAS\" >> ./local.properties
+          echo pushTokenKeyAlias=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
