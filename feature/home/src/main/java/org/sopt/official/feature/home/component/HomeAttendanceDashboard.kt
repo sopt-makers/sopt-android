@@ -31,11 +31,11 @@ import org.sopt.official.feature.home.R.drawable.ic_check_filled
 
 @Composable
 internal fun HomeSoptScheduleDashboard(
-    date: String = "12.02",
-    scheduleType: String = "세미나",
-    scheduleTitle: String = "1차 세미나",
-    onDashboardClick: () -> Unit = {},
-    onAttendanceButtonClick: () -> Unit = {},
+    date: String,
+    scheduleType: String,
+    scheduleTitle: String,
+    onDashboardClick: () -> Unit,
+    onAttendanceButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeBox(
@@ -71,9 +71,7 @@ internal fun HomeSoptScheduleDashboard(
                     tint = Unspecified,
                 )
                 Spacer(modifier = Modifier.weight(weight = 1f))
-                HomeAttendanceButton(
-                    onButtonClick = onAttendanceButtonClick,
-                )
+                HomeAttendanceButton(onButtonClick = onAttendanceButtonClick)
             }
         }
     )
@@ -104,7 +102,7 @@ private fun HomeScheduleTypeChip(
 
 @Composable
 private fun HomeAttendanceButton(
-    onButtonClick: () -> Unit = { },
+    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Button(
@@ -135,6 +133,12 @@ private fun HomeAttendanceButton(
 @Composable
 private fun HomeAttendanceDashboardPreview() {
     SoptTheme {
-        HomeSoptScheduleDashboard()
+        HomeSoptScheduleDashboard(
+            date = "TODO()",
+            scheduleType = "TODO()",
+            scheduleTitle = "TODO()",
+            onDashboardClick = {},
+            onAttendanceButtonClick = {},
+        )
     }
 }
