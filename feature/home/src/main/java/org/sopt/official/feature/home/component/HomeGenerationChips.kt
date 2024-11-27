@@ -1,5 +1,6 @@
 package org.sopt.official.feature.home.component
 
+import androidx.annotation.ColorRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,28 +20,19 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
 
-sealed interface UserSoptState {
-    data object NonMember : UserSoptState
-    data class Member(
-        val isActivated: Boolean,
-        val generations: List<Int>,
-    ) : UserSoptState {
-        val recentGeneration = "${generations.max()}기" + if (isActivated) "활동 중" else "수료"
-        val lastGenerations = generations.filter { it != generations.max() }.sortedDescending()
-    }
-}
-
 @Composable
 internal fun HomeGenerationChips(
     isUserActivated: Boolean,
     userRecentGeneration: String,
-    generations: List<Int>,
+    generations: ImmutableList<Int>,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
@@ -80,7 +72,7 @@ private fun RecentGenerationChip(
 }
 
 @Composable
-private fun LastGenerationChips(generations: List<Int>) {
+private fun LastGenerationChips(generations: ImmutableList<Int>) {
     generations.forEachIndexed { index, generation ->
         when (index) {
             0 -> GenerationChip(
@@ -128,13 +120,14 @@ private fun LastGenerationChips(generations: List<Int>) {
 
 @Composable
 private fun GenerationChip(
-    chipColor: Color,
-    textColor: Color,
+    @ColorRes chipColor: Color,
+    @ColorRes textColor: Color,
     text: String,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Center,
-        modifier = Modifier.background(
+        modifier = modifier.background(
             color = chipColor,
             shape = CircleShape,
         ).size(size = 24.dp)
@@ -167,7 +160,7 @@ private fun HomeGenerationChipsPreview() {
         HomeGenerationChips(
             isUserActivated = true,
             userRecentGeneration = "아하아하",
-            generations = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
+            generations = persistentListOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
             modifier = Modifier.background(Black),
         )
     }
