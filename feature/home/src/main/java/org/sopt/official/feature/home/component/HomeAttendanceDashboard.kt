@@ -28,12 +28,11 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.R.drawable.ic_arrow_right
 import org.sopt.official.feature.home.R.drawable.ic_check_filled
+import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 
 @Composable
 internal fun HomeSoptScheduleDashboard(
-    date: String,
-    scheduleType: String,
-    scheduleTitle: String,
+    homeSoptScheduleModel: HomeSoptScheduleModel,
     onDashboardClick: () -> Unit,
     onAttendanceButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -53,15 +52,15 @@ internal fun HomeSoptScheduleDashboard(
                 ),
             ) {
                 Text(
-                    text = date,
+                    text = homeSoptScheduleModel.date,
                     style = typography.title14SB,
                     color = colors.onSurface400,
                 )
                 Spacer(modifier = Modifier.width(width = 8.dp))
-                HomeScheduleTypeChip(scheduleType)
+                HomeScheduleTypeChip(homeSoptScheduleModel.scheduleType)
                 Spacer(modifier = Modifier.width(width = 8.dp))
                 Text(
-                    text = scheduleTitle,
+                    text = homeSoptScheduleModel.scheduleTitle,
                     style = typography.title16SB,
                     color = colors.onBackground,
                 )
@@ -134,9 +133,11 @@ private fun HomeAttendanceButton(
 private fun HomeAttendanceDashboardPreview() {
     SoptTheme {
         HomeSoptScheduleDashboard(
-            date = "TODO()",
-            scheduleType = "TODO()",
-            scheduleTitle = "TODO()",
+            HomeSoptScheduleModel(
+                date = "TODO()",
+                scheduleType = "TODO()",
+                scheduleTitle = "TODO()",
+            ),
             onDashboardClick = {},
             onAttendanceButtonClick = {},
         )

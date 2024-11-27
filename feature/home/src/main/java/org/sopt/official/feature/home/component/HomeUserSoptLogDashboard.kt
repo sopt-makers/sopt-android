@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
@@ -30,73 +27,13 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.SuitBold
 import org.sopt.official.feature.home.R.drawable.ic_soptlog
-import org.sopt.official.feature.home.component.UserSoptState.Member
-import org.sopt.official.feature.home.component.UserSoptState.NonMember
+import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
 internal fun HomeUserSoptLogDashBoard(
-    homeUserSoptLogModel: HomeUserSoptLogModel,
-    userSoptState: UserSoptState,
+    homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     modifier: Modifier = Modifier,
 ) {
-    val introduceText by remember {
-        mutableStateOf(
-            when (userSoptState) {
-                is NonMember -> buildAnnotatedString {
-                    withStyle(style = ParagraphStyle(lineHeight = 28.sp)) {
-                        withStyle(
-                            style = SpanStyle(
-                                fontFamily = SuitBold,
-                                fontSize = 18.sp,
-                                letterSpacing = (-0.02).em
-                            )
-                        ) { append("안녕하세요\nSOPT의 열정이 되어주세요!") }
-                    }
-                }
-
-                is Member -> buildAnnotatedString {
-                    withStyle(style = ParagraphStyle(lineHeight = 28.sp)) {
-                        withStyle(
-                            style = SpanStyle(
-                                fontFamily = SuitBold,
-                                fontSize = 18.sp,
-                                letterSpacing = (-0.02).em
-                            )
-                        ) { append(homeUserSoptLogModel.emphasizedDescription) }
-                        append(homeUserSoptLogModel.remainingDescription)
-                    }
-                }
-            }
-        )
-    }
-
-    val recentGenerationText by remember {
-        mutableStateOf(
-            when (userSoptState) {
-                is NonMember -> "비회원"
-                is Member -> userSoptState.recentGeneration
-            }
-        )
-    }
-
-    val isActivated by remember {
-        mutableStateOf(
-            when (userSoptState) {
-                is NonMember -> false
-                is Member -> userSoptState.isActivated
-            }
-        )
-    }
-
-    val generations by remember {
-        mutableStateOf(
-            when (userSoptState) {
-                is NonMember -> emptyList()
-                is Member -> userSoptState.lastGenerations
-            }
-        )
-    }
-
     HomeBox(
         modifier = modifier.fillMaxWidth(),
         content = {
@@ -106,15 +43,26 @@ internal fun HomeUserSoptLogDashBoard(
             ) {
                 Column {
                     Text(
-                        text = introduceText,
+                        text = buildAnnotatedString {
+                            withStyle(style = ParagraphStyle(lineHeight = 28.sp)) {
+                                withStyle(
+                                    style = SpanStyle(
+                                        fontFamily = SuitBold,
+                                        fontSize = 18.sp,
+                                        letterSpacing = (-0.02).em
+                                    )
+                                ) { append(homeUserSoptLogDashboardModel.emphasizedDescription) }
+                                append(homeUserSoptLogDashboardModel.remainingDescription)
+                            }
+                        },
                         style = typography.body18M,
                         color = colors.onBackground,
                     )
                     Spacer(modifier = Modifier.height(height = 12.dp))
                     HomeGenerationChips(
-                        isUserActivated = isActivated,
-                        userRecentGeneration = recentGenerationText,
-                        generations = generations,
+                        isUserActivated = homeUserSoptLogDashboardModel.isActivated,
+                        userRecentGeneration = homeUserSoptLogDashboardModel.recentGeneration,
+                        generations = homeUserSoptLogDashboardModel.lastGenerations,
                     )
                 }
                 Spacer(modifier = Modifier.weight(weight = 1f))
@@ -133,25 +81,7 @@ internal fun HomeUserSoptLogDashBoard(
 private fun HomeUserSoptLogDashBoardPreview() {
     SoptTheme {
         HomeUserSoptLogDashBoard(
-            homeUserSoptLogModel = HomeUserSoptLogModel(
-                activityDescription = "<b>김승환</b>님은\nSOPT와 15개월째"
-            ),
-            userSoptState = Member(
-                isActivated = true,
-                generations = listOf(1, 2, 3, 4, 5, 6, 7)
-            ),
+            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(true)
         )
     }
-}
-
-data class HomeUserSoptLogModel(
-    val activityDescription: String,
-) {
-    private val regex by lazy { Regex("<b>(.*?)</b>") }
-
-    val emphasizedDescription: String =
-        regex.find(activityDescription)?.groups?.get(1)?.value.orEmpty()
-
-    val remainingDescription: String =
-        " " + regex.replace(activityDescription, "").trim()
 }

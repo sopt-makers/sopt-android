@@ -1,6 +1,7 @@
 package org.sopt.official.feature.home.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Row
@@ -24,7 +25,10 @@ import org.sopt.official.feature.home.R.drawable.img_logo
 
 @Composable
 internal fun HomeTopBar(
+    isLogin: Boolean,
     hasNotification: Boolean,
+    onNotificationClick: () -> Unit,
+    onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -44,17 +48,21 @@ internal fun HomeTopBar(
             horizontalArrangement = spacedBy(space = 10.dp),
             verticalAlignment = CenterVertically,
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(
-                    if (hasNotification) ic_notification_on else ic_notification_off
-                ),
-                contentDescription = null,
-                tint = Unspecified,
-            )
+            if (isLogin) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(
+                        if (hasNotification) ic_notification_on else ic_notification_off
+                    ),
+                    contentDescription = null,
+                    tint = Unspecified,
+                    modifier = Modifier.clickable { onNotificationClick() },
+                )
+            }
             Icon(
                 imageVector = ImageVector.vectorResource(ic_setting),
                 contentDescription = null,
                 tint = Unspecified,
+                modifier = Modifier.clickable { onSettingClick() },
             )
         }
     }
@@ -65,7 +73,10 @@ internal fun HomeTopBar(
 private fun HomeTopBarPreview() {
     SoptTheme {
         HomeTopBar(
+            isLogin = false,
             hasNotification = true,
+            onSettingClick = {},
+            onNotificationClick = {},
         )
     }
 }
