@@ -19,7 +19,7 @@ import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun AuthTextField(
+internal fun AuthTextField(
     text: String,
     hintText: String,
     onTextChange: (String) -> Unit,

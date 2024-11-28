@@ -15,7 +15,7 @@ import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun AuthTextWithArrow(
+internal fun AuthTextWithArrow(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = SoptTheme.typography.label14SB,

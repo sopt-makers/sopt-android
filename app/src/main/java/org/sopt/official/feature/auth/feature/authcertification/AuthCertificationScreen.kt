@@ -9,17 +9,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.sopt.official.R.drawable.ic_auth_certification_error
 import org.sopt.official.R.drawable.ic_auth_process
 import org.sopt.official.designsystem.Black80
@@ -32,6 +36,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
+import org.sopt.official.feature.auth.feature.authcertification.component.AuthSnackBar
 import org.sopt.official.feature.auth.feature.authcertification.component.AuthTextField
 
 @Composable
@@ -39,6 +44,25 @@ private fun AuthCertificationScreen(
     modifier: Modifier = Modifier
 ) {
     // val authError = viewModel.collectAsState()
+
+    val snackBarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    val onShowSnackBar: (String?) -> Unit = { text ->
+        coroutineScope.launch {
+            snackBarHostState.currentSnackbarData?.dismiss()
+            snackBarHostState.showSnackbar(
+                message = text ?: "",
+            )
+        }
+    }
+
+    SnackbarHost(
+        hostState = snackBarHostState,
+        modifier = Modifier
+            .padding(top = 16.dp)
+    ) {
+        AuthSnackBar(message = it.visuals.message)
+    }
 
     Column(
         modifier = modifier
@@ -51,7 +75,6 @@ private fun AuthCertificationScreen(
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification()
-
         Spacer(modifier = Modifier.height(10.dp))
         AuthTextField(
             modifier = Modifier.fillMaxWidth(),

@@ -34,7 +34,7 @@ import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun LoginErrorDialog(
+internal fun LoginErrorDialog(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

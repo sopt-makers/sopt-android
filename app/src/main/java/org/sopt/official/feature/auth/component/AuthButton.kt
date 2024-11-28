@@ -16,7 +16,7 @@ import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.White
 
 @Composable
-fun AuthButton(
+internal fun AuthButton(
     paddingVertical: Dp,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
