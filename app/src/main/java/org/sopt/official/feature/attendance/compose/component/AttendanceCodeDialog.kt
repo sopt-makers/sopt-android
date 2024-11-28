@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose
+package org.sopt.official.feature.attendance.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,7 +28,6 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
