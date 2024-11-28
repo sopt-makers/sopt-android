@@ -68,8 +68,49 @@ private fun AuthCertificationScreen(
             ErrorText(text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.")
         }
 
-        Spacer(modifier = Modifier.height(20.dp))
-        CertificationResult()
+        val isEnable by remember { mutableStateOf(true) }
+        //todo: state로 빼기
+        AuthButton(
+            modifier = Modifier
+                .fillMaxWidth(),
+//                .border(
+//                    color = Gray10,
+//                    width = 1.dp,
+//                    shape = RoundedCornerShape(10.dp)
+//                ),
+            paddingVertical = 16.dp,
+            paddingHorizontal = 15.dp,
+            onClick = {},
+            containerColor = Black80,
+        ) {
+            Column {
+                AuthTextWithArrow(
+                    text = "전화번호로 SOPT 회원 인증에 실패하셨나요?",
+                    textStyle = SoptTheme.typography.body14M
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                Text(
+                    text = "전화번호가 바뀌었거나, 전화번호 인증이 어려우신 경우\n추가 정보 인증을 통해 가입을 도와드리고 있어요!",
+                    color = Gray60
+                )
+            }
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        AuthButton(
+            modifier = Modifier.fillMaxWidth(),
+            paddingVertical = 16.dp,
+            onClick = {},
+            containerColor = Gray10,
+            contentColor = Gray950,
+            disabledContentColor = Gray60,
+            isEnabled = isEnable
+        ) {
+            Text(
+                text = "SOPT 회원 인증 완료",
+                style = SoptTheme.typography.body14M
+            )
+        }
+        Spacer(modifier = Modifier.height(32.dp))
     }
 }
 
@@ -155,53 +196,6 @@ private fun PhoneCertification(
                     style = SoptTheme.typography.body14M
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun CertificationResult() {
-    //todo: state로 빼기
-    val isEnable by remember { mutableStateOf(true) }
-
-    AuthButton(
-        modifier = Modifier.fillMaxWidth(),
-        paddingVertical = 16.dp,
-        onClick = {},
-        containerColor = Gray10,
-        contentColor = Gray950,
-        disabledContentColor = Gray60,
-        isEnabled = isEnable
-    ) {
-        Text(
-            text = "SOPT 회원 인증 완료",
-            style = SoptTheme.typography.body14M
-        )
-    }
-    Spacer(modifier = Modifier.height(40.dp))
-    AuthButton(
-        modifier = Modifier
-            .fillMaxWidth(),
-//                .border(
-//                    color = Gray10,
-//                    width = 1.dp,
-//                    shape = RoundedCornerShape(10.dp)
-//                ),
-        paddingVertical = 16.dp,
-        paddingHorizontal = 15.dp,
-        onClick = {},
-        containerColor = Black80,
-    ) {
-        Column {
-            AuthTextWithArrow(
-                text = "전화번호로 SOPT 회원 인증에 실패하셨나요?",
-                textStyle = SoptTheme.typography.body14M
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "전화번호가 바뀌었거나, 전화번호 인증이 어려우신 경우\n추가 정보 인증을 통해 가입을 도와드리고 있어요!",
-                color = Gray60
-            )
         }
     }
 }
