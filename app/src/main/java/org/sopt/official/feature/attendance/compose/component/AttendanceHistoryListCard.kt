@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceHistory
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
 
 @Composable
 fun AttendanceHistoryListCard(

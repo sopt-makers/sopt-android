@@ -14,10 +14,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceSession
-import org.sopt.official.feature.attendance.model.FinalAttendance
-import org.sopt.official.feature.attendance.model.MidtermAttendance
-import org.sopt.official.feature.attendance.model.state.AttendanceProgressBarState
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceProgressBar(state: AttendanceProgressBarState, modifier: Modifier = Modifier) {
@@ -89,6 +88,12 @@ class AttendanceProgressBarPreviewParameterProvider(
         ),
     ),
 ) : PreviewParameterProvider<AttendanceProgressBarState>
+
+class AttendanceProgressBarState(
+    val firstAttendance: MidtermAttendance,
+    val secondAttendance: MidtermAttendance,
+    val finalAttendance: FinalAttendance,
+)
 
 @Preview(showBackground = true)
 @Composable
