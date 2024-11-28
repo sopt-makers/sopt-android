@@ -127,7 +127,11 @@ class HomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        tracker.track(type = EventType.VIEW, name = "apphome", properties = mapOf("view_type" to args?.userStatus?.value))
+        tracker.track(
+            type = EventType.VIEW,
+            name = "apphome",
+            properties = mapOf("view_type" to args?.userStatus?.value, "view_type" to args?.userStatus?.value)
+        )
 
         requestNotificationPermission()
         initToolbar()

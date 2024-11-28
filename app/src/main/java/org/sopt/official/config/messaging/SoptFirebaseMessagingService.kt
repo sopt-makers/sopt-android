@@ -35,72 +35,98 @@ import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessa
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.R
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
+import org.sopt.official.feature.notification.SchemeActivity.Argument.NotificationInfo
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
-  @Inject
-  lateinit var dataStore: SoptDataStore
+    @Inject
+    lateinit var dataStore: SoptDataStore
 
-  @Inject
-  lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
+    @Inject
+    lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
 
-  override fun onNewToken(token: String) {
-    if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
-    lifecycleScope.launch {
-      dataStore.pushToken = token
-      registerPushTokenUseCase.invoke(token)
-    }
-  }
+    @Inject
+    lateinit var tracker: AmplitudeTracker
 
-  override fun onMessageReceived(remoteMessage: RemoteMessage) {
-    super.onMessageReceived(remoteMessage)
-    if (remoteMessage.data.isEmpty()) return
-
-    val receivedData = remoteMessage.data
-    val notificationId = receivedData["id"] ?: ""
-    val title = receivedData["title"] ?: ""
-    val body = receivedData["content"] ?: ""
-    val webLink = receivedData["webLink"] ?: ""
-    val deepLink = receivedData["deepLink"] ?: ""
-
-    val notifyId = System.currentTimeMillis().toInt()
-    val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
-      .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setSmallIcon(R.drawable.img_logo_small)
-      .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setChannelId(getString(R.string.toolbar_notification)).setAutoCancel(true)
-
-    notificationBuilder.setNotificationContentIntent(
-      notificationId, webLink.ifBlank { deepLink.ifBlank { "" } }, notifyId
-    )
-
-    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.notify(notifyId, notificationBuilder.build())
-  }
-
-  private fun NotificationCompat.Builder.setNotificationContentIntent(
-    notificationId: String, link: String, notifyId: Int
-  ): NotificationCompat.Builder {
-    val intent = SchemeActivity.getIntent(
-      this@SoptFirebaseMessagingService, SchemeActivity.Argument(notificationId, link)
-    )
-
-    return this.setContentIntent(
-      PendingIntent.getActivity(
-        this@SoptFirebaseMessagingService, notifyId, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        } else {
-          PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    override fun onNewToken(token: String) {
+        if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
+        lifecycleScope.launch {
+            dataStore.pushToken = token
+            registerPushTokenUseCase.invoke(token)
         }
-      )
-    )
-  }
+    }
 
-  companion object {
-    const val NOTIFICATION_CHANNEL_ID = "SOPT"
-  }
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        super.onMessageReceived(remoteMessage)
+        if (remoteMessage.data.isEmpty()) return
+
+        val receivedData = remoteMessage.data
+        val notificationId = receivedData["id"] ?: ""
+        val title = receivedData["title"] ?: ""
+        val body = receivedData["content"] ?: ""
+        val category = receivedData["category"] ?: ""
+        val deepLink = receivedData["deepLink"] ?: ""
+        val webLink = receivedData["webLink"] ?: ""
+        val sendAt = receivedData["sendAt"] ?: ""
+        val relatedFeature = DeepLinkType.of(deepLink).name
+
+        tracker.track(
+            type = EventType.RECEIVED,
+            name = "push",
+            properties = mapOf(
+                "notification_id" to notificationId,
+                "send_timestamp" to sendAt,
+                "title" to title,
+                "contents" to body,
+                "relatedfeature" to relatedFeature,
+                "admin_category" to category
+            )
+        )
+
+        val notifyId = System.currentTimeMillis().toInt()
+        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setSmallIcon(R.drawable.img_logo_small)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setChannelId(getString(R.string.toolbar_notification)).setAutoCancel(true)
+
+        notificationBuilder.setNotificationContentIntent(
+            notificationId,
+            webLink.ifBlank { deepLink.ifBlank { "" } },
+            notifyId,
+            NotificationInfo(id = notificationId, sendAt = sendAt, title = title, content = body, relatedFeature = relatedFeature)
+        )
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notifyId, notificationBuilder.build())
+    }
+
+    private fun NotificationCompat.Builder.setNotificationContentIntent(
+        notificationId: String, link: String, notifyId: Int, notificationInfo: NotificationInfo
+    ): NotificationCompat.Builder {
+        val intent = SchemeActivity.getIntent(
+            this@SoptFirebaseMessagingService, SchemeActivity.Argument(notificationId, link, notificationInfo)
+        )
+
+        return this.setContentIntent(
+            PendingIntent.getActivity(
+                this@SoptFirebaseMessagingService, notifyId, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                } else {
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                }
+            )
+        )
+    }
+
+    companion object {
+        const val NOTIFICATION_CHANNEL_ID = "SOPT"
+    }
 }

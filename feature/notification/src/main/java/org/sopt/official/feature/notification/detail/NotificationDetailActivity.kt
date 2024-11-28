@@ -54,6 +54,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -65,12 +66,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.HOME_FORTUNE
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
 import java.time.LocalDate
+import javax.inject.Inject
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -83,9 +87,13 @@ private val navigator by lazy {
 class NotificationDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
+    @Inject
+    lateinit var tracker: AmplitudeTracker
+
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             val notification by viewModel.notificationDetail.collectAsStateWithLifecycle()
             val context = LocalContext.current
@@ -98,6 +106,19 @@ class NotificationDetailActivity : AppCompatActivity() {
 
                     snackBarHostState.showSnackbar(
                         message = text ?: "오류가 발생했어요. 다시 시도해주세요.",
+                    )
+                }
+            }
+
+            LaunchedEffect(notification) {
+                notification?.let { notification ->
+                    val link = notification.webLink ?: notification.deepLink
+                    tracker.track(
+                        type = EventType.VIEW, name = "notification_detail", properties = mapOf(
+                            "notification_id" to notification.notificationId,
+                            "open_method" to intent.getStringExtra(EXTRA_FROM),
+                            "contain_deeplink" to (link != null)
+                        )
                     )
                 }
             }
@@ -173,8 +194,15 @@ class NotificationDetailActivity : AppCompatActivity() {
                                     Column {
                                         Button(
                                             onClick = {
+                                                tracker.track(
+                                                    type = EventType.CLICK,
+                                                    name = "link.btn",
+                                                    properties = mapOf(
+                                                        "user_id" to notification?.userId,
+                                                        "notification_id" to notification?.notificationId
+                                                    )
+                                                )
                                                 val link = notification?.webLink ?: notification?.deepLink
-
                                                 when {
                                                     link == HOME_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
                                                         onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
@@ -246,5 +274,11 @@ class NotificationDetailActivity : AppCompatActivity() {
             "notificationId",
             notificationId
         )
+
+        const val EXTRA_FROM: String = "org.sopt.official.FROM"
+
+        enum class OpenMethod(val korName: String) {
+            ALARM_LIST("알림센터"), PUSH("푸시");
+        }
     }
 }

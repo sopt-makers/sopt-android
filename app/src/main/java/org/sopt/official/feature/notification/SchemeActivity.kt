@@ -31,15 +31,21 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
+import org.sopt.official.feature.notification.SchemeActivity.Argument.NotificationInfo
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.network.persistence.SoptDataStoreEntryPoint
 import timber.log.Timber
 import java.io.Serializable
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import javax.inject.Inject
 
 class SchemeActivity : AppCompatActivity() {
     private val dataStore by lazy {
@@ -49,9 +55,26 @@ class SchemeActivity : AppCompatActivity() {
     }
     private val args by serializableExtra(Argument("", ""))
 
+    @Inject
+    lateinit var tracker: AmplitudeTracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        trackClickPush()
         handleDeepLink()
+    }
+
+    private fun trackClickPush() {
+        args?.notificationInfo?.let { notificationInfo: NotificationInfo ->
+            tracker.track(
+                type = EventType.CLICK, name = "push", properties = mapOf(
+                    "notification_id" to notificationInfo.id,
+                    "send_timestamp" to notificationInfo.sendAt,
+                    "leadtime" to ChronoUnit.DAYS.between(LocalDate.parse(notificationInfo.sendAt), LocalDate.now()),
+                    "deeplink_url" to args?.link
+                )
+            )
+        }
     }
 
     private fun handleDeepLink() {
@@ -63,7 +86,10 @@ class SchemeActivity : AppCompatActivity() {
             )
         } else {
             checkLinkExpiration(link)
-        }
+        }.putExtra(
+            NotificationDetailActivity.EXTRA_FROM,
+            NotificationDetailActivity.Companion.OpenMethod.PUSH.korName
+        )
 
         when (!isTaskRoot) {
             true -> startActivity(linkIntent)
@@ -114,10 +140,23 @@ class SchemeActivity : AppCompatActivity() {
         return intent.action == Intent.ACTION_MAIN && (intent.categories?.contains(Intent.CATEGORY_LAUNCHER) == true)
     }
 
+    /**
+     *@param notificationInfo 푸시 알림을 클릭해서 들어온 경우, 푸시 알림에 관한 정보를 제공합니다.
+     * 푸시 알림을 통해 들어온 것이 아닐 경우에는 null 입니다.
+     * */
     data class Argument(
         val notificationId: String,
-        val link: String
-    ) : Serializable
+        val link: String,
+        val notificationInfo: NotificationInfo? = null
+    ) : Serializable {
+        data class NotificationInfo(
+            val id: String,
+            val sendAt: String,
+            val title: String,
+            val content: String,
+            val relatedFeature: String,
+        ) : Serializable
+    }
 
     companion object {
         @JvmStatic
