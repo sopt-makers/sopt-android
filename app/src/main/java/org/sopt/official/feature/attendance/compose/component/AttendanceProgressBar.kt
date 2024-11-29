@@ -19,13 +19,18 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.Atte
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
-fun AttendanceProgressBar(state: AttendanceProgressBarState, modifier: Modifier = Modifier) {
+fun AttendanceProgressBar(
+    firstAttendance: MidtermAttendance,
+    secondAttendance: MidtermAttendance,
+    finalAttendance: FinalAttendance,
+    modifier: Modifier = Modifier
+) {
     Box(modifier = modifier) {
         LinearProgressIndicator(
             progress = {
                 calculateAttendanceProgress(
-                    firstAttendance = state.firstAttendance,
-                    secondAttendance = state.secondAttendance
+                    firstAttendance = firstAttendance,
+                    secondAttendance = secondAttendance
                 )
             },
             modifier = Modifier
@@ -40,13 +45,13 @@ fun AttendanceProgressBar(state: AttendanceProgressBarState, modifier: Modifier 
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             MidtermAttendanceCard(
-                midtermAttendance = state.firstAttendance,
+                midtermAttendance = firstAttendance,
             )
             MidtermAttendanceCard(
-                midtermAttendance = state.secondAttendance,
+                midtermAttendance = secondAttendance,
             )
             FinalAttendanceCard(
-                finalAttendance = state.finalAttendance,
+                finalAttendance = finalAttendance,
             )
         }
     }
@@ -64,43 +69,48 @@ fun calculateAttendanceProgress(
     }
 }
 
-class AttendanceProgressBarPreviewParameterProvider(
-    override val values: Sequence<AttendanceProgressBarState> = sequenceOf(
-        AttendanceProgressBarState(
-            firstAttendance = MidtermAttendance.NotYet(AttendanceSession.FIRST),
-            secondAttendance = MidtermAttendance.NotYet(AttendanceSession.SECOND),
-            finalAttendance = FinalAttendance.NOT_YET,
-        ),
-        AttendanceProgressBarState(
-            firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-            secondAttendance = MidtermAttendance.Absent,
-            finalAttendance = FinalAttendance.LATE,
-        ),
-        AttendanceProgressBarState(
-            firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-            secondAttendance = MidtermAttendance.Present(attendanceAt = "16:00"),
-            finalAttendance = FinalAttendance.PRESENT,
-        ),
-        AttendanceProgressBarState(
-            firstAttendance = MidtermAttendance.Absent,
-            secondAttendance = MidtermAttendance.Absent,
-            finalAttendance = FinalAttendance.ABSENT,
-        ),
-    ),
-) : PreviewParameterProvider<AttendanceProgressBarState>
 
-class AttendanceProgressBarState(
+class AttendanceProgressBarPreviewParameter(
     val firstAttendance: MidtermAttendance,
     val secondAttendance: MidtermAttendance,
     val finalAttendance: FinalAttendance,
 )
 
+class AttendanceProgressBarPreviewParameterProvider(
+    override val values: Sequence<AttendanceProgressBarPreviewParameter> = sequenceOf(
+        AttendanceProgressBarPreviewParameter(
+            firstAttendance = MidtermAttendance.NotYet(AttendanceSession.FIRST),
+            secondAttendance = MidtermAttendance.NotYet(AttendanceSession.SECOND),
+            finalAttendance = FinalAttendance.NOT_YET,
+        ),
+        AttendanceProgressBarPreviewParameter(
+            firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+            secondAttendance = MidtermAttendance.Absent,
+            finalAttendance = FinalAttendance.LATE,
+        ),
+        AttendanceProgressBarPreviewParameter(
+            firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+            secondAttendance = MidtermAttendance.Present(attendanceAt = "16:00"),
+            finalAttendance = FinalAttendance.PRESENT,
+        ),
+        AttendanceProgressBarPreviewParameter(
+            firstAttendance = MidtermAttendance.Absent,
+            secondAttendance = MidtermAttendance.Absent,
+            finalAttendance = FinalAttendance.ABSENT,
+        ),
+    ),
+) : PreviewParameterProvider<AttendanceProgressBarPreviewParameter>
+
 @Preview(showBackground = true)
 @Composable
 private fun AttendanceProgressBarPreview(
-    @PreviewParameter(AttendanceProgressBarPreviewParameterProvider::class) attendanceProgressBarState: AttendanceProgressBarState,
+    @PreviewParameter(AttendanceProgressBarPreviewParameterProvider::class) attendanceProgressBarPreviewParameter: AttendanceProgressBarPreviewParameter,
 ) {
     SoptTheme {
-        AttendanceProgressBar(state = attendanceProgressBarState)
+        AttendanceProgressBar(
+            firstAttendance = attendanceProgressBarPreviewParameter.firstAttendance,
+            secondAttendance = attendanceProgressBarPreviewParameter.secondAttendance,
+            finalAttendance = attendanceProgressBarPreviewParameter.finalAttendance
+        )
     }
 }

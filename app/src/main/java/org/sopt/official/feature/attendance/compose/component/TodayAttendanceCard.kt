@@ -88,11 +88,9 @@ fun TodayAttendanceCard(
         }
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(
-            state = AttendanceProgressBarState(
-                firstAttendance = firstAttendance,
-                secondAttendance = secondAttendance,
-                finalAttendance = finalAttendance,
-            )
+            firstAttendance = firstAttendance,
+            secondAttendance = secondAttendance,
+            finalAttendance = finalAttendance,
         )
     }
 }
