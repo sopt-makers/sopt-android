@@ -120,17 +120,6 @@ ksp {
 
 dependencies {
     implementation(projects.core.designsystem)
-    implementation(projects.domain.soptamp)
-    implementation(projects.domain.mypage)
-    implementation(projects.domain.poke)
-    implementation(projects.domain.fortune)
-    implementation(projects.domain.notification)
-    implementation(projects.feature.soptamp)
-    implementation(projects.data.fortune)
-    implementation(projects.data.soptamp)
-    implementation(projects.data.mypage)
-    implementation(projects.data.poke)
-    implementation(projects.data.notification)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
@@ -138,12 +127,29 @@ dependencies {
     implementation(projects.core.authimpl)
     implementation(projects.core.security)
     implementation(projects.core.webview)
+
+    implementation(projects.domain.soptamp)
+    implementation(projects.domain.mypage)
+    implementation(projects.domain.poke)
+    implementation(projects.domain.fortune)
+    implementation(projects.domain.notification)
+    implementation(projects.domain.home)
+
+    implementation(projects.data.fortune)
+    implementation(projects.data.soptamp)
+    implementation(projects.data.mypage)
+    implementation(projects.data.poke)
+    implementation(projects.data.notification)
+    implementation(projects.data.home)
+
+    implementation(projects.feature.soptamp)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)
     implementation(projects.feature.notification)
     implementation(projects.feature.fortune)
     implementation(projects.feature.home)
+
     baselineProfile(projects.baselineprofile)
 
     implementation(libs.kotlin.coroutines.google.play)

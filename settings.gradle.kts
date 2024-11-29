@@ -32,6 +32,8 @@ include(
     ":data:soptamp",
     ":data:poke",
     ":data:fortune",
+    ":data:home",
+    ":domain:home",
     ":domain:fortune",
     ":domain:mypage",
     ":domain:notification",
