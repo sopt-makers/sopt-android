@@ -89,7 +89,7 @@ sealed interface AttendanceUiState {
             ) : AttendanceDayType
 
             /** 아무 일정이 없는 날 **/
-            data object NONE : AttendanceDayType
+            data object None : AttendanceDayType
         }
 
         enum class AttendanceResultType(val type: String) {

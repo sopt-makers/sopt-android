@@ -25,7 +25,8 @@ import org.sopt.official.designsystem.SoptTheme
 fun TodayNoAttendanceCard(
     eventDate: String,
     eventLocation: String,
-    eventName: String, modifier: Modifier = Modifier,
+    eventName: String,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier =

@@ -82,7 +82,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                     )
                 }
 
-                AttendanceDayType.NONE -> {
+                AttendanceDayType.None -> {
                     TodayNoScheduleCard(
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -216,7 +216,7 @@ class AttendanceScreenPreviewParameterProvider() :
             )
         ),
         AttendanceScreenPreviewParameter(
-            attendanceDayType = AttendanceDayType.NONE
+            attendanceDayType = AttendanceDayType.None
         )
     )
 }

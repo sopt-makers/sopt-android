@@ -27,7 +27,8 @@ fun AttendanceHistoryCard(
     attendanceScore: Int,
     totalAttendanceResult: Map<AttendanceResultType, Int>,
     attendanceHistoryList: ImmutableList<AttendanceHistory>,
-    scrollState: ScrollState, modifier: Modifier = Modifier,
+    scrollState: ScrollState,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
