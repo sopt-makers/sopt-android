@@ -17,7 +17,10 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
 
 @Composable
-fun FinalAttendanceCard(finalAttendance: FinalAttendance, modifier: Modifier = Modifier) {
+fun FinalAttendanceCard(
+    finalAttendance: FinalAttendance,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier.padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,

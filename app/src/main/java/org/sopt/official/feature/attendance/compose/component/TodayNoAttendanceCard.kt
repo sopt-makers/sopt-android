@@ -29,8 +29,7 @@ fun TodayNoAttendanceCard(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .background(
                 color = SoptTheme.colors.onSurface800,
                 shape = RoundedCornerShape(16.dp)
