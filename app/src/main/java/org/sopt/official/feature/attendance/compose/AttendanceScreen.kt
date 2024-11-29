@@ -20,8 +20,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -33,6 +31,7 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.compose.component.AttendanceGradientBox
 import org.sopt.official.feature.attendance.compose.component.AttendanceHistoryCard
 import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBar
 import org.sopt.official.feature.attendance.compose.component.TodayAttendanceCard
@@ -98,19 +97,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
             )
             Spacer(Modifier.height(36.dp))
         }
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(148.dp)
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0x000F1010), Color(0xFF0F1010)
-                        )
-                    )
-                )
-                .padding(bottom = 41.dp)
-        )
+        AttendanceGradientBox()
         TextButton(
             onClick = { /*TODO*/ },
             modifier = Modifier
