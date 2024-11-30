@@ -13,11 +13,14 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceType
-import org.sopt.official.feature.attendance.model.MidtermAttendance
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
-fun MidtermAttendanceCard(midtermAttendance: MidtermAttendance, modifier: Modifier = Modifier) {
+fun MidtermAttendanceCard(
+    midtermAttendance: MidtermAttendance,
+    modifier: Modifier = Modifier,
+) {
     Column(
         modifier = modifier.padding(horizontal = 12.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -36,10 +39,10 @@ fun MidtermAttendanceCard(midtermAttendance: MidtermAttendance, modifier: Modifi
 
 class MidtermAttendanceCardPreviewParameterProvider(
     override val values: Sequence<MidtermAttendance> = sequenceOf(
-        MidtermAttendance.NotYet(attendanceType = AttendanceType.FIRST),
+        MidtermAttendance.NotYet(attendanceSession = AttendanceSession.FIRST),
         MidtermAttendance.Present(attendanceAt = "14:00"),
         MidtermAttendance.Absent,
-    )
+    ),
 ) : PreviewParameterProvider<MidtermAttendance>
 
 @Preview(showBackground = true)

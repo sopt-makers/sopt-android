@@ -16,7 +16,11 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun AttendanceCountCard(resultType: String, count: Int, modifier: Modifier = Modifier) {
+fun AttendanceCountCard(
+    resultType: String,
+    count: Int,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = resultType,
