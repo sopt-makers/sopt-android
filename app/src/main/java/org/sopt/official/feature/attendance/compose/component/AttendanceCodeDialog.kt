@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose
+package org.sopt.official.feature.attendance.compose.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,14 +28,13 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
-import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
     codes: ImmutableList<String>,
     inputCodes: ImmutableList<String?>,
-    attendanceType: AttendanceType,
+    attendanceSession: AttendanceSession,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -58,7 +57,7 @@ fun AttendanceCodeDialog(
                     .clickable(onClick = onDismissRequest)
             )
             Text(
-                text = stringResource(R.string.attendance_do, attendanceType.type),
+                text = stringResource(R.string.attendance_do, attendanceSession.type),
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10
             )
@@ -114,7 +113,7 @@ private fun AttendanceCodeDialogPreview(
         AttendanceCodeDialog(
             codes = parameter.codes,
             inputCodes = parameter.inputCodes,
-            attendanceType = parameter.attendanceType,
+            attendanceSession = parameter.attendanceSession,
             modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {}
         )
@@ -124,7 +123,7 @@ private fun AttendanceCodeDialogPreview(
 data class AttendanceCodeDialogPreviewParameter(
     val codes: ImmutableList<String>,
     val inputCodes: ImmutableList<String?>,
-    val attendanceType: AttendanceType,
+    val attendanceSession: AttendanceSession,
 )
 
 class AttendanceCodeDialogPreviewParameterProvider :
@@ -134,22 +133,22 @@ class AttendanceCodeDialogPreviewParameterProvider :
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceType.FIRST,
+                AttendanceSession.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceType.FIRST,
+                AttendanceSession.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceType.SECOND,
+                AttendanceSession.SECOND,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceType.SECOND,
+                AttendanceSession.SECOND,
             ),
         )
 }
