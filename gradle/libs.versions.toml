@@ -59,7 +59,7 @@ deepLinkDispatch = "6.2.2"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"
-firebase = "33.6.0"
+firebase = "33.7.0"
 firebaseMessagingLifecycleKtx = "0.2.1"
 app-distribution = "5.0.0"
 ktlint = "12.1.2"
