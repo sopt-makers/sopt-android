@@ -28,7 +28,6 @@ import org.sopt.official.R.drawable.ic_auth_certification_error
 import org.sopt.official.R.drawable.ic_auth_process
 import org.sopt.official.designsystem.Black80
 import org.sopt.official.designsystem.Gray10
-import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.Gray950
@@ -47,12 +46,9 @@ private fun AuthCertificationScreen(
 
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val onShowSnackBar: (String?) -> Unit = { text ->
+    val onShowSnackBar: () -> Unit = {
         coroutineScope.launch {
             snackBarHostState.currentSnackbarData?.dismiss()
-            snackBarHostState.showSnackbar(
-                message = text ?: "",
-            )
         }
     }
 
@@ -75,7 +71,7 @@ private fun AuthCertificationScreen(
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification(
-            onPhoneNumberClick = {}
+            onPhoneNumberClick = onShowSnackBar
         )
         Spacer(modifier = Modifier.height(10.dp))
         AuthTextField(
@@ -214,11 +210,11 @@ private fun PhoneCertification(
                 onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,
-                disabledContentColor = Gray30,
                 isEnabled = isEnable
             ) {
+                // todo: if(onClick) {CHANGE_CODE}
                 Text(
-                    text = "인증번호 받기",
+                    text = AuthCertificationDefaults.GET_CODE,
                     style = SoptTheme.typography.body14M
                 )
             }
@@ -246,6 +242,11 @@ private fun ErrorText(
             style = SoptTheme.typography.label12SB
         )
     }
+}
+
+object AuthCertificationDefaults {
+    const val GET_CODE = "인증번호 받기"
+    const val CHANGE_CODE = "재전송하기"
 }
 
 @Preview(showBackground = true)
