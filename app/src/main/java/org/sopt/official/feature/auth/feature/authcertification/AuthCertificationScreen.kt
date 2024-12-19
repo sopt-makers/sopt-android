@@ -36,8 +36,8 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
-import org.sopt.official.feature.auth.feature.authcertification.component.AuthSnackBar
 import org.sopt.official.feature.auth.feature.authcertification.component.AuthTextField
+import org.sopt.official.feature.auth.feature.authcertification.component.CertificationSnackBar
 
 @Composable
 private fun AuthCertificationScreen(
@@ -61,7 +61,7 @@ private fun AuthCertificationScreen(
         modifier = Modifier
             .padding(top = 16.dp)
     ) {
-        AuthSnackBar(message = it.visuals.message)
+        CertificationSnackBar()
     }
 
     Column(
@@ -74,7 +74,9 @@ private fun AuthCertificationScreen(
         Spacer(modifier = Modifier.height(72.dp))
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
-        PhoneCertification()
+        PhoneCertification(
+            onPhoneNumberClick = {}
+        )
         Spacer(modifier = Modifier.height(10.dp))
         AuthTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -181,7 +183,8 @@ private fun TopBar(
 private fun PhoneCertification(
     modifier: Modifier = Modifier,
     phoneNumber: String = "",
-    certificateNumber: String = ""
+    certificateNumber: String = "",
+    onPhoneNumberClick: () -> Unit
 ) {
     //todo: state로 빼기
     val isEnable by remember { mutableStateOf(true) }
@@ -208,7 +211,7 @@ private fun PhoneCertification(
             AuthButton(
                 paddingHorizontal = 14.dp,
                 paddingVertical = 16.dp,
-                onClick = {},
+                onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,
                 disabledContentColor = Gray30,
