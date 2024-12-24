@@ -35,13 +35,12 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
-import org.sopt.official.feature.auth.feature.authcertification.component.AuthTextField
+import org.sopt.official.feature.auth.component.PhoneCertification
+import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.feature.authcertification.component.CertificationSnackBar
 
 @Composable
-private fun AuthCertificationScreen(
-    modifier: Modifier = Modifier
-) {
+private fun AuthCertificationScreen() {
     // val authError = viewModel.collectAsState()
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -61,7 +60,7 @@ private fun AuthCertificationScreen(
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -71,7 +70,8 @@ private fun AuthCertificationScreen(
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification(
-            onPhoneNumberClick = onShowSnackBar
+            onPhoneNumberClick = onShowSnackBar,
+            textColor = Gray80
         )
         Spacer(modifier = Modifier.height(10.dp))
         AuthTextField(
@@ -176,53 +176,6 @@ private fun TopBar(
 }
 
 @Composable
-private fun PhoneCertification(
-    modifier: Modifier = Modifier,
-    phoneNumber: String = "",
-    certificateNumber: String = "",
-    onPhoneNumberClick: () -> Unit
-) {
-    //todo: state로 빼기
-    val isEnable by remember { mutableStateOf(true) }
-
-    Column(modifier = modifier) {
-        Text(
-            text = "전화번호",
-            color = Gray80,
-            style = SoptTheme.typography.body14M
-        )
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(7.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AuthTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                text = phoneNumber,
-                hintText = "010-XXXX-XXXX",
-                onTextChange = {}
-            )
-            AuthButton(
-                paddingHorizontal = 14.dp,
-                paddingVertical = 16.dp,
-                onClick = onPhoneNumberClick,
-                containerColor = Gray10,
-                contentColor = Gray950,
-                isEnabled = isEnable
-            ) {
-                // todo: if(onClick) {CHANGE_CODE}
-                Text(
-                    text = AuthCertificationDefaults.GET_CODE,
-                    style = SoptTheme.typography.body14M
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun ErrorText(
     text: String
 ) {
@@ -243,12 +196,6 @@ private fun ErrorText(
         )
     }
 }
-
-object AuthCertificationDefaults {
-    const val GET_CODE = "인증번호 받기"
-    const val CHANGE_CODE = "재전송하기"
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun AuthCertificationPreview() {
