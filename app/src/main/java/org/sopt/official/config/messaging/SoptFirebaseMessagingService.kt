@@ -35,8 +35,6 @@ import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessa
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.analytics.AmplitudeTracker
-import org.sopt.official.analytics.EventType
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
@@ -54,9 +52,6 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
     @Inject
     lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
 
-    @Inject
-    lateinit var tracker: AmplitudeTracker
-
     override fun onNewToken(token: String) {
         if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return
         lifecycleScope.launch {
@@ -73,24 +68,10 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         val notificationId = receivedData["id"] ?: ""
         val title = receivedData["title"] ?: ""
         val body = receivedData["content"] ?: ""
-        val category = receivedData["category"] ?: ""
         val deepLink = receivedData["deepLink"] ?: ""
         val webLink = receivedData["webLink"] ?: ""
         val sendAt = receivedData["sendAt"] ?: ""
         val relatedFeature = DeepLinkType.of(deepLink).name
-
-        tracker.track(
-            type = EventType.RECEIVED,
-            name = "push",
-            properties = mapOf(
-                "notification_id" to notificationId,
-                "send_timestamp" to sendAt,
-                "title" to title,
-                "contents" to body,
-                "relatedfeature" to relatedFeature,
-                "admin_category" to category
-            )
-        )
 
         val notifyId = System.currentTimeMillis().toInt()
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
