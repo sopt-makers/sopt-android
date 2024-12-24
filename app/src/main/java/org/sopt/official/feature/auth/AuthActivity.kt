@@ -194,8 +194,6 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
         }
-
-
     }
 
     @Composable
