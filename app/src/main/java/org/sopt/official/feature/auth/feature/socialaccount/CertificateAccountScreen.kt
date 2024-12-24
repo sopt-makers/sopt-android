@@ -21,7 +21,7 @@ import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
-fun SocialAccountScreen(
+fun CertificateAccountScreen(
 
 ) {
     Column(
@@ -73,6 +73,6 @@ fun SocialAccountScreen(
 @Composable
 private fun SocialAccountPreview() {
     SoptTheme {
-        SocialAccountScreen()
+        CertificateAccountScreen()
     }
 }

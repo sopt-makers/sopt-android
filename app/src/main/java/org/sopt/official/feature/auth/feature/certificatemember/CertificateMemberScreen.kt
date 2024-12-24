@@ -1,4 +1,4 @@
-package org.sopt.official.feature.auth.feature.authcertification
+package org.sopt.official.feature.auth.feature.certificatemember
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -37,10 +37,10 @@ import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.PhoneCertification
 import org.sopt.official.feature.auth.component.AuthTextField
-import org.sopt.official.feature.auth.feature.authcertification.component.CertificationSnackBar
+import org.sopt.official.feature.auth.component.CertificationSnackBar
 
 @Composable
-private fun AuthCertificationScreen() {
+fun CertificateMemberScreen() {
     // val authError = viewModel.collectAsState()
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -196,10 +196,11 @@ private fun ErrorText(
         )
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 private fun AuthCertificationPreview() {
     SoptTheme {
-        AuthCertificationScreen()
+        CertificateMemberScreen()
     }
 }
