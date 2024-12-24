@@ -8,6 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,19 +22,20 @@ import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 
-object AuthCertificationDefaults {
-    const val GET_CODE = "인증번호 요청"
-    const val CHANGE_CODE = "재전송하기"
+enum class CertificationButtonText(val message: String) {
+    GET_CODE("인증번호 요청"),
+    CHANGE_CODE("재전송하기")
 }
 
 @Composable
 internal fun PhoneCertification(
     modifier: Modifier = Modifier,
     phoneNumber: String = "",
-    certificateNumber: String = "",
     onPhoneNumberClick: () -> Unit,
     textColor: Color,
 ) {
+    var buttonState by remember { mutableStateOf(CertificationButtonText.GET_CODE) }
+
     Column(modifier = modifier) {
         Text(
             text = "전화번호",
@@ -57,9 +62,9 @@ internal fun PhoneCertification(
                 containerColor = Gray10,
                 contentColor = Gray950,
             ) {
-                // todo: if(onClick) {CHANGE_CODE}
+                // todo: 클릭에 따라 버튼 상태 바뀌게 수정
                 Text(
-                    text = AuthCertificationDefaults.GET_CODE,
+                    text = buttonState.message,
                     style = SoptTheme.typography.body14M
                 )
             }

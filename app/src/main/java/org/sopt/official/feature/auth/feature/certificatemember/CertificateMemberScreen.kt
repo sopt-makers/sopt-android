@@ -1,6 +1,7 @@
 package org.sopt.official.feature.auth.feature.certificatemember
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +10,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -25,8 +25,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.sopt.official.R.drawable.ic_auth_certification_error
+import org.sopt.official.R.drawable.ic_auth_memeber_error
 import org.sopt.official.R.drawable.ic_auth_process
-import org.sopt.official.designsystem.Black80
+import org.sopt.official.designsystem.Blue500
+import org.sopt.official.designsystem.BlueAlpha100
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
@@ -34,15 +36,13 @@ import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
-import org.sopt.official.feature.auth.component.AuthTextWithArrow
-import org.sopt.official.feature.auth.component.PhoneCertification
 import org.sopt.official.feature.auth.component.AuthTextField
+import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.CertificationSnackBar
+import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
 fun CertificateMemberScreen() {
-    // val authError = viewModel.collectAsState()
-
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val onShowSnackBar: () -> Unit = {
@@ -80,40 +80,38 @@ fun CertificateMemberScreen() {
             hintText = "인증번호를 입력해 주세요.",
             onTextChange = {}
         )
-
-        if (true) {
-            ErrorText(text = "인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요.")
-        }
-
-        if (true) {
-            ErrorText(text = "솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요.")
-        }
-
-        val isEnable by remember { mutableStateOf(true) }
-        //todo: state로 빼기
+        Spacer(modifier = Modifier.height(41.dp))
         AuthButton(
             modifier = Modifier
-                .fillMaxWidth(),
-//                .border(
-//                    color = Gray10,
-//                    width = 1.dp,
-//                    shape = RoundedCornerShape(10.dp)
-//                ),
-            paddingVertical = 16.dp,
-            paddingHorizontal = 15.dp,
+                .fillMaxWidth()
+                .border(
+                    color = Blue500,
+                    width = 1.dp,
+                    shape = RoundedCornerShape(10.dp)
+                ),
+            paddingVertical = 14.dp,
+            paddingHorizontal = 18.dp,
             onClick = {},
-            containerColor = Black80,
+            containerColor = BlueAlpha100,
         ) {
-            Column {
-                AuthTextWithArrow(
-                    text = "전화번호로 SOPT 회원 인증에 실패하셨나요?",
-                    textStyle = SoptTheme.typography.body14M
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Image(
+                    painterResource(id = ic_auth_memeber_error),
+                    contentDescription = "에러 아이콘",
                 )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "전화번호가 바뀌었거나, 전화번호 인증이 어려우신 경우\n추가 정보 인증을 통해 가입을 도와드리고 있어요!",
-                    color = Gray60
-                )
+                Column {
+                    AuthTextWithArrow(
+                        text = "SOPT 회원 인증에 실패하셨나요?",
+                        textStyle = SoptTheme.typography.body14M
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "번호가 바뀌었거나, 인증이 어려우신 경우 추가 정보 인증을 통해 가입을 도와드리고 있어요!",
+                        color = Gray60
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.weight(1f))
@@ -124,7 +122,7 @@ fun CertificateMemberScreen() {
             containerColor = Gray10,
             contentColor = Gray950,
             disabledContentColor = Gray60,
-            isEnabled = isEnable
+            // todo: isEnabled = isEnable
         ) {
             Text(
                 text = "SOPT 회원 인증 완료",
@@ -177,24 +175,29 @@ private fun TopBar(
 
 @Composable
 private fun ErrorText(
-    text: String
+    error: ErrorCase
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painterResource(id = ic_auth_certification_error),
             contentDescription = "에러 아이콘",
         )
         Text(
-            text = text,
+            text = error.message,
             color = Color(0XFFBD372F),
             style = SoptTheme.typography.label12SB
         )
     }
+}
+
+enum class ErrorCase(val message: String) {
+    CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
+    PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
 }
 
 @Preview(showBackground = true)
