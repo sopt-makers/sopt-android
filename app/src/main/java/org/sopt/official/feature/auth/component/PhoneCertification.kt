@@ -73,7 +73,7 @@ internal fun PhoneCertification(
 
 @Preview(showBackground = true)
 @Composable
-fun PhoneCertificationPreview() {
+private fun PhoneCertificationPreview() {
     SoptTheme {
         PhoneCertification(
             onPhoneNumberClick = {},
