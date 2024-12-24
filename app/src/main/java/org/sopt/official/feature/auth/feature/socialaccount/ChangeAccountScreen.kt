@@ -20,7 +20,7 @@ import org.sopt.official.feature.auth.component.AuthButton
 
 @Composable
 fun ChangeAccountScreen(
-    onGoogleLoginCLick : ()-> Unit
+    onGoogleLoginCLick: () -> Unit
 ) {
     Column(
         modifier = Modifier
