@@ -22,6 +22,7 @@ import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 internal fun CertificationSnackBar(
+    message: String,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -38,7 +39,7 @@ internal fun CertificationSnackBar(
             contentDescription = "인증 확인 아이콘"
         )
         Text(
-            text = "인증번호가 전송되었어요.",
+            text = message,
             style = SoptTheme.typography.title14SB
         )
     }
@@ -48,6 +49,8 @@ internal fun CertificationSnackBar(
 @Preview(showBackground = true)
 private fun AuthSnackBarPreview() {
     SoptTheme {
-        CertificationSnackBar()
+        CertificationSnackBar(
+            message = "인증번호가 전송되었어요."
+        )
     }
 }

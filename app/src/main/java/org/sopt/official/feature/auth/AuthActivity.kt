@@ -86,6 +86,7 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.LoginErrorDialog
+import org.sopt.official.feature.auth.feature.certificatemember.CertificateMemberScreen
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -194,6 +195,8 @@ class AuthActivity : AppCompatActivity() {
                 )
             }
         }
+
+
     }
 
     @Composable
@@ -202,7 +205,6 @@ class AuthActivity : AppCompatActivity() {
         onGoogleLoginCLick: () -> Unit,
         onLoginLaterClick: () -> Unit
     ) {
-        // TODO: state,side effect
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
 

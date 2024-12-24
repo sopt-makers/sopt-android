@@ -21,9 +21,7 @@ import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
-fun CertificateAccountScreen(
-
-) {
+fun CertificateAccountScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()

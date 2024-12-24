@@ -19,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -30,9 +29,11 @@ import org.sopt.official.R.drawable.ic_auth_process
 import org.sopt.official.designsystem.Blue500
 import org.sopt.official.designsystem.BlueAlpha100
 import org.sopt.official.designsystem.Gray10
+import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.Gray950
+import org.sopt.official.designsystem.Red100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
@@ -47,7 +48,7 @@ fun CertificateMemberScreen() {
     val coroutineScope = rememberCoroutineScope()
     val onShowSnackBar: () -> Unit = {
         coroutineScope.launch {
-            snackBarHostState.currentSnackbarData?.dismiss()
+            snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
         }
     }
 
@@ -55,9 +56,11 @@ fun CertificateMemberScreen() {
         hostState = snackBarHostState,
         modifier = Modifier
             .padding(top = 16.dp)
-    ) {
-        CertificationSnackBar()
-    }
+            .padding(horizontal = 16.dp),
+        snackbar = { message ->
+            CertificationSnackBar(message = message.visuals.message)
+        }
+    )
 
     Column(
         modifier = Modifier
@@ -65,7 +68,6 @@ fun CertificateMemberScreen() {
             .padding(horizontal = 24.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // todo: 화면 비율 계산
         Spacer(modifier = Modifier.height(72.dp))
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
@@ -94,9 +96,7 @@ fun CertificateMemberScreen() {
             onClick = {},
             containerColor = BlueAlpha100,
         ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 Image(
                     painterResource(id = ic_auth_memeber_error),
                     contentDescription = "에러 아이콘",
@@ -122,7 +122,6 @@ fun CertificateMemberScreen() {
             containerColor = Gray10,
             contentColor = Gray950,
             disabledContentColor = Gray60,
-            // todo: isEnabled = isEnable
         ) {
             Text(
                 text = "SOPT 회원 인증 완료",
@@ -154,8 +153,7 @@ private fun TopBar(
             )
             Text(
                 text = "소셜 계정 연동",
-                // todo: 색상 문의
-                color = Color(0XFF606265),
+                color = Gray100,
                 style = SoptTheme.typography.label12SB
             )
         }
@@ -188,7 +186,7 @@ private fun ErrorText(
         )
         Text(
             text = error.message,
-            color = Color(0XFFBD372F),
+            color = Red100,
             style = SoptTheme.typography.label12SB
         )
     }

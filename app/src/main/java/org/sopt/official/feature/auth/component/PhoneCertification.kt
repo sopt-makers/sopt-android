@@ -29,10 +29,10 @@ enum class CertificationButtonText(val message: String) {
 
 @Composable
 internal fun PhoneCertification(
-    modifier: Modifier = Modifier,
-    phoneNumber: String = "",
     onPhoneNumberClick: () -> Unit,
     textColor: Color,
+    modifier: Modifier = Modifier,
+    phoneNumber: String = "",
 ) {
     var buttonState by remember { mutableStateOf(CertificationButtonText.GET_CODE) }
 
@@ -62,7 +62,6 @@ internal fun PhoneCertification(
                 containerColor = Gray10,
                 contentColor = Gray950,
             ) {
-                // todo: 클릭에 따라 버튼 상태 바뀌게 수정
                 Text(
                     text = buttonState.message,
                     style = SoptTheme.typography.body14M
