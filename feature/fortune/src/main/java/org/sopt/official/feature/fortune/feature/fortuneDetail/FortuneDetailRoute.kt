@@ -47,8 +47,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType.CLICK
 import org.sopt.official.analytics.EventType.VIEW
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
@@ -73,7 +73,7 @@ internal fun FortuneDetailRoute(
     var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
-    val amplitudeTracker = LocalAmplitudeTracker.current
+    val amplitudeTracker = LocalTracker.current
 
     LaunchedEffect(key1 = uiState) {
         if (uiState is Success) {

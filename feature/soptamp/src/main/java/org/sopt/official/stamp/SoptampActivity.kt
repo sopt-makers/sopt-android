@@ -30,46 +30,40 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
-import org.sopt.official.analytics.impl.AmplitudeTracker
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.stamp.feature.NavGraphs
-
-val LocalTracker = staticCompositionLocalOf<AmplitudeTracker> {
-  error("No AmplitudeTracker provided")
-}
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
-  @Inject
-  lateinit var tracker: AmplitudeTracker
+    @Inject
+    lateinit var tracker: Tracker
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContent {
-      val view = LocalView.current
-      if (!view.isInEditMode) {
-        SideEffect {
-          window.statusBarColor = Color.WHITE
-          WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            val view = LocalView.current
+            if (!view.isInEditMode) {
+                SideEffect {
+                    window.statusBarColor = Color.WHITE
+                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+                }
+            }
+            ProvideTracker(tracker) {
+                DestinationsNavHost(navGraph = NavGraphs.root)
+            }
         }
-      }
-
-      CompositionLocalProvider(LocalTracker provides tracker) {
-        DestinationsNavHost(navGraph = NavGraphs.root)
-      }
     }
-  }
 
-  companion object {
-    fun getIntent(context: Context): Intent {
-      return Intent(context, SoptampActivity::class.java)
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, SoptampActivity::class.java)
+        }
     }
-  }
 }

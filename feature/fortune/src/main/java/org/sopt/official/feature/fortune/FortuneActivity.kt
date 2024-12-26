@@ -29,11 +29,10 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
@@ -47,10 +46,6 @@ private val navigator by lazy {
     ).navigatorProvider()
 }
 
-internal val LocalAmplitudeTracker = staticCompositionLocalOf<AmplitudeTracker> {
-    error("No AmplitudeTracker provided")
-}
-
 @AndroidEntryPoint
 @DeepLink("sopt://fortune")
 class FortuneActivity : AppCompatActivity() {
@@ -62,7 +57,7 @@ class FortuneActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                CompositionLocalProvider(LocalAmplitudeTracker provides amplitudeTracker) {
+                ProvideTracker(amplitudeTracker) {
                     FoundationScreen(
                         onClickLeadingIcon = ::finish,
                         navigateToHome = {
