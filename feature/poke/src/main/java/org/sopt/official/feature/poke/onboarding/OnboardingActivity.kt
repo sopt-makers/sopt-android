@@ -37,7 +37,7 @@ import java.io.Serializable
 import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.analytics.EventType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding

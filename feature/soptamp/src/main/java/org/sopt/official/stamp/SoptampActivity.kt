@@ -38,7 +38,7 @@ import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
-import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.stamp.feature.NavGraphs
 
 val LocalTracker = staticCompositionLocalOf<AmplitudeTracker> {

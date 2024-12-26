@@ -34,7 +34,7 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
