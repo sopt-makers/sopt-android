@@ -150,7 +150,7 @@ dependencies {
     implementation(libs.bundles.compose)
     implementation(libs.startup)
     implementation(libs.swipe.refresh.layout)
-    implementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.tooling)
 
     implementation(libs.inappupdate)
 
