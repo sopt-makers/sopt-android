@@ -109,7 +109,7 @@ class AuthActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val action by viewModel.action.collectAsStateWithLifecycle()
+                val action by viewModel.loginDialogAction.collectAsStateWithLifecycle()
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {

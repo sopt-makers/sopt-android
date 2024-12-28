@@ -50,8 +50,8 @@ class AuthViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    private val _action = MutableStateFlow<Boolean?>(null)
-    val action: StateFlow<Boolean?> = _action.asStateFlow()
+    private val _loginDialogAction = MutableStateFlow<Boolean?>(null)
+    val  loginDialogAction: StateFlow<Boolean?> = _loginDialogAction.asStateFlow()
 
     suspend fun onLogin(auth: Auth) {
         loginUseCase(auth)
@@ -64,6 +64,6 @@ class AuthViewModel @Inject constructor(
     }
 
     fun showLoginErrorDialog(visible: Boolean) {
-        _action.update { visible }
+        _loginDialogAction.update { visible }
     }
 }
