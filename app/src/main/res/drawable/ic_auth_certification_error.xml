@@ -2,7 +2,7 @@
 <!--
     MIT License
 
-    Copyright (c) 2022-2024 SOPT Makers
+    Copyright (c) 2024 SOPT Makers
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,20 @@
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
     SOFTWARE.
 -->
-<full-backup-content>
-   <exclude domain="sharedpref" path="sampleKey.xml"/>
-</full-backup-content>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="14dp"
+    android:height="14dp"
+    android:viewportWidth="14"
+    android:viewportHeight="14">
+  <group>
+    <clip-path
+        android:pathData="M0,0h14v14h-14z"/>
+    <path
+        android:strokeWidth="1"
+        android:pathData="M7,4.667V7M7,9.334H7.006M12.834,7C12.834,10.222 10.222,12.834 7,12.834C3.779,12.834 1.167,10.222 1.167,7C1.167,3.779 3.779,1.167 7,1.167C10.222,1.167 12.834,3.779 12.834,7Z"
+        android:strokeLineJoin="round"
+        android:fillColor="#00000000"
+        android:strokeColor="#F04251"
+        android:strokeLineCap="round"/>
+  </group>
+</vector>
