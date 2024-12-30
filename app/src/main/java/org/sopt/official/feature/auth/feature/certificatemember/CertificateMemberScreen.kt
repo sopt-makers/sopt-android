@@ -71,9 +71,11 @@ import org.sopt.official.feature.auth.component.PhoneCertification
 fun CertificateMemberScreen() {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val onShowSnackBar: () -> Unit = {
-        coroutineScope.launch {
-            snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
+    val onShowSnackBar: () -> Unit = remember {
+        {
+            coroutineScope.launch {
+                snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
+            }
         }
     }
 
