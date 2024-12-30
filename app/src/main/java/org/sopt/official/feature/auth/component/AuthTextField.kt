@@ -62,12 +62,13 @@ internal fun AuthTextField(
             .padding(vertical = 15.dp, horizontal = 20.dp),
         textStyle = SoptTheme.typography.body14M.copy(color = Gray10),
         decorationBox = { innerTextField ->
-            if (text.isEmpty())
+            if (text.isEmpty()) {
                 Text(
                     text = hintText,
                     color = Gray100,
                     style = SoptTheme.typography.body14M
                 )
+            }
             innerTextField()
         }
     )
