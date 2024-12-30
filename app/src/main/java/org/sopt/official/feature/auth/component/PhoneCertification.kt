@@ -76,7 +76,7 @@ internal fun PhoneCertification(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
-                text = phoneNumber,
+                labelText = phoneNumber,
                 hintText = "010-XXXX-XXXX",
                 onTextChange = {}
             )

@@ -72,7 +72,7 @@ fun CertificateAccountScreen() {
         Spacer(modifier = Modifier.height(12.dp))
         AuthTextField(
             modifier = Modifier.fillMaxWidth(),
-            text = "",
+            labelText = "",
             hintText = "인증번호를 입력해 주세요.",
             onTextChange = {}
         )

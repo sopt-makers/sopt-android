@@ -44,7 +44,7 @@ import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 internal fun AuthTextField(
-    text: String,
+    labelText: String,
     hintText: String,
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -52,7 +52,7 @@ internal fun AuthTextField(
     var isFocused by remember { mutableStateOf(false) }
 
     BasicTextField(
-        value = text,
+        value = labelText,
         onValueChange = onTextChange,
         modifier = modifier
             .background(color = Black60, shape = RoundedCornerShape(10.dp))
@@ -62,7 +62,7 @@ internal fun AuthTextField(
             .padding(vertical = 15.dp, horizontal = 20.dp),
         textStyle = SoptTheme.typography.body14M.copy(color = Gray10),
         decorationBox = { innerTextField ->
-            if (text.isEmpty()) {
+            if (labelText.isEmpty()) {
                 Text(
                     text = hintText,
                     color = Gray100,
