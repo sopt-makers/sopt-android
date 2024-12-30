@@ -62,6 +62,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -311,7 +312,7 @@ class AuthActivity : AppCompatActivity() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             HorizontalDivider(
-                thickness = 0.6.dp,
+                thickness = Dp.Hairline,
                 color = Gray300,
                 modifier = Modifier.weight(1f)
             )
@@ -321,7 +322,7 @@ class AuthActivity : AppCompatActivity() {
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
             HorizontalDivider(
-                thickness = 0.6.dp,
+                thickness = Dp.Hairline,
                 color = Gray300,
                 modifier = Modifier.weight(1f)
             )
