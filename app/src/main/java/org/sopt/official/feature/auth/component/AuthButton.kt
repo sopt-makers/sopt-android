@@ -32,7 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Black80
@@ -41,10 +40,9 @@ import org.sopt.official.designsystem.White
 
 @Composable
 internal fun AuthButton(
-    paddingVertical: Dp,
+    padding: PaddingValues,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    paddingHorizontal: Dp = 0.dp,
     shape: Shape = RoundedCornerShape(10.dp),
     containerColor: Color = White,
     contentColor: Color = Black,
@@ -56,7 +54,7 @@ internal fun AuthButton(
     Button(
         onClick = onClick,
         enabled = isEnabled,
-        contentPadding = PaddingValues(vertical = paddingVertical, horizontal = paddingHorizontal),
+        contentPadding = padding,
         shape = shape,
         modifier = modifier,
         colors = ButtonDefaults.buttonColors(

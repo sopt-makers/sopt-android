@@ -28,6 +28,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -115,8 +116,7 @@ fun CertificateMemberScreen() {
                     width = 1.dp,
                     shape = RoundedCornerShape(10.dp)
                 ),
-            paddingVertical = 14.dp,
-            paddingHorizontal = 18.dp,
+            padding = PaddingValues(vertical = 14.dp, horizontal = 18.dp),
             onClick = {},
             containerColor = BlueAlpha100,
         ) {
@@ -141,7 +141,7 @@ fun CertificateMemberScreen() {
         Spacer(modifier = Modifier.weight(1f))
         AuthButton(
             modifier = Modifier.fillMaxWidth(),
-            paddingVertical = 16.dp,
+            padding = PaddingValues(vertical = 16.dp),
             onClick = {},
             containerColor = Gray10,
             contentColor = Gray950,

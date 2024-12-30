@@ -26,6 +26,7 @@ package org.sopt.official.feature.auth.feature.autherror
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -85,7 +86,7 @@ fun AuthErrorScreen(
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             shape = RoundedCornerShape(12.dp),
-            paddingVertical = 16.dp
+            padding = PaddingValues(vertical = 16.dp),
         ) {
             Text(
                 text = "다시 로그인하기",

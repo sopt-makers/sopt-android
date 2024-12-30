@@ -26,6 +26,7 @@ package org.sopt.official.feature.auth.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -80,8 +81,7 @@ internal fun PhoneCertification(
                 onTextChange = {}
             )
             AuthButton(
-                paddingHorizontal = 14.dp,
-                paddingVertical = 16.dp,
+                padding = PaddingValues(vertical = 16.dp, horizontal = 14.dp),
                 onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,

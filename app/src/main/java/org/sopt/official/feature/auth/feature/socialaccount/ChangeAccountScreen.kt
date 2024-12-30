@@ -26,6 +26,7 @@ package org.sopt.official.feature.auth.feature.socialaccount
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -59,7 +60,7 @@ fun ChangeAccountScreen(
         )
         Spacer(modifier = Modifier.height(36.dp))
         AuthButton(
-            paddingVertical = 13.dp,
+            padding = PaddingValues(vertical = 13.dp),
             onClick = onGoogleLoginCLick,
             modifier = Modifier.fillMaxWidth()
         ) {

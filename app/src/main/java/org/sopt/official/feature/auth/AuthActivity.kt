@@ -42,6 +42,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -256,7 +257,7 @@ class AuthActivity : AppCompatActivity() {
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AuthButton(
-                paddingVertical = 12.dp,
+                padding = PaddingValues(vertical = 12.dp),
                 onClick = onGoogleLoginCLick,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -281,7 +282,7 @@ class AuthActivity : AppCompatActivity() {
             AuthDivider()
             Spacer(modifier = Modifier.height(16.dp))
             AuthButton(
-                paddingVertical = 12.dp,
+                padding = PaddingValues(vertical = 12.dp),
                 onClick = {
                     // TODO SOPT 회원가입 기능 구현 by leeeyubin
                 },

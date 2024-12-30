@@ -25,6 +25,7 @@
 package org.sopt.official.feature.auth.feature.socialaccount
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -78,7 +79,7 @@ fun CertificateAccountScreen() {
         Spacer(modifier = Modifier.height(12.dp))
         AuthButton(
             modifier = Modifier.fillMaxWidth(),
-            paddingVertical = 16.dp,
+            padding = PaddingValues(vertical = 16.dp),
             onClick = {},
             containerColor = White,
             contentColor = Black80,
