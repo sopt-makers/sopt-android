@@ -281,7 +281,9 @@ class AuthActivity : AppCompatActivity() {
             Spacer(modifier = Modifier.height(16.dp))
             AuthButton(
                 paddingVertical = 12.dp,
-                onClick = {},
+                onClick = {
+                    // TODO SOPT 회원가입 기능 구현 by leeeyubin
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
