@@ -49,3 +49,7 @@ annotation class LocalStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class S3
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AuthRetrofit
