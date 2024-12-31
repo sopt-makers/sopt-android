@@ -30,15 +30,23 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.common.context.appContext
+import org.sopt.official.domain.mypage.repository.UserRepository
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 internal interface AuthEntryPoint {
     fun authRepository(): AuthRepository
+    fun userRepository(): UserRepository
 }
 
 internal val authRepository by lazy {
     EntryPointAccessors
         .fromApplication(appContext, AuthEntryPoint::class.java)
         .authRepository()
+}
+
+internal val userRepository by lazy {
+    EntryPointAccessors
+        .fromApplication(appContext, AuthEntryPoint::class.java)
+        .userRepository()
 }
