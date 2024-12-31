@@ -43,4 +43,5 @@ dependencies {
     implementation(libs.bundles.firebase)
     implementation(libs.process.phoenix)
     implementation(libs.kotlin.collections.immutable)
+    implementation(libs.rin)
 }
