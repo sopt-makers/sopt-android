@@ -66,6 +66,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
+import androidx.core.content.getSystemService
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -130,7 +131,7 @@ class AuthActivity : AppCompatActivity() {
                         enableLights(false)
                         enableVibration(false)
                         lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
+                        getSystemService<NotificationManager>()?.createNotificationChannel(this)
                     }
                 }
 
