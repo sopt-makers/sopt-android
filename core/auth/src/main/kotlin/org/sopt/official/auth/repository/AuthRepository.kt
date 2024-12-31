@@ -28,6 +28,7 @@ import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 
+@Deprecated("이거 쓰지 말고 다른 거 쓰세요")
 interface AuthRepository {
     suspend fun refresh(token: String): Result<Auth>
     fun save(token: Token)
