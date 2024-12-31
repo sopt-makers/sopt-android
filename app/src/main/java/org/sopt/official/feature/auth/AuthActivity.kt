@@ -111,7 +111,7 @@ class AuthActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val action by viewModel.loginDialogAction.collectAsStateWithLifecycle()
+                val loginDialogAction by viewModel.loginDialogAction.collectAsStateWithLifecycle()
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
@@ -150,7 +150,7 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
-                if (action == true) {
+                if (loginDialogAction == true) {
                     LoginErrorDialog(
                         onDismissRequest = { viewModel.showLoginErrorDialog(false) }
                     )
