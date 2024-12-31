@@ -28,7 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -39,52 +38,25 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
-import org.sopt.official.feature.mypage.soptamp.state.AdjustSentenceSideEffect
-import org.sopt.official.feature.mypage.soptamp.state.AdjustSentenceViewModel
+import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
 
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {
-    private val viewModel by viewModels<AdjustSentenceViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                val lifecycleOwner = LocalLifecycleOwner.current
-
-                val sentence by viewModel.sentence.collectAsStateWithLifecycle()
-                val isConfirmed by viewModel.isConfirmed.collectAsStateWithLifecycle(initialValue = false)
-
-                val keyboardController = LocalSoftwareKeyboardController.current
-
-                LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-                    viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { sideEffect ->
-                            when (sideEffect) {
-                                is AdjustSentenceSideEffect.NavigateToMyPage -> {
-                                    keyboardController?.hide()
-                                    toast("한마디가 변경되었습니다")
-                                    onBackPressedDispatcher.onBackPressed()
-                                }
-                            }
-                        }
-                }
+                val uiState = rememberModifyProfileState()
 
                 Scaffold(
                     modifier = Modifier
@@ -105,9 +77,9 @@ class AdjustSentenceActivity : AppCompatActivity() {
                     ) {
                         Spacer(modifier = Modifier.height(20.dp))
                         MyPageTextField(
-                            sentence = sentence,
+                            sentence = uiState.current,
                             modifier = Modifier.padding(horizontal = 20.dp),
-                            onTextChange = { viewModel.onChange(it) },
+                            onTextChange = { uiState.onChangeCurrent(it) },
                         )
                         Spacer(modifier = Modifier.height(32.dp))
                         MyPageButton(
@@ -115,8 +87,8 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .padding(20.dp)
                                 .fillMaxWidth(),
-                            onClick = { viewModel.adjustSentence() },
-                            isEnabled = isConfirmed
+                            onClick = uiState.onUpdate,
+                            isEnabled = uiState.isConfirmed
                         ) {
                             Text(
                                 text = stringResource(R.string.adjust_sentence_button),

@@ -7,7 +7,7 @@ data class ModifySoptampProfileUiState(
     val current: String,
     val previous: String,
     val onChangeCurrent: (String) -> Unit,
-    val onChangePrevious: (String) -> Unit,
+    val onUpdate: () -> Unit,
 ) {
     val isConfirmed: Boolean
         get() = current != previous
