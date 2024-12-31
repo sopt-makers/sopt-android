@@ -46,6 +46,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R.drawable.ic_auth_certification_error
@@ -54,6 +55,7 @@ import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
 @Composable
 internal fun AuthTextField(
@@ -61,6 +63,7 @@ internal fun AuthTextField(
     hintText: String,
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
     errorMessage: String? = null,
     suffix: (@Composable () -> Unit)? = null,
@@ -105,6 +108,7 @@ internal fun AuthTextField(
                     value = labelText,
                     onValueChange = onTextChange,
                     singleLine = true,
+                    visualTransformation = visualTransformation,
                     textStyle = SoptTheme.typography.body16M.copy(color = Gray10),
                 )
             }
@@ -138,7 +142,7 @@ internal fun AuthTextField(
 @Composable
 private fun AuthTextFieldPreview() {
     SoptTheme {
-        var text by remember { mutableStateOf("에러") }
+        var text by remember { mutableStateOf("") }
         AuthTextField(
             labelText = text,
             hintText = "이메일",
@@ -150,6 +154,7 @@ private fun AuthTextFieldPreview() {
                     color = White
                 )
             },
+            visualTransformation = phoneNumberVisualTransformation(),
             errorMessage = "이메일 형식이 아닙니다."
         )
     }
