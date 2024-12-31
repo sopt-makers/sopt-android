@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.auth.feature.certificatemember
+package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -66,7 +66,7 @@ import org.sopt.official.feature.auth.component.CertificationSnackBar
 import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
-fun CertificateMemberScreen() {
+fun CertificationScreen() {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val onShowSnackBar: () -> Unit = remember {
@@ -195,7 +195,7 @@ private fun TopBar(
     }
 }
 
-enum class ErrorCase(val message: String) {
+internal enum class ErrorCase(val message: String) {
     CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
     PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
     TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
@@ -205,6 +205,6 @@ enum class ErrorCase(val message: String) {
 @Composable
 private fun AuthCertificationPreview() {
     SoptTheme {
-        CertificateMemberScreen()
+        CertificationScreen()
     }
 }

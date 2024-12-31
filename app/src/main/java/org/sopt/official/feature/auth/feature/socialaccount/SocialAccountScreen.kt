@@ -44,7 +44,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.AuthButton
 
 @Composable
-fun ChangeAccountScreen(
+fun SocialAccountScreen(
     onGoogleLoginCLick: () -> Unit
 ) {
     Column(
@@ -81,7 +81,7 @@ fun ChangeAccountScreen(
 @Composable
 private fun ChangeAccountPreview() {
     SoptTheme {
-        ChangeAccountScreen(
+        SocialAccountScreen(
             onGoogleLoginCLick = {}
         )
     }

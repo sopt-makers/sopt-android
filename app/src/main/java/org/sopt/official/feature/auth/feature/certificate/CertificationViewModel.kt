@@ -1,4 +1,4 @@
-package org.sopt.official.feature.auth.feature.certificatemember
+package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +13,9 @@ enum class CertificationType(val type: String) {
 }
 
 @HiltViewModel
-class CertificateMemberViewModel @Inject constructor(
+class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
     suspend fun createPhoneNumber() {
         repository.getCertificationNumber(
             UserInformation(
