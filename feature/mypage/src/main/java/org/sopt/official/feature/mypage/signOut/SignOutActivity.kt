@@ -28,7 +28,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -39,43 +38,34 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.flowWithLifecycle
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
+import org.sopt.official.feature.mypage.di.authRepository
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
-    private val viewModel by viewModels<SignOutViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
+                val scope = rememberCoroutineScope()
 
-                LaunchedEffect(viewModel.event, lifecycleOwner) {
-                    viewModel.event.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect {
-                            ProcessPhoenix.triggerRebirth(context)
-                        }
-                }
-
-                Scaffold(modifier = Modifier
-                    .background(SoptTheme.colors.background)
-                    .fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier
+                        .background(SoptTheme.colors.background)
+                        .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
                             title = "마이페이지",
@@ -109,7 +99,13 @@ class SignOutActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .padding(20.dp)
                                 .fillMaxWidth(),
-                            onClick = { viewModel.signOut() },
+                            onClick = {
+                                scope.launch {
+                                    authRepository.withdraw()
+                                        .onSuccess { ProcessPhoenix.triggerRebirth(this@SignOutActivity) }
+                                        .onFailure(Timber::e)
+                                }
+                            },
                         ) {
                             Text(
                                 text = stringResource(R.string.sign_out_button),
