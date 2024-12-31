@@ -48,7 +48,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.sopt.official.R.drawable.ic_auth_certification_error
 import org.sopt.official.R.drawable.ic_auth_memeber_error
 import org.sopt.official.R.drawable.ic_auth_process
 import org.sopt.official.designsystem.Blue500
@@ -58,7 +57,6 @@ import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.Gray950
-import org.sopt.official.designsystem.Red100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
@@ -107,7 +105,7 @@ fun CertificateMemberScreen() {
             modifier = Modifier.fillMaxWidth(),
             labelText = "",
             hintText = "인증번호를 입력해 주세요.",
-            onTextChange = {}
+            onTextChange = {},
         )
         Spacer(modifier = Modifier.height(41.dp))
         AuthButton(
@@ -192,27 +190,6 @@ private fun TopBar(
         Text(
             text = "Playground는 SOPT 회원만을 위한 공간이에요.\nSOPT 회원인증을 위해 전화번호를 입력해 주세요.",
             color = Gray60,
-            style = SoptTheme.typography.label12SB
-        )
-    }
-}
-
-@Composable
-private fun ErrorText(
-    error: ErrorCase
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Image(
-            painterResource(id = ic_auth_certification_error),
-            contentDescription = "에러 아이콘",
-        )
-        Text(
-            text = error.message,
-            color = Red100,
             style = SoptTheme.typography.label12SB
         )
     }
