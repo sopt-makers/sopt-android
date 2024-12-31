@@ -62,7 +62,7 @@ import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.model.MyPageUiModel
 import org.sopt.official.feature.mypage.model.MyPageUiState
-import org.sopt.official.feature.mypage.signOut.SignOutActivity
+import org.sopt.official.feature.mypage.signout.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.sentence.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import java.io.Serializable

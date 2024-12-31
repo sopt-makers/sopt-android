@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.signOut
+package org.sopt.official.feature.mypage.signout
 
 import android.content.Context
 import android.content.Intent
