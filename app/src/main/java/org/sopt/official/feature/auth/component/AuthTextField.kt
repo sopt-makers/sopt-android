@@ -24,8 +24,10 @@
  */
 package org.sopt.official.feature.auth.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,8 +45,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.R.drawable.ic_auth_certification_error
 import org.sopt.official.designsystem.Black60
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
@@ -92,7 +96,8 @@ internal fun AuthTextField(
                 if (labelText.isEmpty()) {
                     Text(
                         text = hintText,
-                        color = Gray100
+                        color = Gray100,
+                        style = SoptTheme.typography.body16M
                     )
                 }
 
@@ -111,11 +116,20 @@ internal fun AuthTextField(
         }
         if (isError && !errorMessage.isNullOrEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = errorMessage,
-                color = SoptTheme.colors.error,
-                style = SoptTheme.typography.label12SB,
-            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painterResource(id = ic_auth_certification_error),
+                    contentDescription = "에러 아이콘",
+                )
+                Text(
+                    text = errorMessage,
+                    color = SoptTheme.colors.error,
+                    style = SoptTheme.typography.label12SB,
+                )
+            }
         }
     }
 }
