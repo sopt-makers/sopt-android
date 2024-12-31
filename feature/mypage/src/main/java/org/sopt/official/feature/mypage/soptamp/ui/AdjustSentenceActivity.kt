@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.soptamp.sentence
+package org.sopt.official.feature.mypage.soptamp.ui
 
 import android.content.Context
 import android.content.Intent
@@ -55,6 +55,8 @@ import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
+import org.sopt.official.feature.mypage.soptamp.state.AdjustSentenceSideEffect
+import org.sopt.official.feature.mypage.soptamp.state.AdjustSentenceViewModel
 
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {

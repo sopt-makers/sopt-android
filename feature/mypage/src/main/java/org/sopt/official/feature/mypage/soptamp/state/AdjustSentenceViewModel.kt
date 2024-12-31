@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.soptamp.sentence
+package org.sopt.official.feature.mypage.soptamp.state
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
