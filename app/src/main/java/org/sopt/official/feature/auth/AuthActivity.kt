@@ -67,7 +67,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,7 +110,7 @@ class AuthActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                val loginDialogAction by viewModel.loginDialogAction.collectAsStateWithLifecycle()
+                var loginDialogVisibility by remember { mutableStateOf(false) }
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
@@ -150,14 +149,18 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
-                if (loginDialogAction == true) {
+                if (loginDialogVisibility) {
                     LoginErrorDialog(
-                        onDismissRequest = { viewModel.showLoginErrorDialog(false) }
+                        onDismissRequest = {
+                            loginDialogVisibility = false
+                        }
                     )
                 }
 
                 AuthScreen(
-                    showDialog = { viewModel.showLoginErrorDialog(true) },
+                    showDialog = {
+                        loginDialogVisibility = true
+                    },
                     onGoogleLoginCLick = {
                         PlaygroundAuth.authorizeWithWebTab(
                             context = context,
