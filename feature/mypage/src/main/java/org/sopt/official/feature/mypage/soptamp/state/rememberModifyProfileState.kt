@@ -35,11 +35,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.launch
-import org.sopt.official.feature.mypage.di.userRepository
+import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
 
 @Composable
 fun rememberModifyProfileState(
+    userRepository: UserRepository,
     onShowToast: (String) -> Unit
 ): ModifySoptampProfileUiState {
     var current by rememberRetained { mutableStateOf("") }

@@ -49,6 +49,7 @@ import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
+import org.sopt.official.feature.mypage.di.userRepository
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
 
 @AndroidEntryPoint
@@ -59,7 +60,10 @@ class AdjustSentenceActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 val context = LocalContext.current
-                val uiState = rememberModifyProfileState(onShowToast = { context.toast(it) })
+                val uiState = rememberModifyProfileState(
+                    userRepository = userRepository,
+                    onShowToast = { context.toast(it) }
+                )
 
                 Scaffold(
                     modifier = Modifier
