@@ -25,9 +25,11 @@
 package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.domain.usecase.LoginUseCase
@@ -46,13 +48,18 @@ class AuthViewModel @Inject constructor(
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
-    suspend fun onLogin(auth: Auth) {
-        loginUseCase(auth)
-        _uiEvent.emit(AuthUiEvent.Success(auth.status))
+    fun onLogin(auth: Auth) {
+        viewModelScope.launch {
+            loginUseCase(auth)
+            _uiEvent.emit(AuthUiEvent.Success(auth.status))
+        }
     }
 
-    suspend fun onFailure(throwable: Throwable) {
-        Timber.e(throwable)
-        _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
+     fun onFailure(throwable: Throwable) {
+         viewModelScope.launch {
+             Timber.e(throwable)
+             _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
+         }
+
     }
 }
