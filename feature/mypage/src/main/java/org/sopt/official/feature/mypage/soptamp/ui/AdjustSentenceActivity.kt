@@ -39,9 +39,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
@@ -56,7 +58,8 @@ class AdjustSentenceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                val uiState = rememberModifyProfileState()
+                val context = LocalContext.current
+                val uiState = rememberModifyProfileState(onShowToast = { context.toast(it) })
 
                 Scaffold(
                     modifier = Modifier
