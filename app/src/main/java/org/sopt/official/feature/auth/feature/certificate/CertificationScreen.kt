@@ -40,6 +40,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -47,6 +48,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.launch
 import org.sopt.official.R.drawable.ic_auth_memeber_error
 import org.sopt.official.R.drawable.ic_auth_process
@@ -66,7 +72,9 @@ import org.sopt.official.feature.auth.component.CertificationSnackBar
 import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
-fun CertificationScreen() {
+internal fun CertificationRoute(
+    viewModel: CertificationViewModel = hiltViewModel()
+) {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
     val onShowSnackBar: () -> Unit = remember {
@@ -75,6 +83,19 @@ fun CertificationScreen() {
                 snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
             }
         }
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is CertificationSideEffect.ShowToast -> {
+                        snackBarHostState.showSnackbar(sideEffect.message)
+                    }
+                }
+            }
     }
 
     SnackbarHost(
@@ -87,6 +108,18 @@ fun CertificationScreen() {
         }
     )
 
+    CertificationScreen(
+        onPhoneNumberClick = {
+            onShowSnackBar()
+            viewModel.createPhoneNumber()
+        }
+    )
+}
+
+@Composable
+private fun CertificationScreen(
+    onPhoneNumberClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -97,7 +130,7 @@ fun CertificationScreen() {
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification(
-            onPhoneNumberClick = onShowSnackBar,
+            onPhoneNumberClick = onPhoneNumberClick,
             textColor = Gray80
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -205,6 +238,8 @@ internal enum class ErrorCase(val message: String) {
 @Composable
 private fun AuthCertificationPreview() {
     SoptTheme {
-        CertificationScreen()
+        CertificationScreen(
+            onPhoneNumberClick = {}
+        )
     }
 }
