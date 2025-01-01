@@ -1,7 +1,12 @@
 package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.UserInformation
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
@@ -16,13 +21,22 @@ enum class CertificationType(val type: String) {
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
-    suspend fun createPhoneNumber() {
-        repository.getCertificationNumber(
-            UserInformation(
-                name = null,
-                phone = "01012345678",
-                type = CertificationType.REGISTER.type
-            )
-        ).onSuccess { }.onFailure { }
+
+    private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
+    val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
+    fun createPhoneNumber() {
+        viewModelScope.launch {
+            repository.getCertificationNumber(
+                UserInformation(
+                    name = null,
+                    phone = "01012345678",
+                    type = CertificationType.REGISTER.type
+                )
+            ).onSuccess {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("성공"))
+            }.onFailure {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
+            }
+        }
     }
 }
