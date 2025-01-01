@@ -1,14 +1,13 @@
-package org.sopt.official.data.auth.remote.response
+package org.sopt.official.data.auth.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class CertificationNumberResponse(
+data class NonDataBaseAuthResponse(
     @SerialName("success")
     val success: Boolean,
     @SerialName("message")
     val message: String,
-    @SerialName("data")
-    val data: String,
+    val data: String?
 )

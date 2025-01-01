@@ -109,16 +109,20 @@ internal fun CertificationRoute(
     )
 
     CertificationScreen(
-        onPhoneNumberClick = {
+        onCreateCodeClick = {
             onShowSnackBar()
-            viewModel.createPhoneNumber()
+            viewModel.createCode()
+        },
+        onCertificateClick = {
+            viewModel.certificateCode()
         }
     )
 }
 
 @Composable
 private fun CertificationScreen(
-    onPhoneNumberClick: () -> Unit
+    onCreateCodeClick: () -> Unit,
+    onCertificateClick:()-> Unit
 ) {
     Column(
         modifier = Modifier
@@ -130,7 +134,7 @@ private fun CertificationScreen(
         TopBar()
         Spacer(modifier = Modifier.height(44.dp))
         PhoneCertification(
-            onPhoneNumberClick = onPhoneNumberClick,
+            onPhoneNumberClick = onCreateCodeClick,
             textColor = Gray80
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -175,7 +179,7 @@ private fun CertificationScreen(
         AuthButton(
             modifier = Modifier.fillMaxWidth(),
             padding = PaddingValues(vertical = 16.dp),
-            onClick = {},
+            onClick = onCertificateClick,
             containerColor = Gray10,
             contentColor = Gray950,
             disabledContentColor = Gray60,
@@ -239,7 +243,8 @@ internal enum class ErrorCase(val message: String) {
 private fun AuthCertificationPreview() {
     SoptTheme {
         CertificationScreen(
-            onPhoneNumberClick = {}
+            onCreateCodeClick = {},
+            onCertificateClick = {}
         )
     }
 }

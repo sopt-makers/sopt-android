@@ -1,13 +1,21 @@
 package org.sopt.official.data.auth.remote.api
 
-import org.sopt.official.data.auth.remote.request.CertificationNumberRequest
-import org.sopt.official.data.auth.remote.response.CertificationNumberResponse
+import org.sopt.official.data.auth.model.BaseAuthResponse
+import org.sopt.official.data.auth.model.NonDataBaseAuthResponse
+import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
+import org.sopt.official.data.auth.remote.request.CreateCodeRequest
+import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 
 internal interface AuthApi {
     @POST("/api/v1/auth/phone")
-    suspend fun postCertificationNumber(
-        @Body request: CertificationNumberRequest,
-    ): CertificationNumberResponse
+    suspend fun createCode(
+        @Body request: CreateCodeRequest,
+    ): NonDataBaseAuthResponse
+
+    @POST("/api/v1/auth/verify/phone")
+    suspend fun certificateCode(
+        @Body request: CertificateCodeRequest,
+    ): BaseAuthResponse<CertificateCodeResponse>
 }
