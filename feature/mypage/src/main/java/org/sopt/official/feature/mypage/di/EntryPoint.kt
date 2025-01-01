@@ -31,12 +31,14 @@ import dagger.hilt.components.SingletonComponent
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.common.context.appContext
 import org.sopt.official.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 internal interface AuthEntryPoint {
     fun authRepository(): AuthRepository
     fun userRepository(): UserRepository
+    fun stampRepository(): StampRepository
 }
 
 internal val authRepository by lazy {
@@ -49,4 +51,10 @@ internal val userRepository by lazy {
     EntryPointAccessors
         .fromApplication(appContext, AuthEntryPoint::class.java)
         .userRepository()
+}
+
+internal val stampRepository by lazy {
+    EntryPointAccessors
+        .fromApplication(appContext, AuthEntryPoint::class.java)
+        .stampRepository()
 }
