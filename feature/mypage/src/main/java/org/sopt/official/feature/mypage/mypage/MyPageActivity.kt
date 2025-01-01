@@ -30,7 +30,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -42,15 +41,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.auth.model.UserActiveState
@@ -60,8 +54,15 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
+import org.sopt.official.feature.mypage.di.authRepository
+import org.sopt.official.feature.mypage.di.stampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiModel
-import org.sopt.official.feature.mypage.model.MyPageUiState
+import org.sopt.official.feature.mypage.mypage.state.ClearSoptamp
+import org.sopt.official.feature.mypage.mypage.state.CloseDialog
+import org.sopt.official.feature.mypage.mypage.state.Logout
+import org.sopt.official.feature.mypage.mypage.state.MyPageDialogState
+import org.sopt.official.feature.mypage.mypage.state.ResetSoptamp
+import org.sopt.official.feature.mypage.mypage.state.rememberMyPageUiState
 import org.sopt.official.feature.mypage.signout.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -70,7 +71,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
-    private val viewModel by viewModels<MyPageViewModel>()
     private val args by serializableExtra(Argument(UserActiveState.UNAUTHENTICATED))
 
     @Inject
@@ -80,11 +80,14 @@ class MyPageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
+                val uiState = rememberMyPageUiState(
+                    userActiveState = args?.userActiveState ?: UserActiveState.UNAUTHENTICATED,
+                    authRepository = authRepository,
+                    stampRepository = stampRepository,
+                    onRestartApp = { startActivity(navigatorProvider.getAuthActivityIntent()) }
+                )
                 val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
 
-                val myPageState by viewModel.state.collectAsStateWithLifecycle()
-                val myPageAction by viewModel.action.collectAsStateWithLifecycle()
                 val scrollState = rememberScrollState()
 
                 val serviceSectionItems = remember {
@@ -136,7 +139,9 @@ class MyPageActivity : AppCompatActivity() {
                         ),
                         MyPageUiModel.MyPageItem(
                             title = "스탬프 초기화",
-                            onItemClick = { viewModel.showDialogState(MyPageAction.CLEAR_SOPTAMP) }
+                            onItemClick = {
+                                uiState.onEventSink(ClearSoptamp)
+                            }
                         )
                     )
                 }
@@ -146,7 +151,9 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.Header(title = "기타"),
                         MyPageUiModel.MyPageItem(
                             title = "로그아웃",
-                            onItemClick = { viewModel.showDialogState(MyPageAction.LOGOUT) }
+                            onItemClick = {
+                                uiState.onEventSink(Logout)
+                            }
                         ),
                         MyPageUiModel.MyPageItem(
                             title = "탈퇴하기",
@@ -165,19 +172,6 @@ class MyPageActivity : AppCompatActivity() {
                             }
                         )
                     )
-                }
-
-                LaunchedEffect(Unit) {
-                    args?.userActiveState?.let {
-                        viewModel.setUserActiveState(it)
-                    }
-                }
-
-                LaunchedEffect(viewModel.finish, lifecycleOwner) {
-                    viewModel.finish.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect {
-                            startActivity(navigatorProvider.getAuthActivityIntent())
-                        }
                 }
 
                 Scaffold(
@@ -201,8 +195,8 @@ class MyPageActivity : AppCompatActivity() {
                         Spacer(modifier = Modifier.height(20.dp))
                         MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
-                        when (myPageState) {
-                            is MyPageUiState.Authenticated -> {
+                        when (uiState.user) {
+                            UserActiveState.ACTIVE, UserActiveState.INACTIVE -> {
                                 MyPageSection(items = notificationSectionItems)
                                 Spacer(modifier = Modifier.height(16.dp))
                                 MyPageSection(items = soptampSectionItems)
@@ -210,20 +204,19 @@ class MyPageActivity : AppCompatActivity() {
                                 MyPageSection(items = etcSectionItems)
                             }
 
-                            is MyPageUiState.UnAuthenticated -> {
+                            UserActiveState.UNAUTHENTICATED -> {
                                 MyPageSection(items = etcLoginSectionItems)
                             }
-
-                            is MyPageUiState.UnInitialized -> {}
                         }
                         Spacer(modifier = Modifier.height(32.dp))
                     }
-                    if (myPageAction != null) {
+
+                    if (uiState.dialogState != MyPageDialogState.CLEAR) {
                         ShowMyPageDialog(
-                            action = myPageAction ?: return@Scaffold,
-                            onDismissRequest = viewModel::closeDialog,
-                            onClearSoptampClick = viewModel::resetSoptamp,
-                            onLogoutClick = viewModel::logOut
+                            dialogState = uiState.dialogState,
+                            onDismissRequest = { uiState.onEventSink(CloseDialog) },
+                            onClearSoptampClick = { uiState.onEventSink(ResetSoptamp) },
+                            onLogoutClick = { uiState.onEventSink(Logout) }
                         )
                     }
                 }
@@ -245,13 +238,13 @@ class MyPageActivity : AppCompatActivity() {
 
 @Composable
 private fun ShowMyPageDialog(
-    action: MyPageAction,
+    dialogState: MyPageDialogState,
     onDismissRequest: () -> Unit,
     onClearSoptampClick: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    when (action) {
-        MyPageAction.CLEAR_SOPTAMP -> {
+    when (dialogState) {
+        MyPageDialogState.CLEAR_SOPTAMP -> {
             MyPageDialog(
                 onDismissRequest = onDismissRequest,
                 title = "미션을 초기화 하실건가요?",
@@ -262,7 +255,7 @@ private fun ShowMyPageDialog(
             )
         }
 
-        MyPageAction.LOGOUT -> {
+        MyPageDialogState.LOGOUT -> {
             MyPageDialog(
                 onDismissRequest = onDismissRequest,
                 title = "로그아웃",
@@ -272,5 +265,7 @@ private fun ShowMyPageDialog(
                 onPositiveButtonClick = onLogoutClick
             )
         }
+
+        else -> {}
     }
 }
