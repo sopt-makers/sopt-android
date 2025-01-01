@@ -45,7 +45,7 @@ import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.LoginErrorDialog
 
 @Composable
-fun AuthMainRoute(
+internal fun AuthMainRoute(
     viewModel: AuthViewModel = hiltViewModel(),
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,

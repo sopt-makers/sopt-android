@@ -17,7 +17,7 @@ import org.sopt.official.feature.auth.feature.certificate.navigation.certificati
 import org.sopt.official.feature.auth.feature.certificate.navigation.navigateCertification
 
 @Composable
-fun AuthScreen(
+internal fun AuthScreen(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     navController: NavHostController = rememberNavController(),
