@@ -26,6 +26,7 @@
 plugins {
     sopt("feature")
     sopt("compose")
+    sopt("test")
 }
 
 android {
@@ -44,4 +45,14 @@ dependencies {
     implementation(libs.process.phoenix)
     implementation(libs.kotlin.collections.immutable)
     implementation(libs.rin)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.truth)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.bundles.compose.test)
+
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.hilt.testing)
+    kspAndroidTest(libs.hilt.testing.compiler)
+    androidTestImplementation(libs.bundles.compose.android.test)
 }

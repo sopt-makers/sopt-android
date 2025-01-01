@@ -40,6 +40,7 @@ robolectric = "4.14.1"
 androidx-uiautomator = "2.3.0"
 androidx-test = "1.6.2"
 androidx-test-rules = "1.6.1"
+mockk = "1.13.5"
 
 gradleplugin = "8.7.3"
 kspplugin = "2.1.0-1.0.29"
@@ -137,6 +138,8 @@ junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core"
 junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.6.0" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 
 androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
