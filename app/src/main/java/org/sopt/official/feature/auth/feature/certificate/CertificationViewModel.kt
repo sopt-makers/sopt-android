@@ -7,7 +7,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.auth.model.UserInformation
+import org.sopt.official.domain.auth.model.InformationWithCode
+import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -24,18 +25,35 @@ class CertificationViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
     val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
-    fun createPhoneNumber() {
+    fun createCode() {
         viewModelScope.launch {
-            repository.getCertificationNumber(
-                UserInformation(
-                    name = null,
+            repository.createCode(
+                InitialInformation(
+                    name = "Mock-Success-Register",
                     phone = "01012345678",
                     type = CertificationType.REGISTER.type
                 )
             ).onSuccess {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("성공"))
+                _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
             }.onFailure {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
+            }
+        }
+    }
+
+    fun certificateCode() {
+        viewModelScope.launch {
+            repository.certificateCode(
+                InformationWithCode(
+                    name = "Mock-Success-Register",
+                    phone = "01012345678",
+                    code = "123456",
+                    type = CertificationType.REGISTER.type
+                )
+            ).onSuccess {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
+            }.onFailure {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
             }
         }
     }

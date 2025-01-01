@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CertificationNumberRequest(
+data class CreateCodeRequest(
     @SerialName("name")
     val name: String?,
     @SerialName("phone")
