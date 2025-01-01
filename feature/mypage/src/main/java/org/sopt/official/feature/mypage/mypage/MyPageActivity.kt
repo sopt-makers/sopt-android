@@ -92,15 +92,21 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.Header(title = "서비스 이용 방침"),
                         MyPageUiModel.MyPageItem(
                             title = "개인정보 처리 방침",
-                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO))) }
+                            onItemClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_PRIVATE_INFO)))
+                            }
                         ),
                         MyPageUiModel.MyPageItem(
                             title = "서비스 이용약관",
-                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE))) }
+                            onItemClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.NOTICE_SERVICE_RULE)))
+                            }
                         ),
                         MyPageUiModel.MyPageItem(
                             title = "의견 보내기",
-                            onItemClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) }
+                            onItemClick = {
+                                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)))
+                            }
                         )
                     )
                 }
@@ -174,9 +180,10 @@ class MyPageActivity : AppCompatActivity() {
                         }
                 }
 
-                Scaffold(modifier = Modifier
-                    .background(SoptTheme.colors.background)
-                    .fillMaxSize(),
+                Scaffold(
+                    modifier = Modifier
+                        .background(SoptTheme.colors.background)
+                        .fillMaxSize(),
                     topBar = {
                         MyPageTopBar(
                             title = "마이페이지",
