@@ -49,13 +49,26 @@ internal fun AuthMainRoute(
     viewModel: AuthViewModel = hiltViewModel(),
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
-    navigateToCertification: () -> Unit
+    navigateToCertification: () -> Unit,
+    navigateToChannel: () -> Unit
 ) {
     var loginDialogVisibility by remember { mutableStateOf(false) }
 
     if (loginDialogVisibility) {
         LoginErrorDialog(
             onDismissRequest = {
+                loginDialogVisibility = false
+            },
+            onFindAccountClick = {
+                navigateToCertification()
+                loginDialogVisibility = false
+            },
+            onResetAccountClick = {
+                navigateToCertification()
+                loginDialogVisibility = false
+            },
+            onContactChannelClick = {
+                navigateToChannel()
                 loginDialogVisibility = false
             }
         )

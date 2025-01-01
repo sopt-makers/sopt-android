@@ -8,13 +8,15 @@ import org.sopt.official.feature.auth.feature.authmain.AuthMainRoute
 fun NavGraphBuilder.authMainNavGraph(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
-    navigateToCertification: () -> Unit
+    navigateToCertification: () -> Unit,
+    navigateToChannel:()-> Unit
 ) {
     composable<AuthMainNavigation> {
         AuthMainRoute(
             navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
             onGoogleLoginCLick = onGoogleLoginCLick,
-            navigateToCertification = navigateToCertification
+            navigateToCertification = navigateToCertification,
+            navigateToChannel = navigateToChannel
         )
     }
 }

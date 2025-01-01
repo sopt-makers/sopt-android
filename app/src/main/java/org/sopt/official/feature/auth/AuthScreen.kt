@@ -20,6 +20,7 @@ import org.sopt.official.feature.auth.feature.certificate.navigation.navigateCer
 internal fun AuthScreen(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
+    navigateToChannel:() -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     Scaffold(
@@ -44,7 +45,9 @@ internal fun AuthScreen(
                         },
                         navigateToCertification = {
                             navController.navigateCertification()
-                        }
+                        },
+                        navigateToChannel = navigateToChannel
+
                     )
                     certificationNavGraph()
                 }
