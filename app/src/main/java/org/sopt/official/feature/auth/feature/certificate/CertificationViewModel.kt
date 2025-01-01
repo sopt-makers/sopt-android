@@ -10,13 +10,8 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
-
-enum class CertificationType(val type: String) {
-    REGISTER("REGISTER"),
-    CHANGE("CHANGE"),
-    SEARCH("SEARCH")
-}
 
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
@@ -31,7 +26,7 @@ class CertificationViewModel @Inject constructor(
                 InitialInformation(
                     name = "Mock-Success-Register",
                     phone = "01012345678",
-                    type = CertificationType.REGISTER.type
+                    type = AuthStatus.REGISTER.type
                 )
             ).onSuccess {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
@@ -48,7 +43,7 @@ class CertificationViewModel @Inject constructor(
                     name = "Mock-Success-Register",
                     phone = "01012345678",
                     code = "123456",
-                    type = CertificationType.REGISTER.type
+                    type = AuthStatus.REGISTER.type
                 )
             ).onSuccess {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))

@@ -28,6 +28,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -51,6 +52,7 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
@@ -145,7 +147,8 @@ class AuthActivity : AppCompatActivity() {
                                 }
                             }
                         }
-                    }
+                    },
+                    navigateToChannel = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) }
                 )
             }
         }
