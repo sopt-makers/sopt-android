@@ -71,7 +71,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
     private val viewModel by viewModels<MyPageViewModel>()
-    private val args by serializableExtra(StartArgs(UserActiveState.UNAUTHENTICATED))
+    private val args by serializableExtra(Argument(UserActiveState.UNAUTHENTICATED))
 
     @Inject
     lateinit var navigatorProvider: NavigatorProvider
@@ -224,15 +224,15 @@ class MyPageActivity : AppCompatActivity() {
         }
     }
 
-    data class StartArgs(
+    data class Argument(
         val userActiveState: UserActiveState
     ) : Serializable
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context, args: StartArgs) = Intent(context, MyPageActivity::class.java).apply {
-            putExtra("args", args)
-        }
+        fun getIntent(context: Context, args: Argument) = Intent(context, MyPageActivity::class.java)
+            .putExtra("args", args)
+
     }
 }
 

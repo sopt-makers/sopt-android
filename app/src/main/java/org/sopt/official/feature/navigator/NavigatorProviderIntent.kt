@@ -55,7 +55,7 @@ class NavigatorProviderIntent @Inject constructor(
 
     override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
         context,
-        MyPageActivity.StartArgs(UserActiveState.valueOf(name))
+        MyPageActivity.Argument(UserActiveState.valueOf(name))
     )
 
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)

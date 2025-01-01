@@ -153,7 +153,7 @@ class HomeActivity : AppCompatActivity() {
             tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
-                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
+                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.Argument(viewModel.userActiveState.value))
                 )
             }
         }
