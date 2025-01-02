@@ -30,7 +30,8 @@ import org.sopt.official.feature.auth.feature.socialaccount.navigation.socialAcc
 internal fun AuthScreen(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
-    navigateToChannel: () -> Unit,
+    onContactChannelClick: () -> Unit,
+    onGoogleFormClick: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -76,12 +77,13 @@ internal fun AuthScreen(
                         navigateToCertification = { status ->
                             navController.navigateCertification(status)
                         },
-                        navigateToChannel = navigateToChannel
+                        onContactChannelClick = onContactChannelClick
                     )
                     certificationNavGraph(
                         onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar,
-                        navigateToSocialAccount = navController::navigateSocialAccount
+                        navigateToSocialAccount = navController::navigateSocialAccount,
+                        onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(
                         onGoogleLoginCLick = {}

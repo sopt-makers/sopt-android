@@ -22,7 +22,8 @@ fun NavController.navigateCertification(
 fun NavGraphBuilder.certificationNavGraph(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: () -> Unit
+    navigateToSocialAccount: () -> Unit,
+    onGoogleFormClick: () -> Unit
 ) {
     composable<CertificationNavigation> {
         val args = it.toRoute<CertificationNavigation>()
@@ -30,7 +31,8 @@ fun NavGraphBuilder.certificationNavGraph(
             status = args.status,
             onBackClick = onBackClick,
             onShowSnackBar = onShowSnackBar,
-            navigateToSocialAccount = navigateToSocialAccount
+            navigateToSocialAccount = navigateToSocialAccount,
+            onGoogleFormClick = onGoogleFormClick
         )
     }
 }

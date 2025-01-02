@@ -48,7 +48,7 @@ internal fun AuthMainRoute(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
-    navigateToChannel: () -> Unit
+    onContactChannelClick: () -> Unit
 ) {
     var loginDialogVisibility by remember { mutableStateOf(false) }
 
@@ -66,7 +66,7 @@ internal fun AuthMainRoute(
                 loginDialogVisibility = false
             },
             onContactChannelClick = {
-                navigateToChannel()
+                onContactChannelClick()
                 loginDialogVisibility = false
             }
         )
