@@ -74,6 +74,7 @@ internal fun CertificationRoute(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
     navigateToSocialAccount: () -> Unit,
+    onGoogleFormClick: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -101,7 +102,8 @@ internal fun CertificationRoute(
         },
         onCertificateClick = {
             viewModel.certificateCode(status)
-        }
+        },
+        onGoogleFormClick = onGoogleFormClick
     )
 }
 
@@ -110,7 +112,8 @@ private fun CertificationScreen(
     status: AuthStatus,
     onBackClick: () -> Unit,
     onCreateCodeClick: () -> Unit,
-    onCertificateClick: () -> Unit
+    onCertificateClick: () -> Unit,
+    onGoogleFormClick: () -> Unit
 ) {
     Column {
         Image(
@@ -151,7 +154,7 @@ private fun CertificationScreen(
                             shape = RoundedCornerShape(10.dp)
                         ),
                     padding = PaddingValues(vertical = 14.dp, horizontal = 18.dp),
-                    onClick = {},
+                    onClick = onGoogleFormClick,
                     containerColor = BlueAlpha100,
                 ) {
                     Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -245,7 +248,8 @@ private fun AuthCertificationPreview() {
             status = AuthStatus.REGISTER,
             onBackClick = {},
             onCreateCodeClick = {},
-            onCertificateClick = {}
+            onCertificateClick = {},
+            onGoogleFormClick = {}
         )
     }
 }

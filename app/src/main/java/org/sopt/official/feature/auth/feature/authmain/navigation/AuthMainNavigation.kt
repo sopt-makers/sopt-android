@@ -10,14 +10,14 @@ fun NavGraphBuilder.authMainNavGraph(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
-    navigateToChannel: () -> Unit
+    onContactChannelClick: () -> Unit
 ) {
     composable<AuthMainNavigation> {
         AuthMainRoute(
             navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
             onGoogleLoginCLick = onGoogleLoginCLick,
             navigateToCertification = navigateToCertification,
-            navigateToChannel = navigateToChannel
+            onContactChannelClick = onContactChannelClick
         )
     }
 }
