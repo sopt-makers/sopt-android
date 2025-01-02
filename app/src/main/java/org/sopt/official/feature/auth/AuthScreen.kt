@@ -73,7 +73,9 @@ internal fun AuthScreen(
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
                         onGoogleLoginCLick = onGoogleLoginCLick,
-                        navigateToCertification = navController::navigateCertification,
+                        navigateToCertification = { status ->
+                            navController.navigateCertification(status)
+                        },
                         navigateToChannel = navigateToChannel
                     )
                     certificationNavGraph(

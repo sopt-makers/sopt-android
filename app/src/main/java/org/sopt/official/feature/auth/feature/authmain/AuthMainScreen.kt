@@ -32,24 +32,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import kotlinx.coroutines.delay
 import org.sopt.official.R
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.auth.AuthViewModel
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.LoginErrorDialog
+import org.sopt.official.feature.auth.model.AuthStatus
 
 @Composable
 internal fun AuthMainRoute(
-    viewModel: AuthViewModel = hiltViewModel(),
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
-    navigateToCertification: () -> Unit,
+    navigateToCertification: (AuthStatus) -> Unit,
     navigateToChannel: () -> Unit
 ) {
     var loginDialogVisibility by remember { mutableStateOf(false) }
@@ -60,11 +58,11 @@ internal fun AuthMainRoute(
                 loginDialogVisibility = false
             },
             onFindAccountClick = {
-                navigateToCertification()
+                navigateToCertification(AuthStatus.SEARCH)
                 loginDialogVisibility = false
             },
             onResetAccountClick = {
-                navigateToCertification()
+                navigateToCertification(AuthStatus.CHANGE)
                 loginDialogVisibility = false
             },
             onContactChannelClick = {
@@ -78,13 +76,11 @@ internal fun AuthMainRoute(
         showDialog = {
             loginDialogVisibility = true
         },
-        onGoogleLoginCLick = {
-            onGoogleLoginCLick()
-        },
-        onLoginLaterClick = {
-            navigateToUnAuthenticatedHome()
-        },
-        navigateToCertification = navigateToCertification
+        onGoogleLoginCLick = onGoogleLoginCLick,
+        onLoginLaterClick = navigateToUnAuthenticatedHome,
+        navigateToCertification = {
+            navigateToCertification(AuthStatus.REGISTER)
+        }
     )
 }
 
