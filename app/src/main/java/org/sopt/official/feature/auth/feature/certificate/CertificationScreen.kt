@@ -227,7 +227,7 @@ private fun TopBar(
             style = SoptTheme.typography.heading24B
         )
         Text(
-            text = "Playground는 SOPT 회원만을 위한 공간이에요.\nSOPT 회원인증을 위해 전화번호를 입력해 주세요.",
+            text = "이곳은 SOPT 회원만을 위한 공간이에요.\nSOPT 회원인증을 위해 전화번호를 입력해 주세요.",
             color = Gray60,
             style = SoptTheme.typography.label12SB
         )
