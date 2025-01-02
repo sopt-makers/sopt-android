@@ -51,7 +51,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_memeber_error
-import org.sopt.official.R.drawable.ic_auth_process
+import org.sopt.official.R.drawable.ic_auth_process_first
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Blue500
 import org.sopt.official.designsystem.BlueAlpha100
@@ -192,7 +192,7 @@ private fun TopBar(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(id = ic_auth_process),
+            painter = painterResource(id = ic_auth_process_first),
             contentDescription = "상단 이미지"
         )
         Spacer(modifier = Modifier.height(11.dp))
