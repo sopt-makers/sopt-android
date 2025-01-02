@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.analytics.compose
 
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import org.sopt.official.analytics.Tracker
 
-android {
-    namespace = "org.sopt.official.analytics"
-}
-
-dependencies {
-    implementation(libs.amplitude.android)
+@Composable
+fun ProvideTracker(
+    tracker: Tracker,
+    content: @Composable () -> Unit
+) {
+    CompositionLocalProvider(
+        LocalTracker provides tracker
+    ) {
+        content()
+    }
 }

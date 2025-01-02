@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,16 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+package org.sopt.official.analytics.impl
 
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 
-android {
-    namespace = "org.sopt.official.analytics"
-}
-
-dependencies {
-    implementation(libs.amplitude.android)
+object FakeTracker : Tracker {
+    override fun track(type: EventType, name: String, properties: Map<String, Any?>) = Unit
+    override fun setNotificationStateToUserProperties(value: Boolean) = Unit
 }

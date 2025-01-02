@@ -43,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.analytics.impl.FakeTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.fortune.R.drawable.ic_alert
 import org.sopt.official.feature.fortune.R.drawable.ic_poke_check
@@ -141,9 +143,11 @@ fun FoundationScreen(
 @Composable
 fun FoundationScreenPreview() {
     SoptTheme {
-        FoundationScreen(
-            onClickLeadingIcon = {},
-            navigateToHome = {}
-        )
+        ProvideTracker(FakeTracker) {
+            FoundationScreen(
+                onClickLeadingIcon = {},
+                navigateToHome = {}
+            )
+        }
     }
 }
