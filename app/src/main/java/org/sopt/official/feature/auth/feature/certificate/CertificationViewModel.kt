@@ -46,7 +46,7 @@ class CertificationViewModel @Inject constructor(
                     type = AuthStatus.REGISTER.type
                 )
             ).onSuccess {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
+                _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount)
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
             }
