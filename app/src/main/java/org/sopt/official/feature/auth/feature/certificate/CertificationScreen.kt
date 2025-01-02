@@ -40,10 +40,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,6 +72,7 @@ import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.PhoneCertification
 import org.sopt.official.feature.auth.model.AuthStatus
+import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
 @Composable
 internal fun CertificationRoute(
@@ -93,17 +99,26 @@ internal fun CertificationRoute(
             }
     }
 
+    //todo: state로 관리
+    var phoneNumber by remember { mutableStateOf("") }
+
     CertificationScreen(
         status = status,
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
+            // TODO: 저장한 전화번호 넣기 by leeeyubin
             viewModel.createCode(status)
         },
         onCertificateClick = {
             viewModel.certificateCode(status)
         },
-        onGoogleFormClick = onGoogleFormClick
+        onGoogleFormClick = onGoogleFormClick,
+        onPhoneNumberChange = { newPhoneNumber ->
+            phoneNumber = newPhoneNumber
+        },
+        phoneNumber = phoneNumber,
+        visualTransformation = phoneNumberVisualTransformation()
     )
 }
 
@@ -113,7 +128,10 @@ private fun CertificationScreen(
     onBackClick: () -> Unit,
     onCreateCodeClick: () -> Unit,
     onCertificateClick: () -> Unit,
-    onGoogleFormClick: () -> Unit
+    onGoogleFormClick: () -> Unit,
+    onPhoneNumberChange: (String) -> Unit,
+    phoneNumber: String,
+    visualTransformation: VisualTransformation
 ) {
     Column {
         Image(
@@ -134,7 +152,10 @@ private fun CertificationScreen(
             Spacer(modifier = Modifier.height(44.dp))
             PhoneCertification(
                 onPhoneNumberClick = onCreateCodeClick,
-                textColor = Gray80
+                textColor = Gray80,
+                onTextChange = onPhoneNumberChange,
+                phoneNumber = phoneNumber,
+                visualTransformation = visualTransformation
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -249,7 +270,10 @@ private fun AuthCertificationPreview() {
             onBackClick = {},
             onCreateCodeClick = {},
             onCertificateClick = {},
-            onGoogleFormClick = {}
+            onGoogleFormClick = {},
+            onPhoneNumberChange = {},
+            phoneNumber = "01012345678",
+            visualTransformation = phoneNumberVisualTransformation(),
         )
     }
 }

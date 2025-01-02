@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray10
@@ -56,8 +57,10 @@ enum class CertificationButtonText(val message: String) {
 internal fun PhoneCertification(
     onPhoneNumberClick: () -> Unit,
     textColor: Color,
+    onTextChange: (String) -> Unit,
+    phoneNumber: String,
     modifier: Modifier = Modifier,
-    phoneNumber: String = "",
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     var buttonState by remember { mutableStateOf(CertificationButtonText.GET_CODE) }
 
@@ -78,7 +81,8 @@ internal fun PhoneCertification(
                     .weight(1f),
                 labelText = phoneNumber,
                 hintText = "010-XXXX-XXXX",
-                onTextChange = {}
+                onTextChange = onTextChange,
+                visualTransformation = visualTransformation
             )
             AuthButton(
                 padding = PaddingValues(vertical = 16.dp, horizontal = 14.dp),
@@ -101,7 +105,9 @@ private fun PhoneCertificationPreview() {
     SoptTheme {
         PhoneCertification(
             onPhoneNumberClick = {},
-            textColor = Gray80
+            textColor = Gray80,
+            onTextChange = {},
+            phoneNumber = "01012345678"
         )
     }
 }
