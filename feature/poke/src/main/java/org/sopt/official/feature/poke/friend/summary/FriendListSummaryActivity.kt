@@ -110,7 +110,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun initAppBar() {
         binding.includeAppBar.apply {
-            toolbar.setOnClickListener { onBackPressed() }
+            toolbar.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
             textViewTitle.text = getString(R.string.my_friend_title)
         }
     }
