@@ -20,13 +20,13 @@ class CertificationViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
     val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
-    fun createCode() {
+    fun createCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.createCode(
                 InitialInformation(
-                    name = "Mock-Success-Register",
-                    phone = "01012345678",
-                    type = AuthStatus.REGISTER.type
+                    name = status.authName,
+                    phone = status.phone,
+                    type = status.type
                 )
             ).onSuccess {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
@@ -36,14 +36,14 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    fun certificateCode() {
+    fun certificateCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.certificateCode(
                 InformationWithCode(
-                    name = "Mock-Success-Register",
-                    phone = "01012345678",
-                    code = "123456",
-                    type = AuthStatus.REGISTER.type
+                    name = status.authName,
+                    phone = status.phone,
+                    code = status.code,
+                    type = status.type
                 )
             ).onSuccess {
                 _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount)
