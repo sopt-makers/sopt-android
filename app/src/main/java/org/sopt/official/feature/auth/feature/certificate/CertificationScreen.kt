@@ -71,6 +71,7 @@ import org.sopt.official.feature.auth.component.PhoneCertification
 internal fun CertificationRoute(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
+    navigateToSocialAccount:()-> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -83,6 +84,7 @@ internal fun CertificationRoute(
                     is CertificationSideEffect.ShowToast -> {
                         context.toast(sideEffect.message)
                     }
+                    is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount()
                 }
             }
     }

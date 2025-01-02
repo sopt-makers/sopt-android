@@ -23,6 +23,8 @@ import org.sopt.official.feature.auth.feature.authmain.navigation.AuthMainNaviga
 import org.sopt.official.feature.auth.feature.authmain.navigation.authMainNavGraph
 import org.sopt.official.feature.auth.feature.certificate.navigation.certificationNavGraph
 import org.sopt.official.feature.auth.feature.certificate.navigation.navigateCertification
+import org.sopt.official.feature.auth.feature.socialaccount.navigation.navigateSocialAccount
+import org.sopt.official.feature.auth.feature.socialaccount.navigation.socialAccountNavGraph
 
 @Composable
 internal fun AuthScreen(
@@ -69,20 +71,18 @@ internal fun AuthScreen(
                     startDestination = AuthMainNavigation
                 ) {
                     authMainNavGraph(
-                        navigateToUnAuthenticatedHome = {
-                            navigateToUnAuthenticatedHome()
-                        },
-                        onGoogleLoginCLick = {
-                            onGoogleLoginCLick()
-                        },
-                        navigateToCertification = {
-                            navController.navigateCertification()
-                        },
+                        navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
+                        onGoogleLoginCLick = onGoogleLoginCLick,
+                        navigateToCertification = navController::navigateCertification,
                         navigateToChannel = navigateToChannel
                     )
                     certificationNavGraph(
                         onBackClick = navController::navigateUp,
-                        onShowSnackBar = onShowSnackBar
+                        onShowSnackBar = onShowSnackBar,
+                        navigateToSocialAccount = navController::navigateSocialAccount
+                    )
+                    socialAccountNavGraph(
+                        onGoogleLoginCLick = {}
                     )
                 }
             }
