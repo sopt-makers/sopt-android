@@ -40,6 +40,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -66,12 +69,14 @@ import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.PhoneCertification
+import org.sopt.official.feature.auth.model.AuthStatus
 
 @Composable
 internal fun CertificationRoute(
+    status: AuthStatus,
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount:()-> Unit,
+    navigateToSocialAccount: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -84,12 +89,14 @@ internal fun CertificationRoute(
                     is CertificationSideEffect.ShowToast -> {
                         context.toast(sideEffect.message)
                     }
+
                     is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount()
                 }
             }
     }
 
     CertificationScreen(
+        status = status,
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
@@ -103,6 +110,7 @@ internal fun CertificationRoute(
 
 @Composable
 private fun CertificationScreen(
+    status: AuthStatus,
     onBackClick: () -> Unit,
     onCreateCodeClick: () -> Unit,
     onCertificateClick: () -> Unit
@@ -135,34 +143,36 @@ private fun CertificationScreen(
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = {},
             )
-            Spacer(modifier = Modifier.height(41.dp))
-            AuthButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .border(
-                        color = Blue500,
-                        width = 1.dp,
-                        shape = RoundedCornerShape(10.dp)
-                    ),
-                padding = PaddingValues(vertical = 14.dp, horizontal = 18.dp),
-                onClick = {},
-                containerColor = BlueAlpha100,
-            ) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Image(
-                        painterResource(id = ic_auth_memeber_error),
-                        contentDescription = "에러 아이콘",
-                    )
-                    Column {
-                        AuthTextWithArrow(
-                            text = "SOPT 회원 인증에 실패하셨나요?",
-                            textStyle = SoptTheme.typography.body14M
+            if (status == AuthStatus.REGISTER) {
+                Spacer(modifier = Modifier.height(41.dp))
+                AuthButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .border(
+                            color = Blue500,
+                            width = 1.dp,
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    padding = PaddingValues(vertical = 14.dp, horizontal = 18.dp),
+                    onClick = {},
+                    containerColor = BlueAlpha100,
+                ) {
+                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                        Image(
+                            painterResource(id = ic_auth_memeber_error),
+                            contentDescription = "에러 아이콘",
                         )
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(
-                            text = "번호가 바뀌었거나, 인증이 어려우신 경우 추가 정보 인증을 통해 가입을 도와드리고 있어요!",
-                            color = Gray60
-                        )
+                        Column {
+                            AuthTextWithArrow(
+                                text = "SOPT 회원 인증에 실패하셨나요?",
+                                textStyle = SoptTheme.typography.body14M
+                            )
+                            Spacer(modifier = Modifier.height(10.dp))
+                            Text(
+                                text = "번호가 바뀌었거나, 인증이 어려우신 경우 추가 정보 인증을 통해 가입을 도와드리고 있어요!",
+                                color = Gray60
+                            )
+                        }
                     }
                 }
             }
@@ -235,6 +245,7 @@ internal enum class ErrorCase(val message: String) {
 private fun AuthCertificationPreview() {
     SoptTheme {
         CertificationScreen(
+            status = AuthStatus.REGISTER,
             onBackClick = {},
             onCreateCodeClick = {},
             onCertificateClick = {}
