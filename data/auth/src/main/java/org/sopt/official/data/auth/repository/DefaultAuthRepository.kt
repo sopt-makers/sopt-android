@@ -8,6 +8,7 @@ import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignInCode
 import org.sopt.official.domain.auth.model.SignInResult
+import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.VerificationResult
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
@@ -27,9 +28,10 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.signIn(request.toRequest()).data.toDomain()
     }
 
-    override suspend fun signUp(): Result<Unit> {
-        TODO("Not yet implemented")
+    override suspend fun signUp(request: SignUpCode): Result<Unit> = runCatching {
+        authApi.signUp(request.toRequest())
     }
+
 
     override suspend fun changeAccount(request: OriginalInformation): Result<Unit> = runCatching {
         authApi.changeAccount(request.toRequest())

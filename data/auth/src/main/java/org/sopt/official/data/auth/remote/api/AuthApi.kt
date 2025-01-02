@@ -6,6 +6,7 @@ import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
 import org.sopt.official.data.auth.remote.request.SignInRequest
+import org.sopt.official.data.auth.remote.request.SignUpRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
 import org.sopt.official.data.auth.remote.response.SignInResponse
 import retrofit2.http.Body
@@ -27,6 +28,11 @@ internal interface AuthApi {
     suspend fun signIn(
         @Body request: SignInRequest,
     ): BaseAuthResponse<SignInResponse>
+
+    @POST("/api/v1/auth/signup")
+    suspend fun signUp(
+        @Body request: SignUpRequest,
+    ): NonDataBaseAuthResponse
 
     @PATCH("/api/v1/social/accounts")
     suspend fun changeAccount(

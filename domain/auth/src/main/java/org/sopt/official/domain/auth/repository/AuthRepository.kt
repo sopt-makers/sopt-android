@@ -5,6 +5,7 @@ import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignInCode
 import org.sopt.official.domain.auth.model.SignInResult
+import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.VerificationResult
 
 interface AuthRepository {
@@ -14,7 +15,7 @@ interface AuthRepository {
 
     suspend fun signIn(request: SignInCode): Result<SignInResult>
 
-    suspend fun signUp(): Result<Unit>
+    suspend fun signUp(request: SignUpCode): Result<Unit>
 
     suspend fun changeAccount(request: OriginalInformation): Result<Unit>
 }
