@@ -619,7 +619,7 @@ SPLandroidx/collection/MutableScatterSet;->add(Ljava/lang/Object;)Z
 SPLandroidx/collection/MutableScatterSet;->addAll(Landroidx/collection/ScatterSet;)Z
 SPLandroidx/collection/MutableScatterSet;->adjustStorage$collection()V
 SPLandroidx/collection/MutableScatterSet;->asMutableSet()Ljava/util/Set;
-HSPLandroidx/collection/MutableScatterSet;->clear()V
+SPLandroidx/collection/MutableScatterSet;->clear()V
 SPLandroidx/collection/MutableScatterSet;->dropDeletes$collection()V
 HSPLandroidx/collection/MutableScatterSet;->findAbsoluteInsertIndex(Ljava/lang/Object;)I
 SPLandroidx/collection/MutableScatterSet;->findFirstAvailableSlot(I)I
@@ -3271,7 +3271,7 @@ Landroidx/compose/runtime/SlotReader;
 SPLandroidx/compose/runtime/SlotReader;-><clinit>()V
 SPLandroidx/compose/runtime/SlotReader;-><init>(Landroidx/compose/runtime/SlotTable;)V
 SPLandroidx/compose/runtime/SlotReader;->anchor(I)Landroidx/compose/runtime/Anchor;
-HSPLandroidx/compose/runtime/SlotReader;->aux([II)Ljava/lang/Object;
+SPLandroidx/compose/runtime/SlotReader;->aux([II)Ljava/lang/Object;
 SPLandroidx/compose/runtime/SlotReader;->beginEmpty()V
 SPLandroidx/compose/runtime/SlotReader;->close()V
 SPLandroidx/compose/runtime/SlotReader;->containsMark(I)Z
@@ -7624,7 +7624,7 @@ SPLandroidx/compose/ui/res/ImageVectorCache$Key;->hashCode()I
 Landroidx/compose/ui/res/PainterResources_androidKt;
 SPLandroidx/compose/ui/res/PainterResources_androidKt;->loadImageBitmapResource(Ljava/lang/CharSequence;Landroid/content/res/Resources;I)Landroidx/compose/ui/graphics/ImageBitmap;
 SPLandroidx/compose/ui/res/PainterResources_androidKt;->loadVectorResource(Landroid/content/res/Resources$Theme;Landroid/content/res/Resources;IILandroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/vector/ImageVector;
-HSPLandroidx/compose/ui/res/PainterResources_androidKt;->painterResource(ILandroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/painter/Painter;
+SPLandroidx/compose/ui/res/PainterResources_androidKt;->painterResource(ILandroidx/compose/runtime/Composer;I)Landroidx/compose/ui/graphics/painter/Painter;
 Landroidx/compose/ui/res/ResourceIdCache;
 SPLandroidx/compose/ui/res/ResourceIdCache;-><clinit>()V
 SPLandroidx/compose/ui/res/ResourceIdCache;-><init>()V
@@ -8673,8 +8673,12 @@ SPLandroidx/compose/ui/text/platform/AndroidTextPaint;->setShadow(Landroidx/comp
 SPLandroidx/compose/ui/text/platform/AndroidTextPaint;->setTextDecoration(Landroidx/compose/ui/text/style/TextDecoration;)V
 Landroidx/compose/ui/text/platform/DefaultImpl;
 SPLandroidx/compose/ui/text/platform/DefaultImpl;-><init>()V
+SPLandroidx/compose/ui/text/platform/DefaultImpl;->access$setLoadState$p(Landroidx/compose/ui/text/platform/DefaultImpl;Landroidx/compose/runtime/State;)V
 SPLandroidx/compose/ui/text/platform/DefaultImpl;->getFontLoadState()Landroidx/compose/runtime/State;
 SPLandroidx/compose/ui/text/platform/DefaultImpl;->getFontLoaded()Landroidx/compose/runtime/State;
+Landroidx/compose/ui/text/platform/DefaultImpl$getFontLoadState$initCallback$1;
+SPLandroidx/compose/ui/text/platform/DefaultImpl$getFontLoadState$initCallback$1;-><init>(Landroidx/compose/runtime/MutableState;Landroidx/compose/ui/text/platform/DefaultImpl;)V
+SPLandroidx/compose/ui/text/platform/DefaultImpl$getFontLoadState$initCallback$1;->onInitialized()V
 Landroidx/compose/ui/text/platform/DispatcherKt;
 SPLandroidx/compose/ui/text/platform/DispatcherKt;-><clinit>()V
 SPLandroidx/compose/ui/text/platform/DispatcherKt;->getFontCacheManagementDispatcher()Lkotlinx/coroutines/CoroutineDispatcher;
@@ -10265,6 +10269,7 @@ SPLandroidx/emoji2/text/EmojiCompat;->load()V
 SPLandroidx/emoji2/text/EmojiCompat;->loadMetadata()V
 SPLandroidx/emoji2/text/EmojiCompat;->onMetadataLoadSuccess()V
 SPLandroidx/emoji2/text/EmojiCompat;->process(Ljava/lang/CharSequence;IIII)Ljava/lang/CharSequence;
+SPLandroidx/emoji2/text/EmojiCompat;->registerInitCallback(Landroidx/emoji2/text/EmojiCompat$InitCallback;)V
 Landroidx/emoji2/text/EmojiCompat$CompatInternal;
 SPLandroidx/emoji2/text/EmojiCompat$CompatInternal;-><init>(Landroidx/emoji2/text/EmojiCompat;)V
 Landroidx/emoji2/text/EmojiCompat$CompatInternal19;
@@ -10282,6 +10287,8 @@ SPLandroidx/emoji2/text/EmojiCompat$Config;->setMetadataLoadStrategy(I)Landroidx
 Landroidx/emoji2/text/EmojiCompat$DefaultSpanFactory;
 SPLandroidx/emoji2/text/EmojiCompat$DefaultSpanFactory;-><init>()V
 Landroidx/emoji2/text/EmojiCompat$GlyphChecker;
+Landroidx/emoji2/text/EmojiCompat$InitCallback;
+SPLandroidx/emoji2/text/EmojiCompat$InitCallback;-><init>()V
 Landroidx/emoji2/text/EmojiCompat$ListenerDispatcher;
 SPLandroidx/emoji2/text/EmojiCompat$ListenerDispatcher;-><init>(Ljava/util/Collection;I)V
 SPLandroidx/emoji2/text/EmojiCompat$ListenerDispatcher;-><init>(Ljava/util/Collection;ILjava/lang/Throwable;)V
@@ -10382,7 +10389,7 @@ HSPLandroidx/emoji2/text/MetadataRepo;->put(Landroidx/emoji2/text/TypefaceEmojiR
 Landroidx/emoji2/text/MetadataRepo$Node;
 SPLandroidx/emoji2/text/MetadataRepo$Node;-><init>()V
 SPLandroidx/emoji2/text/MetadataRepo$Node;-><init>(I)V
-SPLandroidx/emoji2/text/MetadataRepo$Node;->get(I)Landroidx/emoji2/text/MetadataRepo$Node;
+HSPLandroidx/emoji2/text/MetadataRepo$Node;->get(I)Landroidx/emoji2/text/MetadataRepo$Node;
 SPLandroidx/emoji2/text/MetadataRepo$Node;->put(Landroidx/emoji2/text/TypefaceEmojiRasterizer;II)V
 Landroidx/emoji2/text/SpannableBuilder;
 Landroidx/emoji2/text/TypefaceEmojiRasterizer;
@@ -10395,7 +10402,7 @@ HSPLandroidx/emoji2/text/TypefaceEmojiRasterizer;->getMetadataItem()Landroidx/em
 Landroidx/emoji2/text/UnprecomputeTextOnModificationSpannable;
 Landroidx/emoji2/text/flatbuffer/MetadataItem;
 SPLandroidx/emoji2/text/flatbuffer/MetadataItem;-><init>()V
-SPLandroidx/emoji2/text/flatbuffer/MetadataItem;->__assign(ILjava/nio/ByteBuffer;)Landroidx/emoji2/text/flatbuffer/MetadataItem;
+HSPLandroidx/emoji2/text/flatbuffer/MetadataItem;->__assign(ILjava/nio/ByteBuffer;)Landroidx/emoji2/text/flatbuffer/MetadataItem;
 HSPLandroidx/emoji2/text/flatbuffer/MetadataItem;->__init(ILjava/nio/ByteBuffer;)V
 SPLandroidx/emoji2/text/flatbuffer/MetadataItem;->codepoints(I)I
 SPLandroidx/emoji2/text/flatbuffer/MetadataItem;->codepointsLength()I
@@ -12172,8 +12179,6 @@ SPLcom/google/android/gms/internal/measurement/zzcf;-><clinit>()V
 SPLcom/google/android/gms/internal/measurement/zzcf;->zza()Lcom/google/android/gms/internal/measurement/zzci;
 Lcom/google/android/gms/internal/measurement/zzch;
 SPLcom/google/android/gms/internal/measurement/zzch;-><init>()V
-SPLcom/google/android/gms/internal/measurement/zzch;->zza(Ljava/lang/String;)Ljava/lang/String;
-SPLcom/google/android/gms/internal/measurement/zzch;->zza(Ljava/lang/String;Lcom/google/android/gms/internal/measurement/zzcm;)Ljava/lang/String;
 SPLcom/google/android/gms/internal/measurement/zzch;->zza(Ljava/lang/String;Lcom/google/android/gms/internal/measurement/zzcm;Lcom/google/android/gms/internal/measurement/zzcj;)Ljava/lang/String;
 Lcom/google/android/gms/internal/measurement/zzci;
 Lcom/google/android/gms/internal/measurement/zzcj;
@@ -12283,7 +12288,6 @@ SPLcom/google/android/gms/internal/measurement/zzgu;->zza()Ljava/util/Map;
 SPLcom/google/android/gms/internal/measurement/zzgu;->zza(Landroid/content/ContentResolver;Landroid/net/Uri;Ljava/lang/Runnable;)Lcom/google/android/gms/internal/measurement/zzgu;
 SPLcom/google/android/gms/internal/measurement/zzgu;->zza(Ljava/lang/String;)Ljava/lang/Object;
 SPLcom/google/android/gms/internal/measurement/zzgu;->zzb()Ljava/util/Map;
-PLcom/google/android/gms/internal/measurement/zzgu;->zzd()V
 SPLcom/google/android/gms/internal/measurement/zzgu;->zze()Ljava/util/Map;
 Lcom/google/android/gms/internal/measurement/zzgv;
 SPLcom/google/android/gms/internal/measurement/zzgv;-><init>(Landroid/content/Context;Lcom/google/common/base/Supplier;)V
@@ -12291,7 +12295,6 @@ SPLcom/google/android/gms/internal/measurement/zzgv;->zza()Landroid/content/Cont
 SPLcom/google/android/gms/internal/measurement/zzgv;->zzb()Lcom/google/common/base/Supplier;
 Lcom/google/android/gms/internal/measurement/zzgw;
 SPLcom/google/android/gms/internal/measurement/zzgw;-><init>(Lcom/google/android/gms/internal/measurement/zzgu;Landroid/os/Handler;)V
-PLcom/google/android/gms/internal/measurement/zzgw;->onChange(Z)V
 Lcom/google/android/gms/internal/measurement/zzgx;
 SPLcom/google/android/gms/internal/measurement/zzgx;-><init>(Lcom/google/android/gms/internal/measurement/zzgu;)V
 SPLcom/google/android/gms/internal/measurement/zzgx;->zza()Ljava/lang/Object;
@@ -12325,7 +12328,6 @@ SPLcom/google/android/gms/internal/measurement/zzhj;->zza(Ljava/lang/String;)Lja
 SPLcom/google/android/gms/internal/measurement/zzhj;->zzb()Ljava/lang/String;
 SPLcom/google/android/gms/internal/measurement/zzhj;->zzb(Landroid/content/Context;)V
 SPLcom/google/android/gms/internal/measurement/zzhj;->zzb(Lcom/google/android/gms/internal/measurement/zzhu;)Ljava/lang/Object;
-PLcom/google/android/gms/internal/measurement/zzhj;->zzc()V
 SPLcom/google/android/gms/internal/measurement/zzhj;->zzd()Z
 SPLcom/google/android/gms/internal/measurement/zzhj;->zze()Ljava/lang/Object;
 Lcom/google/android/gms/internal/measurement/zzhk;
@@ -12337,7 +12339,6 @@ SPLcom/google/android/gms/internal/measurement/zzhl;-><init>(Landroid/content/Co
 SPLcom/google/android/gms/internal/measurement/zzhl;->get()Ljava/lang/Object;
 Lcom/google/android/gms/internal/measurement/zzhm;
 SPLcom/google/android/gms/internal/measurement/zzhm;-><init>()V
-PLcom/google/android/gms/internal/measurement/zzhm;->run()V
 Lcom/google/android/gms/internal/measurement/zzhn;
 SPLcom/google/android/gms/internal/measurement/zzhn;-><init>(Lcom/google/android/gms/internal/measurement/zzhr;Ljava/lang/String;Ljava/lang/Long;Z)V
 SPLcom/google/android/gms/internal/measurement/zzhn;->zza(Ljava/lang/Object;)Ljava/lang/Object;
@@ -12570,7 +12571,6 @@ PLcom/google/android/gms/measurement/internal/zzav;->zzc()Z
 SPLcom/google/android/gms/measurement/internal/zzav;->zzd()Landroid/os/Handler;
 Lcom/google/android/gms/measurement/internal/zzaw;
 SPLcom/google/android/gms/measurement/internal/zzaw;->zza(Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;)Ljava/util/Set;
-SPLcom/google/android/gms/measurement/internal/zzaw;->zza(Lcom/google/android/gms/measurement/internal/zzgo;Landroid/database/sqlite/SQLiteDatabase;)V
 SPLcom/google/android/gms/measurement/internal/zzaw;->zza(Lcom/google/android/gms/measurement/internal/zzgo;Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;)Z
 SPLcom/google/android/gms/measurement/internal/zzaw;->zza(Lcom/google/android/gms/measurement/internal/zzgo;Landroid/database/sqlite/SQLiteDatabase;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)V
 Lcom/google/android/gms/measurement/internal/zzax;
@@ -12968,7 +12968,6 @@ SPLcom/google/android/gms/measurement/internal/zzgh;-><init>(Lcom/google/android
 Lcom/google/android/gms/measurement/internal/zzgi;
 SPLcom/google/android/gms/measurement/internal/zzgi;-><init>(Lcom/google/android/gms/measurement/internal/zzgf;Landroid/content/Context;Ljava/lang/String;)V
 SPLcom/google/android/gms/measurement/internal/zzgi;->getWritableDatabase()Landroid/database/sqlite/SQLiteDatabase;
-SPLcom/google/android/gms/measurement/internal/zzgi;->onCreate(Landroid/database/sqlite/SQLiteDatabase;)V
 SPLcom/google/android/gms/measurement/internal/zzgi;->onOpen(Landroid/database/sqlite/SQLiteDatabase;)V
 Lcom/google/android/gms/measurement/internal/zzgj;
 SPLcom/google/android/gms/measurement/internal/zzgj;-><init>(Landroid/content/Context;Landroid/os/Looper;Lcom/google/android/gms/common/internal/BaseGmsClient$BaseConnectionCallbacks;Lcom/google/android/gms/common/internal/BaseGmsClient$BaseOnConnectionFailedListener;)V
@@ -13011,11 +13010,9 @@ SPLcom/google/android/gms/measurement/internal/zzha;-><clinit>()V
 SPLcom/google/android/gms/measurement/internal/zzha;-><init>(Lcom/google/android/gms/measurement/internal/zzhy;)V
 SPLcom/google/android/gms/measurement/internal/zzha;->zza(J)Z
 SPLcom/google/android/gms/measurement/internal/zzha;->zza(Lcom/google/android/gms/measurement/internal/zznm;)Z
-SPLcom/google/android/gms/measurement/internal/zzha;->zza(Z)V
 SPLcom/google/android/gms/measurement/internal/zzha;->zzaa()V
 SPLcom/google/android/gms/measurement/internal/zzha;->zzab()Z
 SPLcom/google/android/gms/measurement/internal/zzha;->zzb(Ljava/lang/String;)V
-SPLcom/google/android/gms/measurement/internal/zzha;->zzb(Z)V
 SPLcom/google/android/gms/measurement/internal/zzha;->zzc()Landroid/content/SharedPreferences;
 SPLcom/google/android/gms/measurement/internal/zzha;->zzc(Ljava/lang/String;)V
 SPLcom/google/android/gms/measurement/internal/zzha;->zzg()Landroid/content/SharedPreferences;
@@ -13043,7 +13040,6 @@ SPLcom/google/android/gms/measurement/internal/zzhe;-><init>(Lcom/google/android
 SPLcom/google/android/gms/measurement/internal/zzhe;-><init>(Lcom/google/android/gms/measurement/internal/zzha;Ljava/lang/String;JLcom/google/android/gms/measurement/internal/zzhg;)V
 SPLcom/google/android/gms/measurement/internal/zzhe;->zza()Landroid/util/Pair;
 SPLcom/google/android/gms/measurement/internal/zzhe;->zzb()J
-SPLcom/google/android/gms/measurement/internal/zzhe;->zzc()V
 Lcom/google/android/gms/measurement/internal/zzhs;
 SPLcom/google/android/gms/measurement/internal/zzhs;-><init>(Landroid/content/Context;Ljava/lang/String;)V
 SPLcom/google/android/gms/measurement/internal/zzhs;->zza(Landroid/content/Context;)Ljava/lang/String;
@@ -13254,7 +13250,6 @@ SPLcom/google/android/gms/measurement/internal/zzls;->zzj()Lcom/google/android/g
 SPLcom/google/android/gms/measurement/internal/zzls;->zzk()Lcom/google/android/gms/measurement/internal/zzha;
 SPLcom/google/android/gms/measurement/internal/zzls;->zzl()Lcom/google/android/gms/measurement/internal/zzhv;
 SPLcom/google/android/gms/measurement/internal/zzls;->zzm()Lcom/google/android/gms/measurement/internal/zzjq;
-SPLcom/google/android/gms/measurement/internal/zzls;->zzq()Lcom/google/android/gms/measurement/internal/zzos;
 SPLcom/google/android/gms/measurement/internal/zzls;->zzt()V
 SPLcom/google/android/gms/measurement/internal/zzls;->zzz()Z
 Lcom/google/android/gms/measurement/internal/zzlt;
@@ -13346,7 +13341,6 @@ Lcom/google/android/gms/measurement/internal/zzos;
 SPLcom/google/android/gms/measurement/internal/zzos;-><clinit>()V
 SPLcom/google/android/gms/measurement/internal/zzos;-><init>(Lcom/google/android/gms/measurement/internal/zzhy;)V
 SPLcom/google/android/gms/measurement/internal/zzos;->zza()Landroid/content/Context;
-SPLcom/google/android/gms/measurement/internal/zzos;->zza(I)I
 SPLcom/google/android/gms/measurement/internal/zzos;->zza(ILjava/lang/Object;ZZLjava/lang/String;)Ljava/lang/Object;
 SPLcom/google/android/gms/measurement/internal/zzos;->zza(IZ)Z
 SPLcom/google/android/gms/measurement/internal/zzos;->zza(Landroid/content/Context;)Z
@@ -13370,7 +13364,6 @@ SPLcom/google/android/gms/measurement/internal/zzos;->zza(Ljava/lang/String;[Lja
 SPLcom/google/android/gms/measurement/internal/zzos;->zza(Ljava/lang/String;[Ljava/lang/String;[Ljava/lang/String;Ljava/lang/String;)Z
 SPLcom/google/android/gms/measurement/internal/zzos;->zza([B)J
 SPLcom/google/android/gms/measurement/internal/zzos;->zzaa()V
-SPLcom/google/android/gms/measurement/internal/zzos;->zzb()Lcom/google/android/gms/common/util/Clock;
 SPLcom/google/android/gms/measurement/internal/zzos;->zzb(Landroid/content/Context;Ljava/lang/String;)Z
 SPLcom/google/android/gms/measurement/internal/zzos;->zzb(Ljava/lang/Object;)[Landroid/os/Bundle;
 SPLcom/google/android/gms/measurement/internal/zzos;->zzb(Ljava/lang/String;Ljava/lang/Object;)Ljava/lang/Object;
@@ -18092,7 +18085,6 @@ SPLkotlinx/coroutines/internal/ResizableAtomicArray;->get(I)Ljava/lang/Object;
 SPLkotlinx/coroutines/internal/ResizableAtomicArray;->setSynchronized(ILjava/lang/Object;)V
 Lkotlinx/coroutines/internal/ScopeCoroutine;
 SPLkotlinx/coroutines/internal/ScopeCoroutine;-><init>(Lkotlin/coroutines/CoroutineContext;Lkotlin/coroutines/Continuation;)V
-SPLkotlinx/coroutines/internal/ScopeCoroutine;->afterCompletionUndispatched()V
 SPLkotlinx/coroutines/internal/ScopeCoroutine;->afterResume(Ljava/lang/Object;)V
 Lkotlinx/coroutines/internal/Segment;
 SPLkotlinx/coroutines/internal/Segment;-><clinit>()V
