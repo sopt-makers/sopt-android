@@ -101,23 +101,29 @@ internal fun CertificationRoute(
 
     //todo: state로 관리
     var phoneNumber by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf("") }
 
     CertificationScreen(
         status = status,
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
-            // TODO: 저장한 전화번호 넣기 by leeeyubin
+            // TODO: 실제 전화번호 넣기 by leeeyubin
             viewModel.createCode(status)
         },
         onCertificateClick = {
+            // TODO: 실제 인증코드 넣기 by leeeyubin
             viewModel.certificateCode(status)
         },
         onGoogleFormClick = onGoogleFormClick,
         onPhoneNumberChange = { newPhoneNumber ->
             phoneNumber = newPhoneNumber
         },
+        onCodeChange = { newCode ->
+            code = newCode
+        },
         phoneNumber = phoneNumber,
+        code = code,
         visualTransformation = phoneNumberVisualTransformation()
     )
 }
@@ -130,7 +136,9 @@ private fun CertificationScreen(
     onCertificateClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
     onPhoneNumberChange: (String) -> Unit,
+    onCodeChange: (String) -> Unit,
     phoneNumber: String,
+    code: String,
     visualTransformation: VisualTransformation
 ) {
     Column {
@@ -160,9 +168,9 @@ private fun CertificationScreen(
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
                 modifier = Modifier.fillMaxWidth(),
-                labelText = "",
+                labelText = code,
                 hintText = "인증번호를 입력해 주세요.",
-                onTextChange = {},
+                onTextChange = onCodeChange,
             )
             if (status == AuthStatus.REGISTER) {
                 Spacer(modifier = Modifier.height(41.dp))
@@ -272,7 +280,9 @@ private fun AuthCertificationPreview() {
             onCertificateClick = {},
             onGoogleFormClick = {},
             onPhoneNumberChange = {},
+            onCodeChange = {},
             phoneNumber = "01012345678",
+            code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
         )
     }
