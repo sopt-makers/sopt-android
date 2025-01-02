@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.OriginalInformation
+import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
@@ -32,7 +33,18 @@ class SocialAccountViewModel @Inject constructor(
 
     private fun signUp() {
         viewModelScope.launch {
-
+            authRepository.signUp(
+                SignUpCode(
+                    name = "홍길동",
+                    phone = "010-9121-2121",
+                    code = "eyadxcvc.dasd.wda",
+                    authPlatform = GOOGLE
+                )
+            ).onSuccess {
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공!!"))
+            }.onFailure {
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패ㅠㅠ"))
+            }
         }
     }
 
