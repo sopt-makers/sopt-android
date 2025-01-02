@@ -3,11 +3,13 @@ package org.sopt.official.data.auth.remote.api
 import org.sopt.official.data.auth.model.BaseAuthResponse
 import org.sopt.official.data.auth.model.NonDataBaseAuthResponse
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
+import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
 import org.sopt.official.data.auth.remote.request.SignInRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
 import org.sopt.official.data.auth.remote.response.SignInResponse
 import retrofit2.http.Body
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 internal interface AuthApi {
@@ -25,4 +27,9 @@ internal interface AuthApi {
     suspend fun signIn(
         @Body request: SignInRequest,
     ): BaseAuthResponse<SignInResponse>
+
+    @PATCH("/api/v1/social/accounts")
+    suspend fun changeAccount(
+        @Body request: ChangeAccountRequest
+    ): NonDataBaseAuthResponse
 }

@@ -36,27 +36,50 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
+import org.sopt.official.feature.auth.model.AuthStatus
 
 @Composable
 internal fun SocialAccountRoute(
-    onGoogleLoginCLick: () -> Unit
+    status: AuthStatus,
+    onGoogleLoginCLick: () -> Unit,
+    viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SocialAccountSideEffect.ShowToast -> context.toast(sideEffect.message)
+                }
+            }
+    }
+
     SocialAccountScreen(
-        onGoogleLoginCLick = onGoogleLoginCLick
+        onGoogleLoginCLick = {
+            viewModel.connectSocialAccount(status)
+        }
     )
 }
 
