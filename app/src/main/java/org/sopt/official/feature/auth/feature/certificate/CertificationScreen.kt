@@ -26,6 +26,7 @@ package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,6 +69,7 @@ import org.sopt.official.feature.auth.component.PhoneCertification
 
 @Composable
 internal fun CertificationRoute(
+    onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
@@ -86,6 +88,7 @@ internal fun CertificationRoute(
     }
 
     CertificationScreen(
+        onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
             viewModel.createCode()
@@ -98,6 +101,7 @@ internal fun CertificationRoute(
 
 @Composable
 private fun CertificationScreen(
+    onBackClick: () -> Unit,
     onCreateCodeClick: () -> Unit,
     onCertificateClick: () -> Unit
 ) {
@@ -108,6 +112,7 @@ private fun CertificationScreen(
             modifier = Modifier
                 .padding(vertical = 12.dp)
                 .padding(start = 20.dp)
+                .clickable { onBackClick() }
         )
         Column(
             modifier = Modifier
@@ -228,6 +233,7 @@ internal enum class ErrorCase(val message: String) {
 private fun AuthCertificationPreview() {
     SoptTheme {
         CertificationScreen(
+            onBackClick = {},
             onCreateCodeClick = {},
             onCertificateClick = {}
         )

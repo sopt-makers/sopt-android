@@ -17,10 +17,12 @@ fun NavController.navigateCertification(
 }
 
 fun NavGraphBuilder.certificationNavGraph(
+    onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit
 ) {
     composable<CertificationNavigation> {
         CertificationRoute(
+            onBackClick = onBackClick,
             onShowSnackBar = onShowSnackBar
         )
     }

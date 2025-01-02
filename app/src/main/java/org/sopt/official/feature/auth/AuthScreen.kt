@@ -81,6 +81,7 @@ internal fun AuthScreen(
                         navigateToChannel = navigateToChannel
                     )
                     certificationNavGraph(
+                        onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar
                     )
                 }
