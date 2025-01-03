@@ -144,7 +144,6 @@ class AuthActivity : AppCompatActivity() {
                     },
                     onGoogleLoginCLick = {
                         val credentialManager = CredentialManager.create(context)
-                        // TODO Server Client Id를 입력해주세요.
                         val googleIdOption = GetGoogleIdOption.Builder()
                             .setFilterByAuthorizedAccounts(true)
                             .setServerClientId(BuildConfig.SERVER_CLIENT_ID)
