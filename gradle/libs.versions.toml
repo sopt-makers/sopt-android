@@ -24,11 +24,13 @@ customtab = "1.8.0"
 exifinterface = "1.3.7"
 compose-bom = "2024.12.01"
 androidx-paging = "3.3.5"
+androidx-credential = "1.5.0-beta01"
 desugarJdk = "2.1.4"
 
 material = "1.12.0"
 in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
+google-id = "1.1.1"
 
 junit = "4.13.2"
 androidx-test-junit = "1.2.1"
@@ -58,7 +60,6 @@ dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 
 google-services = "4.4.2"
-google-auth = "21.3.0"
 crashlytics = "3.0.2"
 firebase = "33.7.0"
 firebaseMessagingLifecycleKtx = "0.2.1"
@@ -94,10 +95,13 @@ startup = { module = "androidx.startup:startup-runtime", version.ref = "startup"
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
+androidx-credential = { module = "androidx.credentials:credentials", version.ref = "androidx-credential" }
+androidx-credential-play-service = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credential" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
 secret-plugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
+google-id-identity = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-id" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -171,7 +175,6 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
-google-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "google-auth" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 

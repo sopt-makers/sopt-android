@@ -170,6 +170,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.fragment.ktx)
+    implementation(libs.androidx.credential)
+    implementation(libs.androidx.credential.play.service)
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.compose.test)
@@ -179,7 +181,7 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
-    implementation(libs.google.auth)
+    implementation(libs.google.id.identity)
 }
 
 secrets {
