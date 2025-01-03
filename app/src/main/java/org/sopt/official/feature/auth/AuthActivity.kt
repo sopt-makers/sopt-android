@@ -39,21 +39,17 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig
 import org.sopt.official.R
-import org.sopt.official.auth.PlaygroundAuth
-import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.impl.api.AuthService
-import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.auth.authenticator.rememberGoogleExecutor
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
@@ -74,11 +70,28 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
+                // TODO 서버 클라이언트 아이디를 입력해주세요.
+                val signInClient = GoogleSignIn.getClient(
+                    context,
+                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken("SERVER_CLIENT_ID").requestEmail()
+                        .build()
+                )
+                val launcher = rememberGoogleExecutor(
+                    onSignInSuccess = {
+                        // TODO 로그인 성공시에 서버로 idToken을 전송해주세요.
+                        val idToken = it.idToken
+                    },
+                    onSignInFailed = {
+                        // TODO 로그인 실패시에 화면에 로그인 실패 관련 알림을 보여주세요.
+                    })
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
                         startActivity(
-                            HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                            HomeActivity.getIntent(
+                                context,
+                                HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus))
+                            )
                         )
                     }
                 }
@@ -89,7 +102,10 @@ class AuthActivity : AppCompatActivity() {
                         getString(R.string.toolbar_notification),
                         NotificationManager.IMPORTANCE_HIGH
                     ).apply {
-                        setSound(null, null)
+                        setSound(
+                            null,
+                            null
+                        )
                         enableLights(false)
                         enableVibration(false)
                         lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
@@ -97,19 +113,27 @@ class AuthActivity : AppCompatActivity() {
                     }
                 }
 
-                LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
-                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { event ->
-                            when (event) {
-                                is AuthUiEvent.Success -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(event.userStatus))
+                LaunchedEffect(
+                    viewModel.uiEvent,
+                    lifecycleOwner
+                ) {
+                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle).collect { event ->
+                        when (event) {
+                            is AuthUiEvent.Success -> startActivity(
+                                HomeActivity.getIntent(
+                                    context,
+                                    HomeActivity.StartArgs(event.userStatus)
                                 )
+                            )
 
-                                is AuthUiEvent.Failure -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                            is AuthUiEvent.Failure -> startActivity(
+                                HomeActivity.getIntent(
+                                    context,
+                                    HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED)
                                 )
-                            }
+                            )
                         }
+                    }
                 }
 
                 AuthScreen(
@@ -124,40 +148,34 @@ class AuthActivity : AppCompatActivity() {
                         )
                     },
                     onGoogleLoginCLick = {
-                        PlaygroundAuth.authorizeWithWebTab(
-                            context = context,
-                            isDebug = BuildConfig.DEBUG,
-                            authDataSource = object : PlaygroundAuthDatasource {
-                                override suspend fun oauth(code: String): Result<OAuthToken> {
-                                    return kotlin.runCatching {
-                                        authService
-                                            .authenticate(AuthRequest(code, dataStore.pushToken))
-                                            .toOAuthToken()
-                                    }
-                                }
-                            }
-                        ) {
-                            it.onSuccess { token ->
-                                lifecycleScope.launch {
-                                    viewModel.onLogin(token.toEntity())
-                                }
-                            }.onFailure {
-                                lifecycleScope.launch {
-                                    viewModel.onFailure(it)
-                                }
-                            }
-                        }
+                        launcher.launch(signInClient.signInIntent)
                     },
-                    onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
-                    onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) }
-                )
+                    onContactChannelClick = {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)
+                            )
+                        )
+                    },
+                    onGoogleFormClick = {
+                        startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM)
+                            )
+                        )
+                    })
             }
         }
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(context: Context) = Intent(context, AuthActivity::class.java).apply {
+        fun newInstance(context: Context) = Intent(
+            context,
+            AuthActivity::class.java
+        ).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
     }
