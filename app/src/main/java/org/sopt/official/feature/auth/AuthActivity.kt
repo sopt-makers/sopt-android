@@ -34,23 +34,31 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.auth.authenticator.rememberGoogleExecutor
 import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.persistence.SoptDataStore
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -70,20 +78,7 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
-                // TODO 서버 클라이언트 아이디를 입력해주세요.
-                val signInClient = GoogleSignIn.getClient(
-                    context,
-                    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken("SERVER_CLIENT_ID").requestEmail()
-                        .build()
-                )
-                val launcher = rememberGoogleExecutor(
-                    onSignInSuccess = {
-                        // TODO 로그인 성공시에 서버로 idToken을 전송해주세요.
-                        val idToken = it.idToken
-                    },
-                    onSignInFailed = {
-                        // TODO 로그인 실패시에 화면에 로그인 실패 관련 알림을 보여주세요.
-                    })
+                val scope = rememberCoroutineScope()
 
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
@@ -148,7 +143,38 @@ class AuthActivity : AppCompatActivity() {
                         )
                     },
                     onGoogleLoginCLick = {
-                        launcher.launch(signInClient.signInIntent)
+                        val credentialManager = CredentialManager.create(context)
+                        // TODO Server Client Id를 입력해주세요.
+                        val googleIdOption = GetGoogleIdOption.Builder()
+                            .setFilterByAuthorizedAccounts(true)
+                            .setServerClientId(BuildConfig.SERVER_CLIENT_ID)
+                            .setAutoSelectEnabled(true)
+                            .build()
+                        val credentialRequest = GetCredentialRequest.Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+
+                        scope.launch {
+                            suspendRunCatching {
+                                credentialManager.getCredential(
+                                    request = credentialRequest,
+                                    context = context
+                                )
+                            }.onSuccess {
+                                if (it.credential is CustomCredential &&
+                                    it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                                ) {
+                                    val googleIdTokenCredential =
+                                        GoogleIdTokenCredential.createFrom(it.credential.data)
+                                    val idToken = googleIdTokenCredential.idToken
+                                    // TODO 로그인 성공시에 서버로 idToken을 전송해주세요.
+                                    context.toast("로그인 성공")
+                                }
+                            }.onFailure {
+                                Timber.e(it)
+                                context.toast("로그인 실패")
+                            }
+                        }
                     },
                     onContactChannelClick = {
                         startActivity(
@@ -165,7 +191,8 @@ class AuthActivity : AppCompatActivity() {
                                 Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM)
                             )
                         )
-                    })
+                    }
+                )
             }
         }
     }
