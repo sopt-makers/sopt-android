@@ -58,6 +58,7 @@ dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 
 google-services = "4.4.2"
+google-auth = "21.3.0"
 crashlytics = "3.0.2"
 firebase = "33.7.0"
 firebaseMessagingLifecycleKtx = "0.2.1"
@@ -170,6 +171,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
+google-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "google-auth" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
@@ -186,20 +188,20 @@ deeplink-dispatch-processor = { group = "com.airbnb", name = "deeplinkdispatch-p
 
 [bundles]
 compose = [
-  "compose-ui",
-  "compose-foundation",
-  "compose-ui-tooling",
-  "compose-activity",
-  "compose-animation",
-  "compose-viewmodel",
-  "compose-material",
-  "compose-material-three",
-  "compose-material-icons-extended",
-  "compose-material-icons",
-  "compose-runtime",
-  "compose-ui-tooling-preview",
-  "compose-hilt-navigation",
-  "compose-lottie",
+    "compose-ui",
+    "compose-foundation",
+    "compose-ui-tooling",
+    "compose-activity",
+    "compose-animation",
+    "compose-viewmodel",
+    "compose-material",
+    "compose-material-three",
+    "compose-material-icons-extended",
+    "compose-material-icons",
+    "compose-runtime",
+    "compose-ui-tooling-preview",
+    "compose-hilt-navigation",
+    "compose-lottie",
 ]
 compose-test = ["compose-junit"]
 compose-android-test = ["compose-ui-test"]
