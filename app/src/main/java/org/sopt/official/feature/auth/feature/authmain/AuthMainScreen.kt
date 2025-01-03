@@ -28,12 +28,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.delay
 import org.sopt.official.R
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
@@ -48,8 +53,12 @@ internal fun AuthMainRoute(
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
-    onContactChannelClick: () -> Unit
+    onContactChannelClick: () -> Unit,
+    viewModel: AuthMainViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
     var loginDialogVisibility by remember { mutableStateOf(false) }
 
     if (loginDialogVisibility) {
@@ -70,6 +79,15 @@ internal fun AuthMainRoute(
                 loginDialogVisibility = false
             }
         )
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is AuthMainSideEffect.ShowToast -> context.toast(sideEffect.message)
+                }
+            }
     }
 
     AuthMainScreen(

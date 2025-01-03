@@ -14,7 +14,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    // private val oAuthInteractor: OAuthInteractor
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
@@ -29,6 +28,7 @@ class AuthMainViewModel @Inject constructor(
                     authPlatform = GOOGLE
                 )
             ).onSuccess {
+                //todo: 홈 화면으로 이동
                 _sideEffect.emit(AuthMainSideEffect.ShowToast("성공!!"))
             }.onFailure {
                 _sideEffect.emit(AuthMainSideEffect.ShowToast("실패ㅠㅠ!!"))
@@ -39,5 +39,4 @@ class AuthMainViewModel @Inject constructor(
     companion object {
         private const val GOOGLE = "GOOGLE"
     }
-
 }

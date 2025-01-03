@@ -82,7 +82,9 @@ internal fun AuthScreen(
                     certificationNavGraph(
                         onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar,
-                        navigateToSocialAccount = navController::navigateSocialAccount,
+                        navigateToSocialAccount = { status ->
+                            navController.navigateSocialAccount(status)
+                        },
                         onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(
