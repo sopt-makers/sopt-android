@@ -1,11 +1,13 @@
 package org.sopt.official.domain.auth.repository
 
+import org.sopt.official.domain.auth.model.AccountResult
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignInCode
 import org.sopt.official.domain.auth.model.SignInResult
 import org.sopt.official.domain.auth.model.SignUpCode
+import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.model.VerificationResult
 
 interface AuthRepository {
@@ -18,4 +20,6 @@ interface AuthRepository {
     suspend fun signUp(request: SignUpCode): Result<Unit>
 
     suspend fun changeAccount(request: OriginalInformation): Result<Unit>
+
+    suspend fun findAccount(request: UserPhoneNumber): Result<AccountResult>
 }

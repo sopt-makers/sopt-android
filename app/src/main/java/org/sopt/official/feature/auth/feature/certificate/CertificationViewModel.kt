@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
+import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
@@ -47,6 +48,20 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess {
                 _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount)
+            }.onFailure {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
+            }
+        }
+    }
+
+    fun findAccount() {
+        viewModelScope.launch {
+            repository.findAccount(
+                UserPhoneNumber(
+                    phone = "01012345678"
+                )
+            ).onSuccess {
+                _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
             }

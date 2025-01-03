@@ -5,13 +5,17 @@ import org.sopt.official.data.auth.model.NonDataBaseAuthResponse
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
+import org.sopt.official.data.auth.remote.request.FindAccountRequest
 import org.sopt.official.data.auth.remote.request.SignInRequest
 import org.sopt.official.data.auth.remote.request.SignUpRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
+import org.sopt.official.data.auth.remote.response.FindAccountResponse
 import org.sopt.official.data.auth.remote.response.SignInResponse
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 internal interface AuthApi {
     @POST("/api/v1/auth/phone")
@@ -38,4 +42,9 @@ internal interface AuthApi {
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
     ): NonDataBaseAuthResponse
+
+    @GET("/api/v1/social/accounts/platform")
+    suspend fun findAccount(
+        @Query("phone") request: FindAccountRequest
+    ): BaseAuthResponse<FindAccountResponse>
 }
