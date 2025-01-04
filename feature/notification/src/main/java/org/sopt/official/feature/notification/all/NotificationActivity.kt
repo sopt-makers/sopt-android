@@ -68,8 +68,8 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
@@ -85,7 +85,7 @@ class NotificationActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationViewModel>()
 
     @Inject
-    lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: Tracker
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

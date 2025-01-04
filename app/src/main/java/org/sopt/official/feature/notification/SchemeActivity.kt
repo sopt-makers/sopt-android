@@ -31,8 +31,8 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
@@ -56,15 +56,17 @@ class SchemeActivity : AppCompatActivity() {
     private val args by serializableExtra(Argument("", ""))
 
     @Inject
-    lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: Tracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Timber.tag("gio").e("onCreate invoked...")
         super.onCreate(savedInstanceState)
         trackClickPush()
         handleDeepLink()
     }
 
     private fun trackClickPush() {
+        Timber.tag("gio").e(args?.notificationInfo.toString())
         args?.notificationInfo?.let { notificationInfo: NotificationInfo ->
             tracker.track(
                 type = EventType.CLICK, name = "push", properties = mapOf(

@@ -66,8 +66,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.HOME_FORTUNE
 import org.sopt.official.common.navigator.NavigatorEntryPoint
@@ -88,7 +88,7 @@ class NotificationDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
     @Inject
-    lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: Tracker
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
