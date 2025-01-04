@@ -18,7 +18,6 @@ import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBa
 import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttendanceRoute(onClickBackIcon: () -> Unit) {
     val viewModel: NewAttendanceViewModel = viewModel()
