@@ -103,7 +103,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 9.dp),
-            shape = RoundedCornerShape(size = 6.dp),
+            shape = RoundedCornerShape(size = 12.dp),
             colors = ButtonColors(
                 containerColor = SoptTheme.colors.onSurface10,
                 contentColor = SoptTheme.colors.onSurface950,
@@ -142,7 +142,7 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                     state = AttendanceUiState.Success(
                         attendanceDayType = parameter.attendanceDayType,
                         userTitle = "32기 디자인파트 김솝트",
-                        attendanceScore = 1,
+                        attendanceScore = 2f,
                         totalAttendanceResult = persistentMapOf(
                             Pair(AttendanceResultType.ALL, 16),
                             Pair(AttendanceResultType.PRESENT, 10),
@@ -170,7 +170,7 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                             ),
                         ),
                     ),
-                    action = AttendanceAction(onFakeClick = {})
+                    action = AttendanceAction(onClickRefresh = {})
                 )
             }
         }
@@ -182,7 +182,7 @@ data class AttendanceScreenPreviewParameter(
 )
 
 
-class AttendanceScreenPreviewParameterProvider() :
+class AttendanceScreenPreviewParameterProvider :
     PreviewParameterProvider<AttendanceScreenPreviewParameter> {
 
     override val values: Sequence<AttendanceScreenPreviewParameter> = sequenceOf(
