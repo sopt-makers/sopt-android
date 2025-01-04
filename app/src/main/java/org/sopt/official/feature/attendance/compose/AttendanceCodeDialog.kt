@@ -29,13 +29,13 @@ import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
-import org.sopt.official.feature.attendance.model.AttendanceType
+import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
     codes: ImmutableList<String>,
     inputCodes: ImmutableList<String?>,
-    attendanceType: AttendanceType,
+    attendanceType: AttendanceSession,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -124,7 +124,7 @@ private fun AttendanceCodeDialogPreview(
 data class AttendanceCodeDialogPreviewParameter(
     val codes: ImmutableList<String>,
     val inputCodes: ImmutableList<String?>,
-    val attendanceType: AttendanceType,
+    val attendanceType: AttendanceSession,
 )
 
 class AttendanceCodeDialogPreviewParameterProvider :
@@ -134,22 +134,22 @@ class AttendanceCodeDialogPreviewParameterProvider :
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceType.FIRST,
+                AttendanceSession.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceType.FIRST,
+                AttendanceSession.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceType.SECOND,
+                AttendanceSession.SECOND,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
                 inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceType.SECOND,
+                AttendanceSession.SECOND,
             ),
         )
 }
