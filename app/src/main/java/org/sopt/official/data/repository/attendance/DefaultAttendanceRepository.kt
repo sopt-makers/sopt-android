@@ -38,12 +38,10 @@ class DefaultAttendanceRepository @Inject constructor(
                 part = AttendanceInfo.User.Part.valueOf(attendanceHistoryResponse?.part ?: AttendanceInfo.User.UNKNOWN_PART),
                 attendanceScore = attendanceHistoryResponse?.score ?: 0.0,
                 attendanceCount = AttendanceInfo.User.AttendanceCount(
-                    totalCount = attendanceHistoryResponse?.attendanceCount?.participate ?: 0,
                     attendanceCount = attendanceHistoryResponse?.attendanceCount?.normal ?: 0,
                     lateCount = attendanceHistoryResponse?.attendanceCount?.late ?: 0,
                     absenceCount = attendanceHistoryResponse?.attendanceCount?.abnormal ?: 0,
-
-                    ),
+                ),
                 attendanceHistory = attendanceHistoryResponse?.attendances?.map { attendanceResponse: AttendanceResponse ->
                     AttendanceInfo.User.AttendanceLog(
                         sessionName = attendanceResponse.eventName,
