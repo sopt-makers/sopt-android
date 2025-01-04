@@ -30,6 +30,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
@@ -44,9 +45,12 @@ import org.sopt.official.network.persistence.SoptDataStoreEntryPoint
 import timber.log.Timber
 import java.io.Serializable
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {
     private val dataStore by lazy {
         EntryPointAccessors
@@ -72,7 +76,7 @@ class SchemeActivity : AppCompatActivity() {
                 type = EventType.CLICK, name = "push", properties = mapOf(
                     "notification_id" to notificationInfo.id,
                     "send_timestamp" to notificationInfo.sendAt,
-                    "leadtime" to ChronoUnit.DAYS.between(LocalDate.parse(notificationInfo.sendAt), LocalDate.now()),
+                    "leadtime" to ChronoUnit.DAYS.between(LocalDateTime.parse(notificationInfo.sendAt, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), LocalDateTime.now()),
                     "deeplink_url" to args?.link
                 )
             )
