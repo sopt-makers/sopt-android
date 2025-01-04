@@ -26,11 +26,17 @@ data class AttendanceInfo(
         }
 
         data class AttendanceCount(
-            val totalCount: Int,
+            /** 출석 전체 횟수 */
             val attendanceCount: Int,
+            /** 지각 전체 횟수 */
             val lateCount: Int,
+            /** 결석 전체 횟수 */
             val absenceCount: Int,
-        )
+        ) {
+            /** 전체 횟수 */
+            val totalCount: Int
+                get() = attendanceCount + lateCount + absenceCount
+        }
 
         data class AttendanceLog(
             val sessionName: String,
