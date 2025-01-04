@@ -10,7 +10,7 @@ sealed interface AttendanceUiState {
     data class Success(
         val attendanceDayType: AttendanceDayType,
         val userTitle: String,
-        val attendanceScore: Int,
+        val attendanceScore: Float,
         val totalAttendanceResult: ImmutableMap<AttendanceResultType, Int>,
         val attendanceHistoryList: ImmutableList<AttendanceHistory>,
     ) : AttendanceUiState {
@@ -24,7 +24,7 @@ sealed interface AttendanceUiState {
                 val secondAttendance: MidtermAttendance,
                 val finalAttendance: FinalAttendance,
             ) : AttendanceDayType {
-                sealed class MidtermAttendance(
+                sealed class MidtermAttendance private constructor(
                     @DrawableRes val imageResId: Int,
                     val isFinished: Boolean,
                     val description: String,
