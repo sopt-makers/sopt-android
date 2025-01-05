@@ -2,7 +2,7 @@ package org.sopt.official.domain.entity.attendance
 
 import java.time.LocalDateTime
 
-data class AttendanceInfo(
+data class Attendance(
     val sessionId: Int,
     val user: User,
     val attendanceDayType: AttendanceDayType,

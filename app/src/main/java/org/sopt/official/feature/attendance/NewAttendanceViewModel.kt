@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.entity.attendance.AttendanceInfo
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
+import org.sopt.official.domain.entity.attendance.Attendance
+import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
 import org.sopt.official.domain.repository.attendance.NewAttendanceRepository
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType
@@ -35,14 +35,14 @@ class NewAttendanceViewModel @Inject constructor(
 
     fun fetchAttendanceInfo() {
         viewModelScope.launch {
-            val attendanceInfo: AttendanceInfo = attendanceRepository.fetchAttendanceInfo()
+            val attendance: Attendance = attendanceRepository.fetchAttendanceInfo()
             _uiState.update {
                 AttendanceUiState.Success(
-                    attendanceDayType = when (attendanceInfo.attendanceDayType) {
-                        is AttendanceInfo.AttendanceDayType.HasAttendance -> {
-                            val sessionInfo = attendanceInfo.attendanceDayType.sessionInfo
-                            val firstRoundAttendance = attendanceInfo.attendanceDayType.firstRoundAttendance
-                            val secondRoundAttendance = attendanceInfo.attendanceDayType.secondRoundAttendance
+                    attendanceDayType = when (attendance.attendanceDayType) {
+                        is Attendance.AttendanceDayType.HasAttendance -> {
+                            val sessionInfo = attendance.attendanceDayType.sessionInfo
+                            val firstRoundAttendance = attendance.attendanceDayType.firstRoundAttendance
+                            val secondRoundAttendance = attendance.attendanceDayType.secondRoundAttendance
 
                             AttendanceDayType.AttendanceDay(
                                 eventDate = "${sessionInfo.sessionStartTime} - ${sessionInfo.sessionEndTime}",
@@ -80,8 +80,8 @@ class NewAttendanceViewModel @Inject constructor(
                             )
                         }
 
-                        is AttendanceInfo.AttendanceDayType.NoAttendance -> {
-                            val sessionInfo = attendanceInfo.attendanceDayType.sessionInfo
+                        is Attendance.AttendanceDayType.NoAttendance -> {
+                            val sessionInfo = attendance.attendanceDayType.sessionInfo
                             AttendanceDayType.Event(
                                 eventDate = "${sessionInfo.sessionStartTime} - ${sessionInfo.sessionEndTime}",
                                 eventLocation = sessionInfo.location ?: "장소 정보를 불러올 수 없습니다.",
@@ -89,25 +89,25 @@ class NewAttendanceViewModel @Inject constructor(
                             )
                         }
 
-                        is AttendanceInfo.AttendanceDayType.NoSession -> {
+                        is Attendance.AttendanceDayType.NoSession -> {
                             AttendanceDayType.None
                         }
                     },
-                    userTitle = "${attendanceInfo.user.generation}기 ${attendanceInfo.user.part.partName}파트 ${attendanceInfo.user.name}",
-                    attendanceScore = attendanceInfo.user.attendanceScore.toFloat(),
+                    userTitle = "${attendance.user.generation}기 ${attendance.user.part.partName}파트 ${attendance.user.name}",
+                    attendanceScore = attendance.user.attendanceScore.toFloat(),
                     totalAttendanceResult = persistentMapOf(
-                        AttendanceUiState.Success.AttendanceResultType.ALL to attendanceInfo.user.attendanceCount.totalCount,
-                        AttendanceUiState.Success.AttendanceResultType.PRESENT to attendanceInfo.user.attendanceCount.attendanceCount,
-                        AttendanceUiState.Success.AttendanceResultType.LATE to attendanceInfo.user.attendanceCount.lateCount,
-                        AttendanceUiState.Success.AttendanceResultType.ABSENT to attendanceInfo.user.attendanceCount.absenceCount,
+                        AttendanceUiState.Success.AttendanceResultType.ALL to attendance.user.attendanceCount.totalCount,
+                        AttendanceUiState.Success.AttendanceResultType.PRESENT to attendance.user.attendanceCount.attendanceCount,
+                        AttendanceUiState.Success.AttendanceResultType.LATE to attendance.user.attendanceCount.lateCount,
+                        AttendanceUiState.Success.AttendanceResultType.ABSENT to attendance.user.attendanceCount.absenceCount,
                     ),
-                    attendanceHistoryList = attendanceInfo.user.attendanceHistory.map { attendanceLog: AttendanceInfo.User.AttendanceLog ->
+                    attendanceHistoryList = attendance.user.attendanceHistory.map { attendanceLog: Attendance.User.AttendanceLog ->
                         AttendanceHistory(
                             status = when (attendanceLog.attendanceState) {
-                                AttendanceInfo.User.AttendanceLog.AttendanceState.PARTICIPATE -> "참여"
-                                AttendanceInfo.User.AttendanceLog.AttendanceState.ATTENDANCE -> "출석"
-                                AttendanceInfo.User.AttendanceLog.AttendanceState.TARDY -> "지각"
-                                AttendanceInfo.User.AttendanceLog.AttendanceState.ABSENT -> "결석"
+                                Attendance.User.AttendanceLog.AttendanceState.PARTICIPATE -> "참여"
+                                Attendance.User.AttendanceLog.AttendanceState.ATTENDANCE -> "출석"
+                                Attendance.User.AttendanceLog.AttendanceState.TARDY -> "지각"
+                                Attendance.User.AttendanceLog.AttendanceState.ABSENT -> "결석"
                             },
                             eventName = attendanceLog.sessionName,
                             date = attendanceLog.date

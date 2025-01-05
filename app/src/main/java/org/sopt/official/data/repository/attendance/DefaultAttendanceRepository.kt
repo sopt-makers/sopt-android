@@ -9,12 +9,12 @@ import org.sopt.official.data.model.attendance.AttendanceHistoryResponse.Attenda
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.model.attendance.SoptEventResponse
 import org.sopt.official.data.service.attendance.AttendanceService
-import org.sopt.official.domain.entity.attendance.AttendanceInfo
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.AttendanceDayType
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.AttendanceDayType.HasAttendance.RoundAttendance
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.SessionInfo
-import org.sopt.official.domain.entity.attendance.AttendanceInfo.User.AttendanceLog.AttendanceState
+import org.sopt.official.domain.entity.attendance.Attendance
+import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType
+import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance
+import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
+import org.sopt.official.domain.entity.attendance.Attendance.SessionInfo
+import org.sopt.official.domain.entity.attendance.Attendance.User.AttendanceLog.AttendanceState
 import org.sopt.official.domain.entity.attendance.ConfirmAttendanceCodeResult
 import org.sopt.official.domain.entity.attendance.FetchAttendanceCurrentRoundResult
 import org.sopt.official.domain.repository.attendance.NewAttendanceRepository
@@ -26,24 +26,24 @@ class DefaultAttendanceRepository @Inject constructor(
     private val attendanceService: AttendanceService,
     private val json: Json
 ) : NewAttendanceRepository {
-    override suspend fun fetchAttendanceInfo(): AttendanceInfo {
+    override suspend fun fetchAttendanceInfo(): Attendance {
         val soptEventResponse: SoptEventResponse? = runCatching { attendanceService.getSoptEvent().data }.getOrNull()
         val attendanceHistoryResponse: AttendanceHistoryResponse? =
             runCatching { attendanceService.getAttendanceHistory().data }.getOrNull()
-        return AttendanceInfo(
-            sessionId = soptEventResponse?.id ?: AttendanceInfo.UNKNOWN_SESSION_ID,
-            user = AttendanceInfo.User(
-                name = attendanceHistoryResponse?.name ?: AttendanceInfo.User.UNKNOWN_NAME,
-                generation = attendanceHistoryResponse?.generation ?: AttendanceInfo.User.UNKNOWN_GENERATION,
-                part = AttendanceInfo.User.Part.valueOf(attendanceHistoryResponse?.part ?: AttendanceInfo.User.UNKNOWN_PART),
+        return Attendance(
+            sessionId = soptEventResponse?.id ?: Attendance.UNKNOWN_SESSION_ID,
+            user = Attendance.User(
+                name = attendanceHistoryResponse?.name ?: Attendance.User.UNKNOWN_NAME,
+                generation = attendanceHistoryResponse?.generation ?: Attendance.User.UNKNOWN_GENERATION,
+                part = Attendance.User.Part.valueOf(attendanceHistoryResponse?.part ?: Attendance.User.UNKNOWN_PART),
                 attendanceScore = attendanceHistoryResponse?.score ?: 0.0,
-                attendanceCount = AttendanceInfo.User.AttendanceCount(
+                attendanceCount = Attendance.User.AttendanceCount(
                     attendanceCount = attendanceHistoryResponse?.attendanceCount?.normal ?: 0,
                     lateCount = attendanceHistoryResponse?.attendanceCount?.late ?: 0,
                     absenceCount = attendanceHistoryResponse?.attendanceCount?.abnormal ?: 0,
                 ),
                 attendanceHistory = attendanceHistoryResponse?.attendances?.map { attendanceResponse: AttendanceResponse ->
-                    AttendanceInfo.User.AttendanceLog(
+                    Attendance.User.AttendanceLog(
                         sessionName = attendanceResponse.eventName,
                         date = attendanceResponse.date,
                         attendanceState = AttendanceState.valueOf(attendanceResponse.attendanceState)
