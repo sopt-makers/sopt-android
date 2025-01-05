@@ -72,7 +72,7 @@ data class Attendance(
 
         /** 일정이 있고, 출석 체크가 있는 날 */
         data class HasAttendance(
-            val sessionInfo: SessionInfo,
+            val session: Session,
             val firstRoundAttendance: RoundAttendance,
             val secondRoundAttendance: RoundAttendance
         ) : AttendanceDayType {
@@ -89,20 +89,20 @@ data class Attendance(
         }
 
         /** 일정이 있고, 출석 체크가 없는 날 */
-        data class NoAttendance(val sessionInfo: SessionInfo) : AttendanceDayType
+        data class NoAttendance(val session: Session) : AttendanceDayType
     }
 
     /** 솝트의 세션에 관한 정보
-     * @property sessionName 세션 이름 (OT, 1차 세미나, 솝커톤 등)
+     * @property name 세션 이름 (OT, 1차 세미나, 솝커톤 등)
      * @property location 세션 장소, 정해진 장소가 없을 경우(온라인) null
-     * @property sessionStartTime 세션 시작 시각
-     * @property sessionEndTime 세션 종료 시각
+     * @property startAt 세션 시작 시각
+     * @property endAt 세션 종료 시각
      * */
-    data class SessionInfo(
-        val sessionName: String,
+    data class Session(
+        val name: String,
         val location: String?,
-        val sessionStartTime: LocalDateTime,
-        val sessionEndTime: LocalDateTime,
+        val startAt: LocalDateTime,
+        val endAt: LocalDateTime,
     )
 
     companion object {

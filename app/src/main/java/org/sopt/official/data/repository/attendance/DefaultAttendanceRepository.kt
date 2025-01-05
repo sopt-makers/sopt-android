@@ -13,7 +13,7 @@ import org.sopt.official.domain.entity.attendance.Attendance
 import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType
 import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance
 import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
-import org.sopt.official.domain.entity.attendance.Attendance.SessionInfo
+import org.sopt.official.domain.entity.attendance.Attendance.Session
 import org.sopt.official.domain.entity.attendance.Attendance.User.AttendanceLog.AttendanceState
 import org.sopt.official.domain.entity.attendance.ConfirmAttendanceCodeResult
 import org.sopt.official.domain.entity.attendance.FetchAttendanceCurrentRoundResult
@@ -59,11 +59,11 @@ class DefaultAttendanceRepository @Inject constructor(
                     val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.firstOrNull()
                     val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.lastOrNull()
                     AttendanceDayType.HasAttendance(
-                        sessionInfo = SessionInfo(
-                            sessionName = soptEventResponse.eventName,
+                        session = Session(
+                            name = soptEventResponse.eventName,
                             location = soptEventResponse.location.ifBlank { null },
-                            sessionStartTime = LocalDateTime.parse(soptEventResponse.startAt),
-                            sessionEndTime = LocalDateTime.parse(soptEventResponse.endAt),
+                            startAt = LocalDateTime.parse(soptEventResponse.startAt),
+                            endAt = LocalDateTime.parse(soptEventResponse.endAt),
                         ),
                         firstRoundAttendance = RoundAttendance(
                             state = if (firstAttendanceResponse == null) RoundAttendanceState.NOT_YET else RoundAttendanceState.valueOf(
@@ -82,11 +82,11 @@ class DefaultAttendanceRepository @Inject constructor(
 
                 "NO_ATTENDANCE" -> {
                     AttendanceDayType.NoAttendance(
-                        sessionInfo = SessionInfo(
-                            sessionName = soptEventResponse.eventName,
+                        session = Session(
+                            name = soptEventResponse.eventName,
                             location = soptEventResponse.location.ifBlank { null },
-                            sessionStartTime = LocalDateTime.parse(soptEventResponse.startAt),
-                            sessionEndTime = LocalDateTime.parse(soptEventResponse.endAt),
+                            startAt = LocalDateTime.parse(soptEventResponse.startAt),
+                            endAt = LocalDateTime.parse(soptEventResponse.endAt),
                         )
                     )
                 }
