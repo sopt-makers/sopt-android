@@ -18,7 +18,7 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.Atte
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatterBuilder
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 import javax.inject.Inject
@@ -123,13 +123,8 @@ class NewAttendanceViewModel @Inject constructor(
     }
 
     private fun formatSessionTime(startAt: LocalDateTime, endAt: LocalDateTime): String {
-        val dateFormatter = DateTimeFormatterBuilder()
-            .appendPattern("M월 d일")
-            .toFormatter()
-
-        val timeFormatter = DateTimeFormatterBuilder()
-            .appendPattern("HH:mm")
-            .toFormatter()
+        val dateFormatter = DateTimeFormatter.ofPattern("M월 d일")
+        val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
         return "${startAt.format(dateFormatter)} ${startAt.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)} ${
             startAt.format(
