@@ -17,6 +17,10 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.Atte
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatterBuilder
+import java.time.format.TextStyle
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -40,14 +44,14 @@ class NewAttendanceViewModel @Inject constructor(
                 AttendanceUiState.Success(
                     attendanceDayType = when (attendance.attendanceDayType) {
                         is Attendance.AttendanceDayType.HasAttendance -> {
-                            val sessionInfo = attendance.attendanceDayType.sessionInfo
+                            val session = attendance.attendanceDayType.session
                             val firstRoundAttendance = attendance.attendanceDayType.firstRoundAttendance
                             val secondRoundAttendance = attendance.attendanceDayType.secondRoundAttendance
 
                             AttendanceDayType.AttendanceDay(
-                                eventDate = "${sessionInfo.sessionStartTime} - ${sessionInfo.sessionEndTime}",
-                                eventLocation = sessionInfo.location ?: "장소 정보를 불러올 수 없습니다.",
-                                eventName = sessionInfo.sessionName,
+                                eventDate = formatSessionTime(session.startAt, session.endAt),
+                                eventLocation = session.location ?: "장소 정보를 불러올 수 없습니다.",
+                                eventName = session.name,
                                 firstAttendance = when (firstRoundAttendance.state) {
                                     RoundAttendanceState.ATTENDANCE -> MidtermAttendance.Present(
                                         attendanceAt = firstRoundAttendance.attendedAt.toString()
@@ -81,11 +85,11 @@ class NewAttendanceViewModel @Inject constructor(
                         }
 
                         is Attendance.AttendanceDayType.NoAttendance -> {
-                            val sessionInfo = attendance.attendanceDayType.sessionInfo
+                            val session = attendance.attendanceDayType.session
                             AttendanceDayType.Event(
-                                eventDate = "${sessionInfo.sessionStartTime} - ${sessionInfo.sessionEndTime}",
-                                eventLocation = sessionInfo.location ?: "장소 정보를 불러올 수 없습니다.",
-                                eventName = sessionInfo.sessionName
+                                eventDate = formatSessionTime(session.startAt, session.endAt),
+                                eventLocation = session.location ?: "장소 정보를 불러올 수 없습니다.",
+                                eventName = session.name
                             )
                         }
 
@@ -118,4 +122,22 @@ class NewAttendanceViewModel @Inject constructor(
         }
     }
 
+    private fun formatSessionTime(startAt: LocalDateTime, endAt: LocalDateTime): String {
+        val dateFormatter = DateTimeFormatterBuilder()
+            .appendPattern("M월 d일")
+            .toFormatter()
+
+        val timeFormatter = DateTimeFormatterBuilder()
+            .appendPattern("HH:mm")
+            .toFormatter()
+
+        return "${startAt.format(dateFormatter)} ${startAt.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)} ${
+            startAt.format(
+                timeFormatter
+            )
+        } - " + if (startAt.toLocalDate() == endAt.toLocalDate()) endAt.format(timeFormatter)
+        else "${endAt.format(dateFormatter)} ${
+            endAt.dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREAN)
+        } ${endAt.format(timeFormatter)}"
+    }
 }
