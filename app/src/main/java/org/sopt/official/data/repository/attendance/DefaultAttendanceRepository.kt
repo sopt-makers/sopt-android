@@ -6,6 +6,7 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.sopt.official.data.model.attendance.AttendanceHistoryResponse
 import org.sopt.official.data.model.attendance.AttendanceHistoryResponse.AttendanceResponse
+import org.sopt.official.data.model.attendance.AttendanceRoundResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.model.attendance.SoptEventResponse
 import org.sopt.official.data.service.attendance.AttendanceService
@@ -100,7 +101,9 @@ class DefaultAttendanceRepository @Inject constructor(
 
     override suspend fun fetchAttendanceCurrentRound(lectureId: Long): FetchAttendanceCurrentRoundResult {
         return runCatching { attendanceService.getAttendanceRound(lectureId).data }.fold(
-            onSuccess = { FetchAttendanceCurrentRoundResult.Success(it?.round) },
+            onSuccess = { attendanceRoundResponse: AttendanceRoundResponse? ->
+                FetchAttendanceCurrentRoundResult.Success(attendanceRoundResponse?.round)
+            },
             onFailure = { error: Throwable ->
                 if (error !is HttpException) return FetchAttendanceCurrentRoundResult.Failure(null)
 
