@@ -4,23 +4,17 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
+import org.sopt.official.data.mapToAttendance
 import org.sopt.official.data.model.attendance.AttendanceHistoryResponse
-import org.sopt.official.data.model.attendance.AttendanceHistoryResponse.AttendanceResponse
 import org.sopt.official.data.model.attendance.AttendanceRoundResponse
 import org.sopt.official.data.model.attendance.RequestAttendanceCode
 import org.sopt.official.data.model.attendance.SoptEventResponse
 import org.sopt.official.data.service.attendance.AttendanceService
 import org.sopt.official.domain.entity.attendance.Attendance
-import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType
-import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance
-import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
-import org.sopt.official.domain.entity.attendance.Attendance.Session
-import org.sopt.official.domain.entity.attendance.Attendance.User.AttendanceLog.AttendanceState
 import org.sopt.official.domain.entity.attendance.ConfirmAttendanceCodeResult
 import org.sopt.official.domain.entity.attendance.FetchAttendanceCurrentRoundResult
 import org.sopt.official.domain.repository.attendance.NewAttendanceRepository
 import retrofit2.HttpException
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 class DefaultAttendanceRepository @Inject constructor(
@@ -31,72 +25,10 @@ class DefaultAttendanceRepository @Inject constructor(
         val soptEventResponse: SoptEventResponse? = runCatching { attendanceService.getSoptEvent().data }.getOrNull()
         val attendanceHistoryResponse: AttendanceHistoryResponse? =
             runCatching { attendanceService.getAttendanceHistory().data }.getOrNull()
-        return Attendance(
-            sessionId = soptEventResponse?.id ?: Attendance.UNKNOWN_SESSION_ID,
-            user = Attendance.User(
-                name = attendanceHistoryResponse?.name ?: Attendance.User.UNKNOWN_NAME,
-                generation = attendanceHistoryResponse?.generation ?: Attendance.User.UNKNOWN_GENERATION,
-                part = Attendance.User.Part.valueOf(attendanceHistoryResponse?.part ?: Attendance.User.UNKNOWN_PART),
-                attendanceScore = attendanceHistoryResponse?.score ?: 0.0,
-                attendanceCount = Attendance.User.AttendanceCount(
-                    attendanceCount = attendanceHistoryResponse?.attendanceCount?.normal ?: 0,
-                    lateCount = attendanceHistoryResponse?.attendanceCount?.late ?: 0,
-                    absenceCount = attendanceHistoryResponse?.attendanceCount?.abnormal ?: 0,
-                ),
-                attendanceHistory = attendanceHistoryResponse?.attendances?.map { attendanceResponse: AttendanceResponse ->
-                    Attendance.User.AttendanceLog(
-                        sessionName = attendanceResponse.eventName,
-                        date = attendanceResponse.date,
-                        attendanceState = AttendanceState.valueOf(attendanceResponse.attendanceState)
-                    )
-                } ?: emptyList(),
-            ),
-            attendanceDayType = when (soptEventResponse?.type) {
-                "NO_SESSION" -> {
-                    AttendanceDayType.NoSession
-                }
 
-                "HAS_ATTENDANCE" -> {
-                    val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(0)
-                    val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(1)
-                    AttendanceDayType.HasAttendance(
-                        session = Session(
-                            name = soptEventResponse.eventName,
-                            location = soptEventResponse.location.ifBlank { null },
-                            startAt = LocalDateTime.parse(soptEventResponse.startAt),
-                            endAt = LocalDateTime.parse(soptEventResponse.endAt),
-                        ),
-                        firstRoundAttendance = RoundAttendance(
-                            state = if (firstAttendanceResponse == null) RoundAttendanceState.NOT_YET else RoundAttendanceState.valueOf(
-                                firstAttendanceResponse.status
-                            ),
-                            attendedAt = LocalDateTime.parse(firstAttendanceResponse?.attendedAt),
-                        ),
-                        secondRoundAttendance = RoundAttendance(
-                            state = if (secondAttendanceResponse == null) RoundAttendanceState.NOT_YET else RoundAttendanceState.valueOf(
-                                secondAttendanceResponse.status
-                            ),
-                            attendedAt = LocalDateTime.parse(secondAttendanceResponse?.attendedAt),
-                        ),
-                    )
-                }
-
-                "NO_ATTENDANCE" -> {
-                    AttendanceDayType.NoAttendance(
-                        session = Session(
-                            name = soptEventResponse.eventName,
-                            location = soptEventResponse.location.ifBlank { null },
-                            startAt = LocalDateTime.parse(soptEventResponse.startAt),
-                            endAt = LocalDateTime.parse(soptEventResponse.endAt),
-                        )
-                    )
-                }
-
-                else -> {
-                    AttendanceDayType.NoSession
-                }
-            },
-        )
+        val attendance: Attendance =
+            mapToAttendance(attendanceHistoryResponse = attendanceHistoryResponse, soptEventResponse = soptEventResponse)
+        return attendance
     }
 
     override suspend fun fetchAttendanceCurrentRound(lectureId: Long): FetchAttendanceCurrentRoundResult {
