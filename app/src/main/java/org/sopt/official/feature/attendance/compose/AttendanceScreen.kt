@@ -66,8 +66,8 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                         eventDate = state.attendanceDayType.eventDate,
                         eventLocation = state.attendanceDayType.eventLocation,
                         eventName = state.attendanceDayType.eventName,
-                        firstAttendance = state.attendanceDayType.firstAttendance,
-                        secondAttendance = state.attendanceDayType.secondAttendance,
+                        firstRoundAttendance = state.attendanceDayType.firstRoundAttendance,
+                        secondRoundAttendance = state.attendanceDayType.secondRoundAttendance,
                         finalAttendance = state.attendanceDayType.finalAttendance,
                     )
                 }
@@ -191,8 +191,8 @@ class AttendanceScreenPreviewParameterProvider :
                 eventDate = "3월 23일 토요일 14:00 - 18:00",
                 eventLocation = "건국대학교 꽥꽥오리관",
                 eventName = "2차 세미나",
-                firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                secondAttendance = MidtermAttendance.Absent,
+                firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+                secondRoundAttendance = MidtermAttendance.Absent,
                 finalAttendance = FinalAttendance.LATE,
             )
         ), AttendanceScreenPreviewParameter(
