@@ -56,8 +56,8 @@ class DefaultAttendanceRepository @Inject constructor(
                 }
 
                 "HAS_ATTENDANCE" -> {
-                    val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.firstOrNull()
-                    val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.lastOrNull()
+                    val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(0)
+                    val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(1)
                     AttendanceDayType.HasAttendance(
                         session = Session(
                             name = soptEventResponse.eventName,
