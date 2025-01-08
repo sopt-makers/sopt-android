@@ -1,6 +1,7 @@
 package org.sopt.official.data.repository.attendance
 
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
@@ -39,13 +40,8 @@ class DefaultAttendanceRepository @Inject constructor(
             onFailure = { error: Throwable ->
                 if (error !is HttpException) return FetchAttendanceCurrentRoundResult.Failure(null)
 
-                val errorBodyString: String =
-                    error.response()?.errorBody()?.string() ?: return FetchAttendanceCurrentRoundResult.Failure(null)
-
-                val jsonObject = json.parseToJsonElement(errorBodyString).jsonObject
-                val errorMessage = jsonObject["message"]?.jsonPrimitive?.contentOrNull
-
-                FetchAttendanceCurrentRoundResult.Failure(errorMessage)
+                val message: String? = error.jsonErrorMessage
+                FetchAttendanceCurrentRoundResult.Failure(message)
             },
         )
     }
@@ -61,15 +57,17 @@ class DefaultAttendanceRepository @Inject constructor(
             onFailure = { error: Throwable ->
                 if (error !is HttpException) return ConfirmAttendanceCodeResult.Failure(null)
 
-                val errorBodyString: String =
-                    error.response()?.errorBody()?.string() ?: return ConfirmAttendanceCodeResult.Failure(null)
-
-                val jsonObject = json.parseToJsonElement(errorBodyString).jsonObject
-                val errorMessage = jsonObject["message"]?.jsonPrimitive?.contentOrNull
-
-                ConfirmAttendanceCodeResult.Failure(errorMessage)
+                val message: String? = error.jsonErrorMessage
+                ConfirmAttendanceCodeResult.Failure(message)
             },
         )
     }
 
+    private val HttpException.jsonErrorMessage: String?
+        get() {
+            val errorBody: String = this.response()?.errorBody()?.string() ?: return null
+            val jsonObject: JsonObject = json.parseToJsonElement(errorBody).jsonObject
+            val errorMessage: String? = jsonObject["message"]?.jsonPrimitive?.contentOrNull
+            return errorMessage
+        }
 }
