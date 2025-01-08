@@ -23,9 +23,9 @@ import coil3.test.FakeImage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.soptlog.component.DashBoardItem
 import org.sopt.official.feature.soptlog.component.EditProfileButton
 import org.sopt.official.feature.soptlog.component.SoptlogDashBoard
-import org.sopt.official.feature.soptlog.component.SoptlogDashBoardItemData
 import org.sopt.official.feature.soptlog.component.SoptlogIntroduction
 import org.sopt.official.feature.soptlog.component.SoptlogProfile
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
@@ -38,17 +38,17 @@ fun SoptlogRoute() {
         part = "안드로이드",
         introduction = "자기소개는 15글자까지",
         dashBoardItems = persistentListOf(
-            SoptlogDashBoardItemData(
+            DashBoardItem(
                 title = "솝트레벨",
                 iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
                 content = "Lv.6",
             ),
-            SoptlogDashBoardItemData(
+            DashBoardItem(
                 title = "콕찌르기",
                 iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                 content = "208회",
             ),
-            SoptlogDashBoardItemData(
+            DashBoardItem(
                 title = "솝트와",
                 iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                 content = "33개월",
@@ -65,7 +65,7 @@ fun SoptlogScreen(
     name: String,
     part: String,
     introduction: String?,
-    dashBoardItems: ImmutableList<SoptlogDashBoardItemData>,
+    dashBoardItems: ImmutableList<DashBoardItem>,
     todayFortuneTitle: String,
 ) {
     Column(
@@ -150,17 +150,17 @@ fun PreviewSoptlogScreen() {
                 part = "안드로이드",
                 introduction = "자기소개는 15글자까지",
                 dashBoardItems = persistentListOf(
-                    SoptlogDashBoardItemData(
+                    DashBoardItem(
                         title = "솝트레벨",
                         iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
                         content = "Lv.6",
                     ),
-                    SoptlogDashBoardItemData(
+                    DashBoardItem(
                         title = "콕찌르기",
                         iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                         content = "208회",
                     ),
-                    SoptlogDashBoardItemData(
+                    DashBoardItem(
                         title = "솝트와",
                         iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                         content = "33개월",

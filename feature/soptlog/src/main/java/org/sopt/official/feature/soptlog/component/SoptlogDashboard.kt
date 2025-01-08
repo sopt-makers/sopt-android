@@ -24,7 +24,7 @@ import org.sopt.official.designsystem.component.UrlImage
 
 @Composable
 fun SoptlogDashBoard(
-    dashBoardItems: ImmutableList<SoptlogDashBoardItemData>,
+    dashBoardItems: ImmutableList<DashBoardItem>,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -50,7 +50,7 @@ fun SoptlogDashBoard(
     }
 }
 
-data class SoptlogDashBoardItemData(
+data class DashBoardItem(
     val title: String,
     val iconUrl: String,
     val content: String,
@@ -97,17 +97,17 @@ fun SoptlogDashBoardPreview() {
     SoptTheme {
         SoptlogDashBoard(
             dashBoardItems = persistentListOf(
-                SoptlogDashBoardItemData(
+                DashBoardItem(
                     title = "솝트레벨",
                     iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
                     content = "Lv.6",
                 ),
-                SoptlogDashBoardItemData(
+                DashBoardItem(
                     title = "콕찌르기",
                     iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                     content = "208회",
                 ),
-                SoptlogDashBoardItemData(
+                DashBoardItem(
                     title = "솝트와",
                     iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
                     content = "33개월",
