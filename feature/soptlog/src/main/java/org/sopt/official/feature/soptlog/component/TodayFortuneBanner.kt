@@ -25,8 +25,8 @@ import org.sopt.official.feature.soptlog.R
 @Composable
 fun TodayFortuneBanner(
     title: String,
-    modifier: Modifier = Modifier,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -56,7 +56,7 @@ fun TodayFortuneBanner(
                 text = "바로 확인하기 >",
                 style = SoptTheme.typography.label12SB,
                 color = SoptTheme.colors.onSurface200,
-                modifier = Modifier.clickable { onClick() }
+                modifier = Modifier.clickable(onClick = onClick)
             )
         }
     }
@@ -67,7 +67,8 @@ fun TodayFortuneBanner(
 fun TodayFortuneBannerPreview() {
     SoptTheme {
         TodayFortuneBanner(
-            "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?"
-        ) {}
+            title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?",
+            onClick = {}
+        )
     }
 }

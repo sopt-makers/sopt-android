@@ -91,6 +91,18 @@ private fun SoptlogDashBoardItem(
     }
 }
 
+@Preview
+@Composable
+fun SoptlogDashBoardItemPreview() {
+    SoptTheme {
+        SoptlogDashBoardItem(
+            title = "솝트레벨",
+            iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+            content = "Lv.6",
+        )
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun SoptlogDashBoardPreview() {

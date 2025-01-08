@@ -105,18 +105,21 @@ fun SoptlogScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            EditProfileButton() {
-                // TODO: 프로필 수정 화면으로 이동
-            }
+            EditProfileButton(
+                onClick = {
+                    // TODO: 프로필 수정 화면으로 이동
+                }
+            )
         }
 
         Spacer(modifier = Modifier.height(40.dp))
 
         TodayFortuneBanner(
-            title = todayFortuneTitle
-        ) {
-            // TODO: 오늘의 운세 화면으로 이동
-        }
+            title = todayFortuneTitle,
+            onClick = {
+                // TODO: 오늘의 운세 화면으로 이동
+            }
+        )
     }
 }
 
