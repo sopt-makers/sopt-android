@@ -35,21 +35,21 @@ fun mapToAttendance(
                 )
             } ?: emptyList(),
         ),
-        attendanceDayType = mapToAttendanceDayType(soptEventResponse)
+        attendanceDayType = soptEventResponse.toAttendanceDayType()
     )
 }
 
-private fun mapToAttendanceDayType(soptEventResponse: SoptEventResponse?): AttendanceDayType {
-    return when (soptEventResponse?.type) {
+private fun SoptEventResponse?.toAttendanceDayType(): AttendanceDayType {
+    return when (this?.type) {
         "HAS_ATTENDANCE" -> {
-            val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(0)
-            val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = soptEventResponse.attendances.getOrNull(1)
+            val firstAttendanceResponse: SoptEventResponse.AttendanceResponse? = attendances.getOrNull(0)
+            val secondAttendanceResponse: SoptEventResponse.AttendanceResponse? = attendances.getOrNull(1)
             AttendanceDayType.HasAttendance(
                 session = Session(
-                    name = soptEventResponse.eventName,
-                    location = soptEventResponse.location.ifBlank { null },
-                    startAt = LocalDateTime.parse(soptEventResponse.startAt),
-                    endAt = LocalDateTime.parse(soptEventResponse.endAt),
+                    name = eventName,
+                    location = location.ifBlank { null },
+                    startAt = LocalDateTime.parse(startAt),
+                    endAt = LocalDateTime.parse(endAt),
                 ),
                 firstRoundAttendance = RoundAttendance(
                     state = if (firstAttendanceResponse == null) RoundAttendanceState.NOT_YET else RoundAttendanceState.valueOf(
@@ -69,10 +69,10 @@ private fun mapToAttendanceDayType(soptEventResponse: SoptEventResponse?): Atten
         "NO_ATTENDANCE" -> {
             AttendanceDayType.NoAttendance(
                 session = Session(
-                    name = soptEventResponse.eventName,
-                    location = soptEventResponse.location.ifBlank { null },
-                    startAt = LocalDateTime.parse(soptEventResponse.startAt),
-                    endAt = LocalDateTime.parse(soptEventResponse.endAt),
+                    name = eventName,
+                    location = location.ifBlank { null },
+                    startAt = LocalDateTime.parse(startAt),
+                    endAt = LocalDateTime.parse(endAt),
                 )
             )
         }
