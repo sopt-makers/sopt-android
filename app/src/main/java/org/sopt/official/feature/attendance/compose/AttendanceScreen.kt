@@ -38,12 +38,11 @@ import org.sopt.official.feature.attendance.compose.component.TodayAttendanceCar
 import org.sopt.official.feature.attendance.compose.component.TodayNoAttendanceCard
 import org.sopt.official.feature.attendance.compose.component.TodayNoScheduleCard
 import org.sopt.official.feature.attendance.model.AttendanceAction
+import org.sopt.official.feature.attendance.model.AttendanceDayType
 import org.sopt.official.feature.attendance.model.AttendanceUiState
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceResultType
+import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
 fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction) {
@@ -193,7 +192,6 @@ class AttendanceScreenPreviewParameterProvider :
                 eventName = "2차 세미나",
                 firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
                 secondRoundAttendance = MidtermAttendance.Absent,
-                finalAttendance = FinalAttendance.LATE,
             )
         ), AttendanceScreenPreviewParameter(
             attendanceDayType = AttendanceDayType.Event(

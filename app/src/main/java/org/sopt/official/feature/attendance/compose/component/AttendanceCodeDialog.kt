@@ -28,7 +28,7 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
+import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
