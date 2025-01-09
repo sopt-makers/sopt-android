@@ -45,7 +45,7 @@ mockk = "1.13.5"
 gradleplugin = "8.7.3"
 kspplugin = "2.1.0-1.0.29"
 
-dagger-hilt = "2.54"
+dagger-hilt = "2.55"
 dagger-hilt-navigation-compose = "1.2.0"
 flipper = "0.273.0"
 soloader = "0.12.1"
