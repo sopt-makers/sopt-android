@@ -97,10 +97,10 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".feature.mypage.signOut.SignOutActivity"
+            android:name=".feature.mypage.signout.SignOutActivity"
             android:exported="false" />
         <activity
-            android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
+            android:name=".feature.mypage.soptamp.ui.AdjustSentenceActivity"
             android:exported="false" />
         <activity
             android:name=".feature.poke.onboarding.OnboardingActivity"

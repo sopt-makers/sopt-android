@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.analytics.compose
+package org.sopt.official.feature.mypage.soptamp.state
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import org.sopt.official.analytics.Tracker
+import androidx.compose.runtime.Stable
 
-@Composable
-fun ProvideTracker(
-    tracker: Tracker,
-    content: @Composable () -> Unit
+@Stable
+data class ModifySoptampProfileUiState(
+    val current: String,
+    val previous: String,
+    val onChangeCurrent: (String) -> Unit,
+    val onUpdate: () -> Unit,
 ) {
-    CompositionLocalProvider(
-        LocalTracker provides tracker
-    ) {
-        content()
-    }
+    val isConfirmed: Boolean
+        get() = current != previous
 }

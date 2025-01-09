@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -110,7 +110,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun initAppBar() {
         binding.includeAppBar.apply {
-            toolbar.setOnClickListener { onBackPressed() }
+            toolbar.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
             textViewTitle.text = getString(R.string.my_friend_title)
         }
     }

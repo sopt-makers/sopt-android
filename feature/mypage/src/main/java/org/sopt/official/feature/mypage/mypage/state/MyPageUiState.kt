@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.analytics.compose
+package org.sopt.official.feature.mypage.mypage.state
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import org.sopt.official.analytics.Tracker
+import org.sopt.official.auth.model.UserActiveState
 
-@Composable
-fun ProvideTracker(
-    tracker: Tracker,
-    content: @Composable () -> Unit
-) {
-    CompositionLocalProvider(
-        LocalTracker provides tracker
-    ) {
-        content()
-    }
+data class MyPageUiState(
+    val user: UserActiveState,
+    val dialogState: MyPageDialogState,
+    val onEventSink: (action: MyPageAction) -> Unit,
+)
+
+enum class MyPageDialogState {
+    CLEAR_SOPTAMP, LOGOUT, CLEAR;
 }

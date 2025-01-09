@@ -22,20 +22,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.analytics.compose
+package org.sopt.official.feature.mypage.di
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import org.sopt.official.analytics.Tracker
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.android.EntryPointAccessors
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.auth.repository.AuthRepository
+import org.sopt.official.common.context.appContext
+import org.sopt.official.domain.mypage.repository.UserRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 
-@Composable
-fun ProvideTracker(
-    tracker: Tracker,
-    content: @Composable () -> Unit
-) {
-    CompositionLocalProvider(
-        LocalTracker provides tracker
-    ) {
-        content()
-    }
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+internal interface AuthEntryPoint {
+    fun authRepository(): AuthRepository
+    fun userRepository(): UserRepository
+    fun stampRepository(): StampRepository
+}
+
+internal val authRepository by lazy {
+    EntryPointAccessors
+        .fromApplication(appContext, AuthEntryPoint::class.java)
+        .authRepository()
+}
+
+internal val userRepository by lazy {
+    EntryPointAccessors
+        .fromApplication(appContext, AuthEntryPoint::class.java)
+        .userRepository()
+}
+
+internal val stampRepository by lazy {
+    EntryPointAccessors
+        .fromApplication(appContext, AuthEntryPoint::class.java)
+        .stampRepository()
 }

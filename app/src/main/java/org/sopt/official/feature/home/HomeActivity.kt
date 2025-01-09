@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -153,7 +153,7 @@ class HomeActivity : AppCompatActivity() {
             tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
-                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
+                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.Argument(viewModel.userActiveState.value))
                 )
             }
         }
