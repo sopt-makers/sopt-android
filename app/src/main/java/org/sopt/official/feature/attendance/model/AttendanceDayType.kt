@@ -18,7 +18,7 @@ sealed interface AttendanceDayType {
         val secondRoundAttendance: MidtermAttendance,
     ) : AttendanceDayType {
         val finalAttendance: FinalAttendance =
-            FinalAttendance.of(firstRoundAttendance, secondRoundAttendance)
+            FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance)
 
         companion object {
             fun of(

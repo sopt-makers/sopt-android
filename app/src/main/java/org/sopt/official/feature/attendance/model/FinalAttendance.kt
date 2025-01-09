@@ -30,7 +30,7 @@ enum class FinalAttendance(
     );
 
     companion object {
-        fun of(
+        fun calculateFinalAttendance(
             firstAttendance: MidtermAttendance,
             secondAttendance: MidtermAttendance,
         ): FinalAttendance {
