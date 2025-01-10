@@ -1,17 +1,16 @@
 package org.sopt.official.feature.attendance.compose
 
+import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import org.sopt.official.designsystem.SoptTheme
@@ -20,18 +19,17 @@ import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBa
 import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AttendanceRoute(onClickBackIcon: () -> Unit) {
+fun AttendanceRoute() {
     val viewModel: NewAttendanceViewModel = viewModel()
+    val state: AttendanceUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val action: AttendanceAction = viewModel.rememberAttendanceActions()
 
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val action = viewModel.rememberAttendanceActions()
-
+    val activity: Activity = LocalContext.current as Activity
     Scaffold(
         topBar = {
             AttendanceTopAppBar(
-                onClickBackIcon = onClickBackIcon,
+                onClickBackIcon = { if (!activity.isFinishing) activity.finish() },
                 onClickRefreshIcon = action.onClickRefresh,
             )
         }
