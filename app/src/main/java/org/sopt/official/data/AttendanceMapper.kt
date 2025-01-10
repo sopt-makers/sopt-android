@@ -16,7 +16,7 @@ fun mapToAttendance(
     soptEventResponse: SoptEventResponse?
 ): Attendance {
     return Attendance(
-        sessionId = soptEventResponse?.id ?: Attendance.UNKNOWN_SESSION_ID,
+        sessionId = soptEventResponse?.lectureId ?: Attendance.UNKNOWN_SESSION_ID,
         user = Attendance.User(
             name = attendanceHistoryResponse?.name ?: Attendance.User.UNKNOWN_NAME,
             generation = attendanceHistoryResponse?.generation ?: Attendance.User.UNKNOWN_GENERATION,
