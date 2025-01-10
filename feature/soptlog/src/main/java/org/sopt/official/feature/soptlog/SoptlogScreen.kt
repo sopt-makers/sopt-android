@@ -20,9 +20,15 @@ import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import coil3.test.FakeImage
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.soptlog.component.DashBoardItem
+import org.sopt.official.feature.soptlog.component.EditProfileButton
+import org.sopt.official.feature.soptlog.component.SoptlogDashBoard
 import org.sopt.official.feature.soptlog.component.SoptlogIntroduction
 import org.sopt.official.feature.soptlog.component.SoptlogProfile
+import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 
 @Composable
 fun SoptlogRoute() {
@@ -30,7 +36,25 @@ fun SoptlogRoute() {
         profileImageUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
         name = "차은우",
         part = "안드로이드",
-        introduction = "자기소개는 15글자까지"
+        introduction = "자기소개는 15글자까지",
+        dashBoardItems = persistentListOf(
+            DashBoardItem(
+                title = "솝트레벨",
+                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+                content = "Lv.6",
+            ),
+            DashBoardItem(
+                title = "콕찌르기",
+                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                content = "208회",
+            ),
+            DashBoardItem(
+                title = "솝트와",
+                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                content = "33개월",
+            )
+        ),
+        todayFortuneTitle = "오늘 내 운세는?",
     )
 }
 
@@ -41,6 +65,8 @@ fun SoptlogScreen(
     name: String,
     part: String,
     introduction: String?,
+    dashBoardItems: ImmutableList<DashBoardItem>,
+    todayFortuneTitle: String,
 ) {
     Column(
         modifier = Modifier
@@ -66,14 +92,34 @@ fun SoptlogScreen(
                 name = name,
                 part = part,
             )
+
             Spacer(modifier = Modifier.height(12.dp))
-            SoptlogIntroduction(
-                introduction = introduction
-            ){
-                // TODO: 한 줄 소개 등록 화면 이동
-            }
+
+            SoptlogIntroduction(introduction = introduction)
+
             Spacer(modifier = Modifier.height(12.dp))
+
+            SoptlogDashBoard(
+                dashBoardItems = dashBoardItems
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            EditProfileButton(
+                onClick = {
+                    // TODO: 프로필 수정 화면으로 이동
+                }
+            )
         }
+
+        Spacer(modifier = Modifier.height(40.dp))
+
+        TodayFortuneBanner(
+            title = todayFortuneTitle,
+            onClick = {
+                // TODO: 오늘의 운세 화면으로 이동
+            }
+        )
     }
 }
 
@@ -105,7 +151,25 @@ fun PreviewSoptlogScreen() {
                 profileImageUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
                 name = "차은우",
                 part = "안드로이드",
-                introduction = "자기소개는 15글자까지"
+                introduction = "자기소개는 15글자까지",
+                dashBoardItems = persistentListOf(
+                    DashBoardItem(
+                        title = "솝트레벨",
+                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+                        content = "Lv.6",
+                    ),
+                    DashBoardItem(
+                        title = "콕찌르기",
+                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                        content = "208회",
+                    ),
+                    DashBoardItem(
+                        title = "솝트와",
+                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                        content = "33개월",
+                    )
+                ),
+                todayFortuneTitle = "오늘 내 운세는?"
             )
         }
     }
