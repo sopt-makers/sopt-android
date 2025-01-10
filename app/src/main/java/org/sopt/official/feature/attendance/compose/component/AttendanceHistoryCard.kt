@@ -24,7 +24,7 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.Atte
 @Composable
 fun AttendanceHistoryCard(
     userTitle: String,
-    attendanceScore: Int,
+    attendanceScore: Float,
     totalAttendanceResult: Map<AttendanceResultType, Int>,
     attendanceHistoryList: ImmutableList<AttendanceHistory>,
     scrollState: ScrollState,
@@ -72,7 +72,7 @@ private fun AttendanceHistoryCardPreview() {
     SoptTheme {
         AttendanceHistoryCard(
             userTitle = "32기 디자인파트 김솝트",
-            attendanceScore = 1,
+            attendanceScore = 1f,
             totalAttendanceResult = mapOf(
                 Pair(AttendanceResultType.ALL, 16),
                 Pair(AttendanceResultType.PRESENT, 5),

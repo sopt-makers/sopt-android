@@ -1,4 +1,4 @@
-package org.sopt.official.feature.attendance.compose.component
+package org.sopt.official.feature.attendance.compose
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -28,13 +28,14 @@ import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
 import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
     codes: ImmutableList<String>,
     inputCodes: ImmutableList<String?>,
-    attendanceSession: AttendanceSession,
+    attendanceType: AttendanceSession,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -57,7 +58,7 @@ fun AttendanceCodeDialog(
                     .clickable(onClick = onDismissRequest)
             )
             Text(
-                text = stringResource(R.string.attendance_do, attendanceSession.type),
+                text = stringResource(R.string.attendance_do, attendanceType.type),
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10
             )
@@ -113,7 +114,7 @@ private fun AttendanceCodeDialogPreview(
         AttendanceCodeDialog(
             codes = parameter.codes,
             inputCodes = parameter.inputCodes,
-            attendanceSession = parameter.attendanceSession,
+            attendanceType = parameter.attendanceType,
             modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {}
         )
@@ -123,7 +124,7 @@ private fun AttendanceCodeDialogPreview(
 data class AttendanceCodeDialogPreviewParameter(
     val codes: ImmutableList<String>,
     val inputCodes: ImmutableList<String?>,
-    val attendanceSession: AttendanceSession,
+    val attendanceType: AttendanceSession,
 )
 
 class AttendanceCodeDialogPreviewParameterProvider :

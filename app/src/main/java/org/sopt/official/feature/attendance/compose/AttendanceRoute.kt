@@ -1,9 +1,9 @@
 package org.sopt.official.feature.attendance.compose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -11,12 +11,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.NewAttendanceViewModel
 import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBar
 import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttendanceRoute(onClickBackIcon: () -> Unit) {
     val viewModel: NewAttendanceViewModel = viewModel()
@@ -27,13 +27,14 @@ fun AttendanceRoute(onClickBackIcon: () -> Unit) {
         topBar = {
             AttendanceTopAppBar(
                 onClickBackIcon = onClickBackIcon,
-                onClickRefreshIcon = viewModel::fetchData,
+                onClickRefreshIcon = action.onClickRefresh,
             )
         }
     ) { innerPaddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .background(color = SoptTheme.colors.background)
                 .padding(innerPaddingValues)
         ) {
             when (state) {
@@ -54,6 +55,6 @@ fun AttendanceRoute(onClickBackIcon: () -> Unit) {
 @Composable
 fun NewAttendanceViewModel.rememberAttendanceActions(): AttendanceAction = remember(this) {
     AttendanceAction(
-        onFakeClick = {}
+        onClickRefresh = ::fetchAttendanceInfo
     )
 }

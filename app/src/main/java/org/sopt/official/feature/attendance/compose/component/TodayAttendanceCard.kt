@@ -20,16 +20,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
+import org.sopt.official.feature.attendance.model.FinalAttendance
+import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
 fun TodayAttendanceCard(
     eventDate: String,
     eventLocation: String,
     eventName: String,
-    firstAttendance: MidtermAttendance,
-    secondAttendance: MidtermAttendance,
+    firstRoundAttendance: MidtermAttendance,
+    secondRoundAttendance: MidtermAttendance,
     finalAttendance: FinalAttendance,
     modifier: Modifier = Modifier,
 ) {
@@ -88,8 +88,8 @@ fun TodayAttendanceCard(
         }
         Spacer(modifier = Modifier.height(12.dp))
         AttendanceProgressBar(
-            firstAttendance = firstAttendance,
-            secondAttendance = secondAttendance,
+            firstAttendance = firstRoundAttendance,
+            secondAttendance = secondRoundAttendance,
             finalAttendance = finalAttendance,
         )
     }
@@ -106,8 +106,8 @@ private fun TodayAttendanceCardPreview() {
                 eventDate = "3월 23일 토요일 14:00 - 18:00",
                 eventLocation = "건국대학교 꽥꽥오리관",
                 eventName = "2차 세미나",
-                firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                secondAttendance = MidtermAttendance.Absent,
+                firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+                secondRoundAttendance = MidtermAttendance.Absent,
                 finalAttendance = FinalAttendance.LATE,
             )
         }

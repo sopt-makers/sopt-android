@@ -13,6 +13,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R
 import org.sopt.official.designsystem.Orange400
@@ -21,7 +23,7 @@ import org.sopt.official.designsystem.SoptTheme
 @Composable
 fun AttendanceHistoryUserInfoCard(
     userTitle: String,
-    attendanceScore: Int,
+    attendanceScore: Float,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -38,7 +40,7 @@ fun AttendanceHistoryUserInfoCard(
                 style = SoptTheme.typography.body18M
             )
             Text(
-                text = "${attendanceScore}점",
+                text = "${attendanceScore.prettyString}점",
                 color = Orange400,
                 style = SoptTheme.typography.title20SB
             )
@@ -60,12 +62,26 @@ fun AttendanceHistoryUserInfoCard(
 
 @Preview
 @Composable
-fun AttendanceHistoryUserInfoCardPreview() {
+fun AttendanceHistoryUserInfoCardPreview(
+    @PreviewParameter(AttendanceHistoryUserInfoCardPreviewParameter::class) previewParameter: Float
+) {
     SoptTheme {
         AttendanceHistoryUserInfoCard(
             userTitle = "32기 디자인파트 김솝트",
-            attendanceScore = 1,
+            attendanceScore = previewParameter,
             modifier = Modifier.background(color = SoptTheme.colors.onSurface800)
         )
     }
 }
+
+class AttendanceHistoryUserInfoCardPreviewParameter(override val values: Sequence<Float> = sequenceOf(-0.5f, 0f, 0.5f, 1f, 1.5f, 2f)) :
+    PreviewParameterProvider<Float>
+
+private val Float.prettyString: String
+    get() {
+        return if (this == this.toInt().toFloat()) {
+            this.toInt().toString()
+        } else {
+            this.toString()
+        }
+    }
