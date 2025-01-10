@@ -13,6 +13,10 @@ class FinalAttendanceTest {
     @Test
     fun `1차 또는 2차 출석 여부가 아직 결정되지 않은 경우에는 최종 출석이 아직 결정되지 않은 상태로 한다`() {
         firstRoundAttendance = MidtermAttendance.NotYet(FIRST)
+        secondRoundAttendance = MidtermAttendance.NotYet(SECOND)
+        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) == FinalAttendance.NOT_YET)
+
+        firstRoundAttendance = MidtermAttendance.NotYet(FIRST)
         secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
         assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) == FinalAttendance.NOT_YET)
 
@@ -34,22 +38,6 @@ class FinalAttendanceTest {
         firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00")
         secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
         assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) == FinalAttendance.PRESENT)
-
-        firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00")
-        secondRoundAttendance = MidtermAttendance.Absent
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.PRESENT)
-
-        firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00")
-        secondRoundAttendance = MidtermAttendance.NotYet(SECOND)
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.PRESENT)
-
-        firstRoundAttendance = MidtermAttendance.Absent
-        secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.PRESENT)
-
-        firstRoundAttendance = MidtermAttendance.NotYet(FIRST)
-        secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.PRESENT)
     }
 
     @Test
@@ -57,22 +45,6 @@ class FinalAttendanceTest {
         firstRoundAttendance = MidtermAttendance.Absent
         secondRoundAttendance = MidtermAttendance.Absent
         assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) == FinalAttendance.ABSENT)
-
-        firstRoundAttendance = MidtermAttendance.Absent
-        secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.ABSENT)
-
-        firstRoundAttendance = MidtermAttendance.Absent
-        secondRoundAttendance = MidtermAttendance.NotYet(SECOND)
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.ABSENT)
-
-        firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00")
-        secondRoundAttendance = MidtermAttendance.Absent
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.ABSENT)
-
-        firstRoundAttendance = MidtermAttendance.NotYet(FIRST)
-        secondRoundAttendance = MidtermAttendance.Absent
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.ABSENT)
     }
 
     @Test
@@ -84,14 +56,6 @@ class FinalAttendanceTest {
         firstRoundAttendance = MidtermAttendance.Absent
         secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
         assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) == FinalAttendance.LATE)
-
-        firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00")
-        secondRoundAttendance = MidtermAttendance.Present(attendanceAt = "16:00")
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.LATE)
-
-        firstRoundAttendance = MidtermAttendance.Absent
-        secondRoundAttendance = MidtermAttendance.Absent
-        assert(FinalAttendance.calculateFinalAttendance(firstRoundAttendance, secondRoundAttendance) != FinalAttendance.LATE)
     }
 
 }
