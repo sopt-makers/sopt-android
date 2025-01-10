@@ -14,9 +14,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance.NotYet.AttendanceSession
+import org.sopt.official.feature.attendance.model.FinalAttendance
+import org.sopt.official.feature.attendance.model.MidtermAttendance
+import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
 
 @Composable
 fun AttendanceProgressBar(

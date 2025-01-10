@@ -38,12 +38,11 @@ import org.sopt.official.feature.attendance.compose.component.TodayAttendanceCar
 import org.sopt.official.feature.attendance.compose.component.TodayNoAttendanceCard
 import org.sopt.official.feature.attendance.compose.component.TodayNoScheduleCard
 import org.sopt.official.feature.attendance.model.AttendanceAction
+import org.sopt.official.feature.attendance.model.AttendanceDayType
 import org.sopt.official.feature.attendance.model.AttendanceUiState
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.FinalAttendance
-import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceDayType.AttendanceDay.MidtermAttendance
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceResultType
+import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
 fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction) {
@@ -66,8 +65,8 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
                         eventDate = state.attendanceDayType.eventDate,
                         eventLocation = state.attendanceDayType.eventLocation,
                         eventName = state.attendanceDayType.eventName,
-                        firstAttendance = state.attendanceDayType.firstAttendance,
-                        secondAttendance = state.attendanceDayType.secondAttendance,
+                        firstRoundAttendance = state.attendanceDayType.firstRoundAttendance,
+                        secondRoundAttendance = state.attendanceDayType.secondRoundAttendance,
                         finalAttendance = state.attendanceDayType.finalAttendance,
                     )
                 }
@@ -103,7 +102,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 9.dp),
-            shape = RoundedCornerShape(size = 6.dp),
+            shape = RoundedCornerShape(size = 12.dp),
             colors = ButtonColors(
                 containerColor = SoptTheme.colors.onSurface10,
                 contentColor = SoptTheme.colors.onSurface950,
@@ -142,7 +141,7 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                     state = AttendanceUiState.Success(
                         attendanceDayType = parameter.attendanceDayType,
                         userTitle = "32기 디자인파트 김솝트",
-                        attendanceScore = 1,
+                        attendanceScore = 2f,
                         totalAttendanceResult = persistentMapOf(
                             Pair(AttendanceResultType.ALL, 16),
                             Pair(AttendanceResultType.PRESENT, 10),
@@ -170,7 +169,7 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                             ),
                         ),
                     ),
-                    action = AttendanceAction(onFakeClick = {})
+                    action = AttendanceAction(onClickRefresh = {})
                 )
             }
         }
@@ -182,7 +181,7 @@ data class AttendanceScreenPreviewParameter(
 )
 
 
-class AttendanceScreenPreviewParameterProvider() :
+class AttendanceScreenPreviewParameterProvider :
     PreviewParameterProvider<AttendanceScreenPreviewParameter> {
 
     override val values: Sequence<AttendanceScreenPreviewParameter> = sequenceOf(
@@ -191,9 +190,8 @@ class AttendanceScreenPreviewParameterProvider() :
                 eventDate = "3월 23일 토요일 14:00 - 18:00",
                 eventLocation = "건국대학교 꽥꽥오리관",
                 eventName = "2차 세미나",
-                firstAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
-                secondAttendance = MidtermAttendance.Absent,
-                finalAttendance = FinalAttendance.LATE,
+                firstRoundAttendance = MidtermAttendance.Present(attendanceAt = "14:00"),
+                secondRoundAttendance = MidtermAttendance.Absent,
             )
         ), AttendanceScreenPreviewParameter(
             attendanceDayType = AttendanceDayType.Event(
