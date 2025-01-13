@@ -10,7 +10,7 @@ import org.sopt.official.feature.attendance.toUiAttendanceDayType
 sealed interface AttendanceUiState {
     data object Loading : AttendanceUiState
     data class Success(
-        val sessionId: Long,
+        val lectureId: Long,
         val attendanceDayType: AttendanceDayType,
         val userTitle: String,
         val attendanceScore: Float,
@@ -34,7 +34,7 @@ sealed interface AttendanceUiState {
         companion object {
             fun of(attendance: Attendance): Success {
                 return Success(
-                    sessionId = attendance.lectureId,
+                    lectureId = attendance.lectureId,
                     attendanceDayType = attendance.attendanceDayType.toUiAttendanceDayType(),
                     userTitle = "${attendance.user.generation}기 ${attendance.user.part.partName}파트 ${attendance.user.name}",
                     attendanceScore = attendance.user.attendanceScore.toFloat(),
