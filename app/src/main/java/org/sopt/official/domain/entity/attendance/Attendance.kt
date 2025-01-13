@@ -3,7 +3,7 @@ package org.sopt.official.domain.entity.attendance
 import java.time.LocalDateTime
 
 data class Attendance(
-    val sessionId: Int,
+    val lectureId: Long,
     val user: User,
     val attendanceDayType: AttendanceDayType,
 ) {
@@ -106,6 +106,10 @@ data class Attendance(
     )
 
     companion object {
-        const val UNKNOWN_SESSION_ID = -1
+        /** 세션이 올바르게 생성되지 않은 경우 */
+        const val UNKNOWN_SESSION_ID: Long = -1L
+
+        /** 출석해야 할 세션이 존재하지 않는 경우 */
+        const val NO_SESSION_ID: Long = 0L
     }
 }
