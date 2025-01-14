@@ -11,10 +11,11 @@ import org.sopt.official.feature.auth.model.AuthStatus
 
 fun NavController.navigateSocialAccount(
     status: AuthStatus,
+    name: String,
     navOptions: NavOptions? = null
 ) {
     navigate(
-        route = SocialAccount(status = status),
+        route = SocialAccount(status = status, name = name),
         navOptions = navOptions
     )
 }
@@ -26,6 +27,7 @@ fun NavGraphBuilder.socialAccountNavGraph(
         val args = it.toRoute<SocialAccount>()
         SocialAccountRoute(
             status = args.status,
+            name = args.name,
             onGoogleLoginCLick = onGoogleLoginCLick
         )
     }
@@ -33,5 +35,6 @@ fun NavGraphBuilder.socialAccountNavGraph(
 
 @Serializable
 data class SocialAccount(
-    val status: AuthStatus
+    val status: AuthStatus,
+    val name: String
 )

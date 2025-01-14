@@ -8,7 +8,7 @@ data class CertificateCodeResponse(
     @SerialName("isVerified")
     val isVerified: Boolean,
     @SerialName("name")
-    val name: String?,
+    val name: String,
     @SerialName("phone")
     val phone: String
 )

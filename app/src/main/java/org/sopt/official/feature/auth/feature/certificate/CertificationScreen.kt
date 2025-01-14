@@ -79,7 +79,7 @@ internal fun CertificationRoute(
     status: AuthStatus,
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: (AuthStatus) -> Unit,
+    navigateToSocialAccount: (AuthStatus, String) -> Unit,
     navigateToAuthMain: () -> Unit,
     onGoogleFormClick: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
@@ -95,7 +95,7 @@ internal fun CertificationRoute(
                         context.toast(sideEffect.message)
                     }
 
-                    is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount(status)
+                    is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount(status, sideEffect.name)
 
                     is CertificationSideEffect.NavigateToAuthMain -> navigateToAuthMain()
                 }

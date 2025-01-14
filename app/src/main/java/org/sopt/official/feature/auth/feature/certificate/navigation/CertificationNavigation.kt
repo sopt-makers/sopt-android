@@ -22,7 +22,7 @@ fun NavController.navigateCertification(
 fun NavGraphBuilder.certificationNavGraph(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: (AuthStatus) -> Unit,
+    navigateToSocialAccount: (AuthStatus, String) -> Unit,
     navigateToAuthMain: () -> Unit,
     onGoogleFormClick: () -> Unit
 ) {
