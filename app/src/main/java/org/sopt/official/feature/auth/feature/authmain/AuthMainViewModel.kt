@@ -20,7 +20,7 @@ class AuthMainViewModel @Inject constructor(
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
 
     fun signIn(token: String) {
-        // TODO: 실제 code 넣기 by leeeyubin
+        // TODO: 실제 token 넣기 by leeeyubin
         viewModelScope.launch {
             authRepository.signIn(
                 SignInCode(

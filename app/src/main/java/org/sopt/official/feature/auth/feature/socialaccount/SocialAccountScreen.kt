@@ -61,6 +61,7 @@ import org.sopt.official.feature.auth.model.AuthStatus
 @Composable
 internal fun SocialAccountRoute(
     status: AuthStatus,
+    name: String,
     onGoogleLoginCLick: () -> Unit,
     viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
@@ -77,6 +78,7 @@ internal fun SocialAccountRoute(
     }
 
     SocialAccountScreen(
+        name = name,
         onGoogleLoginCLick = {
             viewModel.connectSocialAccount(status)
         }
@@ -85,6 +87,7 @@ internal fun SocialAccountRoute(
 
 @Composable
 private fun SocialAccountScreen(
+    name: String,
     onGoogleLoginCLick: () -> Unit
 ) {
     Column(
@@ -94,7 +97,7 @@ private fun SocialAccountScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(48.dp))
-        TopBar()
+        TopBar(name)
         Spacer(modifier = Modifier.height(66.dp))
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
@@ -116,6 +119,7 @@ private fun SocialAccountScreen(
 
 @Composable
 private fun TopBar(
+    name: String,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -147,7 +151,7 @@ private fun TopBar(
         )
         Spacer(modifier = Modifier.height(14.dp))
         Text(
-            text = "반갑습니다 ㅇㅇㅇ님\n소셜로그인을 진행하여 회원가입을 완료해주세요",
+            text = "반갑습니다 ${name}님\n소셜로그인을 진행하여 회원가입을 완료해주세요",
             color = Gray60,
             style = SoptTheme.typography.label12SB,
             textAlign = TextAlign.Center
@@ -160,6 +164,7 @@ private fun TopBar(
 private fun ChangeAccountPreview() {
     SoptTheme {
         SocialAccountScreen(
+            name = "SOPT",
             onGoogleLoginCLick = {}
         )
     }

@@ -25,7 +25,7 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.createCode(
                 InitialInformation(
-                    name =  status.authName,
+                    name = status.authName,
                     phone = status.phone,
                     type = status.type
                 )
@@ -46,11 +46,11 @@ class CertificationViewModel @Inject constructor(
                     code = status.token,
                     type = status.type
                 )
-            ).onSuccess {
+            ).onSuccess { response ->
                 if (status.type == AuthStatus.SEARCH.type) {
                     findAccount()
                 } else {
-                    _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount)
+                    _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount(response.name))
                 }
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
