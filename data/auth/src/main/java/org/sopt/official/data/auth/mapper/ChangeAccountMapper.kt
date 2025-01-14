@@ -7,6 +7,6 @@ fun OriginalInformation.toRequest(): ChangeAccountRequest =
     ChangeAccountRequest(
         phone = phone,
         authPlatform = authPlatform,
-        code = code
+        token = token
     )
 

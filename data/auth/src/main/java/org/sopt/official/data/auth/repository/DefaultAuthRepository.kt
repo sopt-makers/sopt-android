@@ -34,7 +34,6 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.signUp(request.toRequest())
     }
 
-
     override suspend fun changeAccount(request: OriginalInformation): Result<Unit> = runCatching {
         authApi.changeAccount(request.toRequest())
     }
