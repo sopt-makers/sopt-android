@@ -9,6 +9,6 @@ data class ChangeAccountRequest (
     val phone: String,
     @SerialName("authPlatform")
     val authPlatform: String,
-    @SerialName("code")
-    val code: String,
+    @SerialName("token")
+    val token: String,
 )

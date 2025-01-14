@@ -19,12 +19,12 @@ class AuthMainViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
 
-    fun signIn(code: String) {
+    fun signIn(token: String) {
         // TODO: 실제 code 넣기 by leeeyubin
         viewModelScope.launch {
             authRepository.signIn(
                 SignInCode(
-                    code = "codecodecodecodecode",
+                    token = "codecodecodecodecode",
                     authPlatform = GOOGLE
                 )
             ).onSuccess {

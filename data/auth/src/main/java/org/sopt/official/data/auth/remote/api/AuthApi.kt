@@ -21,7 +21,7 @@ internal interface AuthApi {
     @POST("/api/v1/auth/phone")
     suspend fun createCode(
         @Body request: CreateCodeRequest,
-    ): NonDataBaseAuthResponse
+    ): NonDataBaseAuthResponse<Unit>
 
     @POST("/api/v1/auth/verify/phone")
     suspend fun certificateCode(
@@ -36,12 +36,12 @@ internal interface AuthApi {
     @POST("/api/v1/auth/signup")
     suspend fun signUp(
         @Body request: SignUpRequest,
-    ): NonDataBaseAuthResponse
+    ): NonDataBaseAuthResponse<Unit>
 
     @PATCH("/api/v1/social/accounts")
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
-    ): NonDataBaseAuthResponse
+    ): NonDataBaseAuthResponse<Unit>
 
     @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(

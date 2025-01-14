@@ -7,7 +7,7 @@ import org.sopt.official.domain.auth.model.SignInResult
 
 fun SignInCode.toRequest(): SignInRequest =
     SignInRequest(
-        code = code,
+        token = token,
         authPlatform = authPlatform
     )
 

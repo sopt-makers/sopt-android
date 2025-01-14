@@ -54,7 +54,7 @@ class SocialAccountViewModel @Inject constructor(
                 OriginalInformation(
                     phone = "010-0000-0000",
                     authPlatform = GOOGLE,
-                    code = "codecodecodecodecode"
+                    token = "codecodecodecodecode"
                 )
             ).onSuccess {
                 _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공!!"))

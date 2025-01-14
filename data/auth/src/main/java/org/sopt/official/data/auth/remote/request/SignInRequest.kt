@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignInRequest (
-    @SerialName("code")
-    val code: String,
+    @SerialName("token")
+    val token: String,
     @SerialName("authPlatform")
     val authPlatform: String
 )

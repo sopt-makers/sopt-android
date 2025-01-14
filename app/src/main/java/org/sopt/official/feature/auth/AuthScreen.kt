@@ -21,6 +21,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.CertificationSnackBar
 import org.sopt.official.feature.auth.feature.authmain.navigation.AuthMainNavigation
 import org.sopt.official.feature.auth.feature.authmain.navigation.authMainNavGraph
+import org.sopt.official.feature.auth.feature.authmain.navigation.navigateAuthMain
 import org.sopt.official.feature.auth.feature.certificate.navigation.certificationNavGraph
 import org.sopt.official.feature.auth.feature.certificate.navigation.navigateCertification
 import org.sopt.official.feature.auth.feature.socialaccount.navigation.navigateSocialAccount
@@ -85,6 +86,7 @@ internal fun AuthScreen(
                         navigateToSocialAccount = { status ->
                             navController.navigateSocialAccount(status)
                         },
+                        navigateToAuthMain = navController::navigateAuthMain,
                         onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(

@@ -1,6 +1,6 @@
 package org.sopt.official.domain.auth.model
 
 data class SignInCode(
-    val code: String,
+    val token: String,
     val authPlatform: String
 )
