@@ -3,6 +3,8 @@ package org.sopt.official.feature.auth.feature.certificate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,13 +13,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
-import java.util.Locale
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +33,8 @@ class CertificationViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
     val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
+
+    private var timerJob: Job? = null
 
     fun updatePhone(phone: String) {
         _state.update { currentState ->
@@ -98,26 +103,26 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    fun startTimer(currentTime: String) {
-        viewModelScope.launch {
-            var (minutes, seconds) = currentTime.split(":").map { it.toInt() }
-            var totalSeconds: Int = minutes * 60 + seconds
-
-            while (totalSeconds > 0) {
+    suspend fun startTimer() {
+        timerJob?.cancelAndJoin()
+        timerJob = null
+        _state.update { currentState ->
+            currentState.copy(
+                currentTimeValue = 180
+            )
+        }
+        timerJob = viewModelScope.launch {
+            while (isActive) {
                 delay(1000L)
-
-                totalSeconds--
-                minutes = totalSeconds / 60
-                seconds = totalSeconds % 60
+                Timber.d("totalSeconds: ${state.value}")
 
                 _state.update { currentState ->
                     currentState.copy(
-                        currentTime = String.format(Locale.US, "%02d:%02d", minutes, seconds)
+                        currentTimeValue = currentState.currentTimeValue - 1
                     )
                 }
             }
             delay(1000L)
-            // TODO : 에러 화면 띄우기 by leeeyubin
         }
     }
 }

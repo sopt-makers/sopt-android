@@ -41,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -52,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_memeber_error
 import org.sopt.official.R.drawable.ic_auth_process_first
@@ -83,6 +85,7 @@ internal fun CertificationRoute(
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val scope = rememberCoroutineScope()
     val context = LocalContext.current
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -107,8 +110,10 @@ internal fun CertificationRoute(
         onCreateCodeClick = {
             onShowSnackBar()
             // TODO: 실제 전화번호 넣기 by leeeyubin
-            viewModel.createCode(status)
-            viewModel.startTimer(state.currentTime)
+            scope.launch {
+                viewModel.createCode(status)
+                viewModel.startTimer()
+            }
         },
         onCertificateClick = {
             // TODO: 실제 인증코드 넣기 by leeeyubin
