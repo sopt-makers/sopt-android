@@ -53,6 +53,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_memeber_error
@@ -87,6 +88,8 @@ internal fun CertificationRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -108,11 +111,13 @@ internal fun CertificationRoute(
 
     CertificationScreen(
         status = status,
+        currentTime = state.currentTime,
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
             // TODO: 실제 전화번호 넣기 by leeeyubin
             viewModel.createCode(status)
+            viewModel.startTimer(state.currentTime)
         },
         onCertificateClick = {
             // TODO: 실제 인증코드 넣기 by leeeyubin
@@ -134,6 +139,7 @@ internal fun CertificationRoute(
 @Composable
 private fun CertificationScreen(
     status: AuthStatus,
+    currentTime: String,
     onBackClick: () -> Unit,
     onCreateCodeClick: () -> Unit,
     onCertificateClick: () -> Unit,
@@ -174,7 +180,13 @@ private fun CertificationScreen(
                 labelText = code,
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = onCodeChange,
-            )
+            ) {
+                Text(
+                    text = currentTime,
+                    style = SoptTheme.typography.body14M,
+                    color = White,
+                )
+            }
             if (status == AuthStatus.REGISTER) {
                 Spacer(modifier = Modifier.height(41.dp))
                 AuthButton(
@@ -278,6 +290,7 @@ private fun AuthCertificationPreview() {
     SoptTheme {
         CertificationScreen(
             status = AuthStatus.REGISTER,
+            currentTime = "03:00",
             onBackClick = {},
             onCreateCodeClick = {},
             onCertificateClick = {},
