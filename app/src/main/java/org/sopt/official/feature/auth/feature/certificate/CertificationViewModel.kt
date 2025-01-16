@@ -30,6 +30,23 @@ class CertificationViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
     val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
+
+    fun updatePhone(phone: String) {
+        _state.update { currentState ->
+            currentState.copy(
+                phone = phone
+            )
+        }
+    }
+
+    fun updateCode(code: String) {
+        _state.update { currentState ->
+            currentState.copy(
+                code = code
+            )
+        }
+    }
+
     fun createCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.createCode(
@@ -100,7 +117,7 @@ class CertificationViewModel @Inject constructor(
                 }
             }
             delay(1000L)
-            // todo: 에러 화면 띄우기
+            // TODO : 에러 화면 띄우기 by leeeyubin
         }
     }
 }

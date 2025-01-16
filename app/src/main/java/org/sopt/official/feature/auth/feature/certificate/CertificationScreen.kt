@@ -41,9 +41,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -105,10 +102,6 @@ internal fun CertificationRoute(
             }
     }
 
-    //todo: state로 관리
-    var phoneNumber by remember { mutableStateOf("") }
-    var code by remember { mutableStateOf("") }
-
     CertificationScreen(
         status = status,
         currentTime = state.currentTime,
@@ -125,13 +118,13 @@ internal fun CertificationRoute(
         },
         onGoogleFormClick = onGoogleFormClick,
         onPhoneNumberChange = { newPhoneNumber ->
-            phoneNumber = newPhoneNumber
+            viewModel.updatePhone(newPhoneNumber)
         },
         onCodeChange = { newCode ->
-            code = newCode
+            viewModel.updateCode(newCode)
         },
-        phoneNumber = phoneNumber,
-        code = code,
+        phoneNumber = state.phone,
+        code = state.code,
         visualTransformation = phoneNumberVisualTransformation()
     )
 }
