@@ -47,6 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -182,7 +183,7 @@ private fun CertificationScreen(
                 phoneNumber = phoneNumber,
                 visualTransformation = visualTransformation,
                 buttonText = certificationButtonText
-                )
+            )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -281,7 +282,9 @@ private fun TopBar(
             color = Gray10,
             style = SoptTheme.typography.heading24B
         )
+        Spacer(modifier = Modifier.height(14.dp))
         Text(
+            textAlign = TextAlign.Center,
             text = "이곳은 SOPT 회원만을 위한 공간이에요.\nSOPT 회원인증을 위해 전화번호를 입력해 주세요.",
             color = Gray60,
             style = SoptTheme.typography.label12SB
