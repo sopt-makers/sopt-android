@@ -41,9 +41,9 @@ class SocialAccountViewModel @Inject constructor(
                     authPlatform = GOOGLE
                 )
             ).onSuccess {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공!!"))
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))
             }.onFailure {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패ㅠㅠ"))
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패"))
             }
         }
     }
@@ -57,9 +57,9 @@ class SocialAccountViewModel @Inject constructor(
                     token = "codecodecodecodecode"
                 )
             ).onSuccess {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공!!"))
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))
             }.onFailure {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패ㅠㅠ"))
+                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패"))
             }
         }
     }

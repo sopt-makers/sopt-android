@@ -38,7 +38,8 @@ class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _state: MutableStateFlow<CertificationState> = MutableStateFlow(CertificationState())
+    private val _state: MutableStateFlow<CertificationState> =
+        MutableStateFlow(CertificationState())
     val state: StateFlow<CertificationState> = _state.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
@@ -75,16 +76,11 @@ class CertificationViewModel @Inject constructor(
                 resetErrorCase()
                 updateButtonText()
             }.onFailure {
-                // TODO: DELETE startTimer(), resetErrorCase(), updateButtonText() !!
-                startTimer()
-                resetErrorCase()
-                updateButtonText()
-                // TODO: 주석 해제
-//                _state.update { currentState ->
-//                    currentState.copy(
-//                        errorMessage = ErrorCase.PHONE_ERROR.message
-//                    )
-//                }
+                _state.update { currentState ->
+                    currentState.copy(
+                        errorMessage = ErrorCase.PHONE_ERROR.message
+                    )
+                }
             }
         }
     }
@@ -105,7 +101,7 @@ class CertificationViewModel @Inject constructor(
                     _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount(response.name))
                 }
             }.onFailure {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }
         }
     }
@@ -119,7 +115,7 @@ class CertificationViewModel @Inject constructor(
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
             }.onFailure {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
+                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }
         }
     }
