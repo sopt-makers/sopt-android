@@ -136,7 +136,8 @@ internal fun CertificationRoute(
         },
         phoneNumber = state.phone,
         code = state.code,
-        visualTransformation = phoneNumberVisualTransformation()
+        visualTransformation = phoneNumberVisualTransformation(),
+        errorMessage = state.errorMessage
     )
 }
 
@@ -152,7 +153,8 @@ private fun CertificationScreen(
     onCodeChange: (String) -> Unit,
     phoneNumber: String,
     code: String,
-    visualTransformation: VisualTransformation
+    visualTransformation: VisualTransformation,
+    errorMessage: String
 ) {
     Column {
         Image(
@@ -184,6 +186,8 @@ private fun CertificationScreen(
                 labelText = code,
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = onCodeChange,
+                isError = errorMessage.isNotEmpty(),
+                errorMessage = errorMessage
             ) {
                 Text(
                     text = currentTime,
@@ -282,12 +286,6 @@ private fun TopBar(
     }
 }
 
-internal enum class ErrorCase(val message: String) {
-    CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
-    PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun AuthCertificationPreview() {
@@ -304,6 +302,7 @@ private fun AuthCertificationPreview() {
             phoneNumber = "01012345678",
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
+            errorMessage = ""
         )
     }
 }

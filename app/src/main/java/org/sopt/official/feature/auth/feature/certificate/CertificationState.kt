@@ -5,7 +5,8 @@ import java.util.Locale
 data class CertificationState(
     val phone: String = "",
     val code: String = "",
-    val currentTimeValue: Int = 180
+    val currentTimeValue: Int = 180,
+    val errorMessage: String = ""
 ) {
     val currentTime: String
         get() = String.format(
@@ -14,4 +15,5 @@ data class CertificationState(
             currentTimeValue / 60,
             currentTimeValue % 60
         )
+    val isTimerEnd: Boolean get() = currentTimeValue == 0
 }
