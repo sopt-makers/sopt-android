@@ -22,12 +22,18 @@ import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
 
+internal enum class ErrorCase(val message: String) {
+    CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
+    PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
+}
+
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(CertificationState())
+    private val _state: MutableStateFlow<CertificationState> = MutableStateFlow(CertificationState())
     val state: StateFlow<CertificationState> = _state.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
@@ -61,10 +67,17 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess {
                 startTimer()
+                resetErrorCase()
             }.onFailure {
-                // TODO: DELETE startTimer() !!
+                // TODO: DELETE startTimer(), resetErrorCase() !!
                 startTimer()
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
+                resetErrorCase()
+                // TODO: 주석 해제
+//                _state.update { currentState ->
+//                    currentState.copy(
+//                        errorMessage = ErrorCase.PHONE_ERROR.message
+//                    )
+//                }
             }
         }
     }
@@ -115,13 +128,32 @@ class CertificationViewModel @Inject constructor(
         timerJob = viewModelScope.launch {
             while (isActive) {
                 delay(1000L)
-                _state.update { currentState ->
-                    currentState.copy(
-                        currentTimeValue = currentState.currentTimeValue - 1
-                    )
+
+                if (_state.value.isTimerEnd) {
+                    _state.update { currentState ->
+                        currentState.copy(
+                            errorMessage = ErrorCase.TIME_ERROR.message
+                        )
+                    }
+
+                    timerJob?.cancelAndJoin()
+                    timerJob = null
+                } else {
+                    _state.update { currentState ->
+                        currentState.copy(
+                            currentTimeValue = currentState.currentTimeValue - 1
+                        )
+                    }
                 }
             }
-            delay(1000L)
+        }
+    }
+
+    private fun resetErrorCase() {
+        _state.update { currentState ->
+            currentState.copy(
+                errorMessage = ""
+            )
         }
     }
 }
