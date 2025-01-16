@@ -28,10 +28,10 @@ class AuthMainViewModel @Inject constructor(
                     authPlatform = GOOGLE
                 )
             ).onSuccess {
-                //todo: 홈 화면으로 이동
-                _sideEffect.emit(AuthMainSideEffect.ShowToast("성공!!"))
+                //TODO: 홈 화면으로 이동
+                _sideEffect.emit(AuthMainSideEffect.ShowToast("성공"))
             }.onFailure {
-                _sideEffect.emit(AuthMainSideEffect.ShowToast("실패ㅠㅠ!!"))
+                _sideEffect.emit(AuthMainSideEffect.ShowToast("실패"))
             }
         }
     }

@@ -237,9 +237,11 @@ private fun AuthBottom(
 }
 
 @Composable
-private fun AuthDivider() {
+private fun AuthDivider(
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier.padding(horizontal = 20.dp),
+        modifier = modifier.padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         HorizontalDivider(
