@@ -53,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_memeber_error
@@ -96,9 +97,17 @@ internal fun CertificationRoute(
                 when (sideEffect) {
                     is CertificationSideEffect.ShowToast -> context.toast(sideEffect.message)
 
-                    is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount(status, sideEffect.name)
+                    is CertificationSideEffect.NavigateToSocialAccount -> {
+                        viewModel.timerJob?.cancelAndJoin()
+                        viewModel.timerJob = null
+                        navigateToSocialAccount(status, sideEffect.name)
+                    }
 
-                    is CertificationSideEffect.NavigateToAuthMain -> navigateToAuthMain()
+                    is CertificationSideEffect.NavigateToAuthMain -> {
+                        viewModel.timerJob?.cancelAndJoin()
+                        viewModel.timerJob = null
+                        navigateToAuthMain()
+                    }
                 }
             }
     }
@@ -112,7 +121,6 @@ internal fun CertificationRoute(
             // TODO: 실제 전화번호 넣기 by leeeyubin
             scope.launch {
                 viewModel.createCode(status)
-                viewModel.startTimer()
             }
         },
         onCertificateClick = {

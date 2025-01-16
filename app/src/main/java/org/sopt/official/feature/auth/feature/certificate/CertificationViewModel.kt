@@ -20,7 +20,6 @@ import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +33,7 @@ class CertificationViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<CertificationSideEffect>()
     val sideEffect: SharedFlow<CertificationSideEffect> = _sideEffect.asSharedFlow()
 
-    private var timerJob: Job? = null
+    var timerJob: Job? = null
 
     fun updatePhone(phone: String) {
         _state.update { currentState ->
@@ -61,8 +60,10 @@ class CertificationViewModel @Inject constructor(
                     type = status.type
                 )
             ).onSuccess {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("성공!!!"))
+                startTimer()
             }.onFailure {
+                // TODO: DELETE startTimer() !!
+                startTimer()
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
             }
         }
@@ -103,7 +104,7 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    suspend fun startTimer() {
+    private suspend fun startTimer() {
         timerJob?.cancelAndJoin()
         timerJob = null
         _state.update { currentState ->
@@ -114,8 +115,6 @@ class CertificationViewModel @Inject constructor(
         timerJob = viewModelScope.launch {
             while (isActive) {
                 delay(1000L)
-                Timber.d("totalSeconds: ${state.value}")
-
                 _state.update { currentState ->
                     currentState.copy(
                         currentTimeValue = currentState.currentTimeValue - 1
