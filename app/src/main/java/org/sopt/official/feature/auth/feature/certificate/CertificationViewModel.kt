@@ -116,8 +116,8 @@ class CertificationViewModel @Inject constructor(
                 UserPhoneNumber(
                     phone = "01012345678"
                 )
-            ).onSuccess {
-                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain)
+            ).onSuccess { response ->
+                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패ㅠㅠ"))
             }

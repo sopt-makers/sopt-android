@@ -4,15 +4,17 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.authmain.AuthMainRoute
 import org.sopt.official.feature.auth.model.AuthStatus
 
 fun NavController.navigateAuthMain(
+    platform: String,
     navOptions: NavOptions? = null
 ) {
     navigate(
-        route = AuthMainNavigation,
+        route = AuthMainNavigation(platform = platform),
         navOptions = navOptions
     )
 }
@@ -24,7 +26,9 @@ fun NavGraphBuilder.authMainNavGraph(
     onContactChannelClick: () -> Unit
 ) {
     composable<AuthMainNavigation> {
+        val args = it.toRoute<AuthMainNavigation>()
         AuthMainRoute(
+            platform = args.platform,
             navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
             onGoogleLoginCLick = onGoogleLoginCLick,
             navigateToCertification = navigateToCertification,
@@ -34,4 +38,6 @@ fun NavGraphBuilder.authMainNavGraph(
 }
 
 @Serializable
-data object AuthMainNavigation
+data class AuthMainNavigation(
+    val platform: String
+)

@@ -70,7 +70,7 @@ internal fun AuthScreen(
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = AuthMainNavigation
+                    startDestination = AuthMainNavigation(platform = "") // TODO: platform 값 로컬에서 가져오기
                 ) {
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
@@ -86,7 +86,9 @@ internal fun AuthScreen(
                         navigateToSocialAccount = { status, name ->
                             navController.navigateSocialAccount(status, name)
                         },
-                        navigateToAuthMain = navController::navigateAuthMain,
+                        navigateToAuthMain = { platform ->
+                            navController.navigateAuthMain(platform)
+                        },
                         onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(
