@@ -137,7 +137,8 @@ internal fun CertificationRoute(
         phoneNumber = state.phone,
         code = state.code,
         visualTransformation = phoneNumberVisualTransformation(),
-        errorMessage = state.errorMessage
+        errorMessage = state.errorMessage,
+        certificationButtonText = state.buttonText
     )
 }
 
@@ -154,7 +155,8 @@ private fun CertificationScreen(
     phoneNumber: String,
     code: String,
     visualTransformation: VisualTransformation,
-    errorMessage: String
+    errorMessage: String,
+    certificationButtonText: String
 ) {
     Column {
         Image(
@@ -178,8 +180,9 @@ private fun CertificationScreen(
                 textColor = Gray80,
                 onTextChange = onPhoneNumberChange,
                 phoneNumber = phoneNumber,
-                visualTransformation = visualTransformation
-            )
+                visualTransformation = visualTransformation,
+                buttonText = certificationButtonText
+                )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
                 modifier = Modifier.fillMaxWidth(),
@@ -302,7 +305,8 @@ private fun AuthCertificationPreview() {
             phoneNumber = "01012345678",
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
-            errorMessage = ""
+            errorMessage = "",
+            certificationButtonText = CertificationButtonText.GET_CODE.message
         )
     }
 }

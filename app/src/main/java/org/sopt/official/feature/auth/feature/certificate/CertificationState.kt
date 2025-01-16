@@ -6,7 +6,8 @@ data class CertificationState(
     val phone: String = "",
     val code: String = "",
     val currentTimeValue: Int = 180,
-    val errorMessage: String = ""
+    val errorMessage: String = "",
+    val buttonText: String = CertificationButtonText.GET_CODE.message,
 ) {
     val currentTime: String
         get() = String.format(
