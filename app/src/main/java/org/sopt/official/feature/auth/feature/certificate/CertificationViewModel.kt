@@ -28,6 +28,11 @@ internal enum class ErrorCase(val message: String) {
     TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
 }
 
+internal enum class CertificationButtonText(val message: String) {
+    GET_CODE("인증번호 요청"),
+    CHANGE_CODE("재전송하기")
+}
+
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository
@@ -68,10 +73,12 @@ class CertificationViewModel @Inject constructor(
             ).onSuccess {
                 startTimer()
                 resetErrorCase()
+                updateButtonText()
             }.onFailure {
-                // TODO: DELETE startTimer(), resetErrorCase() !!
+                // TODO: DELETE startTimer(), resetErrorCase(), updateButtonText() !!
                 startTimer()
                 resetErrorCase()
+                updateButtonText()
                 // TODO: 주석 해제
 //                _state.update { currentState ->
 //                    currentState.copy(
@@ -153,6 +160,14 @@ class CertificationViewModel @Inject constructor(
         _state.update { currentState ->
             currentState.copy(
                 errorMessage = ""
+            )
+        }
+    }
+
+    private fun updateButtonText() {
+        _state.update { currentState ->
+            currentState.copy(
+                buttonText = CertificationButtonText.CHANGE_CODE.message
             )
         }
     }

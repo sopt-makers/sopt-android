@@ -33,10 +33,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,11 +43,7 @@ import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray80
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
-
-enum class CertificationButtonText(val message: String) {
-    GET_CODE("인증번호 요청"),
-    CHANGE_CODE("재전송하기")
-}
+import org.sopt.official.feature.auth.feature.certificate.CertificationButtonText
 
 @Composable
 internal fun PhoneCertification(
@@ -60,10 +52,9 @@ internal fun PhoneCertification(
     onTextChange: (String) -> Unit,
     phoneNumber: String,
     modifier: Modifier = Modifier,
-    visualTransformation: VisualTransformation = VisualTransformation.None
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    buttonText: String
 ) {
-    var buttonState by remember { mutableStateOf(CertificationButtonText.GET_CODE) }
-
     Column(modifier = modifier) {
         Text(
             text = "전화번호",
@@ -85,13 +76,17 @@ internal fun PhoneCertification(
                 visualTransformation = visualTransformation
             )
             AuthButton(
-                padding = PaddingValues(vertical = 16.dp, horizontal = 14.dp),
+                padding = PaddingValues(
+                    vertical = 16.dp,
+                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 12.dp
+                    else 20.dp
+                ),
                 onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,
             ) {
                 Text(
-                    text = buttonState.message,
+                    text = buttonText,
                     style = SoptTheme.typography.body14M
                 )
             }
@@ -107,7 +102,8 @@ private fun PhoneCertificationPreview() {
             onPhoneNumberClick = {},
             textColor = Gray80,
             onTextChange = {},
-            phoneNumber = "01012345678"
+            phoneNumber = "01012345678",
+            buttonText = "인증번호 요청"
         )
     }
 }
