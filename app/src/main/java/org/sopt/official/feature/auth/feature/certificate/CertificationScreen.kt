@@ -91,9 +91,7 @@ internal fun CertificationRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is CertificationSideEffect.ShowToast -> {
-                        context.toast(sideEffect.message)
-                    }
+                    is CertificationSideEffect.ShowToast -> context.toast(sideEffect.message)
 
                     is CertificationSideEffect.NavigateToSocialAccount -> navigateToSocialAccount(status, sideEffect.name)
 
