@@ -81,7 +81,7 @@ internal fun CertificationRoute(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
     navigateToSocialAccount: (AuthStatus, String) -> Unit,
-    navigateToAuthMain: () -> Unit,
+    navigateToAuthMain: (String) -> Unit,
     onGoogleFormClick: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
 ) {
@@ -106,7 +106,7 @@ internal fun CertificationRoute(
                     is CertificationSideEffect.NavigateToAuthMain -> {
                         viewModel.timerJob?.cancelAndJoin()
                         viewModel.timerJob = null
-                        navigateToAuthMain()
+                        navigateToAuthMain(sideEffect.platform)
                     }
                 }
             }

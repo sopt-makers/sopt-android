@@ -7,6 +7,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +43,7 @@ import kotlinx.coroutines.delay
 import org.sopt.official.R
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray300
+import org.sopt.official.designsystem.Gray50
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
@@ -50,6 +54,7 @@ import org.sopt.official.feature.auth.model.AuthStatus
 
 @Composable
 internal fun AuthMainRoute(
+    platform: String,
     navigateToUnAuthenticatedHome: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
@@ -91,6 +96,7 @@ internal fun AuthMainRoute(
     }
 
     AuthMainScreen(
+        platform = platform,
         showDialog = {
             loginDialogVisibility = true
         },
@@ -104,6 +110,7 @@ internal fun AuthMainRoute(
 
 @Composable
 private fun AuthMainScreen(
+    platform: String,
     showDialog: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     onLoginLaterClick: () -> Unit,
@@ -146,6 +153,7 @@ private fun AuthMainScreen(
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
             AuthBottom(
+                platform = platform,
                 showDialog = showDialog,
                 onGoogleLoginCLick = onGoogleLoginCLick,
                 onLoginLaterClick = onLoginLaterClick,
@@ -157,12 +165,29 @@ private fun AuthMainScreen(
 
 @Composable
 private fun AuthBottom(
+    platform: String,
     showDialog: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     onLoginLaterClick: () -> Unit,
     navigateToCertification: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        if (platform.isNotEmpty()) {
+            Text(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(color = SoptTheme.colors.success)
+                    .padding(vertical = 10.dp, horizontal = 20.dp),
+                text = "로그인한 계정은 ${platform}이에요.",
+                color = Gray50,
+                style = SoptTheme.typography.body13M
+            )
+            Image(
+                painter = painterResource(R.drawable.ic_auth_platform),
+                contentDescription = "화살표"
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+        }
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
             onClick = onGoogleLoginCLick,
@@ -240,6 +265,7 @@ private fun AuthDivider() {
 private fun AuthMainScreenPreview() {
     SoptTheme {
         AuthMainScreen(
+            platform = "",
             showDialog = {},
             onGoogleLoginCLick = {},
             onLoginLaterClick = {},
