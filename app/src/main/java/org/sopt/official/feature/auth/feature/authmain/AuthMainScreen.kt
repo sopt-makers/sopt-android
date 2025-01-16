@@ -172,6 +172,7 @@ private fun AuthBottom(
     navigateToCertification: () -> Unit
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
         if (platform.isNotEmpty()) {
             Text(
                 modifier = Modifier
@@ -188,6 +189,7 @@ private fun AuthBottom(
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
+
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
             onClick = onGoogleLoginCLick,
