@@ -61,7 +61,7 @@ rin = "0.3.0"
 
 google-services = "4.4.2"
 crashlytics = "3.0.2"
-firebase = "33.7.0"
+firebase = "33.8.0"
 firebaseMessagingLifecycleKtx = "0.2.1"
 app-distribution = "5.1.0"
 ktlint = "12.1.2"
