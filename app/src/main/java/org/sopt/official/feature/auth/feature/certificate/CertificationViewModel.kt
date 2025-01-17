@@ -23,8 +23,8 @@ import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
 
 internal enum class ErrorCase(val message: String) {
-    CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
-    PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
+    CODE_ERROR("인증 번호가 일치하지 않아요."),
+    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
     TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
 }
 
@@ -76,11 +76,16 @@ class CertificationViewModel @Inject constructor(
                 resetErrorCase()
                 updateButtonText()
             }.onFailure {
-                _state.update { currentState ->
-                    currentState.copy(
-                        errorMessage = ErrorCase.PHONE_ERROR.message
-                    )
-                }
+                // TODO: DELETE !!
+                startTimer()
+                resetErrorCase()
+                updateButtonText()
+                // TODO: 주석 해제
+//                _state.update { currentState ->
+//                    currentState.copy(
+//                        errorMessage = ErrorCase.PHONE_ERROR.message
+//                    )
+//                }
             }
         }
     }
