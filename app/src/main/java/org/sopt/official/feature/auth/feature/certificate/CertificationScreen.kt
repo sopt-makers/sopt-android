@@ -44,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
@@ -72,7 +73,6 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
-import org.sopt.official.feature.auth.component.PhoneCertification
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
@@ -182,7 +182,8 @@ private fun CertificationScreen(
                 onTextChange = onPhoneNumberChange,
                 phoneNumber = phoneNumber,
                 visualTransformation = visualTransformation,
-                buttonText = certificationButtonText
+                buttonText = certificationButtonText,
+                errorMessage = errorMessage
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -190,7 +191,7 @@ private fun CertificationScreen(
                 labelText = code,
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = onCodeChange,
-                isError = errorMessage.isNotEmpty(),
+                isError = ErrorCase.isCodeError(errorMessage),
                 errorMessage = errorMessage
             ) {
                 Text(
@@ -289,6 +290,55 @@ private fun TopBar(
             color = Gray60,
             style = SoptTheme.typography.label12SB
         )
+    }
+}
+
+@Composable
+private fun PhoneCertification(
+    onPhoneNumberClick: () -> Unit,
+    textColor: Color,
+    onTextChange: (String) -> Unit,
+    phoneNumber: String,
+    buttonText: String,
+    errorMessage: String,
+    modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = "전화번호",
+            color = textColor,
+            style = SoptTheme.typography.body14M
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+            AuthTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                labelText = phoneNumber,
+                hintText = "010-XXXX-XXXX",
+                onTextChange = onTextChange,
+                visualTransformation = visualTransformation,
+                isError = ErrorCase.isPhoneError(errorMessage),
+                errorMessage = errorMessage
+            )
+            AuthButton(
+                padding = PaddingValues(
+                    vertical = 16.dp,
+                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 12.dp
+                    else 20.dp
+                ),
+                onClick = onPhoneNumberClick,
+                containerColor = Gray10,
+                contentColor = Gray950,
+            ) {
+                Text(
+                    text = buttonText,
+                    style = SoptTheme.typography.body14M
+                )
+            }
+        }
     }
 }
 
