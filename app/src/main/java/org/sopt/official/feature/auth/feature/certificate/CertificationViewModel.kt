@@ -82,14 +82,14 @@ class CertificationViewModel @Inject constructor(
                 updateButtonText()
             }.onFailure {
                 // TODO: DELETE !!
-//                startTimer()
-//                updateButtonText()
+                startTimer()
+                updateButtonText()
                 // TODO: 주석 해제
-                _state.update { currentState ->
-                    currentState.copy(
-                        errorMessage = ErrorCase.PHONE_ERROR.message
-                    )
-                }
+//                _state.update { currentState ->
+//                    currentState.copy(
+//                        errorMessage = ErrorCase.PHONE_ERROR.message
+//                    )
+//                }
             }
         }
     }
