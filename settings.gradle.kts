@@ -44,3 +44,5 @@ include(
     ":feature:poke",
     ":feature:fortune"
 )
+include(":data:auth")
+include(":domain:auth")

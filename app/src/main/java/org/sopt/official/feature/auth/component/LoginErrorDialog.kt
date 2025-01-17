@@ -60,6 +60,9 @@ import org.sopt.official.designsystem.SoptTheme
 @Composable
 internal fun LoginErrorDialog(
     onDismissRequest: () -> Unit,
+    onFindAccountClick: () -> Unit,
+    onResetAccountClick: () -> Unit,
+    onContactChannelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Popup {
@@ -81,17 +84,17 @@ internal fun LoginErrorDialog(
                 Spacer(modifier = Modifier.height(12.dp))
                 LoginDialogText(
                     text = "로그인한 계정을 알고 싶어요.",
-                    onClick = {}
+                    onClick = onFindAccountClick
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LoginDialogText(
                     text = "소셜 계정을 재설정하고 싶어요.",
-                    onClick = {}
+                    onClick = onResetAccountClick
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LoginDialogText(
                     text = "카카오톡 채널에 문의할게요.",
-                    onClick = {}
+                    onClick = onContactChannelClick
                 )
             }
         }
@@ -148,7 +151,10 @@ private fun LoginDialogText(
 private fun LoginErrorDialogPreview() {
     SoptTheme {
         LoginErrorDialog(
-            onDismissRequest = {}
+            onDismissRequest = {},
+            onFindAccountClick = {},
+            onResetAccountClick = {},
+            onContactChannelClick = {}
         )
     }
 }

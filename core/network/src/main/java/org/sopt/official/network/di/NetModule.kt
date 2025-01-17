@@ -37,11 +37,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
 import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.authenticator.SoptAuthenticator
 import retrofit2.Converter
+import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
@@ -113,5 +115,14 @@ object NetModule {
         .client(client)
         .addConverterFactory(converter)
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_OPERATION_BASE_URL else BuildConfig.SOPT_OPERATION_BASE_URL)
+        .build()
+
+    @AuthRetrofit
+    @Provides
+    @Singleton
+    fun provideAuthRetrofit(client: OkHttpClient, converter: Factory):Retrofit = Retrofit.Builder()
+        .client(client)
+        .addConverterFactory(converter)
+        .baseUrl(BuildConfig.MOCK_AUTH_API)
         .build()
 }
