@@ -131,9 +131,11 @@ internal fun CertificationRoute(
         onGoogleFormClick = onGoogleFormClick,
         onPhoneNumberChange = { newPhoneNumber ->
             viewModel.updatePhone(newPhoneNumber)
+            viewModel.resetErrorCase()
         },
         onCodeChange = { newCode ->
             viewModel.updateCode(newCode)
+            viewModel.resetErrorCase()
         },
         phoneNumber = state.phone,
         code = state.code,
