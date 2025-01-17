@@ -10,12 +10,15 @@ import org.sopt.official.feature.attendance.toUiAttendanceDayType
 sealed interface AttendanceUiState {
     data object Loading : AttendanceUiState
     data class Success(
-        val lectureId: Long,
+        val lectureId: Long?,
         val attendanceDayType: AttendanceDayType,
         val userTitle: String,
         val attendanceScore: Float,
         val totalAttendanceResult: ImmutableMap<AttendanceResultType, Int>,
         val attendanceHistoryList: ImmutableList<AttendanceHistory>,
+        val attendanceSession: AttendanceSession? = null,
+        val codes: List<String> = emptyList(),
+        val isCodeCorrect: Boolean = true,
     ) : AttendanceUiState {
 
         enum class AttendanceResultType(val type: String) {

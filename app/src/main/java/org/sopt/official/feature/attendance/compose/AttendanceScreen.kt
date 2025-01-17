@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Gray60
@@ -37,7 +38,6 @@ import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBa
 import org.sopt.official.feature.attendance.compose.component.TodayAttendanceCard
 import org.sopt.official.feature.attendance.compose.component.TodayNoAttendanceCard
 import org.sopt.official.feature.attendance.compose.component.TodayNoScheduleCard
-import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceDayType
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceHistory
@@ -45,8 +45,13 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.Atte
 import org.sopt.official.feature.attendance.model.MidtermAttendance
 
 @Composable
-fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction) {
+fun AttendanceScreen(
+    state: AttendanceUiState.Success,
+    onClickAttendance: () -> Unit,
+    onDismissAttendanceCodeDialog: () -> Unit
+) {
     val scrollState = rememberScrollState()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -98,7 +103,7 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
         }
         AttendanceGradientBox()
         TextButton(
-            onClick = { /*TODO*/ },
+            onClick = onClickAttendance,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 9.dp),
@@ -114,6 +119,16 @@ fun AttendanceScreen(state: AttendanceUiState.Success, action: AttendanceAction)
             Text(
                 text = stringResource(R.string.attendance_dialog_button),
                 style = SoptTheme.typography.label18SB,
+            )
+        }
+
+        if (state.attendanceSession != null) {
+            AttendanceCodeDialog(
+                codes = state.codes.toImmutableList(),
+                isCodeCorrect = state.isCodeCorrect,
+                attendanceSession = state.attendanceSession,
+                modifier = Modifier.fillMaxWidth(),
+                onDismissRequest = onDismissAttendanceCodeDialog
             )
         }
     }
@@ -139,6 +154,7 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
             ) {
                 AttendanceScreen(
                     state = AttendanceUiState.Success(
+                        lectureId = 0L,
                         attendanceDayType = parameter.attendanceDayType,
                         userTitle = "32기 디자인파트 김솝트",
                         attendanceScore = 2f,
@@ -169,7 +185,8 @@ private fun AttendanceScreenPreview(@PreviewParameter(AttendanceScreenPreviewPar
                             ),
                         ),
                     ),
-                    action = AttendanceAction(onClickRefresh = {})
+                    onClickAttendance = {},
+                    onDismissAttendanceCodeDialog = {}
                 )
             }
         }
