@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.UserPhoneNumber
@@ -25,7 +26,12 @@ import javax.inject.Inject
 internal enum class ErrorCase(val message: String) {
     CODE_ERROR("인증 번호가 일치하지 않아요."),
     PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.");
+
+    companion object {
+        fun isPhoneError(message: String) = PHONE_ERROR.message == message
+        fun isCodeError(message: String) = immutableListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
+    }
 }
 
 internal enum class CertificationButtonText(val message: String) {
@@ -77,15 +83,15 @@ class CertificationViewModel @Inject constructor(
                 updateButtonText()
             }.onFailure {
                 // TODO: DELETE !!
-                startTimer()
-                resetErrorCase()
-                updateButtonText()
+//                startTimer()
+//                resetErrorCase()
+//                updateButtonText()
                 // TODO: 주석 해제
-//                _state.update { currentState ->
-//                    currentState.copy(
-//                        errorMessage = ErrorCase.PHONE_ERROR.message
-//                    )
-//                }
+                _state.update { currentState ->
+                    currentState.copy(
+                        errorMessage = ErrorCase.PHONE_ERROR.message
+                    )
+                }
             }
         }
     }
