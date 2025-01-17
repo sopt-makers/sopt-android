@@ -7,11 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.NewAttendanceViewModel
 import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBar
@@ -21,8 +23,14 @@ import org.sopt.official.feature.attendance.model.AttendanceUiState
 fun AttendanceRoute() {
     val viewModel: NewAttendanceViewModel = viewModel()
     val state: AttendanceUiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     val activity: Activity = LocalContext.current as Activity
+
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage.collect { message ->
+            activity.toast(message)
+        }
+    }
+
     Scaffold(
         topBar = {
             AttendanceTopAppBar(
@@ -47,7 +55,8 @@ fun AttendanceRoute() {
                 is AttendanceUiState.Success -> {
                     AttendanceScreen(
                         state = state as AttendanceUiState.Success,
-                        onClickAttendance = {},
+                        onClickAttendance = viewModel::fetchCurrentRound,
+                        onDismissAttendanceCodeDialog = viewModel::clearAttendanceCode,
                     )
                 }
             }
