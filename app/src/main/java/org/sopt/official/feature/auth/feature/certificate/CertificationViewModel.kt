@@ -79,12 +79,10 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess {
                 startTimer()
-                resetErrorCase()
                 updateButtonText()
             }.onFailure {
                 // TODO: DELETE !!
 //                startTimer()
-//                resetErrorCase()
 //                updateButtonText()
                 // TODO: 주석 해제
                 _state.update { currentState ->
@@ -163,7 +161,7 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun resetErrorCase() {
+    fun resetErrorCase() {
         _state.update { currentState ->
             currentState.copy(
                 errorMessage = ""
