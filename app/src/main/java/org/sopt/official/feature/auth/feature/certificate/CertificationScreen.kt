@@ -202,8 +202,9 @@ private fun CertificationScreen(
                     color = White,
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
+
             if (status == AuthStatus.REGISTER) {
-                Spacer(modifier = Modifier.height(41.dp))
                 AuthButton(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -234,8 +235,9 @@ private fun CertificationScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            Spacer(modifier = Modifier.weight(1f))
+
             AuthButton(
                 modifier = Modifier.fillMaxWidth(),
                 padding = PaddingValues(vertical = 16.dp),
