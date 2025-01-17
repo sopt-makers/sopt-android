@@ -276,7 +276,7 @@ private fun TopBar(
                 style = SoptTheme.typography.label12SB
             )
         }
-        Spacer(modifier = Modifier.height(60.dp))
+        Spacer(modifier = Modifier.height(54.dp))
         Text(
             text = "SOPT 회원인증",
             color = Gray10,
