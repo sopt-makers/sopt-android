@@ -27,12 +27,13 @@ import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
+import org.sopt.official.designsystem.SuitSemiBold
 
 @Composable
 internal fun HomeGenerationChips(
     isUserActivated: Boolean,
     userRecentGeneration: String,
-    generations: ImmutableList<Int>,
+    generations: ImmutableList<Long>,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
@@ -64,7 +65,7 @@ private fun RecentGenerationChip(
         Text(
             text = userRecentGeneration,
             style = TextStyle(
-                fontFamily = SuitMedium, fontSize = 12.sp, lineHeight = 15.sp
+                fontFamily = SuitSemiBold, fontSize = 12.sp, lineHeight = 15.sp
             ),
             color = if (isUserActivated) colors.background else colors.onBackground,
         )
@@ -72,7 +73,7 @@ private fun RecentGenerationChip(
 }
 
 @Composable
-private fun LastGenerationChips(generations: ImmutableList<Int>) {
+private fun LastGenerationChips(generations: ImmutableList<Long>) {
     generations.forEachIndexed { index, generation ->
         when (index) {
             0 -> GenerationChip(

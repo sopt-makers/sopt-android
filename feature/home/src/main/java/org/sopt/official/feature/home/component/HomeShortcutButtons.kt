@@ -26,7 +26,10 @@ import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
-import org.sopt.official.feature.home.R.drawable.ic_setting
+import org.sopt.official.feature.home.R.drawable.ic_member
+import org.sopt.official.feature.home.R.drawable.ic_pencil
+import org.sopt.official.feature.home.R.drawable.ic_project
+import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
 internal fun HomeShortcutButtons(
@@ -37,19 +40,19 @@ internal fun HomeShortcutButtons(
         modifier = modifier.fillMaxWidth(),
     ) {
         HomeShortcutButton(
-            icon = ic_setting,
+            icon = is_playground,
             text = "Playground",
         )
         HomeShortcutButton(
-            icon = ic_setting,
+            icon = ic_pencil,
             text = "모임/스터디",
         )
         HomeShortcutButton(
-            icon = ic_setting,
+            icon = ic_member,
             text = "멤버",
         )
         HomeShortcutButton(
-            icon = ic_setting,
+            icon = ic_project,
             text = "프로젝트",
         )
     }

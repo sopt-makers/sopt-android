@@ -5,11 +5,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
@@ -17,22 +20,53 @@ import org.sopt.official.feature.home.component.HomeShortcutButtons
 import org.sopt.official.feature.home.component.HomeSoptScheduleDashboard
 import org.sopt.official.feature.home.component.HomeTopBar
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashBoard
-import org.sopt.official.feature.home.component.HomeUserSoptLogModel
-import org.sopt.official.feature.home.component.UserSoptState
-import org.sopt.official.feature.home.component.UserSoptState.Member
-import org.sopt.official.feature.home.component.UserSoptState.NonMember
+import org.sopt.official.feature.home.model.HomeSoptScheduleModel
+import org.sopt.official.feature.home.model.HomeUiState.Error
+import org.sopt.official.feature.home.model.HomeUiState.Loading
+import org.sopt.official.feature.home.model.HomeUiState.Success
+import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
+import org.sopt.official.feature.home.model.dummyHomeUiState
 
 @Composable
-internal fun HomeRoute() {
-    HomeScreen()
+internal fun HomeRoute(
+    homeViewModel: HomeViewModel2 = hiltViewModel(),
+) {
+    val uiState = homeViewModel.homeUiState.collectAsStateWithLifecycle()
+
+    when (val state = uiState.value) {
+        is Success -> {
+            HomeScreen(
+                isLogin = state.isLogin,
+                hasNotification = state.hasNotification,
+                homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
+                homeSoptScheduleModel = state.homeSoptScheduleModel,
+                onNotificationClick = {},
+                onSettingClick = {},
+                onDashboardClick = {},
+                onAttendanceButtonClick = {},
+            )
+        }
+
+        is Loading -> {
+            // 로딩 상태 UI 처리
+        }
+
+        is Error -> {
+            // 에러 상태 UI 처리
+        }
+    }
 }
 
 @Composable
 private fun HomeScreen(
-    userSoptState: UserSoptState = Member(
-        isActivated = false,
-        generations = listOf(1, 2, 3, 4, 5, 6, 7)
-    ),
+    isLogin: Boolean,
+    hasNotification: Boolean,
+    homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
+    homeSoptScheduleModel: HomeSoptScheduleModel,
+    onNotificationClick: () -> Unit,
+    onSettingClick: () -> Unit,
+    onDashboardClick: () -> Unit,
+    onAttendanceButtonClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -41,23 +75,27 @@ private fun HomeScreen(
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBar(
-            hasNotification = true,
+            isLogin = isLogin,
+            hasNotification = hasNotification,
+            onNotificationClick = onNotificationClick,
+            onSettingClick = onSettingClick,
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashBoard(
-            homeUserSoptLogModel = HomeUserSoptLogModel(
-                activityDescription = "<b>김승환</b>님은\nSOPT와 15개월째"
-            ),
-            userSoptState = userSoptState,
-        )
-        when (userSoptState) {
-            is Member -> {
+        HomeUserSoptLogDashBoard(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
+
+        when (isLogin) {
+            true -> {
                 Spacer(modifier = Modifier.height(height = 12.dp))
-                HomeSoptScheduleDashboard()
+                HomeSoptScheduleDashboard(
+                    homeSoptScheduleModel = homeSoptScheduleModel,
+                    isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
+                    onDashboardClick = onDashboardClick,
+                    onAttendanceButtonClick = onAttendanceButtonClick,
+                )
                 Spacer(modifier = Modifier.height(height = 12.dp))
             }
 
-            is NonMember -> {
+            false -> {
                 Spacer(modifier = Modifier.height(height = 36.dp))
                 Text(
                     text = "SOPT를 더 알고 싶다면, 둘러보세요",
@@ -75,6 +113,17 @@ private fun HomeScreen(
 @Composable
 private fun HomeScreenPreview() {
     SoptTheme {
-        HomeScreen()
+        Surface {
+            HomeScreen(
+                isLogin = dummyHomeUiState.isLogin,
+                hasNotification = dummyHomeUiState.hasNotification,
+                homeUserSoptLogDashboardModel = dummyHomeUiState.homeUserSoptLogDashboardModel,
+                homeSoptScheduleModel = dummyHomeUiState.homeSoptScheduleModel,
+                onNotificationClick = {},
+                onSettingClick = {},
+                onDashboardClick = {},
+                onAttendanceButtonClick = {},
+            )
+        }
     }
 }
