@@ -22,13 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.remote.api
+package org.sopt.official.data.home.remote.response
 
-import org.sopt.official.data.home.remote.response.HomeUserMainResponse
-import retrofit2.http.GET
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-internal interface HomeApi {
-
-    @GET("user/main")
-    suspend fun getUserMain(): HomeUserMainResponse
-}
+@Serializable
+internal data class HomeDescriptionResponseDto(
+    @SerialName("activityDescription")
+    val activityDescription: String,
+)

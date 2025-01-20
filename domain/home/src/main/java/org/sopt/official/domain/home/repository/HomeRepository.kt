@@ -24,7 +24,15 @@
  */
 package org.sopt.official.domain.home.repository
 
+import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.UserInfo
+import org.sopt.official.domain.home.model.UserInfo.UserDescription
+
 interface HomeRepository {
 
-    suspend fun getHomeMain()
+    suspend fun getUserInfo(): UserInfo
+
+    suspend fun getHomeDescription(): UserDescription
+
+    suspend fun getRecentCalendar(): RecentCalendar
 }

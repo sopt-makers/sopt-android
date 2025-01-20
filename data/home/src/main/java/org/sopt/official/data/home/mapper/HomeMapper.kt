@@ -24,3 +24,32 @@
  */
 package org.sopt.official.data.home.mapper
 
+import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
+import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
+import org.sopt.official.data.home.remote.response.UserMainResponseDto
+import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.UserInfo
+import org.sopt.official.domain.home.model.UserInfo.User
+import org.sopt.official.domain.home.model.UserInfo.UserDescription
+
+internal fun UserMainResponseDto.toDomain(): UserInfo = UserInfo(
+    user = user.toDomain(),
+    isAllConfirm = isAllConfirm,
+)
+
+internal fun UserMainResponseDto.UserResponseDto.toDomain(): User = User(
+    status = status,
+    name = name.orEmpty(),
+    profileImage = profileImage.orEmpty(),
+    generationList = generationList ?: emptyList()
+)
+
+internal fun RecentCalendarResponseDto.toDomain(): RecentCalendar = RecentCalendar(
+    date = date,
+    type = type,
+    title = title,
+)
+
+internal fun HomeDescriptionResponseDto.toDomain(): UserDescription = UserDescription(
+    activityDescription = activityDescription,
+)

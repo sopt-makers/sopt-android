@@ -49,6 +49,9 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
 
+    // domain
+    implementation(projects.domain.home)
+
     // compose
     implementation(libs.compose.navigation)
 

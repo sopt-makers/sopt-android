@@ -22,37 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.remote.response
+package org.sopt.official.data.home.remote.api
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
+import org.sopt.official.data.home.remote.response.UserMainResponseDto
+import retrofit2.http.GET
 
-@Serializable
-internal data class HomeUserMainResponse(
-    @SerialName("user")
-    val user: HomeUserResponse,
-    @SerialName("operation")
-    val operation: HomeOperationResponse,
-    @SerialName("isAllConfirm")
-    val isAllConfirm: Boolean,
-) {
-    @Serializable
-    data class HomeUserResponse(
-        @SerialName("status")
-        val status: String,
-        @SerialName("name")
-        val name: String?,
-        @SerialName("profileImage")
-        val profileImage: String?,
-        @SerialName("generationList")
-        val generationList: List<Long>?,
-    )
+internal interface UserApi {
 
-    @Serializable
-    data class HomeOperationResponse(
-        @SerialName("attendanceScore")
-        val attendanceScore: Double?,
-        @SerialName("announcement")
-        val announcement: String?,
-    )
+    @GET("user/main")
+    suspend fun getUserMain(): UserMainResponseDto
+
+    @GET("home/description")
+    suspend fun getHomeDescription(): HomeDescriptionResponseDto
 }

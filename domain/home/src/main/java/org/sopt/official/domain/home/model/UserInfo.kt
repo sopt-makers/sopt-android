@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.di
+package org.sopt.official.domain.home.model
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import org.sopt.official.common.di.AppRetrofit
-import org.sopt.official.data.home.remote.api.CalendarApi
-import org.sopt.official.data.home.remote.api.UserApi
-import retrofit2.Retrofit
-import retrofit2.create
-import javax.inject.Singleton
+data class UserInfo(
+    val user: User,
+    val isAllConfirm: Boolean,
+) {
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ApiModule {
+    data class User(
+        val status: String,
+        val name: String,
+        val profileImage: String,
+        val generationList: List<Long>,
+    ) {
+        val userStatus = UserStatus.from(status)
+        val isActivated = userStatus == UserStatus.ACTIVE
+    }
 
-    @Provides
-    @Singleton
-    internal fun provideHomeApi(@AppRetrofit(true) retrofit: Retrofit): UserApi = retrofit.create()
+    data class UserDescription(
+        val activityDescription: String,
+    )
+}
 
-    @Provides
-    @Singleton
-    internal fun provideCalendarApi(@AppRetrofit(true) retrofit: Retrofit): CalendarApi = retrofit.create()
+enum class UserStatus {
+    ACTIVE, INACTIVE, UNAUTHENTICATED
+    ;
+
+    companion object {
+        fun from(userStatus: String): UserStatus =
+            UserStatus.entries.find {
+                it.name == userStatus
+            } ?: UNAUTHENTICATED
+    }
 }

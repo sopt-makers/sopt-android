@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,28 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.di
+package org.sopt.official.data.home.remote.response
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import org.sopt.official.common.di.AppRetrofit
-import org.sopt.official.data.home.remote.api.CalendarApi
-import org.sopt.official.data.home.remote.api.UserApi
-import retrofit2.Retrofit
-import retrofit2.create
-import javax.inject.Singleton
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ApiModule {
+@Serializable
+internal data class UserMainResponseDto(
+    @SerialName("user")
+    val user: UserResponseDto,
+    @SerialName("operation")
+    val operation: OperationResponseDto,
+    @SerialName("isAllConfirm")
+    val isAllConfirm: Boolean,
+) {
+    @Serializable
+    data class UserResponseDto(
+        @SerialName("status")
+        val status: String,
+        @SerialName("name")
+        val name: String?,
+        @SerialName("profileImage")
+        val profileImage: String?,
+        @SerialName("generationList")
+        val generationList: List<Long>?,
+    )
 
-    @Provides
-    @Singleton
-    internal fun provideHomeApi(@AppRetrofit(true) retrofit: Retrofit): UserApi = retrofit.create()
-
-    @Provides
-    @Singleton
-    internal fun provideCalendarApi(@AppRetrofit(true) retrofit: Retrofit): CalendarApi = retrofit.create()
+    @Serializable
+    data class OperationResponseDto(
+        @SerialName("attendanceScore")
+        val attendanceScore: Double?,
+        @SerialName("announcement")
+        val announcement: String?,
+    )
 }

@@ -24,15 +24,23 @@
  */
 package org.sopt.official.data.home.repository
 
-import org.sopt.official.data.home.remote.api.HomeApi
+import org.sopt.official.data.home.mapper.toDomain
+import org.sopt.official.data.home.remote.api.CalendarApi
+import org.sopt.official.data.home.remote.api.UserApi
+import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.UserInfo
+import org.sopt.official.domain.home.model.UserInfo.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
 import javax.inject.Inject
 
 internal class DefaultHomeRepository @Inject constructor(
-    private val homeApi: HomeApi,
+    private val userApi: UserApi,
+    private val calendarApi: CalendarApi,
 ) : HomeRepository {
 
-    override suspend fun getHomeMain() {
-        homeApi.getUserMain()
-    }
+    override suspend fun getUserInfo(): UserInfo = userApi.getUserMain().toDomain()
+
+    override suspend fun getHomeDescription(): UserDescription = userApi.getHomeDescription().toDomain()
+
+    override suspend fun getRecentCalendar(): RecentCalendar = calendarApi.getRecentCalendar().toDomain()
 }
