@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -61,7 +60,7 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
-import org.sopt.official.stamp.LocalTracker
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,8 +41,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.R
 import org.sopt.official.feature.fortune.component.FortuneButton
 import java.time.LocalDate
@@ -55,7 +55,7 @@ internal fun HomeRoute(
     onFortuneDetailClick: (String) -> Unit,
 ) {
     val date = rememberSaveable { getToday() }
-    val amplitudeTracker = LocalAmplitudeTracker.current.also {
+    val amplitudeTracker = LocalTracker.current.also {
         it.track(
             type = EventType.VIEW,
             name = "view_soptmadi_title",

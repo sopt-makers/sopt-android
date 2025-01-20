@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.analytics
+package org.sopt.official.analytics.impl
 
 import android.content.Context
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.amplitude.android.events.Identify
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
+import org.sopt.official.analytics.BuildConfig
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import timber.log.Timber
+import javax.inject.Inject
 
 class AmplitudeTracker @Inject constructor(
     @ApplicationContext private val context: Context
-) {
+) : Tracker {
     private val amplitude = Amplitude(
         Configuration(
             apiKey = if (BuildConfig.DEBUG) {
@@ -46,14 +49,14 @@ class AmplitudeTracker @Inject constructor(
         )
     )
 
-    fun track(type: EventType, name: String, properties: Map<String, Any?> = emptyMap()) {
+    override fun track(type: EventType, name: String, properties: Map<String, Any?>) {
         if (BuildConfig.DEBUG) {
             Timber.d("Amplitude: ${type.prefix}_$name properties: $properties")
         }
         amplitude.track(eventType = "${type.prefix}_$name", eventProperties = properties)
     }
 
-    fun setNotificationStateToUserProperties(value: Boolean) {
+    override fun setNotificationStateToUserProperties(value: Boolean) {
         val identify = Identify()
         identify.setOnce("state_of_push_notification", value)
         amplitude.identify(identify)

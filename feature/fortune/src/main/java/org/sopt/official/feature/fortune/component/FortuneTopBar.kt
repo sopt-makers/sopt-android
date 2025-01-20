@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,9 +36,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 
 @Composable
 fun FortuneTopBar(
@@ -46,7 +46,7 @@ fun FortuneTopBar(
     modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
-    val amplitudeTracker = LocalAmplitudeTracker.current
+    val amplitudeTracker = LocalTracker.current
 
     Box(modifier = modifier.fillMaxWidth()) {
         Icon(

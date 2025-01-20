@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,12 +33,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
@@ -48,6 +46,8 @@ import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
@@ -59,7 +59,7 @@ class OnboardingActivity : AppCompatActivity() {
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
 
     @Inject
-    lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: Tracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

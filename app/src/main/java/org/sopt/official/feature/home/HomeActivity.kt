@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,8 +49,8 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
@@ -90,7 +90,7 @@ class HomeActivity : AppCompatActivity() {
     private val args by serializableExtra(StartArgs(UserStatus.UNAUTHENTICATED))
 
     @Inject
-    lateinit var tracker: AmplitudeTracker
+    lateinit var tracker: Tracker
     private val smallBlockAdapter: SmallBlockAdapter?
         get() = binding.smallBlockList.adapter as? SmallBlockAdapter
 
@@ -153,7 +153,7 @@ class HomeActivity : AppCompatActivity() {
             tracker.track(type = EventType.CLICK, name = "mypage", properties = mapOf("view_type" to args?.userStatus?.value))
             lifecycleScope.launch {
                 startActivity(
-                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.StartArgs(viewModel.userActiveState.value))
+                    MyPageActivity.getIntent(this@HomeActivity, MyPageActivity.Argument(viewModel.userActiveState.value))
                 )
             }
         }

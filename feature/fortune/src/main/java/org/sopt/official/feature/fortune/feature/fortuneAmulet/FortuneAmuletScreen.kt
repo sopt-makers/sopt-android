@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,8 +46,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.LocalAmplitudeTracker
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 import org.sopt.official.feature.fortune.component.UrlImage
 
@@ -56,7 +56,7 @@ internal fun FortuneAmuletRoute(
     onHomeClick: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
-    val amplitudeTracker = LocalAmplitudeTracker.current
+    val amplitudeTracker = LocalTracker.current
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     when {
