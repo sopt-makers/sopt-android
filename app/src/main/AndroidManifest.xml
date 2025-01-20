@@ -97,6 +97,9 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
+            android:name=".feature.home.FakeActivity"
+            android:exported="true" />
+        <activity
             android:name=".feature.mypage.signOut.SignOutActivity"
             android:exported="false" />
         <activity
