@@ -21,6 +21,7 @@ import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
+import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
 internal enum class ErrorCase(val message: String) {
@@ -41,7 +42,8 @@ internal enum class CertificationButtonText(val message: String) {
 
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val dataStore: SoptDataStore,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CertificationState> =
@@ -86,9 +88,9 @@ class CertificationViewModel @Inject constructor(
                 // TODO: DELETE !!
                 startTimer()
                 updateButtonText()
-
-                updateCodeTextField(false)
-                updateButtonState(false)
+                // TODO: true -> false
+                updateCodeTextField(true)
+                updateButtonState(true)
                 // TODO: 주석 해제
 //                _state.update { currentState ->
 //                    currentState.copy(
@@ -128,6 +130,7 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
+                dataStore.platform = response.platform
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }
@@ -182,7 +185,7 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun updateCodeTextField(isEnable: Boolean){
+    private fun updateCodeTextField(isEnable: Boolean) {
         _state.update { currentState ->
             currentState.copy(
                 isCodeEnable = isEnable
@@ -190,7 +193,7 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun updateButtonState(isEnable : Boolean) {
+    private fun updateButtonState(isEnable: Boolean) {
         _state.update { currentState ->
             currentState.copy(
                 isButtonEnable = isEnable
