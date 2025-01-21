@@ -35,8 +35,6 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -66,6 +64,8 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -110,7 +110,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private fun initAppBar() {
         binding.includeAppBar.apply {
-            toolbar.setOnClickListener { onBackPressed() }
+            toolbar.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
             textViewTitle.text = getString(R.string.my_friend_title)
         }
     }
