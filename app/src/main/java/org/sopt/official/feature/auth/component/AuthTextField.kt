@@ -110,9 +110,10 @@ internal fun AuthTextField(
                 BasicTextField(
                     value = labelText,
                     onValueChange = { newValue ->
+                        val filteredValue = newValue.filter { it.isDigit() }
                         val maxLength = if (hintText.contains(PHONE_HINT_TEXT)) MAX_PHONE_NUMBER else MAX_CODE_NUMBER
-                        if (newValue.length <= maxLength) {
-                            onTextChange(newValue)
+                        if (filteredValue.length <= maxLength) {
+                            onTextChange(filteredValue)
                         }
                     },
                     singleLine = true,
