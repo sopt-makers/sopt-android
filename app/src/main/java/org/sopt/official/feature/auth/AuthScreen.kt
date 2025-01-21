@@ -36,6 +36,7 @@ internal fun AuthScreen(
     onGoogleLoginCLick: () -> Unit,
     onContactChannelClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
+    platform: String,
     navController: NavHostController = rememberNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -73,7 +74,7 @@ internal fun AuthScreen(
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = AuthMainNavigation(platform = "") // TODO: platform 값 로컬에서 가져오기
+                    startDestination = AuthMainNavigation(platform = platform)
                 ) {
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
