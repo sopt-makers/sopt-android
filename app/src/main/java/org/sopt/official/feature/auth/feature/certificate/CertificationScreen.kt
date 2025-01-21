@@ -65,8 +65,10 @@ import org.sopt.official.designsystem.Blue500
 import org.sopt.official.designsystem.BlueAlpha100
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
+import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
+import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
@@ -141,7 +143,9 @@ internal fun CertificationRoute(
         code = state.code,
         visualTransformation = phoneNumberVisualTransformation(),
         errorMessage = state.errorMessage,
-        certificationButtonText = state.buttonText
+        certificationButtonText = state.buttonText,
+        isCodeEnable = state.isCodeEnable,
+        isButtonEnable = state.isButtonEnable
     )
 }
 
@@ -159,7 +163,9 @@ private fun CertificationScreen(
     code: String,
     visualTransformation: VisualTransformation,
     errorMessage: String,
-    certificationButtonText: String
+    certificationButtonText: String,
+    isCodeEnable: Boolean,
+    isButtonEnable: Boolean
 ) {
     Column {
         Image(
@@ -194,6 +200,7 @@ private fun CertificationScreen(
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = onCodeChange,
                 isError = ErrorCase.isCodeError(errorMessage),
+                isEnabled = isCodeEnable,
                 errorMessage = errorMessage
             ) {
                 Text(
@@ -242,9 +249,11 @@ private fun CertificationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 padding = PaddingValues(vertical = 16.dp),
                 onClick = onCertificateClick,
+                isEnabled = isButtonEnable,
                 containerColor = Gray10,
                 contentColor = Gray950,
-                disabledContentColor = Gray60,
+                disabledContentColor = Gray500,
+                disabledContainerColor = Gray800
             ) {
                 Text(
                     text = "SOPT 회원 인증 완료",
@@ -363,7 +372,9 @@ private fun AuthCertificationPreview() {
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
             errorMessage = "",
-            certificationButtonText = CertificationButtonText.GET_CODE.message
+            certificationButtonText = CertificationButtonText.GET_CODE.message,
+            isCodeEnable = false,
+            isButtonEnable = false
         )
     }
 }

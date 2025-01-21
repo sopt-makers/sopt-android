@@ -8,6 +8,8 @@ data class CertificationState(
     val currentTimeValue: Int = 180,
     val errorMessage: String = "",
     val buttonText: String = CertificationButtonText.GET_CODE.message,
+    val isCodeEnable: Boolean = false,
+    val isButtonEnable: Boolean = false
 ) {
     val currentTime: String
         get() = String.format(

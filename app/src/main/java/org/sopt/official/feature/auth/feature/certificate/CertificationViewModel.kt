@@ -80,10 +80,15 @@ class CertificationViewModel @Inject constructor(
             ).onSuccess {
                 startTimer()
                 updateButtonText()
+                updateCodeTextField(true)
+                updateButtonState(true)
             }.onFailure {
                 // TODO: DELETE !!
                 startTimer()
                 updateButtonText()
+
+                updateCodeTextField(false)
+                updateButtonState(false)
                 // TODO: 주석 해제
 //                _state.update { currentState ->
 //                    currentState.copy(
@@ -176,4 +181,21 @@ class CertificationViewModel @Inject constructor(
             )
         }
     }
+
+    private fun updateCodeTextField(isEnable: Boolean){
+        _state.update { currentState ->
+            currentState.copy(
+                isCodeEnable = isEnable
+            )
+        }
+    }
+
+    private fun updateButtonState(isEnable : Boolean) {
+        _state.update { currentState ->
+            currentState.copy(
+                isButtonEnable = isEnable
+            )
+        }
+    }
+
 }
