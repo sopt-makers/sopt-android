@@ -17,14 +17,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CentralizeAuthentication @Inject constructor(
+class CentralizeAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     private val refreshApi: RefreshApi,
     @ApplicationContext private val context: Context,
     private val navigatorProvider: NavigatorProvider
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code == 400) {
+        if (response.code == 401) {
             val refreshToken = dataStore.refreshToken
             if (refreshToken.isEmpty()) return null
             val newTokens = runCatching {
