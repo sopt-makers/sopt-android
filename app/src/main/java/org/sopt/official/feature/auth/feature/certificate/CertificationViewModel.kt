@@ -91,6 +91,7 @@ class CertificationViewModel @Inject constructor(
                 // TODO: true -> false
                 updateCodeTextField(true)
                 updateButtonState(true)
+
                 // TODO: 주석 해제
 //                _state.update { currentState ->
 //                    currentState.copy(
