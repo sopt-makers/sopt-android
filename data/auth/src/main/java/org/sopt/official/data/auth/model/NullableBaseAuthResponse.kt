@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NonDataBaseAuthResponse<T>(
+data class NullableBaseAuthResponse<T>(
     @SerialName("success")
     val success: Boolean,
     @SerialName("message")

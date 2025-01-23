@@ -34,6 +34,7 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.network.model.request.RefreshRequest
 
+@Deprecated("이거 말고 DefaultCentralizeAuthRepository 사용하세요.")
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: RemoteAuthDataSource,
     private val localAuthDataSource: LocalAuthDataSource,
