@@ -3,7 +3,7 @@ package org.sopt.official.data.auth.mapper
 import org.sopt.official.data.auth.remote.request.SignInRequest
 import org.sopt.official.data.auth.remote.response.SignInResponse
 import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignInResult
+import org.sopt.official.domain.auth.model.Token
 
 fun SignInCode.toRequest(): SignInRequest =
     SignInRequest(
@@ -11,8 +11,8 @@ fun SignInCode.toRequest(): SignInRequest =
         authPlatform = authPlatform
     )
 
-fun SignInResponse.toDomain(): SignInResult =
-    SignInResult(
+fun SignInResponse.toDomain(): Token =
+    Token(
         accessToken = accessToken,
         refreshToken = refreshToken
     )

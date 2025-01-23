@@ -1,6 +1,6 @@
 package org.sopt.official.domain.auth.model
 
-data class SignInResult(
+data class Token(
     val accessToken: String,
     val refreshToken: String
 )

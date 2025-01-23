@@ -8,8 +8,8 @@ import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignInResult
 import org.sopt.official.domain.auth.model.SignUpCode
+import org.sopt.official.domain.auth.model.Token
 import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.model.VerificationResult
 import org.sopt.official.domain.auth.repository.AuthRepository
@@ -26,7 +26,7 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.certificateCode(request.toRequest()).data.toDomain()
     }
 
-    override suspend fun signIn(request: SignInCode): Result<SignInResult> = runCatching {
+    override suspend fun signIn(request: SignInCode): Result<Token> = runCatching {
         authApi.signIn(request.toRequest()).data.toDomain()
     }
 

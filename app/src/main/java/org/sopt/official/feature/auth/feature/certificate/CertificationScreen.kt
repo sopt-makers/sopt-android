@@ -373,8 +373,8 @@ private fun AuthCertificationPreview() {
             visualTransformation = phoneNumberVisualTransformation(),
             errorMessage = "",
             certificationButtonText = CertificationButtonText.GET_CODE.message,
-            isCodeEnable = false,
-            isButtonEnable = false
+            isCodeEnable = true,
+            isButtonEnable = true
         )
     }
 }
