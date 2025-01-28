@@ -102,24 +102,26 @@ fun AttendanceScreen(
             Spacer(Modifier.height(36.dp))
         }
         AttendanceGradientBox()
-        TextButton(
-            onClick = onClickAttendance,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 9.dp),
-            shape = RoundedCornerShape(size = 12.dp),
-            colors = ButtonColors(
-                containerColor = SoptTheme.colors.onSurface10,
-                contentColor = SoptTheme.colors.onSurface950,
-                disabledContainerColor = Black40,
-                disabledContentColor = Gray60,
-            ),
-            contentPadding = PaddingValues(vertical = 16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.attendance_dialog_button),
-                style = SoptTheme.typography.label18SB,
-            )
+        if(state.attendanceDayType is AttendanceDayType.AttendanceDay){
+            TextButton(
+                onClick = onClickAttendance,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 9.dp),
+                shape = RoundedCornerShape(size = 12.dp),
+                colors = ButtonColors(
+                    containerColor = SoptTheme.colors.onSurface10,
+                    contentColor = SoptTheme.colors.onSurface950,
+                    disabledContainerColor = Black40,
+                    disabledContentColor = Gray60,
+                ),
+                contentPadding = PaddingValues(vertical = 16.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.attendance_dialog_button),
+                    style = SoptTheme.typography.label18SB,
+                )
+            }
         }
 
         if (state.attendanceSession != null) {
