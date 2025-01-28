@@ -18,9 +18,9 @@ fun mapToAttendance(
     return Attendance(
         lectureId = soptEventResponse?.lectureId?.toLong() ?: Attendance.UNKNOWN_SESSION_ID,
         user = Attendance.User(
-            name = attendanceHistoryResponse?.name ?: Attendance.User.UNKNOWN_NAME,
-            generation = attendanceHistoryResponse?.generation ?: Attendance.User.UNKNOWN_GENERATION,
-            part = Attendance.User.Part.valueOf(attendanceHistoryResponse?.part ?: Attendance.User.UNKNOWN_PART),
+            name = attendanceHistoryResponse?.name,
+            generation = attendanceHistoryResponse?.generation,
+            part = Attendance.User.Part.of(partName = attendanceHistoryResponse?.part),
             attendanceScore = attendanceHistoryResponse?.score ?: 0.0,
             attendanceCount = Attendance.User.AttendanceCount(
                 attendanceCount = attendanceHistoryResponse?.attendanceCount?.normal ?: 0,

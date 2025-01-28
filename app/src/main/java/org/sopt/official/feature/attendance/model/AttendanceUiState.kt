@@ -39,7 +39,7 @@ sealed interface AttendanceUiState {
                 return Success(
                     lectureId = attendance.lectureId,
                     attendanceDayType = attendance.attendanceDayType.toUiAttendanceDayType(),
-                    userTitle = "${attendance.user.generation}기 ${attendance.user.part.partName}파트 ${attendance.user.name}",
+                    userTitle = attendance.user.userTitle,
                     attendanceScore = attendance.user.attendanceScore.toFloat(),
                     totalAttendanceResult = attendance.user.attendanceCount.toTotalAttendanceResult(),
                     attendanceHistoryList = attendance.user.attendanceHistory.map { attendanceLog: Attendance.User.AttendanceLog ->
@@ -56,6 +56,14 @@ sealed interface AttendanceUiState {
                     }.toPersistentList()
                 )
             }
+
+            private val Attendance.User.userTitle: String
+                get() {
+                    if (generation == null || part == null || name == null) {
+                        return "SOPT 회원님"
+                    }
+                    return "${generation}기 ${part.partName}파트 $name"
+                }
         }
     }
 

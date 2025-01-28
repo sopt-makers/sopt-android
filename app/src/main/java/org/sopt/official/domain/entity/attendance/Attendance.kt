@@ -8,9 +8,9 @@ data class Attendance(
     val attendanceDayType: AttendanceDayType,
 ) {
     data class User(
-        val name: String,
-        val generation: Int,
-        val part: Part,
+        val name: String?,
+        val generation: Int?,
+        val part: Part?,
         val attendanceScore: Number,
         val attendanceCount: AttendanceCount,
         val attendanceHistory: List<AttendanceLog>
@@ -21,8 +21,14 @@ data class Attendance(
             ANDROID("안드로이드"),
             IOS("iOS"),
             WEB("웹"),
-            SERVER("서버"),
-            UNKNOWN("")
+            SERVER("서버");
+
+            companion object {
+                fun of(partName: String?): Part? {
+                    if (partName == null) return null
+                    return entries.find { part: Part -> part.partName == partName }
+                }
+            }
         }
 
         data class AttendanceCount(
@@ -56,12 +62,6 @@ data class Attendance(
                 /** 결석 */
                 ABSENT
             }
-        }
-
-        companion object {
-            const val UNKNOWN_NAME = "회원"
-            const val UNKNOWN_GENERATION = -1
-            const val UNKNOWN_PART = "UNKNOWN"
         }
     }
 
