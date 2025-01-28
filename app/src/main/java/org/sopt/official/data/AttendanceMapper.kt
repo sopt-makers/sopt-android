@@ -53,11 +53,11 @@ private fun SoptEventResponse?.toAttendanceDayType(): AttendanceDayType {
                 ),
                 firstRoundAttendance = RoundAttendance(
                     state = RoundAttendanceState.valueOf(firstAttendanceResponse?.status ?: RoundAttendanceState.NOT_YET.name),
-                    attendedAt = LocalDateTime.parse(firstAttendanceResponse?.attendedAt),
+                    attendedAt = if (firstAttendanceResponse == null) null else LocalDateTime.parse(firstAttendanceResponse.attendedAt)
                 ),
                 secondRoundAttendance = RoundAttendance(
                     state = RoundAttendanceState.valueOf(secondAttendanceResponse?.status ?: RoundAttendanceState.NOT_YET.name),
-                    attendedAt = LocalDateTime.parse(secondAttendanceResponse?.attendedAt),
+                    attendedAt = if (secondAttendanceResponse == null) null else LocalDateTime.parse(secondAttendanceResponse.attendedAt)
                 ),
             )
         }
