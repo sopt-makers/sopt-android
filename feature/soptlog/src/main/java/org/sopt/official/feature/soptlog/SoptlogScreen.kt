@@ -16,6 +16,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.annotation.ExperimentalCoilApi
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
@@ -31,31 +32,41 @@ import org.sopt.official.feature.soptlog.component.SoptlogProfile
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 
 @Composable
-fun SoptlogRoute() {
-    SoptlogScreen(
-        profileImageUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
-        name = "차은우",
-        part = "안드로이드",
-        introduction = "자기소개는 15글자까지",
-        dashBoardItems = persistentListOf(
-            DashBoardItem(
-                title = "솝트레벨",
-                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
-                content = "Lv.6",
-            ),
-            DashBoardItem(
-                title = "콕찌르기",
-                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
-                content = "208회",
-            ),
-            DashBoardItem(
-                title = "솝트와",
-                iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
-                content = "33개월",
+fun SoptlogRoute(
+    viewModel: SoptLogViewModel = hiltViewModel(),
+) {
+    val soptLogInfo = viewModel.soptLogInfo
+
+    if (soptLogInfo == null) {
+
+    } else {
+        with(soptLogInfo) {
+            SoptlogScreen(
+                profileImageUrl = profileImageUrl,
+                name = userName,
+                part = part,
+                introduction = profileMessage,
+                dashBoardItems = persistentListOf(
+                    DashBoardItem(
+                        title = "솝트레벨",
+                        icon = R.drawable.ic_sopt_level,
+                        content = soptLevel,
+                    ),
+                    DashBoardItem(
+                        title = "콕찌르기",
+                        icon = R.drawable.ic_poke_hand,
+                        content = pokeCount,
+                    ),
+                    DashBoardItem(
+                        title = if (isActive) "솝템프" else "솝트와",
+                        icon = if (isActive) R.drawable.ic_soptamp_hand else R.drawable.ic_calender,
+                        content = if (isActive) soptampRank else during,
+                    )
+                ),
+                todayFortuneTitle = todayFortuneTitle,
             )
-        ),
-        todayFortuneTitle = "오늘 내 운세는?",
-    )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -95,7 +106,12 @@ fun SoptlogScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            SoptlogIntroduction(introduction = introduction)
+            SoptlogIntroduction(
+                introduction = introduction,
+                onClick = {
+                    // TODO: 자기소개 작성 웹페이지로 이동
+                }
+            )
 
             Spacer(modifier = Modifier.height(12.dp))
 
@@ -155,17 +171,17 @@ fun PreviewSoptlogScreen() {
                 dashBoardItems = persistentListOf(
                     DashBoardItem(
                         title = "솝트레벨",
-                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+                        icon = R.drawable.ic_sopt_level,
                         content = "Lv.6",
                     ),
                     DashBoardItem(
                         title = "콕찌르기",
-                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                        icon = R.drawable.ic_poke_hand,
                         content = "208회",
                     ),
                     DashBoardItem(
                         title = "솝트와",
-                        iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                        icon = R.drawable.ic_calender,
                         content = "33개월",
                     )
                 ),

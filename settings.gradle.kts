@@ -36,6 +36,7 @@ include(
     ":domain:notification",
     ":domain:soptamp",
     ":domain:poke",
+    ":domain:soptlog",
     ":feature:auth",
     ":feature:mypage",
     ":feature:notification",
@@ -44,3 +45,4 @@ include(
     ":feature:fortune",
     ":feature:soptlog"
 )
+include(":data:soptlog")

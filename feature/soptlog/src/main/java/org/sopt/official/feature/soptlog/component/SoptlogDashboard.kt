@@ -1,5 +1,7 @@
 package org.sopt.official.feature.soptlog.component
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,12 +17,14 @@ import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.component.UrlImage
+import org.sopt.official.feature.soptlog.R
 
 @Composable
 fun SoptlogDashBoard(
@@ -42,7 +46,7 @@ fun SoptlogDashBoard(
             ) {
                 SoptlogDashBoardItem(
                     title = item.title,
-                    iconUrl = item.iconUrl,
+                    icon = item.icon,
                     content = item.content,
                 )
             }
@@ -52,14 +56,14 @@ fun SoptlogDashBoard(
 
 data class DashBoardItem(
     val title: String,
-    val iconUrl: String,
+    @DrawableRes val icon: Int,
     val content: String,
 )
 
 @Composable
 private fun SoptlogDashBoardItem(
     title: String,
-    iconUrl: String,
+    @DrawableRes icon: Int,
     content: String,
     modifier: Modifier = Modifier,
 ) {
@@ -73,14 +77,14 @@ private fun SoptlogDashBoardItem(
             color = SoptTheme.colors.onSurface200
         )
 
-        UrlImage(
-            url = iconUrl,
+        Image(
+            imageVector = ImageVector.vectorResource(icon),
             modifier = Modifier
                 .padding(top = 6.dp, bottom = 4.dp)
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(SoptTheme.colors.surface),
-            contentDescription = "프로필 사진"
+                .background(SoptTheme.colors.onSurface700),
+            contentDescription = null
         )
 
         Text(
@@ -97,7 +101,7 @@ fun SoptlogDashBoardItemPreview() {
     SoptTheme {
         SoptlogDashBoardItem(
             title = "솝트레벨",
-            iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+            icon = R.drawable.ic_sopt_level,
             content = "Lv.6",
         )
     }
@@ -111,17 +115,17 @@ fun SoptlogDashBoardPreview() {
             dashBoardItems = persistentListOf(
                 DashBoardItem(
                     title = "솝트레벨",
-                    iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+                    icon = R.drawable.ic_sopt_level,
                     content = "Lv.6",
                 ),
                 DashBoardItem(
                     title = "콕찌르기",
-                    iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                    icon = R.drawable.ic_poke_hand,
                     content = "208회",
                 ),
                 DashBoardItem(
                     title = "솝트와",
-                    iconUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo2.png",
+                    icon = R.drawable.ic_calender,
                     content = "33개월",
                 )
             ),
