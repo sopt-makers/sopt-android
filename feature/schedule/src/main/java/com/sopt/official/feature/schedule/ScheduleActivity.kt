@@ -24,6 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,6 +32,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.sopt.official.feature.schedule.component.ScheduleItem
 import com.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,19 +52,11 @@ class ScheduleActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleScreen() {
-    val fakeData = listOf(
-        Pair("9월 28일 토요일", "1차 세미나"),
-        Pair("9월 28일 토요일", "2차 세미나"),
-        Pair("9월 28일 토요일", "3차 세미나"),
-        Pair("9월 28일 토요일", "4차 세미나"),
-        Pair("9월 28일 토요일", "5차 세미나"),
-        Pair("9월 28일 토요일", "6차 세미나"),
-        Pair("9월 28일 토요일", "7차 세미나"),
-        Pair("9월 28일 토요일", "8차 세미나"),
-        Pair("9월 28일 토요일", "9차 세미나"),
-        Pair("9월 28일 토요일", "10차 세미나"),
-    )
+fun ScheduleScreen(
+    viewModel: ScheduleViewModel = hiltViewModel(),
+) {
+    val state by viewModel.schedule.collectAsStateWithLifecycle()
+
 
     Scaffold(
         topBar = {
@@ -100,10 +95,10 @@ fun ScheduleScreen() {
                     .padding(horizontal = 20.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                items(fakeData) { item ->
+                items(state.scheduleList) { item ->
                     ScheduleItem(
-                        date = item.first,
-                        event = item.second
+                        date = item.date,
+                        event = item.title
                     )
                 }
 
