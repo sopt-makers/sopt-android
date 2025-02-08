@@ -31,6 +31,7 @@ include(
     ":data:soptamp",
     ":data:poke",
     ":data:fortune",
+    ":data:soptlog",
     ":domain:fortune",
     ":domain:mypage",
     ":domain:notification",
@@ -45,4 +46,3 @@ include(
     ":feature:fortune",
     ":feature:soptlog"
 )
-include(":data:soptlog")
