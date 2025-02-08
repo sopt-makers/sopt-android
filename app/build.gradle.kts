@@ -131,6 +131,7 @@ dependencies {
     implementation(projects.data.mypage)
     implementation(projects.data.poke)
     implementation(projects.data.notification)
+    implementation(projects.data.soptlog)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
