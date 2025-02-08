@@ -137,7 +137,7 @@ fun ScheduleScreen() {
                         .clip(RoundedCornerShape(12.dp))
                         .background(SoptTheme.colors.primary)
                         .clickable {
-
+                            // TODO: nav 연결
                         },
                     contentAlignment = Alignment.Center
                 ) {
