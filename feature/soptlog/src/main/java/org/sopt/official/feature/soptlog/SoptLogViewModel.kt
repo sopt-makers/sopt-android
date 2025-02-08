@@ -1,9 +1,11 @@
 package org.sopt.official.feature.soptlog
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
@@ -14,9 +16,9 @@ import javax.inject.Inject
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
 ) : ViewModel() {
-    private val _soptLogInfo = mutableStateOf<SoptLogInfo?>(null)
-    val soptLogInfo
-        get() = _soptLogInfo.value
+    private val _soptLogInfo = MutableStateFlow<SoptLogInfo?>(null)
+    val soptLogInfo: StateFlow<SoptLogInfo?>
+        get() = _soptLogInfo.asStateFlow()
 
     init {
         getSoptLogInfo()
