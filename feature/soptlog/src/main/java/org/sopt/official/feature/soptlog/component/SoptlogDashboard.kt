@@ -80,10 +80,10 @@ private fun SoptlogDashBoardItem(
         Image(
             imageVector = ImageVector.vectorResource(icon),
             modifier = Modifier
-                .padding(top = 6.dp, bottom = 4.dp)
                 .size(40.dp)
                 .clip(CircleShape)
-                .background(SoptTheme.colors.onSurface700),
+                .background(SoptTheme.colors.onSurface700)
+                .padding(vertical = 7.dp, horizontal = 6.dp),
             contentDescription = null
         )
 
