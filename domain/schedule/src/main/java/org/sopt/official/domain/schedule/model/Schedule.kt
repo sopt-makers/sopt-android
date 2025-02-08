@@ -1,4 +1,4 @@
-package com.sopt.official.domain.schedule.model
+package org.sopt.official.domain.schedule.model
 
 data class Schedule(
     val date: String,

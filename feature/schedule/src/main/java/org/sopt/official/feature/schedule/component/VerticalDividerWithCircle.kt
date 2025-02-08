@@ -1,4 +1,4 @@
-package com.sopt.official.feature.schedule.component
+package org.sopt.official.feature.schedule.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

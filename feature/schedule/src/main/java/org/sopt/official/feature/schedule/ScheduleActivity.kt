@@ -1,4 +1,4 @@
-package com.sopt.official.feature.schedule
+package org.sopt.official.feature.schedule
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -34,10 +34,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.sopt.official.feature.schedule.component.ScheduleItem
-import com.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.schedule.component.ScheduleItem
+import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
 @AndroidEntryPoint
 class ScheduleActivity : AppCompatActivity() {
@@ -45,7 +45,9 @@ class ScheduleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ScheduleScreen()
+            SoptTheme {
+                ScheduleScreen()
+            }
         }
     }
 }
@@ -56,7 +58,6 @@ fun ScheduleScreen(
     viewModel: ScheduleViewModel = hiltViewModel(),
 ) {
     val state by viewModel.schedule.collectAsStateWithLifecycle()
-
 
     Scaffold(
         topBar = {
@@ -150,7 +151,7 @@ fun ScheduleScreen(
 
 @Preview
 @Composable
-fun ScheduleActivityPreview() {
+private fun ScheduleActivityPreview() {
     SoptTheme {
         ScheduleScreen()
     }

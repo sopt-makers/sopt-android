@@ -1,9 +1,7 @@
-package com.sopt.official.feature.schedule
+package org.sopt.official.feature.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sopt.official.domain.schedule.model.Schedule
-import com.sopt.official.domain.schedule.repository.ScheduleRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -13,10 +11,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.schedule.model.Schedule
+import org.sopt.official.domain.schedule.repository.ScheduleRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
-class ScheduleViewModel constructor(
+class ScheduleViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
 ) : ViewModel() {
     private val _schedule = MutableStateFlow(ScheduleState())
