@@ -1,6 +1,6 @@
 package org.sopt.official.data.schedule.di
 
-import com.sopt.official.domain.schedule.repository.ScheduleRepository
+import org.sopt.official.domain.schedule.repository.ScheduleRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
