@@ -42,5 +42,6 @@ include(
     ":feature:soptamp",
     ":feature:poke",
     ":feature:fortune",
-    ":feature:soptlog"
+    ":feature:soptlog",
+    ":feature:schedule"
 )
