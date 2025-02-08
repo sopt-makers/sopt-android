@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -24,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
@@ -57,7 +61,15 @@ class ScheduleActivity : AppCompatActivity() {
 fun ScheduleScreen(
     viewModel: ScheduleViewModel = hiltViewModel(),
 ) {
+    val lazyListState = rememberLazyListState()
     val state by viewModel.schedule.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state) {
+        if (state.scheduleList.isNotEmpty()) {
+            delay(200L)
+            lazyListState.animateScrollToItem(state.scheduleList.indexOfFirst { it.isRecentSchedule })
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -94,17 +106,23 @@ fun ScheduleScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 20.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
+                contentPadding = PaddingValues(vertical = 16.dp),
+                state = lazyListState
             ) {
                 items(state.scheduleList) { item ->
                     ScheduleItem(
                         date = item.date,
-                        event = item.title
+                        title = item.title,
+                        type = item.type,
+                        isRecentSchedule = item.isRecentSchedule,
                     )
                 }
 
                 item {
-                    VerticalDividerWithCircle(Color.Unspecified)
+                    VerticalDividerWithCircle(
+                        circleColor = Color.Unspecified,
+                        height = 200.dp
+                    )
                 }
             }
 
