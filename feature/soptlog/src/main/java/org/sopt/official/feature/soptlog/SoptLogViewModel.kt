@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
 ) : ViewModel() {
-    private val _soptLogInfo = MutableStateFlow<Result<SoptLogInfo>>(Result.failure(Exception()))
-    val soptLogInfo: StateFlow<Result<SoptLogInfo>>
+    private val _soptLogInfo = MutableStateFlow(SoptLogState())
+    val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
 
     init {
@@ -26,13 +27,51 @@ class SoptLogViewModel @Inject constructor(
 
     private fun getSoptLogInfo() {
         viewModelScope.launch {
-            _soptLogInfo.value = soptLogRepository.getSoptLogInfo()
+            _soptLogInfo.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
 
-            with(soptLogInfo.value.exceptionOrNull()) {
-                if (this != null){
-                    Timber.e(this)
+            soptLogRepository.getSoptLogInfo()
+                .onSuccess { info ->
+                    _soptLogInfo.update {
+                        it.copy(
+                            soptLogInfo = info,
+                            isError = false,
+                        )
+                    }
+                }.onFailure { error ->
+                    Timber.e(error)
+                    _soptLogInfo.update {
+                        it.copy(
+                            isError = true,
+                        )
+                    }
                 }
+
+            _soptLogInfo.update {
+                it.copy(
+                    isLoading = false
+                )
             }
         }
     }
 }
+
+data class SoptLogState(
+    val soptLogInfo: SoptLogInfo = SoptLogInfo(
+        profileImageUrl = "",
+        userName = "",
+        part = "",
+        profileMessage = "",
+        soptLevel = "",
+        pokeCount = "",
+        isActive = false,
+        soptampRank = "",
+        during = "",
+        todayFortuneTitle = "",
+    ),
+    val isLoading: Boolean = false,
+    val isError: Boolean = false,
+)

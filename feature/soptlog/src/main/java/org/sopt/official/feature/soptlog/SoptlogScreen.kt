@@ -39,33 +39,43 @@ fun SoptlogRoute(
 ) {
     val soptLogInfo by viewModel.soptLogInfo.collectAsStateWithLifecycle()
 
-    soptLogInfo.onSuccess {
-        SoptlogScreen(
-            profileImageUrl = it.profileImageUrl,
-            name = it.userName,
-            part = it.part,
-            introduction = it.profileMessage,
-            dashBoardItems = persistentListOf(
-                DashBoardItem(
-                    title = "솝트레벨",
-                    icon = R.drawable.ic_sopt_level,
-                    content = it.soptLevel,
-                ),
-                DashBoardItem(
-                    title = "콕찌르기",
-                    icon = R.drawable.ic_poke_hand,
-                    content = it.pokeCount,
-                ),
-                DashBoardItem(
-                    title = if (it.isActive) "솝템프" else "솝트와",
-                    icon = if (it.isActive) R.drawable.ic_soptamp_hand else R.drawable.ic_calender,
-                    content = if (it.isActive) it.soptampRank else it.during,
+    when {
+        soptLogInfo.isLoading -> {
+            // TODO: 로딩 화면
+        }
+
+        soptLogInfo.isError -> {
+            // TODO: 오류 화면
+        }
+
+        else -> {
+            with(soptLogInfo.soptLogInfo) {
+                SoptlogScreen(
+                    profileImageUrl = profileImageUrl,
+                    name = userName,
+                    part = part,
+                    introduction = profileMessage,
+                    dashBoardItems = persistentListOf(
+                        DashBoardItem(
+                            title = "솝트레벨",
+                            icon = R.drawable.ic_sopt_level,
+                            content = soptLevel,
+                        ),
+                        DashBoardItem(
+                            title = "콕찌르기",
+                            icon = R.drawable.ic_poke_hand,
+                            content = pokeCount,
+                        ),
+                        DashBoardItem(
+                            title = if (isActive) "솝템프" else "솝트와",
+                            icon = if (isActive) R.drawable.ic_soptamp_hand else R.drawable.ic_calender,
+                            content = if (isActive) soptampRank else during,
+                        )
+                    ),
+                    todayFortuneTitle = todayFortuneTitle,
                 )
-            ),
-            todayFortuneTitle = it.todayFortuneTitle,
-        )
-    }.onFailure {
-        // TODO: 오류 화면
+            }
+        }
     }
 }
 
