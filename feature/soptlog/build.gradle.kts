@@ -24,5 +24,4 @@ dependencies {
 
     // etc
     implementation(libs.coil3.compose)
-    implementation(libs.coil3.test)
 }

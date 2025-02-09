@@ -10,17 +10,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.annotation.ExperimentalCoilApi
-import coil3.compose.AsyncImagePreviewHandler
-import coil3.compose.LocalAsyncImagePreviewHandler
-import coil3.test.FakeImage
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.soptlog.R
@@ -72,21 +67,14 @@ fun SoptlogProfile(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Preview
 @Composable
 fun PreviewSoptlogProfile() {
     SoptTheme {
-        val previewHandler = AsyncImagePreviewHandler {
-            FakeImage(color = 0xFFE0E0E0.toInt())
-        }
-
-        CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-            SoptlogProfile(
-                "https://avatars.githubusercontent.com/u/48426991?v=4",
-                "차은우",
-                "안드로이드"
-            )
-        }
+        SoptlogProfile(
+            "https://avatars.githubusercontent.com/u/48426991?v=4",
+            "차은우",
+            "안드로이드"
+        )
     }
 }
