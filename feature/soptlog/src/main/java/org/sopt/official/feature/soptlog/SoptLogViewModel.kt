@@ -16,8 +16,8 @@ import javax.inject.Inject
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
 ) : ViewModel() {
-    private val _soptLogInfo = MutableStateFlow<SoptLogInfo?>(null)
-    val soptLogInfo: StateFlow<SoptLogInfo?>
+    private val _soptLogInfo = MutableStateFlow<Result<SoptLogInfo>>(Result.failure(Exception()))
+    val soptLogInfo: StateFlow<Result<SoptLogInfo>>
         get() = _soptLogInfo.asStateFlow()
 
     init {
@@ -26,9 +26,13 @@ class SoptLogViewModel @Inject constructor(
 
     private fun getSoptLogInfo() {
         viewModelScope.launch {
-            soptLogRepository.getSoptLogInfo().onSuccess {
-                _soptLogInfo.value = it
-            }.onFailure(Timber::e)
+            _soptLogInfo.value = soptLogRepository.getSoptLogInfo()
+
+            with(soptLogInfo.value.exceptionOrNull()) {
+                if (this != null){
+                    Timber.e(this)
+                }
+            }
         }
     }
 }
