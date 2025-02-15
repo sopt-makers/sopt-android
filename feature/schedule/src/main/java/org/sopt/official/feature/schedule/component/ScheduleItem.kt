@@ -1,4 +1,4 @@
-package com.sopt.official.feature.schedule.component
+package org.sopt.official.feature.schedule.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -11,19 +11,34 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Blue400
+import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun ScheduleItem(
     date: String,
-    event: String,
+    title: String,
+    type: String,
+    isRecentSchedule: Boolean = false,
 ) {
+    val (event, containerColor, textColor) = remember {
+        when (type) {
+            "SEMINAR" -> Triple("세미나", Orange400.copy(alpha = 0.2f), Orange400)
+            else -> Triple("행사", Blue400.copy(alpha = 0.2f), Blue400)
+        }
+    }
+
+
     Row {
-        VerticalDividerWithCircle()
+        VerticalDividerWithCircle(
+            circleColor = if (isRecentSchedule) SoptTheme.colors.onSurface10 else SoptTheme.colors.onSurface500,
+        )
         Spacer(modifier = Modifier.width(8.dp))
         Column(
             modifier = Modifier
@@ -42,17 +57,17 @@ fun ScheduleItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "세미나",
-                    color = SoptTheme.colors.primary,
+                    text = event,
+                    color = textColor,
                     modifier = Modifier
-                        .background(SoptTheme.colors.error, RoundedCornerShape(4.dp)) // 임시 색상 입니다
+                        .background(containerColor, RoundedCornerShape(4.dp))
                         .padding(horizontal = 6.dp, vertical = 3.dp),
                     style = SoptTheme.typography.label11SB,
                 )
                 Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = event,
-                    color = SoptTheme.colors.onSurface10, // 임시 색상 입니다
+                    text = title,
+                    color = SoptTheme.colors.onSurface10,
                     style = SoptTheme.typography.heading18B
                 )
             }
@@ -67,7 +82,8 @@ private fun ScheduleItemPreview() {
     SoptTheme {
         ScheduleItem(
             date = "9월 28일 토요일",
-            event = "1차 세미나"
+            title = "1차 세미나",
+            type = "세미나"
         )
     }
 }

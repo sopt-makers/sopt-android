@@ -11,4 +11,7 @@ dependencies {
     // core
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+
+    // domain
+    implementation(projects.domain.schedule)
 }

@@ -1,4 +1,4 @@
-package com.sopt.official.feature.schedule
+package org.sopt.official.feature.schedule
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -24,6 +26,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,10 +35,13 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.sopt.official.feature.schedule.component.ScheduleItem
-import com.sopt.official.feature.schedule.component.VerticalDividerWithCircle
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.schedule.component.ScheduleItem
+import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
 @AndroidEntryPoint
 class ScheduleActivity : AppCompatActivity() {
@@ -42,26 +49,27 @@ class ScheduleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            ScheduleScreen()
+            SoptTheme {
+                ScheduleScreen()
+            }
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleScreen() {
-    val fakeData = listOf(
-        Pair("9월 28일 토요일", "1차 세미나"),
-        Pair("9월 28일 토요일", "2차 세미나"),
-        Pair("9월 28일 토요일", "3차 세미나"),
-        Pair("9월 28일 토요일", "4차 세미나"),
-        Pair("9월 28일 토요일", "5차 세미나"),
-        Pair("9월 28일 토요일", "6차 세미나"),
-        Pair("9월 28일 토요일", "7차 세미나"),
-        Pair("9월 28일 토요일", "8차 세미나"),
-        Pair("9월 28일 토요일", "9차 세미나"),
-        Pair("9월 28일 토요일", "10차 세미나"),
-    )
+fun ScheduleScreen(
+    viewModel: ScheduleViewModel = hiltViewModel(),
+) {
+    val lazyListState = rememberLazyListState()
+    val state by viewModel.schedule.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state) {
+        if (state.scheduleList.isNotEmpty()) {
+            delay(200L)
+            lazyListState.animateScrollToItem(state.scheduleList.indexOfFirst { it.isRecentSchedule })
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -98,17 +106,23 @@ fun ScheduleScreen() {
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 20.dp),
-                contentPadding = PaddingValues(vertical = 16.dp)
+                contentPadding = PaddingValues(vertical = 16.dp),
+                state = lazyListState
             ) {
-                items(fakeData) { item ->
+                items(state.scheduleList) { item ->
                     ScheduleItem(
-                        date = item.first,
-                        event = item.second
+                        date = item.date,
+                        title = item.title,
+                        type = item.type,
+                        isRecentSchedule = item.isRecentSchedule,
                     )
                 }
 
                 item {
-                    VerticalDividerWithCircle(Color.Unspecified)
+                    VerticalDividerWithCircle(
+                        circleColor = Color.Unspecified,
+                        height = 200.dp
+                    )
                 }
             }
 
@@ -155,7 +169,7 @@ fun ScheduleScreen() {
 
 @Preview
 @Composable
-fun ScheduleActivityPreview() {
+private fun ScheduleActivityPreview() {
     SoptTheme {
         ScheduleScreen()
     }

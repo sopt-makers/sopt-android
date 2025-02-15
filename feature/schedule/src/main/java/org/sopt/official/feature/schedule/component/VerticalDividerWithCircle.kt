@@ -1,4 +1,4 @@
-package com.sopt.official.feature.schedule.component
+package org.sopt.official.feature.schedule.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -12,19 +12,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun VerticalDividerWithCircle(
     circleColor: Color = SoptTheme.colors.onSurface500,
+    height: Dp = 100.dp,
 ) {
     Box(
         contentAlignment = Alignment.TopCenter,
     ) {
         VerticalDivider(
             modifier = Modifier
-                .height(100.dp)
+                .height(height)
                 .width(1.dp),
             color = SoptTheme.colors.onSurface500
         )
