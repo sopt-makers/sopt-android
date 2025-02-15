@@ -1,6 +1,7 @@
 package org.sopt.official.feature.soptlog.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import org.sopt.official.designsystem.SoptTheme
 @Composable
 fun SoptlogIntroduction(
     introduction: String?,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -27,11 +29,15 @@ fun SoptlogIntroduction(
             .background(
                 SoptTheme.colors.onSurface800
             )
+            .clickable(
+                enabled = introduction.isNullOrBlank(),
+                onClick = onClick
+            )
             .padding(horizontal = 20.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
     ) {
         IntroductionText(
-            introduction ?: "프로필 수정에서 한 줄 소개 등록해보세요!"
+            introduction = if (introduction.isNullOrBlank()) "프로필 수정에서 한 줄 소개 등록해보세요!" else introduction
         )
     }
 
@@ -52,10 +58,12 @@ fun PreviewSoptlogIntroduction() {
     SoptTheme {
         Column {
             SoptlogIntroduction(
-                introduction = "이건 null이 아니에요"
+                introduction = "이건 null이 아니에요",
+                onClick = {}
             )
             SoptlogIntroduction(
-                introduction = null
+                introduction = null,
+                onClick = {}
             )
         }
     }

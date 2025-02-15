@@ -19,7 +19,9 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
 
+    // domain
+    implementation(projects.domain.soptlog)
+
     // etc
     implementation(libs.coil3.compose)
-    implementation(libs.coil3.test)
 }
