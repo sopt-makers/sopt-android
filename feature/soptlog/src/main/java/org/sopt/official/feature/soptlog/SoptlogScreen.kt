@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.component.DashBoardItem
 import org.sopt.official.feature.soptlog.component.EditProfileButton
@@ -32,6 +33,8 @@ import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 @Composable
 fun SoptlogRoute(
     paddingValues: PaddingValues,
+    navigateToMyPage: (String) -> Unit = {},
+    navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
     val soptLogInfo by viewModel.soptLogInfo.collectAsStateWithLifecycle()
@@ -70,7 +73,11 @@ fun SoptlogRoute(
                         )
                     ),
                     todayFortuneTitle = todayFortuneTitle,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(paddingValues),
+                    navigateToMyPage = {
+                        navigateToMyPage(if (isActive) UserStatus.ACTIVE.name else UserStatus.INACTIVE.name)
+                    },
+                    navigateToFortune = navigateToFortune,
                 )
             }
         }
@@ -87,6 +94,8 @@ fun SoptlogScreen(
     dashBoardItems: ImmutableList<DashBoardItem>,
     todayFortuneTitle: String,
     modifier: Modifier = Modifier,
+    navigateToMyPage: () -> Unit = {},
+    navigateToFortune: () -> Unit = {},
 ) {
     Column(
         modifier = modifier
@@ -131,9 +140,7 @@ fun SoptlogScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             EditProfileButton(
-                onClick = {
-                    // TODO: 프로필 수정 화면으로 이동
-                }
+                onClick = navigateToMyPage
             )
         }
 
@@ -141,9 +148,7 @@ fun SoptlogScreen(
 
         TodayFortuneBanner(
             title = todayFortuneTitle,
-            onClick = {
-                // TODO: 오늘의 운세 화면으로 이동
-            }
+            onClick = navigateToFortune
         )
     }
 }

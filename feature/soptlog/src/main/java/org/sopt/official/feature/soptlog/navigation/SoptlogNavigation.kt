@@ -15,10 +15,14 @@ fun NavController.navigateToSoptlog(navOptions: NavOptions) {
 
 fun NavGraphBuilder.soptlogNavGraph(
     paddingValues: PaddingValues,
+    navigateToMyPage: (String) -> Unit,
+    navigateToFortune: () -> Unit,
 ) {
     composable<SoptLog> {
         SoptlogRoute(
-            paddingValues = paddingValues
+            paddingValues = paddingValues,
+            navigateToMyPage = navigateToMyPage,
+            navigateToFortune = navigateToFortune
         )
     }
 }

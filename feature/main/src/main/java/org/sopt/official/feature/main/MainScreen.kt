@@ -18,19 +18,32 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
+
+private val applicationNavigator by lazy {
+    EntryPointAccessors.fromApplication(
+        appContext,
+        NavigatorEntryPoint::class.java
+    ).navigatorProvider()
+}
 
 @Composable
 fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
+    val context = LocalContext.current
+
     Scaffold(
         content = { innerPadding ->
             Column(
@@ -42,7 +55,19 @@ fun MainScreen(
                     startDestination = navigator.startDestination
                 ) {
                     dummyNavGraph(paddingValues = innerPadding)
-                    soptlogNavGraph(paddingValues = innerPadding)
+                    soptlogNavGraph(
+                        paddingValues = innerPadding,
+                        navigateToMyPage = {
+                            context.startActivity(
+                                applicationNavigator.getMyPageActivityIntent(it)
+                            )
+                        },
+                        navigateToFortune = {
+                            context.startActivity(
+                                applicationNavigator.getFortuneActivityIntent()
+                            )
+                        }
+                    )
                 }
 
                 SoptBottomBar(
