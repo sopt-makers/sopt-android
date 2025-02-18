@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.soptlog.navigation.navigateToSoptlog
 
@@ -27,7 +28,7 @@ class MainNavigator(
         }
 
 
-    fun navigate(tab: MainTab) {
+    fun navigate(tab: MainTab, userStatus: UserStatus, onFailure: () -> Unit = {}) {
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
@@ -41,9 +42,17 @@ class MainNavigator(
                 navOptions = navOptions
             )
 
-            MainTab.SoptLog -> navController.navigateToSoptlog(
-                navOptions = navOptions
-            )
+            MainTab.SoptLog -> {
+                when (userStatus) {
+                    UserStatus.ACTIVE, UserStatus.INACTIVE -> {
+                        navController.navigateToSoptlog(
+                            navOptions = navOptions
+                        )
+                    }
+
+                    UserStatus.UNAUTHENTICATED -> onFailure()
+                }
+            }
         }
     }
 

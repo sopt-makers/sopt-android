@@ -57,6 +57,7 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 
@@ -76,7 +77,7 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         if (dataStore.accessToken.isNotEmpty()) {
             startActivity(
-                HomeActivity.getIntent(this, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
             )
         }
         setContentView(binding.root)
@@ -107,11 +108,11 @@ class AuthActivity : AppCompatActivity() {
             .onEach { event ->
                 when (event) {
                     is AuthUiEvent.Success -> startActivity(
-                        HomeActivity.getIntent(this, HomeActivity.StartArgs(event.userStatus))
+                        MainActivity.getIntent(this, MainActivity.StartArgs(event.userStatus))
                     )
 
                     is AuthUiEvent.Failure -> startActivity(
-                        HomeActivity.getIntent(this, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                        MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                     )
                 }
             }.launchIn(lifecycleScope)
@@ -168,9 +169,9 @@ class AuthActivity : AppCompatActivity() {
         }
         binding.btnSoptNotMember.setOnSingleClickListener {
             startActivity(
-                HomeActivity.getIntent(
+                MainActivity.getIntent(
                     this,
-                    HomeActivity.StartArgs(
+                    MainActivity.StartArgs(
                         UserStatus.UNAUTHENTICATED
                     )
                 )
