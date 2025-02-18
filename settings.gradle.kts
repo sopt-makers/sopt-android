@@ -49,3 +49,5 @@ include(
     ":feature:soptlog",
     ":feature:schedule"
 )
+include(":feature:main")
+include(":core:navigation")

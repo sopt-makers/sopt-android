@@ -146,6 +146,10 @@
             android:name=".feature.fortune.FortuneActivity"
             android:exported="true"
             android:launchMode="singleTop" />
+        <activity
+            android:name=".feature.main.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
 
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
