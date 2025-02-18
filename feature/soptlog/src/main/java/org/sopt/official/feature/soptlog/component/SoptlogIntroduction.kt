@@ -19,7 +19,6 @@ import org.sopt.official.designsystem.SoptTheme
 @Composable
 fun SoptlogIntroduction(
     introduction: String?,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -28,10 +27,6 @@ fun SoptlogIntroduction(
             .clip(RoundedCornerShape(8.dp))
             .background(
                 SoptTheme.colors.onSurface800
-            )
-            .clickable(
-                enabled = introduction.isNullOrBlank(),
-                onClick = onClick
             )
             .padding(horizontal = 20.dp, vertical = 8.dp),
         contentAlignment = Alignment.Center
@@ -59,11 +54,9 @@ fun PreviewSoptlogIntroduction() {
         Column {
             SoptlogIntroduction(
                 introduction = "이건 null이 아니에요",
-                onClick = {}
             )
             SoptlogIntroduction(
                 introduction = null,
-                onClick = {}
             )
         }
     }

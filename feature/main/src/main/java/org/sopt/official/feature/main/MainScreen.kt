@@ -1,5 +1,6 @@
 package org.sopt.official.feature.main
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -47,6 +48,7 @@ import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
+import org.sopt.official.webview.view.WebViewActivity
 
 private val applicationNavigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -54,6 +56,8 @@ private val applicationNavigator by lazy {
         NavigatorEntryPoint::class.java
     ).navigatorProvider()
 }
+
+private const val EditProfileUrl = "https://playground.sopt.org/members/edit"
 
 @Composable
 fun MainScreen(
@@ -76,10 +80,11 @@ fun MainScreen(
                     dummyNavGraph(paddingValues = innerPadding)
                     soptlogNavGraph(
                         paddingValues = innerPadding,
-                        navigateToMyPage = {
-                            context.startActivity(
-                                applicationNavigator.getMyPageActivityIntent(it)
-                            )
+                        navigateToEditProfile = {
+                            val intent = Intent(context, WebViewActivity::class.java).apply {
+                                putExtra(WebViewActivity.INTENT_URL, EditProfileUrl)
+                            }
+                            context.startActivity(intent)
                         },
                         navigateToFortune = {
                             context.startActivity(

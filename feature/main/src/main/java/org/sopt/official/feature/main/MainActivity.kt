@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 MainScreen(
-                    userStatus = UserStatus.UNAUTHENTICATED, // startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                    userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
                 )
             }
         }

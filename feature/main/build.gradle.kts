@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.core.navigation)
 
     implementation(projects.feature.soptlog)
+    implementation(project(":core:webview"))
 }
