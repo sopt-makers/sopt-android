@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -42,8 +42,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.AmplitudeTracker
 import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
@@ -68,7 +68,7 @@ class PokeNotificationActivity : AppCompatActivity() {
   private val args by serializableExtra(Argument(""))
 
   @Inject
-  lateinit var tracker: AmplitudeTracker
+  lateinit var tracker: Tracker
   private val pokeNotificationAdapter
     get() = binding.recyclerviewPokeNotification.adapter as PokeNotificationAdapter
 

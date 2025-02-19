@@ -25,6 +25,7 @@
 
 plugins {
   sopt("feature")
+  sopt("compose")
 }
 
 android {
@@ -33,6 +34,7 @@ android {
 
 dependencies {
   implementation(projects.core.auth)
+  implementation(projects.core.security)
   implementation(platform(libs.okhttp.bom))
   implementation(libs.okhttp)
   implementation(libs.exifinterface)

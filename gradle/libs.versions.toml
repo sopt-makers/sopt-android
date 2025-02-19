@@ -5,26 +5,26 @@ targetSdk = "35"
 appVersion = "2.4.0"
 versionCode = "20400"
 
-kotlin = "2.0.21"
-kotlinx-serialization-json = "1.7.3"
+kotlin = "2.1.10"
+kotlinx-serialization-json = "1.8.0"
 kotlinx-serialization-converter = "1.0.0"
-kotlinx-coroutines = "1.9.0"
+kotlinx-coroutines = "1.10.1"
 kotlinx-datetime = "0.6.1"
 kotlinx-collections-immutable = "0.3.8"
 javax-inject = "1"
 corektx = "1.15.0"
 appcompat = "1.7.0"
-activity = "1.9.3"
+activity = "1.10.0"
 fragmentKtx = "1.8.5"
 lifecycle = "2.8.7"
 swipe-refresh-layout = "1.1.0"
-navigation = "2.8.4"
+navigation = "2.8.6"
 startup = "1.2.0"
 customtab = "1.8.0"
 exifinterface = "1.3.7"
-compose-bom = "2024.11.00"
-androidx-paging = "3.3.4"
-desugarJdk = "2.1.3"
+compose-bom = "2025.01.01"
+androidx-paging = "3.3.5"
+desugarJdk = "2.1.4"
 
 material = "1.12.0"
 in-app-update = "2.1.0"
@@ -33,40 +33,41 @@ secret-gradle-plugin = "2.0.1"
 junit = "4.13.2"
 androidx-test-junit = "1.2.1"
 androidx-test-espresso = "3.6.1"
-junit5-plugin = "1.11.2.0"
-junit5-jupiter = "5.11.3"
+junit5-plugin = "1.11.3.0"
+junit5-jupiter = "5.11.4"
 truth = "1.4.4"
-robolectric = "4.14"
+robolectric = "4.14.1"
 androidx-uiautomator = "2.3.0"
 androidx-test = "1.6.2"
 androidx-test-rules = "1.6.1"
+mockk = "1.13.16"
 
-gradleplugin = "8.7.2"
-kspplugin = "2.0.21-1.0.28"
+gradleplugin = "8.8.0"
+kspplugin = "2.1.10-1.0.29"
 
-dagger-hilt = "2.52"
+dagger-hilt = "2.55"
 dagger-hilt-navigation-compose = "1.2.0"
-flipper = "0.272.0"
+flipper = "0.273.0"
 soloader = "0.12.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
 timber = "5.0.1"
-compose-destination = "1.11.7"
+compose-destination = "1.11.9"
 coil = "2.7.0"
-coil3 = "3.0.3"
-lottie = "6.6.0"
+lottie = "6.6.2"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
+rin = "0.3.0"
 
 google-services = "4.4.2"
-crashlytics = "3.0.2"
-firebase = "33.6.0"
-firebaseMessagingLifecycleKtx = "0.2.1"
-app-distribution = "5.0.0"
-ktlint = "12.1.1"
+crashlytics = "3.0.3"
+firebase = "33.9.0"
+firebaseMessagingLifecycleKtx = "0.3.0"
+app-distribution = "5.1.1"
+ktlint = "12.1.2"
 process-pheonix = "3.0.0"
-amplitude = "1.19.2"
-spotless = "6.25.0"
+amplitude = "1.19.4"
+spotless = "7.0.2"
 constraintlayout = "2.2.0"
 benchmark-macro-junit4 = "1.3.3"
 androidx-baselineprofile = "1.3.3"
@@ -125,8 +126,6 @@ compose-compiler-extension = { module = "org.jetbrains.kotlin:compose-compiler-g
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
-coil3-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil3" }
-coil3-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil3" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }
@@ -139,6 +138,8 @@ junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core"
 junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.6.0" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 
 androidx-uiautomator = { module = "androidx.test.uiautomator:uiautomator", version.ref = "androidx-uiautomator" }
 androidx-test-runner = { module = "androidx.test:runner", version.ref = "androidx-test" }
@@ -186,6 +187,7 @@ profileinstaller = { group = "androidx.profileinstaller", name = "profileinstall
 dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindicator" }
 deeplink-dispatch = { group = "com.airbnb", name = "deeplinkdispatch", version.ref = "deepLinkDispatch" }
 deeplink-dispatch-processor = { group = "com.airbnb", name = "deeplinkdispatch-processor", version.ref = "deepLinkDispatch" }
+rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
 
 [bundles]
 compose = [

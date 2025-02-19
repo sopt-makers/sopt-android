@@ -32,13 +32,20 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
+import org.sopt.official.common.util.decryptInReleaseMode
+import org.sopt.official.common.util.encryptInReleaseMode
+import org.sopt.official.network.BuildConfig.ACCESS_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.PUSH_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
+import org.sopt.official.network.BuildConfig.USER_STATUS_KEY_ALIAS
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class SoptDataStore @Inject constructor(
     @ApplicationContext private val context: Context,
-    @LocalStore private val fileName: String,
+    @LocalStore private val fileName: String
 ) {
     private val store = createSharedPreference(fileName, context)
 
@@ -49,35 +56,35 @@ class SoptDataStore @Inject constructor(
     }
 
     var accessToken: String
-        set(value) = store.edit { putString(ACCESS_TOKEN, value) }
-        get() = store.getString(ACCESS_TOKEN, "") ?: ""
+        set(value) = store.edit { putString(ACCESS_TOKEN, value.encryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(ACCESS_TOKEN, null)?.decryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     var refreshToken: String
-        set(value) = store.edit { putString(REFRESH_TOKEN, value) }
-        get() = store.getString(REFRESH_TOKEN, "") ?: ""
+        set(value) = store.edit { putString(REFRESH_TOKEN, value.encryptInReleaseMode(keyAlias = REFRESH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(REFRESH_TOKEN, null)?.decryptInReleaseMode(keyAlias = REFRESH_TOKEN_KEY_ALIAS)
+            ?: DEFAULT_VALUE
 
     var playgroundToken: String
-        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value) }
-        get() = store.getString(PLAYGROUND_TOKEN, "") ?: ""
+        set(value) = store.edit { putString(PLAYGROUND_TOKEN, value.encryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PLAYGROUND_TOKEN, null)?.decryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)
+            ?: DEFAULT_VALUE
 
     var userStatus: String
-        set(value) = store.edit { putString(USER_STATUS, value) }
-        get() = store.getString(USER_STATUS, UNAUTHENTICATED) ?: UNAUTHENTICATED
+        set(value) = store.edit { putString(USER_STATUS, value.encryptInReleaseMode(keyAlias = USER_STATUS_KEY_ALIAS)) }
+        get() = store.getString(USER_STATUS, null)?.decryptInReleaseMode(keyAlias = USER_STATUS_KEY_ALIAS) ?: UNAUTHENTICATED
 
     var pushToken: String
-        set(value) = store.edit { putString(PUSH_TOKEN, value) }
-        get() = store.getString(PUSH_TOKEN, "") ?: ""
+        set(value) = store.edit { putString(PUSH_TOKEN, value.encryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PUSH_TOKEN, null)?.decryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
     companion object {
-        const val DEBUG_FILE_NAME = "sopt_debug"
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"
         private const val PLAYGROUND_TOKEN = "pg_token"
         private const val USER_STATUS = "user_status"
-        private const val KEY_ALIAS_AUTH = "alias.preferences.auth_token"
-        private const val ANDROID_KEY_STORE = "AndroidKeyStore"
         private const val PUSH_TOKEN = "push_token"
         private const val UNAUTHENTICATED = "UNAUTHENTICATED"
+        private const val DEFAULT_VALUE = ""
     }
 }
 

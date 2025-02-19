@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.soptamp.sentence
+package org.sopt.official.feature.mypage.mypage.state
 
-sealed interface AdjustSentenceSideEffect {
-    data object NavigateToMyPage : AdjustSentenceSideEffect
-}
+sealed interface MyPageAction
+data object ResetSoptamp : MyPageAction
+data object ClearSoptamp : MyPageAction
+data object Logout : MyPageAction
+data object CloseDialog : MyPageAction

@@ -26,13 +26,17 @@ package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
+import javax.inject.Inject
 
 sealed interface AuthUiEvent {
     data class Success(val userStatus: UserStatus) : AuthUiEvent
@@ -45,6 +49,10 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
+
+    private val _loginDialogAction = MutableStateFlow<Boolean?>(null)
+    val  loginDialogAction: StateFlow<Boolean?> = _loginDialogAction.asStateFlow()
+
     suspend fun onLogin(auth: Auth) {
         loginUseCase(auth)
         _uiEvent.emit(AuthUiEvent.Success(auth.status))
@@ -53,5 +61,9 @@ class AuthViewModel @Inject constructor(
     suspend fun onFailure(throwable: Throwable) {
         Timber.e(throwable)
         _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
+    }
+
+    fun showLoginErrorDialog(visible: Boolean) {
+        _loginDialogAction.update { visible }
     }
 }
