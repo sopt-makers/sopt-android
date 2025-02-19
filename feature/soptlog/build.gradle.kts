@@ -24,5 +24,5 @@ dependencies {
     implementation(projects.domain.soptlog)
 
     // etc
-    implementation(libs.coil3.compose)
+    implementation(libs.coil.compose)
 }
