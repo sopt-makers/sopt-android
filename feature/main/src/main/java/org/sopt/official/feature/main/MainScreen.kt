@@ -2,6 +2,7 @@ package org.sopt.official.feature.main
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideIn
@@ -208,7 +209,6 @@ fun SoptButton(
     }
 }
 
-
 @Composable
 fun SoptBottomBar(
     visible: Boolean,
@@ -217,10 +217,8 @@ fun SoptBottomBar(
     onTabSelected: (MainTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedVisibility(
+    SlideUpDownWithFadeAnimatedVisibility(
         visible = visible,
-        enter = fadeIn() + slideIn { IntOffset(0, it.height) },
-        exit = fadeOut() + slideOut { IntOffset(0, it.height) }
     ) {
         Row(
             modifier = modifier
@@ -247,6 +245,19 @@ fun SoptBottomBar(
             }
         }
     }
+}
+
+@Composable
+fun SlideUpDownWithFadeAnimatedVisibility(
+    visible: Boolean,
+    content: @Composable AnimatedVisibilityScope.() -> Unit,
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = fadeIn() + slideIn { IntOffset(0, it.height) },
+        exit = fadeOut() + slideOut { IntOffset(0, it.height) },
+        content = content
+    )
 }
 
 @Preview(backgroundColor = 0xFFFFFFFF, showBackground = true)
