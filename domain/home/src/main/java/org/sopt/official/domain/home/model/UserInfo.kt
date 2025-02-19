@@ -25,22 +25,21 @@
 package org.sopt.official.domain.home.model
 
 data class UserInfo(
-    val user: User,
-    val isAllConfirm: Boolean,
+    val user: User = User(),
+    val isAllConfirm: Boolean = false,
 ) {
 
     data class User(
-        val status: String,
-        val name: String,
-        val profileImage: String,
-        val generationList: List<Long>,
+        val status: String = "",
+        val name: String = "",
+        val profileImage: String = "",
+        val generationList: List<Long> = emptyList(),
     ) {
         val userStatus = UserStatus.from(status)
-        val isActivated = userStatus == UserStatus.ACTIVE
     }
 
     data class UserDescription(
-        val activityDescription: String,
+        val activityDescription: String = "",
     )
 }
 

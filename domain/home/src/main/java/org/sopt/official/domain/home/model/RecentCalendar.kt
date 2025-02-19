@@ -1,9 +1,9 @@
 package org.sopt.official.domain.home.model
 
 data class RecentCalendar(
-    val date: String,
-    val type: String,
-    val title: String,
+    val date: String = "",
+    val type: String = "",
+    val title: String = "",
 ) {
     val scheduleType: ScheduleType = ScheduleType.from(type)
 }
