@@ -18,10 +18,11 @@ dependencies {
     // core
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.navigation)
 
     // domain
     implementation(projects.domain.soptlog)
 
     // etc
-    implementation(libs.coil3.compose)
+    implementation(libs.coil.compose)
 }

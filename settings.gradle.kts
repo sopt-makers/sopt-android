@@ -29,6 +29,7 @@ include(
     ":core:network",
     ":core:security",
     ":core:webview",
+    ":core:navigation",
 
     ":data:fortune",
     ":data:home",
@@ -56,5 +57,6 @@ include(
     ":feature:poke",
     ":feature:schedule",
     ":feature:soptamp",
-    ":feature:soptlog"
+    ":feature:soptlog",
+    ":feature:main"
 )

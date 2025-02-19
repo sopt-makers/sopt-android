@@ -151,6 +151,7 @@ dependencies {
     implementation(projects.feature.notification)
     implementation(projects.feature.fortune)
     implementation(projects.feature.home)
+    implementation(projects.feature.main)
 
     baselineProfile(projects.baselineprofile)
 

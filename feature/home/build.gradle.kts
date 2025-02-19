@@ -25,22 +25,10 @@
 plugins {
     sopt("feature")
     sopt("compose")
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "org.sopt.official.feature.home"
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {

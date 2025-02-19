@@ -28,6 +28,8 @@ class AndroidComposePlugin : Plugin<Project> {
             "implementation"(libs.findBundle("compose").get())
             "implementation"(libs.findLibrary("coil-compose").get())
             "implementation"(libs.findLibrary("kotlin-collections-immutable").get())
+            "implementation"(libs.findLibrary("compose-navigation").get())
+            "implementation"(libs.findLibrary("compose-hilt-navigation").get())
         }
     }
 }

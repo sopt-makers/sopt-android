@@ -88,7 +88,7 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
 import org.sopt.official.feature.auth.component.LoginErrorDialog
-import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
@@ -106,6 +106,7 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SoptTheme {
                 val context = LocalContext.current
@@ -116,7 +117,7 @@ class AuthActivity : AppCompatActivity() {
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
                         startActivity(
-                            HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                            MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
                         )
                     }
                 }
@@ -140,11 +141,11 @@ class AuthActivity : AppCompatActivity() {
                         .collect { event ->
                             when (event) {
                                 is AuthUiEvent.Success -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(event.userStatus))
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
                                 )
 
                                 is AuthUiEvent.Failure -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                                 )
                             }
                         }
@@ -185,12 +186,7 @@ class AuthActivity : AppCompatActivity() {
                     },
                     onLoginLaterClick = {
                         startActivity(
-                            HomeActivity.getIntent(
-                                this,
-                                HomeActivity.StartArgs(
-                                    UserStatus.UNAUTHENTICATED
-                                )
-                            )
+                            MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                         )
                     }
                 )
@@ -202,7 +198,7 @@ class AuthActivity : AppCompatActivity() {
     fun AuthScreen(
         showDialog: () -> Unit,
         onGoogleLoginCLick: () -> Unit,
-        onLoginLaterClick: () -> Unit
+        onLoginLaterClick: () -> Unit,
     ) {
         var showAuthBottom by remember { mutableStateOf(false) }
         val offsetY = remember { Animatable(0f) }
@@ -253,7 +249,7 @@ class AuthActivity : AppCompatActivity() {
     private fun AuthBottom(
         showDialog: () -> Unit,
         onGoogleLoginCLick: () -> Unit,
-        onLoginLaterClick: () -> Unit
+        onLoginLaterClick: () -> Unit,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             AuthButton(
