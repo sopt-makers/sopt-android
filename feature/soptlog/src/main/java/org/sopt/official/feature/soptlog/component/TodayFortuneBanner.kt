@@ -32,7 +32,8 @@ fun TodayFortuneBanner(
         modifier = modifier
             .fillMaxWidth()
             .background(SoptTheme.colors.onSurface800)
-            .padding(horizontal = 20.dp, vertical = 10.dp),
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -55,8 +56,7 @@ fun TodayFortuneBanner(
             Text(
                 text = "바로 확인하기 >",
                 style = SoptTheme.typography.label12SB,
-                color = SoptTheme.colors.onSurface200,
-                modifier = Modifier.clickable(onClick = onClick)
+                color = SoptTheme.colors.onSurface200
             )
         }
     }
