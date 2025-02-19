@@ -27,6 +27,7 @@ include(
     ":core:designsystem",
     ":core:security",
     ":core:webview",
+    ":core:navigation",
     ":data:mypage",
     ":data:notification",
     ":data:soptamp",
@@ -48,5 +49,6 @@ include(
     ":feature:poke",
     ":feature:fortune",
     ":feature:soptlog",
-    ":feature:schedule"
+    ":feature:schedule",
+    ":feature:main"
 )

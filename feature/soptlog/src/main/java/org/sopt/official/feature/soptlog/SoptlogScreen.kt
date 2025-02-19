@@ -2,6 +2,7 @@ package org.sopt.official.feature.soptlog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,17 +13,12 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil3.annotation.ExperimentalCoilApi
-import coil3.compose.AsyncImagePreviewHandler
-import coil3.compose.LocalAsyncImagePreviewHandler
-import coil3.test.FakeImage
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
@@ -35,6 +31,9 @@ import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 
 @Composable
 fun SoptlogRoute(
+    paddingValues: PaddingValues,
+    navigateToEditProfile: () -> Unit = {},
+    navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
     val soptLogInfo by viewModel.soptLogInfo.collectAsStateWithLifecycle()
@@ -73,6 +72,9 @@ fun SoptlogRoute(
                         )
                     ),
                     todayFortuneTitle = todayFortuneTitle,
+                    modifier = Modifier.padding(paddingValues),
+                    navigateToEditProfile = navigateToEditProfile,
+                    navigateToFortune = navigateToFortune,
                 )
             }
         }
@@ -88,9 +90,12 @@ fun SoptlogScreen(
     introduction: String?,
     dashBoardItems: ImmutableList<DashBoardItem>,
     todayFortuneTitle: String,
+    modifier: Modifier = Modifier,
+    navigateToEditProfile: () -> Unit = {},
+    navigateToFortune: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(SoptTheme.colors.background)
     ) {
@@ -117,10 +122,7 @@ fun SoptlogScreen(
             Spacer(modifier = Modifier.height(12.dp))
 
             SoptlogIntroduction(
-                introduction = introduction,
-                onClick = {
-                    // TODO: 자기소개 작성 웹페이지로 이동
-                }
+                introduction = introduction
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -132,9 +134,7 @@ fun SoptlogScreen(
             Spacer(modifier = Modifier.height(20.dp))
 
             EditProfileButton(
-                onClick = {
-                    // TODO: 프로필 수정 화면으로 이동
-                }
+                onClick = navigateToEditProfile
             )
         }
 
@@ -142,9 +142,7 @@ fun SoptlogScreen(
 
         TodayFortuneBanner(
             title = todayFortuneTitle,
-            onClick = {
-                // TODO: 오늘의 운세 화면으로 이동
-            }
+            onClick = navigateToFortune
         )
     }
 }
@@ -163,40 +161,33 @@ fun SoptlogContents(
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Preview
 @Composable
 fun PreviewSoptlogScreen() {
     SoptTheme {
-        val previewHandler = AsyncImagePreviewHandler {
-            FakeImage(color = 0xFFE0E0E0.toInt())
-        }
-
-        CompositionLocalProvider(LocalAsyncImagePreviewHandler provides previewHandler) {
-            SoptlogScreen(
-                profileImageUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
-                name = "차은우",
-                part = "안드로이드",
-                introduction = "자기소개는 15글자까지",
-                dashBoardItems = persistentListOf(
-                    DashBoardItem(
-                        title = "솝트레벨",
-                        icon = R.drawable.ic_sopt_level,
-                        content = "Lv.6",
-                    ),
-                    DashBoardItem(
-                        title = "콕찌르기",
-                        icon = R.drawable.ic_poke_hand,
-                        content = "208회",
-                    ),
-                    DashBoardItem(
-                        title = "솝트와",
-                        icon = R.drawable.ic_calender,
-                        content = "33개월",
-                    )
+        SoptlogScreen(
+            profileImageUrl = "https://sopt.org/wp-content/uploads/2021/06/sopt_logo.png",
+            name = "차은우",
+            part = "안드로이드",
+            introduction = "자기소개는 15글자까지",
+            dashBoardItems = persistentListOf(
+                DashBoardItem(
+                    title = "솝트레벨",
+                    icon = R.drawable.ic_sopt_level,
+                    content = "Lv.6",
                 ),
-                todayFortuneTitle = "오늘 내 운세는?"
-            )
-        }
+                DashBoardItem(
+                    title = "콕찌르기",
+                    icon = R.drawable.ic_poke_hand,
+                    content = "208회",
+                ),
+                DashBoardItem(
+                    title = "솝트와",
+                    icon = R.drawable.ic_calender,
+                    content = "33개월",
+                )
+            ),
+            todayFortuneTitle = "오늘 내 운세는?"
+        )
     }
 }
