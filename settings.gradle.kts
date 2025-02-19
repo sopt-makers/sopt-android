@@ -32,15 +32,21 @@ include(
     ":data:soptamp",
     ":data:poke",
     ":data:fortune",
+    ":data:schedule",
+    ":data:soptlog",
     ":domain:fortune",
     ":domain:mypage",
     ":domain:notification",
     ":domain:soptamp",
     ":domain:poke",
+    ":domain:schedule",
+    ":domain:soptlog",
     ":feature:auth",
     ":feature:mypage",
     ":feature:notification",
     ":feature:soptamp",
     ":feature:poke",
-    ":feature:fortune"
+    ":feature:fortune",
+    ":feature:soptlog",
+    ":feature:schedule"
 )
