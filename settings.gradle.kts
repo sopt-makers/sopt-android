@@ -18,32 +18,43 @@ dependencyResolutionManagement {
 rootProject.name = "SOPT"
 include(
     ":app",
+
     ":baselineprofile",
-    ":core:network",
+
     ":core:analytics",
     ":core:auth",
     ":core:authimpl",
     ":core:common",
     ":core:designsystem",
+    ":core:network",
     ":core:security",
     ":core:webview",
-    ":data:mypage",
-    ":data:notification",
-    ":data:soptamp",
-    ":data:poke",
+
     ":data:fortune",
     ":data:home",
-    ":domain:home",
+    ":data:mypage",
+    ":data:notification",
+    ":data:poke",
+    ":data:schedule",
+    ":data:soptamp",
+    ":data:soptlog",
+
     ":domain:fortune",
+    ":domain:home",
     ":domain:mypage",
     ":domain:notification",
-    ":domain:soptamp",
     ":domain:poke",
+    ":domain:schedule",
+    ":domain:soptamp",
+    ":domain:soptlog",
+
     ":feature:auth",
+    ":feature:fortune",
+    ":feature:home",
     ":feature:mypage",
     ":feature:notification",
-    ":feature:soptamp",
     ":feature:poke",
-    ":feature:fortune",
-    ":feature:home"
+    ":feature:schedule",
+    ":feature:soptamp",
+    ":feature:soptlog"
 )

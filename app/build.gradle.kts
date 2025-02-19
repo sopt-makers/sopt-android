@@ -143,6 +143,8 @@ dependencies {
     implementation(projects.data.home)
 
     implementation(projects.feature.soptamp)
+    implementation(projects.data.schedule)
+    implementation(projects.data.soptlog)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)
