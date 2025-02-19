@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
@@ -30,7 +31,41 @@ import org.sopt.official.feature.home.R.drawable.ic_soptlog
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
-internal fun HomeUserSoptLogDashBoard(
+internal fun HomeUserSoptLogDashboardForVisitor(
+    modifier: Modifier = Modifier,
+) {
+    HomeBox(
+        modifier = modifier.fillMaxWidth(),
+        content = {
+            Column(
+                modifier = Modifier.padding(all = 16.dp),
+            ) {
+                Text(
+                    text = "안녕하세요.\nSOPT의 열정이 되어주세요!",
+                    style = typography.body18M,
+                    color = colors.onBackground,
+                )
+                Spacer(modifier = Modifier.height(height = 12.dp))
+                RecentGenerationChip(
+                    chipColor = Black40,
+                    textColor = colors.onBackground,
+                    text = "비회원"
+                )
+            }
+        }
+    )
+}
+
+@Preview
+@Composable
+private fun HomeUserSoptLogDashboardForVisitorPreview() {
+    SoptTheme {
+        HomeUserSoptLogDashboardForVisitor()
+    }
+}
+
+@Composable
+internal fun HomeUserSoptLogDashboardForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     modifier: Modifier = Modifier,
 ) {
@@ -59,11 +94,7 @@ internal fun HomeUserSoptLogDashBoard(
                         color = colors.onBackground,
                     )
                     Spacer(modifier = Modifier.height(height = 12.dp))
-                    HomeGenerationChips(
-                        isUserActivated = homeUserSoptLogDashboardModel.isActivated,
-                        userRecentGeneration = homeUserSoptLogDashboardModel.recentGeneration,
-                        generations = homeUserSoptLogDashboardModel.lastGenerations,
-                    )
+                    HomeGenerationChips(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
                 }
                 Spacer(modifier = Modifier.weight(weight = 1f))
                 Icon(
@@ -78,10 +109,10 @@ internal fun HomeUserSoptLogDashBoard(
 
 @Preview
 @Composable
-private fun HomeUserSoptLogDashBoardPreview() {
+private fun HomeUserSoptLogDashboardForMemberPreview() {
     SoptTheme {
-        HomeUserSoptLogDashBoard(
-            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(true)
+        HomeUserSoptLogDashboardForMember(
+            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel()
         )
     }
 }

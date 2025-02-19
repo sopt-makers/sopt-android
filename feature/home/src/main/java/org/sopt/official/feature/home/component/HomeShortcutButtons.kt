@@ -26,13 +26,16 @@ import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
+import org.sopt.official.feature.home.R.drawable.ic_folder
+import org.sopt.official.feature.home.R.drawable.ic_homepage
+import org.sopt.official.feature.home.R.drawable.ic_instagram
 import org.sopt.official.feature.home.R.drawable.ic_member
 import org.sopt.official.feature.home.R.drawable.ic_pencil
 import org.sopt.official.feature.home.R.drawable.ic_project
 import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
-internal fun HomeShortcutButtons(
+internal fun HomeShortcutButtonsForMember(
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -55,6 +58,49 @@ internal fun HomeShortcutButtons(
             icon = ic_project,
             text = "프로젝트",
         )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeShortcutButtonsForMemberPreview() {
+    SoptTheme {
+        HomeShortcutButtonsForMember()
+    }
+}
+
+@Composable
+internal fun HomeShortcutButtonsForVisitor(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        horizontalArrangement = SpaceBetween,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        HomeShortcutButton(
+            icon = ic_homepage,
+            text = "홈페이지",
+        )
+        HomeShortcutButton(
+            icon = is_playground,
+            text = "활동후기",
+        )
+        HomeShortcutButton(
+            icon = ic_folder,
+            text = "프로젝트",
+        )
+        HomeShortcutButton(
+            icon = ic_instagram,
+            text = "인스타그램",
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeShortcutButtonsForVisitorPreview() {
+    SoptTheme {
+        HomeShortcutButtonsForVisitor()
     }
 }
 
@@ -89,13 +135,5 @@ private fun HomeShortcutButton(
             ),
             color = colors.onSurface200,
         )
-    }
-}
-
-@Preview
-@Composable
-private fun HomeShortcutButtonsPreview() {
-    SoptTheme {
-        HomeShortcutButtons()
     }
 }

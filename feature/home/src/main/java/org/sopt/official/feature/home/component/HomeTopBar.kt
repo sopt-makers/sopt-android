@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
@@ -24,12 +25,72 @@ import org.sopt.official.feature.home.R.drawable.ic_setting
 import org.sopt.official.feature.home.R.drawable.img_logo
 
 @Composable
-internal fun HomeTopBar(
-    isLogin: Boolean,
+internal fun HomeTopBarForMember(
     hasNotification: Boolean,
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
+) {
+    HomeTopBar(modifier = modifier) {
+        Icon(
+            imageVector = ImageVector.vectorResource(
+                if (hasNotification) ic_notification_on else ic_notification_off
+            ),
+            contentDescription = null,
+            tint = Unspecified,
+            modifier = Modifier.clickable { onNotificationClick() },
+        )
+        Icon(
+            imageVector = ImageVector.vectorResource(ic_setting),
+            contentDescription = null,
+            tint = Unspecified,
+            modifier = Modifier.clickable { onSettingClick() },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeTopBarForMemberPreview() {
+    SoptTheme {
+        HomeTopBarForMember(
+            hasNotification = true,
+            onSettingClick = {},
+            onNotificationClick = {},
+        )
+    }
+}
+
+@Composable
+internal fun HomeTopBarForVisitor(
+    onSettingClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    HomeTopBar(modifier = modifier) {
+        Icon(
+            imageVector = ImageVector.vectorResource(ic_setting),
+            contentDescription = null,
+            tint = Unspecified,
+            modifier = Modifier.clickable { onSettingClick() },
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeTopBarForVisitorPreview() {
+    SoptTheme {
+        HomeTopBarForVisitor(
+            onSettingClick = {},
+        )
+    }
+}
+
+
+@Composable
+private fun HomeTopBar(
+    modifier: Modifier = Modifier,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         horizontalArrangement = SpaceBetween,
@@ -47,24 +108,8 @@ internal fun HomeTopBar(
         Row(
             horizontalArrangement = spacedBy(space = 10.dp),
             verticalAlignment = CenterVertically,
-        ) {
-            if (isLogin) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(
-                        if (hasNotification) ic_notification_on else ic_notification_off
-                    ),
-                    contentDescription = null,
-                    tint = Unspecified,
-                    modifier = Modifier.clickable { onNotificationClick() },
-                )
-            }
-            Icon(
-                imageVector = ImageVector.vectorResource(ic_setting),
-                contentDescription = null,
-                tint = Unspecified,
-                modifier = Modifier.clickable { onSettingClick() },
-            )
-        }
+            content = content,
+        )
     }
 }
 
@@ -72,11 +117,12 @@ internal fun HomeTopBar(
 @Composable
 private fun HomeTopBarPreview() {
     SoptTheme {
-        HomeTopBar(
-            isLogin = false,
-            hasNotification = true,
-            onSettingClick = {},
-            onNotificationClick = {},
-        )
+        HomeTopBar {
+            Icon(
+                imageVector = ImageVector.vectorResource(ic_setting),
+                contentDescription = null,
+                tint = Unspecified,
+            )
+        }
     }
 }

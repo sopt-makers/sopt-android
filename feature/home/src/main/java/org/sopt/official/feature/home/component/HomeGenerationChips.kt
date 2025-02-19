@@ -14,48 +14,50 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
 import org.sopt.official.designsystem.SuitSemiBold
+import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
 internal fun HomeGenerationChips(
-    isUserActivated: Boolean,
-    userRecentGeneration: String,
-    generations: ImmutableList<Long>,
+    homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     modifier: Modifier = Modifier,
 ) {
+    val recentChipColor = if (homeUserSoptLogDashboardModel.isActivated) Orange400 else Black40
+    val recentChipTextColor = if (homeUserSoptLogDashboardModel.isActivated) colors.background else colors.onBackground
+
     Row(modifier = modifier) {
         RecentGenerationChip(
-            isUserActivated = isUserActivated,
-            userRecentGeneration = userRecentGeneration,
+            chipColor = recentChipColor,
+            textColor = recentChipTextColor,
+            text = homeUserSoptLogDashboardModel.recentGeneration,
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
-        LastGenerationChips(generations)
+        LastGenerationChips(homeUserSoptLogDashboardModel.lastGenerations)
     }
 }
 
 @Composable
-private fun RecentGenerationChip(
-    isUserActivated: Boolean,
-    userRecentGeneration: String,
+internal fun RecentGenerationChip(
+    @ColorRes chipColor: Color,
+    @ColorRes textColor: Color,
+    text: String,
     modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Center,
         modifier = modifier.background(
-            color = if (isUserActivated) Orange400 else Black40,
+            color = chipColor,
             shape = RoundedCornerShape(size = 15.dp),
         ).size(
             width = 82.dp,
@@ -63,11 +65,11 @@ private fun RecentGenerationChip(
         )
     ) {
         Text(
-            text = userRecentGeneration,
+            text = text,
             style = TextStyle(
                 fontFamily = SuitSemiBold, fontSize = 12.sp, lineHeight = 15.sp
             ),
-            color = if (isUserActivated) colors.background else colors.onBackground,
+            color = textColor,
         )
     }
 }
@@ -145,24 +147,10 @@ private fun GenerationChip(
 
 @Preview(showBackground = true)
 @Composable
-private fun RecentGenerationChipsPreview() {
-    SoptTheme {
-        RecentGenerationChip(
-            isUserActivated = true,
-            userRecentGeneration = "아하아하",
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
 private fun HomeGenerationChipsPreview() {
     SoptTheme {
         HomeGenerationChips(
-            isUserActivated = true,
-            userRecentGeneration = "아하아하",
-            generations = persistentListOf(1, 2, 3, 4, 5, 6, 7, 8, 9),
-            modifier = Modifier.background(Black),
+            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel()
         )
     }
 }
