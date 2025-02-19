@@ -5,8 +5,7 @@ import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import org.sopt.official.domain.home.model.ScheduleType
-import org.sopt.official.domain.home.model.ScheduleType.EVENT
+import org.sopt.official.feature.home.model.Schedule.EVENT
 
 @Stable
 internal sealed interface HomeUiState {
@@ -47,7 +46,7 @@ internal sealed interface HomeUiState {
 
 @Immutable
 data class HomeSoptScheduleModel(
-    val type: ScheduleType = EVENT,
+    val type: Schedule = EVENT,
     val date: String = "",
     val title: String = "",
 ) {

@@ -29,12 +29,12 @@ import org.sopt.official.designsystem.OrangeAlpha200
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
-import org.sopt.official.domain.home.model.ScheduleType
-import org.sopt.official.domain.home.model.ScheduleType.EVENT
-import org.sopt.official.domain.home.model.ScheduleType.SEMINAR
 import org.sopt.official.feature.home.R.drawable.ic_arrow_right
 import org.sopt.official.feature.home.R.drawable.ic_check_filled
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
+import org.sopt.official.feature.home.model.Schedule
+import org.sopt.official.feature.home.model.Schedule.EVENT
+import org.sopt.official.feature.home.model.Schedule.SEMINAR
 
 @Composable
 internal fun HomeSoptScheduleDashboard(
@@ -85,12 +85,12 @@ internal fun HomeSoptScheduleDashboard(
 
 @Composable
 private fun HomeScheduleTypeChip(
-    scheduleType: ScheduleType,
+    schedule: Schedule,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.background(
-            color = when (scheduleType) {
+            color = when (schedule) {
                 EVENT -> BlueAlpha200
                 SEMINAR -> OrangeAlpha200
             },
@@ -98,9 +98,9 @@ private fun HomeScheduleTypeChip(
         )
     ) {
         Text(
-            text = scheduleType.titleKR,
+            text = schedule.titleKR,
             style = typography.label11SB,
-            color = when (scheduleType) {
+            color = when (schedule) {
                 EVENT -> Blue400
                 SEMINAR -> Orange400
             },
@@ -148,7 +148,6 @@ private fun HomeAttendanceDashboardPreview() {
         HomeSoptScheduleDashboard(
             HomeSoptScheduleModel(
                 date = "TODO()",
-                type = EVENT,
                 title = "TODO()",
             ),
             isActivatedGeneration = false,

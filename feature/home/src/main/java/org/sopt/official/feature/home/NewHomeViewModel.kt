@@ -32,6 +32,7 @@ import org.sopt.official.feature.home.model.HomeUiState.ActiveMember
 import org.sopt.official.feature.home.model.HomeUiState.InactiveMember
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
+import org.sopt.official.feature.home.model.Schedule
 import javax.inject.Inject
 
 @HiltViewModel
@@ -156,7 +157,7 @@ private data class HomeViewModelState(
                 generations = generations,
                 isActivated = true,
             ), homeSoptScheduleModel = HomeSoptScheduleModel(
-                type = scheduleType,
+                type = Schedule.from(scheduleType),
                 date = scheduleDate,
                 title = scheduleTitle,
             )
@@ -171,7 +172,7 @@ private data class HomeViewModelState(
                 generations = generations,
                 isActivated = false,
             ), homeSoptScheduleModel = HomeSoptScheduleModel(
-                type = scheduleType,
+                type = Schedule.from(scheduleType),
                 date = scheduleDate,
                 title = scheduleTitle,
             )
