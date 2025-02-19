@@ -13,7 +13,8 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
+    implementation(projects.core.webview)
 
     implementation(projects.feature.soptlog)
-    implementation(projects.core.webview)
+    implementation(projects.feature.home)
 }

@@ -48,6 +48,7 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 
@@ -78,7 +79,10 @@ fun MainScreen(
                     navController = navigator.navController,
                     startDestination = navigator.startDestination
                 ) {
-                    dummyNavGraph(paddingValues = innerPadding)
+                    homeNavGraph(
+                        userStatus = userStatus,
+                        paddingValues = innerPadding,
+                    )
                     soptlogNavGraph(
                         paddingValues = innerPadding,
                         navigateToEditProfile = {

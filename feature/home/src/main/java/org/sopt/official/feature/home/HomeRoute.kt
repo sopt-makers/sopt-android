@@ -3,6 +3,7 @@ package org.sopt.official.feature.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeErrorDialog
@@ -35,11 +37,18 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
 internal fun HomeRoute(
+    userStatus: UserStatus, // 뷰모델 init 블럭 제거
+    paddingValues: PaddingValues,
+    onNotificationClick: () -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues),
+    ) {
         when (val state = uiState) {
             is Unauthenticated -> HomeScreenForVisitor()
             is Member -> {
