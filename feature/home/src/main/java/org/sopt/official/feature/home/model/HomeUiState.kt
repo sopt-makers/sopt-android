@@ -9,22 +9,40 @@ import org.sopt.official.domain.home.model.ScheduleType
 import org.sopt.official.domain.home.model.ScheduleType.EVENT
 
 @Stable
-sealed interface HomeUiState {
+internal sealed interface HomeUiState {
+    val isLoading: Boolean
+    val isError: Boolean
+
+    @Stable
+    sealed interface Member : HomeUiState {
+        val hasNotification: Boolean
+        val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel
+        val homeSoptScheduleModel: HomeSoptScheduleModel
+    }
+
     @Immutable
-    data class Success(
-        val isLogin: Boolean = false,
-        val hasNotification: Boolean = false,
-        val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(isLogin = isLogin),
-        val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
+    data class Unauthenticated(
+        override val isLoading: Boolean,
+        override val isError: Boolean,
     ) : HomeUiState
 
     @Immutable
-    data class Error(
-        val error: Throwable? = null,
-    ) : HomeUiState
+    data class ActiveMember(
+        override val isLoading: Boolean,
+        override val isError: Boolean,
+        override val hasNotification: Boolean = false,
+        override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
+        override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
+    ) : Member
 
     @Immutable
-    data object Loading : HomeUiState
+    data class InactiveMember(
+        override val isLoading: Boolean,
+        override val isError: Boolean,
+        override val hasNotification: Boolean = false,
+        override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
+        override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
+    ) : Member
 }
 
 @Immutable
@@ -38,27 +56,17 @@ data class HomeSoptScheduleModel(
 
 @Immutable
 data class HomeUserSoptLogDashboardModel(
-    val isLogin: Boolean,
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
-    private val _isActivated: Boolean = false,
+    val isActivated: Boolean = false,
 ) {
     private val regex by lazy { Regex("<b>(.*?)</b>") }
-
     val emphasizedDescription: String =
-        if (isLogin) regex.find(activityDescription)?.groups?.get(1)?.value.orEmpty() else "안녕하세요.\nSOPT의 열정이 되어주세요!"
-
+        regex.find(activityDescription)?.groups?.get(1)?.value.orEmpty()
     val remainingDescription: String =
-        if (isLogin) " " + regex.replace(activityDescription, "").trim().replace("<br>", "\n") else ""
-
-    val recentGeneration: String = if (isLogin) {
-        "${generations.max()}기 " + if (_isActivated) "활동 중" else "수료"
-    } else "비회원"
-
+        " " + regex.replace(activityDescription, "").trim().replace("<br>", "\n")
+    val recentGeneration: String =
+        "${generations.maxOrNull() ?: 0}기 " + if (isActivated) "활동 중" else "수료"
     val lastGenerations: ImmutableList<Long> =
-        if (isLogin) generations.filter { it != generations.max() }.sortedDescending().toPersistentList() else persistentListOf()
-
-    val isActivated: Boolean get() = if (isLogin) _isActivated else false
+        generations.filter { it != generations.max() }.sortedDescending().toPersistentList()
 }
-
-val dummyHomeUiState = HomeUiState.Success()
