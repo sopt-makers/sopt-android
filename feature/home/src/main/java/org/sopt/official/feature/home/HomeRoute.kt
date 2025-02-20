@@ -30,6 +30,9 @@ import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
+import org.sopt.official.feature.home.model.HomeEvent
+import org.sopt.official.feature.home.model.HomeEvent.HomeDashboardEvent
+import org.sopt.official.feature.home.model.HomeEvent.HomeShortcutEvent
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
@@ -38,8 +41,8 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 @Composable
 internal fun HomeRoute(
     userStatus: UserStatus, // 뷰모델 init 블럭 제거
-    paddingValues: PaddingValues,
-    onNotificationClick: () -> Unit,
+    paddingValues: PaddingValues, // 전체 박스 래핑
+    homeEvent: HomeEvent,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
@@ -50,16 +53,14 @@ internal fun HomeRoute(
             .padding(paddingValues),
     ) {
         when (val state = uiState) {
-            is Unauthenticated -> HomeScreenForVisitor()
+            is Unauthenticated -> HomeScreenForVisitor(homeShortcutEvent = homeEvent as HomeShortcutEvent)
             is Member -> {
                 HomeScreenForMember(
+                    homeDashboardEvent = homeEvent as HomeDashboardEvent,
+                    homeShortcutEvent = homeEvent as HomeShortcutEvent,
                     hasNotification = state.hasNotification,
                     homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                     homeSoptScheduleModel = state.homeSoptScheduleModel,
-                    onNotificationClick = {},
-                    onSettingClick = {},
-                    onDashboardClick = {},
-                    onAttendanceButtonClick = {},
                 )
             }
         }
@@ -86,13 +87,11 @@ internal fun HomeRoute(
 
 @Composable
 private fun HomeScreenForMember(
+    homeDashboardEvent: HomeDashboardEvent,
+    homeShortcutEvent: HomeShortcutEvent,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
-    onNotificationClick: () -> Unit,
-    onSettingClick: () -> Unit,
-    onDashboardClick: () -> Unit,
-    onAttendanceButtonClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -102,25 +101,35 @@ private fun HomeScreenForMember(
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForMember(
             hasNotification = hasNotification,
-            onNotificationClick = onNotificationClick,
-            onSettingClick = onSettingClick,
+            onNotificationClick = homeDashboardEvent::navigateToNotification,
+            onSettingClick = homeDashboardEvent::navigateToSetting,
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForMember(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
+        HomeUserSoptLogDashboardForMember(
+            onSoptlogClick = homeDashboardEvent::navigateToSoptlog,
+            homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+        )
         Spacer(modifier = Modifier.height(height = 12.dp))
         HomeSoptScheduleDashboard(
             homeSoptScheduleModel = homeSoptScheduleModel,
             isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onDashboardClick = onDashboardClick,
-            onAttendanceButtonClick = onAttendanceButtonClick,
+            onScheduleClick = homeDashboardEvent::navigateToSchedule,
+            onAttendanceButtonClick = homeDashboardEvent::navigateToAttendance,
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
-        HomeShortcutButtonsForMember()
+        HomeShortcutButtonsForMember(
+            onPlaygroundClick = homeShortcutEvent::navigateToPlayground,
+            onStudyClick = homeShortcutEvent::navigateToPlaygroundGroup,
+            onMemberClick = homeShortcutEvent::navigateToPlaygroundMember,
+            onProjectClick = homeShortcutEvent::navigateToPlaygroundProject,
+        )
     }
 }
 
 @Composable
-private fun HomeScreenForVisitor() {
+private fun HomeScreenForVisitor(
+    homeShortcutEvent: HomeShortcutEvent,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -137,6 +146,11 @@ private fun HomeScreenForVisitor() {
             color = colors.onBackground,
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeShortcutButtonsForVisitor()
+        HomeShortcutButtonsForVisitor(
+            onHomePageClick = homeShortcutEvent::navigateToSoptHomepage,
+            onPlaygroundClick = homeShortcutEvent::navigateToSoptReview,
+            onProjectClick = homeShortcutEvent::navigateToSoptProject,
+            onInstagramClick = homeShortcutEvent::navigateToSoptInstagram,
+        )
     }
 }

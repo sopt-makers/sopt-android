@@ -1,5 +1,6 @@
 package org.sopt.official.feature.home.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -67,6 +68,7 @@ private fun HomeUserSoptLogDashboardForVisitorPreview() {
 @Composable
 internal fun HomeUserSoptLogDashboardForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
+    onSoptlogClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeBox(
@@ -101,6 +103,7 @@ internal fun HomeUserSoptLogDashboardForMember(
                     imageVector = ImageVector.vectorResource(ic_soptlog),
                     contentDescription = null,
                     tint = Unspecified,
+                    modifier = Modifier.clickable { onSoptlogClick() }
                 )
             }
         }
@@ -112,7 +115,8 @@ internal fun HomeUserSoptLogDashboardForMember(
 private fun HomeUserSoptLogDashboardForMemberPreview() {
     SoptTheme {
         HomeUserSoptLogDashboardForMember(
-            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel()
+            homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
+            onSoptlogClick = {},
         )
     }
 }

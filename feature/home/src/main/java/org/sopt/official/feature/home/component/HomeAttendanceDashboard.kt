@@ -40,14 +40,14 @@ import org.sopt.official.feature.home.model.Schedule.SEMINAR
 internal fun HomeSoptScheduleDashboard(
     homeSoptScheduleModel: HomeSoptScheduleModel,
     isActivatedGeneration: Boolean,
-    onDashboardClick: () -> Unit,
+    onScheduleClick: () -> Unit,
     onAttendanceButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeBox(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onDashboardClick() },
+            .clickable { onScheduleClick() },
         content = {
             Row(
                 verticalAlignment = CenterVertically,
@@ -151,7 +151,7 @@ private fun HomeAttendanceDashboardPreview() {
                 title = "TODO()",
             ),
             isActivatedGeneration = false,
-            onDashboardClick = {},
+            onScheduleClick = {},
             onAttendanceButtonClick = {},
         )
     }

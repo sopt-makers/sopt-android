@@ -1,6 +1,7 @@
 package org.sopt.official.feature.home.component
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,10 @@ import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
 internal fun HomeShortcutButtonsForMember(
+    onPlaygroundClick: () -> Unit,
+    onStudyClick: () -> Unit,
+    onMemberClick: () -> Unit,
+    onProjectClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -45,18 +50,22 @@ internal fun HomeShortcutButtonsForMember(
         HomeShortcutButton(
             icon = is_playground,
             text = "Playground",
+            onClick = onPlaygroundClick,
         )
         HomeShortcutButton(
             icon = ic_pencil,
             text = "모임/스터디",
+            onClick = onStudyClick,
         )
         HomeShortcutButton(
             icon = ic_member,
             text = "멤버",
+            onClick = onMemberClick,
         )
         HomeShortcutButton(
             icon = ic_project,
             text = "프로젝트",
+            onClick = onProjectClick,
         )
     }
 }
@@ -65,12 +74,21 @@ internal fun HomeShortcutButtonsForMember(
 @Composable
 private fun HomeShortcutButtonsForMemberPreview() {
     SoptTheme {
-        HomeShortcutButtonsForMember()
+        HomeShortcutButtonsForMember(
+            onPlaygroundClick = { },
+            onStudyClick = { },
+            onMemberClick = { },
+            onProjectClick = { },
+        )
     }
 }
 
 @Composable
 internal fun HomeShortcutButtonsForVisitor(
+    onHomePageClick: () -> Unit,
+    onPlaygroundClick: () -> Unit,
+    onProjectClick: () -> Unit,
+    onInstagramClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -80,18 +98,22 @@ internal fun HomeShortcutButtonsForVisitor(
         HomeShortcutButton(
             icon = ic_homepage,
             text = "홈페이지",
+            onClick = onHomePageClick,
         )
         HomeShortcutButton(
             icon = is_playground,
             text = "활동후기",
+            onClick = onPlaygroundClick,
         )
         HomeShortcutButton(
             icon = ic_folder,
             text = "프로젝트",
+            onClick = onProjectClick,
         )
         HomeShortcutButton(
             icon = ic_instagram,
             text = "인스타그램",
+            onClick = onInstagramClick,
         )
     }
 }
@@ -100,7 +122,12 @@ internal fun HomeShortcutButtonsForVisitor(
 @Composable
 private fun HomeShortcutButtonsForVisitorPreview() {
     SoptTheme {
-        HomeShortcutButtonsForVisitor()
+        HomeShortcutButtonsForVisitor(
+            onHomePageClick = { },
+            onPlaygroundClick = { },
+            onProjectClick = { },
+            onInstagramClick = { },
+        )
     }
 }
 
@@ -108,11 +135,12 @@ private fun HomeShortcutButtonsForVisitorPreview() {
 private fun HomeShortcutButton(
     @DrawableRes icon: Int,
     text: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = CenterHorizontally,
-        modifier = modifier,
+        modifier = modifier.clickable { onClick() },
     ) {
         Box(modifier = Modifier.padding(horizontal = 3.dp)) {
             HomeBox(
