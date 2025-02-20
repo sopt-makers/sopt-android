@@ -3,7 +3,6 @@ package org.sopt.official.feature.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -41,7 +40,6 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 @Composable
 internal fun HomeRoute(
     userStatus: UserStatus, // 뷰모델 init 블럭 제거
-    paddingValues: PaddingValues, // 전체 박스 래핑
     homeEvent: HomeEvent,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
@@ -49,8 +47,7 @@ internal fun HomeRoute(
 
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues),
+            .fillMaxSize(),
     ) {
         when (val state = uiState) {
             is Unauthenticated -> HomeScreenForVisitor(homeShortcutEvent = homeEvent as HomeShortcutEvent)

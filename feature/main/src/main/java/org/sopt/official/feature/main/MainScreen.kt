@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -75,7 +76,10 @@ fun MainScreen(
     Scaffold(
         content = { innerPadding ->
             Column(
-                modifier = Modifier.background(color = SoptTheme.colors.background),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color = SoptTheme.colors.background)
+                    .padding(innerPadding),
             ) {
                 NavHost(
                     modifier = Modifier.weight(1f),
@@ -83,6 +87,7 @@ fun MainScreen(
                     startDestination = navigator.startDestination
                 ) {
                     homeNavGraph(
+                        userStatus = userStatus,
                         homeEvent = object : HomeShortcutEvent, HomeDashboardEvent {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
@@ -98,19 +103,18 @@ fun MainScreen(
                             override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
                             override fun navigateToNotification() =
                                 context.startActivity(applicationNavigator.getNotificationActivityIntent())
+
                             override fun navigateToSetting() =
                                 context.startActivity(applicationNavigator.getMyPageActivityIntent(userStatus.name))
+
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
                             override fun navigateToSoptlog() = navigator.navigateToSoptlog(userStatus)
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
 
                         },
-                        userStatus = userStatus,
-                        paddingValues = innerPadding,
                     )
 
                     soptlogNavGraph(
-                        paddingValues = innerPadding,
                         navigateToEditProfile = {
                             val intent = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)

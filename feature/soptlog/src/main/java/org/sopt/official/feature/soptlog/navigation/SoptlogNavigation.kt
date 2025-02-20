@@ -1,6 +1,5 @@
 package org.sopt.official.feature.soptlog.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -14,13 +13,11 @@ fun NavController.navigateToSoptlog(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.soptlogNavGraph(
-    paddingValues: PaddingValues,
     navigateToEditProfile: () -> Unit,
     navigateToFortune: () -> Unit,
 ) {
     composable<SoptLog> {
         SoptlogRoute(
-            paddingValues = paddingValues,
             navigateToEditProfile = navigateToEditProfile,
             navigateToFortune = navigateToFortune
         )
