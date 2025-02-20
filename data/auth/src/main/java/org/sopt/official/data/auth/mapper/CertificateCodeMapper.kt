@@ -13,9 +13,8 @@ fun InformationWithCode.toRequest(): CertificateCodeRequest =
         type = type
     )
 
-fun CertificateCodeResponse.toDomain() : VerificationResult =
+fun CertificateCodeResponse.toDomain(): VerificationResult =
     VerificationResult(
-        isVerified = isVerified,
         name = name,
         phone = phone
     )
