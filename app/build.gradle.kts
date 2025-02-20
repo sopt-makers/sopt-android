@@ -152,6 +152,7 @@ dependencies {
     implementation(projects.feature.fortune)
     implementation(projects.feature.home)
     implementation(projects.feature.main)
+    implementation(projects.feature.schedule)
 
     baselineProfile(projects.baselineprofile)
 

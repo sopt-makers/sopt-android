@@ -84,6 +84,10 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getFortuneActivityIntent())
     },
+    SCHEDULE("home/schedule") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
+            userStatus.setIntent(navigator.getScheduleActivityIntent())
+    },
     UNKNOWN("unknown-deep-link") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus, UNKNOWN)
     },

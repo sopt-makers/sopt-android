@@ -152,6 +152,11 @@
             android:exported="true"
             android:launchMode="singleTop" />
 
+        <activity
+            android:name=".feature.schedule.ScheduleActivity"
+            android:exported="true"
+            android:launchMode="singleTop" />
+
         <service
             android:name=".config.messaging.SoptFirebaseMessagingService"
             android:exported="false">

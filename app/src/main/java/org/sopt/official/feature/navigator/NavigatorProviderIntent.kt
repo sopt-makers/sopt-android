@@ -40,6 +40,7 @@ import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
+import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.stamp.SoptampActivity
 import javax.inject.Inject
 
@@ -68,6 +69,7 @@ class NavigatorProviderIntent @Inject constructor(
     )
 
     override fun getFortuneActivityIntent(): Intent = FortuneActivity.getIntent(context)
+    override fun getScheduleActivityIntent(): Intent = ScheduleActivity.getIntent(context)
 
     override fun getSchemeActivityIntent(
         notificationId: String,
