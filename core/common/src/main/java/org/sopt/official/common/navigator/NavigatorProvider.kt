@@ -39,6 +39,7 @@ interface NavigatorProvider {
     fun getSoptampActivityIntent(): Intent
     fun getPokeNotificationActivityIntent(name: String): Intent
     fun getFortuneActivityIntent(): Intent
+    fun getScheduleActivityIntent(): Intent
     fun getHomeActivityIntent(
         userStatus: UserStatus,
         deepLinkType: DeepLinkType?,

@@ -2,7 +2,6 @@ package org.sopt.official.feature.soptlog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,7 +30,6 @@ import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 
 @Composable
 fun SoptlogRoute(
-    paddingValues: PaddingValues,
     navigateToEditProfile: () -> Unit = {},
     navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
@@ -72,7 +70,6 @@ fun SoptlogRoute(
                         )
                     ),
                     todayFortuneTitle = todayFortuneTitle,
-                    modifier = Modifier.padding(paddingValues),
                     navigateToEditProfile = navigateToEditProfile,
                     navigateToFortune = navigateToFortune,
                 )

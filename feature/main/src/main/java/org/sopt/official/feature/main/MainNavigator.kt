@@ -11,6 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.core.navigation.Route
+import org.sopt.official.feature.home.navigation.Home
+import org.sopt.official.feature.home.navigation.navigateToHome
 import org.sopt.official.feature.soptlog.navigation.navigateToSoptlog
 
 class MainNavigator(
@@ -20,7 +22,7 @@ class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
-    val startDestination = Dummy
+    val startDestination = Home
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
@@ -38,7 +40,7 @@ class MainNavigator(
         }
 
         when (tab) {
-            MainTab.Home -> navController.navigateToDummy(
+            MainTab.Home -> navController.navigateToHome(
                 navOptions = navOptions
             )
 
@@ -56,12 +58,35 @@ class MainNavigator(
         }
     }
 
+    fun navigateToSoptlog(
+        userStatus: UserStatus,
+        onFailure: () -> Unit = {},
+    ) {
+        val navOptions = navOptions {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+
+        when (userStatus) {
+            UserStatus.ACTIVE, UserStatus.INACTIVE -> {
+                navController.navigateToSoptlog(
+                    navOptions = navOptions
+                )
+            }
+
+            UserStatus.UNAUTHENTICATED -> onFailure()
+        }
+    }
+
     private fun navigateUp() {
         navController.navigateUp()
     }
 
     fun navigateUpIfNotStartDestination() {
-        if (!isSameCurrentDestination<Dummy>()) {
+        if (!isSameCurrentDestination<Home>()) {
             navigateUp()
         }
     }

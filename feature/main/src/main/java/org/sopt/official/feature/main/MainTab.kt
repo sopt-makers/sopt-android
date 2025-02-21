@@ -16,7 +16,7 @@ enum class MainTab(
     Home(
         icon = Icons.Default.Home,
         contentDescription = "홈",
-        route = Dummy
+        route = org.sopt.official.feature.home.navigation.Home
     ),
     SoptLog(
         icon = Icons.Default.Person,
