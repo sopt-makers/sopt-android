@@ -1,7 +1,12 @@
 package org.sopt.official.feature.home.model
 
-sealed interface HomeEvent {
-    interface HomeShortcutEvent : HomeEvent {
+import androidx.compose.runtime.Stable
+
+@Stable
+sealed interface HomeNavigation {
+    
+    @Stable
+    interface HomeShortcutNavigation : HomeNavigation {
         fun navigateToPlayground()
         fun navigateToPlaygroundGroup()
         fun navigateToPlaygroundMember()
@@ -12,7 +17,8 @@ sealed interface HomeEvent {
         fun navigateToSoptInstagram()
     }
 
-    interface HomeDashboardEvent : HomeEvent {
+    @Stable
+    interface HomeDashboardNavigation : HomeNavigation {
         fun navigateToNotification()
         fun navigateToSetting()
         fun navigateToSchedule()

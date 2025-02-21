@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.feature.home.HomeRoute
-import org.sopt.official.feature.home.model.HomeEvent
+import org.sopt.official.feature.home.model.HomeNavigation
 
 @Serializable
 data object Home : MainTabRoute
@@ -21,12 +21,12 @@ fun NavController.navigateToHome(
 
 fun NavGraphBuilder.homeNavGraph(
     userStatus: UserStatus,
-    homeEvent: HomeEvent,
+    homeNavigation: HomeNavigation,
 ) {
     composable<Home> {
         HomeRoute(
             userStatus = userStatus,
-            homeEvent = homeEvent,
+            homeNavigation = homeNavigation,
         )
     }
 }

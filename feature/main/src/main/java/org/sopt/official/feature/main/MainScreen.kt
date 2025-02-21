@@ -49,8 +49,8 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.model.HomeEvent.HomeDashboardEvent
-import org.sopt.official.feature.home.model.HomeEvent.HomeShortcutEvent
+import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
+import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
@@ -88,7 +88,7 @@ fun MainScreen(
                 ) {
                     homeNavGraph(
                         userStatus = userStatus,
-                        homeEvent = object : HomeShortcutEvent, HomeDashboardEvent {
+                        homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
                             }
