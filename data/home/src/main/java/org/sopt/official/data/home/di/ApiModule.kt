@@ -30,6 +30,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.home.remote.api.CalendarApi
+import org.sopt.official.data.home.remote.api.HomeApi
 import org.sopt.official.data.home.remote.api.UserApi
 import retrofit2.Retrofit
 import retrofit2.create
@@ -41,9 +42,13 @@ internal object ApiModule {
 
     @Provides
     @Singleton
-    internal fun provideHomeApi(@AppRetrofit(true) retrofit: Retrofit): UserApi = retrofit.create()
+    internal fun provideUserApi(@AppRetrofit(true) retrofit: Retrofit): UserApi = retrofit.create()
 
     @Provides
     @Singleton
     internal fun provideCalendarApi(@AppRetrofit(true) retrofit: Retrofit): CalendarApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    internal fun provideHomeApi(@AppRetrofit(true) retrofit: Retrofit): HomeApi = retrofit.create()
 }
