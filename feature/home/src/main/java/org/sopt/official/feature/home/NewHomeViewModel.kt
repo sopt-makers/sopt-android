@@ -23,8 +23,6 @@ import org.sopt.official.domain.home.model.UserStatus.ACTIVE
 import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
-import org.sopt.official.domain.home.result.Result.Error
-import org.sopt.official.domain.home.result.Result.Success
 import org.sopt.official.domain.home.result.successOr
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState
@@ -40,7 +38,7 @@ internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
 ) : ViewModel() {
 
-    private val viewModelState: MutableStateFlow<HomeViewModelState> = MutableStateFlow(HomeViewModelState(isLoading = true))
+    private val viewModelState: MutableStateFlow<HomeViewModelState> = MutableStateFlow(HomeViewModelState())
 
     val uiState: StateFlow<HomeUiState> = viewModelState
         .map(HomeViewModelState::toUiState)
@@ -49,57 +47,6 @@ internal class NewHomeViewModel @Inject constructor(
             started = SharingStarted.Eagerly,
             initialValue = viewModelState.value.toUiState(),
         )
-
-    init {
-        fetchIsLogin()
-    }
-
-    private fun fetchIsLogin() {
-        viewModelScope.launch {
-            val result = homeRepository.getUserInfo()
-
-            viewModelState.update { viewModelState ->
-                when (result) {
-                    is Success -> {
-                        if (result.data.user.userStatus == UNAUTHENTICATED) {
-                            viewModelState.copy(
-                                isLoading = false,
-                                userState = result.data.user.userStatus,
-                            )
-                        } else {
-                            viewModelState.copy(
-                                userState = result.data.user.userStatus,
-                                hasNotification = result.data.isAllConfirm.not(),
-                                generations = result.data.user.generationList.toImmutableList(),
-                            ).also { fetchHome() }
-                        }
-                    }
-
-                    is Error -> viewModelState.copy(isLoading = false, isError = true)
-                }
-            }
-        }
-    }
-
-    private fun fetchHome() {
-        viewModelScope.launch {
-            val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
-            val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
-
-            val userDescription = userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
-            val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
-
-            viewModelState.update {
-                it.copy(
-                    isLoading = false,
-                    activityDescription = userDescription.activityDescription,
-                    scheduleDate = recentCalendar.date,
-                    scheduleType = recentCalendar.scheduleType,
-                    scheduleTitle = recentCalendar.title,
-                )
-            }
-        }
-    }
 
     fun refreshAll() {
         viewModelState.update { it.copy(isLoading = true) }
@@ -110,7 +57,8 @@ internal class NewHomeViewModel @Inject constructor(
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
 
             val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
-            val userDescription = userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
+            val userDescription =
+                userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
 
             viewModelState.update {
@@ -133,7 +81,7 @@ internal class NewHomeViewModel @Inject constructor(
 private data class HomeViewModelState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val userState: UserStatus = ACTIVE,
+    val userState: UserStatus = UNAUTHENTICATED,
     val hasNotification: Boolean = false,
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
