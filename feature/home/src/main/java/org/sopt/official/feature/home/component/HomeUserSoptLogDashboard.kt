@@ -76,7 +76,9 @@ internal fun HomeUserSoptLogDashboardForMember(
         content = {
             Row(
                 verticalAlignment = CenterVertically,
-                modifier = Modifier.padding(all = 16.dp),
+                modifier = Modifier
+                    .padding(all = 16.dp)
+                    .clickable { onSoptlogClick() },
             ) {
                 Column {
                     Text(
@@ -103,7 +105,6 @@ internal fun HomeUserSoptLogDashboardForMember(
                     imageVector = ImageVector.vectorResource(ic_soptlog),
                     contentDescription = null,
                     tint = Unspecified,
-                    modifier = Modifier.clickable { onSoptlogClick() }
                 )
             }
         }
