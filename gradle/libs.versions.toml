@@ -24,7 +24,7 @@ customtab = "1.8.0"
 exifinterface = "1.3.7"
 compose-bom = "2025.02.00"
 androidx-paging = "3.3.6"
-desugarJdk = "2.1.4"
+desugarJdk = "2.1.5"
 
 material = "1.12.0"
 in-app-update = "2.1.0"
