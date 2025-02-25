@@ -138,7 +138,7 @@ private fun HomeScreenForVisitor(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
-        HomeTopBarForVisitor(onSettingClick = { })
+        HomeTopBarForVisitor(onSettingClick = homeDashboardNavigation::navigateToSetting)
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToSoptlog)
         Spacer(modifier = Modifier.height(height = 36.dp))
