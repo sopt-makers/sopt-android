@@ -34,6 +34,7 @@ class MainNavigator(
         val navOptions = navOptions {
             popUpTo(navController.graph.findStartDestination().id) {
                 saveState = true
+                inclusive = true
             }
             launchSingleTop = true
             restoreState = true
@@ -55,29 +56,6 @@ class MainNavigator(
                     UserStatus.UNAUTHENTICATED -> onFailure()
                 }
             }
-        }
-    }
-
-    fun navigateToSoptlog(
-        userStatus: UserStatus,
-        onFailure: () -> Unit = {},
-    ) {
-        val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
-
-        when (userStatus) {
-            UserStatus.ACTIVE, UserStatus.INACTIVE -> {
-                navController.navigateToSoptlog(
-                    navOptions = navOptions
-                )
-            }
-
-            UserStatus.UNAUTHENTICATED -> onFailure()
         }
     }
 

@@ -33,10 +33,13 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
 internal fun HomeUserSoptLogDashboardForVisitor(
+    onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeBox(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable { onDashboardClick() },
         content = {
             Column(
                 modifier = Modifier.padding(all = 16.dp),
@@ -61,14 +64,16 @@ internal fun HomeUserSoptLogDashboardForVisitor(
 @Composable
 private fun HomeUserSoptLogDashboardForVisitorPreview() {
     SoptTheme {
-        HomeUserSoptLogDashboardForVisitor()
+        HomeUserSoptLogDashboardForVisitor(
+            onDashboardClick = {},
+        )
     }
 }
 
 @Composable
 internal fun HomeUserSoptLogDashboardForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
-    onSoptlogClick: () -> Unit,
+    onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeBox(
@@ -78,7 +83,7 @@ internal fun HomeUserSoptLogDashboardForMember(
                 verticalAlignment = CenterVertically,
                 modifier = Modifier
                     .padding(all = 16.dp)
-                    .clickable { onSoptlogClick() },
+                    .clickable { onDashboardClick() },
             ) {
                 Column {
                     Text(
@@ -117,7 +122,7 @@ private fun HomeUserSoptLogDashboardForMemberPreview() {
     SoptTheme {
         HomeUserSoptLogDashboardForMember(
             homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
-            onSoptlogClick = {},
+            onDashboardClick = {},
         )
     }
 }

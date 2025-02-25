@@ -55,6 +55,7 @@ internal fun HomeRoute(
             HomeScreenForVisitor(
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
+                homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeAppServices = uiState.homeServices,
             )
         }
@@ -99,7 +100,7 @@ private fun HomeScreenForMember(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeUserSoptLogDashboardForMember(
-            onSoptlogClick = homeDashboardNavigation::navigateToSoptlog,
+            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
             homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
@@ -127,6 +128,7 @@ private fun HomeScreenForMember(
 @Composable
 private fun HomeScreenForVisitor(
     homeShortcutNavigation: HomeShortcutNavigation,
+    homeDashboardNavigation: HomeDashboardNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     homeAppServices: ImmutableList<HomeAppService>,
 ) {
@@ -138,7 +140,7 @@ private fun HomeScreenForVisitor(
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForVisitor(onSettingClick = { })
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForVisitor()
+        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToSoptlog)
         Spacer(modifier = Modifier.height(height = 36.dp))
         Text(
             text = "SOPT를 더 알고 싶다면, 둘러보세요",

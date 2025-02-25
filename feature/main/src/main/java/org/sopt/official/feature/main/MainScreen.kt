@@ -55,6 +55,7 @@ import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNaviga
 import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
+import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
@@ -111,7 +112,10 @@ fun MainScreen(
                                 context.startActivity(applicationNavigator.getMyPageActivityIntent(userStatus.name))
 
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
-                            override fun navigateToSoptlog() = navigator.navigateToSoptlog(userStatus)
+                            override fun navigateToSoptlog() = navigator.navigate(SoptLog, userStatus) {
+                                isOpenDialog = true
+                            }
+
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
                             override fun navigateToDeepLink(url: String) {
                                 if (userStatus == UNAUTHENTICATED) isOpenDialog = true
