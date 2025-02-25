@@ -1,5 +1,6 @@
 package org.sopt.official.feature.home.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
@@ -80,11 +82,20 @@ private fun AppServiceItem(
     ) {
         Box(contentAlignment = TopEnd) {
             HomeButtonCircleBox {
-                UrlImage(
-                    url = appService.iconUrl,
-                    modifier = Modifier.size(size = 60.dp),
-                )
+                if (appService.defaultIcon != null) {
+                    Image(
+                        painter = painterResource(appService.defaultIcon),
+                        contentDescription = "",
+                        modifier = Modifier.size(size = 60.dp),
+                    )
+                } else {
+                    UrlImage(
+                        url = appService.iconUrl,
+                        modifier = Modifier.size(size = 60.dp),
+                    )
+                }
             }
+
             if (appService.isShowAlarmBadge) AppServiceAlarmBadge(text = appService.alarmBadgeContent)
         }
         Spacer(modifier = Modifier.height(height = 8.dp))

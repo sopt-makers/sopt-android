@@ -29,6 +29,7 @@ import org.sopt.official.feature.home.model.HomeUiState.InactiveMember
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
+import org.sopt.official.feature.home.model.defaultAppServices
 import javax.inject.Inject
 
 @HiltViewModel
@@ -70,7 +71,7 @@ internal class NewHomeViewModel @Inject constructor(
                     userInfo = userInfo,
                     userDescription = userDescription,
                     recentCalendar = recentCalendar,
-                    appService = appService,
+                    appServices = appService,
                 )
             }
         }
@@ -84,22 +85,14 @@ private data class HomeViewModelState(
     val userInfo: UserInfo = UserInfo(),
     val userDescription: UserInfo.UserDescription = UserInfo.UserDescription(),
     val recentCalendar: RecentCalendar = RecentCalendar(),
-    val appService: List<AppService> = emptyList(),
+    val appServices: List<AppService> = emptyList(),
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
         UNAUTHENTICATED -> Unauthenticated(
             isLoading = isLoading,
             isError = isError,
-            homeServices = appService.map {
-                HomeAppService(
-                    serviceName = it.serviceName,
-                    isShowAlarmBadge = it.displayAlarmBadge,
-                    alarmBadgeContent = it.alarmBadge,
-                    iconUrl = it.iconUrl,
-                    deepLink = it.deepLink,
-                )
-            }.toImmutableList()
+            homeServices = defaultAppServices,
         )
 
         ACTIVE -> ActiveMember(
@@ -116,7 +109,7 @@ private data class HomeViewModelState(
                 date = recentCalendar.date,
                 title = recentCalendar.title,
             ),
-            homeServices = appService.map {
+            homeServices = appServices.map {
                 HomeAppService(
                     serviceName = it.serviceName,
                     isShowAlarmBadge = it.displayAlarmBadge,
@@ -141,7 +134,7 @@ private data class HomeViewModelState(
                 date = recentCalendar.date,
                 title = recentCalendar.title,
             ),
-            homeServices = appService.map {
+            homeServices = appServices.map {
                 HomeAppService(
                     serviceName = it.serviceName,
                     isShowAlarmBadge = it.displayAlarmBadge,

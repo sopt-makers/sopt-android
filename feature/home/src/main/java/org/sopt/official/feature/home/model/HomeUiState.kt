@@ -1,10 +1,14 @@
 package org.sopt.official.feature.home.model
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import org.sopt.official.feature.home.R.drawable.img_poke
+import org.sopt.official.feature.home.R.drawable.img_soptamp
+import org.sopt.official.feature.home.R.drawable.img_soptmadi
 import org.sopt.official.feature.home.model.Schedule.EVENT
 
 @Stable
@@ -81,4 +85,20 @@ data class HomeAppService(
     val alarmBadgeContent: String = "",
     val iconUrl: String = "",
     val deepLink: String = "",
+    @DrawableRes val defaultIcon: Int? = null,
+)
+
+internal val defaultAppServices: ImmutableList<HomeAppService> = persistentListOf(
+    HomeAppService(
+        serviceName = "콕찌르기",
+        defaultIcon = img_poke,
+    ),
+    HomeAppService(
+        serviceName = "솝마디",
+        defaultIcon = img_soptmadi,
+    ),
+    HomeAppService(
+        serviceName = "솝탬프",
+        defaultIcon = img_soptamp,
+    ),
 )
