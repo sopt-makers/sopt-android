@@ -51,9 +51,9 @@ import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink

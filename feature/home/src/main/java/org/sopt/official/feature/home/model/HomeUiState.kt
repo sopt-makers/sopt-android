@@ -53,7 +53,7 @@ internal sealed interface HomeUiState {
 }
 
 @Immutable
-data class HomeSoptScheduleModel(
+internal data class HomeSoptScheduleModel(
     val type: Schedule = EVENT,
     val date: String = "",
     val title: String = "",
@@ -62,7 +62,7 @@ data class HomeSoptScheduleModel(
 }
 
 @Immutable
-data class HomeUserSoptLogDashboardModel(
+internal data class HomeUserSoptLogDashboardModel(
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
     val isActivated: Boolean = false,
@@ -79,7 +79,7 @@ data class HomeUserSoptLogDashboardModel(
 }
 
 @Immutable
-data class HomeAppService(
+internal data class HomeAppService(
     val serviceName: String = "",
     val isShowAlarmBadge: Boolean = false,
     val alarmBadgeContent: String = "",

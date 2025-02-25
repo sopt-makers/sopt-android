@@ -29,10 +29,10 @@ import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
-import org.sopt.official.feature.home.model.HomeNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
