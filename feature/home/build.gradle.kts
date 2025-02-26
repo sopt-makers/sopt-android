@@ -41,6 +41,7 @@ dependencies {
 
     // domain
     implementation(projects.domain.home)
+    implementation(projects.domain.poke)
 
     // compose
     implementation(libs.compose.navigation)

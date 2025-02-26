@@ -21,6 +21,8 @@ import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.result.successOr
+import org.sopt.official.domain.poke.entity.onSuccess
+import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState
@@ -35,6 +37,7 @@ import javax.inject.Inject
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
 
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
@@ -73,6 +76,19 @@ internal class NewHomeViewModel @Inject constructor(
                     recentCalendar = recentCalendar,
                     appServices = appService,
                 )
+            }
+        }
+    }
+
+    fun fetchIsNewPoke(onComplete: (isNewPoke: Boolean) -> Unit) {
+        viewModelState.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            checkNewInPokeUseCase().onSuccess { result ->
+                viewModelState.update {
+                    it.copy(isLoading = false)
+                }
+                onComplete(result.isNew)
             }
         }
     }

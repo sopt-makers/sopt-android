@@ -40,7 +40,7 @@ internal fun HomeGenerationChips(
         RecentGenerationChip(
             chipColor = recentChipColor,
             textColor = recentChipTextColor,
-            text = homeUserSoptLogDashboardModel.recentGeneration,
+            text = homeUserSoptLogDashboardModel.recentGenerationDescription,
         )
         Spacer(modifier = Modifier.width(width = 8.dp))
         LastGenerationChips(homeUserSoptLogDashboardModel.lastGenerations)

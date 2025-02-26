@@ -68,12 +68,13 @@ internal data class HomeUserSoptLogDashboardModel(
     val isActivated: Boolean = false,
 ) {
     private val regex by lazy { Regex("<b>(.*?)</b>") }
+    val recentGeneration: Int = generations.maxOrNull()?.toInt() ?: 0
     val emphasizedDescription: String =
         regex.find(activityDescription)?.groups?.get(1)?.value.orEmpty()
     val remainingDescription: String =
         " " + regex.replace(activityDescription, "").trim().replace("<br>", "\n")
-    val recentGeneration: String =
-        "${generations.maxOrNull() ?: 0}기 " + if (isActivated) "활동 중" else "수료"
+    val recentGenerationDescription: String =
+        "${recentGeneration}기 " + if (isActivated) "활동 중" else "수료"
     val lastGenerations: ImmutableList<Long> =
         generations.filter { it != generations.max() }.sortedDescending().toPersistentList()
 }

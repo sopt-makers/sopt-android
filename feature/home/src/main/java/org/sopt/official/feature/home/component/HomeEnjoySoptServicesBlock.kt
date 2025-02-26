@@ -37,7 +37,7 @@ import org.sopt.official.feature.home.model.HomeAppService
 @Composable
 internal fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
-    onAppServiceClick: (url: String) -> Unit,
+    onAppServiceClick: (url: String, appServiceName: String) -> Unit,
 ) {
     Text(
         text = "SOPT 더 재밌게 즐기기!",
@@ -65,7 +65,7 @@ private fun HomeEnjoySoptServicesBlockPreview() {
         Column {
             HomeEnjoySoptServicesBlock(
                 appServices = PREVIEW_FIXTURE,
-                onAppServiceClick = {},
+                onAppServiceClick = { _, _ -> },
             )
         }
     }
@@ -74,11 +74,11 @@ private fun HomeEnjoySoptServicesBlockPreview() {
 @Composable
 private fun AppServiceItem(
     appService: HomeAppService,
-    onItemClick: (url: String) -> Unit,
+    onItemClick: (url: String, appServiceName: String) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onItemClick(appService.deepLink) }
+        modifier = Modifier.clickable { onItemClick(appService.deepLink, appService.serviceName) }
     ) {
         Box(contentAlignment = TopEnd) {
             HomeButtonCircleBox {
@@ -113,7 +113,7 @@ private fun AppServiceItemPreview() {
     SoptTheme {
         AppServiceItem(
             appService = PREVIEW_FIXTURE[0],
-            onItemClick = {},
+            onItemClick = { _, _ -> },
         )
     }
 }

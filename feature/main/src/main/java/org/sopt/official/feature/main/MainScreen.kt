@@ -121,6 +121,14 @@ fun MainScreen(
                                 if (userStatus == UNAUTHENTICATED) isOpenDialog = true
                                 else context.startActivity(DeepLinkType.of(url).getMainIntent(context, userStatus, url))
                             }
+
+                            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
+                                context.startActivity(
+                                    when (isNewPoke) {
+                                        true -> applicationNavigator.getPokeOnboardingActivityIntent(currentDestination, userStatus)
+                                        false -> applicationNavigator.getPokeActivityIntent(userStatus)
+                                    }
+                                )
                         },
                     )
 
