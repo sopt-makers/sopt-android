@@ -63,7 +63,7 @@ mozilla-component-utils = "135.0.1"
 
 google-services = "4.4.2"
 crashlytics = "3.0.3"
-firebase = "33.9.0"
+firebase = "33.10.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
 app-distribution = "5.1.1"
 ktlint = "12.1.2"
