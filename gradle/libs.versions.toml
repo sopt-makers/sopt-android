@@ -58,6 +58,7 @@ lottie = "6.6.2"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
+mozilla-component-utils = "107.0.3"
 
 google-services = "4.4.2"
 crashlytics = "3.0.3"
@@ -188,23 +189,24 @@ dotsindicator = { module = "com.tbuonomo:dotsindicator", version.ref = "dotsindi
 deeplink-dispatch = { group = "com.airbnb", name = "deeplinkdispatch", version.ref = "deepLinkDispatch" }
 deeplink-dispatch-processor = { group = "com.airbnb", name = "deeplinkdispatch-processor", version.ref = "deepLinkDispatch" }
 rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
+mozilla-component-utils = { module = "org.mozilla.components:support-utils", version.ref = "mozilla-component-utils" }
 
 [bundles]
 compose = [
-  "compose-ui",
-  "compose-foundation",
-  "compose-ui-tooling",
-  "compose-activity",
-  "compose-animation",
-  "compose-viewmodel",
-  "compose-material",
-  "compose-material-three",
-  "compose-material-icons-extended",
-  "compose-material-icons",
-  "compose-runtime",
-  "compose-ui-tooling-preview",
-  "compose-hilt-navigation",
-  "compose-lottie",
+    "compose-ui",
+    "compose-foundation",
+    "compose-ui-tooling",
+    "compose-activity",
+    "compose-animation",
+    "compose-viewmodel",
+    "compose-material",
+    "compose-material-three",
+    "compose-material-icons-extended",
+    "compose-material-icons",
+    "compose-runtime",
+    "compose-ui-tooling-preview",
+    "compose-hilt-navigation",
+    "compose-lottie",
 ]
 compose-test = ["compose-junit"]
 compose-android-test = ["compose-ui-test"]

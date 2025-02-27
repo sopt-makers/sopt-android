@@ -43,29 +43,29 @@ import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
-  @Inject
-  lateinit var dataStore: SoptDataStore
-  private val lifecycleOwner: LifecycleOwner
-    get() = ProcessLifecycleOwner.get()
+    @Inject
+    lateinit var dataStore: SoptDataStore
+    private val lifecycleOwner: LifecycleOwner
+        get() = ProcessLifecycleOwner.get()
 
-  override fun onCreate() {
-    super.onCreate()
-    appContext = this.applicationContext
+    override fun onCreate() {
+        super.onCreate()
+        appContext = this.applicationContext
 
-    initFlipper()
-    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-    lifecycleOwner.lifecycleScope.launch {
-      lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        runCatching {
-          FirebaseMessaging.getInstance().token.await()
-        }.onSuccess {
-          dataStore.pushToken = it
-        }.onFailure(Timber::e)
-      }
+        initFlipper()
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        lifecycleOwner.lifecycleScope.launch {
+            lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                runCatching {
+                    FirebaseMessaging.getInstance().token.await()
+                }.onSuccess {
+                    dataStore.pushToken = it
+                }.onFailure(Timber::e)
+            }
+        }
     }
-  }
 
-  private fun initFlipper() {
-    FlipperInitializer.init(this)
-  }
+    private fun initFlipper() {
+        FlipperInitializer.init(this)
+    }
 }

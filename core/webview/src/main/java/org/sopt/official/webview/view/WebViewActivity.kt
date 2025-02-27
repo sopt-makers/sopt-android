@@ -25,9 +25,12 @@
 package org.sopt.official.webview.view
 
 import android.app.Activity
+import android.app.DownloadManager
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.webkit.CookieManager
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -35,10 +38,15 @@ import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.content.getSystemService
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
+import mozilla.components.support.utils.DownloadUtils
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.common.view.toast
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
+import java.net.URLDecoder
 
 @AndroidEntryPoint
 @DeepLink("sopt://web")
@@ -53,6 +61,13 @@ class WebViewActivity : AppCompatActivity() {
             val data = Intent().apply { data = uri }
             filePathCallback?.onReceiveValue(WebChromeClient.FileChooserParams.parseResult(Activity.RESULT_OK, data))
             filePathCallback = null
+        }
+    }
+    private val permissionRequestLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (!isGranted) {
+            toast("권한을 받아오지 못했습니다.")
         }
     }
 
@@ -73,6 +88,37 @@ class WebViewActivity : AppCompatActivity() {
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
                 return true
+            }
+        }
+        binding.webView.setDownloadListener { url, userAgent, contentDisposition, mimetype, _ ->
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+            ) {
+                val fileName = DownloadUtils.guessFileName(
+                    contentDisposition = URLDecoder.decode(contentDisposition, "utf-8"),
+                    null,
+                    url = url,
+                    mimeType = mimetype
+                )
+                val downloadManager = getSystemService<DownloadManager>() ?: return@setDownloadListener
+                val request = DownloadManager.Request(Uri.parse(url))
+                    .setMimeType(mimetype)
+                    .addRequestHeader("Cookie", CookieManager.getInstance().getCookie(url))
+                    .addRequestHeader("User-Agent", userAgent)
+                    .setTitle(fileName)
+                    .apply {
+                        allowScanningByMediaScanner()
+                        setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+                        setDestinationInExternalPublicDir(
+                            Environment.DIRECTORY_DOWNLOADS,
+                            fileName
+                        )
+                    }
+                downloadManager.enqueue(request)
+            } else {
+                permissionRequestLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
         }
         handleLinkUrl()
