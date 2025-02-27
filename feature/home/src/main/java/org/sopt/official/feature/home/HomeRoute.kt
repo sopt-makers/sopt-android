@@ -29,14 +29,14 @@ import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
-import org.sopt.official.feature.home.model.HomeNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
-import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
+import org.sopt.official.feature.home.navigation.HomeNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
+import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 
 @Composable
 internal fun HomeRoute(
@@ -55,6 +55,7 @@ internal fun HomeRoute(
             HomeScreenForVisitor(
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
+                homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeAppServices = uiState.homeServices,
             )
         }
@@ -63,7 +64,25 @@ internal fun HomeRoute(
             HomeScreenForMember(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
-                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
+                onAppServiceClick = { url, appServiceName ->
+                    val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
+
+                    when (appServiceName == "콕찌르기") {
+                        true -> {
+                            newHomeViewModel.fetchIsNewPoke(
+                                onComplete = { isNewPoke ->
+                                    homeAppServicesNavigation.navigateToPoke(
+                                        url = url,
+                                        isNewPoke = isNewPoke,
+                                        currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
+                                    )
+                                }
+                            )
+                        }
+
+                        false -> homeAppServicesNavigation.navigateToDeepLink(url)
+                    }
+                },
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
@@ -80,7 +99,7 @@ internal fun HomeRoute(
 private fun HomeScreenForMember(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeShortcutNavigation: HomeShortcutNavigation,
-    homeAppServicesNavigation: HomeAppServicesNavigation,
+    onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
@@ -99,7 +118,7 @@ private fun HomeScreenForMember(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeUserSoptLogDashboardForMember(
-            onSoptlogClick = homeDashboardNavigation::navigateToSoptlog,
+            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
             homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
@@ -119,7 +138,7 @@ private fun HomeScreenForMember(
         Spacer(modifier = Modifier.height(height = 40.dp))
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
-            onAppServiceClick = homeAppServicesNavigation::navigateToDeepLink,
+            onAppServiceClick = onAppServiceClick,
         )
     }
 }
@@ -127,6 +146,7 @@ private fun HomeScreenForMember(
 @Composable
 private fun HomeScreenForVisitor(
     homeShortcutNavigation: HomeShortcutNavigation,
+    homeDashboardNavigation: HomeDashboardNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     homeAppServices: ImmutableList<HomeAppService>,
 ) {
@@ -136,9 +156,9 @@ private fun HomeScreenForVisitor(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
-        HomeTopBarForVisitor(onSettingClick = { })
+        HomeTopBarForVisitor(onSettingClick = homeDashboardNavigation::navigateToSetting)
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForVisitor()
+        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToSoptlog)
         Spacer(modifier = Modifier.height(height = 36.dp))
         Text(
             text = "SOPT를 더 알고 싶다면, 둘러보세요",
@@ -155,7 +175,7 @@ private fun HomeScreenForVisitor(
         Spacer(modifier = Modifier.height(height = 40.dp))
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
-            onAppServiceClick = homeAppServicesNavigation::navigateToDeepLink,
+            onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
         )
     }
 }

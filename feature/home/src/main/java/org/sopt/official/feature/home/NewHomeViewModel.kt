@@ -21,6 +21,8 @@ import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.result.successOr
+import org.sopt.official.domain.poke.entity.onSuccess
+import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState
@@ -29,11 +31,13 @@ import org.sopt.official.feature.home.model.HomeUiState.InactiveMember
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
+import org.sopt.official.feature.home.model.defaultAppServices
 import javax.inject.Inject
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
 
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
@@ -70,8 +74,21 @@ internal class NewHomeViewModel @Inject constructor(
                     userInfo = userInfo,
                     userDescription = userDescription,
                     recentCalendar = recentCalendar,
-                    appService = appService,
+                    appServices = appService,
                 )
+            }
+        }
+    }
+
+    fun fetchIsNewPoke(onComplete: (isNewPoke: Boolean) -> Unit) {
+        viewModelState.update { it.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            checkNewInPokeUseCase().onSuccess { result ->
+                viewModelState.update {
+                    it.copy(isLoading = false)
+                }
+                onComplete(result.isNew)
             }
         }
     }
@@ -84,22 +101,14 @@ private data class HomeViewModelState(
     val userInfo: UserInfo = UserInfo(),
     val userDescription: UserInfo.UserDescription = UserInfo.UserDescription(),
     val recentCalendar: RecentCalendar = RecentCalendar(),
-    val appService: List<AppService> = emptyList(),
+    val appServices: List<AppService> = emptyList(),
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
         UNAUTHENTICATED -> Unauthenticated(
             isLoading = isLoading,
             isError = isError,
-            homeServices = appService.map {
-                HomeAppService(
-                    serviceName = it.serviceName,
-                    isShowAlarmBadge = it.displayAlarmBadge,
-                    alarmBadgeContent = it.alarmBadge,
-                    iconUrl = it.iconUrl,
-                    deepLink = it.deepLink,
-                )
-            }.toImmutableList()
+            homeServices = defaultAppServices,
         )
 
         ACTIVE -> ActiveMember(
@@ -116,7 +125,7 @@ private data class HomeViewModelState(
                 date = recentCalendar.date,
                 title = recentCalendar.title,
             ),
-            homeServices = appService.map {
+            homeServices = appServices.map {
                 HomeAppService(
                     serviceName = it.serviceName,
                     isShowAlarmBadge = it.displayAlarmBadge,
@@ -141,7 +150,7 @@ private data class HomeViewModelState(
                 date = recentCalendar.date,
                 title = recentCalendar.title,
             ),
-            homeServices = appService.map {
+            homeServices = appServices.map {
                 HomeAppService(
                     serviceName = it.serviceName,
                     isShowAlarmBadge = it.displayAlarmBadge,

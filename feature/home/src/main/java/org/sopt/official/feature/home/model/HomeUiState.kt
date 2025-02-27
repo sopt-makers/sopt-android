@@ -1,10 +1,14 @@
 package org.sopt.official.feature.home.model
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import org.sopt.official.feature.home.R.drawable.img_poke
+import org.sopt.official.feature.home.R.drawable.img_soptamp
+import org.sopt.official.feature.home.R.drawable.img_soptmadi
 import org.sopt.official.feature.home.model.Schedule.EVENT
 
 @Stable
@@ -49,7 +53,7 @@ internal sealed interface HomeUiState {
 }
 
 @Immutable
-data class HomeSoptScheduleModel(
+internal data class HomeSoptScheduleModel(
     val type: Schedule = EVENT,
     val date: String = "",
     val title: String = "",
@@ -58,27 +62,44 @@ data class HomeSoptScheduleModel(
 }
 
 @Immutable
-data class HomeUserSoptLogDashboardModel(
+internal data class HomeUserSoptLogDashboardModel(
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
     val isActivated: Boolean = false,
 ) {
     private val regex by lazy { Regex("<b>(.*?)</b>") }
+    val recentGeneration: Int = generations.maxOrNull()?.toInt() ?: 0
     val emphasizedDescription: String =
         regex.find(activityDescription)?.groups?.get(1)?.value.orEmpty()
     val remainingDescription: String =
         " " + regex.replace(activityDescription, "").trim().replace("<br>", "\n")
-    val recentGeneration: String =
-        "${generations.maxOrNull() ?: 0}기 " + if (isActivated) "활동 중" else "수료"
+    val recentGenerationDescription: String =
+        "${recentGeneration}기 " + if (isActivated) "활동 중" else "수료"
     val lastGenerations: ImmutableList<Long> =
         generations.filter { it != generations.max() }.sortedDescending().toPersistentList()
 }
 
 @Immutable
-data class HomeAppService(
+internal data class HomeAppService(
     val serviceName: String = "",
     val isShowAlarmBadge: Boolean = false,
     val alarmBadgeContent: String = "",
     val iconUrl: String = "",
     val deepLink: String = "",
+    @DrawableRes val defaultIcon: Int? = null,
+)
+
+internal val defaultAppServices: ImmutableList<HomeAppService> = persistentListOf(
+    HomeAppService(
+        serviceName = "콕찌르기",
+        defaultIcon = img_poke,
+    ),
+    HomeAppService(
+        serviceName = "솝마디",
+        defaultIcon = img_soptmadi,
+    ),
+    HomeAppService(
+        serviceName = "솝탬프",
+        defaultIcon = img_soptamp,
+    ),
 )

@@ -42,6 +42,7 @@ import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
+import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.stamp.SoptampActivity
 import javax.inject.Inject
@@ -65,6 +66,12 @@ class NavigatorProviderIntent @Inject constructor(
         context,
         PokeMainActivity.StartArgs(userStatus = userStatus.name)
     )
+
+    override fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent = OnboardingActivity.getIntent(
+        context,
+        OnboardingActivity.StartArgs(currentGeneration = currentGeneration, userStatus = userStatus.name)
+    )
+
 
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
 

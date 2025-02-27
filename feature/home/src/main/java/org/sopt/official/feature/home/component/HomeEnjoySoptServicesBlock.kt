@@ -1,5 +1,6 @@
 package org.sopt.official.feature.home.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
@@ -35,7 +37,7 @@ import org.sopt.official.feature.home.model.HomeAppService
 @Composable
 internal fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
-    onAppServiceClick: (url: String) -> Unit,
+    onAppServiceClick: (url: String, appServiceName: String) -> Unit,
 ) {
     Text(
         text = "SOPT 더 재밌게 즐기기!",
@@ -63,7 +65,7 @@ private fun HomeEnjoySoptServicesBlockPreview() {
         Column {
             HomeEnjoySoptServicesBlock(
                 appServices = PREVIEW_FIXTURE,
-                onAppServiceClick = {},
+                onAppServiceClick = { _, _ -> },
             )
         }
     }
@@ -72,19 +74,28 @@ private fun HomeEnjoySoptServicesBlockPreview() {
 @Composable
 private fun AppServiceItem(
     appService: HomeAppService,
-    onItemClick: (url: String) -> Unit,
+    onItemClick: (url: String, appServiceName: String) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onItemClick(appService.deepLink) }
+        modifier = Modifier.clickable { onItemClick(appService.deepLink, appService.serviceName) }
     ) {
         Box(contentAlignment = TopEnd) {
             HomeButtonCircleBox {
-                UrlImage(
-                    url = appService.iconUrl,
-                    modifier = Modifier.size(size = 60.dp),
-                )
+                if (appService.defaultIcon != null) {
+                    Image(
+                        painter = painterResource(appService.defaultIcon),
+                        contentDescription = "",
+                        modifier = Modifier.size(size = 60.dp),
+                    )
+                } else {
+                    UrlImage(
+                        url = appService.iconUrl,
+                        modifier = Modifier.size(size = 60.dp),
+                    )
+                }
             }
+
             if (appService.isShowAlarmBadge) AppServiceAlarmBadge(text = appService.alarmBadgeContent)
         }
         Spacer(modifier = Modifier.height(height = 8.dp))
@@ -102,7 +113,7 @@ private fun AppServiceItemPreview() {
     SoptTheme {
         AppServiceItem(
             appService = PREVIEW_FIXTURE[0],
-            onItemClick = {},
+            onItemClick = { _, _ -> },
         )
     }
 }

@@ -1,4 +1,4 @@
-package org.sopt.official.feature.home.model
+package org.sopt.official.feature.home.navigation
 
 import androidx.compose.runtime.Stable
 
@@ -29,5 +29,6 @@ sealed interface HomeNavigation {
     @Stable
     interface HomeAppServicesNavigation : HomeNavigation {
         fun navigateToDeepLink(url: String)
+        fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int)
     }
 }
