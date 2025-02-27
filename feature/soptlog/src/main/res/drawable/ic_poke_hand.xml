@@ -1,9 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    MIT License
+
+    Copyright (c) 2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="22dp"
     android:height="18dp"
     android:viewportWidth="22"
     android:viewportHeight="18">
-  <path
-      android:pathData="M20.034,4.9L13.646,11.288C14.918,11.862 17.655,13.068 18.171,13.585C18.553,13.966 18.877,14.542 18.644,15.476C18.415,16.396 16.816,18.194 13.95,16.522C11.877,15.313 9.475,15.723 7.552,16.428C6.111,16.957 4.461,16.76 3.376,15.674L1.35,13.648C-0.01,12.289 -0.01,10.085 1.35,8.725L1.826,8.249C1.59,5.175 3.945,2.128 5.566,0.979C7.187,-0.169 8.667,0.713 8.712,1.836C9.908,0.64 11.915,1.686 11.79,3.096C13.113,2.367 14.36,3.683 14.489,4.502L17.312,1.679C18.24,0.75 19.506,0.33 20.434,1.258C21.545,2.369 21.145,3.789 20.034,4.9Z"
-      android:fillColor="#FCFCFC"/>
+    <path
+        android:fillColor="#FCFCFC"
+        android:pathData="M20.034,4.9L13.646,11.288C14.918,11.862 17.655,13.068 18.171,13.585C18.553,13.966 18.877,14.542 18.644,15.476C18.415,16.396 16.816,18.194 13.95,16.522C11.877,15.313 9.475,15.723 7.552,16.428C6.111,16.957 4.461,16.76 3.376,15.674L1.35,13.648C-0.01,12.289 -0.01,10.085 1.35,8.725L1.826,8.249C1.59,5.175 3.945,2.128 5.566,0.979C7.187,-0.169 8.667,0.713 8.712,1.836C9.908,0.64 11.915,1.686 11.79,3.096C13.113,2.367 14.36,3.683 14.489,4.502L17.312,1.679C18.24,0.75 19.506,0.33 20.434,1.258C21.545,2.369 21.145,3.789 20.034,4.9Z" />
 </vector>

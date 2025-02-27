@@ -60,7 +60,7 @@ fun SoptampIconButton(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current),
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.noRippleClickable { onClick() }

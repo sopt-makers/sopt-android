@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2023 SOPT Makers
@@ -27,7 +26,7 @@
     android:height="46dp"
     android:viewportWidth="310"
     android:viewportHeight="46">
-  <path
-      android:pathData="M302,38C306.42,38 310,34.42 310,30V8C310,3.58 306.42,0 302,0L8,0C3.58,0 0,3.58 0,8V30C0,34.42 3.58,38 8,38H146.92C148.35,38 149.67,38.76 150.38,40L153.27,45C154.04,46.33 155.96,46.33 156.73,45L159.62,40C160.33,38.76 161.65,38 163.08,38H302Z"
-      android:fillColor="#C292FF"/>
+    <path
+        android:fillColor="#C292FF"
+        android:pathData="M302,38C306.42,38 310,34.42 310,30V8C310,3.58 306.42,0 302,0L8,0C3.58,0 0,3.58 0,8V30C0,34.42 3.58,38 8,38H146.92C148.35,38 149.67,38.76 150.38,40L153.27,45C154.04,46.33 155.96,46.33 156.73,45L159.62,40C160.33,38.76 161.65,38 163.08,38H302Z" />
 </vector>

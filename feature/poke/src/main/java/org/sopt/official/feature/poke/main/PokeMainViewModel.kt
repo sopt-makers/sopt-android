@@ -27,7 +27,6 @@ package org.sopt.official.feature.poke.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -42,6 +41,7 @@ import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(

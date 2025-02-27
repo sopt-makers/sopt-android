@@ -54,7 +54,7 @@ import org.sopt.official.stamp.util.DefaultPreview
 private enum class OnBoardingPageUiModel(
     @DrawableRes val image: Int,
     val title: String,
-    val content: String
+    val content: String,
 ) {
     FIRST(
         image = R.drawable.ic_onboarding_1,

@@ -40,34 +40,34 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationDetailViewModel @Inject constructor(
-  private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
-  private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
-  savedStateHandle: SavedStateHandle
+    private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
+    private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-  private val notificationId = savedStateHandle.get<String>("notificationId").orEmpty()
-  private val _notificationDetail = MutableStateFlow<Notification?>(null)
-  val notificationDetail: StateFlow<Notification?> = _notificationDetail.asStateFlow()
+    private val notificationId = savedStateHandle.get<String>("notificationId").orEmpty()
+    private val _notificationDetail = MutableStateFlow<Notification?>(null)
+    val notificationDetail: StateFlow<Notification?> = _notificationDetail.asStateFlow()
 
-  init {
-    getNotificationDetail(notificationId)
-  }
-
-  fun getNotificationDetail(id: String) {
-    viewModelScope.launch {
-      getNotificationDetailUseCase(id).onSuccess {
-        _notificationDetail.value = it
-        updateNotificationReadingState(it.notificationId)
-      }.onFailure {
-        Timber.e(it)
-      }
+    init {
+        getNotificationDetail(notificationId)
     }
-  }
 
-  private suspend fun updateNotificationReadingState(id: String) {
-    runCatching {
-      updateNotificationReadingStateUseCase(id)
-    }.onFailure {
-      Timber.e(it)
+    fun getNotificationDetail(id: String) {
+        viewModelScope.launch {
+            getNotificationDetailUseCase(id).onSuccess {
+                _notificationDetail.value = it
+                updateNotificationReadingState(it.notificationId)
+            }.onFailure {
+                Timber.e(it)
+            }
+        }
     }
-  }
+
+    private suspend fun updateNotificationReadingState(id: String) {
+        runCatching {
+            updateNotificationReadingStateUseCase(id)
+        }.onFailure {
+            Timber.e(it)
+        }
+    }
 }

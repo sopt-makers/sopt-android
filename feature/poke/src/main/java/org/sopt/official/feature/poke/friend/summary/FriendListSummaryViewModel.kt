@@ -27,7 +27,6 @@ package org.sopt.official.feature.poke.friend.summary
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -39,6 +38,7 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
+import javax.inject.Inject
 
 @HiltViewModel
 class FriendListSummaryViewModel @Inject constructor(

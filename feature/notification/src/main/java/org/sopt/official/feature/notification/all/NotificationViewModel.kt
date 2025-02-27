@@ -37,21 +37,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
-  private val repository: NotificationRepository
+    private val repository: NotificationRepository,
 ) : ViewModel() {
-  val notifications = Pager(
-    PagingConfig(pageSize = 10)
-  ) {
-    NotificationPagingSource(repository)
-  }.flow.cachedIn(viewModelScope)
+    val notifications = Pager(
+        PagingConfig(pageSize = 10)
+    ) {
+        NotificationPagingSource(repository)
+    }.flow.cachedIn(viewModelScope)
 
-  fun updateEntireNotificationReadingState() {
-    viewModelScope.launch {
-      runCatching {
-        repository.updateEntireNotificationReadingState()
-      }.onFailure {
-        Timber.e(it)
-      }
+    fun updateEntireNotificationReadingState() {
+        viewModelScope.launch {
+            runCatching {
+                repository.updateEntireNotificationReadingState()
+            }.onFailure {
+                Timber.e(it)
+            }
+        }
     }
-  }
 }

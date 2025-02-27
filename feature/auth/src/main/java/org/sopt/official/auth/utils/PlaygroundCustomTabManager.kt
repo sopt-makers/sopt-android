@@ -118,7 +118,7 @@ object PlaygroundCustomTabManager {
         private val context: Context,
         private val customTabsIntent: CustomTabsIntent,
         private val uri: Uri,
-        private val packageName: String
+        private val packageName: String,
     ) : CustomTabsServiceConnection() {
         override fun onServiceDisconnected(name: ComponentName?) {
             PlaygroundLog.d("Playground Service Connection : onServiceDisconnected - $name")

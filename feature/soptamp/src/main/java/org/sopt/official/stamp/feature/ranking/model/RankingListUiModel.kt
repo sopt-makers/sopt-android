@@ -26,7 +26,7 @@ package org.sopt.official.stamp.feature.ranking.model
 
 class RankingListUiModel private constructor(
     val topRankingList: RankersUiModel,
-    val otherRankingList: List<RankerUiModel>
+    val otherRankingList: List<RankerUiModel>,
 ) {
 
     override fun equals(other: Any?): Boolean {

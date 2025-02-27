@@ -225,7 +225,7 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     data class Argument(
-        val userActiveState: UserActiveState
+        val userActiveState: UserActiveState,
     ) : Serializable
 
     companion object {
@@ -241,7 +241,7 @@ private fun ShowMyPageDialog(
     dialogState: MyPageDialogState,
     onDismissRequest: () -> Unit,
     onClearSoptampClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
 ) {
     when (dialogState) {
         MyPageDialogState.CLEAR_SOPTAMP -> {

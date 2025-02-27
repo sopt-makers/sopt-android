@@ -28,7 +28,7 @@ sealed class UiState<out T : Any> {
     data object Loading : UiState<Nothing>()
     data class Success<out T : Any>(
         val data: T,
-        val isFirstMeet: Boolean = false
+        val isFirstMeet: Boolean = false,
     ) : UiState<T>()
 
     data class ApiError(
@@ -37,6 +37,6 @@ sealed class UiState<out T : Any> {
     ) : UiState<Nothing>()
 
     data class Failure(
-        val throwable: Throwable
+        val throwable: Throwable,
     ) : UiState<Nothing>()
 }

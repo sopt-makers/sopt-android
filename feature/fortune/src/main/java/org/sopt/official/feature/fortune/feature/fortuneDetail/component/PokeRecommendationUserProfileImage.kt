@@ -32,8 +32,8 @@ import androidx.compose.ui.layout.ContentScale.Companion.Crop
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
 import org.sopt.official.designsystem.component.UrlImage
+import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
 
 @Composable
 internal fun PokeRecommendationUserProfileImage(

@@ -29,5 +29,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class RequestToken(
-    @SerialName("code") val code: String
+    @SerialName("code") val code: String,
 )

@@ -74,7 +74,7 @@ class PlaygroundLog private constructor(val isDebug: Boolean) {
             val fileName = Thread.currentThread().stackTrace[4].fileName
             val methodName = Thread.currentThread().stackTrace[4].methodName
             val thread = Thread.currentThread().name
-            return "[${ thread }>${ fileName }::${ methodName }] $log"
+            return "[${thread}>${fileName}::${methodName}] $log"
         }
     }
 }

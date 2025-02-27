@@ -32,7 +32,7 @@ import org.sopt.official.auth.data.remote.ServiceFactory
 import retrofit2.Retrofit
 
 internal class PlaygroundApiManager private constructor(
-    private val retrofit: Retrofit
+    private val retrofit: Retrofit,
 ) {
     fun provideAuthService(): AuthService = retrofit.create(AuthService::class.java)
 

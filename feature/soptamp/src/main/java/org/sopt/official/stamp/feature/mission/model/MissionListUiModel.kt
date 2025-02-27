@@ -29,7 +29,7 @@ import org.sopt.official.domain.soptamp.model.Mission
 
 data class MissionListUiModel(
     val title: String,
-    val missionList: List<MissionUiModel>
+    val missionList: List<MissionUiModel>,
 )
 
 fun List<Mission>.toUiModel(title: String): MissionListUiModel = MissionListUiModel(

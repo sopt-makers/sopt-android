@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2023-2024 SOPT Makers
@@ -27,14 +26,14 @@
     android:height="26dp"
     android:viewportWidth="26"
     android:viewportHeight="26">
-  <path
-      android:pathData="M7,2L19,2A5,5 0,0 1,24 7L24,19A5,5 0,0 1,19 24L7,24A5,5 0,0 1,2 19L2,7A5,5 0,0 1,7 2z"
-      android:fillColor="#346FFA"/>
-  <path
-      android:pathData="M7.667,12.067L11.222,15.667L18.333,9.667"
-      android:strokeLineJoin="round"
-      android:strokeWidth="1.5"
-      android:fillColor="#00000000"
-      android:strokeColor="#ffffff"
-      android:strokeLineCap="round"/>
+    <path
+        android:fillColor="#346FFA"
+        android:pathData="M7,2L19,2A5,5 0,0 1,24 7L24,19A5,5 0,0 1,19 24L7,24A5,5 0,0 1,2 19L2,7A5,5 0,0 1,7 2z" />
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M7.667,12.067L11.222,15.667L18.333,9.667"
+        android:strokeWidth="1.5"
+        android:strokeColor="#ffffff"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
 </vector>

@@ -45,7 +45,7 @@ import org.sopt.official.feature.mypage.R
 fun MyPageItem(
     text: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier

@@ -74,7 +74,7 @@ fun SoptTopAppBar(
     actions: @Composable (RowScope.() -> Unit) = {},
     backgroundColor: Color = Color.Transparent,
     elevation: Dp = 0.dp,
-    contentPadding: PaddingValues? = null
+    contentPadding: PaddingValues? = null,
 ) {
     val layoutDirection = LocalLayoutDirection.current
     SoptAppBar(

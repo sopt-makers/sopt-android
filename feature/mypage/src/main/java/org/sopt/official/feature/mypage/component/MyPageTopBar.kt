@@ -41,7 +41,7 @@ import org.sopt.official.feature.mypage.R
 fun MyPageTopBar(
     title: String,
     onNavigationIconClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,

@@ -55,7 +55,7 @@ class SoptTypography internal constructor(
     caption1: TextStyle,
     caption2: TextStyle,
     caption3: TextStyle,
-    caption4: TextStyle
+    caption4: TextStyle,
 ) {
     var h1: TextStyle by mutableStateOf(h1)
         private set
@@ -94,7 +94,7 @@ class SoptTypography internal constructor(
         caption1: TextStyle = this.caption1,
         caption2: TextStyle = this.caption2,
         caption3: TextStyle = this.caption3,
-        caption4: TextStyle = this.caption4
+        caption4: TextStyle = this.caption4,
     ): SoptTypography = SoptTypography(h1, h2, h3, h4, sub1, sub2, sub3, sub4, caption1, caption2, caption3, caption4)
 
     fun update(other: SoptTypography) {

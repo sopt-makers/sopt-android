@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ fun rememberMyPageUiState(
     userActiveState: UserActiveState,
     authRepository: AuthRepository,
     stampRepository: StampRepository,
-    onRestartApp: () -> Unit
+    onRestartApp: () -> Unit,
 ): MyPageUiState {
     var userActiveState by rememberRetained { mutableStateOf(userActiveState) }
     var dialogState by rememberRetained { mutableStateOf(MyPageDialogState.CLEAR) }

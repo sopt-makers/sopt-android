@@ -35,7 +35,7 @@ enum class TopRankerDescriptionBubble(
     private val rank: Int,
     @DrawableRes val background: Int,
     val backgroundColor: Color,
-    val textColor: Color
+    val textColor: Color,
 ) {
     FIRST(
         rank = 1,

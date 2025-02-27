@@ -34,11 +34,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
 import org.sopt.official.designsystem.Gray400
 import org.sopt.official.designsystem.Gray900
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.model.MyPageUiModel
-import kotlinx.collections.immutable.ImmutableList
 
 @Composable
 fun MyPageSection(items: ImmutableList<MyPageUiModel>) {

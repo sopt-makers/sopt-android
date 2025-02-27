@@ -31,7 +31,7 @@ data class MissionUiModel(
     val id: Int,
     val title: String,
     val level: MissionLevel,
-    val isCompleted: Boolean
+    val isCompleted: Boolean,
 )
 
 fun OtherMission.Mission.toUiModel(): MissionUiModel = MissionUiModel(

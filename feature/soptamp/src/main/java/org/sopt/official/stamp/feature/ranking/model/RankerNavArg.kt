@@ -29,7 +29,7 @@ import com.ramcosta.composedestinations.navargs.NavTypeSerializer
 
 data class RankerNavArg(
     val nickname: String,
-    val description: String
+    val description: String,
 )
 
 fun RankerUiModel.toArgs() = RankerNavArg(
