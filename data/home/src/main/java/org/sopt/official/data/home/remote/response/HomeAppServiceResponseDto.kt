@@ -22,21 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.home.repository
+package org.sopt.official.data.home.remote.response
 
-import org.sopt.official.domain.home.model.AppService
-import org.sopt.official.domain.home.model.RecentCalendar
-import org.sopt.official.domain.home.model.UserInfo
-import org.sopt.official.domain.home.model.UserInfo.UserDescription
-import org.sopt.official.domain.home.result.Result
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface HomeRepository {
-
-    suspend fun getUserInfo(): Result<UserInfo>
-
-    suspend fun getRecentCalendar(): Result<RecentCalendar>
-
-    suspend fun getHomeDescription(): Result<UserDescription>
-
-    suspend fun getHomeAppService(): Result<List<AppService>>
-}
+@Serializable
+internal data class HomeAppServiceResponseDto(
+    @SerialName("serviceName")
+    val serviceName: String,
+    @SerialName("displayAlarmBadge")
+    val displayAlarmBadge: Boolean,
+    @SerialName("alarmBadge")
+    val alarmBadge: String,
+    @SerialName("iconUrl")
+    val iconUrl: String,
+    @SerialName("deepLink")
+    val deepLink: String,
+)

@@ -26,7 +26,9 @@ package org.sopt.official.data.home.repository
 
 import org.sopt.official.data.home.mapper.toDomain
 import org.sopt.official.data.home.remote.api.CalendarApi
+import org.sopt.official.data.home.remote.api.HomeApi
 import org.sopt.official.data.home.remote.api.UserApi
+import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
@@ -37,12 +39,19 @@ import javax.inject.Inject
 
 internal class DefaultHomeRepository @Inject constructor(
     private val userApi: UserApi,
+    private val homeApi: HomeApi,
     private val calendarApi: CalendarApi,
 ) : HomeRepository {
 
-    override suspend fun getUserInfo(): Result<UserInfo> = runCatching { userApi.getUserMain().toDomain() }
+    override suspend fun getUserInfo(): Result<UserInfo> =
+        runCatching { userApi.getUserMain().toDomain() }
 
-    override suspend fun getHomeDescription(): Result<UserDescription> = runCatching { userApi.getHomeDescription().toDomain() }
+    override suspend fun getRecentCalendar(): Result<RecentCalendar> =
+        runCatching { calendarApi.getRecentCalendar().toDomain() }
 
-    override suspend fun getRecentCalendar(): Result<RecentCalendar> = runCatching { calendarApi.getRecentCalendar().toDomain() }
+    override suspend fun getHomeDescription(): Result<UserDescription> =
+        runCatching { homeApi.getHomeDescription().toDomain() }
+
+    override suspend fun getHomeAppService(): Result<List<AppService>> =
+        runCatching { homeApi.getHomeAppService().map { it.toDomain() } }
 }

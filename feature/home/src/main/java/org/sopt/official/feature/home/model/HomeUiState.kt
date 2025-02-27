@@ -11,6 +11,7 @@ import org.sopt.official.feature.home.model.Schedule.EVENT
 internal sealed interface HomeUiState {
     val isLoading: Boolean
     val isError: Boolean
+    val homeServices: ImmutableList<HomeAppService>
 
     @Stable
     sealed interface Member : HomeUiState {
@@ -23,12 +24,14 @@ internal sealed interface HomeUiState {
     data class Unauthenticated(
         override val isLoading: Boolean,
         override val isError: Boolean,
+        override val homeServices: ImmutableList<HomeAppService> = persistentListOf(),
     ) : HomeUiState
 
     @Immutable
     data class ActiveMember(
         override val isLoading: Boolean,
         override val isError: Boolean,
+        override val homeServices: ImmutableList<HomeAppService> = persistentListOf(),
         override val hasNotification: Boolean = false,
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
@@ -38,6 +41,7 @@ internal sealed interface HomeUiState {
     data class InactiveMember(
         override val isLoading: Boolean,
         override val isError: Boolean,
+        override val homeServices: ImmutableList<HomeAppService> = persistentListOf(),
         override val hasNotification: Boolean = false,
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
@@ -69,3 +73,12 @@ data class HomeUserSoptLogDashboardModel(
     val lastGenerations: ImmutableList<Long> =
         generations.filter { it != generations.max() }.sortedDescending().toPersistentList()
 }
+
+@Immutable
+data class HomeAppService(
+    val serviceName: String = "",
+    val isShowAlarmBadge: Boolean = false,
+    val alarmBadgeContent: String = "",
+    val iconUrl: String = "",
+    val deepLink: String = "",
+)

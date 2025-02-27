@@ -24,9 +24,11 @@
  */
 package org.sopt.official.data.home.mapper
 
+import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
 import org.sopt.official.data.home.remote.response.UserMainResponseDto
+import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.User
@@ -52,4 +54,12 @@ internal fun RecentCalendarResponseDto.toDomain(): RecentCalendar = RecentCalend
 
 internal fun HomeDescriptionResponseDto.toDomain(): UserDescription = UserDescription(
     activityDescription = activityDescription,
+)
+
+internal fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
+    serviceName = serviceName,
+    displayAlarmBadge = displayAlarmBadge,
+    alarmBadge = alarmBadge,
+    iconUrl = iconUrl,
+    deepLink = deepLink,
 )

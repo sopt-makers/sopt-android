@@ -35,10 +35,12 @@ import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.fortune.FortuneActivity
 import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
+import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.stamp.SoptampActivity
@@ -57,6 +59,11 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
         context,
         MyPageActivity.Argument(UserActiveState.valueOf(name))
+    )
+
+    override fun getPokeActivityIntent(userStatus: UserStatus): Intent = PokeMainActivity.getIntent(
+        context,
+        PokeMainActivity.StartArgs(userStatus = userStatus.name)
     )
 
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
@@ -92,4 +99,7 @@ class NavigatorProviderIntent @Inject constructor(
             deepLinkType
         )
     )
+
+    override fun getMainActivityIntent(userStatus: UserStatus, deepLinkType: DeepLinkType?): Intent =
+        MainActivity.getIntent(context, MainActivity.StartArgs(userStatus = userStatus, deepLinkType = deepLinkType))
 }

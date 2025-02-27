@@ -4,7 +4,7 @@ import androidx.compose.runtime.Stable
 
 @Stable
 sealed interface HomeNavigation {
-    
+
     @Stable
     interface HomeShortcutNavigation : HomeNavigation {
         fun navigateToPlayground()
@@ -24,5 +24,10 @@ sealed interface HomeNavigation {
         fun navigateToSchedule()
         fun navigateToSoptlog()
         fun navigateToAttendance()
+    }
+
+    @Stable
+    interface HomeAppServicesNavigation : HomeNavigation {
+        fun navigateToDeepLink(url: String)
     }
 }

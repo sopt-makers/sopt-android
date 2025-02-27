@@ -13,10 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.ImmutableList
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
@@ -26,7 +28,9 @@ import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
+import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeNavigation
+import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
@@ -47,14 +51,23 @@ internal fun HomeRoute(
     }
 
     when (val state = uiState) {
-        is Unauthenticated -> HomeScreenForVisitor(homeShortcutEvent = homeNavigation as HomeShortcutNavigation)
+        is Unauthenticated -> {
+            HomeScreenForVisitor(
+                homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
+                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
+                homeAppServices = uiState.homeServices,
+            )
+        }
+
         is Member -> {
             HomeScreenForMember(
-                homeDashboardEvent = homeNavigation as HomeDashboardNavigation,
-                homeShortcutEvent = homeNavigation as HomeShortcutNavigation,
+                homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
+                homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
+                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
+                homeAppServices = uiState.homeServices,
             )
         }
     }
@@ -65,11 +78,13 @@ internal fun HomeRoute(
 
 @Composable
 private fun HomeScreenForMember(
-    homeDashboardEvent: HomeDashboardNavigation,
-    homeShortcutEvent: HomeShortcutNavigation,
+    homeDashboardNavigation: HomeDashboardNavigation,
+    homeShortcutNavigation: HomeShortcutNavigation,
+    homeAppServicesNavigation: HomeAppServicesNavigation,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
+    homeAppServices: ImmutableList<HomeAppService>,
 ) {
     Column(
         modifier = Modifier
@@ -79,34 +94,41 @@ private fun HomeScreenForMember(
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForMember(
             hasNotification = hasNotification,
-            onNotificationClick = homeDashboardEvent::navigateToNotification,
-            onSettingClick = homeDashboardEvent::navigateToSetting,
+            onNotificationClick = homeDashboardNavigation::navigateToNotification,
+            onSettingClick = homeDashboardNavigation::navigateToSetting,
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeUserSoptLogDashboardForMember(
-            onSoptlogClick = homeDashboardEvent::navigateToSoptlog,
+            onSoptlogClick = homeDashboardNavigation::navigateToSoptlog,
             homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
         HomeSoptScheduleDashboard(
             homeSoptScheduleModel = homeSoptScheduleModel,
             isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = homeDashboardEvent::navigateToSchedule,
-            onAttendanceButtonClick = homeDashboardEvent::navigateToAttendance,
+            onScheduleClick = homeDashboardNavigation::navigateToSchedule,
+            onAttendanceButtonClick = homeDashboardNavigation::navigateToAttendance,
         )
         Spacer(modifier = Modifier.height(height = 12.dp))
         HomeShortcutButtonsForMember(
-            onPlaygroundClick = homeShortcutEvent::navigateToPlayground,
-            onStudyClick = homeShortcutEvent::navigateToPlaygroundGroup,
-            onMemberClick = homeShortcutEvent::navigateToPlaygroundMember,
-            onProjectClick = homeShortcutEvent::navigateToPlaygroundProject,
+            onPlaygroundClick = homeShortcutNavigation::navigateToPlayground,
+            onStudyClick = homeShortcutNavigation::navigateToPlaygroundGroup,
+            onMemberClick = homeShortcutNavigation::navigateToPlaygroundMember,
+            onProjectClick = homeShortcutNavigation::navigateToPlaygroundProject,
+        )
+        Spacer(modifier = Modifier.height(height = 40.dp))
+        HomeEnjoySoptServicesBlock(
+            appServices = homeAppServices,
+            onAppServiceClick = homeAppServicesNavigation::navigateToDeepLink,
         )
     }
 }
 
 @Composable
 private fun HomeScreenForVisitor(
-    homeShortcutEvent: HomeShortcutNavigation,
+    homeShortcutNavigation: HomeShortcutNavigation,
+    homeAppServicesNavigation: HomeAppServicesNavigation,
+    homeAppServices: ImmutableList<HomeAppService>,
 ) {
     Column(
         modifier = Modifier
@@ -125,10 +147,15 @@ private fun HomeScreenForVisitor(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeShortcutButtonsForVisitor(
-            onHomePageClick = homeShortcutEvent::navigateToSoptHomepage,
-            onPlaygroundClick = homeShortcutEvent::navigateToSoptReview,
-            onProjectClick = homeShortcutEvent::navigateToSoptProject,
-            onInstagramClick = homeShortcutEvent::navigateToSoptInstagram,
+            onHomePageClick = homeShortcutNavigation::navigateToSoptHomepage,
+            onPlaygroundClick = homeShortcutNavigation::navigateToSoptReview,
+            onProjectClick = homeShortcutNavigation::navigateToSoptProject,
+            onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
+        )
+        Spacer(modifier = Modifier.height(height = 40.dp))
+        HomeEnjoySoptServicesBlock(
+            appServices = homeAppServices,
+            onAppServiceClick = homeAppServicesNavigation::navigateToDeepLink,
         )
     }
 }

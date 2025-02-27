@@ -46,9 +46,12 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.home.model.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.model.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.model.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
@@ -88,7 +91,7 @@ fun MainScreen(
                 ) {
                     homeNavGraph(
                         userStatus = userStatus,
-                        homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation {
+                        homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
                             }
@@ -110,7 +113,10 @@ fun MainScreen(
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
                             override fun navigateToSoptlog() = navigator.navigateToSoptlog(userStatus)
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
-
+                            override fun navigateToDeepLink(url: String) {
+                                if (userStatus == UNAUTHENTICATED) isOpenDialog = true
+                                else context.startActivity(DeepLinkType.of(url).getMainIntent(context, userStatus, url))
+                            }
                         },
                     )
 
