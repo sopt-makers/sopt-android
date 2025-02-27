@@ -73,6 +73,8 @@ jobs:
           echo playgroundTokenKeyAlias=\"PLAYGROUND_TOKEN_KEY_ALIAS\" >> ./local.properties
           echo userStatusKeyAlias=\"USER_STATUS_KEY_ALIAS\" >> ./local.properties
           echo pushTokenKeyAlias=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+          echo mockAuthApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+          echo serverClientId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
 
       - name: Access Firebase Service
         run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
