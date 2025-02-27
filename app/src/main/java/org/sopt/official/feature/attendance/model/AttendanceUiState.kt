@@ -10,11 +10,15 @@ import org.sopt.official.feature.attendance.toUiAttendanceDayType
 sealed interface AttendanceUiState {
     data object Loading : AttendanceUiState
     data class Success(
+        val lectureId: Long?,
         val attendanceDayType: AttendanceDayType,
         val userTitle: String,
         val attendanceScore: Float,
         val totalAttendanceResult: ImmutableMap<AttendanceResultType, Int>,
         val attendanceHistoryList: ImmutableList<AttendanceHistory>,
+        val attendanceSession: AttendanceSession? = null,
+        val codes: List<String> = emptyList(),
+        val isCodeCorrect: Boolean = true,
     ) : AttendanceUiState {
 
         enum class AttendanceResultType(val type: String) {
@@ -33,8 +37,9 @@ sealed interface AttendanceUiState {
         companion object {
             fun of(attendance: Attendance): Success {
                 return Success(
+                    lectureId = attendance.lectureId,
                     attendanceDayType = attendance.attendanceDayType.toUiAttendanceDayType(),
-                    userTitle = "${attendance.user.generation}기 ${attendance.user.part.partName}파트 ${attendance.user.name}",
+                    userTitle = attendance.user.userTitle,
                     attendanceScore = attendance.user.attendanceScore.toFloat(),
                     totalAttendanceResult = attendance.user.attendanceCount.toTotalAttendanceResult(),
                     attendanceHistoryList = attendance.user.attendanceHistory.map { attendanceLog: Attendance.User.AttendanceLog ->
@@ -51,6 +56,14 @@ sealed interface AttendanceUiState {
                     }.toPersistentList()
                 )
             }
+
+            private val Attendance.User.userTitle: String
+                get() {
+                    if (generation == null || part == null || name == null) {
+                        return "SOPT 회원님"
+                    }
+                    return "${generation}기 ${part.partName}파트 $name"
+                }
         }
     }
 

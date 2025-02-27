@@ -1,33 +1,41 @@
 package org.sopt.official.feature.attendance.compose
 
+import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.NewAttendanceViewModel
 import org.sopt.official.feature.attendance.compose.component.AttendanceTopAppBar
-import org.sopt.official.feature.attendance.model.AttendanceAction
 import org.sopt.official.feature.attendance.model.AttendanceUiState
 
 @Composable
-fun AttendanceRoute(onClickBackIcon: () -> Unit) {
+fun AttendanceRoute() {
     val viewModel: NewAttendanceViewModel = viewModel()
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val action = viewModel.rememberAttendanceActions()
+    val state: AttendanceUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val activity: Activity = LocalActivity.current as Activity
+
+    LaunchedEffect(Unit) {
+        viewModel.errorMessage.collect { message ->
+            activity.toast(message)
+        }
+    }
 
     Scaffold(
         topBar = {
             AttendanceTopAppBar(
-                onClickBackIcon = onClickBackIcon,
-                onClickRefreshIcon = action.onClickRefresh,
+                onClickBackIcon = { if (!activity.isFinishing) activity.finish() },
+                onClickRefreshIcon = viewModel::fetchAttendanceInfo
             )
         }
     ) { innerPaddingValues ->
@@ -45,16 +53,13 @@ fun AttendanceRoute(onClickBackIcon: () -> Unit) {
                 is AttendanceUiState.Failure -> {}
                 AttendanceUiState.NetworkError -> {}
                 is AttendanceUiState.Success -> {
-                    AttendanceScreen(state = state as AttendanceUiState.Success, action = action)
+                    AttendanceScreen(
+                        state = state as AttendanceUiState.Success,
+                        onClickAttendance = viewModel::fetchCurrentRound,
+                        onDismissAttendanceCodeDialog = viewModel::clearAttendanceCode,
+                    )
                 }
             }
         }
     }
-}
-
-@Composable
-fun NewAttendanceViewModel.rememberAttendanceActions(): AttendanceAction = remember(this) {
-    AttendanceAction(
-        onClickRefresh = ::fetchAttendanceInfo
-    )
 }

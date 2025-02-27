@@ -13,12 +13,7 @@ sealed class MidtermAttendance private constructor(
         imageResId = R.drawable.ic_attendance_state_nothing,
         isFinished = false,
         description = attendanceSession.type
-    ) {
-        enum class AttendanceSession(val type: String) {
-            FIRST("1차 출석"),
-            SECOND("2차 출석")
-        }
-    }
+    )
 
     data class Present(val attendanceAt: String) : MidtermAttendance(
         imageResId = R.drawable.ic_attendance_state_yes,

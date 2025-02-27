@@ -16,11 +16,11 @@ fun mapToAttendance(
     soptEventResponse: SoptEventResponse?
 ): Attendance {
     return Attendance(
-        sessionId = soptEventResponse?.id ?: Attendance.UNKNOWN_SESSION_ID,
+        lectureId = soptEventResponse?.lectureId?.toLong() ?: Attendance.UNKNOWN_SESSION_ID,
         user = Attendance.User(
-            name = attendanceHistoryResponse?.name ?: Attendance.User.UNKNOWN_NAME,
-            generation = attendanceHistoryResponse?.generation ?: Attendance.User.UNKNOWN_GENERATION,
-            part = Attendance.User.Part.valueOf(attendanceHistoryResponse?.part ?: Attendance.User.UNKNOWN_PART),
+            name = attendanceHistoryResponse?.name,
+            generation = attendanceHistoryResponse?.generation,
+            part = Attendance.User.Part.of(partName = attendanceHistoryResponse?.part),
             attendanceScore = attendanceHistoryResponse?.score ?: 0.0,
             attendanceCount = Attendance.User.AttendanceCount(
                 attendanceCount = attendanceHistoryResponse?.attendanceCount?.normal ?: 0,
@@ -53,11 +53,11 @@ private fun SoptEventResponse?.toAttendanceDayType(): AttendanceDayType {
                 ),
                 firstRoundAttendance = RoundAttendance(
                     state = RoundAttendanceState.valueOf(firstAttendanceResponse?.status ?: RoundAttendanceState.NOT_YET.name),
-                    attendedAt = LocalDateTime.parse(firstAttendanceResponse?.attendedAt),
+                    attendedAt = if (firstAttendanceResponse == null) null else LocalDateTime.parse(firstAttendanceResponse.attendedAt)
                 ),
                 secondRoundAttendance = RoundAttendance(
                     state = RoundAttendanceState.valueOf(secondAttendanceResponse?.status ?: RoundAttendanceState.NOT_YET.name),
-                    attendedAt = LocalDateTime.parse(secondAttendanceResponse?.attendedAt),
+                    attendedAt = if (secondAttendanceResponse == null) null else LocalDateTime.parse(secondAttendanceResponse.attendedAt)
                 ),
             )
         }

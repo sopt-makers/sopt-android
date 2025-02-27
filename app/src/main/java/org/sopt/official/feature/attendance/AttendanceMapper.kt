@@ -5,9 +5,9 @@ import kotlinx.collections.immutable.persistentMapOf
 import org.sopt.official.domain.entity.attendance.Attendance
 import org.sopt.official.domain.entity.attendance.Attendance.AttendanceDayType.HasAttendance.RoundAttendance.RoundAttendanceState
 import org.sopt.official.feature.attendance.model.AttendanceDayType
+import org.sopt.official.feature.attendance.model.AttendanceSession
 import org.sopt.official.feature.attendance.model.AttendanceUiState.Success.AttendanceResultType
 import org.sopt.official.feature.attendance.model.MidtermAttendance
-import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
 
 fun Attendance.AttendanceDayType.toUiAttendanceDayType(): AttendanceDayType {
     return when (this) {

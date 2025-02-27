@@ -34,7 +34,7 @@ import org.sopt.official.domain.entity.attendance.SoptEvent
 @Serializable
 data class SoptEventResponse(
     @SerialName("id")
-    val id: Int = 1,
+    val lectureId: Int = 1,
     @SerialName("type")
     val type: String,
     @SerialName("location")
@@ -97,7 +97,7 @@ data class SoptEventResponse(
         }
 
         return SoptEvent(
-            id = this.id,
+            id = this.lectureId,
             eventType = EventType.valueOf(this.type),
             date = eventDateTime,
             location = this.location,

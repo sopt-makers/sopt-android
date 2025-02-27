@@ -26,9 +26,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
+import org.sopt.official.feature.attendance.model.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
@@ -91,7 +91,7 @@ fun AttendanceCodeDialog(
                     containerColor = SoptTheme.colors.onSurface10,
                     contentColor = SoptTheme.colors.onSurface950,
                     disabledContainerColor = Black40,
-                    disabledContentColor = Gray60,
+                    disabledContentColor = Gray500,
                 ),
                 enabled = codes == inputCodes
             ) {

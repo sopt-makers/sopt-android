@@ -26,16 +26,16 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.compose.component.AttendanceCodeCardList
-import org.sopt.official.feature.attendance.model.MidtermAttendance.NotYet.AttendanceSession
+import org.sopt.official.feature.attendance.model.AttendanceSession
 
 @Composable
 fun AttendanceCodeDialog(
-    codes: ImmutableList<String>,
-    inputCodes: ImmutableList<String?>,
-    attendanceType: AttendanceSession,
+    codes: ImmutableList<String?>,
+    isCodeCorrect: Boolean,
+    attendanceSession: AttendanceSession,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -58,7 +58,7 @@ fun AttendanceCodeDialog(
                     .clickable(onClick = onDismissRequest)
             )
             Text(
-                text = stringResource(R.string.attendance_do, attendanceType.type),
+                text = stringResource(R.string.attendance_do, attendanceSession.type),
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10
             )
@@ -70,11 +70,11 @@ fun AttendanceCodeDialog(
             )
             Spacer(modifier = Modifier.height(24.dp))
             AttendanceCodeCardList(
-                codes = inputCodes,
+                codes = codes,
                 onTextChange = {},
                 onTextFieldFull = {},
             )
-            if (codes != inputCodes) {
+            if (isCodeCorrect) {
                 Spacer(modifier = Modifier.height(24.dp))
                 Text(
                     text = stringResource(R.string.attendance_code_does_not_match),
@@ -92,9 +92,9 @@ fun AttendanceCodeDialog(
                     containerColor = SoptTheme.colors.onSurface10,
                     contentColor = SoptTheme.colors.onSurface950,
                     disabledContainerColor = Black40,
-                    disabledContentColor = Gray60,
+                    disabledContentColor = Gray500,
                 ),
-                enabled = codes == inputCodes
+                enabled = codes.filterNotNull().size == ATTENDANCE_CODE_LENGTH
             ) {
                 Text(
                     text = stringResource(R.string.attendance_dialog_button),
@@ -105,6 +105,8 @@ fun AttendanceCodeDialog(
     }
 }
 
+const val ATTENDANCE_CODE_LENGTH = 5
+
 @Preview
 @Composable
 private fun AttendanceCodeDialogPreview(
@@ -113,8 +115,8 @@ private fun AttendanceCodeDialogPreview(
     SoptTheme {
         AttendanceCodeDialog(
             codes = parameter.codes,
-            inputCodes = parameter.inputCodes,
-            attendanceType = parameter.attendanceType,
+            isCodeCorrect = true,
+            attendanceSession = parameter.attendanceType,
             modifier = Modifier.fillMaxWidth(),
             onDismissRequest = {}
         )
@@ -122,8 +124,8 @@ private fun AttendanceCodeDialogPreview(
 }
 
 data class AttendanceCodeDialogPreviewParameter(
-    val codes: ImmutableList<String>,
-    val inputCodes: ImmutableList<String?>,
+    val codes: ImmutableList<String?>,
+    val isCodeCorrect: Boolean,
     val attendanceType: AttendanceSession,
 )
 
@@ -133,23 +135,23 @@ class AttendanceCodeDialogPreviewParameterProvider :
         sequenceOf(
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
-                inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceSession.FIRST,
+                isCodeCorrect = true,
+                attendanceType = AttendanceSession.FIRST,
+            ),
+            AttendanceCodeDialogPreviewParameter(
+                codes = persistentListOf("1", "2", "3", null, null),
+                isCodeCorrect = false,
+                attendanceType = AttendanceSession.FIRST,
             ),
             AttendanceCodeDialogPreviewParameter(
                 codes = persistentListOf("1", "2", "3", "4", "5"),
-                inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceSession.FIRST,
+                isCodeCorrect = true,
+                attendanceType = AttendanceSession.SECOND,
             ),
             AttendanceCodeDialogPreviewParameter(
-                codes = persistentListOf("1", "2", "3", "4", "5"),
-                inputCodes = persistentListOf("1", "2", "3", null, null),
-                AttendanceSession.SECOND,
-            ),
-            AttendanceCodeDialogPreviewParameter(
-                codes = persistentListOf("1", "2", "3", "4", "5"),
-                inputCodes = persistentListOf("1", "2", "3", "4", "5"),
-                AttendanceSession.SECOND,
+                codes = persistentListOf("1", "2", "3", null, null),
+                isCodeCorrect = false,
+                attendanceType = AttendanceSession.SECOND,
             ),
         )
 }

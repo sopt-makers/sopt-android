@@ -13,9 +13,7 @@ class NewAttendanceActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                AttendanceRoute(
-                    onClickBackIcon = { if (!isFinishing) finish() }
-                )
+                AttendanceRoute()
             }
         }
     }

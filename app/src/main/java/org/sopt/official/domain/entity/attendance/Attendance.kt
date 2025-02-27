@@ -3,14 +3,14 @@ package org.sopt.official.domain.entity.attendance
 import java.time.LocalDateTime
 
 data class Attendance(
-    val sessionId: Int,
+    val lectureId: Long,
     val user: User,
     val attendanceDayType: AttendanceDayType,
 ) {
     data class User(
-        val name: String,
-        val generation: Int,
-        val part: Part,
+        val name: String?,
+        val generation: Int?,
+        val part: Part?,
         val attendanceScore: Number,
         val attendanceCount: AttendanceCount,
         val attendanceHistory: List<AttendanceLog>
@@ -21,8 +21,14 @@ data class Attendance(
             ANDROID("안드로이드"),
             IOS("iOS"),
             WEB("웹"),
-            SERVER("서버"),
-            UNKNOWN("")
+            SERVER("서버");
+
+            companion object {
+                fun of(partName: String?): Part? {
+                    if (partName == null) return null
+                    return entries.find { part: Part -> part.partName == partName }
+                }
+            }
         }
 
         data class AttendanceCount(
@@ -56,12 +62,6 @@ data class Attendance(
                 /** 결석 */
                 ABSENT
             }
-        }
-
-        companion object {
-            const val UNKNOWN_NAME = "회원"
-            const val UNKNOWN_GENERATION = -1
-            const val UNKNOWN_PART = "UNKNOWN"
         }
     }
 
@@ -106,6 +106,10 @@ data class Attendance(
     )
 
     companion object {
-        const val UNKNOWN_SESSION_ID = -1
+        /** 세션이 올바르게 생성되지 않은 경우 */
+        const val UNKNOWN_SESSION_ID: Long = -1L
+
+        /** 출석해야 할 세션이 존재하지 않는 경우 */
+        const val NO_SESSION_ID: Long = 0L
     }
 }
