@@ -80,6 +80,7 @@ sealed class PokeUserViewHolder(
                             crossfade(true)
                             transformations(CircleCropTransformation())
                         }
+
                     false ->
                         imageViewProfile.load(pokeUser.profileImage) {
                             crossfade(true)

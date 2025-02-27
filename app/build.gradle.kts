@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -120,17 +120,6 @@ ksp {
 
 dependencies {
     implementation(projects.core.designsystem)
-    implementation(projects.domain.soptamp)
-    implementation(projects.domain.mypage)
-    implementation(projects.domain.poke)
-    implementation(projects.domain.fortune)
-    implementation(projects.domain.notification)
-    implementation(projects.feature.soptamp)
-    implementation(projects.data.fortune)
-    implementation(projects.data.soptamp)
-    implementation(projects.data.mypage)
-    implementation(projects.data.poke)
-    implementation(projects.data.notification)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.network)
@@ -138,11 +127,33 @@ dependencies {
     implementation(projects.core.authimpl)
     implementation(projects.core.security)
     implementation(projects.core.webview)
+
+    implementation(projects.domain.soptamp)
+    implementation(projects.domain.mypage)
+    implementation(projects.domain.poke)
+    implementation(projects.domain.fortune)
+    implementation(projects.domain.notification)
+    implementation(projects.domain.home)
+
+    implementation(projects.data.fortune)
+    implementation(projects.data.soptamp)
+    implementation(projects.data.mypage)
+    implementation(projects.data.poke)
+    implementation(projects.data.notification)
+    implementation(projects.data.home)
+
+    implementation(projects.feature.soptamp)
+    implementation(projects.data.schedule)
+    implementation(projects.data.soptlog)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)
     implementation(projects.feature.notification)
     implementation(projects.feature.fortune)
+    implementation(projects.feature.home)
+    implementation(projects.feature.main)
+    implementation(projects.feature.schedule)
+
     baselineProfile(projects.baselineprofile)
 
     implementation(libs.kotlin.coroutines.google.play)

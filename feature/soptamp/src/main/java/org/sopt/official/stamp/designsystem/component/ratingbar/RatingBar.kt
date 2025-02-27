@@ -50,7 +50,7 @@ fun RatingBar(
     maxStars: Int = DEFAULT_MAX,
     gapSize: Dp = 10.dp,
     selectedColor: Color = SoptTheme.colors.mint300,
-    unselectedColor: Color = SoptTheme.colors.onSurface30
+    unselectedColor: Color = SoptTheme.colors.onSurface30,
 ) {
     require(maxStars >= stars) {
         "RatingBar의 최대 별 갯수는 선택된 별 갯수보다 커야합니다. Max Stars: $maxStars, stars: $stars"

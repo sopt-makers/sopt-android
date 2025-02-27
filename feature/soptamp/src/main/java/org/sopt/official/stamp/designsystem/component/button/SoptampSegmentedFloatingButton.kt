@@ -52,7 +52,7 @@ fun SoptampSegmentedFloatingButton(
     option2: String,
     modifier: Modifier = Modifier,
     onClickFirstOption: () -> Unit = {},
-    onClickSecondOption: () -> Unit = {}
+    onClickSecondOption: () -> Unit = {},
 ) {
     Row(
         modifier = modifier

@@ -54,6 +54,7 @@ retrofit = "2.11.0"
 timber = "5.0.1"
 compose-destination = "1.11.9"
 coil = "2.7.0"
+coil3 = "3.0.3"
 lottie = "6.6.2"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
@@ -127,6 +128,9 @@ compose-compiler-extension = { module = "org.jetbrains.kotlin:compose-compiler-g
 
 coil-core = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+coil3-test = { group = "io.coil-kt.coil3", name = "coil-test", version.ref = "coil3" }
+coil3-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil3" }
+coil3-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil3" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-test-junit" }

@@ -34,7 +34,7 @@ data class MissionNavArgs(
     val level: MissionLevel,
     val isCompleted: Boolean,
     val isMe: Boolean,
-    val nickname: String
+    val nickname: String,
 )
 
 fun MissionUiModel.toArgs(isMe: Boolean, nickname: String) = MissionNavArgs(

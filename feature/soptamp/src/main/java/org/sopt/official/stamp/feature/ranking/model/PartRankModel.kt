@@ -29,7 +29,7 @@ import org.sopt.official.domain.soptamp.model.PartRank
 data class PartRankModel(
     val rank: Int,
     val part: String,
-    val point: Int
+    val point: Int,
 )
 
 internal fun List<PartRank>.toData(): List<PartRankModel> = this.map {

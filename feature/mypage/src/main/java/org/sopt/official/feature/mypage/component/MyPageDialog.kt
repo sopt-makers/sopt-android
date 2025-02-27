@@ -58,7 +58,7 @@ fun MyPageDialog(
     positiveText: String,
     modifier: Modifier = Modifier,
     properties: DialogProperties = DialogProperties(usePlatformDefaultWidth = false),
-    onPositiveButtonClick: () -> Unit = {}
+    onPositiveButtonClick: () -> Unit = {},
 ) {
     Dialog(
         onDismissRequest = onDismissRequest,

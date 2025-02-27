@@ -66,7 +66,7 @@ class SoptColors(
     onSurface20: Color,
     onSurface10: Color,
     onSurface5: Color,
-    isLight: Boolean
+    isLight: Boolean,
 ) {
     var white by mutableStateOf(white)
         private set
@@ -217,7 +217,7 @@ fun soptLightColors(
     onSurface30: Color = Gray300,
     onSurface20: Color = Gray200,
     onSurface10: Color = Gray100,
-    onSurface5: Color = Gray50
+    onSurface5: Color = Gray50,
 ) = SoptColors(
     white,
     black,
@@ -278,7 +278,7 @@ fun soptDarkColors(
     onSurface30: Color = Gray300,
     onSurface20: Color = Gray200,
     onSurface10: Color = Gray100,
-    onSurface5: Color = Gray50
+    onSurface5: Color = Gray50,
 ) = SoptColors(
     white,
     black,

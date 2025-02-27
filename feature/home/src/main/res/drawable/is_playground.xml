@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    MIT License
+
+    Copyright (c) 2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+    <path
+        android:fillColor="#808087"
+        android:pathData="M13.067,6.667H22.933C25.174,6.667 26.294,6.667 27.149,7.102C27.902,7.486 28.514,8.098 28.897,8.851C29.333,9.706 29.333,10.826 29.333,13.066V16.667C29.268,16.667 29.203,16.667 29.136,16.667H21.53C20.843,16.667 20.213,16.666 19.686,16.709C19.117,16.756 18.496,16.862 17.881,17.175C17.003,17.623 16.289,18.337 15.842,19.215C15.529,19.829 15.423,20.451 15.376,21.019C15.333,21.546 15.333,22.177 15.333,22.863L15.333,26.025L13.233,28.151C12.661,28.73 12.375,29.02 12.129,29.041C11.916,29.058 11.707,28.972 11.568,28.81C11.407,28.623 11.407,28.216 11.407,27.402V25.322C11.407,24.592 10.809,24.063 10.087,23.958C8.338,23.701 6.965,22.328 6.709,20.58C6.667,20.291 6.667,19.947 6.667,19.259V13.066C6.667,10.826 6.667,9.706 7.103,8.851C7.486,8.098 8.098,7.486 8.851,7.102C9.706,6.667 10.826,6.667 13.067,6.667Z" />
+    <path
+        android:fillColor="#808087"
+        android:pathData="M33.333,22.933C33.333,21.44 33.333,20.693 33.043,20.122C32.787,19.621 32.379,19.213 31.877,18.957C31.307,18.667 30.56,18.667 29.067,18.667H21.6C20.107,18.667 19.36,18.667 18.789,18.957C18.288,19.213 17.88,19.621 17.624,20.122C17.333,20.693 17.333,21.44 17.333,22.933V26.286C17.333,27.779 17.333,28.526 17.624,29.096C17.88,29.598 18.288,30.006 18.789,30.262C19.36,30.552 20.107,30.552 21.6,30.552H23.996C24.493,30.552 24.741,30.552 24.981,30.596C25.193,30.636 25.401,30.701 25.598,30.79C25.819,30.89 26.024,31.032 26.431,31.316L29.333,33.333V30.552C30.576,30.552 31.197,30.552 31.687,30.349C32.34,30.079 32.86,29.559 33.13,28.906C33.333,28.416 33.333,27.795 33.333,26.552V22.933Z" />
+</vector>

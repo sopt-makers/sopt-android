@@ -33,7 +33,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 enum class Stamp(
     val missionLevel: MissionLevel,
-    @DrawableRes val lottieImage: Int
+    @DrawableRes val lottieImage: Int,
 ) {
     LEVEL1(MissionLevel.of(1), R.drawable.pinkstamp_image),
     LEVEL2(MissionLevel.of(2), R.drawable.purplestamp_image),

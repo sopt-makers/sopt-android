@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.fortune.feature.fortuneDetail.component
 
-import android.annotation.SuppressLint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row

@@ -76,7 +76,7 @@ data class PostUiState(
 @HiltViewModel
 class MissionDetailViewModel @Inject constructor(
     private val stampRepository: StampRepository,
-    private val imageUploaderRepository: ImageUploaderRepository
+    private val imageUploaderRepository: ImageUploaderRepository,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
 

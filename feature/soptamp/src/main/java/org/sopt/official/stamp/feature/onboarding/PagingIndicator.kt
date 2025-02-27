@@ -52,7 +52,7 @@ fun PageIndicator(
     defaultRadius: Dp = 20.dp,
     selectedLength: Dp = 60.dp,
     space: Dp = 30.dp,
-    animationDurationInMillis: Int = 200
+    animationDurationInMillis: Int = 200,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -80,7 +80,7 @@ fun PageIndicatorView(
     defaultRadius: Dp,
     selectedLength: Dp,
     animationDurationInMillis: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val color: Color by animateColorAsState(
         targetValue = if (isSelected) {

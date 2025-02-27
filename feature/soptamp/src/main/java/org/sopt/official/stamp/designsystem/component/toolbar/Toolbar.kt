@@ -45,7 +45,7 @@ import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 enum class ToolbarIconType(
-    @DrawableRes private val resId: Int = -1
+    @DrawableRes private val resId: Int = -1,
 ) {
     NONE,
     WRITE(R.drawable.ic_write),
@@ -66,7 +66,7 @@ fun Toolbar(
     title: @Composable (() -> Unit)? = null,
     iconOption: ToolbarIconType = ToolbarIconType.NONE,
     onBack: (() -> Unit)? = null,
-    onPressIcon: () -> Unit = {}
+    onPressIcon: () -> Unit = {},
 ) {
     Row(
         modifier = modifier

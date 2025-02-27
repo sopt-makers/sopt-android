@@ -31,12 +31,12 @@ import androidx.compose.runtime.Stable
 sealed interface MyPageUiModel {
     @Immutable
     data class Header(
-        val title: String
+        val title: String,
     ) : MyPageUiModel
 
     @Immutable
     data class MyPageItem(
         val title: String,
-        val onItemClick: () -> Unit
+        val onItemClick: () -> Unit,
     ) : MyPageUiModel
 }

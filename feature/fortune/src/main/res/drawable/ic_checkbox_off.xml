@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2022-2024 SOPT Makers
@@ -27,7 +26,7 @@
     android:height="26dp"
     android:viewportWidth="26"
     android:viewportHeight="26">
-  <path
-      android:pathData="M6,2L20,2A4,4 0,0 1,24 6L24,20A4,4 0,0 1,20 24L6,24A4,4 0,0 1,2 20L2,6A4,4 0,0 1,6 2z"
-      android:fillColor="#515159"/>
+    <path
+        android:fillColor="#515159"
+        android:pathData="M6,2L20,2A4,4 0,0 1,24 6L24,20A4,4 0,0 1,20 24L6,24A4,4 0,0 1,2 20L2,6A4,4 0,0 1,6 2z" />
 </vector>

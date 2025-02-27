@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,16 @@ interface NavigatorProvider {
     fun getAttendanceActivityIntent(): Intent
     fun getSoptampActivityIntent(): Intent
     fun getPokeNotificationActivityIntent(name: String): Intent
+    fun getPokeActivityIntent(userStatus: UserStatus): Intent
+    fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent
     fun getFortuneActivityIntent(): Intent
+    fun getScheduleActivityIntent(): Intent
     fun getHomeActivityIntent(
+        userStatus: UserStatus,
+        deepLinkType: DeepLinkType?,
+    ): Intent
+
+    fun getMainActivityIntent(
         userStatus: UserStatus,
         deepLinkType: DeepLinkType?,
     ): Intent

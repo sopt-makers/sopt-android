@@ -53,7 +53,7 @@ import org.sopt.official.stamp.designsystem.component.mission.model.MissionPatte
 import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 internal class MissionShape(
-    private val patternCount: Int
+    private val patternCount: Int,
 ) : Shape {
 
     override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =

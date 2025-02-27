@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2024 SOPT - Shout Our Passion Together
+ * Copyright 2022-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,9 @@ fun AlphaColor(color: Int, alphaPercentage: Int = 100): Color {
     val alpha = (alphaPercentage / 100f * 255).toInt()
     return Color((color and 0x00FFFFFF) or (alpha shl 24))
 }
+
+// Black Scale
+val Black40 = Color(0xFF3C3D40)
 
 // Gray Scale
 val White = Color(0xFFFFFFFF)

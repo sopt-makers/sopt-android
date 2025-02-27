@@ -54,7 +54,7 @@ fun RankListItem(
     rankerItem: RankerUiModel? = null,
     isMyRanking: Boolean = false,
     onClickPart: (PartRankModel) -> Unit = {},
-    onClickUser: (RankerUiModel) -> Unit = {}
+    onClickUser: (RankerUiModel) -> Unit = {},
 ) {
     val itemPadding = PaddingValues(
         top = 12.dp,

@@ -24,33 +24,33 @@
  */
 
 plugins {
-  sopt("feature")
-  sopt("compose")
+    sopt("feature")
+    sopt("compose")
 }
 
 android {
-  namespace = "org.sopt.official.feature.notification"
+    namespace = "org.sopt.official.feature.notification"
 }
 
 dependencies {
-  implementation(projects.domain.notification)
+    implementation(projects.domain.notification)
 
-  implementation(projects.core.auth)
-  implementation(projects.core.common)
-  implementation(projects.core.designsystem)
-  implementation(projects.core.analytics)
+    implementation(projects.core.auth)
+    implementation(projects.core.common)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.analytics)
 
-  implementation(platform(libs.firebase))
-  implementation(libs.bundles.firebase)
-  implementation(libs.compose.paging)
+    implementation(platform(libs.firebase))
+    implementation(libs.bundles.firebase)
+    implementation(libs.compose.paging)
 
-  implementation(libs.appcompat)
-  implementation(libs.material)
-  implementation(libs.swipe.refresh.layout)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    implementation(libs.swipe.refresh.layout)
 
-  implementation(libs.coil.core)
-  implementation(libs.android.lottie)
-  implementation(projects.core.analytics)
-  implementation(libs.fragment.ktx)
-  implementation(libs.dotsindicator)
+    implementation(libs.coil.core)
+    implementation(libs.android.lottie)
+    implementation(projects.core.analytics)
+    implementation(libs.fragment.ktx)
+    implementation(libs.dotsindicator)
 }

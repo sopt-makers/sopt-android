@@ -30,11 +30,11 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 @RootNavGraph(start = true)
 @NavGraph
 annotation class MissionNavGraph(
-    val start: Boolean = false
+    val start: Boolean = false,
 )
 
 @RootNavGraph
 @NavGraph
 annotation class SettingNavGraph(
-    val start: Boolean = false
+    val start: Boolean = false,
 )

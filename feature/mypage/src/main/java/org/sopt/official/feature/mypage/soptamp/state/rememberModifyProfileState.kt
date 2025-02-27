@@ -41,7 +41,7 @@ import timber.log.Timber
 @Composable
 fun rememberModifyProfileState(
     userRepository: UserRepository,
-    onShowToast: (String) -> Unit
+    onShowToast: (String) -> Unit,
 ): ModifySoptampProfileUiState {
     var current by rememberRetained { mutableStateOf("") }
     var previous by rememberSaveable { mutableStateOf("") }

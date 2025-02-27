@@ -27,7 +27,7 @@ package org.sopt.official.stamp.designsystem.component.mission.model
 internal class MissionPattern private constructor(
     val length: Float,
     val diameter: Float,
-    val gap: Float
+    val gap: Float,
 ) {
     companion object {
         private const val DIAMETER_RATIO: Float = 0.58f

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2023-2024 SOPT Makers
@@ -27,17 +26,16 @@
     android:height="20dp"
     android:viewportWidth="20"
     android:viewportHeight="20">
-  <group>
-    <clip-path
-        android:pathData="M0,0h20v20h-20z"/>
-    <path
-        android:pathData="M10,10m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0"
-        android:fillColor="#FFDE8A"/>
-    <path
-        android:pathData="M10.967,5.527C10.967,5.015 10.533,4.6 9.998,4.6C9.463,4.6 9.029,5.015 9.029,5.527V10.47C9.029,10.981 9.463,11.396 9.998,11.396C10.533,11.396 10.967,10.981 10.967,10.47V5.527Z"
-        android:fillColor="#B57B1D"/>
-    <path
-        android:pathData="M9.998,12.896C9.463,12.896 9.029,13.311 9.029,13.822C9.029,14.334 9.463,14.749 9.998,14.749H10.011C10.546,14.749 10.98,14.334 10.98,13.822C10.98,13.311 10.546,12.896 10.011,12.896H9.998Z"
-        android:fillColor="#B57B1D"/>
-  </group>
+    <group>
+        <clip-path android:pathData="M0,0h20v20h-20z" />
+        <path
+            android:fillColor="#FFDE8A"
+            android:pathData="M10,10m-10,0a10,10 0,1 1,20 0a10,10 0,1 1,-20 0" />
+        <path
+            android:fillColor="#B57B1D"
+            android:pathData="M10.967,5.527C10.967,5.015 10.533,4.6 9.998,4.6C9.463,4.6 9.029,5.015 9.029,5.527V10.47C9.029,10.981 9.463,11.396 9.998,11.396C10.533,11.396 10.967,10.981 10.967,10.47V5.527Z" />
+        <path
+            android:fillColor="#B57B1D"
+            android:pathData="M9.998,12.896C9.463,12.896 9.029,13.311 9.029,13.822C9.029,14.334 9.463,14.749 9.998,14.749H10.011C10.546,14.749 10.98,14.334 10.98,13.822C10.98,13.311 10.546,12.896 10.011,12.896H9.998Z" />
+    </group>
 </vector>
