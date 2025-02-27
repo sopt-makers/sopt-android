@@ -72,6 +72,7 @@ internal class FortuneDetailScreenTest {
                             part = "기획 파트",
                         )
                     ),
+                    isEnabled = false,
                 )
             }
         }

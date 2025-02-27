@@ -35,6 +35,9 @@ fun AlphaColor(color: Int, alphaPercentage: Int = 100): Color {
     return Color((color and 0x00FFFFFF) or (alpha shl 24))
 }
 
+// Black Scale
+val Black40 = Color(0xFF3C3D40)
+
 // Gray Scale
 val White = Color(0xFFFFFFFF)
 val Black = Color(0xFF000000)

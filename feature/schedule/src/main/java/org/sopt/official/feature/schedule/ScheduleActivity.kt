@@ -1,5 +1,7 @@
 package org.sopt.official.feature.schedule
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
@@ -37,21 +38,44 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
+import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
+private val applicationNavigator by lazy {
+    EntryPointAccessors.fromApplication(
+        appContext,
+        NavigatorEntryPoint::class.java
+    ).navigatorProvider()
+}
+
 @AndroidEntryPoint
+@DeepLink("sopt://schedule")
 class ScheduleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             SoptTheme {
-                ScheduleScreen()
+                ScheduleScreen(
+                    navigateUp = ::finish,
+                    navigateAttendance = {
+                        startActivity(applicationNavigator.getAttendanceActivityIntent())
+                    }
+                )
             }
+        }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, ScheduleActivity::class.java)
         }
     }
 }
@@ -59,6 +83,8 @@ class ScheduleActivity : AppCompatActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ScheduleScreen(
+    navigateUp: () -> Unit = {},
+    navigateAttendance: () -> Unit = {},
     viewModel: ScheduleViewModel = hiltViewModel(),
 ) {
     val lazyListState = rememberLazyListState()
@@ -66,8 +92,9 @@ fun ScheduleScreen(
 
     LaunchedEffect(state) {
         if (state.scheduleList.isNotEmpty()) {
+            val itemIndex = state.scheduleList.indexOfFirst { it.isRecentSchedule }
             delay(200L)
-            lazyListState.animateScrollToItem(state.scheduleList.indexOfFirst { it.isRecentSchedule })
+            lazyListState.animateScrollToItem(if (itemIndex <= 0) 0 else itemIndex)
         }
     }
 
@@ -83,7 +110,9 @@ fun ScheduleScreen(
                         imageVector = Icons.Default.ArrowBackIosNew,
                         contentDescription = "뒤로 가기",
                         tint = SoptTheme.colors.surface,
-                        modifier = Modifier.padding(start = 12.dp)
+                        modifier = Modifier
+                            .padding(start = 12.dp)
+                            .clickable(onClick = navigateUp)
                     )
                 },
                 title = {
@@ -150,9 +179,7 @@ fun ScheduleScreen(
                         .padding(horizontal = 20.dp)
                         .clip(RoundedCornerShape(12.dp))
                         .background(SoptTheme.colors.primary)
-                        .clickable {
-                            // TODO: nav 연결
-                        },
+                        .clickable(onClick = navigateAttendance),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
