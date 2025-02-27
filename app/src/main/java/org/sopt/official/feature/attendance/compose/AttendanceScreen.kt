@@ -30,7 +30,7 @@ import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.R
 import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.Gray60
+import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.attendance.compose.component.AttendanceGradientBox
 import org.sopt.official.feature.attendance.compose.component.AttendanceHistoryCard
@@ -102,7 +102,7 @@ fun AttendanceScreen(
             Spacer(Modifier.height(36.dp))
         }
         AttendanceGradientBox()
-        if(state.attendanceDayType is AttendanceDayType.AttendanceDay){
+        if (state.attendanceDayType is AttendanceDayType.AttendanceDay) {
             TextButton(
                 onClick = onClickAttendance,
                 modifier = Modifier
@@ -113,7 +113,7 @@ fun AttendanceScreen(
                     containerColor = SoptTheme.colors.onSurface10,
                     contentColor = SoptTheme.colors.onSurface950,
                     disabledContainerColor = Black40,
-                    disabledContentColor = Gray60,
+                    disabledContentColor = Gray500,
                 ),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
