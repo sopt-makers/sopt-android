@@ -39,7 +39,6 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -57,8 +56,10 @@ import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -168,9 +169,9 @@ class AuthActivity : AppCompatActivity() {
         }
         binding.btnSoptNotMember.setOnSingleClickListener {
             startActivity(
-                HomeActivity.getIntent(
+                MainActivity.getIntent(
                     this,
-                    HomeActivity.StartArgs(
+                    MainActivity.StartArgs(
                         UserStatus.UNAUTHENTICATED
                     )
                 )
