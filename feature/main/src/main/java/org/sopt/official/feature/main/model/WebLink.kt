@@ -1,5 +1,7 @@
 package org.sopt.official.feature.main.model
 
+import org.sopt.official.common.BuildConfig
+
 internal object SoptWebLink {
     const val OFFICIAL_HOMEPAGE = "https://sopt.org"
     const val PROJECT = "https://sopt.org/project"
@@ -8,9 +10,9 @@ internal object SoptWebLink {
 }
 
 internal object PlaygroundWebLink {
-    const val OFFICIAL_HOMEPAGE = "https://playground.sopt.org"
-    const val MEMBER = "https://playground.sopt.org/members"
-    const val EDIT_PROFILE = "https://playground.sopt.org/members/edit"
-    const val PROJECT = "https://playground.sopt.org/projects"
-    const val GROUP_STUDY = "https://playground.sopt.org/group"
+    const val OFFICIAL_HOMEPAGE = BuildConfig.PLAYGROUND_API
+    const val MEMBER = OFFICIAL_HOMEPAGE + "members"
+    const val EDIT_PROFILE = OFFICIAL_HOMEPAGE + "members/edit"
+    const val PROJECT = OFFICIAL_HOMEPAGE + "projects"
+    const val GROUP_STUDY = OFFICIAL_HOMEPAGE + "group"
 }

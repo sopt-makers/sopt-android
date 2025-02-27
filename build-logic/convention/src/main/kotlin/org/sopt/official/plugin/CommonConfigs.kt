@@ -51,8 +51,20 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "PLAYGROUND_TOKEN_KEY_ALIAS", playgroundTokenKeyAlias)
             buildConfigField("String", "USER_STATUS_KEY_ALIAS", userStatusKeyAlias)
             buildConfigField("String", "PUSH_TOKEN_KEY_ALIAS", pushTokenKeyAlias)
-
         }
+
+        buildTypes {
+            val debugPlaygroundApi = (properties["debugPlaygroundApi"] as? String).orEmpty()
+            val releasePlaygroundApi = (properties["releasePlaygroundApi"] as? String).orEmpty()
+
+            getByName("debug") {
+                buildConfigField("String", "PLAYGROUND_API", debugPlaygroundApi)
+            }
+            getByName("release") {
+                buildConfigField("String", "PLAYGROUND_API", releasePlaygroundApi)
+            }
+        }
+
         buildFeatures.apply {
             viewBinding = true
             buildConfig = true

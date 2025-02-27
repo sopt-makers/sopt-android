@@ -7,7 +7,6 @@ android {
     namespace = "org.sopt.official.feature.main"
 }
 
-
 dependencies {
     implementation(projects.core.auth)
     implementation(projects.core.common)
