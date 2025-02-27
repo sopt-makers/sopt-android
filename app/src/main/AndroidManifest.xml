@@ -28,6 +28,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <queries>
         <package android:name="com.android.chrome" />
@@ -41,6 +42,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SOPT"
@@ -74,7 +76,6 @@
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -98,10 +99,10 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".feature.mypage.signOut.SignOutActivity"
+            android:name=".feature.mypage.signout.SignOutActivity"
             android:exported="false" />
         <activity
-            android:name=".feature.mypage.soptamp.sentence.AdjustSentenceActivity"
+            android:name=".feature.mypage.soptamp.ui.AdjustSentenceActivity"
             android:exported="false" />
         <activity
             android:name=".feature.poke.onboarding.OnboardingActivity"
