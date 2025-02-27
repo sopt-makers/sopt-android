@@ -98,7 +98,6 @@ class WebViewActivity : AppCompatActivity() {
             ) {
                 val fileName = DownloadUtils.guessFileName(
                     contentDisposition = URLDecoder.decode(contentDisposition, "utf-8"),
-                    null,
                     url = url,
                     mimeType = mimetype
                 )

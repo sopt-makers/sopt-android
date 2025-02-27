@@ -6,9 +6,9 @@
 **국내 최대 IT 벤처창업동아리 SOPT의 공식 Android 앱**
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Kotlin-2.1.0-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
+    <img src="https://img.shields.io/badge/Kotlin-2.1.10-7F52FF?style=for-the-badge&logo=Kotlin&logoColor=white"/>
     <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-    <img src="https://img.shields.io/badge/all_contributors-17-orange.svg?style=for-the-badge"/>
+    <img src="https://img.shields.io/badge/all_contributors-18-orange.svg?style=for-the-badge"/>
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 </p>
 <br />  
@@ -72,6 +72,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/leeeyubin"><img src="https://avatars.githubusercontent.com/u/128459613?v=4?s=100" width="100px;" alt="LEE YOU BIN"/><br /><sub><b>LEE YOU BIN</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=leeeyubin" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/s9hn"><img src="https://avatars.githubusercontent.com/u/81347125?v=4?s=100" width="100px;" alt="SeHun"/><br /><sub><b>SeHun</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=s9hn" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jihyunniiii"><img src="https://avatars.githubusercontent.com/u/103172971?v=4?s=100" width="100px;" alt="jihyunniiii"/><br /><sub><b>jihyunniiii</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=jihyunniiii" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/angryPodo"><img src="https://avatars.githubusercontent.com/u/160750136?v=4?s=100" width="100px;" alt="MinJae Han"/><br /><sub><b>MinJae Han</b></sub></a><br /><a href="https://github.com/sopt-makers/sopt-android/commits?author=angryPodo" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
