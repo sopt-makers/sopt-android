@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.compose.material.three)
+    implementation(project(":domain:notification"))
+    implementation(libs.firebase.messaging.ktx)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.compose.junit)
     debugImplementation(libs.compose.ui.tooling)
