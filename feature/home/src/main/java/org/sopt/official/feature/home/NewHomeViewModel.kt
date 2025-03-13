@@ -123,8 +123,9 @@ internal class NewHomeViewModel @Inject constructor(
                 FirebaseMessaging.getInstance().token.await()
             }.onSuccess { token ->
                 Timber.d("FCM 토큰 가져오기 성공: $token")
-                runCatching { 
-                    registerPushTokenUseCase(token) 
+                runCatching {
+                    registerPushTokenUseCase(token)
+                }.onSuccess {
                     Timber.d("FCM 토큰 서버 등록 성공: $token")
                 }.onFailure { error ->
                     Timber.e(error, "FCM 토큰 서버 등록 실패: $token")
