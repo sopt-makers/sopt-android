@@ -159,6 +159,7 @@ dependencies {
     implementation(libs.kotlin.coroutines.google.play)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
+    implementation(libs.compose.lifecycle)
     implementation(libs.startup)
     implementation(libs.swipe.refresh.layout)
 
@@ -187,6 +188,7 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
+    implementation(libs.kotlin.collections.immutable)
 }
 
 secrets {

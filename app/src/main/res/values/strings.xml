@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
     MIT License
 
     Copyright (c) 2022-2024 SOPT Makers
@@ -28,6 +27,7 @@
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT-AMP!</string>
     <string name="poke">콕 찌르기</string>
+    <string name="close">닫기</string>
 
     <!--    메인홈    -->
     <string name="main_title_non_member">안녕하세요,\nSOPT의 열정이 되어주세요!</string>
@@ -83,12 +83,14 @@
 
     <!--    출석    -->
     <string name="attendance">출석</string>
+    <string name="title_attendance_count_all">전체</string>
     <string name="title_attendance_count_normal">출석</string>
     <string name="title_attendance_count_late">지각</string>
     <string name="title_attendance_count_abnormal">결석</string>
     <string name="title_attendance_count_participate">참여</string>
     <string name="header_attendance_log">나의 출결 현황</string>
     <string name="text_not_awarded">출석점수를 체크하지 않습니다</string>
+    <string name="text_no_schedule">오늘은 일정이 없는 날이에요</string>
     <string name="attendance_progress_first">1차 출석</string>
     <string name="attendance_progress_second">2차 출석</string>
     <string name="attendance_progress_before">출석 전</string>
@@ -98,6 +100,12 @@
     <string name="attendance_dialog_subtitle">출석 코드 다섯 자리를 입력해주세요.</string>
     <string name="attendance_dialog_error">코드가 일치하지 않아요!</string>
     <string name="attendance_dialog_button">출석하기</string>
+    <string name="go_back">뒤로 가기</string>
+    <string name="refresh">새로고침</string>
+    <string name="attendance_app_bar_title">출석 조회하기</string>
+    <string name="attendance_do">%1$s하기</string>
+    <string name="attendance_code_description">출석 코드 다섯 자리를 입력해주세요.</string>
+    <string name="attendance_code_does_not_match">코드가 일치하지 않아요!</string>
 
     <!--    알림   -->
     <string name="toolbar_notification">알림</string>
@@ -124,4 +132,6 @@
     <string name="soptamp_dialog_can_not_enter_title">접근할 수 없는 버튼이에요.</string>
     <string name="soptamp_dialog_can_not_enter_body">솝템프는 솝트 회원들에게만 제공되는 기능이에요.</string>
     <string name="soptamp_dialog_confirm_button">확인</string>
+    <string name="attendance_event_info_prefix">"오늘은 "</string>
+    <string name="attendance_event_info_suffix">" 날이에요"</string>
 </resources>
