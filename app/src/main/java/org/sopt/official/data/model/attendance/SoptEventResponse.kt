@@ -25,8 +25,12 @@
 package org.sopt.official.data.model.attendance
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.data.model.attendance.TimeFormat.getTimeFormat
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
 import org.sopt.official.domain.entity.attendance.EventType
 import org.sopt.official.domain.entity.attendance.SoptEvent
@@ -50,6 +54,7 @@ data class SoptEventResponse(
     @SerialName("attendances")
     val attendances: List<AttendanceResponse>
 ) {
+
     @Serializable
     data class AttendanceResponse(
         @SerialName("status")
@@ -58,39 +63,37 @@ data class SoptEventResponse(
         val attendedAt: String = ""
     ) {
         fun toEntity(index: Int): SoptEvent.Attendance {
-            val attendedAtTime = if (this.status == "ATTENDANCE") {
-                LocalDateTime.parse(attendedAt).run {
-                    "${this.hour.toString().padStart(2, '0')}:${this.minute.toString().padStart(2, '0')}"
+            val attendedAtTime =
+                if (this.status == "ATTENDANCE") {
+                    LocalDateTime.parse(attendedAt).run {
+                        val localDateTime = LocalDateTime.parse(attendedAt)
+                        getTimeFormat().format(localDateTime)
+                    }
+                } else {
+                    "${index + 1}차 출석"
                 }
-            } else {
-                "${index + 1}차 출석"
-            }
 
             return SoptEvent.Attendance(
                 AttendanceStatus.valueOf(this.status),
-                attendedAtTime
+                attendedAtTime,
             )
         }
     }
 
     fun toEntity(): SoptEvent {
-        val eventDateTime: String = if (startAt != "" && endAt != "") {
+        val eventDateTime: String = if (startAt.isNotBlank() && endAt.isNotBlank()) {
             val startAtDateTime = LocalDateTime.parse(startAt)
             val endAtDateTime = LocalDateTime.parse(endAt)
+
             if (startAtDateTime.date == endAtDateTime.date) {
-                "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 ${
-                    startAtDateTime.hour.toString().padStart(2, '0')
-                }:${startAtDateTime.minute.toString().padStart(2, '0')} - ${
-                    endAtDateTime.hour.toString().padStart(2, '0')
-                }:${endAtDateTime.minute.toString().padStart(2, '0')}"
+                "${startAtDateTime.monthNumber}\uC6D4 ${startAtDateTime.dayOfMonth}\uC77C " +
+                    "${getTimeFormat().format(startAtDateTime)} - " +
+                    getTimeFormat().format(endAtDateTime)
             } else {
-                "${startAtDateTime.monthNumber}월 ${startAtDateTime.dayOfMonth}일 ${
-                    startAtDateTime.hour.toString().padStart(2, '0')
-                }:${
-                    startAtDateTime.minute.toString().padStart(2, '0')
-                } - ${endAtDateTime.monthNumber}월 ${endAtDateTime.dayOfMonth}일 ${
-                    endAtDateTime.hour.toString().padStart(2, '0')
-                }:${endAtDateTime.minute.toString().padStart(2, '0')}"
+                "${startAtDateTime.monthNumber}\uC6D4 ${startAtDateTime.dayOfMonth}\uC77C " +
+                    "${getTimeFormat().format(startAtDateTime)} - " +
+                    "${endAtDateTime.monthNumber}\uC6D4 ${endAtDateTime.dayOfMonth}\uC77C " +
+                    getTimeFormat().format(endAtDateTime)
             }
         } else {
             ""
@@ -104,7 +107,18 @@ data class SoptEventResponse(
             eventName = this.eventName,
             message = this.message,
             isAttendancePointAwardedEvent = type == "HAS_ATTENDANCE",
-            attendances = this.attendances.mapIndexed { index, attendanceResponse -> attendanceResponse.toEntity(index) }
+            attendances = this.attendances.mapIndexed { index, attendanceResponse -> attendanceResponse.toEntity(index) },
         )
+    }
+}
+
+object TimeFormat {
+    private const val DEFAULT_FORMAT_PATTERN = "HH:mm"
+
+    @OptIn(FormatStringsInDatetimeFormats::class)
+    fun getTimeFormat(pattern: String = DEFAULT_FORMAT_PATTERN): DateTimeFormat<LocalDateTime> {
+        return LocalDateTime.Format {
+            byUnicodePattern(pattern)
+        }
     }
 }
