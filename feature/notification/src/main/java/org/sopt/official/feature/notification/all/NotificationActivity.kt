@@ -68,11 +68,11 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import java.util.Date
+import java.util.Locale
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
-import java.util.Date
-import java.util.Locale
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -91,9 +91,9 @@ class NotificationActivity : AppCompatActivity() {
                 ).navigatorProvider()
             }
             SoptTheme {
-                Scaffold(modifier = Modifier
-                    .fillMaxSize()
-                    .background(SoptTheme.colors.background),
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     topBar = {
                         CenterAlignedTopAppBar(
                             title = {
@@ -112,12 +112,15 @@ class NotificationActivity : AppCompatActivity() {
                                 }
                             },
                             actions = {
-                                Text(text = "모두 읽음",
+                                Text(
+                                    text = "모두 읽음",
                                     style = SoptTheme.typography.body16M,
                                     color = SoptTheme.colors.primary,
                                     modifier = Modifier
-                                        .clickable { viewModel.updateEntireNotificationReadingState() }
-                                        .padding(end = 24.dp))
+                                        .padding(end = 20.dp)
+                                        .clickable(onClick = viewModel::updateEntireNotificationReadingState)
+                                        .padding(vertical = 8.dp, horizontal = 4.dp)
+                                )
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = SoptTheme.colors.background,
@@ -134,23 +137,24 @@ class NotificationActivity : AppCompatActivity() {
                         ) {
                             items(notifications.itemCount) {
                                 val item = notifications[it]
-                                Column(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(100.dp)
-                                    .clickable {
-                                        context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
-                                    }
-                                    .background(
-                                        if (item?.isRead == true) {
-                                            SoptTheme.colors.onSurface800
-                                        } else {
-                                            SoptTheme.colors.background
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(100.dp)
+                                        .clickable {
+                                            context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
                                         }
-                                    )
-                                    .padding(
-                                        horizontal = 20.dp,
-                                        vertical = 16.dp
-                                    )) {
+                                        .background(
+                                            if (item?.isRead == true) {
+                                                SoptTheme.colors.onSurface800
+                                            } else {
+                                                SoptTheme.colors.background
+                                            }
+                                        )
+                                        .padding(
+                                            horizontal = 20.dp,
+                                            vertical = 16.dp
+                                        )) {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween,
