@@ -134,6 +134,7 @@ class NotificationActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
+                                .background(SoptTheme.colors.background)
                         ) {
                             items(notifications.itemCount) {
                                 val item = notifications[it]
@@ -193,7 +194,8 @@ class NotificationActivity : AppCompatActivity() {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(innerPadding),
+                                .padding(innerPadding)
+                                .background(SoptTheme.colors.background),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
