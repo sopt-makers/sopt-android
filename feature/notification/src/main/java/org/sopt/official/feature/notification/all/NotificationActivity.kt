@@ -112,7 +112,7 @@ class NotificationActivity : AppCompatActivity() {
                                 }
                             },
                             actions = {
-                                if (notifications.itemCount > 0) {
+                                if(notifications.itemCount > 0) {
                                     Text(
                                         text = "모두 읽음",
                                         style = SoptTheme.typography.body16M,
@@ -209,7 +209,7 @@ class NotificationActivity : AppCompatActivity() {
                             Text(
                                 text = "아직 도착한 알림이 없어요.",
                                 style = SoptTheme.typography.heading18B,
-                                color = SoptTheme.colors.onSurface800
+                                color = SoptTheme.colors.onSurface400
                             )
                         }
                     }
