@@ -112,15 +112,17 @@ class NotificationActivity : AppCompatActivity() {
                                 }
                             },
                             actions = {
-                                Text(
-                                    text = "모두 읽음",
-                                    style = SoptTheme.typography.body16M,
-                                    color = SoptTheme.colors.primary,
-                                    modifier = Modifier
-                                        .padding(end = 20.dp)
-                                        .clickable(onClick = viewModel::updateEntireNotificationReadingState)
-                                        .padding(vertical = 8.dp, horizontal = 4.dp)
-                                )
+                                if (notifications.itemCount > 0) {
+                                    Text(
+                                        text = "모두 읽음",
+                                        style = SoptTheme.typography.body16M,
+                                        color = SoptTheme.colors.primary,
+                                        modifier = Modifier
+                                            .padding(end = 20.dp)
+                                            .clickable(onClick = viewModel::updateEntireNotificationReadingState)
+                                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                                    )
+                                }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = SoptTheme.colors.background,
