@@ -26,6 +26,7 @@ package org.sopt.official.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.UserInfo
@@ -45,6 +47,7 @@ import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.result.successOr
+import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.model.HomeAppService
@@ -56,12 +59,14 @@ import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
+    private val registerPushTokenUseCase: RegisterPushTokenUseCase
 ) : ViewModel() {
 
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
@@ -90,6 +95,13 @@ internal class NewHomeViewModel @Inject constructor(
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
             val appService = appServiceDeferred.await().successOr(emptyList())
 
+            if (userInfo.user.userStatus != UNAUTHENTICATED) {
+                Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
+                registerFcmToken()
+            } else {
+                Timber.d("사용자 상태가 인증되지 않음: UNAUTHENTICATED, FCM 토큰 등록 건너뜀")
+            }
+
             viewModelState.update {
                 it.copy(
                     isError = false, // 반복 에러 대응 필요
@@ -100,6 +112,26 @@ internal class NewHomeViewModel @Inject constructor(
                     recentCalendar = recentCalendar,
                     appServices = appService,
                 )
+            }
+        }
+    }
+
+    private fun registerFcmToken() {
+        viewModelScope.launch {
+            Timber.d("FCM 토큰 가져오기 시작")
+            runCatching {
+                FirebaseMessaging.getInstance().token.await()
+            }.onSuccess { token ->
+                Timber.d("FCM 토큰 가져오기 성공: $token")
+                runCatching {
+                    registerPushTokenUseCase(token)
+                }.onSuccess {
+                    Timber.d("FCM 토큰 서버 등록 성공: $token")
+                }.onFailure { error ->
+                    Timber.e(error, "FCM 토큰 서버 등록 실패: $token")
+                }
+            }.onFailure { error ->
+                Timber.e(error, "FCM 토큰 가져오기 실패")
             }
         }
     }
