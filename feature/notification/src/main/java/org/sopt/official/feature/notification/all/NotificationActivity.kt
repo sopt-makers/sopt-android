@@ -46,8 +46,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -104,11 +102,11 @@ class NotificationActivity : AppCompatActivity() {
                                 )
                             },
                             navigationIcon = {
-                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                                IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
                                     Icon(
-                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
                                         contentDescription = null,
-                                        tint = SoptTheme.colors.onBackground
+                                        tint = SoptTheme.colors.onSurface10
                                     )
                                 }
                             },
@@ -131,13 +129,14 @@ class NotificationActivity : AppCompatActivity() {
                                 actionIconContentColor = SoptTheme.colors.primary
                             )
                         )
-                    }) { innerPadding ->
+                    },
+                    containerColor = SoptTheme.colors.background
+                ) { innerPadding ->
                     if (notifications.itemCount > 0) {
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
-                                .background(SoptTheme.colors.background)
                         ) {
                             items(notifications.itemCount) {
                                 val item = notifications[it]
@@ -198,8 +197,7 @@ class NotificationActivity : AppCompatActivity() {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(innerPadding)
-                                .background(SoptTheme.colors.background),
+                                .padding(innerPadding),
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
