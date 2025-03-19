@@ -71,6 +71,7 @@ import dagger.hilt.android.EntryPointAccessors
 import java.util.Date
 import java.util.Locale
 import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
 
@@ -112,11 +113,11 @@ class NotificationActivity : AppCompatActivity() {
                                 }
                             },
                             actions = {
-                                if(notifications.itemCount > 0) {
+                                if (notifications.itemCount > 0) {
                                     Text(
                                         text = "모두 읽음",
                                         style = SoptTheme.typography.body16M,
-                                        color = SoptTheme.colors.primary,
+                                        color = Orange400,
                                         modifier = Modifier
                                             .padding(end = 20.dp)
                                             .clickable(onClick = viewModel::updateEntireNotificationReadingState)
@@ -157,7 +158,8 @@ class NotificationActivity : AppCompatActivity() {
                                         .padding(
                                             horizontal = 20.dp,
                                             vertical = 16.dp
-                                        )) {
+                                        )
+                                ) {
                                     Row(
                                         modifier = Modifier.fillMaxWidth(),
                                         horizontalArrangement = Arrangement.SpaceBetween,
@@ -179,7 +181,7 @@ class NotificationActivity : AppCompatActivity() {
                                             color = SoptTheme.colors.onSurface100
                                         )
                                     }
-                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
                                     Text(
                                         item?.content.orEmpty(),
                                         style = SoptTheme.typography.body16M,
