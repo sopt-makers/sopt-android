@@ -31,6 +31,7 @@ interface NotificationRepository {
     suspend fun registerToken(pushToken: String)
     suspend fun deleteToken(pushToken: String)
     suspend fun getNotificationHistory(page: Int): Result<List<NotificationItem>>
+    suspend fun getNotificationHistoryByCategory(page: Int, category: String): Result<List<NotificationItem>>
     suspend fun getNotificationDetail(notificationId: String): Result<Notification>
     suspend fun updateNotificationReadingState(notificationId: String)
     suspend fun updateEntireNotificationReadingState()
