@@ -5,7 +5,7 @@ targetSdk = "35"
 appVersion = "3.0.0"
 versionCode = "30000"
 
-kotlin = "2.1.10"
+kotlin = "2.1.20"
 kotlinx-serialization-json = "1.8.0"
 kotlinx-serialization-converter = "1.0.0"
 kotlinx-coroutines = "1.10.1"
