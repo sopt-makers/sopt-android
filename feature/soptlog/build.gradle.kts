@@ -43,6 +43,7 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
+    implementation(projects.core.analytics)
 
     // domain
     implementation(projects.domain.soptlog)
