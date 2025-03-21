@@ -60,7 +60,7 @@ fun SoptlogDashBoard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(SoptTheme.colors.onSurface800)
-            .padding(horizontal = 20.dp, vertical = 8.dp),
+            .padding(horizontal = 20.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -98,7 +98,9 @@ private fun SoptlogDashBoardItem(
         Text(
             text = title,
             style = SoptTheme.typography.body14M,
-            color = SoptTheme.colors.onSurface200
+            color = SoptTheme.colors.onSurface200,
+            modifier = Modifier
+                .padding(bottom = 6.dp)
         )
 
         Image(
@@ -114,7 +116,9 @@ private fun SoptlogDashBoardItem(
         Text(
             text = content,
             style = SoptTheme.typography.heading16B,
-            color = SoptTheme.colors.surface
+            color = SoptTheme.colors.surface,
+            modifier = Modifier
+                .padding(top = 4.dp)
         )
     }
 }

@@ -30,20 +30,31 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val repository: NotificationRepository,
 ) : ViewModel() {
-    val notifications = Pager(
-        PagingConfig(pageSize = 10)
-    ) {
-        NotificationPagingSource(repository)
-    }.flow.cachedIn(viewModelScope)
+    private val _state: MutableStateFlow<NotificationState> = MutableStateFlow(NotificationState())
+    val state get() = _state.asStateFlow()
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val notifications = _state.flatMapLatest { state ->
+        Pager(
+            PagingConfig(pageSize = 10)
+        ) {
+            NotificationPagingSource(repository, state.notificationCategory)
+        }.flow
+    }.cachedIn(viewModelScope)
 
     fun updateEntireNotificationReadingState() {
         viewModelScope.launch {
@@ -52,6 +63,14 @@ class NotificationViewModel @Inject constructor(
             }.onFailure {
                 Timber.e(it)
             }
+        }
+    }
+
+    fun updateNotificationCategory(category: NotificationCategory) {
+        _state.update {
+            it.copy(
+                notificationCategory = category
+            )
         }
     }
 }

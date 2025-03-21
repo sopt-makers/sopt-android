@@ -32,7 +32,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,8 +39,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -59,18 +56,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import java.time.LocalDate
 import kotlinx.coroutines.launch
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.HOME_FORTUNE
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
-import java.time.LocalDate
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -108,116 +108,111 @@ class NotificationDetailActivity : AppCompatActivity() {
                         .fillMaxSize()
                         .background(SoptTheme.colors.background),
                     containerColor = SoptTheme.colors.background,
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    text = "알림",
+                                    style = SoptTheme.typography.body16M
+                                )
+                            },
+                            navigationIcon = {
+                                IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
+                                    Icon(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
+                                        contentDescription = null,
+                                        tint = SoptTheme.colors.onSurface10
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = SoptTheme.colors.background,
+                                titleContentColor = SoptTheme.colors.onBackground,
+                                navigationIconContentColor = SoptTheme.colors.onBackground
+                            )
+                        )
+                    }
                 ) { innerPadding ->
-                    Box {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                            .background(SoptTheme.colors.background)
+                            .padding(top = 20.dp)
+                            .padding(horizontal = 20.dp),
+                        verticalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                        ) {
-                            CenterAlignedTopAppBar(
-                                title = {
-                                    Text(
-                                        text = "알림",
-                                        style = SoptTheme.typography.body16M
-                                    )
-                                },
-                                navigationIcon = {
-                                    IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
-                                        Icon(
-                                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                            contentDescription = null,
-                                            tint = SoptTheme.colors.onBackground
-                                        )
-                                    }
-                                },
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = SoptTheme.colors.background,
-                                    titleContentColor = SoptTheme.colors.onBackground,
-                                    navigationIconContentColor = SoptTheme.colors.onBackground
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(10.dp))
+                                .background(SoptTheme.colors.onSurface800)
+                                .padding(
+                                    vertical = 24.dp,
+                                    horizontal = 12.dp
                                 )
+                        ) {
+                            Text(
+                                text = notification?.title.orEmpty(),
+                                style = SoptTheme.typography.heading18B,
+                                color = SoptTheme.colors.onSurface10
                             )
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .background(SoptTheme.colors.background)
-                                    .padding(top = 20.dp)
-                                    .padding(horizontal = 20.dp),
-                                verticalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Column(
+                            Spacer(modifier = Modifier.padding(14.dp))
+                            HorizontalDivider(color = SoptTheme.colors.onSurface400)
+                            Text(
+                                text = notification?.content.orEmpty(),
+                                style = SoptTheme.typography.body16M,
+                                color = SoptTheme.colors.onSurface10,
+                                modifier = Modifier.padding(top = 24.dp)
+                            )
+                        }
+                        if (isValidLinks(deepLink = notification?.deepLink, webLink = notification?.webLink)) {
+                            Column {
+                                Button(
+                                    onClick = {
+                                        val link = notification?.webLink ?: notification?.deepLink
+
+                                        when {
+                                            link == HOME_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
+                                                onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
+                                            }
+
+                                            else -> {
+                                                context.startActivity(
+                                                    navigator.getSchemeActivityIntent(
+                                                        notificationId = notification?.notificationId.orEmpty(),
+                                                        link = link.orEmpty()
+                                                    )
+                                                )
+                                            }
+                                        }
+                                    },
+                                    colors = ButtonDefaults.buttonColors(
+                                        containerColor = SoptTheme.colors.primary,
+                                        contentColor = SoptTheme.colors.onPrimary
+                                    ),
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .background(SoptTheme.colors.onSurface800)
-                                        .padding(
-                                            vertical = 24.dp,
-                                            horizontal = 12.dp
-                                        )
+                                        .height(56.dp),
+                                    shape = RoundedCornerShape(10.dp)
                                 ) {
                                     Text(
-                                        text = notification?.title.orEmpty(),
-                                        style = SoptTheme.typography.heading18B,
-                                        color = SoptTheme.colors.onSurface10
-                                    )
-                                    Spacer(modifier = Modifier.padding(14.dp))
-                                    HorizontalDivider(color = SoptTheme.colors.onSurface400)
-                                    Text(
-                                        text = notification?.content.orEmpty(),
-                                        style = SoptTheme.typography.body16M,
-                                        color = SoptTheme.colors.onSurface10,
-                                        modifier = Modifier.padding(top = 24.dp)
+                                        text = "바로가기 >",
+                                        style = SoptTheme.typography.body16M
                                     )
                                 }
-                                if (isValidLinks(deepLink = notification?.deepLink, webLink = notification?.webLink)) {
-                                    Column {
-                                        Button(
-                                            onClick = {
-                                                val link = notification?.webLink ?: notification?.deepLink
-
-                                                when {
-                                                    link == HOME_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
-                                                        onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
-                                                    }
-
-                                                    else -> {
-                                                        context.startActivity(
-                                                            navigator.getSchemeActivityIntent(
-                                                                notificationId = notification?.notificationId.orEmpty(),
-                                                                link = link.orEmpty()
-                                                            )
-                                                        )
-                                                    }
-                                                }
-                                            },
-                                            colors = ButtonDefaults.buttonColors(
-                                                containerColor = SoptTheme.colors.primary,
-                                                contentColor = SoptTheme.colors.onPrimary
-                                            ),
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(56.dp),
-                                            shape = RoundedCornerShape(10.dp)
-                                        ) {
-                                            Text(
-                                                text = "바로가기 >",
-                                                style = SoptTheme.typography.body16M
-                                            )
-                                        }
-                                        Spacer(modifier = Modifier.height(14.dp))
-                                    }
-                                }
+                                Spacer(modifier = Modifier.height(14.dp))
                             }
                         }
-
-                        SnackbarHost(
-                            hostState = snackBarHostState,
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                        ) {
-                            ErrorSnackBar(message = it.visuals.message)
-                        }
                     }
+                }
+
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                ) {
+                    ErrorSnackBar(message = it.visuals.message)
                 }
             }
         }

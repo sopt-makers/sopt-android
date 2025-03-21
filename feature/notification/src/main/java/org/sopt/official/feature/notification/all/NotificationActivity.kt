@@ -46,8 +46,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -56,6 +54,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,14 +64,17 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.common.navigator.NavigatorEntryPoint
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.notification.R
 import java.util.Date
 import java.util.Locale
+import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.designsystem.Orange400
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.notification.R
+import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -91,9 +93,11 @@ class NotificationActivity : AppCompatActivity() {
                 ).navigatorProvider()
             }
             SoptTheme {
-                Scaffold(modifier = Modifier
-                    .fillMaxSize()
-                    .background(SoptTheme.colors.background),
+                val state by viewModel.state.collectAsStateWithLifecycle()
+
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize(),
                     topBar = {
                         CenterAlignedTopAppBar(
                             title = {
@@ -103,21 +107,26 @@ class NotificationActivity : AppCompatActivity() {
                                 )
                             },
                             navigationIcon = {
-                                IconButton(onClick = { onBackPressedDispatcher.onBackPressed() }) {
+                                IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
                                     Icon(
-                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
                                         contentDescription = null,
-                                        tint = SoptTheme.colors.onBackground
+                                        tint = SoptTheme.colors.onSurface10
                                     )
                                 }
                             },
                             actions = {
-                                Text(text = "모두 읽음",
-                                    style = SoptTheme.typography.body16M,
-                                    color = SoptTheme.colors.primary,
-                                    modifier = Modifier
-                                        .clickable { viewModel.updateEntireNotificationReadingState() }
-                                        .padding(end = 24.dp))
+                                if (notifications.itemCount > 0) {
+                                    Text(
+                                        text = "모두 읽음",
+                                        style = SoptTheme.typography.body16M,
+                                        color = Orange400,
+                                        modifier = Modifier
+                                            .padding(end = 20.dp)
+                                            .clickable(onClick = viewModel::updateEntireNotificationReadingState)
+                                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                                    )
+                                }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = SoptTheme.colors.background,
@@ -125,84 +134,105 @@ class NotificationActivity : AppCompatActivity() {
                                 actionIconContentColor = SoptTheme.colors.primary
                             )
                         )
-                    }) { innerPadding ->
-                    if (notifications.itemCount > 0) {
-                        LazyColumn(
+                    },
+                    containerColor = SoptTheme.colors.background
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
+                                .padding(start = 20.dp, top = 12.dp, bottom = 10.dp)
                         ) {
-                            items(notifications.itemCount) {
-                                val item = notifications[it]
-                                Column(modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(100.dp)
-                                    .clickable {
-                                        context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
+                            NotificationCategory.entries.forEach { notification ->
+                                NotificationCategoryChip(
+                                    category = notification.category,
+                                    isSelected = state.notificationCategory == notification,
+                                    onClick = {
+                                        viewModel.updateNotificationCategory(category = notification)
                                     }
-                                    .background(
-                                        if (item?.isRead == true) {
-                                            SoptTheme.colors.onSurface800
-                                        } else {
-                                            SoptTheme.colors.background
-                                        }
-                                    )
-                                    .padding(
-                                        horizontal = 20.dp,
-                                        vertical = 16.dp
-                                    )) {
-                                    Row(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        Text(
-                                            item?.title.orEmpty(),
-                                            style = SoptTheme.typography.body16M,
-                                            color = SoptTheme.colors.onSurface30,
-                                            modifier = Modifier
-                                                .weight(1f)
-                                                .widthIn(max = 250.dp),
-                                            maxLines = 1,
-                                            overflow = TextOverflow.Ellipsis
-                                        )
-                                        Text(
-                                            item?.createdAt.orEmpty().convertToTimesAgo(),
-                                            style = SoptTheme.typography.body13M.copy(fontSize = 12.sp),
-                                            color = SoptTheme.colors.onSurface100
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.height(4.dp))
-                                    Text(
-                                        item?.content.orEmpty(),
-                                        style = SoptTheme.typography.body16M,
-                                        color = SoptTheme.colors.onSurface400,
-                                        maxLines = 2,
-                                        overflow = TextOverflow.Ellipsis,
-                                        modifier = Modifier.weight(1f)
-                                    )
-                                }
-                                HorizontalDivider(color = SoptTheme.colors.onSurface600)
+                                )
                             }
                         }
-                    } else {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Image(
-                                imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
-                                contentDescription = "알림이 없습니다."
-                            )
-                            Spacer(modifier = Modifier.height(24.dp))
-                            Text(
-                                text = "아직 도착한 알림이 없어요.",
-                                style = SoptTheme.typography.heading18B,
-                                color = SoptTheme.colors.onSurface800
-                            )
+
+                        if (notifications.itemCount > 0) {
+                            LazyColumn {
+                                items(notifications.itemCount) {
+                                    val item = notifications[it]
+                                    Column(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .height(100.dp)
+                                            .clickable {
+                                                context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
+                                            }
+                                            .background(
+                                                if (item?.isRead == true) {
+                                                    SoptTheme.colors.onSurface800
+                                                } else {
+                                                    SoptTheme.colors.background
+                                                }
+                                            )
+                                            .padding(
+                                                horizontal = 20.dp,
+                                                vertical = 16.dp
+                                            )
+                                    ) {
+                                        Row(
+                                            modifier = Modifier.fillMaxWidth(),
+                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Text(
+                                                item?.title.orEmpty(),
+                                                style = SoptTheme.typography.body16M,
+                                                color = SoptTheme.colors.onSurface30,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .widthIn(max = 250.dp),
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
+                                            )
+                                            Text(
+                                                item?.createdAt.orEmpty().convertToTimesAgo(),
+                                                style = SoptTheme.typography.body13M.copy(fontSize = 12.sp),
+                                                color = SoptTheme.colors.onSurface100
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.height(8.dp))
+                                        Text(
+                                            item?.content.orEmpty(),
+                                            style = SoptTheme.typography.body16M,
+                                            color = SoptTheme.colors.onSurface400,
+                                            maxLines = 2,
+                                            overflow = TextOverflow.Ellipsis,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                    HorizontalDivider(color = SoptTheme.colors.onSurface600)
+                                }
+                            }
+                        } else {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Image(
+                                    imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
+                                    contentDescription = "알림이 없습니다."
+                                )
+                                Spacer(modifier = Modifier.height(24.dp))
+                                Text(
+                                    text = "아직 도착한 알림이 없어요.",
+                                    style = SoptTheme.typography.heading18B,
+                                    color = SoptTheme.colors.onSurface400
+                                )
+                            }
                         }
                     }
                 }
