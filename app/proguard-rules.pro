@@ -106,9 +106,6 @@
 #}
 ##--------------- End: kotlinx.serialization ----------
 
-# Prevent obfuscation issues with serialization in notification package
--keep class org.sopt.official.data.notification.** { *; }
-
 -keepattributes SourceFile, LineNumberTable, Annotation
 -dontwarn org.slf4j.**
 -dontwarn javax.**
