@@ -30,24 +30,32 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import java.io.Serializable
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var tracker: Tracker
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val startArgs = intent.getSerializableExtra(ARGS) as? StartArgs
 
-        // TODO: HomeActivity에 있는 deepLinkType 처리 로직을 참고하여 구현 필요
         setContent {
             SoptTheme {
-                MainScreen(
-                    userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
-                )
+                ProvideTracker(tracker){
+                    MainScreen(
+                        userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                    )
+                }
             }
         }
     }

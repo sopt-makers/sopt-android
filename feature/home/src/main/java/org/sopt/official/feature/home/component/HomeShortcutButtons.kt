@@ -51,12 +51,12 @@ import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SuitMedium
+import org.sopt.official.feature.home.R.drawable.ic_file_text_filled
 import org.sopt.official.feature.home.R.drawable.ic_folder
 import org.sopt.official.feature.home.R.drawable.ic_homepage
 import org.sopt.official.feature.home.R.drawable.ic_instagram
 import org.sopt.official.feature.home.R.drawable.ic_member
 import org.sopt.official.feature.home.R.drawable.ic_pencil
-import org.sopt.official.feature.home.R.drawable.ic_project
 import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
@@ -87,7 +87,7 @@ internal fun HomeShortcutButtonsForMember(
             onClick = onMemberClick,
         )
         HomeShortcutButton(
-            icon = ic_project,
+            icon = ic_file_text_filled,
             text = "프로젝트",
             onClick = onProjectClick,
         )

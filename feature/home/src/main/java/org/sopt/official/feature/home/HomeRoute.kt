@@ -38,6 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -69,6 +72,7 @@ internal fun HomeRoute(
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
+    val amplitudeTracker = LocalTracker.current
 
     LaunchedEffect(userStatus) {
         if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
@@ -88,11 +92,15 @@ internal fun HomeRoute(
             HomeScreenForMember(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
-                onAppServiceClick = { url, appServiceName ->
+                onAppServiceClick = { url, _ ->
                     val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
 
-                    when (appServiceName == "콕찌르기") {
-                        true -> {
+                    when (url) {
+                        "home/poke" -> {
+                            amplitudeTracker.track(
+                                name = "click_poke_menu",
+                                type = EventType.CLICK
+                            )
                             newHomeViewModel.fetchIsNewPoke(
                                 onComplete = { isNewPoke ->
                                     homeAppServicesNavigation.navigateToPoke(
@@ -104,13 +112,30 @@ internal fun HomeRoute(
                             )
                         }
 
-                        false -> homeAppServicesNavigation.navigateToDeepLink(url)
+                        "home/fortune" -> {
+                            homeAppServicesNavigation.navigateToDeepLink(url)
+                            amplitudeTracker.track(
+                                name = "click_todaysoptmadi_menu",
+                                type = EventType.CLICK
+                            )
+                        }
+
+                        "home/soptamp" -> {
+                            homeAppServicesNavigation.navigateToDeepLink(url)
+                            amplitudeTracker.track(
+                                name = "click_soptamp_menu",
+                                type = EventType.CLICK
+                            )
+                        }
+
+                        else -> homeAppServicesNavigation.navigateToDeepLink(url)
                     }
                 },
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
                 homeAppServices = uiState.homeServices,
+                amplitudeTracker = amplitudeTracker
             )
         }
     }
@@ -128,38 +153,98 @@ private fun HomeScreenForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
     homeAppServices: ImmutableList<HomeAppService>,
+    amplitudeTracker: Tracker
 ) {
+
+    LaunchedEffect(true) {
+        amplitudeTracker.track(
+            name = "view_apphome",
+            type = EventType.VIEW
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
+
         HomeTopBarForMember(
             hasNotification = hasNotification,
-            onNotificationClick = homeDashboardNavigation::navigateToNotification,
+            onNotificationClick = {
+                homeDashboardNavigation.navigateToNotification()
+                amplitudeTracker.track(
+                    name = "click_alarm",
+                    type = EventType.CLICK
+                )
+            },
             onSettingClick = homeDashboardNavigation::navigateToSetting,
         )
+
         Spacer(modifier = Modifier.height(height = 16.dp))
+
         HomeUserSoptLogDashboardForMember(
             onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
             homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
         )
+
         Spacer(modifier = Modifier.height(height = 12.dp))
+
         HomeSoptScheduleDashboard(
             homeSoptScheduleModel = homeSoptScheduleModel,
             isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = homeDashboardNavigation::navigateToSchedule,
-            onAttendanceButtonClick = homeDashboardNavigation::navigateToAttendance,
+            onScheduleClick = {
+                homeDashboardNavigation.navigateToSchedule()
+                amplitudeTracker.track(
+                    name = "click_all_calendar",
+                    type = EventType.CLICK
+                )
+            },
+            onAttendanceButtonClick = {
+                homeDashboardNavigation.navigateToAttendance()
+                amplitudeTracker.track(
+                    name = "click_attendance",
+                    type = EventType.CLICK
+                )
+            }
         )
+
         Spacer(modifier = Modifier.height(height = 12.dp))
+
         HomeShortcutButtonsForMember(
-            onPlaygroundClick = homeShortcutNavigation::navigateToPlayground,
-            onStudyClick = homeShortcutNavigation::navigateToPlaygroundGroup,
-            onMemberClick = homeShortcutNavigation::navigateToPlaygroundMember,
-            onProjectClick = homeShortcutNavigation::navigateToPlaygroundProject,
+            onPlaygroundClick = {
+                homeShortcutNavigation.navigateToPlayground()
+                amplitudeTracker.track(
+                    name = "click_playground_community",
+                    type = EventType.CLICK
+                )
+            },
+            onStudyClick = {
+                homeShortcutNavigation.navigateToPlaygroundGroup()
+                amplitudeTracker.track(
+                    name = "click_moim",
+                    type = EventType.CLICK
+                )
+            },
+            onMemberClick = {
+                homeShortcutNavigation.navigateToPlaygroundMember()
+                amplitudeTracker.track(
+                    name = "click_member",
+                    type = EventType.CLICK
+                )
+            },
+            onProjectClick = {
+                homeShortcutNavigation.navigateToPlaygroundProject()
+                amplitudeTracker.track(
+                    name = "click_project",
+                    type = EventType.CLICK
+                )
+            },
         )
+
         Spacer(modifier = Modifier.height(height = 40.dp))
+
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
             onAppServiceClick = onAppServiceClick,
