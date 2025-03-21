@@ -69,6 +69,8 @@ import androidx.navigation.compose.NavHost
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.common.context.appContext
@@ -80,6 +82,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNav
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.main.MainTab.SoptLog
+import org.sopt.official.feature.main.MainTab.Home
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
@@ -99,6 +102,7 @@ fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val context = LocalContext.current
+    val amplitudeTracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -176,6 +180,17 @@ fun MainScreen(
                     tabs = MainTab.entries.toPersistentList(),
                     currentTab = navigator.currentTab,
                     onTabSelected = {
+                        if (it == Home) {
+                            amplitudeTracker.track(
+                                name = "click_navi_home",
+                                type = EventType.CLICK
+                            )
+                        } else if (it == SoptLog) {
+                            amplitudeTracker.track(
+                                name = "click_navi_soptlog",
+                                type = EventType.CLICK
+                            )
+                        }
                         navigator.navigate(it, userStatus) {
                             isOpenDialog = true
                         }
@@ -265,9 +280,9 @@ fun UnauthenticatedDDialog(
 fun SoptButton(
     title: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     containerColor: Color = SoptTheme.colors.onSurface800,
     textColor: Color = SoptTheme.colors.primary,
-    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
@@ -343,7 +358,7 @@ fun MainScreenPreview() {
         SoptBottomBar(
             visible = true,
             tabs = MainTab.entries.toPersistentList(),
-            currentTab = MainTab.Home,
+            currentTab = Home,
             onTabSelected = {},
         )
     }
