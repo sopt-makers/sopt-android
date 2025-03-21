@@ -218,8 +218,7 @@ class NotificationActivity : AppCompatActivity() {
                         } else {
                             Column(
                                 modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(innerPadding),
+                                    .fillMaxSize(),
                                 verticalArrangement = Arrangement.Center,
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
