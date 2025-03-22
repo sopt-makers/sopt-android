@@ -6,6 +6,9 @@ enum class HomeUrl(val url: String) {
     SOPTAMP("home/soptamp");
 
     companion object {
-        fun from(url: String): HomeUrl? = entries.find { it.url == url }
+        fun from(url: String?): HomeUrl? {
+            if (url == null) return null
+            return entries.find { it.url == url }
+        }
     }
 }
