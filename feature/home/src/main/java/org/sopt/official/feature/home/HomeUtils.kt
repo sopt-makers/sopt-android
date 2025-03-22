@@ -7,4 +7,6 @@ fun trackClickEvent(tracker: Tracker, eventName: String, eventType: EventType = 
     tracker.track(name = eventName, type = eventType)
 }
 
-fun isValidUrl(url: String): Boolean = url.startsWith("home/")
+fun isValidUrl(url: String?): Boolean {
+    return !url.isNullOrBlank()
+}
