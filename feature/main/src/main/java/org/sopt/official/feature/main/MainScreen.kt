@@ -182,12 +182,12 @@ fun MainScreen(
                     onTabSelected = {
                         if (it == Home) {
                             amplitudeTracker.track(
-                                name = "click_navi_home",
+                                name = "navi_home",
                                 type = EventType.CLICK
                             )
                         } else if (it == SoptLog) {
                             amplitudeTracker.track(
-                                name = "click_navi_soptlog",
+                                name = "navi_soptlog",
                                 type = EventType.CLICK
                             )
                         }

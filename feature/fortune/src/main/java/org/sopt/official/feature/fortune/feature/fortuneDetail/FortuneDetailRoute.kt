@@ -79,7 +79,7 @@ internal fun FortuneDetailRoute(
         if (uiState is Success) {
             amplitudeTracker.track(
                 type = VIEW,
-                name = "view_soptmadi_todays",
+                name = "soptmadi_todays",
             )
         }
     }
@@ -125,7 +125,7 @@ internal fun FortuneDetailRoute(
                     isAnonymous = !isAnonymous
                     amplitudeTracker.track(
                         type = CLICK,
-                        name = "click_anonymity",
+                        name = "anonymity",
                         properties = mapOf("isAnonymous" to isAnonymous),
                     )
                     if (isAnonymous.not()) scope.launch {
@@ -145,7 +145,7 @@ internal fun FortuneDetailRoute(
             onFortuneAmuletClick = {
                 amplitudeTracker.track(
                     type = CLICK,
-                    name = "click_get_charmcard",
+                    name = "get_charmcard",
                 )
                 onFortuneAmuletClick()
             },
@@ -157,7 +157,7 @@ internal fun FortuneDetailRoute(
             onPokeClick = {
                 amplitudeTracker.track(
                     type = CLICK,
-                    name = "click_randomepeople",
+                    name = "randomepeople",
                 )
                 scope.launch {
                     bottomSheetState.show()

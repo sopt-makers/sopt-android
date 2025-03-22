@@ -100,14 +100,14 @@ fun SoptlogRoute(
                     navigateToEditProfile = {
                         navigateToEditProfile()
                         amplitudeTracker.track(
-                            name = "click_soptlog_editprofile",
+                            name = "soptlog_editprofile",
                             type = EventType.CLICK
                         )
                     },
                     navigateToFortune = {
                         navigateToFortune()
                         amplitudeTracker.track(
-                            name = "click_soptlog_soptmadi",
+                            name = "soptlog_soptmadi",
                             type = EventType.CLICK
                         )
                     },
