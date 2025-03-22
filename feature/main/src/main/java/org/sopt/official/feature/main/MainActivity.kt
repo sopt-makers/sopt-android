@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             SoptTheme {
-                ProvideTracker(tracker){
+                ProvideTracker(tracker) {
                     MainScreen(
                         userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
                     )
