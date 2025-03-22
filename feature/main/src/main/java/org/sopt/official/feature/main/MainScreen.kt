@@ -102,7 +102,7 @@ fun MainScreen(
     navigator: MainNavigator = rememberMainNavigator(),
 ) {
     val context = LocalContext.current
-    val amplitudeTracker = LocalTracker.current
+    val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
 
     Scaffold(
@@ -179,19 +179,13 @@ fun MainScreen(
                     visible = navigator.shouldShowBottomBar(),
                     tabs = MainTab.entries.toPersistentList(),
                     currentTab = navigator.currentTab,
-                    onTabSelected = {
-                        if (it == Home) {
-                            amplitudeTracker.track(
-                                name = "navi_home",
-                                type = EventType.CLICK
-                            )
-                        } else if (it == SoptLog) {
-                            amplitudeTracker.track(
-                                name = "navi_soptlog",
-                                type = EventType.CLICK
-                            )
-                        }
-                        navigator.navigate(it, userStatus) {
+                    onTabSelected = { selectedTab ->
+                        tracker.track(
+                            name = selectedTab.loggingName,
+                            type = EventType.CLICK
+                        )
+
+                        navigator.navigate(selectedTab, userStatus) {
                             isOpenDialog = true
                         }
                     },

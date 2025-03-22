@@ -36,16 +36,19 @@ enum class MainTab(
     val icon: ImageVector,
     internal val contentDescription: String,
     val route: MainTabRoute,
+    val loggingName: String,
 ) {
     Home(
         icon = Icons.Default.Home,
         contentDescription = "홈",
-        route = org.sopt.official.feature.home.navigation.Home
+        route = org.sopt.official.feature.home.navigation.Home,
+        loggingName = "navi_home"
     ),
     SoptLog(
         icon = Icons.Default.Person,
         contentDescription = "솝트로그",
-        route = org.sopt.official.feature.soptlog.navigation.SoptLog
+        route = org.sopt.official.feature.soptlog.navigation.SoptLog,
+        loggingName = "navi_soptlog"
     );
 
     companion object {
