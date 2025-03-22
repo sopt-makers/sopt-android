@@ -33,11 +33,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
@@ -74,6 +76,7 @@ internal fun HomeRoute(
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(userStatus) {
         if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
@@ -106,15 +109,16 @@ internal fun HomeRoute(
                     when (HomeUrl.from(url)) {
                         HomeUrl.POKE -> {
                             trackClickEvent(tracker, "poke_menu")
-                            newHomeViewModel.fetchIsNewPoke(
-                                onComplete = { isNewPoke ->
-                                    homeAppServicesNavigation.navigateToPoke(
-                                        url = url,
-                                        isNewPoke = isNewPoke,
-                                        currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
-                                    )
-                                }
-                            )
+                            scope.launch {
+                                newHomeViewModel.fetchIsNewPoke()
+                                    .onSuccess { isNewPoke ->
+                                        homeAppServicesNavigation.navigateToPoke(
+                                            url = url,
+                                            isNewPoke = isNewPoke,
+                                            currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
+                                        )
+                                    }
+                            }
                         }
 
                         HomeUrl.FORTUNE -> {
@@ -127,7 +131,7 @@ internal fun HomeRoute(
                             trackClickEvent(tracker, "soptamp_menu")
                         }
 
-                        null -> {
+                        HomeUrl.UNKNOWN -> {
                             if (isValidUrl(url)) {
                                 homeAppServicesNavigation.navigateToDeepLink(url)
                             }
