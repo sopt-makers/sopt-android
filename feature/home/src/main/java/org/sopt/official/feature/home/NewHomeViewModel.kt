@@ -148,10 +148,12 @@ internal class NewHomeViewModel @Inject constructor(
                 viewModelState.update { it.copy(isLoading = false) }
                 Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
             }
+
             is ApiResult.ApiError -> {
                 viewModelState.update { it.copy(isLoading = false) }
                 Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
             }
+
             is ApiResult.Failure -> {
                 viewModelState.update { it.copy(isLoading = false) }
                 Result.failure(apiResult.throwable)
