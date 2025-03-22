@@ -48,6 +48,10 @@ import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.result.successOr
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
+import org.sopt.official.domain.poke.entity.ApiResult
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.entity.onApiError
+import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.model.HomeAppService
@@ -136,18 +140,25 @@ internal class NewHomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchIsNewPoke(onComplete: (isNewPoke: Boolean) -> Unit) {
+    suspend fun fetchIsNewPoke(): Result<Boolean> {
         viewModelState.update { it.copy(isLoading = true) }
 
-        viewModelScope.launch {
-            checkNewInPokeUseCase().onSuccess { result ->
-                viewModelState.update {
-                    it.copy(isLoading = false)
-                }
-                onComplete(result.isNew)
+        return when (val apiResult: ApiResult<*> = checkNewInPokeUseCase()) {
+            is ApiResult.Success -> {
+                viewModelState.update { it.copy(isLoading = false) }
+                Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
+            }
+            is ApiResult.ApiError -> {
+                viewModelState.update { it.copy(isLoading = false) }
+                Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
+            }
+            is ApiResult.Failure -> {
+                viewModelState.update { it.copy(isLoading = false) }
+                Result.failure(apiResult.throwable)
             }
         }
     }
+
 }
 
 private data class HomeViewModelState(
