@@ -61,7 +61,7 @@ fun SoptlogRoute(
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
     val soptLogInfo by viewModel.soptLogInfo.collectAsStateWithLifecycle()
-    val amplitudeTracker = LocalTracker.current
+    val tracker = LocalTracker.current
 
     when {
         soptLogInfo.isLoading -> {
@@ -99,14 +99,14 @@ fun SoptlogRoute(
                     todayFortuneTitle = todayFortuneTitle,
                     navigateToEditProfile = {
                         navigateToEditProfile()
-                        amplitudeTracker.track(
+                        tracker.track(
                             name = "soptlog_editprofile",
                             type = EventType.CLICK
                         )
                     },
                     navigateToFortune = {
                         navigateToFortune()
-                        amplitudeTracker.track(
+                        tracker.track(
                             name = "soptlog_soptmadi",
                             type = EventType.CLICK
                         )
