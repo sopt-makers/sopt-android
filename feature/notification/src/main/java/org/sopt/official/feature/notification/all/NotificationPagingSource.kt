@@ -42,12 +42,12 @@ class NotificationPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NotificationItem> {
         val page = params.key ?: 0
-        val notifications = if (notificationCategory == NotificationCategory.ALL) {
-            repository.getNotificationHistory(page).getOrElse { return LoadResult.Error(it) }
-        } else {
-            repository.getNotificationHistoryByCategory(page = page, category = notificationCategory.serverCode)
-                .getOrElse { return LoadResult.Error(it) }
-        }
+
+        val notifications = when (notificationCategory) {
+            NotificationCategory.ALL -> repository.getNotificationHistory(page)
+            else -> repository.getNotificationHistoryByCategory(page = page, category = notificationCategory.serverCode)
+        }.getOrElse { return LoadResult.Error(it) }
+
         return LoadResult.Page(
             data = notifications,
             prevKey = if (page == 0) null else page - 1,
