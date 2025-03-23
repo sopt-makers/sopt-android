@@ -71,6 +71,7 @@ import dagger.hilt.android.EntryPointAccessors
 import java.util.Date
 import java.util.Locale
 import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
@@ -167,7 +168,11 @@ class NotificationActivity : AppCompatActivity() {
                                             .fillMaxWidth()
                                             .height(100.dp)
                                             .clickable {
-                                                context.startActivity(navigator.getNotificationDetailActivityIntent(item?.notificationId.orEmpty()))
+                                                if (item?.notificationId == null) {
+                                                    toast("문제가 발생했습니다.")
+                                                } else {
+                                                    context.startActivity(navigator.getNotificationDetailActivityIntent(item.notificationId))
+                                                }
                                             }
                                             .background(
                                                 if (item?.isRead == true) {
@@ -187,7 +192,7 @@ class NotificationActivity : AppCompatActivity() {
                                             verticalAlignment = Alignment.CenterVertically
                                         ) {
                                             Text(
-                                                item?.title.orEmpty(),
+                                                text = item?.title.orEmpty(),
                                                 style = SoptTheme.typography.body16M,
                                                 color = SoptTheme.colors.onSurface30,
                                                 modifier = Modifier
@@ -197,14 +202,14 @@ class NotificationActivity : AppCompatActivity() {
                                                 overflow = TextOverflow.Ellipsis
                                             )
                                             Text(
-                                                item?.createdAt.orEmpty().convertToTimesAgo(),
+                                                text = item?.createdAt.orEmpty().convertToTimesAgo(),
                                                 style = SoptTheme.typography.body13M.copy(fontSize = 12.sp),
                                                 color = SoptTheme.colors.onSurface100
                                             )
                                         }
                                         Spacer(modifier = Modifier.height(8.dp))
                                         Text(
-                                            item?.content.orEmpty(),
+                                            text = item?.content.orEmpty(),
                                             style = SoptTheme.typography.body16M,
                                             color = SoptTheme.colors.onSurface400,
                                             maxLines = 2,
@@ -241,6 +246,8 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     private fun String.convertToTimesAgo(): String {
+        if (this.isEmpty()) return ""
+
         val dateFormat: DateFormat = SimpleDateFormat(
             "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
             Locale.KOREA
