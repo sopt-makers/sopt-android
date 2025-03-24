@@ -33,11 +33,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.coroutines.launch
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -61,6 +66,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
+import org.sopt.official.feature.home.navigation.HomeUrl
 
 @Composable
 internal fun HomeRoute(
@@ -69,9 +75,18 @@ internal fun HomeRoute(
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
+    val tracker = LocalTracker.current
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(userStatus) {
         if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
+    }
+
+    LaunchedEffect(Unit) {
+        tracker.track(
+            name = "at36_apphome",
+            type = EventType.VIEW
+        )
     }
 
     when (val state = uiState) {
@@ -88,29 +103,46 @@ internal fun HomeRoute(
             HomeScreenForMember(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
-                onAppServiceClick = { url, appServiceName ->
+                onAppServiceClick = { url, _ ->
                     val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
 
-                    when (appServiceName == "콕찌르기") {
-                        true -> {
-                            newHomeViewModel.fetchIsNewPoke(
-                                onComplete = { isNewPoke ->
-                                    homeAppServicesNavigation.navigateToPoke(
-                                        url = url,
-                                        isNewPoke = isNewPoke,
-                                        currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
-                                    )
-                                }
-                            )
+                    when (HomeUrl.from(url)) {
+                        HomeUrl.POKE -> {
+                            scope.launch {
+                                newHomeViewModel.fetchIsNewPoke()
+                                    .onSuccess { isNewPoke ->
+                                        trackClickEvent(tracker, "at36_poke_menu")
+                                        homeAppServicesNavigation.navigateToPoke(
+                                            url = url,
+                                            isNewPoke = isNewPoke,
+                                            currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
+                                        )
+                                    }
+                            }
                         }
 
-                        false -> homeAppServicesNavigation.navigateToDeepLink(url)
+                        HomeUrl.FORTUNE -> {
+                            homeAppServicesNavigation.navigateToDeepLink(url)
+                            trackClickEvent(tracker, "at36_todaysoptmadi_menu")
+                        }
+
+                        HomeUrl.SOPTAMP -> {
+                            homeAppServicesNavigation.navigateToDeepLink(url)
+                            trackClickEvent(tracker, "at36_soptamp_menu")
+                        }
+
+                        HomeUrl.UNKNOWN -> {
+                            if (isValidUrl(url)) {
+                                homeAppServicesNavigation.navigateToDeepLink(url)
+                            }
+                        }
                     }
                 },
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
                 homeAppServices = uiState.homeServices,
+                tracker = tracker
             )
         }
     }
@@ -128,6 +160,7 @@ private fun HomeScreenForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
     homeAppServices: ImmutableList<HomeAppService>,
+    tracker: Tracker
 ) {
     Column(
         modifier = Modifier
@@ -135,31 +168,61 @@ private fun HomeScreenForMember(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
+
         HomeTopBarForMember(
             hasNotification = hasNotification,
-            onNotificationClick = homeDashboardNavigation::navigateToNotification,
+            onNotificationClick = {
+                homeDashboardNavigation.navigateToNotification()
+                trackClickEvent(tracker,  "at36_alarm")
+            },
             onSettingClick = homeDashboardNavigation::navigateToSetting,
         )
+
         Spacer(modifier = Modifier.height(height = 16.dp))
+
         HomeUserSoptLogDashboardForMember(
             onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
             homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
         )
+
         Spacer(modifier = Modifier.height(height = 12.dp))
+
         HomeSoptScheduleDashboard(
             homeSoptScheduleModel = homeSoptScheduleModel,
             isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = homeDashboardNavigation::navigateToSchedule,
-            onAttendanceButtonClick = homeDashboardNavigation::navigateToAttendance,
+            onScheduleClick = {
+                homeDashboardNavigation.navigateToSchedule()
+                trackClickEvent(tracker, "at36_all_calendar")
+            },
+            onAttendanceButtonClick = {
+                homeDashboardNavigation.navigateToAttendance()
+                trackClickEvent(tracker, "at36_attendance")
+            }
         )
+
         Spacer(modifier = Modifier.height(height = 12.dp))
+
         HomeShortcutButtonsForMember(
-            onPlaygroundClick = homeShortcutNavigation::navigateToPlayground,
-            onStudyClick = homeShortcutNavigation::navigateToPlaygroundGroup,
-            onMemberClick = homeShortcutNavigation::navigateToPlaygroundMember,
-            onProjectClick = homeShortcutNavigation::navigateToPlaygroundProject,
+            onPlaygroundClick = {
+                homeShortcutNavigation.navigateToPlayground()
+                trackClickEvent(tracker, "at36_playground_community")
+            },
+            onStudyClick = {
+                homeShortcutNavigation.navigateToPlaygroundGroup()
+                trackClickEvent(tracker, "at36_moim")
+            },
+            onMemberClick = {
+                homeShortcutNavigation.navigateToPlaygroundMember()
+                trackClickEvent(tracker, "at36_member")
+            },
+            onProjectClick = {
+                homeShortcutNavigation.navigateToPlaygroundProject()
+                trackClickEvent(tracker, "at36_project")
+            },
         )
+
         Spacer(modifier = Modifier.height(height = 40.dp))
+
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
             onAppServiceClick = onAppServiceClick,

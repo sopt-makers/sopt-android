@@ -58,7 +58,7 @@ internal fun HomeRoute(
     val amplitudeTracker = LocalTracker.current.also {
         it.track(
             type = EventType.VIEW,
-            name = "view_soptmadi_title",
+            name = "soptmadi_title",
         )
     }
 
@@ -68,7 +68,7 @@ internal fun HomeRoute(
             onFortuneDetailClick(date)
             amplitudeTracker.track(
                 type = EventType.CLICK,
-                name = "click_check_todaysoptmadi",
+                name = "check_todaysoptmadi",
             )
         }
     )

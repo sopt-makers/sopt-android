@@ -88,14 +88,14 @@ internal fun FortuneAmuletRoute(
                 onHomeClick = {
                     amplitudeTracker.track(
                         type = EventType.CLICK,
-                        name = "click_done_home",
+                        name = "done_home",
                     )
                     onHomeClick()
                 }
             ).also {
                 amplitudeTracker.track(
                     type = EventType.VIEW,
-                    name = "view_soptmadi_charmcard",
+                    name = "soptmadi_charmcard",
                 )
             }
         }
