@@ -108,10 +108,10 @@ internal fun HomeRoute(
 
                     when (HomeUrl.from(url)) {
                         HomeUrl.POKE -> {
-                            trackClickEvent(tracker, "poke_menu")
                             scope.launch {
                                 newHomeViewModel.fetchIsNewPoke()
                                     .onSuccess { isNewPoke ->
+                                        trackClickEvent(tracker, "poke_menu")
                                         homeAppServicesNavigation.navigateToPoke(
                                             url = url,
                                             isNewPoke = isNewPoke,
