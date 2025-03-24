@@ -84,7 +84,7 @@ internal fun HomeRoute(
 
     LaunchedEffect(Unit) {
         tracker.track(
-            name = "apphome",
+            name = "at36_apphome",
             type = EventType.VIEW
         )
     }
@@ -111,7 +111,7 @@ internal fun HomeRoute(
                             scope.launch {
                                 newHomeViewModel.fetchIsNewPoke()
                                     .onSuccess { isNewPoke ->
-                                        trackClickEvent(tracker, "poke_menu")
+                                        trackClickEvent(tracker, "at36_poke_menu")
                                         homeAppServicesNavigation.navigateToPoke(
                                             url = url,
                                             isNewPoke = isNewPoke,
@@ -123,12 +123,12 @@ internal fun HomeRoute(
 
                         HomeUrl.FORTUNE -> {
                             homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "todaysoptmadi_menu")
+                            trackClickEvent(tracker, "at36_todaysoptmadi_menu")
                         }
 
                         HomeUrl.SOPTAMP -> {
                             homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "soptamp_menu")
+                            trackClickEvent(tracker, "at36_soptamp_menu")
                         }
 
                         HomeUrl.UNKNOWN -> {
@@ -173,7 +173,7 @@ private fun HomeScreenForMember(
             hasNotification = hasNotification,
             onNotificationClick = {
                 homeDashboardNavigation.navigateToNotification()
-                trackClickEvent(tracker,  "alarm")
+                trackClickEvent(tracker,  "at36_alarm")
             },
             onSettingClick = homeDashboardNavigation::navigateToSetting,
         )
@@ -192,11 +192,11 @@ private fun HomeScreenForMember(
             isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
             onScheduleClick = {
                 homeDashboardNavigation.navigateToSchedule()
-                trackClickEvent(tracker, "all_calendar")
+                trackClickEvent(tracker, "at36_all_calendar")
             },
             onAttendanceButtonClick = {
                 homeDashboardNavigation.navigateToAttendance()
-                trackClickEvent(tracker, "attendance")
+                trackClickEvent(tracker, "at36_attendance")
             }
         )
 
@@ -205,19 +205,19 @@ private fun HomeScreenForMember(
         HomeShortcutButtonsForMember(
             onPlaygroundClick = {
                 homeShortcutNavigation.navigateToPlayground()
-                trackClickEvent(tracker, "playground_community")
+                trackClickEvent(tracker, "at36_playground_community")
             },
             onStudyClick = {
                 homeShortcutNavigation.navigateToPlaygroundGroup()
-                trackClickEvent(tracker, "moim")
+                trackClickEvent(tracker, "at36_moim")
             },
             onMemberClick = {
                 homeShortcutNavigation.navigateToPlaygroundMember()
-                trackClickEvent(tracker, "member")
+                trackClickEvent(tracker, "at36_member")
             },
             onProjectClick = {
                 homeShortcutNavigation.navigateToPlaygroundProject()
-                trackClickEvent(tracker, "project")
+                trackClickEvent(tracker, "at36_project")
             },
         )
 

@@ -56,7 +56,7 @@ import org.sopt.official.feature.home.R.drawable.ic_folder
 import org.sopt.official.feature.home.R.drawable.ic_homepage
 import org.sopt.official.feature.home.R.drawable.ic_instagram
 import org.sopt.official.feature.home.R.drawable.ic_member
-import org.sopt.official.feature.home.R.drawable.ic_pencil
+import org.sopt.official.feature.home.R.drawable.ic_moim
 import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
@@ -77,7 +77,7 @@ internal fun HomeShortcutButtonsForMember(
             onClick = onPlaygroundClick,
         )
         HomeShortcutButton(
-            icon = ic_pencil,
+            icon = ic_moim,
             text = "모임/스터디",
             onClick = onStudyClick,
         )

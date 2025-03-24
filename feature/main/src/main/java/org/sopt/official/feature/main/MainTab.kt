@@ -42,13 +42,13 @@ enum class MainTab(
         icon = Icons.Default.Home,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
-        loggingName = "navi_home"
+        loggingName = "at36_navi_home"
     ),
     SoptLog(
         icon = Icons.Default.Person,
         contentDescription = "솝트로그",
         route = org.sopt.official.feature.soptlog.navigation.SoptLog,
-        loggingName = "navi_soptlog"
+        loggingName = "at36_navi_soptlog"
     );
 
     companion object {

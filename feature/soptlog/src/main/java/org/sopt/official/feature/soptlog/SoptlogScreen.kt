@@ -100,14 +100,14 @@ fun SoptlogRoute(
                     navigateToEditProfile = {
                         navigateToEditProfile()
                         tracker.track(
-                            name = "soptlog_editprofile",
+                            name = "at36_soptlog_editprofile",
                             type = EventType.CLICK
                         )
                     },
                     navigateToFortune = {
                         navigateToFortune()
                         tracker.track(
-                            name = "soptlog_soptmadi",
+                            name = "at36_soptlog_soptmadi",
                             type = EventType.CLICK
                         )
                     },
