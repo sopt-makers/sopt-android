@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Blue400
+import org.sopt.official.designsystem.Green400
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 
@@ -54,10 +55,11 @@ fun ScheduleItem(
     val (event, containerColor, textColor) = remember {
         when (type) {
             "SEMINAR" -> Triple("세미나", Orange400.copy(alpha = 0.2f), Orange400)
+            "JOINT_SEMINAR" -> Triple("합동 세미나", Orange400.copy(alpha = 0.2f), Orange400)
+            "BREAK" -> Triple("휴식", Green400.copy(alpha = 0.2f), Green400)
             else -> Triple("행사", Blue400.copy(alpha = 0.2f), Blue400)
         }
     }
-
 
     Row {
         VerticalDividerWithCircle(
