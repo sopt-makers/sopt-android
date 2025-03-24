@@ -24,12 +24,12 @@
  */
 package org.sopt.official.data.notification.repository
 
+import javax.inject.Inject
 import org.sopt.official.data.notification.model.request.UpdatePushTokenRequest
 import org.sopt.official.data.notification.service.NotificationService
 import org.sopt.official.domain.notification.entity.Notification
 import org.sopt.official.domain.notification.entity.NotificationItem
 import org.sopt.official.domain.notification.repository.NotificationRepository
-import javax.inject.Inject
 
 class DefaultNotificationRepository @Inject constructor(
   private val service: NotificationService
@@ -55,6 +55,12 @@ class DefaultNotificationRepository @Inject constructor(
       service.getNotificationHistory(page).map { it.asDomain() }
     }
   }
+
+    override suspend fun getNotificationHistoryByCategory(page: Int, category: String): Result<List<NotificationItem>> {
+        return runCatching {
+            service.getNotificationHistoryByCategory(page = page, category = category).map { it.asDomain() }
+        }
+    }
 
   override suspend fun getNotificationDetail(notificationId: String): Result<Notification> {
     return runCatching {

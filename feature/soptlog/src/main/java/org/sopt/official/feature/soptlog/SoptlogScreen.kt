@@ -81,7 +81,7 @@ fun SoptlogRoute(
                     introduction = profileMessage,
                     dashBoardItems = persistentListOf(
                         DashBoardItem(
-                            title = "솝트레벨",
+                            title = "솝레벨",
                             icon = R.drawable.ic_sopt_level,
                             content = soptLevel,
                         ),
@@ -91,7 +91,7 @@ fun SoptlogRoute(
                             content = pokeCount,
                         ),
                         DashBoardItem(
-                            title = if (isActive) "솝템프" else "솝트와",
+                            title = if (isActive) "솝탬프" else "솝트와",
                             icon = if (isActive) R.drawable.ic_soptamp_hand else R.drawable.ic_calender,
                             content = if (isActive) soptampRank else during,
                         )
@@ -119,7 +119,7 @@ fun SoptlogRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SoptlogScreen(
+private fun SoptlogScreen(
     profileImageUrl: String,
     name: String,
     part: String,
