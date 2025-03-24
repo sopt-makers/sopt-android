@@ -52,4 +52,9 @@ class PokeMainListAdapter(
             onBind(currentList[position], clickListener)
         }
     }
+
+    override fun onViewRecycled(holder: PokeMainViewHolder) {
+        super.onViewRecycled(holder)
+        holder.resetImage()
+    }
 }
