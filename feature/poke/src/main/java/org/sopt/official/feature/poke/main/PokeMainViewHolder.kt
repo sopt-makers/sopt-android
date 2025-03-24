@@ -26,6 +26,7 @@ package org.sopt.official.feature.poke.main
 
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import coil.dispose
 import coil.load
 import coil.transform.CircleCropTransformation
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
@@ -63,6 +64,18 @@ class PokeMainViewHolder(
                     bindUiData(itemPokeUserLargeSecond, secondUser, clickListener)
                 }
             }
+        }
+    }
+
+    fun resetImage() {
+        with(binding.itemPokeUserLargeFirst) {
+            imageViewProfile.dispose()
+            imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
+        }
+
+        with(binding.itemPokeUserLargeSecond) {
+            imageViewProfile.dispose()
+            imageViewProfile.setImageResource(R.drawable.ic_empty_profile)
         }
     }
 
