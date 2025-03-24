@@ -44,6 +44,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.component.DashBoardItem
 import org.sopt.official.feature.soptlog.component.EditProfileButton
@@ -59,6 +61,7 @@ fun SoptlogRoute(
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
     val soptLogInfo by viewModel.soptLogInfo.collectAsStateWithLifecycle()
+    val tracker = LocalTracker.current
 
     when {
         soptLogInfo.isLoading -> {
@@ -94,8 +97,20 @@ fun SoptlogRoute(
                         )
                     ),
                     todayFortuneTitle = todayFortuneTitle,
-                    navigateToEditProfile = navigateToEditProfile,
-                    navigateToFortune = navigateToFortune,
+                    navigateToEditProfile = {
+                        navigateToEditProfile()
+                        tracker.track(
+                            name = "at36_soptlog_editprofile",
+                            type = EventType.CLICK
+                        )
+                    },
+                    navigateToFortune = {
+                        navigateToFortune()
+                        tracker.track(
+                            name = "at36_soptlog_soptmadi",
+                            type = EventType.CLICK
+                        )
+                    },
                 )
             }
         }

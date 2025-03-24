@@ -59,7 +59,7 @@ fun FortuneTopBar(
                         onClickNavigationIcon()
                         amplitudeTracker.track(
                             type = EventType.CLICK,
-                            name = "click_leave_soptmadi_title",
+                            name = "leave_soptmadi_title",
                         )
                     }
                 },
@@ -69,7 +69,7 @@ fun FortuneTopBar(
 
 @Preview(showBackground = true)
 @Composable
-fun FortuneTopBarPreview() {
+private fun FortuneTopBarPreview() {
     SoptTheme {
         FortuneTopBar(
             onClickNavigationIcon = { },

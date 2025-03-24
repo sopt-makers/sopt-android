@@ -51,7 +51,7 @@ class AmplitudeTracker @Inject constructor(
 
     override fun track(type: EventType, name: String, properties: Map<String, Any?>) {
         if (BuildConfig.DEBUG) {
-            Timber.d("Amplitude: ${type.prefix}_$name properties: $properties")
+            Timber.tag("Ample").d("Amplitude: ${type.prefix}_$name properties: $properties")
         }
         amplitude.track(eventType = "${type.prefix}_$name", eventProperties = properties)
     }
