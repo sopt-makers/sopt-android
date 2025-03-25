@@ -158,6 +158,17 @@ internal class NewHomeViewModel @Inject constructor(
         }
     }
 
+    fun refreshNotificationStatus() {
+        viewModelScope.launch {
+            val result = homeRepository.getUserInfo()
+            val userInfo = result.successOr(UserInfo(UserInfo.User()))
+            viewModelState.update { state ->
+                state.copy(
+                    userInfo = userInfo
+                )
+            }
+        }
+    }
 }
 
 private data class HomeViewModelState(
