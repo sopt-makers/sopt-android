@@ -24,7 +24,9 @@
  */
 package org.sopt.official.feature.main
 
+import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.fadeIn
@@ -76,18 +78,21 @@ import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
-import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.MainTab.Home
+import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
+
+private const val EXIT_MILLIS = 3000L
 
 private val applicationNavigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -104,6 +109,17 @@ fun MainScreen(
     val context = LocalContext.current
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
+
+    var backPressedTime = 0L
+
+    BackHandler {
+        if (System.currentTimeMillis() - backPressedTime <= EXIT_MILLIS) {
+            (context as Activity).finish()
+        } else {
+            (context as Activity).toast("한번 더 누르면 앱을 종료할 수 있어요")
+        }
+        backPressedTime = System.currentTimeMillis()
+    }
 
     Scaffold(
         content = { innerPadding ->
