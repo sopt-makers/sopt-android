@@ -103,6 +103,7 @@ fun SoptlogRoute(
                             title = "솝레벨",
                             icon = R.drawable.ic_sopt_level,
                             content = soptLevel,
+                            textIcon = R.drawable.ic_helper
                         ),
                         DashBoardItem(
                             title = "콕찌르기",
