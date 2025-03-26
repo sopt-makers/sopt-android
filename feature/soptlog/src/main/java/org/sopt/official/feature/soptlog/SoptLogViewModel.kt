@@ -27,6 +27,7 @@ package org.sopt.official.feature.soptlog
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +36,6 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 class SoptLogViewModel @Inject constructor(
@@ -45,11 +45,7 @@ class SoptLogViewModel @Inject constructor(
     val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
 
-    init {
-        getSoptLogInfo()
-    }
-
-    private fun getSoptLogInfo() {
+    fun getSoptLogInfo() {
         viewModelScope.launch {
             _soptLogInfo.update {
                 it.copy(
