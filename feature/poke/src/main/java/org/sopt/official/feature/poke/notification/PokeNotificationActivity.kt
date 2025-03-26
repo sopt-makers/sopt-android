@@ -94,6 +94,7 @@ class PokeNotificationActivity : AppCompatActivity() {
             name = "view_poke_alarm_detail",
             properties = mapOf("view_type" to intent.getStringExtra("userStatus")),
         )
+        initLottieView()
     }
 
     private fun initAppBar() {
@@ -266,6 +267,14 @@ class PokeNotificationActivity : AppCompatActivity() {
                 }
             }
         }.launchIn(lifecycleScope)
+    }
+
+    private fun initLottieView() {
+        with(binding) {
+            layoutLottie.visibility = View.GONE
+            layoutAnonymousFriendOpen.visibility = View.GONE
+            layoutAnonymousFriendLottie.visibility = View.GONE
+        }
     }
 
     data class Argument(

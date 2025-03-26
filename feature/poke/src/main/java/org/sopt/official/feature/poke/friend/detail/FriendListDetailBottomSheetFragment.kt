@@ -40,6 +40,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -65,7 +66,6 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
@@ -106,15 +106,15 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 type = EventType.VIEW,
                 name = "poke_friend_detail",
                 properties =
-                mapOf(
-                    "view_type" to userStatus,
-                    "friend_type" to
-                        when (it) {
-                            PokeFriendType.NEW -> "newFriend"
-                            PokeFriendType.BEST_FRIEND -> "bestFriend"
-                            PokeFriendType.SOULMATE -> "soulmate"
-                        },
-                ),
+                    mapOf(
+                        "view_type" to userStatus,
+                        "friend_type" to
+                            when (it) {
+                                PokeFriendType.NEW -> "newFriend"
+                                PokeFriendType.BEST_FRIEND -> "bestFriend"
+                                PokeFriendType.SOULMATE -> "soulmate"
+                            },
+                    ),
             )
         }
 
@@ -191,6 +191,13 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun initLottieView() {
+        with(binding) {
+            layoutAnonymousFriendOpen.visibility = View.GONE
+            layoutAnonymousFriendLottie.visibility = View.GONE
+        }
+    }
+
     private val scrollListener =
         object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -211,11 +218,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     type = EventType.CLICK,
                     name = "memberprofile",
                     properties =
-                    mapOf(
-                        "view_type" to userStatus,
-                        "click_view_type" to "friend_detail",
-                        "view_profile" to playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to userStatus,
+                            "click_view_type" to "friend_detail",
+                            "view_profile" to playgroundId,
+                        ),
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
             }
@@ -225,11 +232,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     type = EventType.CLICK,
                     name = "poke_icon",
                     properties =
-                    mapOf(
-                        "view_type" to userStatus,
-                        "click_view_type" to "friend_detail",
-                        "view_profile" to user.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to userStatus,
+                            "click_view_type" to "friend_detail",
+                            "view_profile" to user.playgroundId,
+                        ),
                 )
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
@@ -339,6 +346,11 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
             bottomSheetBehavior.skipCollapsed = true
             bottomSheetBehavior.isHideable = true
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initLottieView()
     }
 
     class Builder {

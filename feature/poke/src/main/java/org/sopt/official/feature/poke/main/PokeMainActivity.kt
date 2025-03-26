@@ -35,6 +35,8 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -58,8 +60,6 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
@@ -89,6 +89,7 @@ class PokeMainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         tracker.track(type = EventType.VIEW, name = "poke_main", properties = mapOf("view_type" to args?.userStatus))
+        initLottieView()
     }
 
     private fun initAdapter() {
@@ -279,11 +280,11 @@ class PokeMainActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "memberprofile",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_main_alarm",
-                        "view_profile" to pokeMeItem.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "poke_main_alarm",
+                            "view_profile" to pokeMeItem.playgroundId,
+                        ),
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.playgroundId))))
             }
@@ -315,11 +316,11 @@ class PokeMainActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "poke_icon",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_main_alarm",
-                        "view_profile" to pokeMeItem.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "poke_main_alarm",
+                            "view_profile" to pokeMeItem.playgroundId,
+                        ),
                 )
                 showMessageListBottomSheet(
                     pokeMeItem.userId,
@@ -342,11 +343,11 @@ class PokeMainActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "memberprofile",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_main_friend",
-                        "view_profile" to pokeFriendItem.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "poke_main_friend",
+                            "view_profile" to pokeFriendItem.playgroundId,
+                        ),
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeFriendItem.playgroundId))))
             }
@@ -369,11 +370,11 @@ class PokeMainActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "poke_icon",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "poke_main_friend",
-                        "view_profile" to pokeFriendItem.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "poke_main_friend",
+                            "view_profile" to pokeFriendItem.playgroundId,
+                        ),
                 )
                 showMessageListBottomSheet(pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
             }
@@ -399,6 +400,14 @@ class PokeMainActivity : AppCompatActivity() {
         }
     }
 
+    private fun initLottieView() {
+        with(binding) {
+            layoutLottie.visibility = View.GONE
+            layoutAnonymousFriendOpen.visibility = View.GONE
+            layoutAnonymousFriendLottie.visibility = View.GONE
+        }
+    }
+
     private val pokeUserListClickLister =
         object : PokeUserListClickListener {
             override fun onClickProfileImage(playgroundId: Int) {
@@ -415,11 +424,11 @@ class PokeMainActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "poke_icon",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "onboarding",
-                        "view_profile" to user.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "onboarding",
+                            "view_profile" to user.playgroundId,
+                        ),
                 )
 
                 messageListBottomSheet =
