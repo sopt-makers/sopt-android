@@ -173,7 +173,7 @@ private fun HomeScreenForMember(
             hasNotification = hasNotification,
             onNotificationClick = {
                 homeDashboardNavigation.navigateToNotification()
-                trackClickEvent(tracker,  "at36_alarm")
+                trackClickEvent(tracker, "at36_alarm")
             },
             onSettingClick = homeDashboardNavigation::navigateToSetting,
         )

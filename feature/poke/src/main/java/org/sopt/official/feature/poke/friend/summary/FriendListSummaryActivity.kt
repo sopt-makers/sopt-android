@@ -35,6 +35,8 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -64,8 +66,6 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
@@ -106,6 +106,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         tracker.track(type = EventType.VIEW, name = "poke_friend", properties = mapOf("view_type" to args?.userStatus))
+        initLottieView()
     }
 
     private fun initAppBar() {
@@ -277,11 +278,11 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "memberprofile",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "friend",
-                        "view_profile" to playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "friend",
+                            "view_profile" to playgroundId,
+                        ),
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
             }
@@ -291,11 +292,11 @@ class FriendListSummaryActivity : AppCompatActivity() {
                     type = EventType.CLICK,
                     name = "poke_icon",
                     properties =
-                    mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "friend",
-                        "view_profile" to user.playgroundId,
-                    ),
+                        mapOf(
+                            "view_type" to args?.userStatus,
+                            "click_view_type" to "friend",
+                            "view_profile" to user.playgroundId,
+                        ),
                 )
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
@@ -360,6 +361,13 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 }
             }
             .launchIn(lifecycleScope)
+    }
+
+    private fun initLottieView() {
+        with(binding) {
+            layoutAnonymousFriendOpen.visibility = View.GONE
+            layoutAnonymousFriendLottie.visibility = View.GONE
+        }
     }
 
     data class StartArgs(

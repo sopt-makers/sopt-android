@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,9 +51,6 @@ import org.sopt.official.domain.home.result.successOr
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
@@ -64,7 +62,6 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
@@ -108,7 +105,7 @@ internal class NewHomeViewModel @Inject constructor(
 
             viewModelState.update {
                 it.copy(
-                    isError = false, // 반복 에러 대응 필요
+                    isError = userInfo.user.name.isBlank() || userDescription.activityDescription.isBlank(), // 반복 에러 대응 필요
                     isLoading = false,
                     userState = userInfo.user.userStatus,
                     userInfo = userInfo,

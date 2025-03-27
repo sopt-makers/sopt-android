@@ -56,12 +56,14 @@ class MainNavigator(
 
     fun navigate(tab: MainTab, userStatus: UserStatus, onFailure: () -> Unit = {}) {
         val navOptions = navOptions {
-            popUpTo(navController.graph.findStartDestination().id) {
-                saveState = true
-                inclusive = true
+            navController.currentDestination?.route?.let {
+                popUpTo(it) {
+                    saveState = true
+                    inclusive = true
+                }
+                launchSingleTop = true
+                restoreState = true
             }
-            launchSingleTop = true
-            restoreState = true
         }
 
         when (tab) {
