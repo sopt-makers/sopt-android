@@ -1,4 +1,5 @@
 [versions]
+balloonCompose = "1.6.12"
 compileSdk = "35"
 minSdk = "30"
 targetSdk = "35"
@@ -78,6 +79,7 @@ firebaseMessagingKtx = "24.1.1"
 
 [libraries]
 agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" }
+balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloonCompose" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }

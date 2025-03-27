@@ -50,4 +50,5 @@ dependencies {
 
     // etc
     implementation(libs.coil.compose)
+    implementation(libs.balloon.compose)
 }

@@ -114,7 +114,10 @@ class NotificationActivity : AppCompatActivity() {
                                         color = Orange400,
                                         modifier = Modifier
                                             .padding(end = 20.dp)
-                                            .clickable(onClick = viewModel::updateEntireNotificationReadingState)
+                                            .clickable{
+                                                viewModel.updateEntireNotificationReadingState()
+                                                notifications.refresh()
+                                            }
                                             .padding(vertical = 8.dp, horizontal = 4.dp)
                                     )
                                 }
