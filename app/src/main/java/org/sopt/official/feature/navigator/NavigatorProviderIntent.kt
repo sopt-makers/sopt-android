@@ -34,7 +34,6 @@ import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.fortune.FortuneActivity
-import org.sopt.official.feature.home.HomeActivity
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.notification.SchemeActivity
@@ -72,7 +71,6 @@ class NavigatorProviderIntent @Inject constructor(
         OnboardingActivity.StartArgs(currentGeneration = currentGeneration, userStatus = userStatus.name)
     )
 
-
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
 
     override fun getSoptampActivityIntent() = SoptampActivity.getIntent(context)
@@ -93,17 +91,6 @@ class NavigatorProviderIntent @Inject constructor(
         SchemeActivity.Argument(
             notificationId,
             link
-        )
-    )
-
-    override fun getHomeActivityIntent(
-        userStatus: UserStatus,
-        deepLinkType: DeepLinkType?,
-    ) = HomeActivity.getIntent(
-        context,
-        HomeActivity.StartArgs(
-            userStatus,
-            deepLinkType
         )
     )
 
