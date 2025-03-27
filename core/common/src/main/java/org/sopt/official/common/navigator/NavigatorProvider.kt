@@ -42,10 +42,7 @@ interface NavigatorProvider {
     fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent
     fun getFortuneActivityIntent(): Intent
     fun getScheduleActivityIntent(): Intent
-    fun getHomeActivityIntent(
-        userStatus: UserStatus,
-        deepLinkType: DeepLinkType?,
-    ): Intent
+
 
     fun getMainActivityIntent(
         userStatus: UserStatus,

@@ -40,7 +40,7 @@ enum class DeepLinkType(
     val link: String,
 ) {
     HOME("home") {
-        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus)
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getMainIntent(userStatus)
         override fun getMainIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent = getMainIntent(userStatus)
     },
     NOTIFICATION_LIST("home/notification") {
@@ -132,11 +132,11 @@ enum class DeepLinkType(
             userStatus.setIntent(navigator.getScheduleActivityIntent())
     },
     UNKNOWN("unknown-deep-link") {
-        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus, UNKNOWN)
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getMainIntent(userStatus, UNKNOWN)
         override fun getMainIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent = getMainIntent(userStatus, UNKNOWN)
     },
     EXPIRED("expired") {
-        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getHomeIntent(userStatus, EXPIRED)
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getMainIntent(userStatus, EXPIRED)
         override fun getMainIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent = getMainIntent(userStatus, EXPIRED)
     };
 
@@ -153,9 +153,7 @@ enum class DeepLinkType(
 
         fun getMainIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent =
             userStatus.setIntent(navigator.getMainActivityIntent(userStatus, deepLinkType))
-
-        fun getHomeIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null) =
-            userStatus.setIntent(navigator.getHomeActivityIntent(userStatus, deepLinkType))
+        
 
         fun of(deepLink: String): DeepLinkType {
             return try {
