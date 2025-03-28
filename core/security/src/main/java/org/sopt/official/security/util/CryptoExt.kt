@@ -28,11 +28,19 @@ import android.util.Base64
 import org.sopt.official.security.CryptoManager
 import org.sopt.official.security.model.EncryptedContent
 
-fun ByteArray.toEncryptedContent(initializationVectorSize: Int): EncryptedContent =
-    EncryptedContent(
-        initializationVector = this.copyOfRange(0, initializationVectorSize),
-        data = this.copyOfRange(initializationVectorSize, this.size)
-    )
+fun ByteArray.toEncryptedContent(initializationVectorSize: Int): EncryptedContent {
+    return if (this.size > initializationVectorSize) {
+        EncryptedContent(
+            initializationVector = this.copyOfRange(0, initializationVectorSize),
+            data = this.copyOfRange(initializationVectorSize, this.size)
+        )
+    } else {
+        EncryptedContent(
+            initializationVector = byteArrayOf(),
+            data = byteArrayOf()
+        )
+    }
+}
 
 fun ByteArray.toBase64(): String = Base64.encodeToString(this, Base64.DEFAULT)
 
