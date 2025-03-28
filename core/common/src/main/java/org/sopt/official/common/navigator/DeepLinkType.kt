@@ -153,7 +153,7 @@ enum class DeepLinkType(
 
         fun getMainIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent =
             userStatus.setIntent(navigator.getMainActivityIntent(userStatus, deepLinkType))
-        
+
 
         fun of(deepLink: String): DeepLinkType {
             return try {
