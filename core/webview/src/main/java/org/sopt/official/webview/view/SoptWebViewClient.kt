@@ -47,11 +47,40 @@ class SoptWebViewClient(
         return if (super.shouldOverrideUrlLoading(view, request)) {
             true
         } else {
-            (handleMarketScheme(view, url)
+            handleMarketScheme(view, url)
                 || handleKakaoLinkScheme(view, url)
                 || handleTelScheme(view, url)
-                || handleIntentScheme(view, url))
+                || handleMailScheme(view, url)
+                || handleIntentScheme(view, url)
         }
+    }
+
+    /**
+     * Comment by HyunWoo Lee
+     * 저사양기기/낮은 API 기기들은 위의 함수가 아닌 해당 함수를 실행할 수 있어
+     * 추가 대응을 위해 구현을 해놓습니다.
+     */
+    @Deprecated("Deprecated in Java")
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
+        return if (super.shouldOverrideUrlLoading(view, url)) {
+            true
+        } else {
+            val uri = url?.toUri() ?: return true
+            handleMarketScheme(view, uri)
+                || handleKakaoLinkScheme(view, uri)
+                || handleTelScheme(view, uri)
+                || handleMailScheme(view, uri)
+                || handleIntentScheme(view, uri)
+        }
+    }
+
+    private fun handleMailScheme(view: WebView?, url: Uri): Boolean {
+        if (url.scheme == "mailto") {
+            view?.context?.navigateTo(url)
+            return true
+        }
+        return false
     }
 
     private fun handleIntentScheme(view: WebView?, url: Uri): Boolean {
@@ -99,7 +128,7 @@ class SoptWebViewClient(
     }
 
     private fun handleMarketScheme(view: WebView?, url: Uri): Boolean {
-        if (url.scheme?.startsWith("market") == true) {
+        if (url.scheme == "market") {
             view?.context?.navigateTo(url)
             return true
         }
@@ -116,25 +145,6 @@ class SoptWebViewClient(
         }
     }
 
-    /**
-     * Comment by HyunWoo Lee
-     * 저사양기기/낮은 API 기기들은 위의 함수가 아닌 해당 함수를 실행할 수 있어
-     * 추가 대응을 위해 구현을 해놓습니다.
-     */
-    @Deprecated("Deprecated in Java")
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
-        return if (super.shouldOverrideUrlLoading(view, url)) {
-            true
-        } else {
-            val uri = url?.toUri() ?: return true
-            handleMarketScheme(view, uri)
-                || handleKakaoLinkScheme(view, uri)
-                || handleTelScheme(view, uri)
-                || handleIntentScheme(view, uri)
-        }
-    }
-
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
@@ -147,11 +157,5 @@ class SoptWebViewClient(
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
-    }
-
-    companion object {
-        private const val INTENT_SCHEME = "intent"
-        private const val KAKAO_PACKAGE_NAME = "com.kakao.talk"
-        private const val MARKET_URL = "market://details?id=$KAKAO_PACKAGE_NAME"
     }
 }
