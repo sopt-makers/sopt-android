@@ -24,11 +24,11 @@
  */
 package org.sopt.official.webview.view
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.os.Build
+import android.net.Uri
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -38,41 +38,101 @@ import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
 class SoptWebViewClient(
-    private val dataStore: SoptDataStore,
-    private val context: Context
+    private val dataStore: SoptDataStore
 ) : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-        if (request?.url?.scheme == INTENT_SCHEME) {
-            try {
-                val isInstalled = try {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        context.packageManager.getPackageInfo(
-                            KAKAO_PACKAGE_NAME,
-                            PackageManager.PackageInfoFlags.of(0)
-                        )
-                    } else {
-                        context.packageManager.getPackageInfo(KAKAO_PACKAGE_NAME, 0)
-                    }
-                    true
-                } catch (e: PackageManager.NameNotFoundException) {
-                    Timber.e(e.message)
-                    false
-                }
+        val url = request?.url.toString().toUri()
 
-                if (isInstalled) {
-                    Intent.parseUri(request.url.toString(), Intent.URI_INTENT_SCHEME).apply {
-                        context.startActivity(this)
-                    }
-                } else {
-                    Intent(Intent.ACTION_VIEW, MARKET_URL.toUri()).apply {
-                        context.startActivity(this)
+        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
+        return if (super.shouldOverrideUrlLoading(view, request)) {
+            true
+        } else {
+            (handleMarketScheme(view, url)
+                || handleKakaoLinkScheme(view, url)
+                || handleTelScheme(view, url)
+                || handleIntentScheme(view, url))
+        }
+    }
+
+    private fun handleIntentScheme(view: WebView?, url: Uri): Boolean {
+        try {
+            if (url.scheme == "intent") {
+                val urlString = url.toString()
+                val intent = Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
+                    addCategory(Intent.CATEGORY_BROWSABLE)
+                    setComponent(null)
+                    setSelector(null)
+                }
+                try {
+                    view?.context?.startActivity(intent)
+                    return true
+                } catch (e: ActivityNotFoundException) {
+                    val packageName = intent.`package`
+                    if (packageName != null) {
+                        view?.context?.navigateTo("market://details?id=${packageName}".toUri())
+                        return true
                     }
                 }
-            } catch (e: Exception) {
-                Timber.e(e.message)
+                return true
             }
+        } catch (e: Exception) {
+            Timber.e("SoptWebViewClient#handleIntentScheme failed", e)
+        }
+        return false
+    }
+
+    private fun handleTelScheme(view: WebView?, url: Uri): Boolean {
+        if (url.scheme?.startsWith("tel") == true) {
+            view?.context?.navigateTo(url)
             return true
-        } else return false
+        }
+        return false
+    }
+
+    private fun handleKakaoLinkScheme(view: WebView?, url: Uri): Boolean {
+        if (url.scheme?.startsWith("intent:kakaolink://") == true) {
+            val kakaoLinkScheme = url.toString().replace("intent:", "").toUri()
+            view?.context?.navigateTo(kakaoLinkScheme)
+            return true
+        }
+        return false
+    }
+
+    private fun handleMarketScheme(view: WebView?, url: Uri): Boolean {
+        if (url.scheme?.startsWith("market") == true) {
+            view?.context?.navigateTo(url)
+            return true
+        }
+        return false
+    }
+
+    private fun Context.navigateTo(to: Uri) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW, to)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.e("Uri is not valid. uri: $to")
+        }
+    }
+
+    /**
+     * Comment by HyunWoo Lee
+     * 저사양기기/낮은 API 기기들은 위의 함수가 아닌 해당 함수를 실행할 수 있어
+     * 추가 대응을 위해 구현을 해놓습니다.
+     */
+    @Deprecated("Deprecated in Java")
+    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
+        return if (super.shouldOverrideUrlLoading(view, url)) {
+            true
+        } else {
+            val uri = url?.toUri() ?: return true
+            handleMarketScheme(view, uri)
+                || handleKakaoLinkScheme(view, uri)
+                || handleTelScheme(view, uri)
+                || handleIntentScheme(view, uri)
+        }
     }
 
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
