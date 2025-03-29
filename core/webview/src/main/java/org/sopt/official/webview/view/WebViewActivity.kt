@@ -42,11 +42,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.URLDecoder
 import mozilla.components.support.utils.DownloadUtils
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
-import java.net.URLDecoder
 
 @AndroidEntryPoint
 @DeepLink("sopt://web")
