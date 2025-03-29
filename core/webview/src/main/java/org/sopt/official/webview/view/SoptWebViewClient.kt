@@ -28,11 +28,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
@@ -42,28 +42,29 @@ class SoptWebViewClient(
     private val context: Context
 ) : WebViewClient() {
     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
-        if (request?.url?.scheme == "intent") {
+        if (request?.url?.scheme == INTENT_SCHEME) {
             try {
-                val intent = Intent.parseUri(request.url.toString(), Intent.URI_INTENT_SCHEME)
-
                 val isInstalled = try {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         context.packageManager.getPackageInfo(
-                            "com.kakao.talk",
+                            KAKAO_PACKAGE_NAME,
                             PackageManager.PackageInfoFlags.of(0)
                         )
                     } else {
-                        context.packageManager.getPackageInfo("com.kakao.talk", 0)
+                        context.packageManager.getPackageInfo(KAKAO_PACKAGE_NAME, 0)
                     }
                     true
                 } catch (e: PackageManager.NameNotFoundException) {
+                    Timber.e(e.message)
                     false
                 }
 
                 if (isInstalled) {
-                    context.startActivity(intent)
+                    Intent.parseUri(request.url.toString(), Intent.URI_INTENT_SCHEME).apply {
+                        context.startActivity(this)
+                    }
                 } else {
-                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.kakao.talk")).apply {
+                    Intent(Intent.ACTION_VIEW, MARKET_URL.toUri()).apply {
                         context.startActivity(this)
                     }
                 }
@@ -86,5 +87,11 @@ class SoptWebViewClient(
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
+    }
+
+    companion object {
+        private const val INTENT_SCHEME = "intent"
+        private const val KAKAO_PACKAGE_NAME = "com.kakao.talk"
+        private const val MARKET_URL = "market://details?id=$KAKAO_PACKAGE_NAME"
     }
 }
