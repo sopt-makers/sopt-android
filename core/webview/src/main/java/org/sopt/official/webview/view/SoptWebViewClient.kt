@@ -24,15 +24,56 @@
  */
 package org.sopt.official.webview.view
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Build
+import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import org.sopt.official.network.persistence.SoptDataStore
+import timber.log.Timber
 
 class SoptWebViewClient(
-    private val dataStore: SoptDataStore
+    private val dataStore: SoptDataStore,
+    private val context: Context
 ) : WebViewClient() {
+    override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+        if (request?.url?.scheme == "intent") {
+            try {
+                val intent = Intent.parseUri(request.url.toString(), Intent.URI_INTENT_SCHEME)
+
+                val isInstalled = try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.packageManager.getPackageInfo(
+                            "com.kakao.talk",
+                            PackageManager.PackageInfoFlags.of(0)
+                        )
+                    } else {
+                        context.packageManager.getPackageInfo("com.kakao.talk", 0)
+                    }
+                    true
+                } catch (e: PackageManager.NameNotFoundException) {
+                    false
+                }
+
+                if (isInstalled) {
+                    context.startActivity(intent)
+                } else {
+                    Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.kakao.talk")).apply {
+                        context.startActivity(this)
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.e(e.message)
+            }
+            return true
+        } else return false
+    }
+
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
