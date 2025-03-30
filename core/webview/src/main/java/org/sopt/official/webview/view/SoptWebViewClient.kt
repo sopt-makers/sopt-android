@@ -89,8 +89,8 @@ class SoptWebViewClient(
                 val urlString = url.toString()
                 val intent = Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
                     addCategory(Intent.CATEGORY_BROWSABLE)
-                    setComponent(null)
-                    setSelector(null)
+                    component = null
+                    selector = null
                 }
                 try {
                     view?.context?.startActivity(intent)
