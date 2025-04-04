@@ -167,5 +167,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
+        <activity
+            android:name=".feature.attendance.NewAttendanceActivity"
+            android:exported="true" />
     </application>
 </manifest>
