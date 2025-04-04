@@ -29,6 +29,7 @@ import org.sopt.official.network.model.response.AuthResponse
 import retrofit2.http.Body
 import retrofit2.http.PATCH
 
+@Deprecated("이거 말고 RefreshApi 사용하세요.")
 interface RefreshService {
     @PATCH("auth/refresh")
     suspend fun refresh(@Body body: RefreshRequest): AuthResponse

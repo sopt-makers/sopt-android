@@ -77,6 +77,10 @@ class SoptDataStore @Inject constructor(
         set(value) = store.edit { putString(PUSH_TOKEN, value.encryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS)) }
         get() = store.getString(PUSH_TOKEN, null)?.decryptInReleaseMode(keyAlias = PUSH_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
 
+    var platform: String
+        set(value) = store.edit { putString(PLATFORM, value.encryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS)) }
+        get() = store.getString(PLATFORM, null)?.decryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+
     companion object {
         private const val ACCESS_TOKEN = "access_token"
         private const val REFRESH_TOKEN = "refresh_token"
@@ -85,6 +89,7 @@ class SoptDataStore @Inject constructor(
         private const val PUSH_TOKEN = "push_token"
         private const val UNAUTHENTICATED = "UNAUTHENTICATED"
         private const val DEFAULT_VALUE = ""
+        private const val PLATFORM = "platform"
     }
 }
 

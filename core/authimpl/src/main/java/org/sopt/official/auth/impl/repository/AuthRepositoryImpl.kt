@@ -24,7 +24,6 @@
  */
 package org.sopt.official.auth.impl.repository
 
-import javax.inject.Inject
 import org.sopt.official.auth.impl.mapper.AuthMapper
 import org.sopt.official.auth.impl.model.response.LogOutRequest
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
@@ -33,7 +32,9 @@ import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.network.model.request.RefreshRequest
+import javax.inject.Inject
 
+@Deprecated("이거 말고 DefaultCentralizeAuthRepository 사용하세요.")
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: RemoteAuthDataSource,
     private val localAuthDataSource: LocalAuthDataSource,
