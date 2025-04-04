@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@
 plugins {
     sopt("feature")
     sopt("compose")
+    sopt("test")
 }
 
 android {
@@ -43,4 +44,15 @@ dependencies {
     implementation(libs.bundles.firebase)
     implementation(libs.process.phoenix)
     implementation(libs.kotlin.collections.immutable)
+    implementation(libs.rin)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.truth)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.bundles.compose.test)
+
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.hilt.testing)
+    kspAndroidTest(libs.hilt.testing.compiler)
+    androidTestImplementation(libs.bundles.compose.android.test)
 }

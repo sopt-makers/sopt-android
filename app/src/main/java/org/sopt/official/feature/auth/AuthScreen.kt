@@ -14,14 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navOptions
 import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.CertificationSnackBar
 import org.sopt.official.feature.auth.feature.authmain.navigation.AuthMainNavigation
 import org.sopt.official.feature.auth.feature.authmain.navigation.authMainNavGraph
 import org.sopt.official.feature.auth.feature.authmain.navigation.navigateAuthMain
+import org.sopt.official.feature.auth.feature.certificate.navigation.CertificationNavigation
 import org.sopt.official.feature.auth.feature.certificate.navigation.certificationNavGraph
 import org.sopt.official.feature.auth.feature.certificate.navigation.navigateCertification
 import org.sopt.official.feature.auth.feature.socialaccount.navigation.navigateSocialAccount
@@ -33,6 +36,7 @@ internal fun AuthScreen(
     onGoogleLoginCLick: () -> Unit,
     onContactChannelClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
+    platform: String,
     navController: NavHostController = rememberNavController(),
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
@@ -70,13 +74,15 @@ internal fun AuthScreen(
             ) {
                 NavHost(
                     navController = navController,
-                    startDestination = AuthMainNavigation(platform = "") // TODO: platform 값 로컬에서 가져오기
+                    startDestination = AuthMainNavigation(platform = platform)
                 ) {
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
                         onGoogleLoginCLick = onGoogleLoginCLick,
                         navigateToCertification = { status ->
-                            navController.navigateCertification(status)
+                            navController.navigateCertification(
+                                status = status
+                            )
                         },
                         onContactChannelClick = onContactChannelClick
                     )
@@ -84,10 +90,25 @@ internal fun AuthScreen(
                         onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar,
                         navigateToSocialAccount = { status, name ->
-                            navController.navigateSocialAccount(status, name)
+                            navController.navigateSocialAccount(
+                                status = status,
+                                name = name,
+                                navOptions = NavOptions.Builder().setPopUpTo(
+                                    route = CertificationNavigation(status),
+                                    inclusive = true
+                                ).build()
+                            )
                         },
                         navigateToAuthMain = { platform ->
-                            navController.navigateAuthMain(platform)
+                            val navOptions = navOptions {
+                                popUpTo(id = navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                            navController.navigateAuthMain(
+                                platform = platform,
+                                navOptions = navOptions
+                            )
                         },
                         onGoogleFormClick = onGoogleFormClick
                     )

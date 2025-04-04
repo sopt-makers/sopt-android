@@ -5,8 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CertificateCodeResponse(
-    @SerialName("isVerified")
-    val isVerified: Boolean,
     @SerialName("name")
     val name: String,
     @SerialName("phone")

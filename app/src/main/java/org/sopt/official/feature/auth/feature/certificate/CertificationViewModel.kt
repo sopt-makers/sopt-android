@@ -15,17 +15,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import okhttp3.internal.immutableListOf
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
 import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
+import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
 internal enum class ErrorCase(val message: String) {
-    CODE_ERROR("인증번호가 일치하지 않아요.\n번호를 확인한 후 다시 입력해 주세요."),
-    PHONE_ERROR("솝트 활동 시 사용한 전화번호가 아니예요.\n인증을 실패하신 경우 하단에서 다른 방법으로 인증할 수 있어요."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.")
+    CODE_ERROR("인증 번호가 일치하지 않아요."),
+    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.");
+
+    companion object {
+        fun isPhoneError(message: String) = PHONE_ERROR.message == message
+        fun isCodeError(message: String) = immutableListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
+    }
 }
 
 internal enum class CertificationButtonText(val message: String) {
@@ -35,7 +42,8 @@ internal enum class CertificationButtonText(val message: String) {
 
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val dataStore: SoptDataStore,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CertificationState> =
@@ -73,14 +81,23 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess {
                 startTimer()
-                resetErrorCase()
                 updateButtonText()
+                updateCodeTextField(true)
+                updateButtonState(true)
             }.onFailure {
-                _state.update { currentState ->
-                    currentState.copy(
-                        errorMessage = ErrorCase.PHONE_ERROR.message
-                    )
-                }
+                // TODO: DELETE !!
+                startTimer()
+                updateButtonText()
+                // TODO: true -> false
+                updateCodeTextField(true)
+                updateButtonState(true)
+
+                // TODO: 주석 해제
+//                _state.update { currentState ->
+//                    currentState.copy(
+//                        errorMessage = ErrorCase.PHONE_ERROR.message
+//                    )
+//                }
             }
         }
     }
@@ -114,6 +131,7 @@ class CertificationViewModel @Inject constructor(
                 )
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
+                dataStore.platform = response.platform
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }
@@ -152,7 +170,7 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun resetErrorCase() {
+    fun resetErrorCase() {
         _state.update { currentState ->
             currentState.copy(
                 errorMessage = ""
@@ -167,4 +185,21 @@ class CertificationViewModel @Inject constructor(
             )
         }
     }
+
+    private fun updateCodeTextField(isEnable: Boolean) {
+        _state.update { currentState ->
+            currentState.copy(
+                isCodeEnable = isEnable
+            )
+        }
+    }
+
+    private fun updateButtonState(isEnable: Boolean) {
+        _state.update { currentState ->
+            currentState.copy(
+                isButtonEnable = isEnable
+            )
+        }
+    }
+
 }

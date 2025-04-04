@@ -1,7 +1,7 @@
 package org.sopt.official.data.auth.remote.api
 
 import org.sopt.official.data.auth.model.BaseAuthResponse
-import org.sopt.official.data.auth.model.NonDataBaseAuthResponse
+import org.sopt.official.data.auth.model.NullableBaseAuthResponse
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
@@ -21,7 +21,7 @@ internal interface AuthApi {
     @POST("/api/v1/auth/phone")
     suspend fun createCode(
         @Body request: CreateCodeRequest,
-    ): NonDataBaseAuthResponse<Unit>
+    ): NullableBaseAuthResponse<Unit>
 
     @POST("/api/v1/auth/verify/phone")
     suspend fun certificateCode(
@@ -36,12 +36,12 @@ internal interface AuthApi {
     @POST("/api/v1/auth/signup")
     suspend fun signUp(
         @Body request: SignUpRequest,
-    ): NonDataBaseAuthResponse<Unit>
+    ): NullableBaseAuthResponse<Unit>
 
     @PATCH("/api/v1/social/accounts")
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
-    ): NonDataBaseAuthResponse<Unit>
+    ): NullableBaseAuthResponse<Unit>
 
     @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(

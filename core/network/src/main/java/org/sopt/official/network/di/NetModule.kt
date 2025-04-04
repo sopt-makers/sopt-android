@@ -28,7 +28,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -41,11 +40,12 @@ import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
 import org.sopt.official.network.FlipperInitializer
-import org.sopt.official.network.authenticator.SoptAuthenticator
+import org.sopt.official.network.authenticator.CentralizeAuthenticator
 import retrofit2.Converter
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -64,7 +64,7 @@ object NetModule {
     fun provideOkHttpClient(
         @Logging loggingInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
-        authenticator: SoptAuthenticator
+        authenticator: CentralizeAuthenticator
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)

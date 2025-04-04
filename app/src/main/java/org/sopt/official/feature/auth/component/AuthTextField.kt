@@ -45,16 +45,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.R.drawable.ic_auth_certification_error
-import org.sopt.official.designsystem.Black60
 import org.sopt.official.designsystem.Gray10
-import org.sopt.official.designsystem.Gray100
+import org.sopt.official.designsystem.Gray200
+import org.sopt.official.designsystem.Gray300
+import org.sopt.official.designsystem.Gray500
+import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.feature.auth.component.BasicTextDefaults.MAX_CODE_NUMBER
+import org.sopt.official.feature.auth.component.BasicTextDefaults.MAX_PHONE_NUMBER
+import org.sopt.official.feature.auth.component.BasicTextDefaults.PHONE_HINT_TEXT
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
 @Composable
@@ -65,9 +71,12 @@ internal fun AuthTextField(
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     isError: Boolean = false,
+    isEnabled: Boolean = true,
     errorMessage: String? = null,
     suffix: (@Composable () -> Unit)? = null,
 ) {
+    var isFocused by remember { mutableStateOf(false) }
+
     Column(
         modifier = modifier
     ) {
@@ -75,18 +84,18 @@ internal fun AuthTextField(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
                 .then(
-                    if (!isError) {
-                        Modifier
-                    } else {
-                        Modifier.border(
-                            width = 1.dp,
-                            color = SoptTheme.colors.error,
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                    }
+                    Modifier.border(
+                        width = 1.dp,
+                        color = when {
+                            isError -> SoptTheme.colors.error
+                            isFocused -> Gray200
+                            else -> Gray800
+                        },
+                        shape = RoundedCornerShape(10.dp)
+                    )
                 )
                 .background(
-                    color = Black60,
+                    color = Gray800,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(vertical = 15.dp, horizontal = 20.dp)
@@ -99,23 +108,36 @@ internal fun AuthTextField(
                 if (labelText.isEmpty()) {
                     Text(
                         text = hintText,
-                        color = Gray100,
+                        color = if (isEnabled) Gray300 else Gray500,
                         style = SoptTheme.typography.body16M
                     )
                 }
 
                 BasicTextField(
                     value = labelText,
-                    onValueChange = onTextChange,
+                    onValueChange = { newValue ->
+                        val filteredValue = newValue.filter { it.isDigit() }
+                        val maxLength = if (hintText.contains(PHONE_HINT_TEXT)) MAX_PHONE_NUMBER else MAX_CODE_NUMBER
+                        if (filteredValue.length <= maxLength) {
+                            onTextChange(filteredValue)
+                        }
+                    },
                     singleLine = true,
                     visualTransformation = visualTransformation,
                     textStyle = SoptTheme.typography.body16M.copy(color = Gray10),
+                    modifier = Modifier.onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                    },
+                    enabled = isEnabled
                 )
             }
-            // suffix가 있으면 우측에 표시
-            suffix?.let {
-                Spacer(modifier = Modifier.width(8.dp))
-                it()
+
+            if (isEnabled) {
+                // suffix가 있으면 우측에 표시
+                suffix?.let {
+                    Spacer(modifier = Modifier.width(8.dp))
+                    it()
+                }
             }
         }
         if (isError && !errorMessage.isNullOrEmpty()) {
@@ -136,6 +158,12 @@ internal fun AuthTextField(
             }
         }
     }
+}
+
+object BasicTextDefaults {
+    const val PHONE_HINT_TEXT: String = "010"
+    const val MAX_PHONE_NUMBER: Int = 11
+    const val MAX_CODE_NUMBER: Int = 6
 }
 
 @Preview(showBackground = false)

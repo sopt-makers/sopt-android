@@ -44,6 +44,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
@@ -64,15 +65,16 @@ import org.sopt.official.designsystem.Blue500
 import org.sopt.official.designsystem.BlueAlpha100
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
+import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.Gray60
 import org.sopt.official.designsystem.Gray80
+import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.component.AuthTextWithArrow
-import org.sopt.official.feature.auth.component.PhoneCertification
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
@@ -131,15 +133,19 @@ internal fun CertificationRoute(
         onGoogleFormClick = onGoogleFormClick,
         onPhoneNumberChange = { newPhoneNumber ->
             viewModel.updatePhone(newPhoneNumber)
+            viewModel.resetErrorCase()
         },
         onCodeChange = { newCode ->
             viewModel.updateCode(newCode)
+            viewModel.resetErrorCase()
         },
         phoneNumber = state.phone,
         code = state.code,
         visualTransformation = phoneNumberVisualTransformation(),
         errorMessage = state.errorMessage,
-        certificationButtonText = state.buttonText
+        certificationButtonText = state.buttonText,
+        isCodeEnable = state.isCodeEnable,
+        isButtonEnable = state.isButtonEnable
     )
 }
 
@@ -157,7 +163,9 @@ private fun CertificationScreen(
     code: String,
     visualTransformation: VisualTransformation,
     errorMessage: String,
-    certificationButtonText: String
+    certificationButtonText: String,
+    isCodeEnable: Boolean,
+    isButtonEnable: Boolean
 ) {
     Column {
         Image(
@@ -182,7 +190,8 @@ private fun CertificationScreen(
                 onTextChange = onPhoneNumberChange,
                 phoneNumber = phoneNumber,
                 visualTransformation = visualTransformation,
-                buttonText = certificationButtonText
+                buttonText = certificationButtonText,
+                errorMessage = errorMessage
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -190,7 +199,8 @@ private fun CertificationScreen(
                 labelText = code,
                 hintText = "인증번호를 입력해 주세요.",
                 onTextChange = onCodeChange,
-                isError = errorMessage.isNotEmpty(),
+                isError = ErrorCase.isCodeError(errorMessage),
+                isEnabled = isCodeEnable,
                 errorMessage = errorMessage
             ) {
                 Text(
@@ -199,8 +209,9 @@ private fun CertificationScreen(
                     color = White,
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
+
             if (status == AuthStatus.REGISTER) {
-                Spacer(modifier = Modifier.height(41.dp))
                 AuthButton(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -231,15 +242,18 @@ private fun CertificationScreen(
                         }
                     }
                 }
+                Spacer(modifier = Modifier.height(20.dp))
             }
-            Spacer(modifier = Modifier.weight(1f))
+
             AuthButton(
                 modifier = Modifier.fillMaxWidth(),
                 padding = PaddingValues(vertical = 16.dp),
                 onClick = onCertificateClick,
+                isEnabled = isButtonEnable,
                 containerColor = Gray10,
                 contentColor = Gray950,
-                disabledContentColor = Gray60,
+                disabledContentColor = Gray500,
+                disabledContainerColor = Gray800
             ) {
                 Text(
                     text = "SOPT 회원 인증 완료",
@@ -292,6 +306,55 @@ private fun TopBar(
     }
 }
 
+@Composable
+private fun PhoneCertification(
+    onPhoneNumberClick: () -> Unit,
+    textColor: Color,
+    onTextChange: (String) -> Unit,
+    phoneNumber: String,
+    buttonText: String,
+    errorMessage: String,
+    modifier: Modifier = Modifier,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = "전화번호",
+            color = textColor,
+            style = SoptTheme.typography.body14M
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+            AuthTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                labelText = phoneNumber,
+                hintText = "010-XXXX-XXXX",
+                onTextChange = onTextChange,
+                visualTransformation = visualTransformation,
+                isError = ErrorCase.isPhoneError(errorMessage),
+                errorMessage = errorMessage
+            )
+            AuthButton(
+                padding = PaddingValues(
+                    vertical = 16.dp,
+                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 12.dp
+                    else 20.dp
+                ),
+                onClick = onPhoneNumberClick,
+                containerColor = Gray10,
+                contentColor = Gray950,
+            ) {
+                Text(
+                    text = buttonText,
+                    style = SoptTheme.typography.body14M
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun AuthCertificationPreview() {
@@ -309,7 +372,9 @@ private fun AuthCertificationPreview() {
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
             errorMessage = "",
-            certificationButtonText = CertificationButtonText.GET_CODE.message
+            certificationButtonText = CertificationButtonText.GET_CODE.message,
+            isCodeEnable = true,
+            isButtonEnable = true
         )
     }
 }

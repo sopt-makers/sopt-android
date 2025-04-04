@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,12 +29,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.staticCompositionLocalOf
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.analytics.AmplitudeTracker
+import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
@@ -45,10 +44,6 @@ private val navigator by lazy {
         appContext,
         NavigatorEntryPoint::class.java
     ).navigatorProvider()
-}
-
-internal val LocalAmplitudeTracker = staticCompositionLocalOf<AmplitudeTracker> {
-    error("No AmplitudeTracker provided")
 }
 
 @AndroidEntryPoint
@@ -62,7 +57,7 @@ class FortuneActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
-                CompositionLocalProvider(LocalAmplitudeTracker provides amplitudeTracker) {
+                ProvideTracker(amplitudeTracker) {
                     FoundationScreen(
                         onClickLeadingIcon = ::finish,
                         navigateToHome = {
