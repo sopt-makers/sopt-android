@@ -27,6 +27,7 @@ package org.sopt.official.network.model.response
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Deprecated("이거 말고 RefreshTokenResponse 사용하세요.")
 @Serializable
 data class AuthResponse(
     @SerialName("accessToken") val accessToken: String,

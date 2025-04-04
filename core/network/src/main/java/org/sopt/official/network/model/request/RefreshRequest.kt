@@ -27,6 +27,7 @@ package org.sopt.official.network.model.request
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Deprecated("이거 말고 ExpiredTokenRequest 사용하세요.")
 @Serializable
 data class RefreshRequest(
     @SerialName("refreshToken")
