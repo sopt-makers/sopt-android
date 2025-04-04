@@ -32,6 +32,7 @@ include(
     ":core:webview",
     ":core:navigation",
 
+    ":data:auth",
     ":data:fortune",
     ":data:home",
     ":data:mypage",
@@ -41,6 +42,7 @@ include(
     ":data:soptamp",
     ":data:soptlog",
 
+    ":domain:auth",
     ":domain:fortune",
     ":domain:home",
     ":domain:mypage",
@@ -49,7 +51,6 @@ include(
     ":domain:schedule",
     ":domain:soptamp",
     ":domain:soptlog",
-    ":domain:auth",
 
     ":feature:auth",
     ":feature:fortune",
@@ -62,4 +63,3 @@ include(
     ":feature:soptlog",
     ":feature:main"
 )
-include(":data:auth")
