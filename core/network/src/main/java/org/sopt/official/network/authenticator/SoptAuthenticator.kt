@@ -40,6 +40,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Deprecated("이거 말고 CentralizeAuthenticator 사용하세요.")
 @Singleton
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
