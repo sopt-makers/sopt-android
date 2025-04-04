@@ -62,3 +62,4 @@ include(
     ":feature:soptlog",
     ":feature:main"
 )
+include(":data:auth")
