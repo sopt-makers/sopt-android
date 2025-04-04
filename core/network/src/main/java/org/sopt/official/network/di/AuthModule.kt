@@ -29,13 +29,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.network.interceptor.AuthInterceptor
+import org.sopt.official.network.service.RefreshApi
 import org.sopt.official.network.service.RefreshService
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -43,6 +45,11 @@ object AuthModule {
     @Provides
     @Singleton
     fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
+
+
+    @Provides
+    @Singleton
+    fun provideRefreshApi(@AuthRetrofit retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
 
     @Module
     @InstallIn(SingletonComponent::class)
