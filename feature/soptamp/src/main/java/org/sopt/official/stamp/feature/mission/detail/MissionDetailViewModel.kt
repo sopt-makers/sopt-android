@@ -27,6 +27,7 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,7 +44,6 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
-import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -119,36 +119,38 @@ class MissionDetailViewModel @Inject constructor(
                     isMe = isMe
                 )
             }
-            stampRepository.getMissionContent(id, nickname)
-                .onSuccess {
-                    val option = if (!isMe) {
-                        ToolbarIconType.NONE
-                    } else {
-                        if (isCompleted) {
-                            ToolbarIconType.WRITE
-                        } else {
+            if (isCompleted) {
+                stampRepository.getMissionContent(id, nickname)
+                    .onSuccess {
+                        val option = if (!isMe) {
                             ToolbarIconType.NONE
+                        } else {
+                            if (isCompleted) {
+                                ToolbarIconType.WRITE
+                            } else {
+                                ToolbarIconType.NONE
+                            }
+                        }
+                        val result = PostUiState.from(it).copy(
+                            stampId = it.id,
+                            imageUri = ImageModel.Remote(url = it.images),
+                            isCompleted = isCompleted,
+                            toolbarIconType = option,
+                        )
+                        uiState.update { result }
+                    }.onFailure { error ->
+                        Timber.e(error)
+                        if (error is HttpException && error.code() != 400) {
+                            uiState.update {
+                                it.copy(isLoading = false, isError = true, error = error)
+                            }
+                        } else {
+                            uiState.update {
+                                it.copy(isLoading = false, error = error)
+                            }
                         }
                     }
-                    val result = PostUiState.from(it).copy(
-                        stampId = it.id,
-                        imageUri = ImageModel.Remote(url = it.images),
-                        isCompleted = isCompleted,
-                        toolbarIconType = option,
-                    )
-                    uiState.update { result }
-                }.onFailure { error ->
-                    Timber.e(error)
-                    if (error is HttpException && error.code() != 400) {
-                        uiState.update {
-                            it.copy(isLoading = false, isError = true, error = error)
-                        }
-                    } else {
-                        uiState.update {
-                            it.copy(isLoading = false, error = error)
-                        }
-                    }
-                }
+            }
         }
     }
 
