@@ -26,15 +26,11 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,18 +47,19 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
+import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
 import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.Header
@@ -70,7 +67,6 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
@@ -124,18 +120,18 @@ fun MissionDetailScreen(
         }
     }
 
-    SoptTheme {
+    org.sopt.official.stamp.designsystem.style.SoptTheme {
         SoptColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(SoptTheme.colors.white)
+                .background(SoptTheme.colors.onSurface950)
         ) {
             Toolbar(
                 modifier = Modifier.padding(bottom = 10.dp),
                 title = {
                     Text(
                         text = "미션",
-                        style = SoptTheme.typography.h2,
+                        style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 4.dp),
                         color = SoptTheme.colors.onSurface
                     )
@@ -180,27 +176,13 @@ fun MissionDetailScreen(
             }
 
             if (isEditable && isMe) {
-                Button(
-                    onClick = {
-                        viewModel.onSubmit()
-                    },
+                SoptampButton(
+                    text = "미션 완료",
+                    onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    enabled = isSubmitEnabled,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getLevelTextColor(level.value),
-                        disabledContainerColor = getLevelBackgroundColor(level.value)
-                    ),
-                    contentPadding = PaddingValues(vertical = 16.dp)
-                ) {
-                    Text(
-                        text = "미션 완료",
-                        style = SoptTheme.typography.h2,
-                        color = if (level.value == 3) SoptTheme.colors.onSurface70 else SoptTheme.colors.white
-                    )
-                }
+                        .padding(top = 9.dp, bottom = 40.dp),
+                )
             }
         }
         if (isSuccess) {
@@ -235,6 +217,7 @@ fun MissionDetailScreen(
             )
         }
     }
+
 }
 
 @DefaultPreview
