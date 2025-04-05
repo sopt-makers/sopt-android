@@ -67,7 +67,6 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @MissionNavGraph
@@ -120,104 +119,101 @@ fun MissionDetailScreen(
         }
     }
 
-    org.sopt.official.stamp.designsystem.style.SoptTheme {
-        SoptColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(SoptTheme.colors.onSurface950)
+    SoptColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoptTheme.colors.onSurface950)
+    ) {
+        Toolbar(
+            modifier = Modifier.padding(bottom = 10.dp),
+            title = {
+                Text(
+                    text = "미션",
+                    style = SoptTheme.typography.heading18B,
+                    modifier = Modifier.padding(start = 2.dp),
+                    color = SoptTheme.colors.onSurface10
+                )
+            },
+            iconOption = toolbarIconType,
+            onBack = resultNavigator::navigateBack,
+            onPressIcon = viewModel::onPressToolbarIcon
+        )
+        Column(
+            modifier = Modifier.weight(1f)
         ) {
-            Toolbar(
-                modifier = Modifier.padding(bottom = 10.dp),
-                title = {
-                    Text(
-                        text = "미션",
-                        style = SoptTheme.typography.heading18B,
-                        modifier = Modifier.padding(start = 4.dp),
-                        color = SoptTheme.colors.onSurface
-                    )
-                },
-                iconOption = toolbarIconType,
-                onBack = { resultNavigator.navigateBack() },
-                onPressIcon = { viewModel.onPressToolbarIcon() }
+            Header(
+                title = title,
+                stars = level.value,
+                toolbarIconType = toolbarIconType,
+                isMe = isMe,
+                isCompleted = isCompleted
             )
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Header(
-                    title = title,
-                    stars = level.value,
-                    toolbarIconType = toolbarIconType,
-                    isMe = isMe,
-                    isCompleted = isCompleted
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                ImageContent(
-                    imageModel = imageModel,
-                    onChangeImage = viewModel::onChangeImage,
-                    isEditable = isEditable && isMe
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                DatePicker(
-                    value = date,
-                    placeHolder = "날짜를 입력해 주세요.",
-                    onClicked = {
-                        viewModel.onChangeDatePickerBottomSheetOpened(true)
-                    },
-                    isEditable = isEditable && isMe && !isSuccess
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Memo(
-                    value = content,
-                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-                    onValueChange = viewModel::onChangeContent,
-                    borderColor = getLevelTextColor(level.value),
-                    isEditable = isEditable && isMe && !isSuccess
-                )
-            }
+            Spacer(modifier = Modifier.height(12.dp))
+            ImageContent(
+                imageModel = imageModel,
+                onChangeImage = viewModel::onChangeImage,
+                isEditable = isEditable && isMe
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            DatePicker(
+                value = date,
+                placeHolder = "날짜를 입력해 주세요.",
+                onClicked = {
+                    viewModel.onChangeDatePickerBottomSheetOpened(true)
+                },
+                isEditable = isEditable && isMe && !isSuccess
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Memo(
+                value = content,
+                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                onValueChange = viewModel::onChangeContent,
+                borderColor = SoptTheme.colors.onSurface600,
+                isEditable = isEditable && isMe && !isSuccess
+            )
+        }
 
-            if (isEditable && isMe) {
-                SoptampButton(
-                    text = "미션 완료",
-                    onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 9.dp, bottom = 40.dp),
-                )
-            }
-        }
-        if (isSuccess) {
-            PostSubmissionBadge(
-                composition = lottieComposition,
-                progress = progress
-            )
-        }
-        if (isDeleteDialogVisible) {
-            DoubleOptionDialog(
-                title = "달성한 미션을 삭제하시겠습니까?",
-                onCancel = {
-                    viewModel.onChangeDeleteDialogVisibility(false)
-                },
-                onConfirm = {
-                    viewModel.onDelete()
-                }
-            )
-        }
-        if (isError) {
-            NetworkErrorDialog {
-                viewModel.onPressNetworkErrorDialog()
-            }
-        }
-        if (isBottomSheetOpened) {
-            DataPickerBottomSheet(
-                onSelected = { date ->
-                    viewModel.onChangeDate(date)
-                    viewModel.onChangeDatePickerBottomSheetOpened(false)
-                },
-                onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+        if (isEditable && isMe) {
+            SoptampButton(
+                text = "미션 완료",
+                onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 9.dp, bottom = 40.dp),
             )
         }
     }
-
+    if (isSuccess) {
+        PostSubmissionBadge(
+            composition = lottieComposition,
+            progress = progress
+        )
+    }
+    if (isDeleteDialogVisible) {
+        DoubleOptionDialog(
+            title = "달성한 미션을 삭제하시겠습니까?",
+            onCancel = {
+                viewModel.onChangeDeleteDialogVisibility(false)
+            },
+            onConfirm = {
+                viewModel.onDelete()
+            }
+        )
+    }
+    if (isError) {
+        NetworkErrorDialog {
+            viewModel.onPressNetworkErrorDialog()
+        }
+    }
+    if (isBottomSheetOpened) {
+        DataPickerBottomSheet(
+            onSelected = { date ->
+                viewModel.onChangeDate(date)
+                viewModel.onChangeDatePickerBottomSheetOpened(false)
+            },
+            onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+        )
+    }
 }
 
 @DefaultPreview

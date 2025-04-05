@@ -25,6 +25,7 @@
 package org.sopt.official.stamp.feature.mission.detail.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -88,6 +89,17 @@ fun DatePicker(
         .fillMaxWidth()
         .defaultMinSize(minHeight = 39.dp)
         .clip(RoundedCornerShape(9.dp))
+        .then(
+            if (isEmpty || !isEditable) {
+                Modifier
+            } else {
+                Modifier.border(
+                    width = 1.dp,
+                    color = SoptTheme.colors.onSurface600,
+                    shape = RoundedCornerShape(9.dp)
+                )
+            }
+        )
 
     Box(
         modifier = newModifier

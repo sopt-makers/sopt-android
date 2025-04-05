@@ -22,7 +22,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-@file:OptIn(ExperimentalMaterial3Api::class)
 
 package org.sopt.official.stamp.feature.mission.detail.component
 
@@ -30,7 +29,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
@@ -40,14 +38,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.sopt.official.stamp.designsystem.style.Gray50
-import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.designsystem.style.White
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, borderColor: Color, isEditable: Boolean) {
+fun Memo(
+    value: String,
+    placeHolder: String,
+    onValueChange: (String) -> Unit,
+    borderColor: Color,
+    isEditable: Boolean
+) {
+    val backgroundColor = SoptTheme.colors.onSurface900
     val isEmpty = remember(value) { value.isEmpty() }
 
     val modifier = Modifier
@@ -59,19 +62,12 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
         if (isEmpty || !isEditable) {
             modifier
         } else {
-            modifier.border(
-                width = 1.dp,
-                color = borderColor,
-                shape = RoundedCornerShape(10.dp)
-            )
-        }
-    }
-
-    val backgroundColor = remember(isEmpty, isEditable) {
-        if (isEmpty || !isEditable) {
-            Gray50
-        } else {
-            White
+            modifier
+                .border(
+                    width = 1.dp,
+                    color = borderColor,
+                    shape = RoundedCornerShape(12.dp)
+                )
         }
     }
 
@@ -79,7 +75,7 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
         value = value,
         onValueChange = onValueChange,
         modifier = modifierWithBorder,
-        shape = RoundedCornerShape(10.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = backgroundColor,
             unfocusedContainerColor = backgroundColor,
@@ -88,15 +84,17 @@ fun Memo(value: String, placeHolder: String, onValueChange: (String) -> Unit, bo
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent,
             disabledIndicatorColor = Color.Transparent,
-            focusedTextColor = SoptTheme.colors.onSurface90,
-            disabledTextColor = SoptTheme.colors.onSurface90,
-            focusedPlaceholderColor = SoptTheme.colors.onSurface60
+            focusedTextColor = SoptTheme.colors.onSurface50,
+            disabledTextColor = SoptTheme.colors.onSurface50,
+            unfocusedTextColor = SoptTheme.colors.onSurface50,
+            focusedPlaceholderColor = SoptTheme.colors.onSurface300
         ),
-        textStyle = SoptTheme.typography.caption1,
+        textStyle = SoptTheme.typography.body14R,
         placeholder = {
             Text(
                 text = placeHolder,
-                style = SoptTheme.typography.caption1
+                style = SoptTheme.typography.body14R,
+                color = SoptTheme.colors.onSurface300
             )
         },
         enabled = isEditable
