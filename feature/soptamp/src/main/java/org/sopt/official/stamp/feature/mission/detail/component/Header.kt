@@ -40,7 +40,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.ratingbar.RatingBar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
-import org.sopt.official.stamp.feature.ranking.getLevelTextColor
+import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -64,7 +64,7 @@ fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Bo
             RatingBar(
                 icon = R.drawable.ic_star,
                 stars = stars,
-                selectedColor = getLevelTextColor(rank = stars)
+                selectedColor = getRankTextColor(rank = stars)
             )
             Text(
                 text = title,

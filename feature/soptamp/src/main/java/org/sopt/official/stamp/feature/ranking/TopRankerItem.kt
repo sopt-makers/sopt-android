@@ -125,12 +125,12 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 style = SoptTheme.typography.body14M,
-                color = getLevelTextColor(rank)
+                color = getRankTextColor(rank)
             )
             SoptampIconButton(
                 modifier = Modifier.size(16.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
-                tint = getLevelTextColor(rank)
+                tint = getRankTextColor(rank)
             )
         }
     }

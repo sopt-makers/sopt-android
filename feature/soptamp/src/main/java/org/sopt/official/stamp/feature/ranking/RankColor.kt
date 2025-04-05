@@ -35,13 +35,13 @@ fun getRankTextColor(rank: Int) = when (rank) {
     1 -> Pink300
     2 -> Mint300
     3 -> Purple300
-    else -> SoptTheme.colors.onSurface400
+    else -> SoptTheme.colors.onSurface300
 }
 
 @Composable
-fun getLevelTextColor(rank: Int) = when (rank) {
+fun getRankBackgroundColor(rank: Int) = when (rank) {
     1 -> Pink300
     2 -> Mint300
     3 -> Purple300
-    else -> SoptTheme.colors.onSurface500
+    else -> SoptTheme.colors.onSurface700
 }
