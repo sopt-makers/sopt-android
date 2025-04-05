@@ -92,10 +92,6 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".feature.home.HomeActivity"
-            android:exported="false"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".feature.mypage.mypage.MyPageActivity"
             android:exported="false"
             android:launchMode="singleTop" />
