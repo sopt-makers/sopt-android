@@ -49,9 +49,9 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 /**
  * 기본적인 TopAppBar 를 디자인에 맞춰 커스텀 하였습니다.

@@ -49,8 +49,8 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.component.mission.model.MissionPattern
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 internal class MissionShape(
     private val patternCount: Int,

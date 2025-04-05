@@ -197,7 +197,7 @@ fun MissionListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
+                .background(SoptTheme.colors.access300)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),

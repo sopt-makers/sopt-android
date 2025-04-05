@@ -31,7 +31,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -39,7 +39,7 @@ fun LoadingScreen() {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(SoptTheme.colors.white),
+            .background(SoptTheme.colors.onSurface950),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()
