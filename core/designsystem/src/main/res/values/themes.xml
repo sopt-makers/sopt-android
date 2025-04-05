@@ -43,6 +43,8 @@
         <item name="colorOnSurfaceVariant">@color/gray_20</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?android:colorBackground</item>
+        <item name="android:navigationBarColor">@color/black_100</item>
+        <item name="android:windowLightNavigationBar">true</item>
         <!-- Font Theme -->
         <item name="textAppearanceDisplayLarge">@style/TextAppearance.SOPT.DisplayLarge</item>
         <item name="textAppearanceDisplayMedium">@style/TextAppearance.SOPT.DisplayMedium</item>
