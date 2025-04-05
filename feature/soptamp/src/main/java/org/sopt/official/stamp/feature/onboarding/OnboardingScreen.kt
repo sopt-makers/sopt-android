@@ -36,7 +36,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,7 +48,9 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.stamp.designsystem.style.Purple200
+import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.util.DefaultPreview
 
 private enum class OnBoardingPageUiModel(
@@ -73,7 +75,6 @@ private enum class OnBoardingPageUiModel(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @MissionNavGraph
 @Destination("onboarding")
 @Composable
@@ -91,7 +92,7 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                 title = {
                     Text(
                         text = "가이드",
-                        style = SoptTheme.typography.h2,
+                        style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 4.dp),
                         color = SoptTheme.colors.onSurface
                     )
@@ -113,8 +114,8 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                 numberOfPages = onboardingPages.size,
                 selectedPage = pageState.currentPage,
                 defaultRadius = 4.dp,
-                defaultColor = SoptTheme.colors.purple300,
-                selectedColor = SoptTheme.colors.purple200,
+                defaultColor = Purple300,
+                selectedColor = Purple200,
                 selectedLength = 20.dp,
                 space = 10.dp,
                 animationDurationInMillis = 100
@@ -134,16 +135,16 @@ fun OnboardingButton(isButtonEnabled: Boolean = true, onClick: () -> Unit = {}) 
         onClick = { onClick() },
         enabled = isButtonEnabled,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = SoptTheme.colors.purple300,
-            disabledBackgroundColor = SoptTheme.colors.purple200
+            backgroundColor = Purple300,
+            disabledBackgroundColor = Purple200
         ),
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(10.dp)
     ) {
         Text(
             text = "확인",
-            color = SoptTheme.colors.white,
-            style = SoptTheme.typography.h2,
+            color = SoptTheme.colors.primary,
+            style = SoptTheme.typography.heading18B,
             modifier = Modifier.padding(vertical = 8.dp)
         )
     }

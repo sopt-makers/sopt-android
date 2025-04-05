@@ -35,17 +35,17 @@ import org.sopt.official.stamp.designsystem.style.Purple300
 
 @Composable
 fun getRankTextColor(rank: Int) = when (rank) {
-    1 -> Purple300
-    2 -> Pink300
-    3 -> Mint300
+    1 -> Pink300
+    2 -> Mint300
+    3 -> Purple300
     else -> SoptTheme.colors.onSurface400
 }
 
 @Composable
 fun getLevelTextColor(rank: Int) = when (rank) {
     1 -> Pink300
-    2 -> Purple300
-    3 -> Mint300
+    2 -> Mint300
+    3 -> Purple300
     else -> SoptTheme.colors.onSurface500
 }
 
@@ -59,9 +59,9 @@ fun getLevelTextColor(rank: Int) = when (rank) {
 
 @Composable
 fun getRankBackgroundColor(rank: Int) = when (rank) {
-    1 -> Purple200
-    2 -> Pink200
-    3 -> Mint200
+    1 -> Pink200
+    2 -> Mint200
+    3 -> Purple200
     else -> SoptTheme.colors.onSurface300
 }
 

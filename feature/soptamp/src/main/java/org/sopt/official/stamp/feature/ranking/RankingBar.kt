@@ -37,7 +37,7 @@ fun RankingBar(modifier: Modifier = Modifier, rank: Int, content: @Composable ()
     Box(
         modifier = modifier
             .background(
-                color = getRankBackgroundColor(rank),
+                color = getLevelTextColor(rank),
                 shape = RoundedCornerShape(8.dp)
             ),
         contentAlignment = Alignment.TopCenter

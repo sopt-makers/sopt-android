@@ -25,7 +25,6 @@
 package org.sopt.official.stamp.feature.ranking
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,8 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
@@ -62,23 +61,12 @@ fun RankListItem(
         start = 16.dp,
         end = 16.dp
     )
-    val backgroundModifier = if (isMyRanking) {
-        Modifier
-            .background(
-                color = SoptTheme.colors.purple100,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .border(
-                width = 2.dp,
-                color = SoptTheme.colors.purple300,
-                shape = RoundedCornerShape(8.dp)
-            )
-    } else {
-        Modifier.background(
-            color = SoptTheme.colors.onSurface5,
+    val backgroundModifier = Modifier
+        .background(
+            color = SoptTheme.colors.onSurface900,
             shape = RoundedCornerShape(8.dp)
         )
-    }
+
 
     val isPartRankItem = partItem != null
 
@@ -159,8 +147,8 @@ fun RankerInformation(modifier: Modifier = Modifier, user: String, description: 
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = user,
-            style = SoptTheme.typography.h3,
-            color = SoptTheme.colors.onSurface80,
+            style = SoptTheme.typography.heading16B,
+            color = SoptTheme.colors.onSurface10,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -168,8 +156,8 @@ fun RankerInformation(modifier: Modifier = Modifier, user: String, description: 
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = description.ifBlank { "설정된 한 마디가 없습니다" },
-                style = SoptTheme.typography.caption1,
-                color = SoptTheme.colors.onSurface70,
+                style = SoptTheme.typography.body14R,
+                color = SoptTheme.colors.onSurface300,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

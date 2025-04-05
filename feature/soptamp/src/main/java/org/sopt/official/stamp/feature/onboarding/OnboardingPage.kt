@@ -40,7 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -67,8 +67,8 @@ fun OnboardingPage(@DrawableRes image: Int, title: String, content: String) {
 fun OnboardingPageTitle(text: String) {
     Text(
         text = text,
-        style = SoptTheme.typography.h1,
-        color = SoptTheme.colors.onSurface90
+        style = SoptTheme.typography.heading20B,
+        color = SoptTheme.colors.onSurface900
     )
 }
 
@@ -76,8 +76,8 @@ fun OnboardingPageTitle(text: String) {
 fun OnboardingPageContent(text: String) {
     Text(
         text = text,
-        style = SoptTheme.typography.sub2,
-        color = SoptTheme.colors.onSurface50
+        style = SoptTheme.typography.body16R,
+        color = SoptTheme.colors.onSurface500
     )
 }
 

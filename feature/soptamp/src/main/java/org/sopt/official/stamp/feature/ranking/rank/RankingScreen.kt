@@ -46,7 +46,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +58,7 @@ import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
@@ -66,7 +66,6 @@ import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.TopRankerList
@@ -92,22 +91,22 @@ fun RankingScreen(
     LaunchedEffect(true) {
         rankingViewModel.fetchRanking(isCurrent, type)
     }
-    SoptTheme {
-        when (state) {
-            RankingState.Loading -> LoadingScreen()
-            RankingState.Failure -> SingleOptionDialog(resultNavigator::navigateBack)
-            is RankingState.Success -> RankingScreen(
-                isCurrent = isCurrent,
-                type = type,
-                refreshing = rankingViewModel.isRefreshing,
-                onRefresh = { rankingViewModel.onRefresh(isCurrent, type) },
-                rankingListUiModel = (state as RankingState.Success).uiModel,
-                nickname = rankingViewModel.nickname,
-                onClickBack = resultNavigator::navigateBack,
-                onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
-            )
-        }
+
+    when (state) {
+        RankingState.Loading -> LoadingScreen()
+        RankingState.Failure -> SingleOptionDialog(resultNavigator::navigateBack)
+        is RankingState.Success -> RankingScreen(
+            isCurrent = isCurrent,
+            type = type,
+            refreshing = rankingViewModel.isRefreshing,
+            onRefresh = { rankingViewModel.onRefresh(isCurrent, type) },
+            rankingListUiModel = (state as RankingState.Success).uiModel,
+            nickname = rankingViewModel.nickname,
+            onClickBack = resultNavigator::navigateBack,
+            onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
+        )
     }
+
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -130,17 +129,19 @@ fun RankingScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollOffsetPx = (-257).dp.toPx()
     val tracker = LocalTracker.current
+
     LaunchedEffect(true) {
         tracker.track(
             EventType.VIEW,
             if (isCurrent) "nowranking" else "partdetailranking"
         )
     }
+
     Scaffold(
         topBar = {
             RankingHeader(
                 title = if (isCurrent) "$type 랭킹" else type + "파트 랭킹",
-                onClickBack = { onClickBack() }
+                onClickBack = onClickBack
             )
         },
         floatingActionButton = {
@@ -159,7 +160,8 @@ fun RankingScreen(
                 }
             }
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.Center,
+        containerColor = SoptTheme.colors.onSurface950
     ) { paddingValues ->
         val defaultPadding = PaddingValues(
             top = paddingValues.calculateTopPadding(),
@@ -170,7 +172,6 @@ fun RankingScreen(
         Box(
             modifier = Modifier
                 .pullRefresh(refreshingState)
-                .background(SoptTheme.colors.white)
                 .fillMaxSize()
         ) {
             LazyColumn(
@@ -203,19 +204,23 @@ fun RankingScreen(
 }
 
 @Composable
-fun RankingHeader(title: String, onClickBack: () -> Unit = {}) {
+fun RankingHeader(
+    title: String,
+    onClickBack: () -> Unit = {}
+) {
     SoptTopAppBar(
         title = {
             Text(
                 text = title,
-                color = Color.Black,
-                style = SoptTheme.typography.h2
+                color = SoptTheme.colors.onSurface10,
+                style = SoptTheme.typography.heading18B
             )
         },
         navigationIcon = {
             SoptampIconButton(
                 imageVector = ImageVector.vectorResource(id = R.drawable.arrow_left),
-                onClick = { onClickBack() }
+                tint = SoptTheme.colors.onSurface10,
+                onClick = onClickBack
             )
         }
     )

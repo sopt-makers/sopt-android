@@ -46,7 +46,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankersUiModel
 import org.sopt.official.stamp.feature.ranking.model.TopRankerDescriptionBubble
@@ -116,16 +116,14 @@ fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDe
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = bubble.background),
             contentDescription = "Top Ranker DescriptionBubble",
-            tint = if (isDefault) SoptTheme.colors.onSurface10 else bubble.backgroundColor
+            tint = SoptTheme.colors.onSurface800
         )
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(
-                    top = 3.dp,
-                    bottom = 13.dp,
-                    start = 24.dp,
-                    end = 8.dp
+                    top = 7.dp,
+                    bottom = 17.dp
                 ),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
@@ -138,8 +136,8 @@ fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDe
             }
             Text(
                 text = description,
-                style = SoptTheme.typography.sub3,
-                color = if (isDefault) SoptTheme.colors.onSurface50 else bubble.textColor,
+                style = SoptTheme.typography.body14M,
+                color = SoptTheme.colors.onSurface300,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center
