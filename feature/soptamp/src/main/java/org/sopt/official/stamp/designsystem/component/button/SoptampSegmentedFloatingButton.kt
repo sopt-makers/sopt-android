@@ -31,19 +31,18 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -56,10 +55,7 @@ fun SoptampSegmentedFloatingButton(
 ) {
     Row(
         modifier = modifier
-            .background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(46.dp)
-            ),
+            .clip(shape = CircleShape),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
@@ -67,26 +63,21 @@ fun SoptampSegmentedFloatingButton(
                 .width(134.dp)
                 .height(54.dp)
                 .weight(1f)
-                .background(
-                    SoptTheme.colors.purple300,
-                    shape = RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp)
-                )
-                .clip(RoundedCornerShape(topStart = 46.dp, bottomStart = 46.dp))
+                .background(SoptTheme.colors.primary)
                 .clickable(onClick = onClickFirstOption)
-                .padding(top = 12.dp, bottom = 12.dp, start = 14.dp, end = 14.dp),
+                .padding(top = 11.dp, bottom = 11.dp, start = 13.dp, end = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.trophy),
+                imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
-                tint = Color.White
+                tint = SoptTheme.colors.onSurface
             )
             Text(
                 text = option1,
-                color = Color.White,
-                style = SoptTheme.typography.h2,
-                fontSize = 18.sp
+                color = SoptTheme.colors.onSurface,
+                style = SoptTheme.typography.heading18B,
             )
         }
         Row(
@@ -94,26 +85,21 @@ fun SoptampSegmentedFloatingButton(
                 .width(134.dp)
                 .height(54.dp)
                 .weight(1f)
-                .background(
-                    SoptTheme.colors.pink300,
-                    shape = RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp)
-                )
-                .clip(RoundedCornerShape(topEnd = 46.dp, bottomEnd = 46.dp))
+                .background(SoptTheme.colors.onSurface)
                 .clickable(onClick = onClickSecondOption)
-                .padding(top = 12.dp, bottom = 12.dp, start = 5.dp, end = 14.dp),
+                .padding(top = 11.dp, bottom = 11.dp, start = 4.dp, end = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.trophy),
+                imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
-                tint = Color.White
+                tint = SoptTheme.colors.primary
             )
             Text(
                 text = option2,
-                color = Color.White,
-                style = SoptTheme.typography.h2,
-                fontSize = 18.sp
+                color = SoptTheme.colors.primary,
+                style = SoptTheme.typography.heading18B,
             )
         }
     }

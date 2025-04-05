@@ -34,9 +34,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 /**
  * 앱 디자인 시스템 Icon Button 입니다.
@@ -63,7 +63,7 @@ fun SoptampIconButton(
     onClick: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier.noRippleClickable { onClick() }
+        modifier = modifier.noRippleClickable(onClick = onClick)
     ) {
         Icon(
             imageVector = imageVector,
