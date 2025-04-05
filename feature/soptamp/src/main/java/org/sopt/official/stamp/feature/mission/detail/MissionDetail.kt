@@ -167,7 +167,6 @@ fun MissionDetailScreen(
                     onClicked = {
                         viewModel.onChangeDatePickerBottomSheetOpened(true)
                     },
-                    borderColor = getLevelTextColor(level.value),
                     isEditable = isEditable && isMe && !isSuccess
                 )
                 Spacer(modifier = Modifier.height(8.dp))
