@@ -35,10 +35,11 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.feature.NavGraphs
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
@@ -55,8 +56,10 @@ class SoptampActivity : AppCompatActivity() {
                     WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
                 }
             }
-            ProvideTracker(tracker) {
-                DestinationsNavHost(navGraph = NavGraphs.root)
+            SoptTheme {
+                ProvideTracker(tracker) {
+                    DestinationsNavHost(navGraph = NavGraphs.root)
+                }
             }
         }
     }
