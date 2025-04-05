@@ -26,11 +26,8 @@ package org.sopt.official.stamp.feature.ranking
 
 import androidx.compose.runtime.Composable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.designsystem.style.Mint200
 import org.sopt.official.stamp.designsystem.style.Mint300
-import org.sopt.official.stamp.designsystem.style.Pink200
 import org.sopt.official.stamp.designsystem.style.Pink300
-import org.sopt.official.stamp.designsystem.style.Purple200
 import org.sopt.official.stamp.designsystem.style.Purple300
 
 @Composable
@@ -48,27 +45,3 @@ fun getLevelTextColor(rank: Int) = when (rank) {
     3 -> Purple300
     else -> SoptTheme.colors.onSurface500
 }
-
-//@Composable
-//fun getLevelBackgroundColor(rank: Int) = when (rank) {
-//    1 -> SoptTheme.colors.pink200
-//    2 -> SoptTheme.colors.purple200
-//    3 -> SoptTheme.colors.mint200
-//    else -> SoptTheme.colors.onSurface5
-//}
-
-@Composable
-fun getRankBackgroundColor(rank: Int) = when (rank) {
-    1 -> Pink200
-    2 -> Mint200
-    3 -> Purple200
-    else -> SoptTheme.colors.onSurface300
-}
-
-//@Composable
-//fun headerBackgroundColorOf(rank: Int) = when (rank) {
-//    1 -> SoptTheme.colors.pink100
-//    2 -> SoptTheme.colors.purple100
-//    3 -> SoptTheme.colors.mint100
-//    else -> SoptTheme.colors.onSurface5
-//}

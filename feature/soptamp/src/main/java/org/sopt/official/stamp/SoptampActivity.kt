@@ -26,13 +26,9 @@ package org.sopt.official.stamp
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.runtime.SideEffect
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -49,13 +45,6 @@ class SoptampActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val view = LocalView.current
-            if (!view.isInEditMode) {
-                SideEffect {
-                    window.statusBarColor = Color.WHITE
-                    WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
-                }
-            }
             SoptTheme {
                 ProvideTracker(tracker) {
                     DestinationsNavHost(navGraph = NavGraphs.root)
