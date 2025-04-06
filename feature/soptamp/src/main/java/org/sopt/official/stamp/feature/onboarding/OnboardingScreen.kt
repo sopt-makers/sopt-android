@@ -25,7 +25,6 @@
 package org.sopt.official.stamp.feature.onboarding
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,13 +43,11 @@ import androidx.compose.ui.unit.dp
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.designsystem.style.Purple200
-import org.sopt.official.stamp.designsystem.style.Purple300
 import org.sopt.official.stamp.util.DefaultPreview
 
 private enum class OnBoardingPageUiModel(
@@ -94,10 +91,10 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                         text = "가이드",
                         style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 4.dp),
-                        color = SoptTheme.colors.onSurface
+                        color = SoptTheme.colors.onSurface10
                     )
                 },
-                onBack = { navigator.popBackStack() }
+                onBack = navigator::popBackStack
             )
             HorizontalPager(
                 modifier = Modifier.fillMaxWidth(),
@@ -114,36 +111,42 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                 numberOfPages = onboardingPages.size,
                 selectedPage = pageState.currentPage,
                 defaultRadius = 4.dp,
-                defaultColor = Purple300,
-                selectedColor = Purple200,
+                defaultColor = SoptTheme.colors.onSurface500,
+                selectedColor = SoptTheme.colors.primary,
                 selectedLength = 20.dp,
                 space = 10.dp,
                 animationDurationInMillis = 100
             )
-            Spacer(modifier = Modifier.size(80.dp))
+            Spacer(modifier = Modifier.weight(1f))
             OnboardingButton(
                 isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
-                onClick = { navigator.popBackStack() }
+                onClick = navigator::popBackStack,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 40.dp)
             )
         }
     }
 }
 
 @Composable
-fun OnboardingButton(isButtonEnabled: Boolean = true, onClick: () -> Unit = {}) {
+fun OnboardingButton(
+    modifier: Modifier = Modifier,
+    isButtonEnabled: Boolean = true,
+    onClick: () -> Unit = {}
+) {
     Button(
-        onClick = { onClick() },
+        onClick = onClick,
         enabled = isButtonEnabled,
         colors = ButtonDefaults.buttonColors(
-            backgroundColor = Purple300,
-            disabledBackgroundColor = Purple200
+            backgroundColor = SoptTheme.colors.primary,
+            disabledBackgroundColor = SoptTheme.colors.onSurface800
         ),
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(10.dp)
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(9.dp)
     ) {
         Text(
             text = "확인",
-            color = SoptTheme.colors.primary,
+            color = if (isButtonEnabled) SoptTheme.colors.onSurface else SoptTheme.colors.onSurface300,
             style = SoptTheme.typography.heading18B,
             modifier = Modifier.padding(vertical = 8.dp)
         )
