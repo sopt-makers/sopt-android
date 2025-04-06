@@ -63,7 +63,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankListItem
@@ -92,7 +92,7 @@ fun PartRankingScreen(
 
     when (state) {
         PartRankingState.Loading -> LoadingScreen()
-        PartRankingState.Failure -> SingleOptionDialog {
+        PartRankingState.Failure -> NetworkErrorDialog() {
             partRankingViewModel.fetchRanking()
         }
 

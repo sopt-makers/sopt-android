@@ -56,7 +56,7 @@ import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
@@ -90,9 +90,9 @@ fun UserMissionListScreen(
         MissionsState.Loading -> LoadingScreen()
         is MissionsState.Failure -> {
             when ((state as MissionsState.Failure).error) {
-                Error.NetworkUnavailable -> SingleOptionDialog {
-                    missionsViewModel.fetchMissions()
-                }
+                Error.NetworkUnavailable -> NetworkErrorDialog(
+                    onRetry = missionsViewModel::fetchMissions
+                )
             }
         }
 

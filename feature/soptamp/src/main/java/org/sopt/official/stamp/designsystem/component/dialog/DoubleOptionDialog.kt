@@ -42,8 +42,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -61,32 +61,28 @@ fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Un
                 .fillMaxWidth()
                 .wrapContentHeight()
                 .background(
-                    color = SoptTheme.colors.white,
+                    color = SoptTheme.colors.onSurface800,
                     shape = RoundedCornerShape(10.dp)
                 )
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 30.dp)
-                    .background(
-                        color = SoptTheme.colors.white,
-                        shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)
-                    ),
+                    .padding(vertical = 30.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     text = title,
-                    style = SoptTheme.typography.sub1,
-                    color = SoptTheme.colors.onSurface90
+                    style = SoptTheme.typography.body16M,
+                    color = SoptTheme.colors.primary
                 )
                 if (subTitle.isNotBlank()) {
                     Text(
                         text = subTitle,
                         modifier = Modifier.padding(top = 6.dp),
-                        style = SoptTheme.typography.caption3,
-                        color = SoptTheme.colors.onSurface50,
+                        style = SoptTheme.typography.label12SB,
+                        color = SoptTheme.colors.onSurface200,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -102,15 +98,15 @@ fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Un
                     modifier = Modifier
                         .weight(1f)
                         .background(
-                            color = SoptTheme.colors.onSurface30,
+                            color = SoptTheme.colors.onSurface600,
                             shape = RoundedCornerShape(bottomStart = 10.dp)
                         )
                         .clickable { onCancel() }
                 ) {
                     Text(
                         text = "취소",
-                        color = SoptTheme.colors.onSurface70,
-                        style = SoptTheme.typography.sub1,
+                        color = SoptTheme.colors.primary,
+                        style = SoptTheme.typography.body16M,
                         modifier = Modifier.padding(vertical = 15.dp)
                     )
                 }
@@ -119,15 +115,15 @@ fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Un
                     modifier = Modifier
                         .weight(1f)
                         .background(
-                            color = SoptTheme.colors.error200,
+                            color = SoptTheme.colors.primary,
                             shape = RoundedCornerShape(bottomEnd = 10.dp)
                         )
                         .clickable { onConfirm() }
                 ) {
                     Text(
                         text = "삭제",
-                        color = SoptTheme.colors.white,
-                        style = SoptTheme.typography.sub1,
+                        color = SoptTheme.colors.onSurface,
+                        style = SoptTheme.typography.body16M,
                         modifier = Modifier.padding(vertical = 15.dp)
                     )
                 }

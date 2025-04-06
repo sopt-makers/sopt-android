@@ -63,7 +63,7 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
@@ -94,7 +94,7 @@ fun RankingScreen(
 
     when (state) {
         RankingState.Loading -> LoadingScreen()
-        RankingState.Failure -> SingleOptionDialog(resultNavigator::navigateBack)
+        RankingState.Failure -> NetworkErrorDialog(resultNavigator::navigateBack)
         is RankingState.Success -> RankingScreen(
             isCurrent = isCurrent,
             type = type,
