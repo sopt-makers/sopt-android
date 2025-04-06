@@ -27,10 +27,9 @@ package org.sopt.official.common.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
+ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.provider.MediaStore
-import androidx.exifinterface.media.ExifInterface
 import java.io.ByteArrayOutputStream
 import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -71,33 +70,10 @@ class ContentUriRequestBody(
 
     private fun compressBitmap() {
         if (uri != null) {
-            var originalBitmap: Bitmap
-            val exif: ExifInterface
-
-            contentResolver.openInputStream(uri).use { inputStream ->
-                if (inputStream == null) return
-                val option = BitmapFactory.Options().apply {
-                    inSampleSize = calculateInSampleSize(this, MAX_WIDTH, MAX_HEIGHT)
-                }
-                originalBitmap = BitmapFactory.decodeStream(inputStream, null, option) ?: return
-                exif = ExifInterface(inputStream)
-            }
-
-            var orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
-            when (orientation) {
-                ExifInterface.ORIENTATION_ROTATE_90 -> orientation = 90
-                ExifInterface.ORIENTATION_ROTATE_180 -> orientation = 180
-                ExifInterface.ORIENTATION_ROTATE_270 -> orientation = 270
-            }
-
-            if (orientation >= 90) {
-                val matrix = Matrix().apply {
-                    setRotate(orientation.toFloat())
-                }
-
-                val rotatedBitmap = Bitmap.createBitmap(originalBitmap, 0, 0, originalBitmap.width, originalBitmap.height, matrix, true)
-                originalBitmap.recycle()
-                originalBitmap = rotatedBitmap
+            val source = ImageDecoder.createSource(contentResolver, uri)
+            val originalBitmap = ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                decoder.allocator = ImageDecoder.ALLOCATOR_SOFTWARE
+                decoder.isMutableRequired = true
             }
 
             val outputStream = ByteArrayOutputStream()
