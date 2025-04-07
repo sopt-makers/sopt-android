@@ -24,26 +24,28 @@
  */
 package org.sopt.official.stamp.designsystem.component.button
 
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun SoptampFloatingButton(text: String, onClick: () -> Unit = {}) {
+fun SoptampFloatingButton(
+    text: String,
+    onClick: () -> Unit = {}
+) {
     ExtendedFloatingActionButton(
         text = {
             Text(
                 text = text,
-                color = Color.White,
-                style = SoptTheme.typography.h2
+                color = SoptTheme.colors.onSurface,
+                style = SoptTheme.typography.body18M
             )
         },
         icon = {
@@ -53,9 +55,9 @@ fun SoptampFloatingButton(text: String, onClick: () -> Unit = {}) {
                 tint = Color.White
             )
         },
-        onClick = { onClick() },
-        shape = RoundedCornerShape(46.dp),
-        containerColor = SoptTheme.colors.purple300,
+        onClick = onClick,
+        shape = CircleShape,
+        containerColor = SoptTheme.colors.primary,
     )
 }
 

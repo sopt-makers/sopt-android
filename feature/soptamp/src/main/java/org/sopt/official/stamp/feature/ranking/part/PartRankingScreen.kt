@@ -61,10 +61,10 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.RankingBar
@@ -90,24 +90,23 @@ fun PartRankingScreen(
         partRankingViewModel.fetchRanking()
     }
 
-    SoptTheme {
-        when (state) {
-            PartRankingState.Loading -> LoadingScreen()
-            PartRankingState.Failure -> SingleOptionDialog {
-                partRankingViewModel.fetchRanking()
-            }
-
-            is PartRankingState.Success -> PartRankingScreen(
-                partRankList = (state as PartRankingState.Success).partRankList,
-                refreshing = partRankingViewModel.isRefreshing,
-                onRefresh = partRankingViewModel::onRefresh,
-                onClickBack = resultNavigator::navigateBack,
-                onClickPart = {
-                    navigator.navigate(RankingScreenDestination(it))
-                }
-            )
+    when (state) {
+        PartRankingState.Loading -> LoadingScreen()
+        PartRankingState.Failure -> NetworkErrorDialog() {
+            partRankingViewModel.fetchRanking()
         }
+
+        is PartRankingState.Success -> PartRankingScreen(
+            partRankList = (state as PartRankingState.Success).partRankList,
+            refreshing = partRankingViewModel.isRefreshing,
+            onRefresh = partRankingViewModel::onRefresh,
+            onClickBack = resultNavigator::navigateBack,
+            onClickPart = {
+                navigator.navigate(RankingScreenDestination(it))
+            }
+        )
     }
+
 }
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -142,7 +141,7 @@ fun PartRankingScreen(
         Box(
             modifier = Modifier
                 .pullRefresh(refreshingState)
-                .background(SoptTheme.colors.white)
+                .background(SoptTheme.colors.onSurface950)
                 .fillMaxSize()
         ) {
             LazyColumn(
@@ -207,8 +206,8 @@ fun PartRankingBar(part: PartRankModel, modifier: Modifier = Modifier) {
         Text(
             text = part.part,
             maxLines = 1,
-            style = SoptTheme.typography.sub3,
-            color = SoptTheme.colors.onSurface80
+            style = SoptTheme.typography.body14M,
+            color = SoptTheme.colors.primary
         )
     }
 }

@@ -26,15 +26,11 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -51,18 +47,19 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
+import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
 import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.Header
@@ -70,8 +67,6 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.official.stamp.feature.ranking.getLevelBackgroundColor
-import org.sopt.official.stamp.feature.ranking.getLevelTextColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @MissionNavGraph
@@ -124,117 +119,100 @@ fun MissionDetailScreen(
         }
     }
 
-    SoptTheme {
-        SoptColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(SoptTheme.colors.white)
+    SoptColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoptTheme.colors.onSurface950)
+    ) {
+        Toolbar(
+            modifier = Modifier.padding(bottom = 10.dp),
+            title = {
+                Text(
+                    text = "미션",
+                    style = SoptTheme.typography.heading18B,
+                    modifier = Modifier.padding(start = 2.dp),
+                    color = SoptTheme.colors.onSurface10
+                )
+            },
+            iconOption = toolbarIconType,
+            onBack = resultNavigator::navigateBack,
+            onPressIcon = viewModel::onPressToolbarIcon
+        )
+        Column(
+            modifier = Modifier.weight(1f)
         ) {
-            Toolbar(
-                modifier = Modifier.padding(bottom = 10.dp),
-                title = {
-                    Text(
-                        text = "미션",
-                        style = SoptTheme.typography.h2,
-                        modifier = Modifier.padding(start = 4.dp),
-                        color = SoptTheme.colors.onSurface
-                    )
-                },
-                iconOption = toolbarIconType,
-                onBack = { resultNavigator.navigateBack() },
-                onPressIcon = { viewModel.onPressToolbarIcon() }
+            Header(
+                title = title,
+                stars = level.value,
+                toolbarIconType = toolbarIconType,
+                isMe = isMe,
+                isCompleted = isCompleted
             )
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                Header(
-                    title = title,
-                    stars = level.value,
-                    toolbarIconType = toolbarIconType,
-                    isMe = isMe,
-                    isCompleted = isCompleted
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                ImageContent(
-                    imageModel = imageModel,
-                    onChangeImage = viewModel::onChangeImage,
-                    isEditable = isEditable && isMe
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                DatePicker(
-                    value = date,
-                    placeHolder = "날짜를 입력해 주세요.",
-                    onClicked = {
-                        viewModel.onChangeDatePickerBottomSheetOpened(true)
-                    },
-                    borderColor = getLevelTextColor(level.value),
-                    isEditable = isEditable && isMe && !isSuccess
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                Memo(
-                    value = content,
-                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-                    onValueChange = viewModel::onChangeContent,
-                    borderColor = getLevelTextColor(level.value),
-                    isEditable = isEditable && isMe && !isSuccess
-                )
-            }
+            Spacer(modifier = Modifier.height(12.dp))
+            ImageContent(
+                imageModel = imageModel,
+                onChangeImage = viewModel::onChangeImage,
+                isEditable = isEditable && isMe
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            DatePicker(
+                value = date,
+                placeHolder = "날짜를 입력해 주세요.",
+                onClicked = {
+                    viewModel.onChangeDatePickerBottomSheetOpened(true)
+                },
+                isEditable = isEditable && isMe && !isSuccess
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Memo(
+                value = content,
+                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                onValueChange = viewModel::onChangeContent,
+                borderColor = SoptTheme.colors.onSurface600,
+                isEditable = isEditable && isMe && !isSuccess
+            )
+        }
 
-            if (isEditable && isMe) {
-                Button(
-                    onClick = {
-                        viewModel.onSubmit()
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 32.dp),
-                    enabled = isSubmitEnabled,
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = getLevelTextColor(level.value),
-                        disabledContainerColor = getLevelBackgroundColor(level.value)
-                    ),
-                    contentPadding = PaddingValues(vertical = 16.dp)
-                ) {
-                    Text(
-                        text = "미션 완료",
-                        style = SoptTheme.typography.h2,
-                        color = if (level.value == 3) SoptTheme.colors.onSurface70 else SoptTheme.colors.white
-                    )
-                }
+        if (isEditable && isMe) {
+            SoptampButton(
+                text = "미션 완료",
+                onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 9.dp, bottom = 40.dp),
+            )
+        }
+    }
+    if (isSuccess) {
+        PostSubmissionBadge(
+            composition = lottieComposition,
+            progress = progress
+        )
+    }
+    if (isDeleteDialogVisible) {
+        DoubleOptionDialog(
+            title = "달성한 미션을 삭제하시겠습니까?",
+            onCancel = {
+                viewModel.onChangeDeleteDialogVisibility(false)
+            },
+            onConfirm = {
+                viewModel.onDelete()
             }
+        )
+    }
+    if (isError) {
+        NetworkErrorDialog {
+            viewModel.onPressNetworkErrorDialog()
         }
-        if (isSuccess) {
-            PostSubmissionBadge(
-                composition = lottieComposition,
-                progress = progress
-            )
-        }
-        if (isDeleteDialogVisible) {
-            DoubleOptionDialog(
-                title = "달성한 미션을 삭제하시겠습니까?",
-                onCancel = {
-                    viewModel.onChangeDeleteDialogVisibility(false)
-                },
-                onConfirm = {
-                    viewModel.onDelete()
-                }
-            )
-        }
-        if (isError) {
-            NetworkErrorDialog {
-                viewModel.onPressNetworkErrorDialog()
-            }
-        }
-        if (isBottomSheetOpened) {
-            DataPickerBottomSheet(
-                onSelected = { date ->
-                    viewModel.onChangeDate(date)
-                    viewModel.onChangeDatePickerBottomSheetOpened(false)
-                },
-                onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
-            )
-        }
+    }
+    if (isBottomSheetOpened) {
+        DataPickerBottomSheet(
+            onSelected = { date ->
+                viewModel.onChangeDate(date)
+                viewModel.onChangeDatePickerBottomSheetOpened(false)
+            },
+            onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+        )
     }
 }
 

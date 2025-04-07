@@ -25,7 +25,7 @@
 package org.sopt.official.data.soptamp.repository
 
 import android.content.Context
-import android.net.Uri
+import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import org.sopt.official.common.util.ContentUriRequestBody
@@ -41,14 +41,9 @@ class ImageUploaderRepositoryImpl @Inject constructor(
 ) : ImageUploaderRepository {
 
     override suspend fun uploadImage(preSignedURL: String, imageUri: String) {
-        s3Service.putS3Image(
-            preSignedURL,
-            imageUri.run {
-                val uri = Uri.parse(this)
-                val requestBody = ContentUriRequestBody(context, uri)
-                requestBody
-            }
-        )
+        // 이미지 URI를 ContentUriRequestBody로 변환하여 S3에 업로드
+        val requestBody = ContentUriRequestBody(context, imageUri.toUri())
+        s3Service.putS3Image(preSignedURL, requestBody)
     }
 
     override suspend fun getImageUploadURL(): Result<ImageUploadUrl> {

@@ -33,7 +33,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,12 +47,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.Gray600
-import org.sopt.official.stamp.designsystem.style.Gray800
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.designsystem.style.Pink300
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
@@ -89,7 +88,7 @@ fun TopRankBarOfRankText(rank: Int) {
                     .align(Alignment.Center)
                     .size(50.dp),
                 painter = painterResource(id = R.drawable.ic_star),
-                tint = SoptTheme.colors.purple100,
+                tint = Pink300,
                 contentDescription = "RankText Star Icon"
             )
             RankNumber(modifier = Modifier.align(Alignment.Center), rank = rank)
@@ -105,13 +104,11 @@ fun TopRankBarOfRankText(rank: Int) {
 fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
     Box(
         modifier = Modifier
-            .noRippleClickable {
-                onClickTopRankerBubble()
-            }
+            .noRippleClickable(onClick = onClickTopRankerBubble)
             .size(width = 97.dp, height = 32.dp)
             .background(
-                color = getRankBackgroundColor(rank),
-                shape = RoundedCornerShape(50.dp)
+                color = SoptTheme.colors.onSurface800,
+                shape = CircleShape
             ),
         contentAlignment = Alignment.Center
     ) {
@@ -124,13 +121,13 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
                 text = nickname,
                 maxLines = 1,
                 textAlign = TextAlign.Center,
-                style = SoptTheme.typography.sub3,
-                color = Gray800
+                style = SoptTheme.typography.body14M,
+                color = getRankTextColor(rank)
             )
             SoptampIconButton(
                 modifier = Modifier.size(16.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
-                tint = Gray600
+                tint = getRankTextColor(rank)
             )
         }
     }

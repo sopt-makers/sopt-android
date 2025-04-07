@@ -49,6 +49,7 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -72,6 +73,7 @@ import com.ramcosta.composedestinations.result.ResultRecipient
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
@@ -79,12 +81,10 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.designsystem.style.SoptTheme
-import org.sopt.official.stamp.designsystem.style.White
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
 import org.sopt.official.stamp.feature.destinations.PartRankingScreenDestination
@@ -121,43 +121,46 @@ fun MissionListScreen(
         }
     }
 
-    SoptTheme {
-        when (state) {
-            MissionsState.Loading -> LoadingScreen()
-            is MissionsState.Failure -> {
-                when ((state as MissionsState.Failure).error) {
-                    Error.NetworkUnavailable -> SingleOptionDialog {
-                        missionsViewModel.fetchMissions()
-                    }
-                }
-            }
-
-            is MissionsState.Success -> MissionListScreen(
-                nickname = nickname,
-                generation = generation,
-                missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
-                onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
-                onMissionItemClick = { item ->
-                    navigator.navigate(
-                        MissionDetailScreenDestination(item)
-                    )
-                },
-                onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
-                onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("${generation}기")) },
-                onReportButtonClick = {
-                    Intent(context, WebViewActivity::class.java).apply {
-                        putExtra(
-                            WebViewActivity.INTENT_URL,
-                            reportUrl
-                        )
-                        context.startActivity(this)
-                    }
-                },
-                onOnboardingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
-            )
-        }
+    LaunchedEffect(Unit) {
+        missionsViewModel.fetchMissions()
     }
+
+    when (state) {
+        MissionsState.Loading -> LoadingScreen()
+        is MissionsState.Failure -> {
+            when ((state as MissionsState.Failure).error) {
+                Error.NetworkUnavailable -> NetworkErrorDialog(
+                    onRetry = missionsViewModel::fetchMissions
+                )
+            }
+        }
+
+        is MissionsState.Success -> MissionListScreen(
+            nickname = nickname,
+            generation = generation,
+            missionListUiModel = (state as MissionsState.Success).missionListUiModel,
+            menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
+            onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
+            onMissionItemClick = { item ->
+                navigator.navigate(
+                    MissionDetailScreenDestination(item)
+                )
+            },
+            onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
+            onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("${generation}기")) },
+            onReportButtonClick = {
+                Intent(context, WebViewActivity::class.java).apply {
+                    putExtra(
+                        WebViewActivity.INTENT_URL,
+                        reportUrl
+                    )
+                    context.startActivity(this)
+                }
+            },
+            onOnboardingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
+        )
+    }
+
 }
 
 @Composable
@@ -197,7 +200,7 @@ fun MissionListScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
+                .background(SoptTheme.colors.onSurface950)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -260,8 +263,8 @@ fun MissionEmptyScreen(contentText: String) {
         Spacer(modifier = Modifier.size(23.dp))
         Text(
             text = "아직 ${contentText}이 없습니다!",
-            style = SoptTheme.typography.sub2,
-            color = SoptTheme.colors.onSurface50
+            style = SoptTheme.typography.body16R,
+            color = SoptTheme.colors.onSurface500
         )
     }
 }
@@ -294,7 +297,7 @@ fun MissionListHeader(
                 SoptampIconButton(
                     imageVector = Icons.Rounded.WarningAmber,
                     modifier = Modifier.padding(4.dp),
-                    tint = SoptTheme.colors.onSurface90,
+                    tint = SoptTheme.colors.onSurface10,
                     onClick = onReportButtonClick
                 )
 
@@ -302,7 +305,7 @@ fun MissionListHeader(
 
                 SoptampIconButton(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide),
-                    tint = SoptTheme.colors.onSurface90,
+                    tint = SoptTheme.colors.onSurface10,
                     onClick = onOnboardingButtonClick
                 )
             }
@@ -314,8 +317,8 @@ fun MissionListHeader(
 fun MissionListHeaderTitle(title: String) {
     Text(
         text = title,
-        color = Color.Black,
-        style = SoptTheme.typography.h2
+        color = SoptTheme.colors.onSurface10,
+        style = SoptTheme.typography.heading18B
     )
 }
 
@@ -330,7 +333,8 @@ fun DropDownMenuButton(menuTexts: ImmutableList<String>, onMenuClick: (String) -
             } else {
                 ImageVector.vectorResource(id = R.drawable.down_expand)
             },
-            onClick = { isMenuExpanded = true }
+            onClick = { isMenuExpanded = true },
+            tint = SoptTheme.colors.onSurface10
         )
         DropdownMenu(
             modifier = Modifier
@@ -357,8 +361,8 @@ fun DropDownMenuButton(menuTexts: ImmutableList<String>, onMenuClick: (String) -
                 ) {
                     Text(
                         text = menuText,
-                        style = SoptTheme.typography.h3,
-                        color = if (menuText == menuTexts[selectedIndex]) Color.Black else SoptTheme.colors.onSurface40
+                        style = SoptTheme.typography.heading16B,
+                        color = if (menuText == menuTexts[selectedIndex]) Color.Black else SoptTheme.colors.onSurface400
                     )
                 }
             }

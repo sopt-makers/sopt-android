@@ -49,16 +49,16 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
-import org.sopt.official.stamp.designsystem.component.dialog.SingleOptionDialog
+import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -86,28 +86,27 @@ fun UserMissionListScreen(
         )
     }
 
-    SoptTheme {
-        when (state) {
-            MissionsState.Loading -> LoadingScreen()
-            is MissionsState.Failure -> {
-                when ((state as MissionsState.Failure).error) {
-                    Error.NetworkUnavailable -> SingleOptionDialog {
-                        missionsViewModel.fetchMissions()
-                    }
-                }
+    when (state) {
+        MissionsState.Loading -> LoadingScreen()
+        is MissionsState.Failure -> {
+            when ((state as MissionsState.Failure).error) {
+                Error.NetworkUnavailable -> NetworkErrorDialog(
+                    onRetry = missionsViewModel::fetchMissions
+                )
             }
-
-            is MissionsState.Success -> UserMissionListScreen(
-                userName = args.nickname,
-                description = args.description,
-                missionListUiModel = (state as MissionsState.Success).missionListUiModel,
-                isMe = args.nickname == nickname,
-                onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-                onClickBack = { resultNavigator.navigateBack() }
-            )
         }
+
+        is MissionsState.Success -> UserMissionListScreen(
+            userName = args.nickname,
+            description = args.description,
+            missionListUiModel = (state as MissionsState.Success).missionListUiModel,
+            isMe = args.nickname == nickname,
+            onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
+            onClickBack = resultNavigator::navigateBack
+        )
     }
 }
+
 
 @Composable
 fun UserMissionListScreen(
@@ -122,14 +121,14 @@ fun UserMissionListScreen(
         topBar = {
             UserMissionListHeader(
                 title = userName,
-                onClickBack = { onClickBack() }
+                onClickBack = onClickBack
             )
         }
     ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(SoptTheme.colors.white)
+                .background(SoptTheme.colors.onSurface950)
                 .padding(
                     top = paddingValues.calculateTopPadding(),
                     bottom = paddingValues.calculateBottomPadding(),
@@ -160,7 +159,7 @@ fun DescriptionText(description: String) {
         modifier = Modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.purple100,
+                color = SoptTheme.colors.onSurface800,
                 shape = RoundedCornerShape(9.dp)
             )
             .padding(
@@ -169,19 +168,23 @@ fun DescriptionText(description: String) {
             ),
         text = descriptionText,
         textAlign = TextAlign.Center,
-        style = SoptTheme.typography.sub1,
-        color = SoptTheme.colors.onSurface90
+        style = SoptTheme.typography.body16M,
+        color = SoptTheme.colors.onSurface50
     )
 }
 
 @Composable
-fun UserMissionListHeader(title: String, onClickBack: () -> Unit = {}) {
+fun UserMissionListHeader(
+    title: String,
+    onClickBack: () -> Unit = {}
+) {
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
         navigationIcon = {
             SoptampIconButton(
                 imageVector = ImageVector.vectorResource(id = R.drawable.arrow_left),
-                onClick = { onClickBack() }
+                tint = SoptTheme.colors.onSurface10,
+                onClick = onClickBack
             )
         }
     )

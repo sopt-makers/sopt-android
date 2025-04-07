@@ -40,9 +40,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 
 @Composable
@@ -55,10 +55,10 @@ fun MissionComponent(mission: MissionUiModel, onClick: () -> Unit = {}) {
             .defaultMinSize(160.dp, 200.dp)
             .aspectRatio(0.8f)
             .background(
-                color = if (mission.isCompleted) stamp.background else SoptTheme.colors.onSurface5,
+                color = SoptTheme.colors.onSurface800,
                 shape = shape
             )
-            .noRippleClickable { onClick() },
+            .noRippleClickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
@@ -87,7 +87,8 @@ private fun TitleOfMission(missionTitle: String) {
     }
     Text(
         text = missionText,
-        style = SoptTheme.typography.sub3,
+        style = SoptTheme.typography.body14M,
+        color = SoptTheme.colors.onSurface10,
         textAlign = TextAlign.Center,
         maxLines = 2,
         modifier = Modifier

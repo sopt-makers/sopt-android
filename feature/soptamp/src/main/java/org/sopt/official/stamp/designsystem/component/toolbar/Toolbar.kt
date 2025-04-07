@@ -25,7 +25,6 @@
 package org.sopt.official.stamp.designsystem.component.toolbar
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -33,15 +32,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 enum class ToolbarIconType(
@@ -79,9 +81,10 @@ fun Toolbar(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (onBack != null) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back),
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                     contentDescription = "Back Button",
+                    tint = SoptTheme.colors.onSurface10,
                     modifier = Modifier
                         .noRippleClickable(onClick = onBack)
                         .align(Alignment.CenterVertically)
@@ -92,9 +95,10 @@ fun Toolbar(
         }
 
         if (iconOption != ToolbarIconType.NONE) {
-            Image(
+            Icon(
                 painter = ToolbarIconType.getResourceFrom(iconOption),
                 contentDescription = "Option Menu Icon",
+                tint = SoptTheme.colors.onSurface10,
                 modifier = Modifier.noRippleClickable(onClick = onPressIcon)
             )
         }
@@ -112,7 +116,7 @@ private fun ToolbarPreview() {
                 title = {
                     Text(
                         text = "미션",
-                        style = SoptTheme.typography.h2,
+                        style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 2.dp),
                         color = SoptTheme.colors.onSurface
                     )

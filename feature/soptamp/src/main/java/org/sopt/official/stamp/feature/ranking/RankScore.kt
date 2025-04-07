@@ -32,17 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.style.MontserratRegular
 import org.sopt.official.stamp.designsystem.style.PretendardMedium
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
 fun RankScore(modifier: Modifier = Modifier, rank: Int, score: Int, isMyRankScore: Boolean = false) {
-    val textColor = if (isMyRankScore) {
-        SoptTheme.colors.purple300
-    } else {
-        getRankTextColor(rank = rank)
-    }
+    val textColor = SoptTheme.colors.primary
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.Bottom

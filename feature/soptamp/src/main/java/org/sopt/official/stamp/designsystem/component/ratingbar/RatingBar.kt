@@ -36,8 +36,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.designsystem.style.Mint300
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 private const val DEFAULT_MAX = 3
@@ -49,8 +50,8 @@ fun RatingBar(
     modifier: Modifier = Modifier,
     maxStars: Int = DEFAULT_MAX,
     gapSize: Dp = 10.dp,
-    selectedColor: Color = SoptTheme.colors.mint300,
-    unselectedColor: Color = SoptTheme.colors.onSurface30,
+    selectedColor: Color = Mint300,
+    unselectedColor: Color = SoptTheme.colors.onSurface300,
 ) {
     require(maxStars >= stars) {
         "RatingBar의 최대 별 갯수는 선택된 별 갯수보다 커야합니다. Max Stars: $maxStars, stars: $stars"

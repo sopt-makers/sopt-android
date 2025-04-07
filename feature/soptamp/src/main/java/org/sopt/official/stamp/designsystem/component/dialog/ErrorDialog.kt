@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,12 +42,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun ErrorDialog(title: String, content: String? = null, retryButtonText: String = "확인", onRetry: () -> Unit = {}) {
+fun ErrorDialog(
+    title: String,
+    content: String? = null,
+    retryButtonText: String = "확인",
+    onRetry: () -> Unit = {}
+) {
     var openDialog by remember {
         mutableStateOf(true)
     }
@@ -58,12 +64,14 @@ fun ErrorDialog(title: String, content: String? = null, retryButtonText: String 
                 .noRippleClickable { }
         ) {
             AlertDialog(
+                backgroundColor = SoptTheme.colors.onSurface700,
+                shape = RoundedCornerShape(10.dp),
                 onDismissRequest = { openDialog = false },
                 title = {
                     Text(
                         text = title,
-                        style = SoptTheme.typography.sub1,
-                        color = Color.Black,
+                        style = SoptTheme.typography.heading16B,
+                        color = SoptTheme.colors.onSurface10,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
@@ -72,8 +80,8 @@ fun ErrorDialog(title: String, content: String? = null, retryButtonText: String 
                     content?.let {
                         Text(
                             text = it,
-                            style = SoptTheme.typography.caption3,
-                            color = SoptTheme.colors.onSurface50,
+                            style = SoptTheme.typography.body14M,
+                            color = SoptTheme.colors.onSurface30,
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -82,8 +90,15 @@ fun ErrorDialog(title: String, content: String? = null, retryButtonText: String 
                 buttons = {
                     Box(
                         modifier = Modifier
+                            .padding(
+                                start = 7.dp, end = 7.dp,
+                                bottom = 10.dp, top = 14.dp
+                            )
                             .fillMaxWidth()
-                            .background(color = Color(0xFFFF8080))
+                            .background(
+                                color = SoptTheme.colors.onSurface10,
+                                shape = RoundedCornerShape(10.dp)
+                            )
                             .noRippleClickable {
                                 onRetry()
                                 openDialog = false
@@ -93,8 +108,8 @@ fun ErrorDialog(title: String, content: String? = null, retryButtonText: String 
                     ) {
                         Text(
                             text = retryButtonText,
-                            style = SoptTheme.typography.sub1,
-                            color = Color.White
+                            style = SoptTheme.typography.title14SB,
+                            color = SoptTheme.colors.onSurface950
                         )
                     }
                 }

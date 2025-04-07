@@ -32,8 +32,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.style.MontserratBold
-import org.sopt.official.stamp.designsystem.style.SoptTheme
 
 @Composable
 fun RankNumber(modifier: Modifier = Modifier, rank: Int, isMyRankNumber: Boolean = false, isPartRankNumber: Boolean = false) {
@@ -44,8 +44,9 @@ fun RankNumber(modifier: Modifier = Modifier, rank: Int, isMyRankNumber: Boolean
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
         color = when {
-            isMyRankNumber -> SoptTheme.colors.purple300
-            isPartRankNumber -> SoptTheme.colors.onSurface40
+            isMyRankNumber -> SoptTheme.colors.onSurface300
+            isPartRankNumber -> SoptTheme.colors.onSurface300
+            rank == 1 -> SoptTheme.colors.primary
             else -> getRankTextColor(rank)
         },
         modifier = modifier,

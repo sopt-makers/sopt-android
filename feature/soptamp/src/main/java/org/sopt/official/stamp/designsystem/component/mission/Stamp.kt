@@ -27,9 +27,15 @@ package org.sopt.official.stamp.designsystem.component.mission
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.style.SoptTheme
+import org.sopt.official.stamp.designsystem.style.Mint100
+import org.sopt.official.stamp.designsystem.style.Mint300
+import org.sopt.official.stamp.designsystem.style.Pink100
+import org.sopt.official.stamp.designsystem.style.Pink300
+import org.sopt.official.stamp.designsystem.style.Purple100
+import org.sopt.official.stamp.designsystem.style.Purple300
 
 enum class Stamp(
     val missionLevel: MissionLevel,
@@ -41,16 +47,16 @@ enum class Stamp(
 
     val starColor: Color
         @Composable get() = when (this) {
-            LEVEL1 -> SoptTheme.colors.pink300
-            LEVEL2 -> SoptTheme.colors.purple300
-            LEVEL3 -> SoptTheme.colors.mint300
+            LEVEL1 -> Pink300
+            LEVEL2 -> Purple300
+            LEVEL3 -> Mint300
         }
 
     val background: Color
         @Composable get() = when (this) {
-            LEVEL1 -> SoptTheme.colors.pink100
-            LEVEL2 -> SoptTheme.colors.purple100
-            LEVEL3 -> SoptTheme.colors.mint100
+            LEVEL1 -> Pink100
+            LEVEL2 -> Purple100
+            LEVEL3 -> Mint100
         }
 
     fun hasStampLevel(level: MissionLevel): Boolean {
