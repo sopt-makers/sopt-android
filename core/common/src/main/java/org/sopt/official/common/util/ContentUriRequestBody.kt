@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ class ContentUriRequestBody(
     private val contentResolver = context.contentResolver
     private var compressedImage: ByteArray? = null
     private var metadata: ImageMetadata? = null
-    
+
     private data class ImageMetadata(
         val fileName: String,
         val size: Long,
@@ -61,7 +61,7 @@ class ContentUriRequestBody(
             compressImage()
         }
     }
-    
+
     private fun extractMetadata(uri: Uri): ImageMetadata =
         runCatching {
             contentResolver.query(
