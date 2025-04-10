@@ -35,12 +35,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.ratingbar.RatingBar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
-import org.sopt.official.stamp.feature.ranking.getRankTextColor
 import org.sopt.official.stamp.feature.ranking.getStarColor
 import org.sopt.official.stamp.util.DefaultPreview
 
@@ -58,7 +58,9 @@ fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Bo
             .padding(vertical = 12.dp)
     ) {
         Column(
-            modifier = Modifier.background(backgroundColor),
+            modifier = Modifier
+                .background(backgroundColor)
+                .padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -70,7 +72,9 @@ fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Bo
             Text(
                 text = title,
                 style = SoptTheme.typography.body16M,
-                color = SoptTheme.colors.primary
+                color = SoptTheme.colors.primary,
+                textAlign = TextAlign.Center,
+                maxLines = 2
             )
         }
     }
