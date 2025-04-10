@@ -41,4 +41,9 @@ dependencies {
 
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)
+
+    implementation(libs.androidx.xr.arcore)
+    implementation(libs.androidx.xr.compose)
+    implementation(libs.androidx.xr.scenecore)
+    implementation(libs.androidx.concurrent.futures)
 }
