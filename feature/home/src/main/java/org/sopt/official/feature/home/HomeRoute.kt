@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.home
 
+import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -42,6 +43,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.xr.compose.platform.LocalSpatialCapabilities
+import androidx.xr.compose.spatial.Subspace
+import androidx.xr.compose.subspace.SpatialPanel
+import androidx.xr.compose.subspace.SpatialRow
+import androidx.xr.compose.subspace.layout.SubspaceModifier
+import androidx.xr.compose.subspace.layout.movable
+import androidx.xr.compose.subspace.layout.resizable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
@@ -162,8 +170,12 @@ internal fun HomeRoute(
         }
     }
 
-    if (uiState.isLoading) HomeProgressIndicator()
-    if (uiState.isError) HomeErrorDialog(onCheckClick = { newHomeViewModel.refreshAll() })
+    if (uiState.isLoading) {
+        HomeProgressIndicator()
+    }
+    if (uiState.isError) {
+        HomeErrorDialog(onCheckClick = { newHomeViewModel.refreshAll() })
+    }
 }
 
 @Composable
@@ -177,72 +189,161 @@ private fun HomeScreenForMember(
     homeAppServices: ImmutableList<HomeAppService>,
     tracker: Tracker
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 20.dp),
-    ) {
-        Spacer(modifier = Modifier.height(height = 8.dp))
-
-        HomeTopBarForMember(
-            hasNotification = hasNotification,
-            onNotificationClick = {
-                homeDashboardNavigation.navigateToNotification()
-                trackClickEvent(tracker, "at36_alarm")
-            },
-            onSettingClick = homeDashboardNavigation::navigateToSetting,
-        )
-
-        Spacer(modifier = Modifier.height(height = 16.dp))
-
-        HomeUserSoptLogDashboardForMember(
-            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
-            homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
-        )
-
-        Spacer(modifier = Modifier.height(height = 12.dp))
-
-        HomeSoptScheduleDashboard(
-            homeSoptScheduleModel = homeSoptScheduleModel,
-            isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = {
-                homeDashboardNavigation.navigateToSchedule()
-                trackClickEvent(tracker, "at36_all_calendar")
-            },
-            onAttendanceButtonClick = {
-                homeDashboardNavigation.navigateToAttendance()
-                trackClickEvent(tracker, "at36_attendance")
-            }
-        )
-
-        Spacer(modifier = Modifier.height(height = 12.dp))
-
-        HomeShortcutButtonsForMember(
-            onPlaygroundClick = {
-                homeShortcutNavigation.navigateToPlayground()
-                trackClickEvent(tracker, "at36_playground_community")
-            },
-            onStudyClick = {
-                homeShortcutNavigation.navigateToPlaygroundGroup()
-                trackClickEvent(tracker, "at36_moim")
-            },
-            onMemberClick = {
-                homeShortcutNavigation.navigateToPlaygroundMember()
-                trackClickEvent(tracker, "at36_member")
-            },
-            onProjectClick = {
-                homeShortcutNavigation.navigateToPlaygroundProject()
-                trackClickEvent(tracker, "at36_project")
-            },
-        )
-
-        Spacer(modifier = Modifier.height(height = 40.dp))
-
-        HomeEnjoySoptServicesBlock(
-            appServices = homeAppServices,
-            onAppServiceClick = onAppServiceClick,
-        )
+    val isSpatialUiEnabled = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        LocalSpatialCapabilities.current.isSpatialUiEnabled
+    } else {
+        false
     }
+
+    if (isSpatialUiEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        Subspace {
+            SpatialRow(curveRadius = 825.dp) {
+                SpatialPanel(
+                    SubspaceModifier
+                        .resizable(true)
+                        .movable(true)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
+                    ) {
+                        HomeTopBarForMember(
+                            hasNotification = hasNotification,
+                            onNotificationClick = {
+                                homeDashboardNavigation.navigateToNotification()
+                                trackClickEvent(tracker, "at36_alarm")
+                            },
+                            onSettingClick = homeDashboardNavigation::navigateToSetting,
+                        )
+                        Spacer(modifier = Modifier.height(height = 16.dp))
+                        HomeUserSoptLogDashboardForMember(
+                            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                            homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+                        )
+                    }
+                }
+                SpatialPanel(
+                    SubspaceModifier
+                        .resizable(true)
+                        .movable(true)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = 20.dp),
+                    ) {
+                        HomeSoptScheduleDashboard(
+                            homeSoptScheduleModel = homeSoptScheduleModel,
+                            isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
+                            onScheduleClick = {
+                                homeDashboardNavigation.navigateToSchedule()
+                                trackClickEvent(tracker, "at36_all_calendar")
+                            },
+                            onAttendanceButtonClick = {
+                                homeDashboardNavigation.navigateToAttendance()
+                                trackClickEvent(tracker, "at36_attendance")
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(height = 12.dp))
+                        HomeShortcutButtonsForMember(
+                            onPlaygroundClick = {
+                                homeShortcutNavigation.navigateToPlayground()
+                                trackClickEvent(tracker, "at36_playground_community")
+                            },
+                            onStudyClick = {
+                                homeShortcutNavigation.navigateToPlaygroundGroup()
+                                trackClickEvent(tracker, "at36_moim")
+                            },
+                            onMemberClick = {
+                                homeShortcutNavigation.navigateToPlaygroundMember()
+                                trackClickEvent(tracker, "at36_member")
+                            },
+                            onProjectClick = {
+                                homeShortcutNavigation.navigateToPlaygroundProject()
+                                trackClickEvent(tracker, "at36_project")
+                            },
+                        )
+                        Spacer(modifier = Modifier.height(height = 40.dp))
+                        HomeEnjoySoptServicesBlock(
+                            appServices = homeAppServices,
+                            onAppServiceClick = onAppServiceClick,
+                        )
+                    }
+                }
+            }
+
+        }
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 20.dp),
+        ) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
+
+            HomeTopBarForMember(
+                hasNotification = hasNotification,
+                onNotificationClick = {
+                    homeDashboardNavigation.navigateToNotification()
+                    trackClickEvent(tracker, "at36_alarm")
+                },
+                onSettingClick = homeDashboardNavigation::navigateToSetting,
+            )
+
+            Spacer(modifier = Modifier.height(height = 16.dp))
+
+            HomeUserSoptLogDashboardForMember(
+                onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+            )
+
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
+            HomeSoptScheduleDashboard(
+                homeSoptScheduleModel = homeSoptScheduleModel,
+                isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
+                onScheduleClick = {
+                    homeDashboardNavigation.navigateToSchedule()
+                    trackClickEvent(tracker, "at36_all_calendar")
+                },
+                onAttendanceButtonClick = {
+                    homeDashboardNavigation.navigateToAttendance()
+                    trackClickEvent(tracker, "at36_attendance")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
+            HomeShortcutButtonsForMember(
+                onPlaygroundClick = {
+                    homeShortcutNavigation.navigateToPlayground()
+                    trackClickEvent(tracker, "at36_playground_community")
+                },
+                onStudyClick = {
+                    homeShortcutNavigation.navigateToPlaygroundGroup()
+                    trackClickEvent(tracker, "at36_moim")
+                },
+                onMemberClick = {
+                    homeShortcutNavigation.navigateToPlaygroundMember()
+                    trackClickEvent(tracker, "at36_member")
+                },
+                onProjectClick = {
+                    homeShortcutNavigation.navigateToPlaygroundProject()
+                    trackClickEvent(tracker, "at36_project")
+                },
+            )
+
+            Spacer(modifier = Modifier.height(height = 40.dp))
+
+            HomeEnjoySoptServicesBlock(
+                appServices = homeAppServices,
+                onAppServiceClick = onAppServiceClick,
+            )
+        }
+    }
+
+
 }
 
 @Composable

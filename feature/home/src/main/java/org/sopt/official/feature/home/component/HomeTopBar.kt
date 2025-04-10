@@ -24,6 +24,8 @@
  */
 package org.sopt.official.feature.home.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
@@ -33,6 +35,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -42,6 +45,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.xr.compose.platform.LocalSession
+import androidx.xr.compose.platform.LocalSpatialCapabilities
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R.drawable.ic_notification_off
 import org.sopt.official.feature.home.R.drawable.ic_notification_on
@@ -69,6 +74,33 @@ internal fun HomeTopBarForMember(
             contentDescription = null,
             tint = Unspecified,
             modifier = Modifier.clickable { onSettingClick() },
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            SpaceTrasnsitionToggleButton()
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+@Composable
+private fun SpaceTrasnsitionToggleButton() {
+    val xrSession = checkNotNull(LocalSession.current)
+
+    val uiIsSpatialized = LocalSpatialCapabilities.current.isSpatialUiEnabled
+    val toggleModes = if (uiIsSpatialized) {
+        { xrSession.spatialEnvironment.requestHomeSpaceMode() }
+    } else {
+        { xrSession.spatialEnvironment.requestFullSpaceMode() }
+    }
+
+    IconButton(
+        onClick = {
+            toggleModes()
+        }
+    ) {
+        Icon(
+            painter = painterResource(id = ic_setting),
+            contentDescription = "토글버튼"
         )
     }
 }

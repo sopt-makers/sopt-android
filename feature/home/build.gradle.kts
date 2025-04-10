@@ -46,6 +46,12 @@ dependencies {
     // compose
     implementation(libs.compose.navigation)
 
+    // Android XR
+    implementation(libs.androidx.xr.arcore)
+    implementation(libs.androidx.xr.compose)
+    implementation(libs.androidx.xr.scenecore)
+    implementation(libs.androidx.concurrent.futures)
+
     // etc
     implementation(libs.coil.compose)
     implementation(libs.lifecycle.runtime)
