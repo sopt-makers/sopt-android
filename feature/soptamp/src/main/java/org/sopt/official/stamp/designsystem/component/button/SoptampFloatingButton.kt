@@ -24,15 +24,14 @@
  */
 package org.sopt.official.stamp.designsystem.component.button
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.Icon
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.R
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -40,31 +39,25 @@ fun SoptampFloatingButton(
     text: String,
     onClick: () -> Unit = {}
 ) {
-    ExtendedFloatingActionButton(
-        text = {
-            Text(
-                text = text,
-                color = SoptTheme.colors.onSurface,
-                style = SoptTheme.typography.body18M
-            )
-        },
-        icon = {
-            Icon(
-                painter = painterResource(id = R.drawable.trophy),
-                contentDescription = "Extended Floating Action Button Trophy Icon",
-                tint = Color.White
-            )
-        },
+    FloatingActionButton(
         onClick = onClick,
         shape = CircleShape,
-        containerColor = SoptTheme.colors.primary,
-    )
+        containerColor = SoptTheme.colors.primary
+    ) {
+        Text(
+            text = text,
+            color = SoptTheme.colors.onSurface,
+            style = SoptTheme.typography.body18M,
+            modifier = Modifier
+                .padding(horizontal = 24.dp, vertical = 16.dp)
+        )
+    }
 }
 
 @DefaultPreview
 @Composable
 private fun SoptampFloatingButtonPreview() {
     SoptTheme {
-        SoptampFloatingButton(text = "랭킹 보기") { }
+        SoptampFloatingButton(text = "내 랭킹 보기") { }
     }
 }
