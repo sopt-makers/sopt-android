@@ -24,9 +24,11 @@
  */
 package org.sopt.official.data.mypage.model.response
 
+import androidx.annotation.Keep
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+@Keep
 @Serializable
 data class UpdateProfileMessageResponse(
     @SerialName("profileMessage")
