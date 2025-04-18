@@ -207,6 +207,10 @@ fun MainScreen(
                     },
                 )
             }
+
+            MainFloatingButton(
+                paddingValues = innerPadding
+            )
         }
     )
 
@@ -342,7 +346,6 @@ fun SoptBottomBar(
                         .weight(1f)
                         .clickable { onTabSelected(tab) }
                 )
-
             }
         }
     }

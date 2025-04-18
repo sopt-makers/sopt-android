@@ -39,4 +39,9 @@ internal object PlaygroundWebLink {
     const val EDIT_PROFILE = OFFICIAL_HOMEPAGE + "members/edit"
     const val PROJECT = OFFICIAL_HOMEPAGE + "projects"
     const val GROUP_STUDY = OFFICIAL_HOMEPAGE + "group"
+
+    const val WRITE = OFFICIAL_HOMEPAGE + "feed/upload"
+    const val MAKE_FLASH = OFFICIAL_HOMEPAGE + "group/make/flash"
+    const val MAKE_MOIM = OFFICIAL_HOMEPAGE + "group/make"
+    const val SOPTICLE = OFFICIAL_HOMEPAGE + "sopticle"
 }
