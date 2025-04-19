@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +34,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -207,6 +209,7 @@ fun MissionListScreen(
                     start = 16.dp,
                     end = 16.dp
                 )
+
         ) {
             if (missionListUiModel.missionList.isEmpty()) {
                 MissionEmptyScreen(contentText = missionListUiModel.title)
@@ -257,7 +260,7 @@ fun MissionEmptyScreen(contentText: String) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(id = R.drawable.empty_mission),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_empty_mission),
             contentDescription = "empty mission list"
         )
         Spacer(modifier = Modifier.size(23.dp))

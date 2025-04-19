@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,5 +43,13 @@ fun getRankBackgroundColor(rank: Int) = when (rank) {
     1 -> Pink300
     2 -> Mint300
     3 -> Purple300
+    else -> SoptTheme.colors.onSurface700
+}
+
+@Composable
+fun getStarColor(rank: Int) = when (rank) {
+    1 -> Pink300
+    2 -> Purple300
+    3 -> Mint300
     else -> SoptTheme.colors.onSurface700
 }

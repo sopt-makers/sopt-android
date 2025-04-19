@@ -253,6 +253,7 @@ class MissionDetailViewModel @Inject constructor(
                     completeMission(id, imageURL, content, date)
                 }
             }.onFailure { error ->
+                Timber.e(error)
                 uiState.update {
                     it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                 }
@@ -273,6 +274,7 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isLoading = false, isSuccess = true)
             }
         }.onFailure { error ->
+            Timber.e(error)
             uiState.update {
                 it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
             }
@@ -292,6 +294,7 @@ class MissionDetailViewModel @Inject constructor(
                 it.copy(isLoading = false, isSuccess = true)
             }
         }.onFailure { error ->
+            Timber.e(error)
             uiState.update {
                 it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
             }
@@ -309,6 +312,7 @@ class MissionDetailViewModel @Inject constructor(
                         it.copy(isLoading = false, isDeleteSuccess = true)
                     }
                 }.onFailure { error ->
+                    Timber.e(error)
                     uiState.update {
                         it.copy(isLoading = false, isError = true, error = error)
                     }
