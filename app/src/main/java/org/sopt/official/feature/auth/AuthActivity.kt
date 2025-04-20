@@ -51,7 +51,7 @@ import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.HomeActivity
+import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
@@ -78,7 +78,7 @@ class AuthActivity : AppCompatActivity() {
                 LaunchedEffect(true) {
                     if (dataStore.accessToken.isNotEmpty()) {
                         startActivity(
-                            HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                            MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
                         )
                     }
                 }
@@ -102,11 +102,11 @@ class AuthActivity : AppCompatActivity() {
                         .collect { event ->
                             when (event) {
                                 is AuthUiEvent.Success -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(event.userStatus))
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
                                 )
 
                                 is AuthUiEvent.Failure -> startActivity(
-                                    HomeActivity.getIntent(context, HomeActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                                 )
                             }
                         }
@@ -115,9 +115,9 @@ class AuthActivity : AppCompatActivity() {
                 AuthScreen(
                     navigateToUnAuthenticatedHome = {
                         startActivity(
-                            HomeActivity.getIntent(
+                            MainActivity.getIntent(
                                 this,
-                                HomeActivity.StartArgs(
+                                MainActivity.StartArgs(
                                     UserStatus.UNAUTHENTICATED
                                 )
                             )
