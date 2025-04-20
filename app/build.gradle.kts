@@ -134,6 +134,7 @@ dependencies {
     implementation(projects.domain.fortune)
     implementation(projects.domain.notification)
     implementation(projects.domain.home)
+    implementation(projects.domain.auth)
 
     implementation(projects.data.fortune)
     implementation(projects.data.soptamp)
