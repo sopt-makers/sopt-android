@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -45,7 +47,11 @@ import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 
-private val playgroundMenu = listOf(Triple(R.drawable.ic_pencil_22, "글쓰기", PlaygroundWebLink.WRITE)).toImmutableList()
+private const val ANIMATION_DURATION = 600
+
+private val playgroundMenu = listOf(
+    Triple(R.drawable.ic_pencil_22, "글쓰기", PlaygroundWebLink.WRITE)
+).toImmutableList()
 private val crewMenu = listOf(
     Triple(R.drawable.ic_bolt_22, "번쩍 개설", PlaygroundWebLink.MAKE_FLASH),
     Triple(R.drawable.ic_moim_22, "모임 개설", PlaygroundWebLink.MAKE_MOIM),
@@ -53,6 +59,12 @@ private val crewMenu = listOf(
 ).toImmutableList()
 private val homepageMenu = listOf(
     Triple(R.drawable.ic_sopticle_22, "솝티클 올리기", PlaygroundWebLink.SOPTICLE)
+).toImmutableList()
+
+private val menuList = listOf(
+    Pair("플레이그라운드", playgroundMenu),
+    Pair("모임/스터디", crewMenu),
+    Pair("홈페이지", homepageMenu)
 ).toImmutableList()
 
 @Composable
@@ -63,12 +75,12 @@ internal fun MainFloatingButton(
 
     val rotation by animateFloatAsState(
         targetValue = if (isFloatingButtonClicked) 0f else 45f,
-        animationSpec = tween(durationMillis = 400, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = ANIMATION_DURATION, easing = FastOutSlowInEasing)
     )
 
     val backgroundAlpha by animateFloatAsState(
         targetValue = if (isFloatingButtonClicked) 0.65f else 0f,
-        animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing)
+        animationSpec = tween(durationMillis = ANIMATION_DURATION, easing = FastOutSlowInEasing)
     )
 
     Box(
@@ -95,11 +107,14 @@ internal fun MainFloatingButton(
             visible = isFloatingButtonClicked,
             enter = slideInVertically(
                 initialOffsetY = { it * 2 },
-                animationSpec = tween(durationMillis = 600)
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
             ),
             exit = slideOutVertically(
                 targetOffsetY = { it * 2 },
-                animationSpec = tween(durationMillis = 600)
+                animationSpec = tween(durationMillis = ANIMATION_DURATION)
             ),
             modifier = Modifier
                 .padding(bottom = 106.dp)
@@ -107,9 +122,9 @@ internal fun MainFloatingButton(
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                FloatingMenuItem(title = "플레이그라운드", menuList = playgroundMenu)
-                FloatingMenuItem(title = "모임/스터디", menuList = crewMenu)
-                FloatingMenuItem(title = "홈페이지", menuList = homepageMenu)
+                menuList.forEach { (title, menu) ->
+                    FloatingMenuItem(title = title, menuList = menu)
+                }
             }
         }
 
