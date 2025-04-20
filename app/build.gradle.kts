@@ -142,6 +142,7 @@ dependencies {
     implementation(projects.data.poke)
     implementation(projects.data.notification)
     implementation(projects.data.home)
+    implementation(projects.data.auth)
 
     implementation(projects.feature.soptamp)
     implementation(projects.data.schedule)
