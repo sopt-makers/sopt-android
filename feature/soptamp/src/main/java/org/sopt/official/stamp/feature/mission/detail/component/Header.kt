@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.designsystem.component.mission.SpecialMissionTitle
 import org.sopt.official.stamp.designsystem.component.ratingbar.RatingBar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.ranking.getStarColor
@@ -64,11 +65,15 @@ fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Bo
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            RatingBar(
-                icon = R.drawable.ic_star,
-                stars = stars,
-                selectedColor = getStarColor(rank = stars)
-            )
+            if (stars < 10) {
+                RatingBar(
+                    icon = R.drawable.ic_star,
+                    stars = stars,
+                    selectedColor = getStarColor(rank = stars)
+                )
+            } else {
+                SpecialMissionTitle()
+            }
             Text(
                 text = title,
                 style = SoptTheme.typography.body16M,
@@ -86,7 +91,20 @@ private fun HeaderPreview() {
     SoptTheme {
         Header(
             title = "오늘은 무슨 일을 할까?",
-            stars = 2,
+            stars = 10,
+            toolbarIconType = ToolbarIconType.WRITE,
+            isMe = true,
+            isCompleted = false
+        )
+    }
+}
+@DefaultPreview
+@Composable
+private fun HeaderPreview2() {
+    SoptTheme {
+        Header(
+            title = "오늘은 무슨 일을 할까?",
+            stars = 1,
             toolbarIconType = ToolbarIconType.WRITE,
             isMe = true,
             isCompleted = false
