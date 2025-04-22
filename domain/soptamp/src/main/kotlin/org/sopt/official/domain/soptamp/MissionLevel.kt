@@ -47,6 +47,7 @@ class MissionLevel private constructor(
     companion object {
         const val MINIMUM_LEVEL = 1
         const val MAXIMUM_LEVEL = 3
+        const val SPECIAL_LEVEL = 10
 
         fun of(level: Int): MissionLevel {
             validateMissionLevel(level)
@@ -54,8 +55,8 @@ class MissionLevel private constructor(
         }
 
         private fun validateMissionLevel(level: Int) {
-            require(level in MINIMUM_LEVEL..MAXIMUM_LEVEL) {
-                "Mission Level 은 $MINIMUM_LEVEL ~ $MAXIMUM_LEVEL 사이 값이어야 합니다."
+            require(level in MINIMUM_LEVEL..SPECIAL_LEVEL) {
+                "Mission Level 은 $MINIMUM_LEVEL ~ $SPECIAL_LEVEL 사이 값이어야 합니다."
             }
         }
     }

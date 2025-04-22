@@ -36,6 +36,7 @@ import org.sopt.official.stamp.designsystem.style.Pink100
 import org.sopt.official.stamp.designsystem.style.Pink300
 import org.sopt.official.stamp.designsystem.style.Purple100
 import org.sopt.official.stamp.designsystem.style.Purple300
+import org.sopt.official.stamp.designsystem.style.Orange300
 
 enum class Stamp(
     val missionLevel: MissionLevel,
@@ -43,13 +44,15 @@ enum class Stamp(
 ) {
     LEVEL1(MissionLevel.of(1), R.drawable.pinkstamp_image),
     LEVEL2(MissionLevel.of(2), R.drawable.purplestamp_image),
-    LEVEL3(MissionLevel.of(3), R.drawable.greenstamp_image);
+    LEVEL3(MissionLevel.of(3), R.drawable.greenstamp_image),
+    LEVEL10(MissionLevel.of(10), R.drawable.orangestamp_iamge);
 
     val starColor: Color
         @Composable get() = when (this) {
             LEVEL1 -> Pink300
             LEVEL2 -> Purple300
             LEVEL3 -> Mint300
+            LEVEL10 -> Orange300
         }
 
     val background: Color
@@ -57,6 +60,7 @@ enum class Stamp(
             LEVEL1 -> Pink100
             LEVEL2 -> Purple100
             LEVEL3 -> Mint100
+            LEVEL10 -> Orange300
         }
 
     fun hasStampLevel(level: MissionLevel): Boolean {

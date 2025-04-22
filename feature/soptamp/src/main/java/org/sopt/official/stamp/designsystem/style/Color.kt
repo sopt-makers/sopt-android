@@ -40,3 +40,5 @@ val Pink100 = Color(0xFFFFF1F6)
 val Mint300 = Color(0xFF53FFC0)
 val Mint200 = Color(0xFFD3FFF0)
 val Mint100 = Color(0xFFE5FFF6)
+
+val Orange300 = Color(0xFFFF834A)
