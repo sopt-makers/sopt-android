@@ -25,6 +25,7 @@
 package org.sopt.official.feature.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -74,6 +75,7 @@ import org.sopt.official.feature.home.navigation.HomeUrl
 
 @Composable
 internal fun HomeRoute(
+    paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
@@ -111,6 +113,7 @@ internal fun HomeRoute(
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeAppServices = uiState.homeServices,
+                paddingValues = paddingValues
             )
         }
 
@@ -157,7 +160,8 @@ internal fun HomeRoute(
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
                 homeAppServices = uiState.homeServices,
-                tracker = tracker
+                tracker = tracker,
+                paddingValues = paddingValues
             )
         }
     }
@@ -175,11 +179,13 @@ private fun HomeScreenForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
     homeAppServices: ImmutableList<HomeAppService>,
-    tracker: Tracker
+    tracker: Tracker,
+    paddingValues: PaddingValues
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(paddingValues)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
@@ -251,10 +257,12 @@ private fun HomeScreenForVisitor(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     homeAppServices: ImmutableList<HomeAppService>,
+    paddingValues: PaddingValues
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(paddingValues)
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))

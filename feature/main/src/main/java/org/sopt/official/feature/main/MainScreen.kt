@@ -40,9 +40,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -122,12 +124,13 @@ fun MainScreen(
     }
 
     Scaffold(
+        modifier = Modifier
+            .navigationBarsPadding(),
         content = { innerPadding ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = SoptTheme.colors.background)
-                    .padding(innerPadding),
+                    .background(color = SoptTheme.colors.background),
             ) {
                 NavHost(
                     modifier = Modifier.weight(1f),
@@ -136,6 +139,7 @@ fun MainScreen(
                 ) {
                     homeNavGraph(
                         userStatus = userStatus,
+                        paddingValues = innerPadding,
                         homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
