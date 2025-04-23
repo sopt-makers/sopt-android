@@ -33,8 +33,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -130,7 +132,10 @@ fun PartRankingScreen(
                 title = "파트별 랭킹",
                 onClickBack = onClickBack
             )
-        }
+        },
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
     ) { paddingValues ->
         val defaultPadding = PaddingValues(
             top = paddingValues.calculateTopPadding(),
