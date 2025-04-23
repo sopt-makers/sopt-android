@@ -35,7 +35,9 @@ import org.sopt.official.stamp.R
 
 @Composable
 fun LevelOfMission(stamp: Stamp, spaceSize: Dp) {
-    Row(
+    if (stamp.missionLevel == MissionLevel.of(10)) {
+        SpecialMissionTitle()
+    } else Row(
         horizontalArrangement = Arrangement.spacedBy(spaceSize)
     ) {
         MissionLevelOfStar(stamp = stamp)
