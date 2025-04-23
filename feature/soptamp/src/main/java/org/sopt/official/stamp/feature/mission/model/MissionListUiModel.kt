@@ -35,7 +35,7 @@ data class MissionListUiModel(
 fun List<Mission>.toUiModel(title: String): MissionListUiModel = MissionListUiModel(
     title = title,
     missionList = this
-        .filter { it.level <= 3 }
+        .filter { it.level <= 10 }
         .map { it.toUiModel() }
 )
 
