@@ -81,6 +81,7 @@ class PokeMainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        enableEdgeToEdge()
         initAdapter()
         initData()
         initListener()

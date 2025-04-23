@@ -28,6 +28,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/mds_gray_950"
+    android:fitsSystemWindows="true"
     tools:context=".friend.summary.FriendListSummaryActivity">
 
     <!-- 익명 친구 오픈 -->
