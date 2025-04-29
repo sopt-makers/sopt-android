@@ -49,9 +49,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.R
-import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.Gray800
@@ -65,11 +65,13 @@ internal fun LoginErrorDialog(
     onContactChannelClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Popup {
+    Dialog(
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Black.copy(alpha = 0.5f))
                 .clickable(onClick = onDismissRequest)
         ) {
             Column(
