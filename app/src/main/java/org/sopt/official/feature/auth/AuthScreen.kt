@@ -137,7 +137,7 @@ internal fun AuthScreen(
                         onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(
-                        onGoogleLoginCLick = {}
+                        onGoogleLoginCLick = {} // TODO: 구글 로그인 계정 연동하는 코드 작성 by 이유빈
                     )
                 }
             }
