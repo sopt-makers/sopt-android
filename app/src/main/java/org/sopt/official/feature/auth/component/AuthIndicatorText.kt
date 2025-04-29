@@ -39,7 +39,7 @@ import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun AuthTextWithArrow(
+internal fun AuthIndicatorText(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = SoptTheme.typography.label14SB,
@@ -66,7 +66,7 @@ internal fun AuthTextWithArrow(
 @Composable
 private fun AuthTextWithButtonPreview() {
     SoptTheme {
-        AuthTextWithArrow(
+        AuthIndicatorText(
             text = "text",
             textColor = Gray30,
             textStyle = SoptTheme.typography.label12SB

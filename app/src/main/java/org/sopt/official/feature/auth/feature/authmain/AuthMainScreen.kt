@@ -72,7 +72,7 @@ import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
-import org.sopt.official.feature.auth.component.AuthTextWithArrow
+import org.sopt.official.feature.auth.component.AuthIndicatorText
 import org.sopt.official.feature.auth.component.LoginErrorDialog
 import org.sopt.official.feature.auth.model.AuthStatus
 
@@ -232,7 +232,7 @@ private fun AuthBottom(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        AuthTextWithArrow(
+        AuthIndicatorText(
             text = "로그인이 안 되나요?",
             modifier = Modifier.clickable(onClick = showDialog)
         )
@@ -254,7 +254,7 @@ private fun AuthBottom(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        AuthTextWithArrow(
+        AuthIndicatorText(
             text = "나중에 로그인할래요.",
             modifier = Modifier.clickable(onClick = onLoginLaterClick)
         )
