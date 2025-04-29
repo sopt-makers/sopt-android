@@ -58,9 +58,9 @@ import org.sopt.official.designsystem.Gray500
 import org.sopt.official.designsystem.Gray800
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.auth.component.BasicTextDefaults.MAX_CODE_NUMBER
-import org.sopt.official.feature.auth.component.BasicTextDefaults.MAX_PHONE_NUMBER
-import org.sopt.official.feature.auth.component.BasicTextDefaults.PHONE_HINT_TEXT
+import org.sopt.official.feature.auth.component.AuthTextDefaults.MAX_CODE_NUMBER
+import org.sopt.official.feature.auth.component.AuthTextDefaults.MAX_PHONE_NUMBER
+import org.sopt.official.feature.auth.component.AuthTextDefaults.PHONE_HINT_TEXT
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
 @Composable
@@ -160,7 +160,7 @@ internal fun AuthTextField(
     }
 }
 
-object BasicTextDefaults {
+object AuthTextDefaults {
     const val PHONE_HINT_TEXT: String = "010"
     const val MAX_PHONE_NUMBER: Int = 11
     const val MAX_CODE_NUMBER: Int = 6
