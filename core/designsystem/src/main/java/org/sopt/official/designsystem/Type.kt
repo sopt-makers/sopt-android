@@ -74,6 +74,7 @@ class SoptTypography internal constructor(
     body13M: TextStyle,
     body13R: TextStyle,
     body13L: TextStyle,
+    body10M: TextStyle,
     label18SB: TextStyle,
     label16SB: TextStyle,
     label14SB: TextStyle,
@@ -128,6 +129,8 @@ class SoptTypography internal constructor(
         private set
     var body13L: TextStyle by mutableStateOf(body13L)
         private set
+    var body10M: TextStyle by mutableStateOf(body10M)
+        private set
     var label18SB: TextStyle by mutableStateOf(label18SB)
         private set
     var label16SB: TextStyle by mutableStateOf(label16SB)
@@ -164,6 +167,7 @@ class SoptTypography internal constructor(
         body13M: TextStyle = this.body13M,
         body13R: TextStyle = this.body13R,
         body13L: TextStyle = this.body13L,
+        body10M: TextStyle = this.body10M,
         label18SB: TextStyle = this.label18SB,
         label16SB: TextStyle = this.label16SB,
         label14SB: TextStyle = this.label14SB,
@@ -194,6 +198,7 @@ class SoptTypography internal constructor(
         body13M,
         body13R,
         body13L,
+        body10M,
         label18SB,
         label16SB,
         label14SB,
@@ -226,6 +231,7 @@ class SoptTypography internal constructor(
         body13M = other.body13M
         body13R = other.body13R
         body13L = other.body13L
+        body10M = other.body10M
         label18SB = other.label18SB
         label16SB = other.label16SB
         label14SB = other.label14SB
@@ -529,6 +535,12 @@ fun SoptTypography(): SoptTypography {
         body13L = TextStyle(
             fontFamily = SuitLight,
             fontSize = 13.sp,
+            letterSpacing = (-0.015).em,
+            lineHeight = 20.sp
+        ),
+        body10M = TextStyle(
+            fontFamily = SuitMedium,
+            fontSize = 10.sp,
             letterSpacing = (-0.015).em,
             lineHeight = 20.sp
         ),
