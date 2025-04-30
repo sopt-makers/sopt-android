@@ -39,7 +39,7 @@ import org.sopt.official.designsystem.Gray30
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun AuthIndicatorText(
+internal fun AuthNavigationText(
     text: String,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = SoptTheme.typography.label14SB,
@@ -64,9 +64,9 @@ internal fun AuthIndicatorText(
 
 @Preview(showBackground = true)
 @Composable
-private fun AuthTextWithButtonPreview() {
+private fun AAuthNavigationTextPreview() {
     SoptTheme {
-        AuthIndicatorText(
+        AuthNavigationText(
             text = "text",
             textColor = Gray30,
             textStyle = SoptTheme.typography.label12SB

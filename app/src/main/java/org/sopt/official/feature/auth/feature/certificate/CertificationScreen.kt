@@ -73,7 +73,7 @@ import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
-import org.sopt.official.feature.auth.component.AuthIndicatorText
+import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.AuthTextField
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
@@ -230,7 +230,7 @@ private fun CertificationScreen(
                             contentDescription = "에러 아이콘",
                         )
                         Column {
-                            AuthIndicatorText(
+                            AuthNavigationText(
                                 text = "SOPT 회원 인증에 실패하셨나요?",
                                 textStyle = SoptTheme.typography.body14M
                             )

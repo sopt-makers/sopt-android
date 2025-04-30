@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
-import org.sopt.official.feature.auth.component.AuthIndicatorText
+import org.sopt.official.feature.auth.component.AuthNavigationText
 
 @Composable
 fun AuthErrorScreen(
@@ -94,7 +94,7 @@ fun AuthErrorScreen(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        AuthIndicatorText(text = "로그인이 안 되나요?")
+        AuthNavigationText(text = "로그인이 안 되나요?")
         Spacer(modifier = Modifier.height(28.dp))
     }
 }
