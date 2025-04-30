@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023-2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="161dp"
+    android:height="23dp"
+    android:viewportWidth="161"
+    android:viewportHeight="23">
+    <path
+        android:pathData="M19,11h123v1h-123z"
+        android:fillColor="#3C3D40"/>
+    <path
+        android:pathData="M0,11.25a11,10.87 0,1 0,22 0a11,10.87 0,1 0,-22 0z"
+        android:fillColor="#346DFF"/>
+    <path
+        android:pathData="M12.03,16.05L10.59,16.04V8.81L8.97,9.62L8.43,8.39L10.59,7.29H12.03V16.05Z"
+        android:fillColor="#ffffff"/>
+    <path
+        android:pathData="M150,11m-11,0a11,11 0,1 1,22 0a11,11 0,1 1,-22 0"
+        android:fillColor="#3C3D40"/>
+    <path
+        android:pathData="M147.29,13.79C147.5,13.59 147.75,13.36 148.04,13.1C148.32,12.85 148.53,12.66 148.66,12.55C149.27,12.02 149.75,11.58 150.1,11.23C150.46,10.89 150.76,10.54 151,10.18C151.24,9.82 151.36,9.47 151.36,9.13C151.36,8.66 151.23,8.28 150.95,7.98C150.69,7.68 150.35,7.54 149.93,7.54C149.6,7.54 149.29,7.64 148.99,7.86C148.69,8.07 148.46,8.34 148.31,8.68L147.07,8.11C147.32,7.55 147.72,7.1 148.25,6.74C148.79,6.38 149.35,6.2 149.93,6.2C150.49,6.2 150.99,6.33 151.42,6.58C151.85,6.82 152.19,7.17 152.43,7.62C152.68,8.06 152.8,8.56 152.8,9.13C152.8,9.7 152.64,10.25 152.31,10.79C151.99,11.32 151.6,11.79 151.16,12.22C150.71,12.64 150.11,13.16 149.37,13.79H152.93V15.05H147.41L147.29,13.79Z"
+        android:fillColor="#ffffff"/>
+</vector>

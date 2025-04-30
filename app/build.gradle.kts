@@ -134,6 +134,7 @@ dependencies {
     implementation(projects.domain.fortune)
     implementation(projects.domain.notification)
     implementation(projects.domain.home)
+    implementation(projects.domain.auth)
 
     implementation(projects.data.fortune)
     implementation(projects.data.soptamp)
@@ -141,6 +142,7 @@ dependencies {
     implementation(projects.data.poke)
     implementation(projects.data.notification)
     implementation(projects.data.home)
+    implementation(projects.data.auth)
 
     implementation(projects.feature.soptamp)
     implementation(projects.data.schedule)
