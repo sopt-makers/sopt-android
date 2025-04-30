@@ -55,10 +55,10 @@ private val playgroundMenu = listOf(
 private val crewMenu = listOf(
     Triple(R.drawable.ic_bolt_22, "번쩍 개설", PlaygroundWebLink.MAKE_FLASH),
     Triple(R.drawable.ic_moim_22, "모임 개설", PlaygroundWebLink.MAKE_MOIM),
-    Triple(R.drawable.ic_feed_22, "피드 작성", PlaygroundWebLink.OFFICIAL_HOMEPAGE),
+    Triple(R.drawable.ic_feed_22, "피드 작성", PlaygroundWebLink.WRITE_FEED),
 ).toImmutableList()
 private val homepageMenu = listOf(
-    Triple(R.drawable.ic_sopticle_22, "솝티클 올리기", PlaygroundWebLink.SOPTICLE)
+    Triple(R.drawable.ic_sopticle_22, "활동후기 업로드", PlaygroundWebLink.UPLOAD_REVIEW)
 ).toImmutableList()
 
 private val menuList = listOf(

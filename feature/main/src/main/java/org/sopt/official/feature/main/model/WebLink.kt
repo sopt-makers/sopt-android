@@ -43,5 +43,6 @@ internal object PlaygroundWebLink {
     const val WRITE = OFFICIAL_HOMEPAGE + "feed/upload"
     const val MAKE_FLASH = OFFICIAL_HOMEPAGE + "group/make/flash"
     const val MAKE_MOIM = OFFICIAL_HOMEPAGE + "group/make"
-    const val SOPTICLE = OFFICIAL_HOMEPAGE + "sopticle"
+    const val WRITE_FEED = OFFICIAL_HOMEPAGE + "group?modal=create-feed"
+    const val UPLOAD_REVIEW = OFFICIAL_HOMEPAGE + "blog"
 }
