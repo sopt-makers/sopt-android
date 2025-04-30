@@ -400,8 +400,8 @@ fun PreviewMissionListScreen() {
             MissionUiModel(
                 id = 4,
                 title = "세미나 끝나고 뒷풀이 4시까지 달리기",
-                level = MissionLevel.of(3),
-                isCompleted = false
+                level = MissionLevel.of(10),
+                isCompleted = true
             ),
             MissionUiModel(
                 id = 5,
@@ -424,7 +424,7 @@ fun PreviewMissionListScreen() {
             MissionUiModel(
                 id = 8,
                 title = "세미나 끝나고 뒷풀이 8시까지 달리기",
-                level = MissionLevel.of(1),
+                level = MissionLevel.of(10),
                 isCompleted = false
             ),
             MissionUiModel(
