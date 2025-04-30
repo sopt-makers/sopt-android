@@ -42,7 +42,6 @@ import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
 import org.sopt.official.domain.auth.model.InformationWithCode
 import org.sopt.official.domain.auth.model.InitialInformation
-import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
@@ -150,9 +149,7 @@ class CertificationViewModel @Inject constructor(
     private fun findAccount() {
         viewModelScope.launch {
             repository.findAccount(
-                UserPhoneNumber(
-                    phone = "01012345678"
-                )
+                "01012345678"
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
                 dataStore.platform = response.platform

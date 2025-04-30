@@ -34,7 +34,6 @@ import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignInCode
 import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.Token
-import org.sopt.official.domain.auth.model.UserPhoneNumber
 import org.sopt.official.domain.auth.model.VerificationResult
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
@@ -62,7 +61,7 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.changeAccount(request.toRequest())
     }
 
-    override suspend fun findAccount(request: UserPhoneNumber): Result<AccountResult> = runCatching {
-        authApi.findAccount(request.toRequest()).data.toDomain()
+    override suspend fun findAccount(request: String): Result<AccountResult> = runCatching {
+        authApi.findAccount(request).data.toDomain()
     }
 }

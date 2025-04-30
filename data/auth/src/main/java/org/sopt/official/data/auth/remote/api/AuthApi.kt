@@ -29,7 +29,6 @@ import org.sopt.official.data.auth.model.NullableBaseAuthResponse
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
-import org.sopt.official.data.auth.remote.request.FindAccountRequest
 import org.sopt.official.data.auth.remote.request.SignInRequest
 import org.sopt.official.data.auth.remote.request.SignUpRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
@@ -69,6 +68,6 @@ internal interface AuthApi {
 
     @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(
-        @Query("phone") request: FindAccountRequest
+        @Query("phone") request: String
     ): BaseAuthResponse<FindAccountResponse>
 }
