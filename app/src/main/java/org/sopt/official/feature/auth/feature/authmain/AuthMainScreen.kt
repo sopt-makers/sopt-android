@@ -183,7 +183,7 @@ private fun AuthMainScreen(
             ),
             modifier = Modifier.align(Alignment.BottomCenter)
         ) {
-            AuthBottom(
+            AuthFooter(
                 platform = platform,
                 showDialog = showDialog,
                 onGoogleLoginCLick = onGoogleLoginCLick,
@@ -195,7 +195,7 @@ private fun AuthMainScreen(
 }
 
 @Composable
-private fun AuthBottom(
+private fun AuthFooter(
     platform: String,
     showDialog: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
