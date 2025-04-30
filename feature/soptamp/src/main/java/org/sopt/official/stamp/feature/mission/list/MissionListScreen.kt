@@ -197,7 +197,10 @@ fun MissionListScreen(
                 onClickSecondOption = onPartRankingButtonClick
             )
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.Center,
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -209,7 +212,6 @@ fun MissionListScreen(
                     start = 16.dp,
                     end = 16.dp
                 )
-
         ) {
             if (missionListUiModel.missionList.isEmpty()) {
                 MissionEmptyScreen(contentText = missionListUiModel.title)
