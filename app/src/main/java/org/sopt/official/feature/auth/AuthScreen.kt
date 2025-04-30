@@ -65,11 +65,9 @@ internal fun AuthScreen(
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
-    val onShowSnackBar: () -> Unit = remember {
-        {
-            coroutineScope.launch {
-                snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
-            }
+    val onShowSnackBar: () -> Unit = {
+        coroutineScope.launch {
+            snackBarHostState.showSnackbar("인증번호가 전송되었어요.")
         }
     }
 
