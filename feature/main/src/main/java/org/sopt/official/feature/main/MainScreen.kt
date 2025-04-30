@@ -40,7 +40,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -211,6 +210,10 @@ fun MainScreen(
                     },
                 )
             }
+
+            MainFloatingButton(
+                paddingValues = innerPadding
+            )
         }
     )
 
@@ -332,20 +335,36 @@ fun SoptBottomBar(
                 .background(color = SoptTheme.colors.onSurface800),
         ) {
             tabs.forEach { tab ->
-                Icon(
-                    imageVector = tab.icon,
-                    contentDescription = tab.contentDescription,
-                    tint = if (tab == currentTab) {
-                        SoptTheme.colors.primary
-                    } else {
-                        SoptTheme.colors.onSurface500
-                    },
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .padding(vertical = 22.dp)
-                        .size(24.dp)
+                        .padding(vertical = 14.dp)
                         .weight(1f)
                         .clickable { onTabSelected(tab) }
-                )
+                ) {
+                    Icon(
+                        imageVector = tab.icon,
+                        contentDescription = tab.contentDescription,
+                        tint = if (tab == currentTab) {
+                            SoptTheme.colors.primary
+                        } else {
+                            SoptTheme.colors.onSurface500
+                        },
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                    Text(
+                        text = tab.contentDescription,
+                        style = SoptTheme.typography.body10M,
+                        color = if (tab == currentTab) {
+                            SoptTheme.colors.primary
+                        } else {
+                            SoptTheme.colors.onSurface500
+                        },
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                    )
+                }
 
             }
         }
