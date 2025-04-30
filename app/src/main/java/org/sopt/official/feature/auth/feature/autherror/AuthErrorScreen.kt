@@ -53,7 +53,7 @@ import org.sopt.official.feature.auth.component.AuthNavigationText
 
 @Composable
 fun AuthErrorScreen(
-    loginAgain: () -> Unit = {}
+    retry: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -81,7 +81,7 @@ fun AuthErrorScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         AuthButton(
-            onClick = loginAgain,
+            onClick = retry,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
