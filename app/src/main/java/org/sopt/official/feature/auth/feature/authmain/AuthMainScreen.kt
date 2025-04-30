@@ -242,7 +242,26 @@ private fun AuthFooter(
             modifier = Modifier.clickable(onClick = showDialog)
         )
         Spacer(modifier = Modifier.height(44.dp))
-        AuthDivider()
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            HorizontalDivider(
+                thickness = Dp.Hairline,
+                color = Gray300,
+                modifier = Modifier.weight(1f)
+            )
+            Text(
+                text = "또는",
+                color = Gray300,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+            HorizontalDivider(
+                thickness = Dp.Hairline,
+                color = Gray300,
+                modifier = Modifier.weight(1f)
+            )
+        }
         Spacer(modifier = Modifier.height(16.dp))
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
@@ -264,32 +283,6 @@ private fun AuthFooter(
             modifier = Modifier.clickable(onClick = onLoginLaterClick)
         )
         Spacer(modifier = Modifier.height(28.dp))
-    }
-}
-
-@Composable
-private fun AuthDivider(
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.padding(horizontal = 20.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        HorizontalDivider(
-            thickness = Dp.Hairline,
-            color = Gray300,
-            modifier = Modifier.weight(1f)
-        )
-        Text(
-            text = "또는",
-            color = Gray300,
-            modifier = Modifier.padding(horizontal = 8.dp)
-        )
-        HorizontalDivider(
-            thickness = Dp.Hairline,
-            color = Gray300,
-            modifier = Modifier.weight(1f)
-        )
     }
 }
 
