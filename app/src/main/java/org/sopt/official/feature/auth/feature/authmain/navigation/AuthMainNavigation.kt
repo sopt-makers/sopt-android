@@ -29,6 +29,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.authmain.AuthMainRoute
 import org.sopt.official.feature.auth.model.AuthStatus
@@ -63,5 +64,6 @@ fun NavGraphBuilder.authMainNavGraph(
 
 @Serializable
 data class AuthMainNavigation(
+    @SerialName("platform")
     val platform: String
 )
