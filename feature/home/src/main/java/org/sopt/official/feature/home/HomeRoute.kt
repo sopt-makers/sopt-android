@@ -24,18 +24,30 @@
  */
 package org.sopt.official.feature.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,10 +66,12 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
+import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
 import org.sopt.official.feature.home.component.HomeSoptScheduleDashboard
+import org.sopt.official.feature.home.component.HomeToastButton
 import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
@@ -182,72 +196,110 @@ private fun HomeScreenForMember(
     tracker: Tracker,
     paddingValues: PaddingValues
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(horizontal = 20.dp),
-    ) {
-        Spacer(modifier = Modifier.height(height = 8.dp))
+    Box {
+        val scrollState = rememberScrollState()
+        val isScrolledBeyondThreshold by remember {
+            derivedStateOf { scrollState.value > 330 || scrollState.isScrollInProgress }
+        }
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState),
+        ) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
-        HomeTopBarForMember(
-            hasNotification = hasNotification,
-            onNotificationClick = {
-                homeDashboardNavigation.navigateToNotification()
-                trackClickEvent(tracker, "at36_alarm")
-            },
-            onSettingClick = homeDashboardNavigation::navigateToSetting,
-        )
+            HomeTopBarForMember(
+                hasNotification = hasNotification,
+                onNotificationClick = {
+                    homeDashboardNavigation.navigateToNotification()
+                    trackClickEvent(tracker, "at36_alarm")
+                },
+                onSettingClick = homeDashboardNavigation::navigateToSetting,
+            )
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-        HomeUserSoptLogDashboardForMember(
-            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
-            homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
-        )
+            HomeUserSoptLogDashboardForMember(
+                onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+            )
 
-        Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
 
-        HomeSoptScheduleDashboard(
-            homeSoptScheduleModel = homeSoptScheduleModel,
-            isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = {
-                homeDashboardNavigation.navigateToSchedule()
-                trackClickEvent(tracker, "at36_all_calendar")
-            },
-            onAttendanceButtonClick = {
-                homeDashboardNavigation.navigateToAttendance()
-                trackClickEvent(tracker, "at36_attendance")
-            }
-        )
+            HomeSoptScheduleDashboard(
+                homeSoptScheduleModel = homeSoptScheduleModel,
+                isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
+                onScheduleClick = {
+                    homeDashboardNavigation.navigateToSchedule()
+                    trackClickEvent(tracker, "at36_all_calendar")
+                },
+                onAttendanceButtonClick = {
+                    homeDashboardNavigation.navigateToAttendance()
+                    trackClickEvent(tracker, "at36_attendance")
+                }
+            )
 
-        Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 12.dp))
 
-        HomeShortcutButtonsForMember(
-            onPlaygroundClick = {
-                homeShortcutNavigation.navigateToPlayground()
-                trackClickEvent(tracker, "at36_playground_community")
-            },
-            onStudyClick = {
-                homeShortcutNavigation.navigateToPlaygroundGroup()
-                trackClickEvent(tracker, "at36_moim")
-            },
-            onMemberClick = {
-                homeShortcutNavigation.navigateToPlaygroundMember()
-                trackClickEvent(tracker, "at36_member")
-            },
-            onProjectClick = {
-                homeShortcutNavigation.navigateToPlaygroundProject()
-                trackClickEvent(tracker, "at36_project")
-            },
-        )
+            HomeShortcutButtonsForMember(
+                onPlaygroundClick = {
+                    homeShortcutNavigation.navigateToPlayground()
+                    trackClickEvent(tracker, "at36_playground_community")
+                },
+                onStudyClick = {
+                    homeShortcutNavigation.navigateToPlaygroundGroup()
+                    trackClickEvent(tracker, "at36_moim")
+                },
+                onMemberClick = {
+                    homeShortcutNavigation.navigateToPlaygroundMember()
+                    trackClickEvent(tracker, "at36_member")
+                },
+                onProjectClick = {
+                    homeShortcutNavigation.navigateToPlaygroundProject()
+                    trackClickEvent(tracker, "at36_project")
+                },
+            )
 
-        Spacer(modifier = Modifier.height(height = 40.dp))
+            Spacer(modifier = Modifier.height(height = 40.dp))
 
-        HomeEnjoySoptServicesBlock(
-            appServices = homeAppServices,
-            onAppServiceClick = onAppServiceClick,
-        )
+            HomeEnjoySoptServicesBlock(
+                appServices = homeAppServices,
+                onAppServiceClick = onAppServiceClick,
+            )
+
+            Spacer(modifier = Modifier.height(height = 600.dp))
+        }
+
+        AnimatedHomeButton(
+            visible = !isScrolledBeyondThreshold,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 40.dp)
+        ) {
+            HomeToastButton(
+                longTitle = "점수 2배! 깜짝 미션 오픈",
+                missionDescription = "지금 바로 미션에 도전해보세요",
+                buttonText = "미션 보기",
+                onClick = {}
+            )
+        }
+
+        AnimatedHomeButton(
+            visible = isScrolledBeyondThreshold,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 40.dp)
+        ) {
+            HomeFloatingButton(
+                shortTitle = "솝탬프",
+                buttonText = "미션 보기",
+                onClick = {},
+            )
+        }
     }
 }
 
@@ -287,5 +339,30 @@ private fun HomeScreenForVisitor(
             appServices = homeAppServices,
             onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
         )
+    }
+}
+
+@Composable
+private fun AnimatedHomeButton(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium
+            )
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { it * 3 },
+            animationSpec = tween(durationMillis = 100)
+        ),
+        modifier = modifier
+    ) {
+        content()
     }
 }
