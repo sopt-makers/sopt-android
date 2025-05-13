@@ -40,6 +40,9 @@ internal sealed interface HomeUiState {
     val isLoading: Boolean
     val isError: Boolean
     val homeServices: ImmutableList<HomeAppService>
+    val surveyData: HomeSurveyData
+    val toastData: HomeToastData
+    val floatingButtonData: HomeFloatingButtonData
 
     @Stable
     sealed interface Member : HomeUiState {
@@ -53,6 +56,9 @@ internal sealed interface HomeUiState {
         override val isLoading: Boolean,
         override val isError: Boolean,
         override val homeServices: ImmutableList<HomeAppService> = persistentListOf(),
+        override val surveyData: HomeSurveyData = HomeSurveyData(),
+        override val toastData: HomeToastData = HomeToastData(),
+        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
     ) : HomeUiState
 
     @Immutable
@@ -63,6 +69,9 @@ internal sealed interface HomeUiState {
         override val hasNotification: Boolean = false,
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
+        override val surveyData: HomeSurveyData = HomeSurveyData(),
+        override val toastData: HomeToastData = HomeToastData(),
+        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
     ) : Member
 
     @Immutable
@@ -73,8 +82,34 @@ internal sealed interface HomeUiState {
         override val hasNotification: Boolean = false,
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
+        override val surveyData: HomeSurveyData = HomeSurveyData(),
+        override val toastData: HomeToastData = HomeToastData(),
+        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
     ) : Member
 }
+
+@Immutable
+internal data class HomeSurveyData(
+    val title: String = "솝커톤 어땠나요?",
+    val description: String = "여러분의 솝커톤 이야기를 들려주세요!",
+    val buttonText: String = "지금 솝커톤 후기 쓰러가기",
+    val surveyLink: String = "",
+)
+
+@Immutable
+internal data class HomeToastData(
+    val longTitle: String = "점수 2배! 깜짝 미션 오픈",
+    val missionDescription: String = "지금 바로 미션에 도전해보세요",
+    val buttonText: String = "미션 보기",
+    val missionLink: String = "",
+)
+
+@Immutable
+internal data class HomeFloatingButtonData(
+    val shortTitle: String = "솝탬프",
+    val buttonText: String = "미션 보기",
+    val missionLink: String = "",
+)
 
 @Immutable
 internal data class HomeSoptScheduleModel(

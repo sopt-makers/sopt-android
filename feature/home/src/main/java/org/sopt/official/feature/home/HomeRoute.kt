@@ -78,7 +78,10 @@ import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
+import org.sopt.official.feature.home.model.HomeFloatingButtonData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
+import org.sopt.official.feature.home.model.HomeSurveyData
+import org.sopt.official.feature.home.model.HomeToastData
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
@@ -136,6 +139,7 @@ internal fun HomeRoute(
             HomeScreenForMember(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
+                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 onAppServiceClick = { url, _ ->
                     val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
 
@@ -176,7 +180,10 @@ internal fun HomeRoute(
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
                 homeAppServices = uiState.homeServices,
                 tracker = tracker,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                surveyData = state.surveyData,
+                toastData = state.toastData,
+                floatingButtonData = state.floatingButtonData
             )
         }
     }
@@ -189,13 +196,17 @@ internal fun HomeRoute(
 private fun HomeScreenForMember(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeShortcutNavigation: HomeShortcutNavigation,
+    homeAppServicesNavigation: HomeAppServicesNavigation,
     onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
     homeAppServices: ImmutableList<HomeAppService>,
     tracker: Tracker,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    surveyData: HomeSurveyData,
+    toastData: HomeToastData,
+    floatingButtonData: HomeFloatingButtonData
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -273,10 +284,13 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 47.dp))
 
             HomeSurveySection(
-                surveyTitle = "솝커톤 어땠나요?",
-                surveyDescription = "여러분의 솝커톤 이야기를 들려주세요!",
-                buttonText = "지금 솝커톤 후기 쓰러가기",
-                onClick = {}
+                surveyTitle = surveyData.title,
+                surveyDescription = surveyData.description,
+                buttonText = surveyData.buttonText,
+                onClick = { 
+                    homeAppServicesNavigation.navigateToDeepLink(surveyData.surveyLink)
+                    trackClickEvent(tracker, "at36_survey_button") 
+                }
             )
 
             Spacer(modifier = Modifier.height(height = 600.dp))
@@ -290,10 +304,13 @@ private fun HomeScreenForMember(
                 .padding(bottom = 40.dp)
         ) {
             HomeToastButton(
-                longTitle = "점수 2배! 깜짝 미션 오픈",
-                missionDescription = "지금 바로 미션에 도전해보세요",
-                buttonText = "미션 보기",
-                onClick = {}
+                longTitle = toastData.longTitle,
+                missionDescription = toastData.missionDescription,
+                buttonText = toastData.buttonText,
+                onClick = { 
+                    homeAppServicesNavigation.navigateToDeepLink(toastData.missionLink)
+                    trackClickEvent(tracker, "at36_toast_button") 
+                }
             )
         }
 
@@ -305,9 +322,12 @@ private fun HomeScreenForMember(
                 .padding(bottom = 40.dp)
         ) {
             HomeFloatingButton(
-                shortTitle = "솝탬프",
-                buttonText = "미션 보기",
-                onClick = {},
+                shortTitle = floatingButtonData.shortTitle,
+                buttonText = floatingButtonData.buttonText,
+                onClick = { 
+                    homeAppServicesNavigation.navigateToDeepLink(floatingButtonData.missionLink)
+                    trackClickEvent(tracker, "at36_floating_button")
+                },
             )
         }
     }
