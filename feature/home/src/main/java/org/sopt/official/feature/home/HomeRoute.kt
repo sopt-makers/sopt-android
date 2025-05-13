@@ -71,6 +71,7 @@ import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
 import org.sopt.official.feature.home.component.HomeSoptScheduleDashboard
+import org.sopt.official.feature.home.component.HomeSurveySection
 import org.sopt.official.feature.home.component.HomeToastButton
 import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
@@ -267,6 +268,15 @@ private fun HomeScreenForMember(
             HomeEnjoySoptServicesBlock(
                 appServices = homeAppServices,
                 onAppServiceClick = onAppServiceClick,
+            )
+
+            Spacer(modifier = Modifier.height(height = 47.dp))
+
+            HomeSurveySection(
+                surveyTitle = "솝커톤 어땠나요?",
+                surveyDescription = "여러분의 솝커톤 이야기를 들려주세요!",
+                buttonText = "지금 솝커톤 후기 쓰러가기",
+                onClick = {}
             )
 
             Spacer(modifier = Modifier.height(height = 600.dp))
