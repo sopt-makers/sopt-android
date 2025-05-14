@@ -1,6 +1,10 @@
 package org.sopt.official.feature.home.component
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,9 +22,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -29,7 +39,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.Orange300
+import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.R
@@ -68,11 +80,11 @@ internal val feedList = persistentListOf(
     ),
     HomePlaygroundFeedModel(
         postId = 4,
-        title = "나 메이커스팀인데 메팀 좋다",
+        title = "사진이 없다면?",
         content = "본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.",
         category = "전체",
         label = "HOT",
-        profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
+        profileImage = "",
         name = "박효빈",
         part = "35기 기획"
     )
@@ -85,12 +97,22 @@ internal fun HomePlaygroundSection(
     navigateToFeed: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    var highlightedIndex by remember { mutableIntStateOf(0) }
+
+    LaunchedEffect(feedList) {
+        while (true) {
+            delay(2400)
+            highlightedIndex = (highlightedIndex + 1) % 4
+        }
+    }
+
     Box(
         modifier = modifier.fillMaxWidth()
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_home_smile),
             contentDescription = null,
+            tint = Color.Unspecified,
             modifier = Modifier
                 .align(Alignment.TopEnd)
         )
@@ -108,16 +130,30 @@ internal fun HomePlaygroundSection(
             Spacer(modifier = Modifier.height(16.dp))
 
             feedList.take(4).forEachIndexed { index, post ->
+                val borderColor by animateColorAsState(
+                    targetValue = if (index == highlightedIndex) Orange400 else Color.Transparent,
+                    animationSpec = tween(
+                        durationMillis = 300,
+                        easing = FastOutSlowInEasing
+                    )
+                )
+
                 PlaygroundPostItem(
                     post = post,
                     navigateToPost = navigateToFeed,
-                    modifier = Modifier.then(
-                        if (index == 0) {
-                            Modifier
-                        } else {
-                            Modifier.padding(top = 10.dp)
-                        }
-                    )
+                    modifier = Modifier
+                        .then(
+                            if (index == 0) {
+                                Modifier
+                            } else {
+                                Modifier.padding(top = 10.dp)
+                            }
+                        )
+                        .border(
+                            width = 1.dp,
+                            color = borderColor,
+                            shape = RoundedCornerShape(12.dp)
+                        )
                 )
             }
 
@@ -208,6 +244,7 @@ private fun ProfileItem(
             modifier = Modifier
                 .size(54.dp)
                 .clip(shape = CircleShape)
+                .background(SoptTheme.colors.onSurface800.copy(0.6f))
         )
         Text(
             text = name,
