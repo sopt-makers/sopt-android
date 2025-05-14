@@ -296,7 +296,7 @@ private fun HomeScreenForMember(
                 }
             )
 
-            Spacer(modifier = Modifier.height(height = 600.dp))
+            Spacer(modifier = Modifier.height(height = 600.dp)) // TODO: 스크롤 확인용입니다. 테스트 완료 후 삭제
         }
 
         AnimatedHomeButton(
