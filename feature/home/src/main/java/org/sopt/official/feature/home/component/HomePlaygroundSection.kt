@@ -37,6 +37,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
@@ -97,6 +101,8 @@ internal fun HomePlaygroundSection(
     navigateToFeed: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val lottieComposition =
+        rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.home_orange_smile))
     var highlightedIndex by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(feedList) {
@@ -109,10 +115,9 @@ internal fun HomePlaygroundSection(
     Box(
         modifier = modifier.fillMaxWidth()
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_home_smile),
-            contentDescription = null,
-            tint = Color.Unspecified,
+        LottieAnimation(
+            composition = lottieComposition.value,
+            iterations = LottieConstants.IterateForever,
             modifier = Modifier
                 .align(Alignment.TopEnd)
         )
