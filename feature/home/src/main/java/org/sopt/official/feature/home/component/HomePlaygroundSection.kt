@@ -29,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -145,6 +146,7 @@ internal fun HomePlaygroundSection(
 
                 PlaygroundPostItem(
                     post = post,
+                    isHighlighted = index == highlightedIndex,
                     navigateToPost = navigateToFeed,
                     modifier = Modifier
                         .then(
@@ -194,6 +196,7 @@ internal fun HomePlaygroundSection(
 @Composable
 private fun PlaygroundPostItem(
     post: HomePlaygroundFeedModel,
+    isHighlighted: Boolean,
     navigateToPost: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -218,13 +221,28 @@ private fun PlaygroundPostItem(
                 part = part,
                 modifier = Modifier
                     .padding(top = 18.dp, bottom = 22.dp)
+                    .then(
+                        if (isHighlighted) {
+                            Modifier
+                        } else {
+                            Modifier.alpha(0.6f)
+                        }
+                    )
             )
 
             PostContentSection(
                 label = label,
                 category = category,
                 title = title,
-                content = content
+                content = content,
+                modifier = Modifier
+                    .then(
+                        if (isHighlighted) {
+                            Modifier
+                        } else {
+                            Modifier.alpha(0.6f)
+                        }
+                    )
             )
         }
     }
