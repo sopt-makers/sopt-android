@@ -16,7 +16,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-@Composable
 fun Modifier.dropShadow(
     shape: Shape,
     color: Color = Color.Black.copy(0.25f),

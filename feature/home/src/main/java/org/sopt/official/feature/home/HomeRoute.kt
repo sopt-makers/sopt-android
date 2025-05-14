@@ -216,6 +216,15 @@ private fun HomeScreenForMember(
         val isScrolledBeyondThreshold by remember {
             derivedStateOf { scrollState.value > 330 || scrollState.isScrollInProgress }
         }
+        val shadowModifier = Modifier.dropShadow(
+            shape = CircleShape,
+            color = GrayAlpha700,
+            blur = 40.dp,
+            offsetX = 0.dp,
+            offsetY = 4.dp,
+            spread = 0.dp
+        )
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -313,7 +322,8 @@ private fun HomeScreenForMember(
                 onClick = { 
                     homeAppServicesNavigation.navigateToDeepLink(toastData.missionLink)
                     trackClickEvent(tracker, "at36_toast_button") 
-                }
+                },
+                modifier = shadowModifier
             )
         }
 
@@ -331,6 +341,7 @@ private fun HomeScreenForMember(
                     homeAppServicesNavigation.navigateToDeepLink(floatingButtonData.missionLink)
                     trackClickEvent(tracker, "at36_floating_button")
                 },
+                modifier = shadowModifier
             )
         }
     }
@@ -394,14 +405,7 @@ private fun AnimatedHomeButton(
             targetOffsetY = { it * 3 },
             animationSpec = tween(durationMillis = 100)
         ),
-        modifier = modifier.dropShadow(
-            shape = CircleShape,
-            color = GrayAlpha700,
-            blur = 40.dp,
-            offsetX = 0.dp,
-            offsetY = 4.dp,
-            spread = 0.dp
-        ),
+        modifier = modifier
     ) {
         content()
     }

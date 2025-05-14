@@ -17,10 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 import org.sopt.official.feature.home.R
 
 @Composable
@@ -47,7 +45,7 @@ fun HomeSurveySection(
         Text(
             text = surveyTitle,
             style = SoptTheme.typography.heading20B,
-            color = White,
+            color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(bottom = 10.dp)
@@ -56,7 +54,7 @@ fun HomeSurveySection(
         Text(
             text = surveyDescription,
             style = SoptTheme.typography.heading20B,
-            color = White,
+            color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             modifier = Modifier.padding(bottom = 18.dp)
@@ -65,7 +63,7 @@ fun HomeSurveySection(
         Text(
             text = buttonText,
             style = SoptTheme.typography.title14SB,
-            color = Black,
+            color = SoptTheme.colors.onSurface,
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(Orange400)

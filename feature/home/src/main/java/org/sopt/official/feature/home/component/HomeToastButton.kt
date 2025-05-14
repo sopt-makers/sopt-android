@@ -26,6 +26,7 @@ import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.Orange700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.feature.home.R
 
 @Composable
 fun HomeToastButton(
@@ -44,7 +45,7 @@ fun HomeToastButton(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = org.sopt.official.feature.home.R.drawable.ic_soptamp_42),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_42),
             tint = Color.Unspecified,
             contentDescription = null,
             modifier = Modifier.padding(end = 7.dp)

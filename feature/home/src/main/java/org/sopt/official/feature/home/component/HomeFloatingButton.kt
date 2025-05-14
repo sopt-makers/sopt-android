@@ -19,7 +19,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.Orange800
 import org.sopt.official.designsystem.SoptTheme
@@ -60,13 +59,13 @@ fun HomeFloatingButton(
                 Text(
                     text = buttonText,
                     style = SoptTheme.typography.label14SB,
-                    color = Black,
+                    color = SoptTheme.colors.onSurface,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
                 )
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                    tint = Black,
+                    tint = SoptTheme.colors.onSurface,
                     contentDescription = null,
                     modifier = Modifier.size(16.dp)
                 )
