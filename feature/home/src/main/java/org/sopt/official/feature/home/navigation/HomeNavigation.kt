@@ -39,6 +39,7 @@ sealed interface HomeNavigation {
         fun navigateToSoptReview()
         fun navigateToSoptProject()
         fun navigateToSoptInstagram()
+        fun navigateToPlaygroundFeed(postId: Int)
     }
 
     @Stable
