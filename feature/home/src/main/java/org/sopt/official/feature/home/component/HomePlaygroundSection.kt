@@ -1,7 +1,7 @@
 package org.sopt.official.feature.home.component
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -134,7 +134,7 @@ internal fun HomePlaygroundSection(
                     targetValue = if (index == highlightedIndex) Orange400 else Color.Transparent,
                     animationSpec = tween(
                         durationMillis = 300,
-                        easing = FastOutSlowInEasing
+                        easing = EaseIn
                     )
                 )
 
