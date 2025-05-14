@@ -38,6 +38,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -62,6 +64,8 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
+import org.sopt.official.common.util.ui.dropShadow
+import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
@@ -391,7 +395,14 @@ private fun AnimatedHomeButton(
             targetOffsetY = { it * 3 },
             animationSpec = tween(durationMillis = 100)
         ),
-        modifier = modifier
+        modifier = modifier.dropShadow(
+            shape = CircleShape,
+            color = GrayAlpha700,
+            blur = 40.dp,
+            offsetX = 0.dp,
+            offsetY = 4.dp,
+            spread = 0.dp
+        ),
     ) {
         content()
     }
