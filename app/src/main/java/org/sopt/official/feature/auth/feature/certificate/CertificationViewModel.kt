@@ -98,7 +98,7 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.createCode(
                 InitialInformation(
-                    name = "이유빈",
+                    name = "이유빈", // todo: name 가져오는 방법 문의 by 이유빈
                     phone = _state.value.phone,
                     type = status.type
                 )
