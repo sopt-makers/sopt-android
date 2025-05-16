@@ -98,8 +98,8 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.createCode(
                 InitialInformation(
-                    name = status.authName,
-                    phone = status.phone,
+                    name = "이유빈",
+                    phone = _state.value.phone,
                     type = status.type
                 )
             ).onSuccess {
@@ -108,19 +108,14 @@ class CertificationViewModel @Inject constructor(
                 updateCodeTextField(true)
                 updateButtonState(true)
             }.onFailure {
-                // TODO: DELETE !!
-                startTimer()
-                updateButtonText()
-                // TODO: true -> false
-                updateCodeTextField(true)
-                updateButtonState(true)
+                updateCodeTextField(false)
+                updateButtonState(false)
 
-                // TODO: 주석 해제
-//                _state.update { currentState ->
-//                    currentState.copy(
-//                        errorMessage = ErrorCase.PHONE_ERROR.message
-//                    )
-//                }
+                _state.update { currentState ->
+                    currentState.copy(
+                        errorMessage = ErrorCase.PHONE_ERROR.message
+                    )
+                }
             }
         }
     }
@@ -129,9 +124,9 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.certificateCode(
                 InformationWithCode(
-                    name = status.authName,
-                    phone = status.phone,
-                    code = status.token,
+                    name = "이유빈",
+                    phone = _state.value.phone,
+                    code = "status.token",
                     type = status.type
                 )
             ).onSuccess { response ->
