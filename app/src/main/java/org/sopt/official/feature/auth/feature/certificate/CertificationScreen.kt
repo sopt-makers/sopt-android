@@ -126,7 +126,6 @@ internal fun CertificationRoute(
             }
         },
         onCertificateClick = {
-            // TODO: 실제 인증코드 넣기 by leeeyubin
             viewModel.certificateCode(status)
         },
         onGoogleFormClick = onGoogleFormClick,
