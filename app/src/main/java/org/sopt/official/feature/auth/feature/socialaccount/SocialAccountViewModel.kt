@@ -28,8 +28,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.OriginalInformation
 import org.sopt.official.domain.auth.model.SignUpCode
@@ -42,12 +46,24 @@ class SocialAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
 
+    private val _state: MutableStateFlow<SocialAccountState> = MutableStateFlow(SocialAccountState())
+    val state: StateFlow<SocialAccountState> = _state.asStateFlow()
+
     private val _sideEffect = MutableSharedFlow<SocialAccountSideEffect>()
     val sideEffect: SharedFlow<SocialAccountSideEffect> = _sideEffect.asSharedFlow()
+
+    fun updateInitialState(name: String, phone: String) {
+        _state.update { currentState ->
+            currentState.copy(
+                name = name,
+                phone = phone
+            )
+        }
+    }
+
     fun connectSocialAccount(status: AuthStatus) {
         viewModelScope.launch {
             when (status) {
-                // TODO: 실제 서버통신 값 넣기 by leeeyubin
                 AuthStatus.REGISTER -> signUp()
                 AuthStatus.CHANGE -> changeAccount()
                 else -> {}
@@ -58,7 +74,7 @@ class SocialAccountViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             authRepository.signUp(
-                SignUpCode(
+                SignUpCode( // TODO: 실제 서버통신 값 넣기 by 이유빈
                     name = "홍길동",
                     phone = "010-9121-2121",
                     code = "eyadxcvc.dasd.wda",
@@ -76,7 +92,7 @@ class SocialAccountViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.changeAccount(
                 OriginalInformation(
-                    phone = "010-0000-0000",
+                    phone = _state.value.phone,
                     authPlatform = GOOGLE,
                     token = "codecodecodecodecode"
                 )
