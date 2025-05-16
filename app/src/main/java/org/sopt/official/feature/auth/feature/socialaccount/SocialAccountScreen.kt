@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,6 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
@@ -62,11 +64,20 @@ import org.sopt.official.feature.auth.model.AuthStatus
 internal fun SocialAccountRoute(
     status: AuthStatus,
     name: String,
+    phone: String,
     onGoogleLoginCLick: () -> Unit,
     viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.updateInitialState(
+            name = name,
+            phone = phone
+        )
+    }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
@@ -78,7 +89,7 @@ internal fun SocialAccountRoute(
     }
 
     SocialAccountScreen(
-        name = name,
+        name = state.name,
         onGoogleLoginCLick = {
             viewModel.connectSocialAccount(status)
         }
