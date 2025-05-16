@@ -126,7 +126,7 @@ class CertificationViewModel @Inject constructor(
                 InformationWithCode(
                     name = "이유빈",
                     phone = _state.value.phone,
-                    code = "status.token",
+                    code = _state.value.code,
                     type = status.type
                 )
             ).onSuccess { response ->
