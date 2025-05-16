@@ -133,7 +133,12 @@ class CertificationViewModel @Inject constructor(
                 if (status.type == AuthStatus.SEARCH.type) {
                     findAccount()
                 } else {
-                    _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount(response.name))
+                    _sideEffect.emit(
+                        CertificationSideEffect.NavigateToSocialAccount(
+                            name = response.name,
+                            phone = response.phone
+                        )
+                    )
                 }
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
