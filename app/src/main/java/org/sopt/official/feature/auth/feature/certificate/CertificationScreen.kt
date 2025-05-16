@@ -121,7 +121,6 @@ internal fun CertificationRoute(
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
-            // TODO: 실제 전화번호 넣기 by leeeyubin
             scope.launch {
                 viewModel.createCode(status)
             }
