@@ -41,33 +41,35 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 internal interface AuthApi {
-    @POST("/api/v1/auth/phone")
+    @POST("/api/v1/auth/phone") // 번호 인증 생성
     suspend fun createCode(
         @Body request: CreateCodeRequest,
     ): NullableBaseAuthResponse<Unit>
 
-    @POST("/api/v1/auth/verify/phone")
+    @POST("/api/v1/auth/verify/phone") // 번호 인증 검사
     suspend fun certificateCode(
         @Body request: CertificateCodeRequest,
     ): BaseAuthResponse<CertificateCodeResponse>
 
-    @POST("/api/v1/auth/login/app")
+    @POST("/api/v1/auth/login/app") // 소셜 로그인 - Mobile
     suspend fun signIn(
         @Body request: SignInRequest,
     ): BaseAuthResponse<SignInResponse>
 
-    @POST("/api/v1/auth/signup")
+    @POST("/api/v1/auth/signup") // 회원가입
     suspend fun signUp(
         @Body request: SignUpRequest,
     ): NullableBaseAuthResponse<Unit>
 
-    @PATCH("/api/v1/social/accounts")
+    @PATCH("/api/v1/social/accounts") // 소셜 계정 변경
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
     ): NullableBaseAuthResponse<Unit>
 
-    @GET("/api/v1/social/accounts/platform")
+    @GET("/api/v1/social/accounts/platform") // 없어짐
     suspend fun findAccount(
         @Query("phone") request: String
     ): BaseAuthResponse<FindAccountResponse>
+
+    // todo: 토큰 리프레시 - App by 이유빈
 }
