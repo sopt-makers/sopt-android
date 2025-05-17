@@ -30,6 +30,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -54,6 +56,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
+import org.sopt.official.feature.home.component.HomePlaygroundSection
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
@@ -62,6 +65,7 @@ import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
+import org.sopt.official.feature.home.component.feedList
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeUiState.Member
@@ -182,9 +186,12 @@ private fun HomeScreenForMember(
     tracker: Tracker,
     paddingValues: PaddingValues
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
             .padding(paddingValues)
             .padding(horizontal = 20.dp),
     ) {
@@ -247,6 +254,14 @@ private fun HomeScreenForMember(
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
             onAppServiceClick = onAppServiceClick,
+        )
+
+        Spacer(modifier = Modifier.height(height = 34.dp))
+
+        HomePlaygroundSection(
+            feedList = feedList,
+            navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
+            navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed
         )
     }
 }
