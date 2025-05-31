@@ -19,34 +19,33 @@ import androidx.compose.ui.unit.dp
 fun Modifier.dropShadow(
     shape: Shape,
     color: Color = Color.Black.copy(0.25f),
-    blur: Dp = 4.dp,
-    offsetY: Dp = 4.dp,
-    offsetX: Dp = 0.dp,
-    spread: Dp = 0.dp
+    blur: Dp = 1.dp,
+    offsetY: Dp = 1.dp,
+    offsetX: Dp = 1.dp,
+    spread: Dp = 1.dp
 ) = composed {
     val density = LocalDensity.current
-    val blurPx = remember(blur) { with(density) { blur.toPx() } }
-    val spreadPx = remember(spread) { with(density) { spread.toPx() } }
-    val offsetXPx = remember(offsetX) { with(density) { offsetX.toPx() } }
-    val offsetYPx = remember(offsetY) { with(density) { offsetY.toPx() } }
 
-    val maskFilter = remember(blurPx) {
-        if (blurPx > 0) BlurMaskFilter(blurPx, BlurMaskFilter.Blur.NORMAL) else null
-    }
-
-    val paint = remember(color, maskFilter) {
+    val paint = remember(color, blur) {
         Paint().apply {
             this.color = color
-            if (maskFilter != null) {
-                this.asFrameworkPaint().maskFilter = maskFilter
+            val blurPx = with(density) { blur.toPx() }
+            if (blurPx > 0f) {
+                this.asFrameworkPaint().maskFilter =
+                    BlurMaskFilter(blurPx, BlurMaskFilter.Blur.NORMAL)
             }
         }
     }
 
     drawBehind {
+        val spreadPx = spread.toPx()
+        val offsetXPx = offsetX.toPx()
+        val offsetYPx = offsetY.toPx()
+
         val shadowWidth = size.width + spreadPx
         val shadowHeight = size.height + spreadPx
-        if (shadowWidth <= 0 || shadowHeight <= 0) return@drawBehind
+
+        if (shadowWidth <= 0f || shadowHeight <= 0f) return@drawBehind
 
         val shadowSize = Size(shadowWidth, shadowHeight)
         val shadowOutline = shape.createOutline(shadowSize, layoutDirection, this)
