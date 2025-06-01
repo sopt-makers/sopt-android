@@ -169,6 +169,10 @@ fun MainScreen(
                                 else context.startActivity(DeepLinkType.of(url).getMainIntent(context, userStatus, url))
                             }
 
+                            override fun navigateToWebUrl(url: String) {
+                                context.startActivity(getIntent(url))
+                            }
+
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
                                 context.startActivity(
                                     when (isNewPoke) {

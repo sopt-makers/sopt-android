@@ -24,18 +24,19 @@
  */
 package org.sopt.official.data.home.repository
 
+import javax.inject.Inject
 import org.sopt.official.data.home.mapper.toDomain
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi
 import org.sopt.official.data.home.remote.api.UserApi
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.result.Result
 import org.sopt.official.domain.home.result.runCatching
-import javax.inject.Inject
 
 internal class DefaultHomeRepository @Inject constructor(
     private val userApi: UserApi,
@@ -54,4 +55,7 @@ internal class DefaultHomeRepository @Inject constructor(
 
     override suspend fun getHomeAppService(): Result<List<AppService>> =
         runCatching { homeApi.getHomeAppService().map { it.toDomain() } }
+
+    override suspend fun getHomeReviewForm(): Result<ReviewForm> =
+        runCatching { homeApi.getReviewForm().toDomain() }
 }

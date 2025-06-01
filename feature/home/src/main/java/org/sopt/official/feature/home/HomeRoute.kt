@@ -214,7 +214,7 @@ private fun HomeScreenForMember(
     Box {
         val scrollState = rememberScrollState()
         val isScrolledBeyondThreshold by remember {
-            derivedStateOf { scrollState.value > 330 || scrollState.isScrollInProgress }
+            derivedStateOf { scrollState.value > 130 || scrollState.isScrollInProgress }
         }
         val shadowModifier = Modifier.dropShadow(
             shape = CircleShape,
@@ -293,14 +293,14 @@ private fun HomeScreenForMember(
                 onAppServiceClick = onAppServiceClick,
             )
 
-            Spacer(modifier = Modifier.height(height = 47.dp))
+            Spacer(modifier = Modifier.height(height = 56.dp))
 
             HomeSurveySection(
                 surveyTitle = surveyData.title,
                 surveyDescription = surveyData.description,
                 buttonText = surveyData.buttonText,
                 onClick = { 
-                    homeAppServicesNavigation.navigateToDeepLink(surveyData.surveyLink)
+                    homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
                     trackClickEvent(tracker, "at36_survey_button") 
                 }
             )

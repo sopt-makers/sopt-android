@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserStatus
 import org.sopt.official.domain.home.model.UserStatus.ACTIVE
@@ -53,6 +54,7 @@ import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
+import org.sopt.official.feature.home.mapper.toModel
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingButtonData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
@@ -93,7 +95,7 @@ internal class NewHomeViewModel @Inject constructor(
             val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
             val appServiceDeferred = async { homeRepository.getHomeAppService() }
-            val surveyDataDeferred = async { fetchSurveyData() }
+            val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
             val toastDataDeferred = async { fetchToastData() }
             val floatingButtonDataDeferred = async { fetchFloatingButtonData() }
 
@@ -102,7 +104,7 @@ internal class NewHomeViewModel @Inject constructor(
                 userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
             val appService = appServiceDeferred.await().successOr(emptyList())
-            val surveyData = surveyDataDeferred.await()
+            val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
             val toastData = toastDataDeferred.await()
             val floatingButtonData = floatingButtonDataDeferred.await()
 
@@ -122,7 +124,7 @@ internal class NewHomeViewModel @Inject constructor(
                     userDescription = userDescription,
                     recentCalendar = recentCalendar,
                     appServices = appService,
-                    surveyData = surveyData,
+                    surveyData = surveyData.toModel(),
                     toastData = toastData,
                     floatingButtonData = floatingButtonData
                 )

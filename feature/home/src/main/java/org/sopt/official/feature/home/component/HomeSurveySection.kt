@@ -53,7 +53,7 @@ fun HomeSurveySection(
 
         Text(
             text = surveyDescription,
-            style = SoptTheme.typography.heading20B,
+            style = SoptTheme.typography.body14M,
             color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
             maxLines = 1,

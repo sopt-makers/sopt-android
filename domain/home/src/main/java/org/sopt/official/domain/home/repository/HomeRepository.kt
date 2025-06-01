@@ -26,6 +26,7 @@ package org.sopt.official.domain.home.repository
 
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
 import org.sopt.official.domain.home.result.Result
@@ -39,4 +40,6 @@ interface HomeRepository {
     suspend fun getHomeDescription(): Result<UserDescription>
 
     suspend fun getHomeAppService(): Result<List<AppService>>
+
+    suspend fun getHomeReviewForm(): Result<ReviewForm>
 }
