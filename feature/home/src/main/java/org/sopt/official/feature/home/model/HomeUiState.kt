@@ -41,8 +41,7 @@ internal sealed interface HomeUiState {
     val isError: Boolean
     val homeServices: ImmutableList<HomeAppService>
     val surveyData: HomeSurveyData
-    val toastData: HomeToastData
-    val floatingButtonData: HomeFloatingButtonData
+    val floatingToastData: HomeFloatingToastData
 
     @Stable
     sealed interface Member : HomeUiState {
@@ -57,8 +56,7 @@ internal sealed interface HomeUiState {
         override val isError: Boolean,
         override val homeServices: ImmutableList<HomeAppService> = persistentListOf(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
-        override val toastData: HomeToastData = HomeToastData(),
-        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
+        override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
     ) : HomeUiState
 
     @Immutable
@@ -70,8 +68,7 @@ internal sealed interface HomeUiState {
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
-        override val toastData: HomeToastData = HomeToastData(),
-        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
+        override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
     ) : Member
 
     @Immutable
@@ -83,8 +80,7 @@ internal sealed interface HomeUiState {
         override val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(),
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
-        override val toastData: HomeToastData = HomeToastData(),
-        override val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData(),
+        override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
     ) : Member
 }
 
@@ -97,18 +93,14 @@ internal data class HomeSurveyData(
 )
 
 @Immutable
-internal data class HomeToastData(
-    val longTitle: String = "점수 2배! 깜짝 미션 오픈",
-    val missionDescription: String = "지금 바로 미션에 도전해보세요",
+internal data class HomeFloatingToastData(
+    val imageUrl: String = "",
+    val title: String = "점수 2배! 깜짝 미션 오픈",
+    val toastDescription: String = "지금 바로 미션에 도전해보세요",
+    val buttonDescription: String = "솝탬프",
     val buttonText: String = "미션 보기",
-    val missionLink: String = "",
-)
-
-@Immutable
-internal data class HomeFloatingButtonData(
-    val shortTitle: String = "솝탬프",
-    val buttonText: String = "미션 보기",
-    val missionLink: String = "",
+    val linkUrl: String = "",
+    val active: Boolean = false
 )
 
 @Immutable

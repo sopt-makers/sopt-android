@@ -8,28 +8,27 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.MdsGray950
 import org.sopt.official.designsystem.Orange400
+import org.sopt.official.designsystem.Orange500
 import org.sopt.official.designsystem.Orange700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.home.R
+import org.sopt.official.designsystem.component.UrlImage
 
 @Composable
 fun HomeToastButton(
+    imageUrl: String,
     longTitle: String,
     missionDescription: String,
     buttonText: String,
@@ -44,16 +43,20 @@ fun HomeToastButton(
             .padding(13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_42),
-            tint = Color.Unspecified,
-            contentDescription = null,
-            modifier = Modifier.padding(end = 7.dp)
+        UrlImage(
+            url = imageUrl,
+            modifier = Modifier
+                .size(42.dp)
+                .background(color = Orange500, shape = CircleShape)
+                .padding(6.dp)
         )
 
         Column(
             verticalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.padding(end = 4.dp)
+            modifier = Modifier.padding(
+                start = 7.dp,
+                end = 4.dp
+            )
         ) {
             Text(
                 text = longTitle,

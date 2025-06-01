@@ -81,10 +81,9 @@ import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
-import org.sopt.official.feature.home.model.HomeFloatingButtonData
+import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
-import org.sopt.official.feature.home.model.HomeToastData
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
@@ -185,8 +184,7 @@ internal fun HomeRoute(
                 tracker = tracker,
                 paddingValues = paddingValues,
                 surveyData = state.surveyData,
-                toastData = state.toastData,
-                floatingButtonData = state.floatingButtonData
+                toastData = state.floatingToastData
             )
         }
     }
@@ -208,8 +206,7 @@ private fun HomeScreenForMember(
     tracker: Tracker,
     paddingValues: PaddingValues,
     surveyData: HomeSurveyData,
-    toastData: HomeToastData,
-    floatingButtonData: HomeFloatingButtonData
+    toastData: HomeFloatingToastData
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -299,50 +296,54 @@ private fun HomeScreenForMember(
                 surveyTitle = surveyData.title,
                 surveyDescription = surveyData.description,
                 buttonText = surveyData.buttonText,
-                onClick = { 
+                onClick = {
                     homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
-                    trackClickEvent(tracker, "at36_survey_button") 
+                    trackClickEvent(tracker, "at36_survey_button")
                 }
             )
 
             Spacer(modifier = Modifier.height(height = 600.dp)) // TODO: 스크롤 확인용입니다. 테스트 완료 후 삭제
         }
 
-        AnimatedHomeButton(
-            visible = !isScrolledBeyondThreshold,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 40.dp)
-        ) {
-            HomeToastButton(
-                longTitle = toastData.longTitle,
-                missionDescription = toastData.missionDescription,
-                buttonText = toastData.buttonText,
-                onClick = { 
-                    homeAppServicesNavigation.navigateToDeepLink(toastData.missionLink)
-                    trackClickEvent(tracker, "at36_toast_button") 
-                },
-                modifier = shadowModifier
-            )
-        }
+        if (toastData.active) {
+            AnimatedHomeButton(
+                visible = !isScrolledBeyondThreshold,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                HomeToastButton(
+                    imageUrl = toastData.imageUrl,
+                    longTitle = toastData.title,
+                    missionDescription = toastData.toastDescription,
+                    buttonText = toastData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                        trackClickEvent(tracker, "at36_toast_button")
+                    },
+                    modifier = shadowModifier
+                )
+            }
 
-        AnimatedHomeButton(
-            visible = isScrolledBeyondThreshold,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 40.dp)
-        ) {
-            HomeFloatingButton(
-                shortTitle = floatingButtonData.shortTitle,
-                buttonText = floatingButtonData.buttonText,
-                onClick = { 
-                    homeAppServicesNavigation.navigateToDeepLink(floatingButtonData.missionLink)
-                    trackClickEvent(tracker, "at36_floating_button")
-                },
-                modifier = shadowModifier
-            )
+            AnimatedHomeButton(
+                visible = isScrolledBeyondThreshold,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                HomeFloatingButton(
+                    imageUrl = toastData.imageUrl,
+                    shortTitle = toastData.buttonDescription,
+                    buttonText = toastData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                        trackClickEvent(tracker, "at36_floating_button")
+                    },
+                    modifier = shadowModifier
+                )
+            }
         }
     }
 }

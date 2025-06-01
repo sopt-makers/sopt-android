@@ -14,18 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Orange400
+import org.sopt.official.designsystem.Orange500
 import org.sopt.official.designsystem.Orange800
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.R
 
 @Composable
 fun HomeFloatingButton(
+    imageUrl: String,
     shortTitle: String,
     buttonText: String,
     onClick: () -> Unit,
@@ -40,12 +42,14 @@ fun HomeFloatingButton(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_42),
-            tint = Color.Unspecified,
-            contentDescription = null,
-            modifier = Modifier.size(35.dp)
+        UrlImage(
+            url = imageUrl,
+            modifier = Modifier
+                .size(35.dp)
+                .background(color = Orange500, shape = CircleShape)
+                .padding(5.dp)
         )
+
         Column {
             Text(
                 text = shortTitle,
@@ -70,7 +74,6 @@ fun HomeFloatingButton(
                     modifier = Modifier.size(16.dp)
                 )
             }
-
         }
     }
 }

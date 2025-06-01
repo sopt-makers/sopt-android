@@ -31,7 +31,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -41,6 +40,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
@@ -56,10 +56,9 @@ import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.mapper.toModel
 import org.sopt.official.feature.home.model.HomeAppService
-import org.sopt.official.feature.home.model.HomeFloatingButtonData
+import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
-import org.sopt.official.feature.home.model.HomeToastData
 import org.sopt.official.feature.home.model.HomeUiState
 import org.sopt.official.feature.home.model.HomeUiState.ActiveMember
 import org.sopt.official.feature.home.model.HomeUiState.InactiveMember
@@ -96,8 +95,7 @@ internal class NewHomeViewModel @Inject constructor(
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
             val appServiceDeferred = async { homeRepository.getHomeAppService() }
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
-            val toastDataDeferred = async { fetchToastData() }
-            val floatingButtonDataDeferred = async { fetchFloatingButtonData() }
+            val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
 
             val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
             val userDescription =
@@ -105,8 +103,7 @@ internal class NewHomeViewModel @Inject constructor(
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
             val appService = appServiceDeferred.await().successOr(emptyList())
             val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
-            val toastData = toastDataDeferred.await()
-            val floatingButtonData = floatingButtonDataDeferred.await()
+            val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
 
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
@@ -125,8 +122,7 @@ internal class NewHomeViewModel @Inject constructor(
                     recentCalendar = recentCalendar,
                     appServices = appService,
                     surveyData = surveyData.toModel(),
-                    toastData = toastData,
-                    floatingButtonData = floatingButtonData
+                    toastData = toastData.toModel()
                 )
             }
         }
@@ -184,35 +180,6 @@ internal class NewHomeViewModel @Inject constructor(
             }
         }
     }
-
-    private suspend fun fetchSurveyData(): HomeSurveyData {
-        delay(100)
-        return HomeSurveyData(
-            title = "솝커톤 어땠나요?",
-            description = "여러분의 솝커톤 이야기를 들려주세요!",
-            buttonText = "지금 솝커톤 후기 쓰러가기",
-            surveyLink = "https://playground.sopt.org/blog"
-        )
-    }
-
-    private suspend fun fetchToastData(): HomeToastData {
-        delay(50)
-        return HomeToastData(
-            longTitle = "점수 2배! 깜짝 미션 오픈",
-            missionDescription = "지금 바로 미션에 도전해보세요",
-            buttonText = "미션 보기",
-            missionLink = "home/soptamp"
-        )
-    }
-
-    private suspend fun fetchFloatingButtonData(): HomeFloatingButtonData {
-        delay(50)
-        return HomeFloatingButtonData(
-            shortTitle = "솝탬프",
-            buttonText = "미션 보기",
-            missionLink = "home/soptamp"
-        )
-    }
 }
 
 private data class HomeViewModelState(
@@ -224,8 +191,7 @@ private data class HomeViewModelState(
     val recentCalendar: RecentCalendar = RecentCalendar(),
     val appServices: List<AppService> = emptyList(),
     val surveyData: HomeSurveyData = HomeSurveyData(),
-    val toastData: HomeToastData = HomeToastData(),
-    val floatingButtonData: HomeFloatingButtonData = HomeFloatingButtonData()
+    val toastData: HomeFloatingToastData = HomeFloatingToastData()
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
@@ -234,8 +200,7 @@ private data class HomeViewModelState(
             isError = isError,
             homeServices = defaultAppServices,
             surveyData = surveyData,
-            toastData = toastData,
-            floatingButtonData = floatingButtonData
+            floatingToastData = toastData
         )
 
         ACTIVE -> ActiveMember(
@@ -262,8 +227,7 @@ private data class HomeViewModelState(
                 )
             }.toImmutableList(),
             surveyData = surveyData,
-            toastData = toastData,
-            floatingButtonData = floatingButtonData
+            floatingToastData = toastData
         )
 
         INACTIVE -> InactiveMember(
@@ -290,8 +254,7 @@ private data class HomeViewModelState(
                 )
             }.toImmutableList(),
             surveyData = surveyData,
-            toastData = toastData,
-            floatingButtonData = floatingButtonData
+            floatingToastData = toastData
         )
     }
 }
