@@ -45,6 +45,4 @@ internal object PlaygroundWebLink {
     const val MAKE_MOIM = OFFICIAL_HOMEPAGE + "group/make"
     const val WRITE_FEED = OFFICIAL_HOMEPAGE + "group?modal=create-feed"
     const val UPLOAD_REVIEW = OFFICIAL_HOMEPAGE + "blog"
-
-    const val POPULAR_FEED = OFFICIAL_HOMEPAGE + "?feed="
 }
