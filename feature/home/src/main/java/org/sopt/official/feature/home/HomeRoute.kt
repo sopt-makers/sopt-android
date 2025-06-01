@@ -24,18 +24,31 @@
  */
 package org.sopt.official.feature.home
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,20 +63,28 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
+import org.sopt.official.common.util.ui.dropShadow
+import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
+import org.sopt.official.feature.home.component.HomeFloatingButton
+import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
 import org.sopt.official.feature.home.component.HomeSoptScheduleDashboard
+import org.sopt.official.feature.home.component.HomeSurveySection
+import org.sopt.official.feature.home.component.HomeToastButton
 import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
+import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
+import org.sopt.official.feature.home.model.HomeSurveyData
 import org.sopt.official.feature.home.model.HomeUiState.Member
 import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
@@ -121,6 +142,7 @@ internal fun HomeRoute(
             HomeScreenForMember(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
+                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 onAppServiceClick = { url, _ ->
                     val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
 
@@ -161,7 +183,9 @@ internal fun HomeRoute(
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
                 homeAppServices = uiState.homeServices,
                 tracker = tracker,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                surveyData = state.surveyData,
+                toastData = state.floatingToastData
             )
         }
     }
@@ -174,80 +198,160 @@ internal fun HomeRoute(
 private fun HomeScreenForMember(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeShortcutNavigation: HomeShortcutNavigation,
+    homeAppServicesNavigation: HomeAppServicesNavigation,
     onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
     homeAppServices: ImmutableList<HomeAppService>,
     tracker: Tracker,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    surveyData: HomeSurveyData,
+    toastData: HomeFloatingToastData
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-            .padding(horizontal = 20.dp),
-    ) {
-        Spacer(modifier = Modifier.height(height = 8.dp))
-
-        HomeTopBarForMember(
-            hasNotification = hasNotification,
-            onNotificationClick = {
-                homeDashboardNavigation.navigateToNotification()
-                trackClickEvent(tracker, "at36_alarm")
-            },
-            onSettingClick = homeDashboardNavigation::navigateToSetting,
+    Box {
+        val scrollState = rememberScrollState()
+        val isScrolledBeyondThreshold by remember {
+            derivedStateOf { scrollState.value > 130 || scrollState.isScrollInProgress }
+        }
+        val shadowModifier = Modifier.dropShadow(
+            shape = CircleShape,
+            color = GrayAlpha700,
+            blur = 40.dp,
+            offsetX = 0.dp,
+            offsetY = 4.dp,
+            spread = 0.dp
         )
 
-        Spacer(modifier = Modifier.height(height = 16.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState),
+        ) {
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
-        HomeUserSoptLogDashboardForMember(
-            onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
-            homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
-        )
+            HomeTopBarForMember(
+                hasNotification = hasNotification,
+                onNotificationClick = {
+                    homeDashboardNavigation.navigateToNotification()
+                    trackClickEvent(tracker, "at36_alarm")
+                },
+                onSettingClick = homeDashboardNavigation::navigateToSetting,
+            )
 
-        Spacer(modifier = Modifier.height(height = 12.dp))
+            Spacer(modifier = Modifier.height(height = 16.dp))
 
-        HomeSoptScheduleDashboard(
-            homeSoptScheduleModel = homeSoptScheduleModel,
-            isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
-            onScheduleClick = {
-                homeDashboardNavigation.navigateToSchedule()
-                trackClickEvent(tracker, "at36_all_calendar")
-            },
-            onAttendanceButtonClick = {
-                homeDashboardNavigation.navigateToAttendance()
-                trackClickEvent(tracker, "at36_attendance")
+            HomeUserSoptLogDashboardForMember(
+                onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+            )
+
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
+            HomeSoptScheduleDashboard(
+                homeSoptScheduleModel = homeSoptScheduleModel,
+                isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
+                onScheduleClick = {
+                    homeDashboardNavigation.navigateToSchedule()
+                    trackClickEvent(tracker, "at36_all_calendar")
+                },
+                onAttendanceButtonClick = {
+                    homeDashboardNavigation.navigateToAttendance()
+                    trackClickEvent(tracker, "at36_attendance")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
+            HomeShortcutButtonsForMember(
+                onPlaygroundClick = {
+                    homeShortcutNavigation.navigateToPlayground()
+                    trackClickEvent(tracker, "at36_playground_community")
+                },
+                onStudyClick = {
+                    homeShortcutNavigation.navigateToPlaygroundGroup()
+                    trackClickEvent(tracker, "at36_moim")
+                },
+                onMemberClick = {
+                    homeShortcutNavigation.navigateToPlaygroundMember()
+                    trackClickEvent(tracker, "at36_member")
+                },
+                onProjectClick = {
+                    homeShortcutNavigation.navigateToPlaygroundProject()
+                    trackClickEvent(tracker, "at36_project")
+                },
+            )
+
+            Spacer(modifier = Modifier.height(height = 40.dp))
+
+            HomeEnjoySoptServicesBlock(
+                appServices = homeAppServices,
+                onAppServiceClick = onAppServiceClick,
+            )
+
+            Spacer(modifier = Modifier.height(height = 56.dp))
+
+            HomeSurveySection(
+                surveyTitle = surveyData.title,
+                surveyDescription = surveyData.description,
+                buttonText = surveyData.buttonText,
+                onClick = {
+                    homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
+                    trackClickEvent(tracker, "at36_survey_button")
+                }
+            )
+
+            Spacer(modifier = Modifier.height(height = 72.dp))
+
+            HomeOfficialChannelButton(
+                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl
+            )
+
+            Spacer(modifier = Modifier.height(height = 58.dp))
+        }
+
+        if (toastData.active) {
+            AnimatedHomeButton(
+                visible = !isScrolledBeyondThreshold,
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                HomeToastButton(
+                    imageUrl = toastData.imageUrl,
+                    longTitle = toastData.title,
+                    missionDescription = toastData.toastDescription,
+                    buttonText = toastData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                        trackClickEvent(tracker, "at36_toast_button")
+                    },
+                    modifier = shadowModifier
+                )
             }
-        )
 
-        Spacer(modifier = Modifier.height(height = 12.dp))
-
-        HomeShortcutButtonsForMember(
-            onPlaygroundClick = {
-                homeShortcutNavigation.navigateToPlayground()
-                trackClickEvent(tracker, "at36_playground_community")
-            },
-            onStudyClick = {
-                homeShortcutNavigation.navigateToPlaygroundGroup()
-                trackClickEvent(tracker, "at36_moim")
-            },
-            onMemberClick = {
-                homeShortcutNavigation.navigateToPlaygroundMember()
-                trackClickEvent(tracker, "at36_member")
-            },
-            onProjectClick = {
-                homeShortcutNavigation.navigateToPlaygroundProject()
-                trackClickEvent(tracker, "at36_project")
-            },
-        )
-
-        Spacer(modifier = Modifier.height(height = 40.dp))
-
-        HomeEnjoySoptServicesBlock(
-            appServices = homeAppServices,
-            onAppServiceClick = onAppServiceClick,
-        )
+            AnimatedHomeButton(
+                visible = isScrolledBeyondThreshold,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 40.dp)
+            ) {
+                HomeFloatingButton(
+                    imageUrl = toastData.imageUrl,
+                    shortTitle = toastData.buttonDescription,
+                    buttonText = toastData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                        trackClickEvent(tracker, "at36_floating_button")
+                    },
+                    modifier = shadowModifier
+                )
+            }
+        }
     }
 }
 
@@ -287,5 +391,30 @@ private fun HomeScreenForVisitor(
             appServices = homeAppServices,
             onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
         )
+    }
+}
+
+@Composable
+private fun AnimatedHomeButton(
+    visible: Boolean,
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    AnimatedVisibility(
+        visible = visible,
+        enter = slideInVertically(
+            initialOffsetY = { it },
+            animationSpec = spring(
+                dampingRatio = Spring.DampingRatioMediumBouncy,
+                stiffness = Spring.StiffnessMedium
+            )
+        ),
+        exit = slideOutVertically(
+            targetOffsetY = { it * 3 },
+            animationSpec = tween(durationMillis = 100)
+        ),
+        modifier = modifier
+    ) {
+        content()
     }
 }

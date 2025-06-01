@@ -53,6 +53,7 @@ sealed interface HomeNavigation {
     @Stable
     interface HomeAppServicesNavigation : HomeNavigation {
         fun navigateToDeepLink(url: String)
+        fun navigateToWebUrl(url: String)
         fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int)
     }
 }

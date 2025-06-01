@@ -40,7 +40,9 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserStatus
 import org.sopt.official.domain.home.model.UserStatus.ACTIVE
@@ -52,8 +54,11 @@ import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
+import org.sopt.official.feature.home.mapper.toModel
 import org.sopt.official.feature.home.model.HomeAppService
+import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
+import org.sopt.official.feature.home.model.HomeSurveyData
 import org.sopt.official.feature.home.model.HomeUiState
 import org.sopt.official.feature.home.model.HomeUiState.ActiveMember
 import org.sopt.official.feature.home.model.HomeUiState.InactiveMember
@@ -89,12 +94,16 @@ internal class NewHomeViewModel @Inject constructor(
             val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
             val appServiceDeferred = async { homeRepository.getHomeAppService() }
+            val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
+            val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
 
             val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
             val userDescription =
                 userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
             val appService = appServiceDeferred.await().successOr(emptyList())
+            val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
+            val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
 
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
@@ -112,6 +121,8 @@ internal class NewHomeViewModel @Inject constructor(
                     userDescription = userDescription,
                     recentCalendar = recentCalendar,
                     appServices = appService,
+                    surveyData = surveyData.toModel(),
+                    toastData = toastData.toModel()
                 )
             }
         }
@@ -179,6 +190,8 @@ private data class HomeViewModelState(
     val userDescription: UserInfo.UserDescription = UserInfo.UserDescription(),
     val recentCalendar: RecentCalendar = RecentCalendar(),
     val appServices: List<AppService> = emptyList(),
+    val surveyData: HomeSurveyData = HomeSurveyData(),
+    val toastData: HomeFloatingToastData = HomeFloatingToastData()
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
@@ -186,6 +199,8 @@ private data class HomeViewModelState(
             isLoading = isLoading,
             isError = isError,
             homeServices = defaultAppServices,
+            surveyData = surveyData,
+            floatingToastData = toastData
         )
 
         ACTIVE -> ActiveMember(
@@ -210,7 +225,9 @@ private data class HomeViewModelState(
                     iconUrl = it.iconUrl,
                     deepLink = it.deepLink,
                 )
-            }.toImmutableList()
+            }.toImmutableList(),
+            surveyData = surveyData,
+            floatingToastData = toastData
         )
 
         INACTIVE -> InactiveMember(
@@ -235,7 +252,9 @@ private data class HomeViewModelState(
                     iconUrl = it.iconUrl,
                     deepLink = it.deepLink,
                 )
-            }.toImmutableList()
+            }.toImmutableList(),
+            surveyData = surveyData,
+            floatingToastData = toastData
         )
     }
 }
