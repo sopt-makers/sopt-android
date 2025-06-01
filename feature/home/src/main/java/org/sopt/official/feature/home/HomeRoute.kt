@@ -70,6 +70,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
+import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
@@ -302,7 +303,13 @@ private fun HomeScreenForMember(
                 }
             )
 
-            Spacer(modifier = Modifier.height(height = 600.dp)) // TODO: 스크롤 확인용입니다. 테스트 완료 후 삭제
+            Spacer(modifier = Modifier.height(height = 72.dp))
+
+            HomeOfficialChannelButton(
+                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl
+            )
+
+            Spacer(modifier = Modifier.height(height = 58.dp))
         }
 
         if (toastData.active) {
