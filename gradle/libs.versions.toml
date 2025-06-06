@@ -62,7 +62,7 @@ rin = "0.3.0"
 mozilla-component-utils = "138.0.4"
 
 google-services = "4.4.2"
-crashlytics = "3.0.3"
+crashlytics = "3.0.4"
 firebase = "33.14.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
 app-distribution = "5.1.1"
