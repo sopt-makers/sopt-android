@@ -59,6 +59,7 @@ import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -74,11 +75,16 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (dataStore.accessToken.isNotEmpty()) {
-            startActivity(
-                MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-            )
+        try {
+            if (dataStore.accessToken.isNotEmpty()) {
+                startActivity(
+                    MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                )
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
+
         setContentView(binding.root)
         initNotificationChannel()
 
