@@ -36,7 +36,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.core.content.getSystemService
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
@@ -55,8 +54,8 @@ import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -71,24 +70,20 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            if (dataStore.accessToken.isNotEmpty()) {
-                startActivity(
-                    MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-                )
-            }
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
-
-        setContentView(binding.root)
-        initNotificationChannel()
+        setContent {
+            SoptTheme {
+                val context = LocalContext.current
+                val lifecycleOwner = LocalLifecycleOwner.current
 
                 LaunchedEffect(true) {
-                    if (dataStore.accessToken.isNotEmpty()) {
-                        startActivity(
-                            MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-                        )
+                    try {
+                        if (dataStore.accessToken.isNotEmpty()) {
+                            startActivity(
+                                MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                            )
+                        }
+                    } catch (e: Exception) {
+                        Timber.e(e)
                     }
                 }
 
@@ -102,7 +97,7 @@ class AuthActivity : AppCompatActivity() {
                         enableLights(false)
                         enableVibration(false)
                         lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                        getSystemService<NotificationManager>()?.createNotificationChannel(this)
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
                     }
                 }
 
