@@ -66,7 +66,7 @@ internal interface AuthApi {
         @Body request: ChangeAccountRequest
     ): NullableBaseAuthResponse<Unit>
 
-    @GET("/api/v1/social/accounts/platform") // 없어짐
+    @GET("/api/v1/social/accounts/platform") // 소셜 계정 찾기
     suspend fun findAccount(
         @Query("name") name: String,
         @Query("phone") phone: String
