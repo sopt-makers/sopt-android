@@ -27,7 +27,6 @@ package org.sopt.official.data.auth.mapper
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
 import org.sopt.official.domain.auth.model.User
-import org.sopt.official.domain.auth.model.VerificationResult
 
 fun User.toCertificateCodeRequest(): CertificateCodeRequest =
     CertificateCodeRequest(
@@ -36,8 +35,8 @@ fun User.toCertificateCodeRequest(): CertificateCodeRequest =
         type = type,
     )
 
-fun CertificateCodeResponse.toDomain(): VerificationResult =
-    VerificationResult(
+fun CertificateCodeResponse.toUserDomain() : User =
+    User (
         name = name,
-        phone = phone
+        phone = phone,
     )
