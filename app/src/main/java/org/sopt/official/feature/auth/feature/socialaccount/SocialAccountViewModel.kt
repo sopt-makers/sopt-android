@@ -35,8 +35,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.auth.model.OriginalInformation
+import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.SignUpCode
+import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import javax.inject.Inject
@@ -65,7 +66,7 @@ class SocialAccountViewModel @Inject constructor(
         viewModelScope.launch {
             when (status) {
                 AuthStatus.REGISTER -> signUp()
-                AuthStatus.CHANGE -> changeAccount()
+                AuthStatus.CHANGE_SOCIAL_PLATFORM -> changeAccount()
                 else -> {}
             }
         }
@@ -91,8 +92,10 @@ class SocialAccountViewModel @Inject constructor(
     private fun changeAccount() {
         viewModelScope.launch {
             authRepository.changeAccount(
-                OriginalInformation(
+                userRequest = User(
                     phone = _state.value.phone,
+                ),
+                authRequest = Auth(
                     authPlatform = GOOGLE,
                     token = "codecodecodecodecode"
                 )
