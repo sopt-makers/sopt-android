@@ -24,18 +24,16 @@
  */
 package org.sopt.official.data.auth.repository
 
+import org.sopt.official.data.auth.mapper.toAuthDomain
 import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
 import org.sopt.official.data.auth.mapper.toChangeAccountRequest
 import org.sopt.official.data.auth.mapper.toCreateCodeRequest
-import org.sopt.official.data.auth.mapper.toDomain
 import org.sopt.official.data.auth.mapper.toSignInRequest
 import org.sopt.official.data.auth.mapper.toSignUpRequest
+import org.sopt.official.data.auth.mapper.toUserDomain
 import org.sopt.official.data.auth.remote.api.AuthApi
-import org.sopt.official.domain.auth.model.AccountResult
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.Token
 import org.sopt.official.domain.auth.model.User
-import org.sopt.official.domain.auth.model.VerificationResult
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -46,12 +44,12 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.createCode(request.toCreateCodeRequest())
     }
 
-    override suspend fun certificateCode(request: User): Result<VerificationResult> = runCatching {
-        authApi.certificateCode(request.toCertificateCodeRequest()).data.toDomain()
+    override suspend fun certificateCode(request: User): Result<User> = runCatching {
+        authApi.certificateCode(request.toCertificateCodeRequest()).data.toUserDomain()
     }
 
-    override suspend fun signIn(request: Auth): Result<Token> = runCatching {
-        authApi.signIn(request.toSignInRequest()).data.toDomain()
+    override suspend fun signIn(request: Auth): Result<Auth> = runCatching {
+        authApi.signIn(request.toSignInRequest()).data.toAuthDomain()
     }
 
     override suspend fun signUp(
@@ -81,10 +79,10 @@ internal class DefaultAuthRepository @Inject constructor(
     override suspend fun findAccount(
         name: String,
         phone: String,
-    ): Result<AccountResult> = runCatching {
+    ): Result<Auth> = runCatching {
         authApi.findAccount(
             name = name,
             phone = phone
-        ).data.toDomain()
+        ).data.toAuthDomain()
     }
 }
