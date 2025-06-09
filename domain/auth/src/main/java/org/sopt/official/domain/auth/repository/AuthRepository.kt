@@ -26,8 +26,6 @@ package org.sopt.official.domain.auth.repository
 
 import org.sopt.official.domain.auth.model.AccountResult
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.Token
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.model.VerificationResult
@@ -38,9 +36,12 @@ interface AuthRepository {
 
     suspend fun certificateCode(request: User): Result<VerificationResult>
 
-    suspend fun signIn(request: SignInCode): Result<Token>
+    suspend fun signIn(request: Auth): Result<Token>
 
-    suspend fun signUp(request: SignUpCode): Result<Unit>
+    suspend fun signUp(
+        userRequest: User,
+        authRequest: Auth
+    ): Result<Unit>
 
     suspend fun changeAccount(
         userRequest: User,

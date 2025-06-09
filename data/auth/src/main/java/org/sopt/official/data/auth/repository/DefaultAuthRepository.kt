@@ -28,12 +28,11 @@ import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
 import org.sopt.official.data.auth.mapper.toChangeAccountRequest
 import org.sopt.official.data.auth.mapper.toCreateCodeRequest
 import org.sopt.official.data.auth.mapper.toDomain
-import org.sopt.official.data.auth.mapper.toRequest
+import org.sopt.official.data.auth.mapper.toSignInRequest
+import org.sopt.official.data.auth.mapper.toSignUpRequest
 import org.sopt.official.data.auth.remote.api.AuthApi
 import org.sopt.official.domain.auth.model.AccountResult
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.Token
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.model.VerificationResult
@@ -51,12 +50,20 @@ internal class DefaultAuthRepository @Inject constructor(
         authApi.certificateCode(request.toCertificateCodeRequest()).data.toDomain()
     }
 
-    override suspend fun signIn(request: SignInCode): Result<Token> = runCatching {
-        authApi.signIn(request.toRequest()).data.toDomain()
+    override suspend fun signIn(request: Auth): Result<Token> = runCatching {
+        authApi.signIn(request.toSignInRequest()).data.toDomain()
     }
 
-    override suspend fun signUp(request: SignUpCode): Result<Unit> = runCatching {
-        authApi.signUp(request.toRequest())
+    override suspend fun signUp(
+        userRequest: User,
+        authRequest: Auth
+    ): Result<Unit> = runCatching {
+        authApi.signUp(
+            toSignUpRequest(
+                user = userRequest,
+                auth = authRequest
+            )
+        )
     }
 
     override suspend fun changeAccount(
