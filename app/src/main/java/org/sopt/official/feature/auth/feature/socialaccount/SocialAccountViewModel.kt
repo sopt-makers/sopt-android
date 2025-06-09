@@ -36,7 +36,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.SignUpCode
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
@@ -74,12 +73,14 @@ class SocialAccountViewModel @Inject constructor(
 
     private fun signUp() {
         viewModelScope.launch {
-            authRepository.signUp(
-                SignUpCode( // TODO: 실제 서버통신 값 넣기 by 이유빈
+            authRepository.signUp( // TODO: 실제 서버통신 값 넣기 by 이유빈
+                userRequest = User(
                     name = "홍길동",
                     phone = "010-9121-2121",
                     code = "eyadxcvc.dasd.wda",
-                    authPlatform = GOOGLE
+                ),
+                authRequest = Auth(
+                    authPlatform = GOOGLE,
                 )
             ).onSuccess {
                 _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))

@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.auth.model.SignInCode
+import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -47,9 +47,9 @@ class AuthMainViewModel @Inject constructor(
         // TODO: 실제 token 넣기 by leeeyubin
         viewModelScope.launch {
             authRepository.signIn(
-                SignInCode(
+                Auth(
                     token = "codecodecodecodecode",
-                    authPlatform = GOOGLE
+                    authPlatform = GOOGLE,
                 )
             ).onSuccess {
                 //TODO: 홈 화면으로 이동
