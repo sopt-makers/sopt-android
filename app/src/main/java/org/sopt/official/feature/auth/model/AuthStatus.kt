@@ -28,9 +28,9 @@ enum class AuthStatus(val type: String) {
     // 회원가입
     REGISTER(type = "REGISTER"),
 
-    // 소셜계정 변경
-    CHANGE(type = "CHANGE"),
+    // 가입한 소셜 플랫폼 조회
+    SEARCH_SOCIAL_PLATFORM(type = "SEARCH_SOCIAL_PLATFORM"),
 
-    // 소셜계정 찾기
-    SEARCH(type = "SEARCH")
+    // 소셜 플랫폼 계정 변경
+    CHANGE_SOCIAL_PLATFORM(type = "CHANGE_SOCIAL_PLATFORM"),
 }

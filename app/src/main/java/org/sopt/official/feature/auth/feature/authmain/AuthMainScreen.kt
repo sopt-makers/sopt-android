@@ -103,11 +103,11 @@ internal fun AuthMainRoute(
                 loginDialogVisibility = false
             },
             onFindAccountClick = {
-                navigateToCertification(AuthStatus.SEARCH)
+                navigateToCertification(AuthStatus.SEARCH_SOCIAL_PLATFORM)
                 loginDialogVisibility = false
             },
             onResetAccountClick = {
-                navigateToCertification(AuthStatus.CHANGE)
+                navigateToCertification(AuthStatus.CHANGE_SOCIAL_PLATFORM)
                 loginDialogVisibility = false
             },
             onContactChannelClick = {
