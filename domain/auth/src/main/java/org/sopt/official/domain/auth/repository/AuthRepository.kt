@@ -27,7 +27,6 @@ package org.sopt.official.domain.auth.repository
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.User
 
-
 interface AuthRepository {
     suspend fun createCode(request: User): Result<Unit>
 
