@@ -25,11 +25,12 @@
 package org.sopt.official.data.auth.mapper
 
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
-import org.sopt.official.domain.auth.model.OriginalInformation
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.model.User
 
-fun OriginalInformation.toRequest(): ChangeAccountRequest =
+fun toChangeAccountRequest(user: User, auth: Auth): ChangeAccountRequest =
     ChangeAccountRequest(
-        phone = phone,
-        authPlatform = authPlatform,
-        token = token
+        phone = user.phone,
+        authPlatform = auth.authPlatform,
+        token = auth.token
     )

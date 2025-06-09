@@ -40,8 +40,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
-import org.sopt.official.domain.auth.model.InformationWithCode
-import org.sopt.official.domain.auth.model.InitialInformation
+import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
@@ -97,11 +96,10 @@ class CertificationViewModel @Inject constructor(
     fun createCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.createCode(
-                InitialInformation(
-                    name = "이유빈", // todo: name 가져오는 방법 문의 by 이유빈
+                User(
                     phone = _state.value.phone,
                     type = status.type
-                )
+                ),
             ).onSuccess {
                 startTimer()
                 updateButtonText()
@@ -123,16 +121,15 @@ class CertificationViewModel @Inject constructor(
     fun certificateCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.certificateCode(
-                InformationWithCode(
-                    name = "이유빈",
+                User(
                     phone = _state.value.phone,
                     code = _state.value.code,
                     type = status.type
                 )
             ).onSuccess { response ->
-                if (status.type == AuthStatus.SEARCH.type) {
-                    findAccount()
-                } else {
+                if (status.type == AuthStatus.SEARCH_SOCIAL_PLATFORM.type) {
+                    findAccount(name = response.name)
+                } else { // 재설정, 회원가입 경우?!
                     _sideEffect.emit(
                         CertificationSideEffect.NavigateToSocialAccount(
                             name = response.name,
@@ -146,10 +143,11 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun findAccount() {
+    private fun findAccount(name: String) {
         viewModelScope.launch {
             repository.findAccount(
-                "01012345678"
+                name = name,
+                phone = _state.value.phone,
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
                 dataStore.platform = response.platform

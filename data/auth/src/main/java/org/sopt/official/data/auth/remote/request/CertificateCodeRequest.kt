@@ -29,8 +29,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CertificateCodeRequest(
-    @SerialName("name")
-    val name: String?,
     @SerialName("phone")
     val phone: String,
     @SerialName("code")
