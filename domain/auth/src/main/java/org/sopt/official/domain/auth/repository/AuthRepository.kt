@@ -24,19 +24,16 @@
  */
 package org.sopt.official.domain.auth.repository
 
-import org.sopt.official.domain.auth.model.AccountResult
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.Token
 import org.sopt.official.domain.auth.model.User
-import org.sopt.official.domain.auth.model.VerificationResult
 
 
 interface AuthRepository {
     suspend fun createCode(request: User): Result<Unit>
 
-    suspend fun certificateCode(request: User): Result<VerificationResult>
+    suspend fun certificateCode(request: User): Result<User>
 
-    suspend fun signIn(request: Auth): Result<Token>
+    suspend fun signIn(request: Auth): Result<Auth>
 
     suspend fun signUp(
         userRequest: User,
@@ -51,5 +48,5 @@ interface AuthRepository {
     suspend fun findAccount(
         name: String,
         phone: String,
-    ): Result<AccountResult>
+    ): Result<Auth>
 }
