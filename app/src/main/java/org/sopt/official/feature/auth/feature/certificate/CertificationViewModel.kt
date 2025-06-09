@@ -149,8 +149,8 @@ class CertificationViewModel @Inject constructor(
                 name = name,
                 phone = _state.value.phone,
             ).onSuccess { response ->
-                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
-                dataStore.platform = response.platform
+                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.authPlatform))
+                dataStore.platform = response.authPlatform
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }

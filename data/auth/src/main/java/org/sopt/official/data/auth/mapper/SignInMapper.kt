@@ -27,7 +27,6 @@ package org.sopt.official.data.auth.mapper
 import org.sopt.official.data.auth.remote.request.SignInRequest
 import org.sopt.official.data.auth.remote.response.SignInResponse
 import org.sopt.official.domain.auth.model.Auth
-import org.sopt.official.domain.auth.model.Token
 
 fun Auth.toSignInRequest() : SignInRequest =
     SignInRequest(
@@ -35,8 +34,8 @@ fun Auth.toSignInRequest() : SignInRequest =
         authPlatform = authPlatform,
     )
 
-fun SignInResponse.toDomain(): Token =
-    Token(
-        accessToken = accessToken,
-        refreshToken = refreshToken
+fun SignInResponse.toAuthDomain() : Auth =
+    Auth(
+        token = accessToken,
+        refreshToken = refreshToken,
     )
