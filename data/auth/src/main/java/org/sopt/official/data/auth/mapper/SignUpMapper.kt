@@ -25,12 +25,16 @@
 package org.sopt.official.data.auth.mapper
 
 import org.sopt.official.data.auth.remote.request.SignUpRequest
-import org.sopt.official.domain.auth.model.SignUpCode
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.model.User
 
-fun SignUpCode.toRequest(): SignUpRequest =
+fun toSignUpRequest(
+    user: User,
+    auth: Auth
+): SignUpRequest =
     SignUpRequest(
-        name = name,
-        phone = phone,
-        code = code,
-        authPlatform = authPlatform
+        name = user.name,
+        phone = user.phone,
+        code = user.code,
+        authPlatform = auth.authPlatform
     )

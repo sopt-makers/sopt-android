@@ -28,7 +28,10 @@ import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.User
 
-fun toChangeAccountRequest(user: User, auth: Auth): ChangeAccountRequest =
+fun toChangeAccountRequest(
+    user: User,
+    auth: Auth
+): ChangeAccountRequest =
     ChangeAccountRequest(
         phone = user.phone,
         authPlatform = auth.authPlatform,
