@@ -24,26 +24,28 @@
  */
 package org.sopt.official.domain.auth.repository
 
-import org.sopt.official.domain.auth.model.AccountResult
-import org.sopt.official.domain.auth.model.InformationWithCode
-import org.sopt.official.domain.auth.model.InitialInformation
-import org.sopt.official.domain.auth.model.OriginalInformation
-import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignUpCode
-import org.sopt.official.domain.auth.model.Token
-import org.sopt.official.domain.auth.model.VerificationResult
-
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.model.User
 
 interface AuthRepository {
-    suspend fun createCode(request: InitialInformation): Result<Unit>
+    suspend fun createCode(request: User): Result<Unit>
 
-    suspend fun certificateCode(request: InformationWithCode): Result<VerificationResult>
+    suspend fun certificateCode(request: User): Result<User>
 
-    suspend fun signIn(request: SignInCode): Result<Token>
+    suspend fun signIn(request: Auth): Result<Auth>
 
-    suspend fun signUp(request: SignUpCode): Result<Unit>
+    suspend fun signUp(
+        userRequest: User,
+        authRequest: Auth
+    ): Result<Unit>
 
-    suspend fun changeAccount(request: OriginalInformation): Result<Unit>
+    suspend fun changeAccount(
+        userRequest: User,
+        authRequest: Auth,
+    ): Result<Unit>
 
-    suspend fun findAccount(request: String): Result<AccountResult>
+    suspend fun findAccount(
+        name: String,
+        phone: String,
+    ): Result<Auth>
 }

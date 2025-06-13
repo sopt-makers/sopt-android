@@ -26,19 +26,17 @@ package org.sopt.official.data.auth.mapper
 
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.response.CertificateCodeResponse
-import org.sopt.official.domain.auth.model.InformationWithCode
-import org.sopt.official.domain.auth.model.VerificationResult
+import org.sopt.official.domain.auth.model.User
 
-fun InformationWithCode.toRequest(): CertificateCodeRequest =
+fun User.toCertificateCodeRequest(): CertificateCodeRequest =
     CertificateCodeRequest(
-        name = name,
         phone = phone,
         code = code,
-        type = type
+        type = type,
     )
 
-fun CertificateCodeResponse.toDomain(): VerificationResult =
-    VerificationResult(
+fun CertificateCodeResponse.toUserDomain() : User =
+    User (
         name = name,
-        phone = phone
+        phone = phone,
     )

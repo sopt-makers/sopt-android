@@ -122,6 +122,6 @@ object NetModule {
     fun provideAuthRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(BuildConfig.MOCK_AUTH_API)
+        .baseUrl(BuildConfig.DEV_AUTH_API)
         .build()
 }
