@@ -36,6 +36,7 @@ import org.sopt.official.auth.data.RemotePlaygroundAuthDatasource
 import org.sopt.official.auth.utils.PlaygroundUriProvider
 import org.sopt.official.network.model.response.OAuthToken
 
+@Deprecated("네이티브 구글 로그인으로 대체됩니다.")
 object PlaygroundAuth {
     fun authorizeWithWebTab(
         context: Context,
