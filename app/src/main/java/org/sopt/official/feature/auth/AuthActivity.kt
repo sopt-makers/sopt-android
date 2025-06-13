@@ -34,25 +34,29 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig
+import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
-import org.sopt.official.auth.PlaygroundAuth
-import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.impl.api.AuthService
-import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import javax.inject.Inject
@@ -74,6 +78,7 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
+                val scope = rememberCoroutineScope()
 
                 LaunchedEffect(true) {
                     try {
@@ -116,6 +121,15 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
+                LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+                    viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect { sideEffect ->
+                            when (sideEffect) {
+                                is AuthSideEffect.ShowToast -> context.toast(sideEffect.message)
+                            }
+                        }
+                }
+
                 AuthScreen(
                     navigateToUnAuthenticatedHome = {
                         startActivity(
@@ -128,24 +142,34 @@ class AuthActivity : AppCompatActivity() {
                         )
                     },
                     onGoogleLoginCLick = {
-                        PlaygroundAuth.authorizeWithWebTab(
-                            context = context,
-                            isDebug = BuildConfig.DEBUG,
-                            authDataSource = object : PlaygroundAuthDatasource {
-                                override suspend fun oauth(code: String): Result<OAuthToken> {
-                                    return kotlin.runCatching {
-                                        authService
-                                            .authenticate(AuthRequest(code, dataStore.pushToken))
-                                            .toOAuthToken()
-                                    }
-                                }
-                            }
-                        ) {
-                            it.onSuccess { token ->
-                                lifecycleScope.launch {
-                                    viewModel.onLogin(token.toEntity())
+                        val credentialManager = CredentialManager.create(context)
+                        val googleIdOption = GetGoogleIdOption.Builder()
+                            .setServerClientId(SERVER_CLIENT_ID)
+                            .setFilterByAuthorizedAccounts(false)
+                            .setAutoSelectEnabled(false)
+                            .build()
+                        val credentialRequest = GetCredentialRequest.Builder()
+                            .addCredentialOption(googleIdOption)
+                            .build()
+
+                        scope.launch {
+                            suspendRunCatching {
+                                credentialManager.getCredential(
+                                    request = credentialRequest,
+                                    context = context
+                                )
+                            }.onSuccess {
+                                if (it.credential is CustomCredential &&
+                                    it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                                ) {
+                                    val googleIdTokenCredential =
+                                        GoogleIdTokenCredential.createFrom(it.credential.data)
+                                    val idToken = googleIdTokenCredential.idToken
+                                    context.toast("성공")
+                                    viewModel.signIn(idToken)
                                 }
                             }.onFailure {
+                                Timber.e(it, "FAILED: ${it.message}")
                                 lifecycleScope.launch {
                                     viewModel.onFailure(it)
                                 }
