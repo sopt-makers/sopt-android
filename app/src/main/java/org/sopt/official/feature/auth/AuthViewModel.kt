@@ -25,14 +25,17 @@
 package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import org.sopt.official.auth.model.Auth
+import kotlinx.coroutines.launch
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.domain.usecase.LoginUseCase
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.repository.AuthRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 sealed interface AuthUiEvent {
     data class Success(val userStatus: UserStatus) : AuthUiEvent
@@ -41,17 +44,37 @@ sealed interface AuthUiEvent {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
-    suspend fun onLogin(auth: Auth) {
-        loginUseCase(auth)
-        _uiEvent.emit(AuthUiEvent.Success(auth.status))
+
+    private val _sideEffect = MutableSharedFlow<AuthSideEffect>()
+    val sideEffect: SharedFlow<AuthSideEffect> = _sideEffect.asSharedFlow()
+
+    fun signIn(token: String) {
+        viewModelScope.launch {
+            authRepository.signIn(
+                Auth(
+                    token = token,
+                    authPlatform = GOOGLE,
+                )
+            ).onSuccess {
+                //TODO: 홈 화면으로 이동
+                // TODO: accessToken refreshToken 저장하기
+                _sideEffect.emit(AuthSideEffect.ShowToast("서버에서 성공"))
+            }.onFailure {
+                _sideEffect.emit(AuthSideEffect.ShowToast("서버에서 실패"))
+            }
+        }
     }
 
     suspend fun onFailure(throwable: Throwable) {
         Timber.e(throwable)
         _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
+    }
+
+    companion object {
+        private const val GOOGLE = "GOOGLE"
     }
 }
