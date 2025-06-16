@@ -52,9 +52,14 @@ class SocialAccountViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<SocialAccountSideEffect>()
     val sideEffect: SharedFlow<SocialAccountSideEffect> = _sideEffect.asSharedFlow()
 
-    fun updateInitialState(name: String, phone: String) {
+    fun updateInitialState(
+        status: String,
+        name: String,
+        phone: String
+    ) {
         _state.update { currentState ->
             currentState.copy(
+                status = status,
                 name = name,
                 phone = phone
             )

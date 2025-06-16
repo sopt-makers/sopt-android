@@ -74,6 +74,7 @@ internal fun SocialAccountRoute(
 
     LaunchedEffect(Unit) {
         viewModel.updateInitialState(
+            status = status.type,
             name = name,
             phone = phone
         )
@@ -89,6 +90,7 @@ internal fun SocialAccountRoute(
     }
 
     SocialAccountScreen(
+        title = state.title,
         name = state.name,
         onGoogleLoginCLick = {
             viewModel.connectSocialAccount(status)
@@ -98,6 +100,7 @@ internal fun SocialAccountRoute(
 
 @Composable
 private fun SocialAccountScreen(
+    title: String,
     name: String,
     onGoogleLoginCLick: () -> Unit
 ) {
@@ -108,7 +111,10 @@ private fun SocialAccountScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(48.dp))
-        TopBar(name)
+        TopBar(
+            title = title,
+            name = name,
+        )
         Spacer(modifier = Modifier.height(66.dp))
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
@@ -130,6 +136,7 @@ private fun SocialAccountScreen(
 
 @Composable
 private fun TopBar(
+    title: String,
     name: String,
     modifier: Modifier = Modifier
 ) {
@@ -156,7 +163,7 @@ private fun TopBar(
         }
         Spacer(modifier = Modifier.height(54.dp))
         Text(
-            text = "소셜 계정연동",
+            text = title,
             color = Gray10,
             style = SoptTheme.typography.heading24B
         )
@@ -175,6 +182,7 @@ private fun TopBar(
 private fun ChangeAccountPreview() {
     SoptTheme {
         SocialAccountScreen(
+            title = AuthStatus.REGISTER.type,
             name = "SOPT",
             onGoogleLoginCLick = {}
         )
