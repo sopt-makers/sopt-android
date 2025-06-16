@@ -50,16 +50,13 @@ fun NavController.navigateSocialAccount(
     )
 }
 
-fun NavGraphBuilder.socialAccountNavGraph(
-    onGoogleLoginCLick: () -> Unit
-) {
+fun NavGraphBuilder.socialAccountNavGraph() {
     composable<SocialAccount> {
         val args = it.toRoute<SocialAccount>()
         SocialAccountRoute(
             status = args.status,
             name = args.name,
             phone = args.phone,
-            onGoogleLoginCLick = onGoogleLoginCLick
         )
     }
 }

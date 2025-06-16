@@ -65,7 +65,6 @@ internal fun SocialAccountRoute(
     status: AuthStatus,
     name: String,
     phone: String,
-    onGoogleLoginCLick: () -> Unit,
     viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
