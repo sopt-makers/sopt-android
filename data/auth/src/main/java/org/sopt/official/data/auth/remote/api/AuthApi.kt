@@ -41,32 +41,32 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 internal interface AuthApi {
-    @POST("/api/v1/auth/phone") // 번호 인증 생성
+    @POST("/api/v1/auth/phone")
     suspend fun createCode(
         @Body request: CreateCodeRequest,
     ): NullableBaseAuthResponse<Unit>
 
-    @POST("/api/v1/auth/verify/phone") // 번호 인증 검사
+    @POST("/api/v1/auth/verify/phone")
     suspend fun certificateCode(
         @Body request: CertificateCodeRequest,
     ): BaseAuthResponse<CertificateCodeResponse>
 
-    @POST("/api/v1/auth/login/app") // 소셜 로그인 - Mobile
+    @POST("/api/v1/auth/login/app")
     suspend fun signIn(
         @Body request: SignInRequest,
     ): BaseAuthResponse<SignInResponse>
 
-    @POST("/api/v1/auth/signup") // 회원가입
+    @POST("/api/v1/auth/signup")
     suspend fun signUp(
         @Body request: SignUpRequest,
     ): NullableBaseAuthResponse<Unit>
 
-    @PATCH("/api/v1/social/accounts") // 소셜 계정 변경
+    @PATCH("/api/v1/social/accounts")
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
     ): NullableBaseAuthResponse<Unit>
 
-    @GET("/api/v1/social/accounts/platform") // 소셜 계정 찾기
+    @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(
         @Query("name") name: String,
         @Query("phone") phone: String
