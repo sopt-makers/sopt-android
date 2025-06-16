@@ -45,6 +45,7 @@ internal fun NavController.navigateAuthMain(
 }
 
 internal fun NavGraphBuilder.authMainNavGraph(
+    navigateToHome: () -> Unit,
     navigateToUnAuthenticatedHome: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
     navigateToAuthError: () -> Unit,
@@ -54,6 +55,7 @@ internal fun NavGraphBuilder.authMainNavGraph(
         val args = it.toRoute<AuthMainNavigation>()
         AuthMainRoute(
             platform = args.platform,
+            navigateToHome = navigateToHome,
             navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
             navigateToCertification = navigateToCertification,
             navigateToAuthError = navigateToAuthError,

@@ -89,6 +89,7 @@ import timber.log.Timber
 @Composable
 internal fun AuthMainRoute(
     platform: String,
+    navigateToHome: () -> Unit,
     navigateToUnAuthenticatedHome: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
     navigateToAuthError: () -> Unit,
@@ -125,7 +126,7 @@ internal fun AuthMainRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is AuthMainSideEffect.ShowToast -> context.toast(sideEffect.message)
+                    is AuthMainSideEffect.NavigateToHome -> navigateToHome()
                     is AuthMainSideEffect.NavigateToAuthError -> navigateToAuthError()
                 }
             }

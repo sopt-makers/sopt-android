@@ -58,6 +58,7 @@ import org.sopt.official.feature.auth.feature.socialaccount.navigation.socialAcc
 
 @Composable
 internal fun AuthScreen(
+    navigateToHome: () -> Unit,
     navigateToUnAuthenticatedHome: () -> Unit,
     onContactChannelClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
@@ -117,6 +118,7 @@ internal fun AuthScreen(
                         },
                     )
                     authMainNavGraph(
+                        navigateToHome = navigateToHome,
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
                         navigateToCertification = { status ->
                             navController.navigateCertification(
