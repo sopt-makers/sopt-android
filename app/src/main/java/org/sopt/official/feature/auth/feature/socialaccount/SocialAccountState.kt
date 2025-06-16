@@ -9,7 +9,7 @@ data class SocialAccountState(
 ) {
     val title: String
         get() = when (status) {
-            AuthStatus.REGISTER.type -> "소셜 계정연동"
+            AuthStatus.REGISTER.type -> "소셜 계정 연동"
             else -> "소셜 계정 재설정"
         }
 }

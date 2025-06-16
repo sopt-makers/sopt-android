@@ -52,7 +52,7 @@ class AuthMainViewModel @Inject constructor(
             ).onSuccess {
                 //TODO: 홈 화면으로 이동
                 // TODO: accessToken refreshToken 저장하기
-                _sideEffect.emit(AuthMainSideEffect.ShowToast("서버에서 성공"))
+                _sideEffect.emit(AuthMainSideEffect.ShowToast("성공"))
             }.onFailure {
                 _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)
             }
