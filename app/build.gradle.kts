@@ -192,6 +192,15 @@ dependencies {
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.google.id.identity)
+
+    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.6.2")
+}
+
+configurations.configureEach {
+    resolutionStrategy {
+        force("androidx.lifecycle:lifecycle-common:2.9.0")
+    }
 }
 
 secrets {
