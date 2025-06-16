@@ -34,7 +34,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.authmain.AuthMainRoute
 import org.sopt.official.feature.auth.model.AuthStatus
 
-fun NavController.navigateAuthMain(
+internal fun NavController.navigateAuthMain(
     platform: String,
     navOptions: NavOptions? = null
 ) {
@@ -44,7 +44,7 @@ fun NavController.navigateAuthMain(
     )
 }
 
-fun NavGraphBuilder.authMainNavGraph(
+internal fun NavGraphBuilder.authMainNavGraph(
     navigateToUnAuthenticatedHome: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
     navigateToAuthError: () -> Unit,
@@ -63,7 +63,7 @@ fun NavGraphBuilder.authMainNavGraph(
 }
 
 @Serializable
-data class AuthMainNavigation(
+internal data class AuthMainNavigation(
     @SerialName("platform")
     val platform: String
 )

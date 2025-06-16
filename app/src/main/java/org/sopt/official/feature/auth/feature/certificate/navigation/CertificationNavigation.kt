@@ -33,7 +33,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.certificate.CertificationRoute
 import org.sopt.official.feature.auth.model.AuthStatus
 
-fun NavController.navigateCertification(
+internal fun NavController.navigateCertification(
     status: AuthStatus,
     navOptions: NavOptions? = null
 ) {
@@ -43,7 +43,7 @@ fun NavController.navigateCertification(
     )
 }
 
-fun NavGraphBuilder.certificationNavGraph(
+internal fun NavGraphBuilder.certificationNavGraph(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
     navigateToSocialAccount: (AuthStatus, String, String) -> Unit,
@@ -64,6 +64,6 @@ fun NavGraphBuilder.certificationNavGraph(
 }
 
 @Serializable
-data class CertificationNavigation(
+internal data class CertificationNavigation(
     val status: AuthStatus
 )

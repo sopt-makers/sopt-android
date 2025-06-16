@@ -34,7 +34,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.socialaccount.SocialAccountRoute
 import org.sopt.official.feature.auth.model.AuthStatus
 
-fun NavController.navigateSocialAccount(
+internal fun NavController.navigateSocialAccount(
     status: AuthStatus,
     name: String,
     phone: String,
@@ -50,7 +50,7 @@ fun NavController.navigateSocialAccount(
     )
 }
 
-fun NavGraphBuilder.socialAccountNavGraph(
+internal fun NavGraphBuilder.socialAccountNavGraph(
     navigateToAuthMain: () -> Unit,
 ) {
     composable<SocialAccount> {
@@ -65,7 +65,7 @@ fun NavGraphBuilder.socialAccountNavGraph(
 }
 
 @Serializable
-data class SocialAccount(
+internal data class SocialAccount(
     @SerialName("status")
     val status: AuthStatus,
     @SerialName("name")

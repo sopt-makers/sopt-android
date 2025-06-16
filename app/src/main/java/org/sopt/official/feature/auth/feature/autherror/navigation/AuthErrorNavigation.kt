@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.feature.auth.feature.autherror.AuthErrorRoute
 import org.sopt.official.feature.auth.model.AuthStatus
 
-fun NavController.navigateAuthError(
+internal fun NavController.navigateAuthError(
     navOptions: NavOptions? = null,
 ) {
     navigate(
@@ -17,7 +17,7 @@ fun NavController.navigateAuthError(
     )
 }
 
-fun NavGraphBuilder.authErrorNavGraph(
+internal fun NavGraphBuilder.authErrorNavGraph(
     onRetryClick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
 ) {
@@ -30,4 +30,4 @@ fun NavGraphBuilder.authErrorNavGraph(
 }
 
 @Serializable
-data object AuthErrorNavigation
+internal data object AuthErrorNavigation
