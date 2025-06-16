@@ -66,23 +66,25 @@ class SocialAccountViewModel @Inject constructor(
         }
     }
 
-    fun connectSocialAccount(status: AuthStatus) {
+    fun connectSocialAccount(status: AuthStatus, token: String) {
         viewModelScope.launch {
             when (status) {
-                AuthStatus.REGISTER -> signUp()
-                AuthStatus.CHANGE_SOCIAL_PLATFORM -> changeAccount()
+                AuthStatus.REGISTER -> signUp(token)
+                AuthStatus.CHANGE_SOCIAL_PLATFORM -> changeAccount(token)
                 else -> {}
             }
         }
     }
 
-    private fun signUp() {
+    private fun signUp(
+        token: String,
+    ) {
         viewModelScope.launch {
             authRepository.signUp(
                 userRequest = User(
                     name = state.value.name,
                     phone = state.value.phone,
-                    code = "codecodecodecodecode",
+                    code = token,
                 ),
                 authRequest = Auth(
                     authPlatform = GOOGLE,
@@ -95,7 +97,9 @@ class SocialAccountViewModel @Inject constructor(
         }
     }
 
-    private fun changeAccount() {
+    private fun changeAccount(
+        token: String,
+    ) {
         viewModelScope.launch {
             authRepository.changeAccount(
                 userRequest = User(
@@ -103,7 +107,7 @@ class SocialAccountViewModel @Inject constructor(
                 ),
                 authRequest = Auth(
                     authPlatform = GOOGLE,
-                    token = "codecodecodecodecode"
+                    token = token,
                 )
             ).onSuccess {
                 _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))

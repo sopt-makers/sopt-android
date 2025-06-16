@@ -129,7 +129,7 @@ class CertificationViewModel @Inject constructor(
             ).onSuccess { response ->
                 if (status.type == AuthStatus.SEARCH_SOCIAL_PLATFORM.type) {
                     findAccount(name = response.name)
-                } else { // 재설정, 회원가입 경우?!
+                } else {
                     _sideEffect.emit(
                         CertificationSideEffect.NavigateToSocialAccount(
                             name = response.name,

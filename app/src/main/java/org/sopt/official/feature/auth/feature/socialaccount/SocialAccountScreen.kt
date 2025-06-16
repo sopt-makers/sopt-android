@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -45,12 +46,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.launch
+import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
@@ -59,6 +68,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.model.AuthStatus
+import timber.log.Timber
 
 @Composable
 internal fun SocialAccountRoute(
@@ -70,6 +80,7 @@ internal fun SocialAccountRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         viewModel.updateInitialState(
@@ -91,8 +102,37 @@ internal fun SocialAccountRoute(
     SocialAccountScreen(
         title = state.title,
         name = state.name,
-        onGoogleLoginCLick = {
-            viewModel.connectSocialAccount(status)
+        onGoogleLoginCLick = { //  todo: 따로 구분
+            val credentialManager = CredentialManager.create(context)
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setServerClientId(SERVER_CLIENT_ID)
+                .setFilterByAuthorizedAccounts(false)
+                .setAutoSelectEnabled(false)
+                .build()
+            val credentialRequest = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
+
+            scope.launch {
+                suspendRunCatching {
+                    credentialManager.getCredential(
+                        request = credentialRequest,
+                        context = context
+                    )
+                }.onSuccess {
+                    if (it.credential is CustomCredential &&
+                        it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                    ) {
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(it.credential.data)
+                        val idToken = googleIdTokenCredential.idToken
+                        viewModel.connectSocialAccount(
+                            status = status,
+                            token = idToken,
+                        )
+                    }
+                }.onFailure(Timber::e)
+            }
         }
     )
 }
