@@ -100,7 +100,17 @@ internal fun AuthScreen(
                     startDestination = AuthMainNavigation(platform = platform)
                 ) {
                     authErrorNavGraph(
-                        onRetryClick = { navController.navigateAuthMain(platform = platform) }
+                        onRetryClick = {
+                            val navOptions = navOptions {
+                                popUpTo(id = navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                            navController.navigateAuthMain(
+                                platform = platform,
+                                navOptions = navOptions,
+                            )
+                        }
                     )
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
