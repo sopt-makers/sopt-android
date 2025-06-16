@@ -122,8 +122,8 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.certificateCode(
                 User(
-                    phone = _state.value.phone,
-                    code = _state.value.code,
+                    phone = state.value.phone,
+                    code = state.value.code,
                     type = status.type
                 )
             ).onSuccess { response ->
@@ -147,7 +147,7 @@ class CertificationViewModel @Inject constructor(
         viewModelScope.launch {
             repository.findAccount(
                 name = name,
-                phone = _state.value.phone,
+                phone = state.value.phone,
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.authPlatform))
                 dataStore.platform = response.authPlatform
