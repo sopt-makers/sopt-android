@@ -101,14 +101,13 @@ internal fun AuthScreen(
                 ) {
                     authErrorNavGraph(
                         onRetryClick = {
-                            val navOptions = navOptions {
-                                popUpTo(id = navController.graph.id) {
-                                    inclusive = true
-                                }
-                            }
                             navController.navigateAuthMain(
                                 platform = platform,
-                                navOptions = navOptions,
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
                             )
                         },
                         navigateToCertification = { status ->
@@ -142,14 +141,13 @@ internal fun AuthScreen(
                             )
                         },
                         navigateToAuthMain = { platform ->
-                            val navOptions = navOptions {
-                                popUpTo(id = navController.graph.id) {
-                                    inclusive = true
-                                }
-                            }
                             navController.navigateAuthMain(
                                 platform = platform,
-                                navOptions = navOptions
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
                             )
                         },
                         onGoogleFormClick = onGoogleFormClick
