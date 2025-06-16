@@ -37,16 +37,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
