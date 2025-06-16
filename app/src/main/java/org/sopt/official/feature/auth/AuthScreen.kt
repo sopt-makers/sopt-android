@@ -110,7 +110,12 @@ internal fun AuthScreen(
                                 platform = platform,
                                 navOptions = navOptions,
                             )
-                        }
+                        },
+                        navigateToCertification = { status ->
+                            navController.navigateCertification(
+                                status = status
+                            )
+                        },
                     )
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,

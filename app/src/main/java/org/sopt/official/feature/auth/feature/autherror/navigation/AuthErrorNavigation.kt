@@ -5,7 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
-import org.sopt.official.feature.auth.feature.autherror.AuthErrorScreen
+import org.sopt.official.feature.auth.feature.autherror.AuthErrorRoute
+import org.sopt.official.feature.auth.model.AuthStatus
 
 fun NavController.navigateAuthError(
     navOptions: NavOptions? = null,
@@ -18,10 +19,12 @@ fun NavController.navigateAuthError(
 
 fun NavGraphBuilder.authErrorNavGraph(
     onRetryClick: () -> Unit,
+    navigateToCertification: (AuthStatus) -> Unit,
 ) {
     composable<AuthErrorNavigation> {
-        AuthErrorScreen(
+        AuthErrorRoute(
             onRetryClick = onRetryClick,
+            navigateToCertification = navigateToCertification,
         )
     }
 }
