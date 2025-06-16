@@ -25,14 +25,11 @@
 package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.launch
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
 import timber.log.Timber
 import javax.inject.Inject
@@ -46,35 +43,15 @@ sealed interface AuthUiEvent {
 class AuthViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
+    // todo: 안쓰는 코드 삭제
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
     private val _sideEffect = MutableSharedFlow<AuthSideEffect>()
     val sideEffect: SharedFlow<AuthSideEffect> = _sideEffect.asSharedFlow()
 
-    fun signIn(token: String) {
-        viewModelScope.launch {
-            authRepository.signIn(
-                Auth(
-                    token = token,
-                    authPlatform = GOOGLE,
-                )
-            ).onSuccess {
-                //TODO: 홈 화면으로 이동
-                // TODO: accessToken refreshToken 저장하기
-                _sideEffect.emit(AuthSideEffect.ShowToast("서버에서 성공"))
-            }.onFailure {
-                _sideEffect.emit(AuthSideEffect.ShowToast("서버에서 실패"))
-            }
-        }
-    }
-
     suspend fun onFailure(throwable: Throwable) {
         Timber.e(throwable)
         _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
-    }
-
-    companion object {
-        private const val GOOGLE = "GOOGLE"
     }
 }

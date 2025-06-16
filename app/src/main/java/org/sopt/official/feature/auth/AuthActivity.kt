@@ -37,21 +37,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
@@ -140,41 +131,6 @@ class AuthActivity : AppCompatActivity() {
                                 )
                             )
                         )
-                    },
-                    onGoogleLoginCLick = {
-                        val credentialManager = CredentialManager.create(context)
-                        val googleIdOption = GetGoogleIdOption.Builder()
-                            .setServerClientId(SERVER_CLIENT_ID)
-                            .setFilterByAuthorizedAccounts(false)
-                            .setAutoSelectEnabled(false)
-                            .build()
-                        val credentialRequest = GetCredentialRequest.Builder()
-                            .addCredentialOption(googleIdOption)
-                            .build()
-
-                        scope.launch {
-                            suspendRunCatching {
-                                credentialManager.getCredential(
-                                    request = credentialRequest,
-                                    context = context
-                                )
-                            }.onSuccess {
-                                if (it.credential is CustomCredential &&
-                                    it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-                                ) {
-                                    val googleIdTokenCredential =
-                                        GoogleIdTokenCredential.createFrom(it.credential.data)
-                                    val idToken = googleIdTokenCredential.idToken
-                                    context.toast("성공")
-                                    viewModel.signIn(idToken)
-                                }
-                            }.onFailure {
-                                Timber.e(it, "FAILED: ${it.message}")
-                                lifecycleScope.launch {
-                                    viewModel.onFailure(it)
-                                }
-                            }
-                        }
                     },
                     onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
                     onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },

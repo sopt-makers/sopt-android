@@ -55,6 +55,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -66,11 +67,19 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray300
@@ -82,18 +91,20 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.model.AuthStatus
+import timber.log.Timber
 
 @Composable
 internal fun AuthMainRoute(
     platform: String,
     navigateToUnAuthenticatedHome: () -> Unit,
-    onGoogleLoginCLick: () -> Unit,
     navigateToCertification: (AuthStatus) -> Unit,
+    navigateToAuthError: () -> Unit,
     onContactChannelClick: () -> Unit,
     viewModel: AuthMainViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     var loginDialogVisibility by remember { mutableStateOf(false) }
 
@@ -122,6 +133,7 @@ internal fun AuthMainRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is AuthMainSideEffect.ShowToast -> context.toast(sideEffect.message)
+                    is AuthMainSideEffect.NavigateToAuthError -> navigateToAuthError()
                 }
             }
     }
@@ -131,7 +143,35 @@ internal fun AuthMainRoute(
         showDialog = {
             loginDialogVisibility = true
         },
-        onGoogleLoginCLick = onGoogleLoginCLick,
+        onGoogleLoginCLick = {
+            val credentialManager = CredentialManager.create(context)
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setServerClientId(SERVER_CLIENT_ID)
+                .setFilterByAuthorizedAccounts(false)
+                .setAutoSelectEnabled(false)
+                .build()
+            val credentialRequest = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
+
+            scope.launch {
+                suspendRunCatching {
+                    credentialManager.getCredential(
+                        request = credentialRequest,
+                        context = context
+                    )
+                }.onSuccess {
+                    if (it.credential is CustomCredential &&
+                        it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+                    ) {
+                        val googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(it.credential.data)
+                        val idToken = googleIdTokenCredential.idToken
+                        viewModel.signIn(idToken)
+                    }
+                }.onFailure(Timber::e)
+            }
+        },
         onLoginLaterClick = navigateToUnAuthenticatedHome,
         navigateToCertification = {
             navigateToCertification(AuthStatus.REGISTER)

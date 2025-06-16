@@ -25,10 +25,13 @@
 package org.sopt.official.feature.auth.feature.authmain
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
+import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -36,10 +39,27 @@ import javax.inject.Inject
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-
-    // TODO: 안쓰는코드 삭제하기
-
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
 
+    fun signIn(token: String) {
+        viewModelScope.launch {
+            authRepository.signIn(
+                Auth(
+                    token = token,
+                    authPlatform = GOOGLE,
+                )
+            ).onSuccess {
+                //TODO: 홈 화면으로 이동
+                // TODO: accessToken refreshToken 저장하기
+                _sideEffect.emit(AuthMainSideEffect.ShowToast("서버에서 성공"))
+            }.onFailure {
+                _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)
+            }
+        }
+    }
+
+    companion object {
+        private const val GOOGLE = "GOOGLE"
+    }
 }
