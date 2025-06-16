@@ -41,17 +41,10 @@ sealed interface AuthUiEvent {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
 ) : ViewModel() {
-    // todo: 안쓰는 코드 삭제
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
     private val _sideEffect = MutableSharedFlow<AuthSideEffect>()
     val sideEffect: SharedFlow<AuthSideEffect> = _sideEffect.asSharedFlow()
-
-    suspend fun onFailure(throwable: Throwable) {
-        Timber.e(throwable)
-        _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
-    }
 }

@@ -69,7 +69,6 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
-                val scope = rememberCoroutineScope()
 
                 LaunchedEffect(true) {
                     try {
