@@ -45,6 +45,8 @@ import androidx.navigation.navOptions
 import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.CertificationSnackBar
+import org.sopt.official.feature.auth.feature.autherror.navigation.authErrorNavGraph
+import org.sopt.official.feature.auth.feature.autherror.navigation.navigateAuthError
 import org.sopt.official.feature.auth.feature.authmain.navigation.AuthMainNavigation
 import org.sopt.official.feature.auth.feature.authmain.navigation.authMainNavGraph
 import org.sopt.official.feature.auth.feature.authmain.navigation.navigateAuthMain
@@ -57,7 +59,6 @@ import org.sopt.official.feature.auth.feature.socialaccount.navigation.socialAcc
 @Composable
 internal fun AuthScreen(
     navigateToUnAuthenticatedHome: () -> Unit,
-    onGoogleLoginCLick: () -> Unit,
     onContactChannelClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
     platform: String,
@@ -98,14 +99,17 @@ internal fun AuthScreen(
                     navController = navController,
                     startDestination = AuthMainNavigation(platform = platform)
                 ) {
+                    authErrorNavGraph(
+                        onRetryClick = { navController.navigateAuthMain(platform = platform) }
+                    )
                     authMainNavGraph(
                         navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
-                        onGoogleLoginCLick = onGoogleLoginCLick,
                         navigateToCertification = { status ->
                             navController.navigateCertification(
                                 status = status
                             )
                         },
+                        navigateToAuthError = navController::navigateAuthError,
                         onContactChannelClick = onContactChannelClick
                     )
                     certificationNavGraph(
