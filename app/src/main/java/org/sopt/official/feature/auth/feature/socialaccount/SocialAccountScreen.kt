@@ -60,7 +60,6 @@ import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
 import org.sopt.official.common.coroutines.suspendRunCatching
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
@@ -75,6 +74,7 @@ internal fun SocialAccountRoute(
     status: AuthStatus,
     name: String,
     phone: String,
+    navigateToAuthMain: () -> Unit,
     viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -94,7 +94,7 @@ internal fun SocialAccountRoute(
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is SocialAccountSideEffect.ShowToast -> context.toast(sideEffect.message)
+                    is SocialAccountSideEffect.NavigateToAuthMain -> navigateToAuthMain()
                 }
             }
     }

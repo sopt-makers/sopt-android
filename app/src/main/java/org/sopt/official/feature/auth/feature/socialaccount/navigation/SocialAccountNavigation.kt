@@ -50,13 +50,16 @@ fun NavController.navigateSocialAccount(
     )
 }
 
-fun NavGraphBuilder.socialAccountNavGraph() {
+fun NavGraphBuilder.socialAccountNavGraph(
+    navigateToAuthMain: () -> Unit,
+) {
     composable<SocialAccount> {
         val args = it.toRoute<SocialAccount>()
         SocialAccountRoute(
             status = args.status,
             name = args.name,
             phone = args.phone,
+            navigateToAuthMain = navigateToAuthMain,
         )
     }
 }

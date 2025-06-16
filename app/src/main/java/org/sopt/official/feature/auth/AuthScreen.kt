@@ -152,7 +152,18 @@ internal fun AuthScreen(
                         },
                         onGoogleFormClick = onGoogleFormClick
                     )
-                    socialAccountNavGraph()
+                    socialAccountNavGraph(
+                        navigateToAuthMain = {
+                            navController.navigateAuthMain(
+                                platform = platform,
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
+                            )
+                        }
+                    )
                 }
             }
         }
