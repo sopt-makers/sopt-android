@@ -124,7 +124,7 @@ private fun LoginDialogText(
 
 @Preview(showBackground = true)
 @Composable
-fun LoginErrorDialogPreview() {
+private fun LoginErrorDialogPreview() {
     SoptTheme {
         LoginErrorDialog(
             onDismissRequest = {},
