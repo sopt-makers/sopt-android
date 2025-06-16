@@ -35,6 +35,6 @@ fun toSignUpRequest(
     SignUpRequest(
         name = user.name,
         phone = user.phone,
-        code = user.code,
+        token = user.code,
         authPlatform = auth.authPlatform
     )

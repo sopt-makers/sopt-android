@@ -78,11 +78,11 @@ class SocialAccountViewModel @Inject constructor(
 
     private fun signUp() {
         viewModelScope.launch {
-            authRepository.signUp( // TODO: 실제 서버통신 값 넣기 by 이유빈
+            authRepository.signUp(
                 userRequest = User(
-                    name = "홍길동",
-                    phone = "010-9121-2121",
-                    code = "eyadxcvc.dasd.wda",
+                    name = state.value.name,
+                    phone = state.value.phone,
+                    code = "codecodecodecodecode",
                 ),
                 authRequest = Auth(
                     authPlatform = GOOGLE,
@@ -99,7 +99,7 @@ class SocialAccountViewModel @Inject constructor(
         viewModelScope.launch {
             authRepository.changeAccount(
                 userRequest = User(
-                    phone = _state.value.phone,
+                    phone = state.value.phone,
                 ),
                 authRequest = Auth(
                     authPlatform = GOOGLE,

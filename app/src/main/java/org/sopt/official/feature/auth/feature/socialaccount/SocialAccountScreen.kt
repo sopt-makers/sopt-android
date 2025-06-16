@@ -182,7 +182,7 @@ private fun TopBar(
 private fun ChangeAccountPreview() {
     SoptTheme {
         SocialAccountScreen(
-            title = AuthStatus.REGISTER.type,
+            title = "소셜 계정 연동",
             name = "SOPT",
             onGoogleLoginCLick = {}
         )
