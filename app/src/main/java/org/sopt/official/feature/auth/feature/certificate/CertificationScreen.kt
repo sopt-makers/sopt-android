@@ -75,6 +75,7 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.AuthTextField
+import org.sopt.official.feature.auth.feature.certificate.navigation.SocialAccountInfo
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
@@ -83,7 +84,7 @@ internal fun CertificationRoute(
     status: AuthStatus,
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: (AuthStatus, String, String) -> Unit,
+    navigateToSocialAccount: (SocialAccountInfo) -> Unit,
     navigateToAuthMain: (String) -> Unit,
     onGoogleFormClick: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
@@ -104,9 +105,11 @@ internal fun CertificationRoute(
                         viewModel.timerJob?.cancelAndJoin()
                         viewModel.timerJob = null
                         navigateToSocialAccount(
-                            status,
-                            sideEffect.name,
-                            sideEffect.phone
+                            SocialAccountInfo(
+                                status = status,
+                                name = sideEffect.name,
+                                phone = sideEffect.phone
+                            )
                         )
                     }
 

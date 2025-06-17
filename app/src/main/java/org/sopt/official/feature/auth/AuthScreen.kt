@@ -131,13 +131,13 @@ internal fun AuthScreen(
                     certificationNavGraph(
                         onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar,
-                        navigateToSocialAccount = { status, name, phone ->
+                        navigateToSocialAccount = { socialAccountInfo ->
                             navController.navigateSocialAccount(
-                                status = status,
-                                name = name,
-                                phone = phone,
+                                status = socialAccountInfo.status,
+                                name = socialAccountInfo.name,
+                                phone = socialAccountInfo.phone,
                                 navOptions = NavOptions.Builder().setPopUpTo(
-                                    route = CertificationNavigation(status),
+                                    route = CertificationNavigation(socialAccountInfo.status),
                                     inclusive = true
                                 ).build()
                             )

@@ -43,10 +43,18 @@ internal fun NavController.navigateCertification(
     )
 }
 
+internal data class SocialAccountInfo(
+    val status: AuthStatus,
+    val name: String,
+    val phone: String
+)
+
+internal typealias SocialAccountNavigator = (SocialAccountInfo) -> Unit
+
 internal fun NavGraphBuilder.certificationNavGraph(
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: (AuthStatus, String, String) -> Unit,
+    navigateToSocialAccount: SocialAccountNavigator,
     navigateToAuthMain: (String) -> Unit,
     onGoogleFormClick: () -> Unit
 ) {
