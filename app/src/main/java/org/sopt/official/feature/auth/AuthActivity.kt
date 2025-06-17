@@ -43,7 +43,6 @@ import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -106,15 +105,6 @@ class AuthActivity : AppCompatActivity() {
                                 is AuthUiEvent.Failure -> startActivity(
                                     MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                                 )
-                            }
-                        }
-                }
-
-                LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-                    viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { sideEffect ->
-                            when (sideEffect) {
-                                is AuthSideEffect.ShowToast -> context.toast(sideEffect.message)
                             }
                         }
                 }

@@ -33,13 +33,11 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
-import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
-    private var dataStore: SoptDataStore,
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()

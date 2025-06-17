@@ -27,7 +27,6 @@ package org.sopt.official.feature.auth
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.sopt.official.auth.model.UserStatus
 import javax.inject.Inject
