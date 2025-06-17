@@ -27,11 +27,8 @@ package org.sopt.official.feature.auth
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.domain.auth.repository.AuthRepository
-import timber.log.Timber
 import javax.inject.Inject
 
 sealed interface AuthUiEvent {
@@ -42,9 +39,7 @@ sealed interface AuthUiEvent {
 @HiltViewModel
 class AuthViewModel @Inject constructor(
 ) : ViewModel() {
+    // TODO: 삭제 예정
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
-
-    private val _sideEffect = MutableSharedFlow<AuthSideEffect>()
-    val sideEffect: SharedFlow<AuthSideEffect> = _sideEffect.asSharedFlow()
 }
