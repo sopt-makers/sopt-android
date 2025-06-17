@@ -120,7 +120,7 @@ class AuthActivity : AppCompatActivity() {
                 }
 
                 AuthScreen(
-                    navigateToHome = {
+                    navigateToHome = { // TODO: 유저 상태 관리하기 by 이유빈
                         try {
                             if (dataStore.accessToken.isNotEmpty()) {
                                 startActivity(
