@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.auth.repository
 
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.auth.mapper.toAuthDomain
 import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
 import org.sopt.official.data.auth.mapper.toChangeAccountRequest
@@ -40,22 +41,22 @@ import javax.inject.Inject
 internal class DefaultAuthRepository @Inject constructor(
     private val authApi: AuthApi
 ) : AuthRepository {
-    override suspend fun createCode(request: User): Result<Unit> = runCatching {
+    override suspend fun createCode(request: User): Result<Unit> = suspendRunCatching {
         authApi.createCode(request.toCreateCodeRequest())
     }
 
-    override suspend fun certificateCode(request: User): Result<User> = runCatching {
+    override suspend fun certificateCode(request: User): Result<User> = suspendRunCatching {
         authApi.certificateCode(request.toCertificateCodeRequest()).data.toUserDomain()
     }
 
-    override suspend fun signIn(request: Auth): Result<Auth> = runCatching {
+    override suspend fun signIn(request: Auth): Result<Auth> = suspendRunCatching {
         authApi.signIn(request.toSignInRequest()).data.toAuthDomain()
     }
 
     override suspend fun signUp(
         userRequest: User,
         authRequest: Auth
-    ): Result<Unit> = runCatching {
+    ): Result<Unit> = suspendRunCatching {
         authApi.signUp(
             toSignUpRequest(
                 user = userRequest,
@@ -67,7 +68,7 @@ internal class DefaultAuthRepository @Inject constructor(
     override suspend fun changeAccount(
         userRequest: User,
         authRequest: Auth,
-    ): Result<Unit> = runCatching {
+    ): Result<Unit> = suspendRunCatching {
         authApi.changeAccount(
             toChangeAccountRequest(
                 user = userRequest,
@@ -79,7 +80,7 @@ internal class DefaultAuthRepository @Inject constructor(
     override suspend fun findAccount(
         name: String,
         phone: String,
-    ): Result<Auth> = runCatching {
+    ): Result<Auth> = suspendRunCatching {
         authApi.findAccount(
             name = name,
             phone = phone
