@@ -61,20 +61,13 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig.SERVER_CLIENT_ID
 import org.sopt.official.R
-import org.sopt.official.common.coroutines.suspendRunCatching
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray50
 import org.sopt.official.designsystem.Gray700
@@ -84,7 +77,7 @@ import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.LoginErrorDialog
 import org.sopt.official.feature.auth.model.AuthStatus
-import timber.log.Timber
+import org.sopt.official.feature.auth.utils.di.GoogleLoginManagerEntryPoint
 
 @Composable
 internal fun AuthMainRoute(
@@ -99,6 +92,13 @@ internal fun AuthMainRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+
+    val googleLoginManager = remember(context) {
+        EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            GoogleLoginManagerEntryPoint::class.java
+        ).googleLoginManager()
+    }
 
     var loginDialogVisibility by remember { mutableStateOf(false) }
 
@@ -138,32 +138,9 @@ internal fun AuthMainRoute(
             loginDialogVisibility = true
         },
         onGoogleLoginCLick = {
-            val credentialManager = CredentialManager.create(context)
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setServerClientId(SERVER_CLIENT_ID)
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
-                .build()
-            val credentialRequest = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
-
             scope.launch {
-                suspendRunCatching {
-                    credentialManager.getCredential(
-                        request = credentialRequest,
-                        context = context
-                    )
-                }.onSuccess {
-                    if (it.credential is CustomCredential &&
-                        it.credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-                    ) {
-                        val googleIdTokenCredential =
-                            GoogleIdTokenCredential.createFrom(it.credential.data)
-                        val idToken = googleIdTokenCredential.idToken
-                        viewModel.signIn(idToken)
-                    }
-                }.onFailure(Timber::e)
+                val idToken = googleLoginManager.getGoogleIdToken(context)
+                viewModel.signIn(idToken)
             }
         },
         onLoginLaterClick = navigateToUnAuthenticatedHome,

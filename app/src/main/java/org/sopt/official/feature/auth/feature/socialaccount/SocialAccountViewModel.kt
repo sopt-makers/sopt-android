@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SocialAccountViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SocialAccountState> = MutableStateFlow(SocialAccountState())
