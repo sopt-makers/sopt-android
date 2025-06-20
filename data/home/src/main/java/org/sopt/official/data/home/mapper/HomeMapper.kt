@@ -26,10 +26,14 @@ package org.sopt.official.data.home.mapper
 
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
+import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
+import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
 import org.sopt.official.data.home.remote.response.UserMainResponseDto
 import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
+import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.User
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
@@ -62,4 +66,22 @@ internal fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
     alarmBadge = alarmBadge,
     iconUrl = iconUrl,
     deepLink = deepLink,
+)
+
+internal fun HomeReviewFormResponseDto.toDomain(): ReviewForm = ReviewForm(
+    title = this.title,
+    subTitle = this.subTitle,
+    actionButtonName = this.actionButtonName,
+    linkUrl = this.linkUrl,
+    isActive = this.isActive
+)
+
+internal fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
+    imageUrl = this.imageUrl,
+    title = this.title,
+    expandedSubTitle = this.expandedSubTitle,
+    collapsedSubtitle = this.collapsedSubtitle,
+    actionButtonName = this.actionButtonName,
+    linkUrl = this.linkUrl,
+    active = this.isActive
 )

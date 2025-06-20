@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.home.navigation
+package org.sopt.official.data.home.remote.response
 
-import androidx.compose.runtime.Stable
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Stable
-sealed interface HomeNavigation {
-
-    @Stable
-    interface HomeShortcutNavigation : HomeNavigation {
-        fun navigateToPlayground()
-        fun navigateToPlaygroundGroup()
-        fun navigateToPlaygroundMember()
-        fun navigateToPlaygroundProject()
-        fun navigateToSoptHomepage()
-        fun navigateToSoptReview()
-        fun navigateToSoptProject()
-        fun navigateToSoptInstagram()
-        fun navigateToPlaygroundFeed(postId: Int)
-    }
-
-    @Stable
-    interface HomeDashboardNavigation : HomeNavigation {
-        fun navigateToNotification()
-        fun navigateToSetting()
-        fun navigateToSchedule()
-        fun navigateToSoptlog()
-        fun navigateToAttendance()
-    }
-
-    @Stable
-    interface HomeAppServicesNavigation : HomeNavigation {
-        fun navigateToDeepLink(url: String)
-        fun navigateToWebUrl(url: String)
-        fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int)
-    }
-}
+@Serializable
+data class HomeReviewFormResponseDto(
+    @SerialName("title")
+    val title: String,
+    @SerialName("subTitle")
+    val subTitle: String,
+    @SerialName("actionButtonName")
+    val actionButtonName: String,
+    @SerialName("linkUrl")
+    val linkUrl: String,
+    @SerialName("isActive")
+    val isActive: Boolean
+)
