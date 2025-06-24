@@ -26,12 +26,17 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Orange300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
-import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 
 @Composable
 internal fun HomePlaygroundPost(
-    post: HomePlaygroundPostModel,
-    navigateToPost: (Int) -> Unit,
+    profileImage: String,
+    userName: String,
+    userPart: String?,
+    label: String,
+    category: String,
+    title: String,
+    description: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -43,27 +48,23 @@ internal fun HomePlaygroundPost(
                 color = SoptTheme.colors.onSurface900,
                 shape = RoundedCornerShape(12.dp)
             )
-            .clickable {
-                navigateToPost(post.postId)
-            }
+            .clickable(onClick = onClick)
             .padding(horizontal = 17.dp)
     ) {
-        with(post) {
-            ProfileItem(
-                profileImage = profileImage,
-                name = name,
-                part = part,
-                modifier = Modifier
-                    .padding(top = 18.dp, bottom = 22.dp)
-            )
+        ProfileItem(
+            profileImage = profileImage,
+            name = userName,
+            part = userPart,
+            modifier = Modifier
+                .padding(top = 18.dp, bottom = 22.dp)
+        )
 
-            PostContentSection(
-                label = label,
-                category = category,
-                title = title,
-                content = content
-            )
-        }
+        PostContentSection(
+            label = label,
+            category = category,
+            title = title,
+            description = description
+        )
     }
 }
 
@@ -112,7 +113,7 @@ private fun PostContentSection(
     label: String,
     category: String,
     title: String,
-    content: String,
+    description: String,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -150,7 +151,7 @@ private fun PostContentSection(
         Spacer(modifier = Modifier.height(4.dp))
 
         Text(
-            text = content,
+            text = description,
             style = SoptTheme.typography.body13M,
             color = SoptTheme.colors.onSurface400,
             maxLines = 2,

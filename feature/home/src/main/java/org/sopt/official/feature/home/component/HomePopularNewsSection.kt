@@ -116,23 +116,33 @@ internal fun HomePopularNewsSection(
                 )
             )
 
-            HomePlaygroundPost(
-                post = post,
-                navigateToPost = navigateToFeed,
-                modifier = Modifier
-                    .then(
-                        if (index == 0) {
-                            Modifier
-                        } else {
-                            Modifier.padding(top = 10.dp)
-                        }
+            with(post) {
+                HomePlaygroundPost(
+                    profileImage = profileImage,
+                    userName = name,
+                    userPart = part,
+                    label = label,
+                    category = category,
+                    title = title,
+                    description = content,
+                    onClick = {
+                        navigateToFeed(postId)
+                    },
+                    modifier = Modifier
+                        .then(
+                            if (index == 0) {
+                                Modifier
+                            } else {
+                                Modifier.padding(top = 10.dp)
+                            }
+                        )
+                        .border(
+                            width = 1.dp,
+                            brush = gradientStroke,
+                            shape = RoundedCornerShape(12.dp)
+                        )
                     )
-                    .border(
-                        width = 1.dp,
-                        brush = gradientStroke,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-            )
+            }
         }
     }
 }
