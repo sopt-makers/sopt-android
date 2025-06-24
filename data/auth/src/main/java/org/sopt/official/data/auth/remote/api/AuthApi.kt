@@ -71,6 +71,4 @@ internal interface AuthApi {
         @Query("name") name: String,
         @Query("phone") phone: String
     ): BaseAuthResponse<FindAccountResponse>
-
-    // todo: 토큰 리프레시 - App by 이유빈
 }
