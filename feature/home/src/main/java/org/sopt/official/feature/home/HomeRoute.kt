@@ -71,7 +71,7 @@ import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
-import org.sopt.official.feature.home.component.HomePlaygroundSection
+import org.sopt.official.feature.home.component.HomePopularNewsSection
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
@@ -295,9 +295,8 @@ private fun HomeScreenForMember(
 
             Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomePlaygroundSection(
+            HomePopularNewsSection(
                 feedList = feedList,
-                navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
                 navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed
             )
 
