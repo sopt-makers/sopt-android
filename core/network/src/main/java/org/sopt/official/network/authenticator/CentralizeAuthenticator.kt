@@ -55,14 +55,14 @@ class CentralizeAuthenticator @Inject constructor(
                 runBlocking {
                     refreshApi.refreshToken(
                         ExpiredTokenRequest(
-                            accessToken = dataStore.accessToken,
+                            accessToken = "$BEARER ${dataStore.accessToken}",
                             refreshToken = refreshToken
                         )
                     )
                 }
             }.onSuccess {
                 dataStore.accessToken = it.data?.accessToken.orEmpty()
-                dataStore.refreshToken = it.data?.accessToken.orEmpty()
+                dataStore.refreshToken = it.data?.refreshToken.orEmpty()
             }.onFailure {
                 dataStore.clear()
                 Timber.e(it)
@@ -70,10 +70,15 @@ class CentralizeAuthenticator @Inject constructor(
             }.getOrThrow()
 
             return response.request.newBuilder()
-                .header("Authorization", newTokens.data?.accessToken.orEmpty())
+                .header(AUTHORIZATION, newTokens.data?.accessToken.orEmpty())
                 .build()
         }
 
         return null
+    }
+
+    companion object {
+        private const val BEARER = "Bearer"
+        private const val AUTHORIZATION = "Authorization"
     }
 }
