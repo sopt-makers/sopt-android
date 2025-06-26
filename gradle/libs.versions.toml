@@ -61,7 +61,7 @@ deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
 mozilla-component-utils = "140.0"
 
-google-services = "4.4.2"
+google-services = "4.4.3"
 crashlytics = "3.0.4"
 firebase = "33.15.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
