@@ -62,22 +62,27 @@ import org.sopt.official.feature.home.model.HomeAppService
 internal fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
     onAppServiceClick: (url: String, appServiceName: String) -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Text(
-        text = "SOPT 더 재밌게 즐기기!",
-        style = typography.heading20B,
-        color = colors.onBackground,
-    )
-    Spacer(modifier = Modifier.height(height = 16.dp))
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
-        modifier = Modifier.fillMaxWidth(),
+    Column(
+        modifier = modifier
     ) {
-        items(appServices) { appService ->
-            AppServiceItem(
-                appService = appService,
-                onItemClick = onAppServiceClick,
-            )
+        Text(
+            text = "SOPT 더 재밌게 즐기기!",
+            style = typography.heading20B,
+            color = colors.onBackground,
+        )
+        Spacer(modifier = Modifier.height(height = 16.dp))
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            items(appServices) { appService ->
+                AppServiceItem(
+                    appService = appService,
+                    onItemClick = onAppServiceClick,
+                )
+            }
         }
     }
 }

@@ -10,3 +10,10 @@ data class HomePlaygroundPostModel(
     val name: String,
     val part: String?
 )
+
+data class HomePlaygroundEmptyPostModel(
+    val category: String,
+    val description: String,
+    val iconUrl: String,
+    val webLink: String
+)

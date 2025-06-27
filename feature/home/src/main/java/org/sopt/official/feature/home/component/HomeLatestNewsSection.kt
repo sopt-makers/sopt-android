@@ -1,0 +1,108 @@
+package org.sopt.official.feature.home.component
+
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.home.model.HomePlaygroundEmptyPostModel
+import org.sopt.official.feature.home.model.HomePlaygroundPostModel
+
+internal val emptyFeedList = persistentListOf(
+    HomePlaygroundEmptyPostModel(
+        category = "[자유]",
+        description = "에 오늘의 TMI 적어봐!",
+        iconUrl = "https://avatars.githubusercontent.com/u/98209004?v=4",
+        webLink = "https://playground.sopt.org/?category=21&feed="
+    )
+)
+
+private const val CATEGORY_COUNT = 5
+private const val AUTO_SCROLL_DELAY = 3000L
+private const val AUTO_SCROLL_ANIMATION_DELAY = 450
+
+@Composable
+internal fun HomeLatestNewsSection(
+    feedList: ImmutableList<HomePlaygroundPostModel>,
+    emptyFeedList: ImmutableList<HomePlaygroundEmptyPostModel>,
+    navigateToPlayground: () -> Unit,
+    navigateToFeed: (Int) -> Unit,
+    navigateToWebLink: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val pageCount = CATEGORY_COUNT
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0f,
+        pageCount = { Int.MAX_VALUE }
+    )
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(AUTO_SCROLL_DELAY)
+            coroutineScope.launch {
+                val nextPage = pagerState.currentPage + 1
+                pagerState.animateScrollToPage(
+                    page = nextPage,
+                    animationSpec = tween(durationMillis = AUTO_SCROLL_ANIMATION_DELAY)
+                )
+            }
+        }
+    }
+
+    Column {
+        Row {
+            Text(
+                text = "최신 게시물",
+                style = SoptTheme.typography.heading20B,
+                color = SoptTheme.colors.primary
+            )
+
+        }
+        HorizontalPager(
+            state = pagerState,
+            beyondViewportPageCount = 1,
+            contentPadding = PaddingValues(horizontal = 20.dp),
+            pageSpacing = 20.dp
+        ) { currentPage ->
+            val page = currentPage % pageCount
+
+            if (page < feedList.size) {
+                with(feedList[page]) {
+                    HomePlaygroundPost(
+                        profileImage = profileImage,
+                        userName = name,
+                        userPart = part,
+                        label = label,
+                        category = category,
+                        title = title,
+                        description = content,
+                        onClick = { navigateToFeed(postId) }
+                    )
+                }
+            } else {
+                with(emptyFeedList[page - feedList.size]) {
+                    HomePlaygroundEmptyPost(
+                        category = category,
+                        description = description,
+                        iconUrl = iconUrl,
+                        onClick = { navigateToWebLink(webLink) }
+                    )
+                }
+            }
+        }
+    }
+}

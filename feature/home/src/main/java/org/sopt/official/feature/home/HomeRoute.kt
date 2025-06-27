@@ -70,6 +70,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
+import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
 import org.sopt.official.feature.home.component.HomeProgressIndicator
@@ -82,6 +83,7 @@ import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
+import org.sopt.official.feature.home.component.emptyFeedList
 import org.sopt.official.feature.home.component.feedList
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
@@ -229,7 +231,6 @@ private fun HomeScreenForMember(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 20.dp)
                 .verticalScroll(scrollState),
         ) {
             Spacer(modifier = Modifier.height(height = 8.dp))
@@ -241,6 +242,8 @@ private fun HomeScreenForMember(
                     trackClickEvent(tracker, "at36_alarm")
                 },
                 onSettingClick = homeDashboardNavigation::navigateToSetting,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))
@@ -248,6 +251,8 @@ private fun HomeScreenForMember(
             HomeUserSoptLogDashboardForMember(
                 onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
                 homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -262,7 +267,9 @@ private fun HomeScreenForMember(
                 onAttendanceButtonClick = {
                     homeDashboardNavigation.navigateToAttendance()
                     trackClickEvent(tracker, "at36_attendance")
-                }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -284,6 +291,8 @@ private fun HomeScreenForMember(
                     homeShortcutNavigation.navigateToPlaygroundProject()
                     trackClickEvent(tracker, "at36_project")
                 },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 40.dp))
@@ -291,13 +300,27 @@ private fun HomeScreenForMember(
             HomeEnjoySoptServicesBlock(
                 appServices = homeAppServices,
                 onAppServiceClick = onAppServiceClick,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 56.dp))
 
             HomePopularNewsSection(
                 feedList = feedList,
-                navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed
+                navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            )
+
+            Spacer(modifier = Modifier.height(height = 56.dp))
+
+            HomeLatestNewsSection(
+                feedList = feedList,
+                emptyFeedList = emptyFeedList,
+                navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
+                navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed,
+                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
             )
 
             HomeSurveySection(
@@ -307,13 +330,17 @@ private fun HomeScreenForMember(
                 onClick = {
                     homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
                     trackClickEvent(tracker, "at36_survey_button")
-                }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 72.dp))
 
             HomeOfficialChannelButton(
-                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl
+                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 58.dp))
