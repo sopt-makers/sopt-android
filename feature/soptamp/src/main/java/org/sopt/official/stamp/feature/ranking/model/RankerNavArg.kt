@@ -24,30 +24,21 @@
  */
 package org.sopt.official.stamp.feature.ranking.model
 
-import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
-import com.ramcosta.composedestinations.navargs.NavTypeSerializer
+// This file might be redundant now as RankerNavArg is defined in navigation/StampNavigation.kt
+// However, to minimize changes outside of navigation replacement for now,
+// we'll keep this and ensure it's compatible.
+// Consider removing/refactoring this file in a follow-up.
 
-data class RankerNavArg(
+data class RankerNavArgHolder( // Renamed to avoid conflict with the one in navigation package
     val nickname: String,
     val description: String,
 )
 
-fun RankerUiModel.toArgs() = RankerNavArg(
+// The RankerUiModel.toRankerNavArg() or direct construction is now handled in RankingScreen.kt
+// when creating UserMissionListRoute. This extension might cause confusion.
+/*
+fun RankerUiModel.toRankerNavArgHolder() = RankerNavArgHolder(
     nickname = this.nickname,
     description = this.getDescription()
 )
-
-@NavTypeSerializer
-class RankerNavArgsSerializer : DestinationsNavTypeSerializer<RankerNavArg> {
-    override fun fromRouteString(routeStr: String): RankerNavArg {
-        val (nickname, description) = routeStr.split("::")
-        return RankerNavArg(
-            nickname = nickname,
-            description = description
-        )
-    }
-
-    override fun toRouteString(value: RankerNavArg): String {
-        return "${value.nickname}::${value.description}"
-    }
-}
+*/

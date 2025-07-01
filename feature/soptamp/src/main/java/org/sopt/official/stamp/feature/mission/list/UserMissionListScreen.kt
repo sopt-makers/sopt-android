@@ -45,36 +45,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
+import androidx.navigation.NavHostController
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
-import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
-import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
+import org.sopt.official.stamp.navigation.MissionNavArgs
+import org.sopt.official.stamp.navigation.RankerNavArg
 
-@MissionNavGraph
-@Destination("mission/user")
 @Composable
 fun UserMissionListScreen(
     missionsViewModel: MissionsViewModel = hiltViewModel(),
     args: RankerNavArg,
-    resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator,
+    resultNavigator: NavHostController,
+    navigator: NavHostController,
 ) {
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
@@ -101,15 +95,15 @@ fun UserMissionListScreen(
             description = args.description,
             missionListUiModel = (state as MissionsState.Success).missionListUiModel,
             isMe = args.nickname == nickname,
-            onMissionItemClick = { item -> navigator.navigate(MissionDetailScreenDestination(item)) },
-            onClickBack = resultNavigator::navigateBack
+            onMissionItemClick = { item -> navigator.navigate(item.toMissionDetailRoute()) },
+            onClickBack = { resultNavigator.popBackStack() }
         )
     }
 }
 
 
 @Composable
-fun UserMissionListScreen(
+fun UserMissionListContent(
     userName: String,
     description: String,
     missionListUiModel: MissionListUiModel,
@@ -190,11 +184,13 @@ fun UserMissionListHeader(
     )
 }
 
+import androidx.navigation.compose.rememberNavController
+
 @Preview
 @Composable
 fun PreviewUserMissionListScreen() {
     SoptTheme {
-        UserMissionListScreen(
+        UserMissionListContent(
             userName = "hello",
             description = "일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이",
             missionListUiModel = MissionListUiModel(

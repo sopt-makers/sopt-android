@@ -54,66 +54,67 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
+import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.feature.destinations.UserMissionListScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.TopRankerList
-import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel.Companion.DEFAULT_USER_NAME
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
-import org.sopt.official.stamp.feature.ranking.model.toArgs
+import org.sopt.official.stamp.navigation.RankerNavArg
+import org.sopt.official.stamp.navigation.RankingNavArg
+import org.sopt.official.stamp.navigation.UserMissionListRoute
 import org.sopt.official.stamp.util.toPx
 
-@MissionNavGraph
-@Destination("ranking")
 @Composable
 fun RankingScreen(
-    type: String,
+    args: RankingNavArg,
     rankingViewModel: RankingViewModel = hiltViewModel(),
-    resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator,
+    resultNavigator: NavHostController,
+    navigator: NavHostController,
 ) {
-    val isCurrent = type.first().isDigit()
+    val isCurrent = args.type.first().isDigit()
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
-        rankingViewModel.fetchRanking(isCurrent, type)
+        rankingViewModel.fetchRanking(isCurrent, args.type)
     }
 
     when (state) {
         RankingState.Loading -> LoadingScreen()
-        RankingState.Failure -> NetworkErrorDialog(resultNavigator::navigateBack)
-        is RankingState.Success -> RankingScreen(
+        RankingState.Failure -> NetworkErrorDialog { resultNavigator.popBackStack() }
+        is RankingState.Success -> RankingContent(
             isCurrent = isCurrent,
-            type = type,
+            type = args.type,
             refreshing = rankingViewModel.isRefreshing,
-            onRefresh = { rankingViewModel.onRefresh(isCurrent, type) },
+            onRefresh = { rankingViewModel.onRefresh(isCurrent, args.type) },
             rankingListUiModel = (state as RankingState.Success).uiModel,
             nickname = rankingViewModel.nickname,
-            onClickBack = resultNavigator::navigateBack,
-            onClickUser = { ranker -> navigator.navigate(UserMissionListScreenDestination(ranker)) }
+            onClickBack = { resultNavigator.popBackStack() },
+            onClickUser = { rankerUiModel ->
+                navigator.navigate(
+                    UserMissionListRoute(
+                        nickname = rankerUiModel.nickname,
+                        description = rankerUiModel.getDescription()
+                    )
+                )
+            }
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RankingScreen(
+fun RankingContent(
     isCurrent: Boolean,
     type: String,
     refreshing: Boolean = false,
@@ -121,7 +122,7 @@ fun RankingScreen(
     rankingListUiModel: RankingListUiModel,
     nickname: String,
     onClickBack: () -> Unit = {},
-    onClickUser: (RankerNavArg) -> Unit = {},
+    onClickUser: (RankerUiModel) -> Unit = {},
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -189,7 +190,7 @@ fun RankingScreen(
                     TopRankerList(
                         topRanker = rankingListUiModel.topRankingList,
                         onClickTopRankerBubble = { ranker ->
-                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs())
+                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker)
                         }
                     )
                 }
@@ -198,7 +199,7 @@ fun RankingScreen(
                         rankerItem = item,
                         isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
-                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
+                            if (nickname != ranker.nickname) onClickUser(ranker)
                         }
                     )
                 }
@@ -244,12 +245,16 @@ fun PreviewRankingScreen() {
             )
         )
     }
+import androidx.navigation.compose.rememberNavController
+
     SoptTheme {
-        RankingScreen(
+        RankingContent(
             isCurrent = true,
             type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
+            onClickBack = {},
+            onClickUser = {}
         )
     }
 }

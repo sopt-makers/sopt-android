@@ -20,6 +20,12 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile) apply false
 }
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}
+
 subprojects {
     apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
 

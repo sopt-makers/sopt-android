@@ -43,12 +43,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
@@ -56,7 +54,6 @@ import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
@@ -69,15 +66,14 @@ import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
-import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.navigateBackWithResult
+import org.sopt.official.stamp.navigation.MissionNavArgs
 import org.sopt.official.stamp.util.DefaultPreview
 
-@MissionNavGraph
-@Destination("detail")
 @Composable
 fun MissionDetailScreen(
     args: MissionNavArgs,
-    resultNavigator: ResultBackNavigator<Boolean>,
+    resultNavigator: NavHostController,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
@@ -114,12 +110,12 @@ fun MissionDetailScreen(
     LaunchedEffect(isSuccess, progress) {
         if (progress >= 0.99f && isSuccess) {
             delay(500L)
-            resultNavigator.navigateBack(true)
+            resultNavigator.navigateBackWithResult("refreshMissionList", true)
         }
     }
     LaunchedEffect(isDeleteSuccess) {
         if (isDeleteSuccess) {
-            resultNavigator.navigateBack(true)
+            resultNavigator.navigateBackWithResult("refreshMissionList", true)
         }
     }
 
@@ -141,7 +137,7 @@ fun MissionDetailScreen(
                 )
             },
             iconOption = toolbarIconType,
-            onBack = resultNavigator::navigateBack,
+            onBack = { resultNavigator.popBackStack() },
             onPressIcon = viewModel::onPressToolbarIcon
         )
         Column(
@@ -233,10 +229,12 @@ fun MissionDetailPreview() {
         isMe = true,
         nickname = "Nunu",
     )
+import androidx.navigation.compose.rememberNavController
+
     SoptTheme {
         MissionDetailScreen(
             args,
-            EmptyResultBackNavigator(),
+            rememberNavController(),
             MissionDetailViewModel(stampRepository = FakeStampRepository, imageUploaderRepository = FakeImageUploaderRepository)
         )
     }

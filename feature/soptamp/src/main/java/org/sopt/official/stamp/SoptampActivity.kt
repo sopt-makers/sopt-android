@@ -30,13 +30,23 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.ramcosta.composedestinations.DestinationsNavHost
+import androidx.compose.material.use
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.feature.NavGraphs
+import org.sopt.official.domain.soptamp.error.Error
 
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
@@ -47,9 +57,33 @@ class SoptampActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val navController = rememberNavController()
+            val snackbarHostState = remember { SnackbarHostState() }
+            val scope = rememberCoroutineScope()
+
             SoptTheme {
                 ProvideTracker(tracker) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    Scaffold(
+                        modifier = Modifier,
+                        snackbarHost = { SnackbarHost(snackbarHostState) }
+                    ) { paddingValues ->
+                        SoptampNavHost(
+                            navController = navController,
+                            modifier = Modifier,
+                            onShowErrorToast = { throwable ->
+                                val message = when (throwable) {
+                                    is Error.Unknown -> "알 수 없는 오류가 발생했습니다. 다시 시도해주세요."
+                                    else -> throwable.message ?: "오류가 발생했습니다."
+                                }
+                                scope.launch {
+                                    snackbarHostState.showSnackbar(
+                                        message = message,
+                                        withDismissAction = true
+                                    )
+                                }
+                            }
+                        )
+                    }
                 }
             }
         }

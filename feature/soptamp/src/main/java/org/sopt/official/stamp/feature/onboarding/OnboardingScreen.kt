@@ -42,12 +42,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.util.DefaultPreview
@@ -74,10 +72,8 @@ private enum class OnBoardingPageUiModel(
     )
 }
 
-@MissionNavGraph
-@Destination("onboarding")
 @Composable
-fun OnboardingScreen(navigator: DestinationsNavigator) {
+fun OnboardingScreen(navigator: NavHostController) {
     val onboardingPages = OnBoardingPageUiModel.entries.toTypedArray()
     val pageState = rememberPagerState { onboardingPages.size }
     SoptTheme {
@@ -98,7 +94,7 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                         color = SoptTheme.colors.onSurface10
                     )
                 },
-                onBack = navigator::popBackStack
+                onBack = { navigator.popBackStack() }
             )
             HorizontalPager(
                 modifier = Modifier.fillMaxWidth(),
@@ -124,7 +120,7 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
             Spacer(modifier = Modifier.weight(1f))
             OnboardingButton(
                 isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
-                onClick = navigator::popBackStack,
+                onClick = { navigator.popBackStack() },
                 modifier = Modifier
                     .padding(start = 16.dp, end = 16.dp, bottom = 40.dp)
             )
@@ -161,6 +157,6 @@ fun OnboardingButton(
 @Composable
 private fun OnboardingScreenPreview() {
     SoptTheme {
-        OnboardingScreen(navigator = EmptyDestinationsNavigator)
+        OnboardingScreen(navigator = rememberNavController())
     }
 }

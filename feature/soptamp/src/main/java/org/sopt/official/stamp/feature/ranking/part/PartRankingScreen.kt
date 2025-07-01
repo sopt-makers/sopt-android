@@ -56,31 +56,26 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
+import androidx.navigation.NavHostController
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
-import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.RankingBar
 import org.sopt.official.stamp.feature.ranking.TopRankBarOfRankText
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.rank.RankingHeader
+import org.sopt.official.stamp.navigation.RankingRoute
 
-@MissionNavGraph
-@Destination("partRanking")
 @Composable
 fun PartRankingScreen(
     partRankingViewModel: PartRankingViewModel = hiltViewModel(),
-    resultNavigator: ResultBackNavigator<Boolean>,
-    navigator: DestinationsNavigator,
+    resultNavigator: NavHostController,
+    navigator: NavHostController,
 ) {
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
@@ -102,9 +97,9 @@ fun PartRankingScreen(
             partRankList = (state as PartRankingState.Success).partRankList,
             refreshing = partRankingViewModel.isRefreshing,
             onRefresh = partRankingViewModel::onRefresh,
-            onClickBack = resultNavigator::navigateBack,
+            onClickBack = { resultNavigator.popBackStack() },
             onClickPart = {
-                navigator.navigate(RankingScreenDestination(it))
+                navigator.navigate(RankingRoute(it))
             }
         )
     }
@@ -113,7 +108,7 @@ fun PartRankingScreen(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun PartRankingScreen(
+fun PartRankingContent(
     partRankList: ImmutableList<PartRankModel>,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
@@ -226,6 +221,8 @@ fun getRankHeight(rank: Int) = when (rank) {
     else -> 27.dp
 }
 
+import androidx.navigation.compose.rememberNavController
+
 @Preview
 @Composable
 fun PartRankingPreview() {
@@ -262,6 +259,10 @@ fun PartRankingPreview() {
         )
     )
     SoptTheme {
-        PartRankingScreen(partRankList)
+        PartRankingContent(
+            partRankList = partRankList,
+            onClickBack = {},
+            onClickPart = {}
+        )
     }
 }

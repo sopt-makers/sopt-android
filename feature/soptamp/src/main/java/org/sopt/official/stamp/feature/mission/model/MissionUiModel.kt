@@ -26,6 +26,7 @@ package org.sopt.official.stamp.feature.mission.model
 
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.model.OtherMission
+import org.sopt.official.stamp.navigation.MissionNavArgs
 
 data class MissionUiModel(
     val id: Int,

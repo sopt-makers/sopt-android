@@ -25,7 +25,6 @@
 plugins {
     sopt("feature")
     sopt("compose")
-    alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.secret)
 }
@@ -34,13 +33,6 @@ android {
     defaultConfig {
         vectorDrawables {
             useSupportLibrary = true
-        }
-    }
-    libraryVariants.all {
-        sourceSets {
-            getByName(name) {
-                java.srcDir("build/generated/ksp/$name/kotlin")
-            }
         }
     }
     namespace = "org.sopt.official.stamp"
@@ -61,9 +53,10 @@ dependencies {
     implementation(libs.kotlin.collections.immutable)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.compose.destination.core)
-    ksp(libs.compose.destination.ksp)
     implementation(libs.coil.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.process.phoenix)
     testImplementation(libs.junit)
     androidTestImplementation(libs.bundles.compose.test)

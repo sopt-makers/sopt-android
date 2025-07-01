@@ -68,10 +68,8 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.result.NavResult
-import com.ramcosta.composedestinations.result.ResultRecipient
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -80,32 +78,29 @@ import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
-import org.sopt.official.stamp.feature.destinations.MissionDetailScreenDestination
-import org.sopt.official.stamp.feature.destinations.OnboardingScreenDestination
-import org.sopt.official.stamp.feature.destinations.PartRankingScreenDestination
-import org.sopt.official.stamp.feature.destinations.RankingScreenDestination
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
-import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
-import org.sopt.official.stamp.feature.mission.model.toArgs
+import org.sopt.official.stamp.getResult
+import org.sopt.official.stamp.navigation.MissionDetailRoute
+import org.sopt.official.stamp.navigation.MissionNavArgs
+import org.sopt.official.stamp.navigation.OnboardingRoute
+import org.sopt.official.stamp.navigation.PartRankingRoute
+import org.sopt.official.stamp.navigation.RankingRoute
 import org.sopt.official.webview.view.WebViewActivity
 
-@MissionNavGraph(true)
-@Destination("list")
 @Composable
 fun MissionListScreen(
-    navigator: DestinationsNavigator,
-    resultRecipient: ResultRecipient<MissionDetailScreenDestination, Boolean>,
+    navigator: NavHostController = rememberNavController(),
     missionsViewModel: MissionsViewModel = hiltViewModel(),
+    onShowErrorToast: (throwable: Throwable) -> Unit = {}
 ) {
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
@@ -114,12 +109,9 @@ fun MissionListScreen(
 
     val context = LocalContext.current
 
-    resultRecipient.onNavResult { result ->
-        when (result) {
-            is NavResult.Canceled -> Unit
-            is NavResult.Value -> {
-                if (result.value) missionsViewModel.fetchMissions()
-            }
+    navigator.getResult<Boolean>("refreshMissionList") { refresh ->
+        if (refresh) {
+            missionsViewModel.fetchMissions()
         }
     }
 
@@ -130,10 +122,13 @@ fun MissionListScreen(
     when (state) {
         MissionsState.Loading -> LoadingScreen()
         is MissionsState.Failure -> {
-            when ((state as MissionsState.Failure).error) {
+            val error = (state as MissionsState.Failure).error
+            when (error) {
                 Error.NetworkUnavailable -> NetworkErrorDialog(
                     onRetry = missionsViewModel::fetchMissions
                 )
+
+                else -> onShowErrorToast(error)
             }
         }
 
@@ -144,12 +139,10 @@ fun MissionListScreen(
             menuTexts = MissionsFilter.getTitleOfMissionsList().toImmutableList(),
             onMenuClick = { filter -> missionsViewModel.fetchMissions(filter = filter) },
             onMissionItemClick = { item ->
-                navigator.navigate(
-                    MissionDetailScreenDestination(item)
-                )
+                navigator.navigate(item.toMissionDetailRoute())
             },
-            onPartRankingButtonClick = { navigator.navigate(PartRankingScreenDestination) },
-            onCurrentRankingButtonClick = { navigator.navigate(RankingScreenDestination("${generation}기")) },
+            onPartRankingButtonClick = { navigator.navigate(PartRankingRoute) },
+            onCurrentRankingButtonClick = { navigator.navigate(RankingRoute("${generation}기")) },
             onReportButtonClick = {
                 Intent(context, WebViewActivity::class.java).apply {
                     putExtra(
@@ -159,14 +152,13 @@ fun MissionListScreen(
                     context.startActivity(this)
                 }
             },
-            onOnboardingButtonClick = { navigator.navigate(OnboardingScreenDestination) }
+            onOnboardingButtonClick = { navigator.navigate(OnboardingRoute) }
         )
     }
-
 }
 
 @Composable
-fun MissionListScreen(
+fun MissionListContent(
     nickname: String,
     generation: Int,
     missionListUiModel: MissionListUiModel,
@@ -244,7 +236,7 @@ fun MissionsGridComponent(
             MissionComponent(
                 mission = missionUiModel,
                 onClick = {
-                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
+                    onMissionItemClick(missionUiModel.toNavArgs(isMe, nickname))
                 }
             )
         }

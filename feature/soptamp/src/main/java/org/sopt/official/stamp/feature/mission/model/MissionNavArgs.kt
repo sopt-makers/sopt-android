@@ -24,11 +24,14 @@
  */
 package org.sopt.official.stamp.feature.mission.model
 
-import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
-import com.ramcosta.composedestinations.navargs.NavTypeSerializer
 import org.sopt.official.domain.soptamp.MissionLevel
 
-data class MissionNavArgs(
+// This file might be redundant now as MissionNavArgs is defined in navigation/StampNavigation.kt
+// However, to minimize changes outside of navigation replacement for now,
+// we'll keep this and ensure it's compatible.
+// Consider removing/refactoring this file in a follow-up.
+
+data class MissionNavArgsHolder( // Renamed to avoid conflict with the one in navigation package
     val id: Int,
     val title: String,
     val level: MissionLevel,
@@ -37,7 +40,11 @@ data class MissionNavArgs(
     val nickname: String,
 )
 
-fun MissionUiModel.toArgs(isMe: Boolean, nickname: String) = MissionNavArgs(
+// The toNavArgs function in MissionUiModel.kt now creates instances of
+// org.sopt.official.stamp.navigation.MissionNavArgs, so this extension is no longer needed here
+// and might cause confusion.
+/*
+fun MissionUiModel.toNavArgs(isMe: Boolean, nickname: String) = MissionNavArgsHolder(
     id = this.id,
     title = this.title,
     level = this.level,
@@ -45,22 +52,4 @@ fun MissionUiModel.toArgs(isMe: Boolean, nickname: String) = MissionNavArgs(
     isMe = isMe,
     nickname = nickname
 )
-
-@NavTypeSerializer
-class MissionNavArgsSerializer : DestinationsNavTypeSerializer<MissionNavArgs> {
-    override fun toRouteString(value: MissionNavArgs): String {
-        return "${value.id}::${value.title}::${value.level}::${value.isCompleted}::${value.isMe}::${value.nickname}"
-    }
-
-    override fun fromRouteString(routeStr: String): MissionNavArgs {
-        val it = routeStr.split("::")
-        return MissionNavArgs(
-            id = it[0].toInt(),
-            title = it[1],
-            level = MissionLevel.of(it[2].toInt()),
-            isCompleted = it[3].toBoolean(),
-            isMe = it[4].toBoolean(),
-            nickname = it[5],
-        )
-    }
-}
+*/
