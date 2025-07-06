@@ -77,12 +77,12 @@ internal fun LoginErrorDialog(
                 }
                 Spacer(modifier = Modifier.height(12.dp))
                 LoginDialogText(
-                    text = "로그인한 계정을 알고 싶어요.",
+                    text = "로그인 했던 방법을 알고 싶어요.",
                     onClick = onFindAccountClick
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 LoginDialogText(
-                    text = "소셜 계정을 재설정하고 싶어요.",
+                    text = "로그인 계정을 변경하고 싶어요.",
                     onClick = onResetAccountClick
                 )
                 if (showContactChanel) {
