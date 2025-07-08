@@ -323,6 +323,8 @@ private fun HomeScreenForMember(
                 navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
             )
 
+            Spacer(modifier = Modifier.height(height = 56.dp))
+
             HomeSurveySection(
                 surveyTitle = surveyData.title,
                 surveyDescription = surveyData.description,
