@@ -6,7 +6,7 @@ targetSdk = "35"
 appVersion = "3.0.10"
 versionCode = "30010"
 
-kotlin = "2.1.21"
+kotlin = "2.2.0"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.0-0.6.x-compat"
@@ -43,7 +43,7 @@ androidx-test-rules = "1.6.1"
 mockk = "1.14.4"
 
 gradleplugin = "8.11.0"
-kspplugin = "2.1.21-2.0.2"
+kspplugin = "2.2.0-2.0.2"
 
 dagger-hilt = "2.56.2"
 dagger-hilt-navigation-compose = "1.2.0"
