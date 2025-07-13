@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,24 +30,24 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import org.sopt.official.stamp.feature.mission.MissionsViewModel
-import org.sopt.official.stamp.feature.mission.MissionsState
-import org.sopt.official.stamp.feature.mission.detail.MissionDetailScreen
-import org.sopt.official.stamp.feature.mission.detail.MissionDetailViewModel
-import org.sopt.official.stamp.feature.mission.list.MissionListScreenNew
-import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
-import org.sopt.official.stamp.feature.onboarding.OnboardingScreenNew
-import org.sopt.official.stamp.feature.ranking.rank.RankingViewModel
-import org.sopt.official.stamp.feature.ranking.rank.RankingState
-import org.sopt.official.stamp.feature.ranking.rank.RankingScreen
-import org.sopt.official.stamp.feature.ranking.part.PartRankingViewModel
-import org.sopt.official.stamp.feature.ranking.part.PartRankingState
-import org.sopt.official.stamp.feature.ranking.part.PartRankingScreen
-import org.sopt.official.stamp.feature.mission.list.UserMissionListScreen
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
+import org.sopt.official.stamp.feature.mission.MissionsState
+import org.sopt.official.stamp.feature.mission.MissionsViewModel
+import org.sopt.official.stamp.feature.mission.detail.MissionDetailScreen
+import org.sopt.official.stamp.feature.mission.detail.MissionDetailViewModel
+import org.sopt.official.stamp.feature.mission.list.MissionListScreenNew
+import org.sopt.official.stamp.feature.mission.list.UserMissionListScreen
+import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.onboarding.OnboardingScreenNew
+import org.sopt.official.stamp.feature.ranking.part.PartRankingScreen
+import org.sopt.official.stamp.feature.ranking.part.PartRankingState
+import org.sopt.official.stamp.feature.ranking.part.PartRankingViewModel
+import org.sopt.official.stamp.feature.ranking.rank.RankingScreen
+import org.sopt.official.stamp.feature.ranking.rank.RankingState
+import org.sopt.official.stamp.feature.ranking.rank.RankingViewModel
 
 @Composable
 fun MissionListScreenRoute(navController: NavController) {
@@ -109,25 +109,26 @@ fun RankingScreenRoute(
 
     when (state) {
         RankingState.Loading -> LoadingScreen()
-        RankingState.Failure -> NetworkErrorDialog { 
-            navController.popBackStack()
-        }
+        RankingState.Failure ->
+            NetworkErrorDialog {
+                navController.popBackStack()
+            }
         is RankingState.Success -> {
             val successState = state as RankingState.Success
             RankingScreen(
                 isCurrent = args.type.first().isDigit(),
                 type = args.type,
                 refreshing = rankingViewModel.isRefreshing,
-                onRefresh = { 
+                onRefresh = {
                     val isCurrent = args.type.first().isDigit()
-                    rankingViewModel.onRefresh(isCurrent, args.type) 
+                    rankingViewModel.onRefresh(isCurrent, args.type)
                 },
                 rankingListUiModel = successState.uiModel,
                 nickname = successState.nickname,
                 onClickBack = { navController.popBackStack() },
-                onClickUser = { ranker -> 
+                onClickUser = { ranker ->
                     navController.navigateToUserMissionList(ranker)
-                }
+                },
             )
         }
     }
@@ -144,9 +145,10 @@ fun PartRankingScreenRoute(navController: NavController) {
 
     when (state) {
         PartRankingState.Loading -> LoadingScreen()
-        PartRankingState.Failure -> NetworkErrorDialog {
-            partRankingViewModel.fetchRanking()
-        }
+        PartRankingState.Failure ->
+            NetworkErrorDialog {
+                partRankingViewModel.fetchRanking()
+            }
         is PartRankingState.Success -> {
             val successState = state as PartRankingState.Success
             PartRankingScreen(
@@ -156,7 +158,7 @@ fun PartRankingScreenRoute(navController: NavController) {
                 onClickBack = { navController.popBackStack() },
                 onClickPart = { partName ->
                     navController.navigateToRanking(partName)
-                }
+                },
             )
         }
     }
@@ -182,9 +184,10 @@ fun UserMissionListScreenRoute(
         MissionsState.Loading -> LoadingScreen()
         is MissionsState.Failure -> {
             when ((state as MissionsState.Failure).error) {
-                Error.NetworkUnavailable -> NetworkErrorDialog(
-                    onRetry = missionsViewModel::fetchMissions
-                )
+                Error.NetworkUnavailable ->
+                    NetworkErrorDialog(
+                        onRetry = missionsViewModel::fetchMissions,
+                    )
             }
         }
         is MissionsState.Success -> {
@@ -194,10 +197,10 @@ fun UserMissionListScreenRoute(
                 description = args.description,
                 missionListUiModel = successState.missionListUiModel,
                 isMe = args.nickname == nickname,
-                onMissionItemClick = { item -> 
+                onMissionItemClick = { item ->
                     navController.navigateToMissionDetail(item)
                 },
-                onClickBack = { navController.popBackStack() }
+                onClickBack = { navController.popBackStack() },
             )
         }
     }
