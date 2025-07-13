@@ -34,9 +34,10 @@ data class MissionUiModel(
     val isCompleted: Boolean,
 )
 
-fun OtherMission.Mission.toUiModel(): MissionUiModel = MissionUiModel(
-    id = this.id,
-    title = this.title,
-    level = MissionLevel.of(this.level),
-    isCompleted = this.display,
-)
+fun OtherMission.Mission.toUiModel(): MissionUiModel =
+    MissionUiModel(
+        id = this.id,
+        title = this.title,
+        level = MissionLevel.of(this.level),
+        isCompleted = this.display,
+    )

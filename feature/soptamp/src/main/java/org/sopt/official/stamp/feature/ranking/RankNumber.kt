@@ -36,21 +36,27 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.style.MontserratBold
 
 @Composable
-fun RankNumber(modifier: Modifier = Modifier, rank: Int, isMyRankNumber: Boolean = false, isPartRankNumber: Boolean = false) {
+fun RankNumber(
+    modifier: Modifier = Modifier,
+    rank: Int,
+    isMyRankNumber: Boolean = false,
+    isPartRankNumber: Boolean = false,
+) {
     val defaultRankSymbols = "-"
     Text(
         text = if (rank <= 0) defaultRankSymbols else "$rank",
         fontFamily = MontserratBold,
         fontSize = 30.sp,
         fontWeight = FontWeight.Bold,
-        color = when {
-            isMyRankNumber -> SoptTheme.colors.onSurface300
-            isPartRankNumber -> SoptTheme.colors.onSurface300
-            rank == 1 -> SoptTheme.colors.primary
-            else -> getRankTextColor(rank)
-        },
+        color =
+            when {
+                isMyRankNumber -> SoptTheme.colors.onSurface300
+                isPartRankNumber -> SoptTheme.colors.onSurface300
+                rank == 1 -> SoptTheme.colors.primary
+                else -> getRankTextColor(rank)
+            },
         modifier = modifier,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 

@@ -31,25 +31,28 @@ import org.sopt.official.stamp.designsystem.style.Pink300
 import org.sopt.official.stamp.designsystem.style.Purple300
 
 @Composable
-fun getRankTextColor(rank: Int) = when (rank) {
-    1 -> Pink300
-    2 -> Mint300
-    3 -> Purple300
-    else -> SoptTheme.colors.onSurface300
-}
+fun getRankTextColor(rank: Int) =
+    when (rank) {
+        1 -> Pink300
+        2 -> Mint300
+        3 -> Purple300
+        else -> SoptTheme.colors.onSurface300
+    }
 
 @Composable
-fun getRankBackgroundColor(rank: Int) = when (rank) {
-    1 -> Pink300
-    2 -> Mint300
-    3 -> Purple300
-    else -> SoptTheme.colors.onSurface700
-}
+fun getRankBackgroundColor(rank: Int) =
+    when (rank) {
+        1 -> Pink300
+        2 -> Mint300
+        3 -> Purple300
+        else -> SoptTheme.colors.onSurface700
+    }
 
 @Composable
-fun getStarColor(rank: Int) = when (rank) {
-    1 -> Pink300
-    2 -> Purple300
-    3 -> Mint300
-    else -> SoptTheme.colors.onSurface700
-}
+fun getStarColor(rank: Int) =
+    when (rank) {
+        1 -> Pink300
+        2 -> Purple300
+        3 -> Mint300
+        else -> SoptTheme.colors.onSurface700
+    }

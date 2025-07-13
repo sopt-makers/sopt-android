@@ -55,26 +55,32 @@ import org.sopt.official.stamp.designsystem.style.Pink300
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
 @Composable
-fun TopRankerItem(ranker: RankerUiModel, height: Dp, onClick: (RankerUiModel) -> Unit = {}, onClickTopRankerBubble: () -> Unit = {}) {
+fun TopRankerItem(
+    ranker: RankerUiModel,
+    height: Dp,
+    onClick: (RankerUiModel) -> Unit = {},
+    onClickTopRankerBubble: () -> Unit = {},
+) {
     Column(
         modifier = Modifier.noRippleClickable { onClick(ranker) },
         verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TopRankBarOfRankText(rank = ranker.rank)
         RankingBar(modifier = Modifier.size(width = 90.dp, height = height), ranker.rank) {
             RankScore(
-                modifier = Modifier
-                    .padding(top = 8.dp),
+                modifier =
+                    Modifier
+                        .padding(top = 8.dp),
                 rank = ranker.rank,
-                score = ranker.score
+                score = ranker.score,
             )
         }
         Spacer(modifier = Modifier.size(10.dp))
         TopRankBarOfUserName(
             rank = ranker.rank,
             nickname = ranker.nickname,
-            onClickTopRankerBubble = onClickTopRankerBubble
+            onClickTopRankerBubble = onClickTopRankerBubble,
         )
     }
 }
@@ -84,12 +90,13 @@ fun TopRankBarOfRankText(rank: Int) {
     if (rank == 1) {
         Box {
             Icon(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(50.dp),
+                modifier =
+                    Modifier
+                        .align(Alignment.Center)
+                        .size(50.dp),
                 painter = painterResource(id = R.drawable.ic_star),
                 tint = Pink300,
-                contentDescription = "RankText Star Icon"
+                contentDescription = "RankText Star Icon",
             )
             RankNumber(modifier = Modifier.align(Alignment.Center), rank = rank)
         }
@@ -101,19 +108,24 @@ fun TopRankBarOfRankText(rank: Int) {
 }
 
 @Composable
-fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: () -> Unit = {}) {
+fun TopRankBarOfUserName(
+    rank: Int,
+    nickname: String,
+    onClickTopRankerBubble: () -> Unit = {},
+) {
     Box(
-        modifier = Modifier
-            .noRippleClickable(onClick = onClickTopRankerBubble)
-            .size(width = 97.dp, height = 32.dp)
-            .background(
-                color = SoptTheme.colors.onSurface800,
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .noRippleClickable(onClick = onClickTopRankerBubble)
+                .size(width = 97.dp, height = 32.dp)
+                .background(
+                    color = SoptTheme.colors.onSurface800,
+                    shape = CircleShape,
+                ),
+        contentAlignment = Alignment.Center,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(0.8f),
@@ -122,12 +134,12 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
                 maxLines = 1,
                 textAlign = TextAlign.Center,
                 style = SoptTheme.typography.body14M,
-                color = getRankTextColor(rank)
+                color = getRankTextColor(rank),
             )
             SoptampIconButton(
                 modifier = Modifier.size(16.dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
-                tint = getRankTextColor(rank)
+                tint = getRankTextColor(rank),
             )
         }
     }
@@ -138,12 +150,13 @@ fun TopRankBarOfUserName(rank: Int, nickname: String, onClickTopRankerBubble: ()
 fun PreviewTopRankerItem() {
     SoptTheme {
         TopRankerItem(
-            ranker = RankerUiModel(
-                rank = 1,
-                nickname = "디자인김땡땡",
-                score = 1000
-            ),
-            height = 150.dp
+            ranker =
+                RankerUiModel(
+                    rank = 1,
+                    nickname = "디자인김땡땡",
+                    score = 1000,
+                ),
+            height = 150.dp,
         )
     }
 }

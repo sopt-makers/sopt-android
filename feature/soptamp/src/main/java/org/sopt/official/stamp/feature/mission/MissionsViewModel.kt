@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,94 +40,103 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
-class MissionsViewModel @Inject constructor(
-    private val missionsRepository: MissionsRepository,
-    private val rankingRepository: RankingRepository,
-    private val userRepository: UserRepository,
-    private val stampRepository: StampRepository,
-) : ViewModel() {
+class MissionsViewModel
+    @Inject
+    constructor(
+        private val missionsRepository: MissionsRepository,
+        private val rankingRepository: RankingRepository,
+        private val userRepository: UserRepository,
+        private val stampRepository: StampRepository,
+    ) : ViewModel() {
+        private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
+        val state: StateFlow<MissionsState> = _state.asStateFlow()
+        private val _nickname = MutableStateFlow("")
+        val nickname = _nickname.asStateFlow()
+        private val _generation = MutableStateFlow(-1)
+        val generation = _generation.asStateFlow()
+        val reportUrl = MutableStateFlow("")
 
-    private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
-    val state: StateFlow<MissionsState> = _state.asStateFlow()
-    private val _nickname = MutableStateFlow("")
-    val nickname = _nickname.asStateFlow()
-    private val _generation = MutableStateFlow(-1)
-    val generation = _generation.asStateFlow()
-    val reportUrl = MutableStateFlow("")
-
-    init {
-        initUser()
-        getReportUrl()
-    }
-
-
-    private fun initUser() {
-        viewModelScope.launch {
-            userRepository.getUserInfo()
-                .onSuccess { _nickname.value = it.nickname }
-                .onFailure(Timber::e)
-
-            userRepository.getUserGeneration()
-                .onSuccess { _generation.value = it }
-                .onFailure(Timber::e)
+        init {
+            initUser()
+            getReportUrl()
         }
-    }
 
-    private fun getReportUrl() {
-        viewModelScope.launch {
-            stampRepository.getReportUrl()
-                .onSuccess { reportUrl.value = it }
-                .onFailure(Timber::e)
-        }
-    }
+        private fun initUser() {
+            viewModelScope.launch {
+                userRepository.getUserInfo()
+                    .onSuccess { _nickname.value = it.nickname }
+                    .onFailure(Timber::e)
 
-    fun fetchMissions(filter: String? = null, nickname: String = "") = viewModelScope.launch {
-        _state.value = MissionsState.Loading
-        fetchMissions(
-            filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION,
-            nickname = nickname
-        )
-    }
-
-    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String) {
-        if (nickname.isEmpty()) {
-            val missions = when (filter) {
-                MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
-                MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions()
-                MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
+                userRepository.getUserGeneration()
+                    .onSuccess { _generation.value = it }
+                    .onFailure(Timber::e)
             }
-            missions.mapCatching { it.toUiModel(filter.title) }
-                .onSuccess { result ->
-                    _state.value = MissionsState.Success(result)
-                }
-                .onFailure { throwable ->
-                    when (throwable) {
-                        is Error.NetworkUnavailable -> {
-                            _state.value = MissionsState.Failure(throwable)
-                        }
-
-                        else -> throw throwable
-                    }
-                }
-            return
         }
-        viewModelScope.launch {
-            rankingRepository.getRankDetail(nickname)
-                .onSuccess {
-                    val missions = it.userMissions
-                        .map { mission -> mission.toUiModel() }
-                    _state.value = MissionsState.Success(MissionListUiModel(filter.title, missions))
-                }.onFailure { throwable ->
-                    when (throwable) {
-                        is Error.NetworkUnavailable -> {
-                            _state.value = MissionsState.Failure(throwable)
-                        }
 
-                        else -> throw throwable
+        private fun getReportUrl() {
+            viewModelScope.launch {
+                stampRepository.getReportUrl()
+                    .onSuccess { reportUrl.value = it }
+                    .onFailure(Timber::e)
+            }
+        }
+
+        fun fetchMissions(
+            filter: String? = null,
+            nickname: String = "",
+        ) = viewModelScope.launch {
+            _state.value = MissionsState.Loading
+            fetchMissions(
+                filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION,
+                nickname = nickname,
+            )
+        }
+
+        private suspend fun fetchMissions(
+            filter: MissionsFilter,
+            nickname: String,
+        ) {
+            if (nickname.isEmpty()) {
+                val missions =
+                    when (filter) {
+                        MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
+                        MissionsFilter.COMPLETE_MISSION -> missionsRepository.getCompleteMissions()
+                        MissionsFilter.INCOMPLETE_MISSION -> missionsRepository.getInCompleteMissions()
                     }
-                }
+                missions.mapCatching { it.toUiModel(filter.title) }
+                    .onSuccess { result ->
+                        _state.value = MissionsState.Success(result)
+                    }
+                    .onFailure { throwable ->
+                        when (throwable) {
+                            is Error.NetworkUnavailable -> {
+                                _state.value = MissionsState.Failure(throwable)
+                            }
+
+                            else -> throw throwable
+                        }
+                    }
+                return
+            }
+            viewModelScope.launch {
+                rankingRepository.getRankDetail(nickname)
+                    .onSuccess {
+                        val missions =
+                            it.userMissions
+                                .map { mission -> mission.toUiModel() }
+                        _state.value = MissionsState.Success(MissionListUiModel(filter.title, missions))
+                    }.onFailure { throwable ->
+                        when (throwable) {
+                            is Error.NetworkUnavailable -> {
+                                _state.value = MissionsState.Failure(throwable)
+                            }
+
+                            else -> throw throwable
+                        }
+                    }
+            }
         }
     }
-}
