@@ -30,13 +30,16 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import com.ramcosta.composedestinations.DestinationsNavHost
+import androidx.compose.runtime.Composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.feature.NavGraphs
+import org.sopt.official.stamp.feature.navigation.MissionList
+import org.sopt.official.stamp.feature.navigation.soptampNavGraph
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
@@ -49,7 +52,7 @@ class SoptampActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 ProvideTracker(tracker) {
-                    DestinationsNavHost(navGraph = NavGraphs.root)
+                    SoptampNavHost()
                 }
             }
         }
@@ -59,5 +62,20 @@ class SoptampActivity : AppCompatActivity() {
         fun getIntent(context: Context): Intent {
             return Intent(context, SoptampActivity::class.java)
         }
+    }
+}
+
+@Composable
+private fun SoptampNavHost() {
+    val navController = rememberNavController()
+
+    NavHost(
+        navController = navController,
+        startDestination = MissionList,
+    ) {
+        soptampNavGraph(
+            navController = navController,
+            onBackClick = { navController.popBackStack() },
+        )
     }
 }
