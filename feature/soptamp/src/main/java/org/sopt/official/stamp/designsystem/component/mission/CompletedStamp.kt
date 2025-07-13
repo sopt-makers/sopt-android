@@ -30,10 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun CompletedStamp(stamp: Stamp, modifier: Modifier = Modifier) {
+fun CompletedStamp(
+    stamp: Stamp,
+    modifier: Modifier = Modifier,
+) {
     Image(
         painter = painterResource(id = stamp.lottieImage),
         contentDescription = "Completed Stamp Image",
-        modifier = modifier
+        modifier = modifier,
     )
 }

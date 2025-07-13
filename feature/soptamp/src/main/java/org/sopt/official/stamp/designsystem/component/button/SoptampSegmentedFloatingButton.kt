@@ -54,25 +54,27 @@ fun SoptampSegmentedFloatingButton(
     onClickSecondOption: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier
-            .clip(shape = CircleShape),
+        modifier =
+            modifier
+                .clip(shape = CircleShape),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            modifier = Modifier
-                .width(134.dp)
-                .height(54.dp)
-                .weight(1f)
-                .background(SoptTheme.colors.primary)
-                .clickable(onClick = onClickFirstOption)
-                .padding(top = 11.dp, bottom = 11.dp, start = 13.dp, end = 6.dp),
+            modifier =
+                Modifier
+                    .width(134.dp)
+                    .height(54.dp)
+                    .weight(1f)
+                    .background(SoptTheme.colors.primary)
+                    .clickable(onClick = onClickFirstOption)
+                    .padding(top = 11.dp, bottom = 11.dp, start = 13.dp, end = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
-                tint = SoptTheme.colors.onSurface
+                tint = SoptTheme.colors.onSurface,
             )
             Text(
                 text = option1,
@@ -81,20 +83,21 @@ fun SoptampSegmentedFloatingButton(
             )
         }
         Row(
-            modifier = Modifier
-                .width(134.dp)
-                .height(54.dp)
-                .weight(1f)
-                .background(SoptTheme.colors.onSurface)
-                .clickable(onClick = onClickSecondOption)
-                .padding(top = 11.dp, bottom = 11.dp, start = 4.dp, end = 11.dp),
+            modifier =
+                Modifier
+                    .width(134.dp)
+                    .height(54.dp)
+                    .weight(1f)
+                    .background(SoptTheme.colors.onSurface)
+                    .clickable(onClick = onClickSecondOption)
+                    .padding(top = 11.dp, bottom = 11.dp, start = 4.dp, end = 11.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
-                tint = SoptTheme.colors.primary
+                tint = SoptTheme.colors.primary,
             )
             Text(
                 text = option2,

@@ -45,11 +45,12 @@ fun SoptColumn(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .padding(horizontal = 16.dp),
+        modifier =
+            modifier
+                .padding(horizontal = 16.dp),
         verticalArrangement,
         horizontalAlignment,
-        content = content
+        content = content,
     )
 }
 
@@ -64,7 +65,7 @@ fun SoptRow(
         modifier = modifier.padding(horizontal = 20.dp),
         horizontalArrangement,
         verticalAlignment,
-        content
+        content,
     )
 }
 
@@ -79,6 +80,6 @@ fun SoptBox(
         modifier = modifier.padding(horizontal = 20.dp),
         contentAlignment,
         propagateMinConstraints,
-        content
+        content,
     )
 }

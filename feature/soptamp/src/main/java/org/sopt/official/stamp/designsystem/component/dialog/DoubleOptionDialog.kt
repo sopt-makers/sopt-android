@@ -47,35 +47,43 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Unit, onCancel: () -> Unit) {
+fun DoubleOptionDialog(
+    title: String,
+    subTitle: String = "",
+    onConfirm: () -> Unit,
+    onCancel: () -> Unit,
+) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.55f))
-            .noRippleClickable { }
-            .padding(horizontal = 50.dp),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.55f))
+                .noRippleClickable { }
+                .padding(horizontal = 50.dp),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight()
-                .background(
-                    color = SoptTheme.colors.onSurface800,
-                    shape = RoundedCornerShape(10.dp)
-                )
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight()
+                    .background(
+                        color = SoptTheme.colors.onSurface800,
+                        shape = RoundedCornerShape(10.dp),
+                    ),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 30.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 30.dp),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = title,
                     style = SoptTheme.typography.body16M,
-                    color = SoptTheme.colors.primary
+                    color = SoptTheme.colors.primary,
                 )
                 if (subTitle.isNotBlank()) {
                     Text(
@@ -83,48 +91,51 @@ fun DoubleOptionDialog(title: String, subTitle: String = "", onConfirm: () -> Un
                         modifier = Modifier.padding(top = 6.dp),
                         style = SoptTheme.typography.label12SB,
                         color = SoptTheme.colors.onSurface200,
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 }
             }
             Row(
-                modifier = Modifier.background(
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp)
-                )
+                modifier =
+                    Modifier.background(
+                        color = Color.Transparent,
+                        shape = RoundedCornerShape(bottomStart = 10.dp, bottomEnd = 10.dp),
+                    ),
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            color = SoptTheme.colors.onSurface600,
-                            shape = RoundedCornerShape(bottomStart = 10.dp)
-                        )
-                        .clickable { onCancel() }
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = SoptTheme.colors.onSurface600,
+                                shape = RoundedCornerShape(bottomStart = 10.dp),
+                            )
+                            .clickable { onCancel() },
                 ) {
                     Text(
                         text = "취소",
                         color = SoptTheme.colors.primary,
                         style = SoptTheme.typography.body16M,
-                        modifier = Modifier.padding(vertical = 15.dp)
+                        modifier = Modifier.padding(vertical = 15.dp),
                     )
                 }
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .weight(1f)
-                        .background(
-                            color = SoptTheme.colors.primary,
-                            shape = RoundedCornerShape(bottomEnd = 10.dp)
-                        )
-                        .clickable { onConfirm() }
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .background(
+                                color = SoptTheme.colors.primary,
+                                shape = RoundedCornerShape(bottomEnd = 10.dp),
+                            )
+                            .clickable { onConfirm() },
                 ) {
                     Text(
                         text = "삭제",
                         color = SoptTheme.colors.onSurface,
                         style = SoptTheme.typography.body16M,
-                        modifier = Modifier.padding(vertical = 15.dp)
+                        modifier = Modifier.padding(vertical = 15.dp),
                     )
                 }
             }
@@ -140,7 +151,7 @@ fun DoubleOptionDialogPreview() {
             title = "미션을 초기화 하시겠습니까?",
             subTitle = " 사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
             onConfirm = { },
-            onCancel = { }
+            onCancel = { },
         )
     }
 }

@@ -41,23 +41,24 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 fun SoptampButton(
     text: String,
     onClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = SoptTheme.colors.primary,
-                shape = RoundedCornerShape(9.dp)
-            )
-            .noRippleClickable(onClick = onClicked),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(
+                    color = SoptTheme.colors.primary,
+                    shape = RoundedCornerShape(9.dp),
+                )
+                .noRippleClickable(onClick = onClicked),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             modifier = Modifier.padding(vertical = 16.dp),
             text = text,
             style = SoptTheme.typography.heading18B,
-            color = SoptTheme.colors.onSurface
+            color = SoptTheme.colors.onSurface,
         )
     }
 }

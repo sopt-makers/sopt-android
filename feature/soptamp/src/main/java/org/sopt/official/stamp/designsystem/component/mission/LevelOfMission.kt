@@ -34,28 +34,34 @@ import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.stamp.R
 
 @Composable
-fun LevelOfMission(stamp: Stamp, spaceSize: Dp) {
+fun LevelOfMission(
+    stamp: Stamp,
+    spaceSize: Dp,
+) {
     if (stamp.missionLevel == MissionLevel.of(10)) {
         SpecialMissionTitle()
-    } else Row(
-        horizontalArrangement = Arrangement.spacedBy(spaceSize)
-    ) {
-        MissionLevelOfStar(stamp = stamp)
+    } else {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(spaceSize),
+        ) {
+            MissionLevelOfStar(stamp = stamp)
+        }
     }
 }
 
 @Composable
 private fun MissionLevelOfStar(stamp: Stamp) {
     (MissionLevel.MINIMUM_LEVEL..MissionLevel.MAXIMUM_LEVEL).forEach {
-        val starColor = if (it <= stamp.missionLevel.value) {
-            stamp.starColor
-        } else {
-            Stamp.defaultStarColor
-        }
+        val starColor =
+            if (it <= stamp.missionLevel.value) {
+                stamp.starColor
+            } else {
+                Stamp.defaultStarColor
+            }
         Icon(
             painter = painterResource(id = R.drawable.level_star),
             contentDescription = "Star Of Mission Level",
-            tint = starColor
+            tint = starColor,
         )
     }
 }

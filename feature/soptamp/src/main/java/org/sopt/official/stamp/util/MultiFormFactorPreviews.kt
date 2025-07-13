@@ -30,12 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
     name = "phone",
     device = "spec:shape=Normal,width=360,height=800,unit=dp,dpi=480",
     showBackground = true,
-    showSystemUi = true
+    showSystemUi = true,
 )
 @Preview(
     name = "tablet",
     device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480",
     showBackground = true,
-    showSystemUi = true
+    showSystemUi = true,
 )
 annotation class MultiFormFactorPreviews
