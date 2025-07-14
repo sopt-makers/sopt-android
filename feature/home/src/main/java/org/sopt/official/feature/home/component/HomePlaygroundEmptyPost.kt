@@ -69,10 +69,7 @@ internal fun HomePlaygroundEmptyPost(
             )
         }
 
-        Spacer(
-            modifier = Modifier
-                .width(18.dp)
-        )
+        Spacer(modifier = Modifier.width(18.dp))
 
         UrlImage(
             url = iconUrl,

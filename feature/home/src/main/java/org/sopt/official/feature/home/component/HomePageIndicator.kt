@@ -56,7 +56,7 @@ private fun PageIndicatorItem(
     animationDurationInMillis: Int,
     modifier: Modifier = Modifier,
 ) {
-    val color: Color by animateColorAsState(
+    val color by animateColorAsState(
         targetValue = if (isSelected) {
             selectedColor
         } else {
@@ -69,7 +69,7 @@ private fun PageIndicatorItem(
     )
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(width = 16.dp, height = 4.dp)
             .clip(CircleShape)
             .background(color)
