@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 import com.android.build.api.dsl.ManagedVirtualDevice
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.androidTest)
@@ -39,8 +40,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+    kotlin {
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 
     defaultConfig {
@@ -55,11 +56,15 @@ android {
     // This code creates the gradle managed device used to generate baseline profiles.
     // To use GMD please invoke generation through the command line:
     // ./gradlew :app:generateBaselineProfile
-    testOptions.managedDevices.devices {
-        create<ManagedVirtualDevice>("pixel6Api35") {
-            device = "Pixel 6"
-            apiLevel = 35
-            systemImageSource = "google"
+    testOptions {
+        managedDevices {
+            allDevices {
+                create<ManagedVirtualDevice>("pixel6Api35") {
+                    device = "Pixel 6"
+                    apiLevel = 35
+                    systemImageSource = "google"
+                }
+            }
         }
     }
 }
