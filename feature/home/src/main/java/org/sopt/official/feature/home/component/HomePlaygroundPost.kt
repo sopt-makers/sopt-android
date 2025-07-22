@@ -15,17 +15,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Orange300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
+import org.sopt.official.feature.home.R
 
 @Composable
 internal fun HomePlaygroundPost(
@@ -81,14 +86,27 @@ private fun ProfileItem(
         modifier = modifier
             .width(IntrinsicSize.Min)
     ) {
-        UrlImage(
-            url = profileImage,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(54.dp)
-                .clip(shape = CircleShape)
-                .background(SoptTheme.colors.onSurface800)
-        )
+        if (profileImage.isNotBlank()) {
+            UrlImage(
+                url = profileImage,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(54.dp)
+                    .clip(shape = CircleShape)
+                    .background(SoptTheme.colors.onSurface800)
+            )
+        } else {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_empty_profile),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .size(54.dp)
+                    .clip(shape = CircleShape)
+                    .background(SoptTheme.colors.onSurface800)
+            )
+        }
+
         Text(
             text = name,
             style = SoptTheme.typography.body10M,
