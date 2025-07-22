@@ -94,6 +94,7 @@ private fun ProfileItem(
             style = SoptTheme.typography.body10M,
             color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
         )
         if (!part.isNullOrBlank()) {
