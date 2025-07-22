@@ -25,6 +25,7 @@
 package org.sopt.official.feature.home.mapper
 
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.feature.home.model.HomeFloatingToastData
@@ -58,4 +59,17 @@ internal fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPost
     name = this.name,
     generationAndPart = this.generationAndPart,
     webLink = this.webLink
+)
+
+internal fun LatestPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
+    postId = this.id,
+    title = this.title,
+    content = this.content,
+    category = this.category,
+    label = "NEW",
+    profileImage = this.profileImage,
+    name = this.name,
+    generationAndPart = this.generationAndPart,
+    webLink = this.webLink,
+    isOutdated = this.isOutdated
 )

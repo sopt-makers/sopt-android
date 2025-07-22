@@ -83,8 +83,6 @@ import org.sopt.official.feature.home.component.HomeTopBarForMember
 import org.sopt.official.feature.home.component.HomeTopBarForVisitor
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMember
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
-import org.sopt.official.feature.home.component.emptyFeedList
-import org.sopt.official.feature.home.component.feedList
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
@@ -191,7 +189,8 @@ internal fun HomeRoute(
                 paddingValues = paddingValues,
                 surveyData = state.surveyData,
                 toastData = state.floatingToastData,
-                popularPosts = state.popularPosts
+                popularPosts = state.popularPosts,
+                latestPosts = state.latestPosts
             )
         }
     }
@@ -214,7 +213,8 @@ private fun HomeScreenForMember(
     paddingValues: PaddingValues,
     surveyData: HomeSurveyData,
     toastData: HomeFloatingToastData,
-    popularPosts: ImmutableList<HomePlaygroundPostModel>
+    popularPosts: ImmutableList<HomePlaygroundPostModel>,
+    latestPosts: ImmutableList<HomePlaygroundPostModel>
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -310,21 +310,21 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 56.dp))
 
             HomePopularNewsSection(
-                feedList = popularPosts,
-                navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed,
+                postList = popularPosts,
+                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomeLatestNewsSection(
-                feedList = feedList,
-                emptyFeedList = emptyFeedList,
-                navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
-                navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed,
-                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
-            )
+            if (latestPosts.isNotEmpty()) {
+                HomeLatestNewsSection(
+                    feedList = latestPosts,
+                    navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
+                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
+                )
+            }
 
             Spacer(modifier = Modifier.height(height = 56.dp))
 

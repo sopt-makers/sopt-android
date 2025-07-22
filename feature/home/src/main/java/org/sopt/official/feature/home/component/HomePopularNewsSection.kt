@@ -75,13 +75,13 @@ private const val POPULAR_NEWS_LIST_SIZE = 3
 
 @Composable
 internal fun HomePopularNewsSection(
-    feedList: ImmutableList<HomePlaygroundPostModel>,
-    navigateToFeed: (Int) -> Unit,
+    postList: ImmutableList<HomePlaygroundPostModel>,
+    navigateToWebLink: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var highlightedIndex by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(feedList) {
+    LaunchedEffect(postList) {
         while (true) {
             delay(2400)
             highlightedIndex = (highlightedIndex + 1) % POPULAR_NEWS_LIST_SIZE
@@ -100,7 +100,7 @@ internal fun HomePopularNewsSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        feedList.take(POPULAR_NEWS_LIST_SIZE).forEachIndexed { index, post ->
+        postList.take(POPULAR_NEWS_LIST_SIZE).forEachIndexed { index, post ->
             val borderAlpha by animateFloatAsState(
                 targetValue = if (index == highlightedIndex) 1f else 0f,
                 animationSpec = tween(
@@ -126,7 +126,7 @@ internal fun HomePopularNewsSection(
                     title = title,
                     description = content,
                     onClick = {
-                        navigateToFeed(postId)
+                        navigateToWebLink(webLink)
                     },
                     modifier = Modifier
                         .then(
@@ -152,8 +152,19 @@ internal fun HomePopularNewsSection(
 private fun HomePlaygroundSectionPreview() {
     SoptTheme {
         HomePopularNewsSection(
-            feedList = feedList,
-            navigateToFeed = {}
+            postList = persistentListOf(
+                HomePlaygroundPostModel(
+                    postId = 1,
+                    title = "나 메이커스팀인데 메팀 좋다",
+                    content = "본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.",
+                    category = "전체",
+                    label = "HOT",
+                    profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
+                    name = "익명의 앱븐이",
+                    generationAndPart = ""
+                )
+            ),
+            navigateToWebLink = {}
         )
     }
 }

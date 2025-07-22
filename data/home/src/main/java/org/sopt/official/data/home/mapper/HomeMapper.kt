@@ -27,12 +27,14 @@ package org.sopt.official.data.home.mapper
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
+import org.sopt.official.data.home.remote.response.HomeLatestPostResponseDto
 import org.sopt.official.data.home.remote.response.HomePopularPostResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
 import org.sopt.official.data.home.remote.response.UserMainResponseDto
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
@@ -98,4 +100,16 @@ internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
     content = this.content,
     webLink = this.webLink,
     id = this.id
+)
+
+internal fun HomeLatestPostResponseDto.toDomain(): LatestPost = LatestPost(
+    profileImage = this.profileImage ?: "",
+    name = this.name ?: "",
+    generationAndPart = this.generationAndPart ?: "",
+    category = this.category,
+    title = this.title,
+    content = this.content,
+    webLink = this.webLink,
+    id = this.id ?: -1,
+    isOutdated = this.isOutdated
 )

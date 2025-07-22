@@ -49,6 +49,7 @@ internal sealed interface HomeUiState {
         val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel
         val homeSoptScheduleModel: HomeSoptScheduleModel
         val popularPosts: ImmutableList<HomePlaygroundPostModel>
+        val latestPosts: ImmutableList<HomePlaygroundPostModel>
     }
 
     @Immutable
@@ -70,7 +71,8 @@ internal sealed interface HomeUiState {
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
-        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
+        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
     ) : Member
 
     @Immutable
@@ -83,7 +85,8 @@ internal sealed interface HomeUiState {
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
-        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
+        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
     ) : Member
 }
 
@@ -116,7 +119,8 @@ data class HomePlaygroundPostModel(
     val profileImage: String = "",
     val name: String = "",
     val generationAndPart: String = "",
-    val webLink: String = ""
+    val webLink: String = "",
+    val isOutdated: Boolean = false
 )
 
 @Immutable

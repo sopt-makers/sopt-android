@@ -27,6 +27,7 @@ package org.sopt.official.data.home.remote.api
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
+import org.sopt.official.data.home.remote.response.HomeLatestPostsResponseDto
 import org.sopt.official.data.home.remote.response.HomePopularPostsResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import retrofit2.http.GET
@@ -47,4 +48,7 @@ internal interface HomeApi {
 
     @GET("home/posts/popular")
     suspend fun getHomePopularPosts(): HomePopularPostsResponseDto
+
+    @GET("home/posts/latest")
+    suspend fun getHomeLatestPosts(): HomeLatestPostsResponseDto
 }

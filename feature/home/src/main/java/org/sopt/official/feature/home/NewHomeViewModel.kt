@@ -100,6 +100,7 @@ internal class NewHomeViewModel @Inject constructor(
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
             val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
+            val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
 
             val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
             val userDescription =
@@ -109,6 +110,7 @@ internal class NewHomeViewModel @Inject constructor(
             val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
             val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
             val popularPostsData = popularPostsDeferred.await().successOr(emptyList())
+            val latestPostData = latestPostsDeferred.await().successOr(emptyList())
 
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
@@ -128,7 +130,8 @@ internal class NewHomeViewModel @Inject constructor(
                     appServices = appService,
                     surveyData = surveyData.toModel(),
                     toastData = toastData.toModel(),
-                    popularPostData = popularPostsData.map { post ->  post.toModel() }.toImmutableList()
+                    popularPostData = popularPostsData.map { post -> post.toModel() }.toImmutableList(),
+                    latestPostData = latestPostData.map { post -> post.toModel() }.toImmutableList()
                 )
             }
         }
@@ -198,7 +201,8 @@ private data class HomeViewModelState(
     val appServices: List<AppService> = emptyList(),
     val surveyData: HomeSurveyData = HomeSurveyData(),
     val toastData: HomeFloatingToastData = HomeFloatingToastData(),
-    val popularPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
+    val popularPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+    val latestPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
@@ -235,7 +239,8 @@ private data class HomeViewModelState(
             }.toImmutableList(),
             surveyData = surveyData,
             floatingToastData = toastData,
-            popularPosts = popularPostData
+            popularPosts = popularPostData,
+            latestPosts = latestPostData
         )
 
         INACTIVE -> InactiveMember(
@@ -263,7 +268,8 @@ private data class HomeViewModelState(
             }.toImmutableList(),
             surveyData = surveyData,
             floatingToastData = toastData,
-            popularPosts = popularPostData
+            popularPosts = popularPostData,
+            latestPosts = latestPostData
         )
     }
 }
