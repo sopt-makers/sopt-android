@@ -22,7 +22,7 @@ navigation = "2.9.1"
 startup = "1.2.0"
 customtab = "1.8.0"
 exifinterface = "1.4.1"
-compose-bom = "2025.06.01"
+compose-bom = "2025.07.00"
 androidx-paging = "3.3.6"
 desugarJdk = "2.1.5"
 
