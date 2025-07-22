@@ -27,11 +27,13 @@ package org.sopt.official.data.home.mapper
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
+import org.sopt.official.data.home.remote.response.HomePopularPostResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
 import org.sopt.official.data.home.remote.response.UserMainResponseDto
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
@@ -84,4 +86,16 @@ internal fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
     actionButtonName = this.actionButtonName,
     linkUrl = this.linkUrl,
     active = this.isActive
+)
+
+internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
+    profileImage = this.profileImage,
+    name = this.name,
+    generationAndPart = this.generationAndPart,
+    rank = this.rank,
+    category = this.category,
+    title = this.title,
+    content = this.content,
+    webLink = this.webLink,
+    id = this.id
 )

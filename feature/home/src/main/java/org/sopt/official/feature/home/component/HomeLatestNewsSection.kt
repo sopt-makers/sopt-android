@@ -96,7 +96,7 @@ internal fun HomeLatestNewsSection(
                     HomePlaygroundPost(
                         profileImage = profileImage,
                         userName = name,
-                        userPart = part,
+                        userPart = generationAndPart,
                         label = label,
                         category = category,
                         title = title,

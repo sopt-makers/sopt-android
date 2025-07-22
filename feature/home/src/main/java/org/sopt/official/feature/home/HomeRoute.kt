@@ -87,6 +87,7 @@ import org.sopt.official.feature.home.component.emptyFeedList
 import org.sopt.official.feature.home.component.feedList
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
+import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
 import org.sopt.official.feature.home.model.HomeUiState.Member
@@ -189,7 +190,8 @@ internal fun HomeRoute(
                 tracker = tracker,
                 paddingValues = paddingValues,
                 surveyData = state.surveyData,
-                toastData = state.floatingToastData
+                toastData = state.floatingToastData,
+                popularPosts = state.popularPosts
             )
         }
     }
@@ -211,7 +213,8 @@ private fun HomeScreenForMember(
     tracker: Tracker,
     paddingValues: PaddingValues,
     surveyData: HomeSurveyData,
-    toastData: HomeFloatingToastData
+    toastData: HomeFloatingToastData,
+    popularPosts: ImmutableList<HomePlaygroundPostModel>
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -307,7 +310,7 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 56.dp))
 
             HomePopularNewsSection(
-                feedList = feedList,
+                feedList = popularPosts,
                 navigateToFeed = homeShortcutNavigation::navigateToPlaygroundFeed,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)

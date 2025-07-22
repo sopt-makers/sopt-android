@@ -38,7 +38,7 @@ internal val feedList = persistentListOf(
         label = "HOT",
         profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
         name = "익명의 앱븐이",
-        part = null
+        generationAndPart = ""
     ),
     HomePlaygroundPostModel(
         postId = 2,
@@ -48,7 +48,7 @@ internal val feedList = persistentListOf(
         label = "HOT",
         profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
         name = "박효빈",
-        part = "35기 안드로이드"
+        generationAndPart = "35기 안드로이드"
     ),
     HomePlaygroundPostModel(
         postId = 3,
@@ -58,7 +58,7 @@ internal val feedList = persistentListOf(
         label = "HOT",
         profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
         name = "박효빈",
-        part = "35기 안드로이드"
+        generationAndPart = "35기 안드로이드"
     ),
     HomePlaygroundPostModel(
         postId = 4,
@@ -68,7 +68,7 @@ internal val feedList = persistentListOf(
         label = "HOT",
         profileImage = "",
         name = "박효빈",
-        part = "35기 기획"
+        generationAndPart = "35기 기획"
     )
 )
 private const val POPULAR_NEWS_LIST_SIZE = 3
@@ -120,7 +120,7 @@ internal fun HomePopularNewsSection(
                 HomePlaygroundPost(
                     profileImage = profileImage,
                     userName = name,
-                    userPart = part,
+                    userPart = generationAndPart,
                     label = label,
                     category = category,
                     title = title,
@@ -141,7 +141,7 @@ internal fun HomePopularNewsSection(
                             brush = gradientStroke,
                             shape = RoundedCornerShape(12.dp)
                         )
-                    )
+                )
             }
         }
     }

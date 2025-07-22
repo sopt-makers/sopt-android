@@ -31,6 +31,7 @@ import org.sopt.official.data.home.remote.api.HomeApi
 import org.sopt.official.data.home.remote.api.UserApi
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
@@ -62,4 +63,7 @@ internal class DefaultHomeRepository @Inject constructor(
 
     override suspend fun getHomeFloatingToast(): Result<FloatingToast> =
         runCatching { homeApi.getHomeFloatingToast().toDomain() }
+
+    override suspend fun getHomePopularPosts(): Result<List<PopularPost>> =
+        runCatching { homeApi.getHomePopularPosts().popularPosts.map { it.toDomain() } }
 }
