@@ -180,6 +180,7 @@ firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
+firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
