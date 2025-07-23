@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
@@ -24,11 +25,15 @@ fun TwoButtonDialog(
     onPositiveClick: () -> Unit,
     onNegativeClick: () -> Unit,
     modifier: Modifier = Modifier,
+    properties: DialogProperties = DialogProperties(
+        usePlatformDefaultWidth = false
+    ),
     content: @Composable () -> Unit,
 ) {
     SoptBasicDialog(
         onDismiss = onDismiss,
-        modifier = modifier
+        modifier = modifier,
+        properties = properties
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(24.dp)
