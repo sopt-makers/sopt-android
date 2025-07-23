@@ -10,6 +10,11 @@ import timber.log.Timber
 private const val UPDATE_CONFIG = "android_update_notice"
 
 class SoptRemoteConfig {
+    private val json = Json {
+        ignoreUnknownKeys = true
+        prettyPrint = true
+    }
+
     private val remoteConfig: FirebaseRemoteConfig by lazy {
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = 3600
@@ -20,13 +25,14 @@ class SoptRemoteConfig {
         }
     }
 
-    fun addOnVersionFetchCompleteListener(callback: (UpdateConfigModel) -> Unit) {
+    fun addOnVersionFetchCompleteListener(callback: (UpdateConfigResponseDto) -> Unit) {
         try {
             val fetchTask = remoteConfig.fetchAndActivate()
             fetchTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val versionConfig = remoteConfig.getString(UPDATE_CONFIG)
-                    callback(Json.decodeFromString<UpdateConfigModel>(versionConfig))
+                    Timber.d(versionConfig)
+                    callback(json.decodeFromString<UpdateConfigResponseDto>(versionConfig))
                 }
             }
         } catch (e: Exception) {

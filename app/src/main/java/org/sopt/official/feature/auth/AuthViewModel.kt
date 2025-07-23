@@ -25,29 +25,64 @@
 package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
+
+private const val DEFAULT_VERSION = "9.9.9"
 
 sealed interface AuthUiEvent {
     data class Success(val userStatus: UserStatus) : AuthUiEvent
     data class Failure(val message: String) : AuthUiEvent
 }
 
+sealed interface UpdateState {
+    data object Default : UpdateState
+    data object NoUpdateAvailable : UpdateState
+    data class ForceUpdate(val message: String) : UpdateState
+}
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val remoteConfig: SoptRemoteConfig
 ) : ViewModel() {
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
+
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Default)
+    val updateState get() = _updateState.asStateFlow()
+
     suspend fun onLogin(auth: Auth) {
         loginUseCase(auth)
         _uiEvent.emit(AuthUiEvent.Success(auth.status))
+    }
+
+    fun checkForUpdate(version: String?) {
+        viewModelScope.launch {
+            remoteConfig.addOnVersionFetchCompleteListener { config ->
+                val currentVersion = SemVer.parse(version ?: DEFAULT_VERSION)
+                val latestAppVersion = SemVer.parse(config.latestVersion)
+
+                if (currentVersion.major < latestAppVersion.major) {
+                    _updateState.update { UpdateState.ForceUpdate(config.forcedUpdateNotice) }
+                } else {
+                    _updateState.update { UpdateState.NoUpdateAvailable }
+                }
+            }
+        }
     }
 
     suspend fun onFailure(throwable: Throwable) {

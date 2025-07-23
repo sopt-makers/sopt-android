@@ -39,6 +39,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -51,14 +52,18 @@ import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.util.dp
+import org.sopt.official.common.util.getVersionName
+import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.common.util.setOnAnimationEndListener
 import org.sopt.official.common.util.setOnSingleClickListener
+import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -75,22 +80,52 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            if (dataStore.accessToken.isNotEmpty()) {
-                startActivity(
-                    MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-                )
-            }
-        } catch (e: Exception) {
-            Timber.e(e)
+
+        viewModel.checkForUpdate(this.getVersionName())
+        collectUiEvent()
+
+        lifecycleScope.launch {
+            viewModel.updateState
+                .collect { state ->
+                    when (state) {
+                        is UpdateState.Default -> {}
+                        is UpdateState.NoUpdateAvailable -> {
+                            try {
+                                if (dataStore.accessToken.isNotEmpty()) {
+                                    startActivity(
+                                        MainActivity.getIntent(
+                                            this@AuthActivity,
+                                            MainActivity.StartArgs(UserStatus.of(dataStore.userStatus))
+                                        )
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                            }
+
+                            initUi()
+                            initAnimation()
+                        }
+
+                        is UpdateState.ForceUpdate -> {
+                            binding.composeView.setVisible(true)
+                            binding.composeView.setContent {
+                                SoptTheme {
+                                    UpdateDialog(
+                                        description = state.message,
+                                        onDismiss = this@AuthActivity::finishAffinity,
+                                        onPositiveClick = this@AuthActivity::launchPlayStore,
+                                        onNegativeClick = this@AuthActivity::finishAffinity,
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
         }
 
         setContentView(binding.root)
         initNotificationChannel()
-
-        initUi()
-        initAnimation()
-        collectUiEvent()
     }
 
     private fun initNotificationChannel() {

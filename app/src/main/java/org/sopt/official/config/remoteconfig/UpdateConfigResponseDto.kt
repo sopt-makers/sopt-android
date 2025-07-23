@@ -4,9 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdateConfigModel(
-    @SerialName("minimumVersion")
-    val minimumVersion: String,
+data class UpdateConfigResponseDto(
+    @SerialName("latestVersion")
+    val latestVersion: String,
     @SerialName("forcedUpdateNotice")
     val forcedUpdateNotice: String,
     @SerialName("optionalUpdateNotice")
