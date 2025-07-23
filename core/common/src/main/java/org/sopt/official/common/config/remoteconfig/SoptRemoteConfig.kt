@@ -1,4 +1,4 @@
-package org.sopt.official.config.remoteconfig
+package org.sopt.official.common.config.remoteconfig
 
 import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -25,14 +25,14 @@ class SoptRemoteConfig {
         }
     }
 
-    fun addOnVersionFetchCompleteListener(callback: (UpdateConfigResponseDto) -> Unit) {
+    fun addOnVersionFetchCompleteListener(callback: (UpdateConfigModel) -> Unit) {
         try {
             val fetchTask = remoteConfig.fetchAndActivate()
             fetchTask.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val versionConfig = remoteConfig.getString(UPDATE_CONFIG)
                     Timber.d(versionConfig)
-                    callback(json.decodeFromString<UpdateConfigResponseDto>(versionConfig))
+                    callback(json.decodeFromString<UpdateConfigModel>(versionConfig))
                 }
             }
         } catch (e: Exception) {

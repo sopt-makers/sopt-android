@@ -24,18 +24,21 @@
  */
 
 plugins {
-  sopt("feature")
-  sopt("compose")
+    sopt("feature")
+    sopt("compose")
+    alias(libs.plugins.google.services)
 }
 
 android {
-  namespace = "org.sopt.official.common"
+    namespace = "org.sopt.official.common"
 }
 
 dependencies {
-  implementation(projects.core.auth)
-  implementation(projects.core.security)
-  implementation(platform(libs.okhttp.bom))
-  implementation(libs.okhttp)
-  implementation(libs.exifinterface)
+    implementation(projects.core.auth)
+    implementation(projects.core.security)
+    implementation(platform(libs.okhttp.bom))
+    implementation(libs.okhttp)
+    implementation(libs.exifinterface)
+    implementation(platform(libs.firebase))
+    implementation(libs.firebase.config)
 }

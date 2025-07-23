@@ -1,4 +1,4 @@
-package org.sopt.official.config.remoteconfig
+package org.sopt.official.common.config.remoteconfig
 
 import dagger.Module
 import dagger.Provides

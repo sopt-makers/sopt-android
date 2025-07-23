@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.config.remoteconfig.SoptRemoteConfig
+import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
 
