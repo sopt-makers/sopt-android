@@ -188,6 +188,7 @@ dependencies {
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.firebase.config)
+    implementation(libs.semver)
 }
 
 secrets {
