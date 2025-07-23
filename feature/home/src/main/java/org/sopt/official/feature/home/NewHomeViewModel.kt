@@ -29,6 +29,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -57,6 +59,7 @@ import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.mapper.toModel
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
+import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
 import org.sopt.official.feature.home.model.HomeUiState
@@ -96,6 +99,8 @@ internal class NewHomeViewModel @Inject constructor(
             val appServiceDeferred = async { homeRepository.getHomeAppService() }
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
             val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
+            val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
+            val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
 
             val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
             val userDescription =
@@ -104,6 +109,8 @@ internal class NewHomeViewModel @Inject constructor(
             val appService = appServiceDeferred.await().successOr(emptyList())
             val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
             val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
+            val popularPostsData = popularPostsDeferred.await().successOr(emptyList())
+            val latestPostData = latestPostsDeferred.await().successOr(emptyList())
 
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
@@ -122,7 +129,9 @@ internal class NewHomeViewModel @Inject constructor(
                     recentCalendar = recentCalendar,
                     appServices = appService,
                     surveyData = surveyData.toModel(),
-                    toastData = toastData.toModel()
+                    toastData = toastData.toModel(),
+                    popularPostData = popularPostsData.map { post -> post.toModel() }.toImmutableList(),
+                    latestPostData = latestPostData.map { post -> post.toModel() }.toImmutableList()
                 )
             }
         }
@@ -191,7 +200,9 @@ private data class HomeViewModelState(
     val recentCalendar: RecentCalendar = RecentCalendar(),
     val appServices: List<AppService> = emptyList(),
     val surveyData: HomeSurveyData = HomeSurveyData(),
-    val toastData: HomeFloatingToastData = HomeFloatingToastData()
+    val toastData: HomeFloatingToastData = HomeFloatingToastData(),
+    val popularPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+    val latestPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
 ) {
 
     fun toUiState(): HomeUiState = when (userState) {
@@ -227,7 +238,9 @@ private data class HomeViewModelState(
                 )
             }.toImmutableList(),
             surveyData = surveyData,
-            floatingToastData = toastData
+            floatingToastData = toastData,
+            popularPosts = popularPostData,
+            latestPosts = latestPostData
         )
 
         INACTIVE -> InactiveMember(
@@ -254,7 +267,9 @@ private data class HomeViewModelState(
                 )
             }.toImmutableList(),
             surveyData = surveyData,
-            floatingToastData = toastData
+            floatingToastData = toastData,
+            popularPosts = popularPostData,
+            latestPosts = latestPostData
         )
     }
 }

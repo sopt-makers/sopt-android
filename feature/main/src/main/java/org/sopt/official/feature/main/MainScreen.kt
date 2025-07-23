@@ -152,6 +152,7 @@ fun MainScreen(
                             override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
                             override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))
                             override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
+
                             override fun navigateToNotification() =
                                 context.startActivity(applicationNavigator.getNotificationActivityIntent())
 
