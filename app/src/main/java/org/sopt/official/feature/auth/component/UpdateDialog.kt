@@ -26,7 +26,6 @@ internal fun UpdateDialog(
         onPositiveClick = onPositiveClick,
         onNegativeClick = onNegativeClick,
         properties = DialogProperties(
-            dismissOnBackPress = false,
             dismissOnClickOutside = false,
             usePlatformDefaultWidth = false
         ),
