@@ -4,12 +4,13 @@ import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
+import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 private const val UPDATE_CONFIG = "android_update_notice"
 
-class SoptRemoteConfig {
+class SoptRemoteConfig @Inject constructor() {
     private val json = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
