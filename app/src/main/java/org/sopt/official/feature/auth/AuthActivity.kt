@@ -86,10 +86,28 @@ class AuthActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             viewModel.updateState
+                .flowWithLifecycle(this@AuthActivity.lifecycle)
                 .collect { state ->
                     when (state) {
-                        is UpdateState.Default -> {}
-                        is UpdateState.NoUpdateAvailable -> {
+                        is UpdateState.PatchUpdateAvailable -> {
+                            // TODO: 선택 업데이트 추가하기
+                        }
+
+                        is UpdateState.UpdateRequired -> {
+                            binding.composeView.setVisible(true)
+                            binding.composeView.setContent {
+                                SoptTheme {
+                                    UpdateDialog(
+                                        description = state.message,
+                                        onDismiss = this@AuthActivity::finishAffinity,
+                                        onPositiveClick = this@AuthActivity::launchPlayStore,
+                                        onNegativeClick = this@AuthActivity::finishAffinity,
+                                    )
+                                }
+                            }
+                        }
+
+                        else -> {
                             try {
                                 if (dataStore.accessToken.isNotEmpty()) {
                                     startActivity(
@@ -105,20 +123,6 @@ class AuthActivity : AppCompatActivity() {
 
                             initUi()
                             initAnimation()
-                        }
-
-                        is UpdateState.ForceUpdate -> {
-                            binding.composeView.setVisible(true)
-                            binding.composeView.setContent {
-                                SoptTheme {
-                                    UpdateDialog(
-                                        description = state.message,
-                                        onDismiss = this@AuthActivity::finishAffinity,
-                                        onPositiveClick = this@AuthActivity::launchPlayStore,
-                                        onNegativeClick = this@AuthActivity::finishAffinity,
-                                    )
-                                }
-                            }
                         }
                     }
                 }

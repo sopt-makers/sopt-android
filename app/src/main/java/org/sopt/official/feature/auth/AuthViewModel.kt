@@ -51,7 +51,8 @@ sealed interface AuthUiEvent {
 sealed interface UpdateState {
     data object Default : UpdateState
     data object NoUpdateAvailable : UpdateState
-    data class ForceUpdate(val message: String) : UpdateState
+    data class PatchUpdateAvailable(val message: String) : UpdateState
+    data class UpdateRequired(val message: String) : UpdateState
 }
 
 @HiltViewModel
@@ -72,15 +73,30 @@ class AuthViewModel @Inject constructor(
 
     fun checkForUpdate(version: String?) {
         viewModelScope.launch {
-            remoteConfig.addOnVersionFetchCompleteListener { config ->
+            remoteConfig.getVersionConfig().onSuccess { config ->
                 val currentVersion = SemVer.parse(version ?: DEFAULT_VERSION)
                 val latestAppVersion = SemVer.parse(config.latestVersion)
 
-                if (currentVersion.major < latestAppVersion.major) {
-                    _updateState.update { UpdateState.ForceUpdate(config.forcedUpdateNotice) }
-                } else {
-                    _updateState.update { UpdateState.NoUpdateAvailable }
+                when {
+                    currentVersion.major < latestAppVersion.major -> {
+                        _updateState.update { UpdateState.UpdateRequired(config.forcedUpdateNotice) }
+                    }
+
+                    currentVersion.minor < latestAppVersion.minor -> {
+                        _updateState.update { UpdateState.UpdateRequired(config.forcedUpdateNotice) }
+                    }
+
+                    currentVersion.patch < latestAppVersion.patch -> {
+                        _updateState.update { UpdateState.PatchUpdateAvailable(config.optionalUpdateNotice) }
+                    }
+
+                    else -> {
+                        _updateState.update { UpdateState.NoUpdateAvailable }
+                    }
                 }
+            }.onFailure {
+                Timber.e(it)
+                _updateState.update { UpdateState.NoUpdateAvailable }
             }
         }
     }
