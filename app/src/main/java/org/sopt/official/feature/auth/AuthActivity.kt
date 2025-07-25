@@ -81,7 +81,7 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.checkForUpdate(this.getVersionName())
+        viewModel.getUpdateConfig(this.getVersionName())
         collectUiEvent()
 
         lifecycleScope.launch {

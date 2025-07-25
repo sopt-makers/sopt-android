@@ -79,13 +79,6 @@ object NetModule {
 
     @Provides
     @Singleton
-    fun provideJson(): Json = Json {
-        ignoreUnknownKeys = true
-        isLenient = true
-    }
-
-    @Provides
-    @Singleton
     fun provideKotlinSerializationConverter(json: Json): Converter.Factory = json.asConverterFactory("application/json".toMediaType())
 
     @AppRetrofit
