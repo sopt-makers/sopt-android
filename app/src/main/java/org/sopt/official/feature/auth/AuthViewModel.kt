@@ -38,6 +38,7 @@ import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
+import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
 import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
 
@@ -71,33 +72,37 @@ class AuthViewModel @Inject constructor(
         _uiEvent.emit(AuthUiEvent.Success(auth.status))
     }
 
-    fun checkForUpdate(version: String?) {
+    fun getUpdateConfig(version: String?) {
         viewModelScope.launch {
             remoteConfig.getVersionConfig().onSuccess { config ->
-                val currentVersion = SemVer.parse(version ?: DEFAULT_VERSION)
-                val latestAppVersion = SemVer.parse(config.latestVersion)
-
-                when {
-                    currentVersion.major < latestAppVersion.major -> {
-                        _updateState.update { UpdateState.UpdateRequired(config.forcedUpdateNotice) }
-                    }
-
-                    currentVersion.minor < latestAppVersion.minor -> {
-                        _updateState.update { UpdateState.UpdateRequired(config.forcedUpdateNotice) }
-                    }
-
-                    currentVersion.patch < latestAppVersion.patch -> {
-                        _updateState.update { UpdateState.PatchUpdateAvailable(config.optionalUpdateNotice) }
-                    }
-
-                    else -> {
-                        _updateState.update { UpdateState.NoUpdateAvailable }
-                    }
-                }
+                val updateState = checkForUpdate(version, config)
+                _updateState.update { updateState }
             }.onFailure {
                 Timber.e(it)
                 _updateState.update { UpdateState.NoUpdateAvailable }
             }
+        }
+    }
+
+    private fun checkForUpdate(appVersion: String?, versionConfig: UpdateConfigModel): UpdateState {
+        val currentVersion = parseToSemVer(appVersion)
+        val latestAppVersion = parseToSemVer(versionConfig.latestVersion)
+
+        return when {
+            currentVersion.major < latestAppVersion.major -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
+            currentVersion.minor < latestAppVersion.minor -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
+            currentVersion.patch < latestAppVersion.patch -> UpdateState.PatchUpdateAvailable(versionConfig.optionalUpdateNotice)
+            else -> UpdateState.NoUpdateAvailable
+        }
+    }
+
+    private fun parseToSemVer(version: String?): SemVer {
+        return try {
+            if (version == null) return SemVer.parse(DEFAULT_VERSION)
+            SemVer.parse(version)
+        } catch (e: Exception) {
+            Timber.e(e)
+            SemVer.parse(DEFAULT_VERSION)
         }
     }
 
