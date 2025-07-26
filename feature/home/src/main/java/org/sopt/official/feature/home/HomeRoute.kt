@@ -70,7 +70,9 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
+import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
+import org.sopt.official.feature.home.component.HomePopularNewsSection
 import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
@@ -83,6 +85,7 @@ import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMembe
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
+import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
 import org.sopt.official.feature.home.model.HomeUiState.Member
@@ -185,7 +188,9 @@ internal fun HomeRoute(
                 tracker = tracker,
                 paddingValues = paddingValues,
                 surveyData = state.surveyData,
-                toastData = state.floatingToastData
+                toastData = state.floatingToastData,
+                popularPosts = state.popularPosts,
+                latestPosts = state.latestPosts
             )
         }
     }
@@ -207,7 +212,9 @@ private fun HomeScreenForMember(
     tracker: Tracker,
     paddingValues: PaddingValues,
     surveyData: HomeSurveyData,
-    toastData: HomeFloatingToastData
+    toastData: HomeFloatingToastData,
+    popularPosts: ImmutableList<HomePlaygroundPostModel>,
+    latestPosts: ImmutableList<HomePlaygroundPostModel>
 ) {
     Box {
         val scrollState = rememberScrollState()
@@ -227,7 +234,6 @@ private fun HomeScreenForMember(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 20.dp)
                 .verticalScroll(scrollState),
         ) {
             Spacer(modifier = Modifier.height(height = 8.dp))
@@ -239,6 +245,8 @@ private fun HomeScreenForMember(
                     trackClickEvent(tracker, "at36_alarm")
                 },
                 onSettingClick = homeDashboardNavigation::navigateToSetting,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 16.dp))
@@ -246,6 +254,8 @@ private fun HomeScreenForMember(
             HomeUserSoptLogDashboardForMember(
                 onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
                 homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -260,7 +270,9 @@ private fun HomeScreenForMember(
                 onAttendanceButtonClick = {
                     homeDashboardNavigation.navigateToAttendance()
                     trackClickEvent(tracker, "at36_attendance")
-                }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 12.dp))
@@ -282,6 +294,8 @@ private fun HomeScreenForMember(
                     homeShortcutNavigation.navigateToPlaygroundProject()
                     trackClickEvent(tracker, "at36_project")
                 },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 40.dp))
@@ -289,7 +303,28 @@ private fun HomeScreenForMember(
             HomeEnjoySoptServicesBlock(
                 appServices = homeAppServices,
                 onAppServiceClick = onAppServiceClick,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
+
+            Spacer(modifier = Modifier.height(height = 56.dp))
+
+            HomePopularNewsSection(
+                postList = popularPosts,
+                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            )
+
+            Spacer(modifier = Modifier.height(height = 56.dp))
+
+            if (latestPosts.isNotEmpty()) {
+                HomeLatestNewsSection(
+                    feedList = latestPosts,
+                    navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
+                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
+                )
+            }
 
             Spacer(modifier = Modifier.height(height = 56.dp))
 
@@ -300,13 +335,17 @@ private fun HomeScreenForMember(
                 onClick = {
                     homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
                     trackClickEvent(tracker, "at36_survey_button")
-                }
+                },
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 72.dp))
 
             HomeOfficialChannelButton(
-                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl
+                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
             Spacer(modifier = Modifier.height(height = 58.dp))

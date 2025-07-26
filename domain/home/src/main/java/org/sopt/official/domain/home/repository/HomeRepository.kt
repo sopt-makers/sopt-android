@@ -26,6 +26,8 @@ package org.sopt.official.domain.home.repository
 
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.LatestPost
+import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
@@ -45,4 +47,8 @@ interface HomeRepository {
     suspend fun getHomeReviewForm(): Result<ReviewForm>
 
     suspend fun getHomeFloatingToast(): Result<FloatingToast>
+
+    suspend fun getHomePopularPosts(): Result<List<PopularPost>>
+
+    suspend fun getHomeLatestPosts(): Result<List<LatestPost>>
 }

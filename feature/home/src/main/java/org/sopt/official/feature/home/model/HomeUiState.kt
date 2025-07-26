@@ -48,6 +48,8 @@ internal sealed interface HomeUiState {
         val hasNotification: Boolean
         val homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel
         val homeSoptScheduleModel: HomeSoptScheduleModel
+        val popularPosts: ImmutableList<HomePlaygroundPostModel>
+        val latestPosts: ImmutableList<HomePlaygroundPostModel>
     }
 
     @Immutable
@@ -69,6 +71,8 @@ internal sealed interface HomeUiState {
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
+        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
     ) : Member
 
     @Immutable
@@ -81,6 +85,8 @@ internal sealed interface HomeUiState {
         override val homeSoptScheduleModel: HomeSoptScheduleModel = HomeSoptScheduleModel(),
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
+        override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
     ) : Member
 }
 
@@ -101,6 +107,20 @@ internal data class HomeFloatingToastData(
     val buttonText: String = "미션 보기",
     val linkUrl: String = "",
     val active: Boolean = false
+)
+
+@Immutable
+data class HomePlaygroundPostModel(
+    val postId: Int = -1,
+    val title: String = "",
+    val content: String = "",
+    val category: String = "",
+    val label: String = "",
+    val profileImage: String = "",
+    val name: String = "",
+    val generationAndPart: String = "",
+    val webLink: String = "",
+    val isOutdated: Boolean = false
 )
 
 @Immutable
