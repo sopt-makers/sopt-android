@@ -59,7 +59,7 @@ lottie = "6.6.7"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
-mozilla-component-utils = "140.0.4"
+mozilla-component-utils = "141.0"
 
 google-services = "4.4.3"
 crashlytics = "3.0.5"
