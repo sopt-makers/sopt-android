@@ -24,11 +24,11 @@
  */
 package org.sopt.official.network.interceptor
 
-import javax.inject.Inject
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
     private val dataStore: SoptDataStore
@@ -37,7 +37,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val authRequest = if (isAccessTokenUsed(originalRequest)) {
-            originalRequest.newBuilder().addHeader("Authorization", dataStore.accessToken).build()
+            originalRequest.newBuilder().addHeader("Authorization", BEARER + dataStore.accessToken).build()
         } else {
             originalRequest
         }
@@ -48,5 +48,9 @@ class AuthInterceptor @Inject constructor(
         originalRequest.url.encodedPath.contains("auth/playground") -> false
         originalRequest.url.encodedPath.contains("availability") -> false
         else -> true
+    }
+
+    companion object {
+        private const val BEARER = "Bearer "
     }
 }
