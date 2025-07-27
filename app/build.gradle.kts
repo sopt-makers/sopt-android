@@ -192,8 +192,6 @@ dependencies {
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.google.id.identity)
-    implementation(libs.play.services.auth)
-    implementation(libs.lifecycle.livedata.ktx)
 }
 
 secrets {
