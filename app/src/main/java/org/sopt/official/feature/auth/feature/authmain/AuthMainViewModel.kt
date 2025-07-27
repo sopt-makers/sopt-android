@@ -50,7 +50,10 @@ class AuthMainViewModel @Inject constructor(
                     authPlatform = GOOGLE,
                 )
             ).onSuccess { response ->
-                // TODO: 홈화면 상태와 연동 및 토큰 관리
+                authRepository.saveUserToken(
+                    accessToken = response.token,
+                    refreshToken = response.refreshToken,
+                )
                 _sideEffect.emit(AuthMainSideEffect.NavigateToHome)
             }.onFailure {
                 _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)

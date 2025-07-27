@@ -139,7 +139,7 @@ internal fun AuthMainRoute(
         },
         onGoogleLoginCLick = {
             scope.launch {
-                val idToken = googleLoginManager.getGoogleIdToken()
+                val idToken = googleLoginManager.getGoogleIdToken(context)
                 viewModel.signIn(idToken)
             }
         },
@@ -220,7 +220,7 @@ private fun AuthFooter(
                     .clip(RoundedCornerShape(12.dp))
                     .background(color = SoptTheme.colors.success)
                     .padding(vertical = 10.dp, horizontal = 20.dp),
-                text = "로그인한 계정은 ${platform}이에요.",
+                text = "최근 로그인 계정은 ${platform}이에요.",
                 color = Gray50,
                 style = SoptTheme.typography.body13M
             )

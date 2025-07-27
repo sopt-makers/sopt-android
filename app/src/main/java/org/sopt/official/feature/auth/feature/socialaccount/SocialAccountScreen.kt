@@ -106,7 +106,7 @@ internal fun SocialAccountRoute(
         name = state.name,
         onGoogleLoginCLick = {
             scope.launch {
-                val idToken = googleLoginManager.getGoogleIdToken()
+                val idToken = googleLoginManager.getGoogleIdToken(context)
                 viewModel.connectSocialAccount(status = status, token = idToken)
             }
         }
