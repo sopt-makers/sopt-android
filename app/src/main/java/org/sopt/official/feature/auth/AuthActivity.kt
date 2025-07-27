@@ -34,21 +34,15 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -73,7 +67,6 @@ class AuthActivity : AppCompatActivity() {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
-                val scope = rememberCoroutineScope()
 
                 LaunchedEffect(true) {
                     try {
@@ -115,15 +108,6 @@ class AuthActivity : AppCompatActivity() {
                                 is AuthUiEvent.Failure -> startActivity(
                                     MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
                                 )
-                            }
-                        }
-                }
-
-                LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-                    viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { sideEffect ->
-                            when (sideEffect) {
-                                is AuthSideEffect.ShowToast -> context.toast(sideEffect.message)
                             }
                         }
                 }
