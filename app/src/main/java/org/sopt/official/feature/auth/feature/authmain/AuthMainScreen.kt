@@ -139,7 +139,7 @@ internal fun AuthMainRoute(
         },
         onGoogleLoginCLick = {
             scope.launch {
-                val idToken = googleLoginManager.getGoogleIdToken()
+                val idToken = googleLoginManager.getGoogleIdToken(context)
                 viewModel.signIn(idToken)
             }
         },
