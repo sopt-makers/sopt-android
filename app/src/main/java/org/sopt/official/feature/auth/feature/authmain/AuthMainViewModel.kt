@@ -33,11 +33,13 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.network.persistence.SoptDataStore
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val soptDataStore: SoptDataStore,
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
@@ -50,7 +52,8 @@ class AuthMainViewModel @Inject constructor(
                     authPlatform = GOOGLE,
                 )
             ).onSuccess { response ->
-                // TODO: 홈화면 상태와 연동 및 토큰 관리
+                soptDataStore.accessToken = response.token
+                soptDataStore.refreshToken = response.refreshToken
                 _sideEffect.emit(AuthMainSideEffect.NavigateToHome)
             }.onFailure {
                 _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)
