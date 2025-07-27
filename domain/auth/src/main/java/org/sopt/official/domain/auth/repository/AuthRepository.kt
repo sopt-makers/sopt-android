@@ -48,4 +48,9 @@ interface AuthRepository {
         name: String,
         phone: String,
     ): Result<Auth>
+
+    suspend fun saveUserToken(
+        accessToken: String,
+        refreshToken: String,
+    )
 }
