@@ -79,7 +79,10 @@ class AuthActivity : AppCompatActivity() {
                     try {
                         if (dataStore.accessToken.isNotEmpty()) {
                             startActivity(
-                                MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                                MainActivity.getIntent(
+                                    context = context,
+                                    args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                )
                             )
                         }
                     } catch (e: Exception) {
