@@ -25,6 +25,7 @@
 package org.sopt.official.feature.auth.feature.autherror
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -50,10 +55,45 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
+import org.sopt.official.feature.auth.component.LoginErrorDialog
+import org.sopt.official.feature.auth.model.AuthStatus
 
 @Composable
-fun AuthErrorScreen(
-    retry: () -> Unit = {}
+internal fun AuthErrorRoute(
+    onRetryClick: () -> Unit,
+    navigateToCertification: (AuthStatus) -> Unit,
+) {
+    var loginDialogVisibility by remember { mutableStateOf(false) }
+
+    if (loginDialogVisibility) {
+        LoginErrorDialog(
+            onDismissRequest = {
+                loginDialogVisibility = false
+            },
+            onFindAccountClick = {
+                navigateToCertification(AuthStatus.SEARCH_SOCIAL_PLATFORM)
+                loginDialogVisibility = false
+            },
+            onResetAccountClick = {
+                navigateToCertification(AuthStatus.CHANGE_SOCIAL_PLATFORM)
+                loginDialogVisibility = false
+            },
+            showContactChanel = false
+        )
+    }
+
+    AuthErrorScreen(
+        onRetryClick = onRetryClick,
+        showDialog = {
+            loginDialogVisibility = true
+        }
+    )
+}
+
+@Composable
+private fun AuthErrorScreen(
+    onRetryClick: () -> Unit,
+    showDialog: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -81,7 +121,7 @@ fun AuthErrorScreen(
         )
         Spacer(modifier = Modifier.weight(1f))
         AuthButton(
-            onClick = retry,
+            onClick = onRetryClick,
             modifier = Modifier
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
@@ -94,7 +134,10 @@ fun AuthErrorScreen(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        AuthNavigationText(text = "로그인이 안 되나요?")
+        AuthNavigationText(
+            text = "로그인이 안 되나요?",
+            modifier = Modifier.clickable(onClick = showDialog)
+        )
         Spacer(modifier = Modifier.height(28.dp))
     }
 }
@@ -103,6 +146,9 @@ fun AuthErrorScreen(
 @Composable
 private fun AuthErrorPreview() {
     SoptTheme {
-        AuthErrorScreen()
+        AuthErrorScreen(
+            onRetryClick = {},
+            showDialog = {},
+        )
     }
 }

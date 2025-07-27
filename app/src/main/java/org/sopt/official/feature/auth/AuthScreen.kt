@@ -45,6 +45,8 @@ import androidx.navigation.navOptions
 import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.CertificationSnackBar
+import org.sopt.official.feature.auth.feature.autherror.navigation.authErrorNavGraph
+import org.sopt.official.feature.auth.feature.autherror.navigation.navigateAuthError
 import org.sopt.official.feature.auth.feature.authmain.navigation.AuthMainNavigation
 import org.sopt.official.feature.auth.feature.authmain.navigation.authMainNavGraph
 import org.sopt.official.feature.auth.feature.authmain.navigation.navigateAuthMain
@@ -56,8 +58,8 @@ import org.sopt.official.feature.auth.feature.socialaccount.navigation.socialAcc
 
 @Composable
 internal fun AuthScreen(
+    navigateToHome: () -> Unit,
     navigateToUnAuthenticatedHome: () -> Unit,
-    onGoogleLoginCLick: () -> Unit,
     onContactChannelClick: () -> Unit,
     onGoogleFormClick: () -> Unit,
     platform: String,
@@ -98,44 +100,71 @@ internal fun AuthScreen(
                     navController = navController,
                     startDestination = AuthMainNavigation(platform = platform)
                 ) {
-                    authMainNavGraph(
-                        navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
-                        onGoogleLoginCLick = onGoogleLoginCLick,
+                    authErrorNavGraph(
+                        onRetryClick = {
+                            navController.navigateAuthMain(
+                                platform = platform,
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
+                            )
+                        },
                         navigateToCertification = { status ->
                             navController.navigateCertification(
                                 status = status
                             )
                         },
+                    )
+                    authMainNavGraph(
+                        navigateToHome = navigateToHome,
+                        navigateToUnAuthenticatedHome = navigateToUnAuthenticatedHome,
+                        navigateToCertification = { status ->
+                            navController.navigateCertification(
+                                status = status
+                            )
+                        },
+                        navigateToAuthError = navController::navigateAuthError,
                         onContactChannelClick = onContactChannelClick
                     )
                     certificationNavGraph(
                         onBackClick = navController::navigateUp,
                         onShowSnackBar = onShowSnackBar,
-                        navigateToSocialAccount = { status, name ->
+                        navigateToSocialAccount = { socialAccountInfo ->
                             navController.navigateSocialAccount(
-                                status = status,
-                                name = name,
+                                status = socialAccountInfo.status,
+                                name = socialAccountInfo.name,
+                                phone = socialAccountInfo.phone,
                                 navOptions = NavOptions.Builder().setPopUpTo(
-                                    route = CertificationNavigation(status),
+                                    route = CertificationNavigation(socialAccountInfo.status),
                                     inclusive = true
                                 ).build()
                             )
                         },
                         navigateToAuthMain = { platform ->
-                            val navOptions = navOptions {
-                                popUpTo(id = navController.graph.id) {
-                                    inclusive = true
-                                }
-                            }
                             navController.navigateAuthMain(
                                 platform = platform,
-                                navOptions = navOptions
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
                             )
                         },
                         onGoogleFormClick = onGoogleFormClick
                     )
                     socialAccountNavGraph(
-                        onGoogleLoginCLick = {} // TODO: 구글 로그인 계정 연동하는 코드 작성 by 이유빈
+                        navigateToAuthMain = {
+                            navController.navigateAuthMain(
+                                platform = platform,
+                                navOptions = navOptions {
+                                    popUpTo(id = navController.graph.id) {
+                                        inclusive = true
+                                    }
+                                },
+                            )
+                        }
                     )
                 }
             }

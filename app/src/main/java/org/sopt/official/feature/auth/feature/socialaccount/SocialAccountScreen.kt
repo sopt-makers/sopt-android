@@ -37,6 +37,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -46,10 +49,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
-import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
@@ -57,36 +62,60 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.model.AuthStatus
+import org.sopt.official.feature.auth.utils.di.GoogleLoginManagerEntryPoint
 
 @Composable
 internal fun SocialAccountRoute(
     status: AuthStatus,
     name: String,
-    onGoogleLoginCLick: () -> Unit,
+    phone: String,
+    navigateToAuthMain: () -> Unit,
     viewModel: SocialAccountViewModel = hiltViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+
+    val googleLoginManager = remember(context) {
+        EntryPointAccessors.fromApplication(
+            context.applicationContext,
+            GoogleLoginManagerEntryPoint::class.java
+        ).googleLoginManager()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.updateInitialState(
+            status = status.type,
+            name = name,
+            phone = phone
+        )
+    }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is SocialAccountSideEffect.ShowToast -> context.toast(sideEffect.message)
+                    is SocialAccountSideEffect.NavigateToAuthMain -> navigateToAuthMain()
                 }
             }
     }
 
     SocialAccountScreen(
-        name = name,
+        title = state.title,
+        name = state.name,
         onGoogleLoginCLick = {
-            viewModel.connectSocialAccount(status)
+            scope.launch {
+                val idToken = googleLoginManager.getGoogleIdToken()
+                viewModel.connectSocialAccount(status = status, token = idToken)
+            }
         }
     )
 }
 
 @Composable
 private fun SocialAccountScreen(
+    title: String,
     name: String,
     onGoogleLoginCLick: () -> Unit
 ) {
@@ -97,7 +126,10 @@ private fun SocialAccountScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(48.dp))
-        TopBar(name)
+        TopBar(
+            title = title,
+            name = name,
+        )
         Spacer(modifier = Modifier.height(66.dp))
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
@@ -119,6 +151,7 @@ private fun SocialAccountScreen(
 
 @Composable
 private fun TopBar(
+    title: String,
     name: String,
     modifier: Modifier = Modifier
 ) {
@@ -145,7 +178,7 @@ private fun TopBar(
         }
         Spacer(modifier = Modifier.height(54.dp))
         Text(
-            text = "소셜 계정연동",
+            text = title,
             color = Gray10,
             style = SoptTheme.typography.heading24B
         )
@@ -164,6 +197,7 @@ private fun TopBar(
 private fun ChangeAccountPreview() {
     SoptTheme {
         SocialAccountScreen(
+            title = "소셜 계정 연동",
             name = "SOPT",
             onGoogleLoginCLick = {}
         )

@@ -24,44 +24,66 @@
  */
 package org.sopt.official.data.auth.repository
 
-import org.sopt.official.data.auth.mapper.toDomain
-import org.sopt.official.data.auth.mapper.toRequest
+import org.sopt.official.common.coroutines.suspendRunCatching
+import org.sopt.official.data.auth.mapper.toAuthDomain
+import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
+import org.sopt.official.data.auth.mapper.toChangeAccountRequest
+import org.sopt.official.data.auth.mapper.toCreateCodeRequest
+import org.sopt.official.data.auth.mapper.toSignInRequest
+import org.sopt.official.data.auth.mapper.toSignUpRequest
+import org.sopt.official.data.auth.mapper.toUserDomain
 import org.sopt.official.data.auth.remote.api.AuthApi
-import org.sopt.official.domain.auth.model.AccountResult
-import org.sopt.official.domain.auth.model.InformationWithCode
-import org.sopt.official.domain.auth.model.InitialInformation
-import org.sopt.official.domain.auth.model.OriginalInformation
-import org.sopt.official.domain.auth.model.SignInCode
-import org.sopt.official.domain.auth.model.SignUpCode
-import org.sopt.official.domain.auth.model.Token
-import org.sopt.official.domain.auth.model.VerificationResult
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
 internal class DefaultAuthRepository @Inject constructor(
     private val authApi: AuthApi
 ) : AuthRepository {
-    override suspend fun createCode(request: InitialInformation): Result<Unit> = runCatching {
-        authApi.createCode(request.toRequest())
+    override suspend fun createCode(request: User): Result<Unit> = suspendRunCatching {
+        authApi.createCode(request.toCreateCodeRequest())
     }
 
-    override suspend fun certificateCode(request: InformationWithCode): Result<VerificationResult> = runCatching {
-        authApi.certificateCode(request.toRequest()).data.toDomain()
+    override suspend fun certificateCode(request: User): Result<User> = suspendRunCatching {
+        authApi.certificateCode(request.toCertificateCodeRequest()).data.toUserDomain()
     }
 
-    override suspend fun signIn(request: SignInCode): Result<Token> = runCatching {
-        authApi.signIn(request.toRequest()).data.toDomain()
+    override suspend fun signIn(request: Auth): Result<Auth> = suspendRunCatching {
+        authApi.signIn(request.toSignInRequest()).data.toAuthDomain()
     }
 
-    override suspend fun signUp(request: SignUpCode): Result<Unit> = runCatching {
-        authApi.signUp(request.toRequest())
+    override suspend fun signUp(
+        userRequest: User,
+        authRequest: Auth
+    ): Result<Unit> = suspendRunCatching {
+        authApi.signUp(
+            toSignUpRequest(
+                user = userRequest,
+                auth = authRequest
+            )
+        )
     }
 
-    override suspend fun changeAccount(request: OriginalInformation): Result<Unit> = runCatching {
-        authApi.changeAccount(request.toRequest())
+    override suspend fun changeAccount(
+        userRequest: User,
+        authRequest: Auth,
+    ): Result<Unit> = suspendRunCatching {
+        authApi.changeAccount(
+            toChangeAccountRequest(
+                user = userRequest,
+                auth = authRequest
+            )
+        )
     }
 
-    override suspend fun findAccount(request: String): Result<AccountResult> = runCatching {
-        authApi.findAccount(request).data.toDomain()
+    override suspend fun findAccount(
+        name: String,
+        phone: String,
+    ): Result<Auth> = suspendRunCatching {
+        authApi.findAccount(
+            name = name,
+            phone = phone
+        ).data.toAuthDomain()
     }
 }

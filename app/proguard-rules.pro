@@ -127,3 +127,10 @@
 -dontwarn com.google.auto.service.AutoService
 -dontwarn net.ltgt.gradle.incap.IncrementalAnnotationProcessor
 -dontwarn net.ltgt.gradle.incap.IncrementalAnnotationProcessorType
+
+##--------------- Begin: androidx.credential ----------
+-if class androidx.credentials.CredentialManager
+-keep class androidx.credentials.playservices.** {
+  *;
+}
+##--------------- End: androidx.credential ------------

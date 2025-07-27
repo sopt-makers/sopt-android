@@ -40,8 +40,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import okhttp3.internal.immutableListOf
-import org.sopt.official.domain.auth.model.InformationWithCode
-import org.sopt.official.domain.auth.model.InitialInformation
+import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
@@ -97,30 +96,24 @@ class CertificationViewModel @Inject constructor(
     fun createCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.createCode(
-                InitialInformation(
-                    name = status.authName,
-                    phone = status.phone,
+                User(
+                    phone = _state.value.phone,
                     type = status.type
-                )
+                ),
             ).onSuccess {
                 startTimer()
                 updateButtonText()
                 updateCodeTextField(true)
                 updateButtonState(true)
             }.onFailure {
-                // TODO: DELETE !!
-                startTimer()
-                updateButtonText()
-                // TODO: true -> false
-                updateCodeTextField(true)
-                updateButtonState(true)
+                updateCodeTextField(false)
+                updateButtonState(false)
 
-                // TODO: 주석 해제
-//                _state.update { currentState ->
-//                    currentState.copy(
-//                        errorMessage = ErrorCase.PHONE_ERROR.message
-//                    )
-//                }
+                _state.update { currentState ->
+                    currentState.copy(
+                        errorMessage = ErrorCase.PHONE_ERROR.message
+                    )
+                }
             }
         }
     }
@@ -128,17 +121,21 @@ class CertificationViewModel @Inject constructor(
     fun certificateCode(status: AuthStatus) {
         viewModelScope.launch {
             repository.certificateCode(
-                InformationWithCode(
-                    name = status.authName,
-                    phone = status.phone,
-                    code = status.token,
+                User(
+                    phone = state.value.phone,
+                    code = state.value.code,
                     type = status.type
                 )
             ).onSuccess { response ->
-                if (status.type == AuthStatus.SEARCH.type) {
-                    findAccount()
+                if (status.type == AuthStatus.SEARCH_SOCIAL_PLATFORM.type) {
+                    findAccount(name = response.name)
                 } else {
-                    _sideEffect.emit(CertificationSideEffect.NavigateToSocialAccount(response.name))
+                    _sideEffect.emit(
+                        CertificationSideEffect.NavigateToSocialAccount(
+                            name = response.name,
+                            phone = response.phone
+                        )
+                    )
                 }
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
@@ -146,13 +143,14 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun findAccount() {
+    private fun findAccount(name: String) {
         viewModelScope.launch {
             repository.findAccount(
-                "01012345678"
+                name = name,
+                phone = state.value.phone,
             ).onSuccess { response ->
-                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.platform))
-                dataStore.platform = response.platform
+                _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.authPlatform))
+                dataStore.platform = response.authPlatform
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }

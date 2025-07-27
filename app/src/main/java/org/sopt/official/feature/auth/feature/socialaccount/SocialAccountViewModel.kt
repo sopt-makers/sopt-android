@@ -28,63 +28,89 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.auth.model.OriginalInformation
-import org.sopt.official.domain.auth.model.SignUpCode
+import org.sopt.official.domain.auth.model.Auth
+import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SocialAccountViewModel @Inject constructor(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
+
+    private val _state: MutableStateFlow<SocialAccountState> = MutableStateFlow(SocialAccountState())
+    val state: StateFlow<SocialAccountState> = _state.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SocialAccountSideEffect>()
     val sideEffect: SharedFlow<SocialAccountSideEffect> = _sideEffect.asSharedFlow()
-    fun connectSocialAccount(status: AuthStatus) {
+
+    fun updateInitialState(
+        status: String,
+        name: String,
+        phone: String
+    ) {
+        _state.update { currentState ->
+            currentState.copy(
+                status = status,
+                name = name,
+                phone = phone
+            )
+        }
+    }
+
+    fun connectSocialAccount(status: AuthStatus, token: String) {
         viewModelScope.launch {
             when (status) {
-                // TODO: 실제 서버통신 값 넣기 by leeeyubin
-                AuthStatus.REGISTER -> signUp()
-                AuthStatus.CHANGE -> changeAccount()
+                AuthStatus.REGISTER -> signUp(token)
+                AuthStatus.CHANGE_SOCIAL_PLATFORM -> changeAccount(token)
                 else -> {}
             }
         }
     }
 
-    private fun signUp() {
+    private fun signUp(
+        token: String,
+    ) {
         viewModelScope.launch {
             authRepository.signUp(
-                SignUpCode(
-                    name = "홍길동",
-                    phone = "010-9121-2121",
-                    code = "eyadxcvc.dasd.wda",
-                    authPlatform = GOOGLE
+                userRequest = User(
+                    name = state.value.name,
+                    phone = state.value.phone,
+                    code = token,
+                ),
+                authRequest = Auth(
+                    authPlatform = GOOGLE,
                 )
             ).onSuccess {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))
-            }.onFailure {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패"))
-            }
+                _sideEffect.emit(SocialAccountSideEffect.NavigateToAuthMain)
+            }.onFailure(Timber::e)
         }
     }
 
-    private fun changeAccount() {
+    private fun changeAccount(
+        token: String,
+    ) {
         viewModelScope.launch {
             authRepository.changeAccount(
-                OriginalInformation(
-                    phone = "010-0000-0000",
+                userRequest = User(
+                    phone = state.value.phone,
+                ),
+                authRequest = Auth(
                     authPlatform = GOOGLE,
-                    token = "codecodecodecodecode"
+                    token = token,
                 )
             ).onSuccess {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("성공"))
-            }.onFailure {
-                _sideEffect.emit(SocialAccountSideEffect.ShowToast("실패"))
-            }
+                _sideEffect.emit(SocialAccountSideEffect.NavigateToAuthMain)
+            }.onFailure(Timber::e)
         }
     }
 

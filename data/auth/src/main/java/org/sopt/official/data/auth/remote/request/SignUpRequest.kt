@@ -33,8 +33,8 @@ data class SignUpRequest (
     val name:  String,
     @SerialName("phone")
     val phone:  String,
-    @SerialName("code")
-    val code:  String,
+    @SerialName("token")
+    val token:  String,
     @SerialName("authPlatform")
     val authPlatform:  String
 )

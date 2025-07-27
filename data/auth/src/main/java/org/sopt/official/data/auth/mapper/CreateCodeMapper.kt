@@ -25,11 +25,11 @@
 package org.sopt.official.data.auth.mapper
 
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
-import org.sopt.official.domain.auth.model.InitialInformation
+import org.sopt.official.domain.auth.model.User
 
-fun InitialInformation.toRequest(): CreateCodeRequest =
+fun User.toCreateCodeRequest(): CreateCodeRequest =
     CreateCodeRequest(
         name = name,
         phone = phone,
-        type = type
+        type = type,
     )

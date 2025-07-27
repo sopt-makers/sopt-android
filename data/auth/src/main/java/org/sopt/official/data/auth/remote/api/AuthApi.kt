@@ -68,6 +68,9 @@ internal interface AuthApi {
 
     @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(
-        @Query("phone") request: String
+        @Query("name") name: String,
+        @Query("phone") phone: String
     ): BaseAuthResponse<FindAccountResponse>
+
+    // todo: 토큰 리프레시 - App by 이유빈
 }

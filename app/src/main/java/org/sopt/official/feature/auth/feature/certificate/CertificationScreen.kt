@@ -75,6 +75,7 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.AuthTextField
+import org.sopt.official.feature.auth.feature.certificate.navigation.SocialAccountInfo
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.feature.auth.utils.phoneNumberVisualTransformation
 
@@ -83,7 +84,7 @@ internal fun CertificationRoute(
     status: AuthStatus,
     onBackClick: () -> Unit,
     onShowSnackBar: () -> Unit,
-    navigateToSocialAccount: (AuthStatus, String) -> Unit,
+    navigateToSocialAccount: (SocialAccountInfo) -> Unit,
     navigateToAuthMain: (String) -> Unit,
     onGoogleFormClick: () -> Unit,
     viewModel: CertificationViewModel = hiltViewModel()
@@ -103,7 +104,13 @@ internal fun CertificationRoute(
                     is CertificationSideEffect.NavigateToSocialAccount -> {
                         viewModel.timerJob?.cancelAndJoin()
                         viewModel.timerJob = null
-                        navigateToSocialAccount(status, sideEffect.name)
+                        navigateToSocialAccount(
+                            SocialAccountInfo(
+                                status = status,
+                                name = sideEffect.name,
+                                phone = sideEffect.phone
+                            )
+                        )
                     }
 
                     is CertificationSideEffect.NavigateToAuthMain -> {
@@ -121,13 +128,11 @@ internal fun CertificationRoute(
         onBackClick = onBackClick,
         onCreateCodeClick = {
             onShowSnackBar()
-            // TODO: 실제 전화번호 넣기 by leeeyubin
             scope.launch {
                 viewModel.createCode(status)
             }
         },
         onCertificateClick = {
-            // TODO: 실제 인증코드 넣기 by leeeyubin
             viewModel.certificateCode(status)
         },
         onGoogleFormClick = onGoogleFormClick,

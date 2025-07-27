@@ -38,21 +38,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig
 import org.sopt.official.R
-import org.sopt.official.auth.PlaygroundAuth
-import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.impl.api.AuthService
-import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
-import org.sopt.official.network.model.response.OAuthToken
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import javax.inject.Inject
@@ -117,6 +110,17 @@ class AuthActivity : AppCompatActivity() {
                 }
 
                 AuthScreen(
+                    navigateToHome = { // TODO: 유저 상태 관리하기 by 이유빈
+                        try {
+                            if (dataStore.accessToken.isNotEmpty()) {
+                                startActivity(
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e)
+                        }
+                    },
                     navigateToUnAuthenticatedHome = {
                         startActivity(
                             MainActivity.getIntent(
@@ -126,31 +130,6 @@ class AuthActivity : AppCompatActivity() {
                                 )
                             )
                         )
-                    },
-                    onGoogleLoginCLick = {
-                        PlaygroundAuth.authorizeWithWebTab(
-                            context = context,
-                            isDebug = BuildConfig.DEBUG,
-                            authDataSource = object : PlaygroundAuthDatasource {
-                                override suspend fun oauth(code: String): Result<OAuthToken> {
-                                    return kotlin.runCatching {
-                                        authService
-                                            .authenticate(AuthRequest(code, dataStore.pushToken))
-                                            .toOAuthToken()
-                                    }
-                                }
-                            }
-                        ) {
-                            it.onSuccess { token ->
-                                lifecycleScope.launch {
-                                    viewModel.onLogin(token.toEntity())
-                                }
-                            }.onFailure {
-                                lifecycleScope.launch {
-                                    viewModel.onFailure(it)
-                                }
-                            }
-                        }
                     },
                     onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
                     onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },

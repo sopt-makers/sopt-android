@@ -31,7 +31,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.auth.model.SignInCode
+import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
 import javax.inject.Inject
 
@@ -39,23 +39,21 @@ import javax.inject.Inject
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
-
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
 
     fun signIn(token: String) {
-        // TODO: 실제 token 넣기 by leeeyubin
         viewModelScope.launch {
             authRepository.signIn(
-                SignInCode(
-                    token = "codecodecodecodecode",
-                    authPlatform = GOOGLE
+                Auth(
+                    token = token,
+                    authPlatform = GOOGLE,
                 )
-            ).onSuccess {
-                //TODO: 홈 화면으로 이동
-                _sideEffect.emit(AuthMainSideEffect.ShowToast("성공"))
+            ).onSuccess { response ->
+                // TODO: 홈화면 상태와 연동 및 토큰 관리
+                _sideEffect.emit(AuthMainSideEffect.NavigateToHome)
             }.onFailure {
-                _sideEffect.emit(AuthMainSideEffect.ShowToast("실패"))
+                _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)
             }
         }
     }
