@@ -126,11 +126,14 @@ class AuthActivity : AppCompatActivity() {
                 }
 
                 AuthScreen(
-                    navigateToHome = { // TODO: 유저 상태 관리하기 by 이유빈
+                    navigateToHome = {
                         try {
                             if (dataStore.accessToken.isNotEmpty()) {
                                 startActivity(
-                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
+                                    MainActivity.getIntent(
+                                        context = context,
+                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                    )
                                 )
                             }
                         } catch (e: Exception) {
@@ -140,10 +143,8 @@ class AuthActivity : AppCompatActivity() {
                     navigateToUnAuthenticatedHome = {
                         startActivity(
                             MainActivity.getIntent(
-                                this,
-                                MainActivity.StartArgs(
-                                    UserStatus.UNAUTHENTICATED
-                                )
+                                context = this,
+                                args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
                             )
                         )
                     },
