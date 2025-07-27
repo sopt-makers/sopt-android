@@ -6,6 +6,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.BuildConfig.serverClientId
 import org.sopt.official.common.coroutines.suspendRunCatching
 import timber.log.Timber
@@ -13,8 +14,10 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GoogleLoginManager @Inject constructor() {
-    suspend fun getGoogleIdToken(context: Context): String {
+class GoogleLoginManager @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    suspend fun getGoogleIdToken(): String {
         var idToken = ""
         val credentialManager = CredentialManager.create(context)
         val googleIdOption = GetGoogleIdOption.Builder()
