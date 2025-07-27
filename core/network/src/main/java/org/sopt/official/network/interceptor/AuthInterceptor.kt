@@ -37,7 +37,7 @@ class AuthInterceptor @Inject constructor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
         val authRequest = if (isAccessTokenUsed(originalRequest)) {
-            originalRequest.newBuilder().addHeader("Authorization", BEARER + dataStore.accessToken).build()
+            originalRequest.newBuilder().addHeader(AUTHORIZATION, "$BEARER ${dataStore.accessToken}").build()
         } else {
             originalRequest
         }
@@ -51,6 +51,7 @@ class AuthInterceptor @Inject constructor(
     }
 
     companion object {
-        private const val BEARER = "Bearer "
+        private const val BEARER = "Bearer"
+        private const val AUTHORIZATION = "Authorization"
     }
 }
