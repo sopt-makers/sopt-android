@@ -134,6 +134,7 @@ dependencies {
     implementation(projects.domain.fortune)
     implementation(projects.domain.notification)
     implementation(projects.domain.home)
+    implementation(projects.domain.auth)
 
     implementation(projects.data.fortune)
     implementation(projects.data.soptamp)
@@ -141,6 +142,7 @@ dependencies {
     implementation(projects.data.poke)
     implementation(projects.data.notification)
     implementation(projects.data.home)
+    implementation(projects.data.auth)
 
     implementation(projects.feature.soptamp)
     implementation(projects.data.schedule)
@@ -178,6 +180,8 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.fragment.ktx)
+    implementation(libs.androidx.credential)
+    implementation(libs.androidx.credential.play.service)
 
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.bundles.compose.test)
@@ -187,6 +191,7 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
+    implementation(libs.google.id.identity)
 }
 
 secrets {

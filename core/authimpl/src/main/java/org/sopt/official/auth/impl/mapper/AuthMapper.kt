@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import org.sopt.official.auth.model.Token
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.network.model.response.AuthResponse
 
+@Deprecated("이거 말고 TokenMapper 사용하세요.")
 class AuthMapper {
     fun toEntity(responseItem: AuthResponse) = Auth(
         Token(

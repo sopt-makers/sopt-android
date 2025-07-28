@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import org.sopt.official.network.model.response.AuthResponse
 import retrofit2.http.Body
 import retrofit2.http.PATCH
 
+@Deprecated("이거 말고 RefreshApi 사용하세요.")
 interface RefreshService {
     @PATCH("auth/refresh")
     suspend fun refresh(@Body body: RefreshRequest): AuthResponse
