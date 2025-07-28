@@ -184,9 +184,9 @@ hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
