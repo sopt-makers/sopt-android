@@ -27,6 +27,7 @@ package org.sopt.official.feature.auth.feature.certificate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -39,7 +40,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import okhttp3.internal.immutableListOf
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
@@ -53,7 +53,7 @@ internal enum class ErrorCase(val message: String) {
 
     companion object {
         fun isPhoneError(message: String) = PHONE_ERROR.message == message
-        fun isCodeError(message: String) = immutableListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
+        fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
     }
 }
 
