@@ -24,46 +24,34 @@
  */
 package org.sopt.official.feature.auth
 
-import android.animation.ObjectAnimator
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
-import android.view.animation.AnimationUtils
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.core.view.isVisible
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig
 import org.sopt.official.R
-import org.sopt.official.auth.PlaygroundAuth
-import org.sopt.official.auth.data.PlaygroundAuthDatasource
 import org.sopt.official.auth.impl.api.AuthService
-import org.sopt.official.auth.impl.model.request.AuthRequest
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.util.dp
-import org.sopt.official.common.util.setOnAnimationEndListener
-import org.sopt.official.common.util.setOnSingleClickListener
-import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityAuthBinding
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.MainActivity
-import org.sopt.official.network.model.response.OAuthToken
+import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
-    private val binding by viewBinding(ActivityAuthBinding::inflate)
     private val viewModel by viewModels<AuthViewModel>()
 
     @Auth
@@ -75,112 +63,83 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        try {
-            if (dataStore.accessToken.isNotEmpty()) {
-                startActivity(
-                    MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.of(dataStore.userStatus)))
-                )
-            }
-        } catch (e: Exception) {
-            Timber.e(e)
-        }
+        setContent {
+            SoptTheme {
+                val context = LocalContext.current
+                val lifecycleOwner = LocalLifecycleOwner.current
 
-        setContentView(binding.root)
-        initNotificationChannel()
-
-        initUi()
-        initAnimation()
-        collectUiEvent()
-    }
-
-    private fun initNotificationChannel() {
-        NotificationChannel(
-            getString(R.string.toolbar_notification),
-            getString(R.string.toolbar_notification),
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            setSound(null, null)
-            enableLights(false)
-            enableVibration(false)
-            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
-        }
-    }
-
-    private fun collectUiEvent() {
-        viewModel.uiEvent
-            .flowWithLifecycle(lifecycle)
-            .onEach { event ->
-                when (event) {
-                    is AuthUiEvent.Success -> startActivity(
-                        MainActivity.getIntent(this, MainActivity.StartArgs(event.userStatus))
-                    )
-
-                    is AuthUiEvent.Failure -> startActivity(
-                        MainActivity.getIntent(this, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
-                    )
-                }
-            }.launchIn(lifecycleScope)
-    }
-
-    private fun initAnimation() {
-        val fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.anim_fade_in).apply {
-            startOffset = 700
-        }
-        fadeInAnimation.setOnAnimationEndListener {
-            binding.groupBottomAuth.isVisible = true
-        }
-        ObjectAnimator.ofFloat(
-            binding.imgSoptLogo,
-            "translationY",
-            -140.dp.toFloat()
-        ).apply {
-            duration = 1000
-            startDelay = 700
-            interpolator = AnimationUtils.loadInterpolator(
-                this@AuthActivity,
-                android.R.interpolator.fast_out_slow_in
-            )
-        }.start()
-        binding.groupBottomAuth.startAnimation(fadeInAnimation)
-    }
-
-    private fun initUi() {
-        binding.btnSoptNotMember.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.btnSoptLogin.setOnSingleClickListener {
-            PlaygroundAuth.authorizeWithWebTab(
-                context = this,
-                isDebug = BuildConfig.DEBUG,
-                authDataSource = object : PlaygroundAuthDatasource {
-                    override suspend fun oauth(code: String): Result<OAuthToken> {
-                        return kotlin.runCatching {
-                            authService
-                                .authenticate(AuthRequest(code, dataStore.pushToken))
-                                .toOAuthToken()
+                LaunchedEffect(true) {
+                    try {
+                        if (dataStore.accessToken.isNotEmpty()) {
+                            startActivity(
+                                MainActivity.getIntent(
+                                    context = context,
+                                    args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                )
+                            )
                         }
+                    } catch (e: Exception) {
+                        Timber.e(e)
                     }
                 }
-            ) {
-                it.onSuccess { token ->
-                    lifecycleScope.launch {
-                        viewModel.onLogin(token.toEntity())
-                    }
-                }.onFailure {
-                    lifecycleScope.launch {
-                        viewModel.onFailure(it)
+
+                LaunchedEffect(true) {
+                    NotificationChannel(
+                        getString(R.string.toolbar_notification),
+                        getString(R.string.toolbar_notification),
+                        NotificationManager.IMPORTANCE_HIGH
+                    ).apply {
+                        setSound(null, null)
+                        enableLights(false)
+                        enableVibration(false)
+                        lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
                     }
                 }
-            }
-        }
-        binding.btnSoptNotMember.setOnSingleClickListener {
-            startActivity(
-                MainActivity.getIntent(
-                    this,
-                    MainActivity.StartArgs(
-                        UserStatus.UNAUTHENTICATED
-                    )
+
+                LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
+                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                        .collect { event ->
+                            when (event) {
+                                is AuthUiEvent.Success -> startActivity(
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
+                                )
+
+                                is AuthUiEvent.Failure -> startActivity(
+                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                                )
+                            }
+                        }
+                }
+
+                AuthScreen(
+                    navigateToHome = {
+                        try {
+                            if (dataStore.accessToken.isNotEmpty()) {
+                                startActivity(
+                                    MainActivity.getIntent(
+                                        context = context,
+                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                    )
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e)
+                        }
+                    },
+                    navigateToUnAuthenticatedHome = {
+                        startActivity(
+                            MainActivity.getIntent(
+                                context = this,
+                                args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                            )
+                        )
+                    },
+                    onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
+                    onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
+                    platform = dataStore.platform
                 )
-            )
+            }
         }
     }
 
