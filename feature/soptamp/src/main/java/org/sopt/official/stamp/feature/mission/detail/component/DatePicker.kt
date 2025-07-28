@@ -67,8 +67,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import okhttp3.internal.immutableListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
@@ -346,7 +346,7 @@ private val days28 = (listOf("") + (1..28).map { it.toString() } + listOf("")).t
 private val days29 = (listOf("") + (1..29).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 윤년 2월
 private val days30 = (listOf("") + (1..30).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 4,6,9,11
 private val days31 = (listOf("") + (1..31).map { it.toString() } + listOf("")).toImmutableList() // 해당 월 : 1,3,5,7,8,10.12
-private val days30Months = immutableListOf(4, 6, 9, 11)
+private val days30Months = persistentListOf(4, 6, 9, 11)
 
 @DefaultPreview
 @Composable
