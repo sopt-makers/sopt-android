@@ -64,7 +64,7 @@ rin = "0.3.0"
 mozilla-component-utils = "141.0"
 
 google-services = "4.4.3"
-playServicesAuth = "21.3.0"
+playServicesAuth = "21.4.0"
 crashlytics = "3.0.5"
 firebase = "33.16.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
