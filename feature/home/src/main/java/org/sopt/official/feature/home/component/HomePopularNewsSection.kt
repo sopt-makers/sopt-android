@@ -35,6 +35,7 @@ private const val POPULAR_NEWS_LIST_SIZE = 3
 internal fun HomePopularNewsSection(
     postList: ImmutableList<HomePlaygroundPostModel>,
     navigateToWebLink: (String) -> Unit,
+    navigateToMemberProfile: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var highlightedIndex by remember { mutableIntStateOf(0) }
@@ -86,6 +87,7 @@ internal fun HomePopularNewsSection(
                     onClick = {
                         navigateToWebLink(webLink)
                     },
+                    onProfileClick = { if (userId != null) navigateToMemberProfile(userId) },
                     modifier = Modifier
                         .then(
                             if (index == 0) {
@@ -122,7 +124,8 @@ private fun HomePlaygroundSectionPreview() {
                     generationAndPart = ""
                 )
             ),
-            navigateToWebLink = {}
+            navigateToWebLink = {},
+            navigateToMemberProfile = {}
         )
     }
 }

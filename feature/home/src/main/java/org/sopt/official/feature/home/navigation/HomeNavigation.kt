@@ -55,5 +55,6 @@ sealed interface HomeNavigation {
         fun navigateToDeepLink(url: String)
         fun navigateToWebUrl(url: String)
         fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int)
+        fun navigateToPlaygroundMemberProfile(userId: Int)
     }
 }
