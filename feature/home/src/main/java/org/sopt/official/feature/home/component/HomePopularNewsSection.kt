@@ -29,48 +29,6 @@ import org.sopt.official.designsystem.Orange500
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 
-internal val feedList = persistentListOf(
-    HomePlaygroundPostModel(
-        postId = 1,
-        title = "나 메이커스팀인데 메팀 좋다",
-        content = "본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.",
-        category = "전체",
-        label = "HOT",
-        profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
-        name = "익명의 앱븐이",
-        generationAndPart = ""
-    ),
-    HomePlaygroundPostModel(
-        postId = 2,
-        title = "제목 길이가 엄청나게 길어진다면????나 메이커스팀인데 메팀 좋다 ",
-        content = "본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.",
-        category = "전체",
-        label = "HOT",
-        profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
-        name = "박효빈",
-        generationAndPart = "35기 안드로이드"
-    ),
-    HomePlaygroundPostModel(
-        postId = 3,
-        title = "나 메이커스팀인데 메팀 좋다",
-        content = "본문 내용이 엄청 짧다면???",
-        category = "전체",
-        label = "HOT",
-        profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4",
-        name = "박효빈",
-        generationAndPart = "35기 안드로이드"
-    ),
-    HomePlaygroundPostModel(
-        postId = 4,
-        title = "사진이 없다면?",
-        content = "본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.본문 내용은 두줄로 보여줍니다.",
-        category = "전체",
-        label = "HOT",
-        profileImage = "",
-        name = "박효빈",
-        generationAndPart = "35기 기획"
-    )
-)
 private const val POPULAR_NEWS_LIST_SIZE = 3
 
 @Composable
