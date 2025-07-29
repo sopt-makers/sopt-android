@@ -35,11 +35,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
-import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
-import org.sopt.official.domain.usecase.LoginUseCase
 import timber.log.Timber
 
 private const val DEFAULT_VERSION = "9.9.9"
@@ -58,19 +56,14 @@ sealed interface UpdateState {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val loginUseCase: LoginUseCase,
     private val remoteConfig: SoptRemoteConfig
 ) : ViewModel() {
+    // TODO: 삭제 예정
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
 
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Default)
     val updateState get() = _updateState.asStateFlow()
-
-    suspend fun onLogin(auth: Auth) {
-        loginUseCase(auth)
-        _uiEvent.emit(AuthUiEvent.Success(auth.status))
-    }
 
     fun getUpdateConfig(version: String?) {
         viewModelScope.launch {
@@ -104,10 +97,5 @@ class AuthViewModel @Inject constructor(
             Timber.e(e)
             SemVer.parse(DEFAULT_VERSION)
         }
-    }
-
-    suspend fun onFailure(throwable: Throwable) {
-        Timber.e(throwable)
-        _uiEvent.emit(AuthUiEvent.Failure(throwable.message ?: "로그인에 실패했습니다."))
     }
 }

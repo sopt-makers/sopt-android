@@ -25,10 +25,12 @@ exifinterface = "1.4.1"
 compose-bom = "2025.07.00"
 androidx-paging = "3.3.6"
 desugarJdk = "2.1.5"
+androidx-credential = "1.5.0"
 
 material = "1.12.0"
 in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
+google-id = "1.1.1"
 
 junit = "4.13.2"
 androidx-test-junit = "1.2.1"
@@ -49,7 +51,7 @@ dagger-hilt = "2.57"
 dagger-hilt-navigation-compose = "1.2.0"
 flipper = "0.273.0"
 soloader = "0.12.1"
-okhttp = "4.12.0"
+okhttp = "5.1.0"
 retrofit = "3.0.0"
 timber = "5.0.1"
 compose-destination = "1.11.9"
@@ -59,11 +61,12 @@ lottie = "6.6.7"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
-mozilla-component-utils = "140.0.4"
+mozilla-component-utils = "141.0"
 
 google-services = "4.4.3"
+playServicesAuth = "21.4.0"
 crashlytics = "3.0.5"
-firebase = "33.16.0"
+firebase = "34.0.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
 app-distribution = "5.1.1"
 ktlint = "13.0.0"
@@ -95,15 +98,20 @@ fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragm
 appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
 exifinterface = { module = "androidx.exifinterface:exifinterface", version.ref = "exifinterface" }
 desugarLibs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugarJdk" }
 customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
+androidx-credential = { module = "androidx.credentials:credentials", version.ref = "androidx-credential" }
+androidx-credential-play-service = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credential" }
+lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }
 secret-plugin = { group = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", name = "secrets-gradle-plugin", version.ref = "secret-gradle-plugin" }
+google-id-identity = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "google-id" }
 
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
 compose-ui = { module = "androidx.compose.ui:ui" }
@@ -178,9 +186,9 @@ hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
-firebase-analytics = { module = "com.google.firebase:firebase-analytics-ktx" }
-firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics-ktx" }
-firebase-messaging = { module = "com.google.firebase:firebase-messaging-ktx" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config" }
 

@@ -45,7 +45,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import okhttp3.internal.immutableListOf
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
@@ -95,7 +95,7 @@ internal fun PokeMessageBottomSheetScreen(
         }
         Spacer(modifier = Modifier.height(height = 12.dp))
         LazyColumn(contentPadding = PaddingValues(vertical = 4.dp)) {
-            val messages = immutableListOf(
+            val messages = persistentListOf(
                 "안녕하세요? I AM 35기에요",
                 "친해지고 싶어서 DM 드려요 ^^~",
                 "이야기 해보고 싶었어요!!",
