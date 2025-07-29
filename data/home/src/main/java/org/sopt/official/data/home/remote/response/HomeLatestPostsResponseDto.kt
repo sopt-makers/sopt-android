@@ -11,6 +11,8 @@ data class HomeLatestPostsResponseDto(
 
 @Serializable
 data class HomeLatestPostResponseDto(
+    @SerialName("userId")
+    val userId: Int?,
     @SerialName("profileImage")
     val profileImage: String?,
     @SerialName("name")

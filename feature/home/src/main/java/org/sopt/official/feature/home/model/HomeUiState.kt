@@ -111,6 +111,7 @@ internal data class HomeFloatingToastData(
 
 @Immutable
 data class HomePlaygroundPostModel(
+    val userId: Int? = null,
     val postId: Int = -1,
     val title: String = "",
     val content: String = "",
