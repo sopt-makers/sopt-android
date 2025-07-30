@@ -312,6 +312,7 @@ private fun HomeScreenForMember(
             HomePopularNewsSection(
                 postList = popularPosts,
                 navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
+                navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
@@ -322,7 +323,8 @@ private fun HomeScreenForMember(
                 HomeLatestNewsSection(
                     feedList = latestPosts,
                     navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
-                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl
+                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
+                    navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile
                 )
             }
 

@@ -38,6 +38,7 @@ internal fun HomeLatestNewsSection(
     feedList: ImmutableList<HomePlaygroundPostModel>,
     navigateToPlayground: () -> Unit,
     navigateToWebLink: (String) -> Unit,
+    navigateToMemberProfile: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -95,7 +96,8 @@ internal fun HomeLatestNewsSection(
                         category = category,
                         title = title,
                         description = content,
-                        onClick = { navigateToWebLink(webLink) }
+                        onClick = { navigateToWebLink(webLink) },
+                        onProfileClick = { if (userId != null) navigateToMemberProfile(userId) }
                     )
                 }
             }

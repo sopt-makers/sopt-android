@@ -42,6 +42,7 @@ internal fun HomePlaygroundPost(
     title: String,
     description: String,
     onClick: () -> Unit,
+    onProfileClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -61,6 +62,7 @@ internal fun HomePlaygroundPost(
             name = userName,
             part = userPart,
             modifier = Modifier
+                .clickable(onClick = onProfileClick)
                 .padding(top = 18.dp, bottom = 22.dp)
         )
 

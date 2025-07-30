@@ -11,8 +11,10 @@ data class HomePopularPostsResponseDto(
 
 @Serializable
 data class HomePopularPostResponseDto(
+    @SerialName("userId")
+    val userId: Int?,
     @SerialName("profileImage")
-    val profileImage: String,
+    val profileImage: String?,
     @SerialName("name")
     val name: String,
     @SerialName("generationAndPart")

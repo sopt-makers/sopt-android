@@ -181,7 +181,13 @@ fun MainScreen(
                                         false -> applicationNavigator.getPokeActivityIntent(userStatus)
                                     }
                                 )
-                        },
+
+                            override fun navigateToPlaygroundMemberProfile(userId: Int) {
+                                context.startActivity(
+                                    getIntent("${PlaygroundWebLink.MEMBER}/$userId")
+                                )
+                            }
+                        }
                     )
 
                     soptlogNavGraph(
