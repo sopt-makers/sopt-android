@@ -50,6 +50,7 @@ internal fun FloatingToast.toModel(): HomeFloatingToastData = HomeFloatingToastD
 )
 
 internal fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
+    userId = this.userId,
     postId = this.id,
     title = this.title,
     content = this.content,
@@ -62,6 +63,7 @@ internal fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPost
 )
 
 internal fun LatestPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
+    userId = this.userId,
     postId = this.id,
     title = this.title,
     content = this.content,

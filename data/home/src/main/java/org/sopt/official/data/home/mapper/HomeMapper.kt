@@ -91,7 +91,8 @@ internal fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
 )
 
 internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
-    profileImage = this.profileImage,
+    userId = this.userId,
+    profileImage = this.profileImage.orEmpty(),
     name = this.name,
     generationAndPart = this.generationAndPart,
     rank = this.rank,
@@ -103,6 +104,7 @@ internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
 )
 
 internal fun HomeLatestPostResponseDto.toDomain(): LatestPost = LatestPost(
+    userId = this.userId,
     profileImage = this.profileImage ?: "",
     name = this.name ?: "",
     generationAndPart = this.generationAndPart ?: "",

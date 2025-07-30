@@ -1,6 +1,7 @@
 package org.sopt.official.domain.home.model
 
 data class LatestPost(
+    val userId: Int?,
     val profileImage: String,
     val name: String,
     val generationAndPart: String,
