@@ -61,7 +61,7 @@ lottie = "6.6.7"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
-mozilla-component-utils = "141.0"
+mozilla-component-utils = "141.0.1"
 
 google-services = "4.4.3"
 playServicesAuth = "21.4.0"
