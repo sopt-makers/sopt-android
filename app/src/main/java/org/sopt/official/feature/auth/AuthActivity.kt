@@ -83,19 +83,12 @@ class AuthActivity : AppCompatActivity() {
                 when (val state = updateState) {
                     is UpdateState.Default -> {}
                     is UpdateState.PatchUpdateAvailable -> {
-                        // TODO: 선택 업데이트 추가하기 + 아래 내용 삭제
-                        try {
-                            if (dataStore.accessToken.isNotEmpty()) {
-                                startActivity(
-                                    MainActivity.getIntent(
-                                        context = context,
-                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
-                                    )
-                                )
-                            }
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                        }
+                        UpdateDialog(
+                            description = state.message,
+                            onDismiss = { navigateToMainActivity() },
+                            onPositiveClick = this@AuthActivity::launchPlayStore,
+                            onNegativeClick = { navigateToMainActivity() }
+                        )
                     }
 
                     is UpdateState.UpdateRequired -> {
@@ -107,20 +100,7 @@ class AuthActivity : AppCompatActivity() {
                         )
                     }
 
-                    else -> {
-                        try {
-                            if (dataStore.accessToken.isNotEmpty()) {
-                                startActivity(
-                                    MainActivity.getIntent(
-                                        context = context,
-                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
-                                    )
-                                )
-                            }
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                        }
-                    }
+                    else -> navigateToMainActivity()
                 }
 
                 LaunchedEffect(true) {
@@ -180,6 +160,21 @@ class AuthActivity : AppCompatActivity() {
                     platform = dataStore.platform
                 )
             }
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        try {
+            if (dataStore.accessToken.isNotEmpty()) {
+                startActivity(
+                    MainActivity.getIntent(
+                        context = this,
+                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 
