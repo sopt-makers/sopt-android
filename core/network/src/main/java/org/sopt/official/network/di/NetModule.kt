@@ -28,6 +28,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
@@ -44,7 +45,6 @@ import org.sopt.official.network.authenticator.CentralizeAuthenticator
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
-import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -77,13 +77,6 @@ object NetModule {
         .addInterceptor(loggingInterceptor)
         .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
-
-    @Provides
-    @Singleton
-    fun provideJson(): Json = Json {
-        ignoreUnknownKeys = true
-        isLenient = true
-    }
 
     @Provides
     @Singleton

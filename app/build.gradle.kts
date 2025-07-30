@@ -192,6 +192,7 @@ dependencies {
     implementation(libs.profileinstaller)
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.google.id.identity)
+    implementation(libs.semver)
 }
 
 secrets {

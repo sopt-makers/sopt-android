@@ -34,21 +34,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.sopt.official.R
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
+import org.sopt.official.common.util.getVersionName
+import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -63,24 +68,39 @@ class AuthActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SoptTheme {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
-                LaunchedEffect(true) {
-                    try {
-                        if (dataStore.accessToken.isNotEmpty()) {
-                            startActivity(
-                                MainActivity.getIntent(
-                                    context = context,
-                                    args = MainActivity.StartArgs(UserStatus.ACTIVE)
-                                )
-                            )
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
+                val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+
+                LaunchedEffect(Unit) {
+                    viewModel.getUpdateConfig(context.getVersionName())
+                }
+
+                when (val state = updateState) {
+                    is UpdateState.Default -> {}
+                    is UpdateState.PatchUpdateAvailable -> {
+                        UpdateDialog(
+                            description = state.message,
+                            onDismiss = { navigateToMainActivity() },
+                            onPositiveClick = this@AuthActivity::launchPlayStore,
+                            onNegativeClick = { navigateToMainActivity() }
+                        )
                     }
+
+                    is UpdateState.UpdateRequired -> {
+                        UpdateDialog(
+                            description = state.message,
+                            onDismiss = this@AuthActivity::finishAffinity,
+                            onPositiveClick = this@AuthActivity::launchPlayStore,
+                            onNegativeClick = this@AuthActivity::finishAffinity,
+                        )
+                    }
+
+                    else -> navigateToMainActivity()
                 }
 
                 LaunchedEffect(true) {
@@ -140,6 +160,21 @@ class AuthActivity : AppCompatActivity() {
                     platform = dataStore.platform
                 )
             }
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        try {
+            if (dataStore.accessToken.isNotEmpty()) {
+                startActivity(
+                    MainActivity.getIntent(
+                        context = this,
+                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                    )
+                )
+            }
+        } catch (e: Exception) {
+            Timber.e(e)
         }
     }
 

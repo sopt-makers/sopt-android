@@ -25,21 +25,77 @@
 package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import org.sopt.official.auth.model.UserStatus
 import javax.inject.Inject
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import net.swiftzer.semver.SemVer
+import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
+import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
+import timber.log.Timber
+
+private const val DEFAULT_VERSION = "9.9.9"
 
 sealed interface AuthUiEvent {
     data class Success(val userStatus: UserStatus) : AuthUiEvent
     data class Failure(val message: String) : AuthUiEvent
 }
 
+sealed interface UpdateState {
+    data object Default : UpdateState
+    data object NoUpdateAvailable : UpdateState
+    data class PatchUpdateAvailable(val message: String) : UpdateState
+    data class UpdateRequired(val message: String) : UpdateState
+}
+
 @HiltViewModel
 class AuthViewModel @Inject constructor(
+    private val remoteConfig: SoptRemoteConfig
 ) : ViewModel() {
     // TODO: 삭제 예정
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
     val uiEvent = _uiEvent.asSharedFlow()
+
+    private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Default)
+    val updateState get() = _updateState.asStateFlow()
+
+    fun getUpdateConfig(version: String?) {
+        viewModelScope.launch {
+            remoteConfig.getVersionConfig().onSuccess { config ->
+                val updateState = checkForUpdate(version, config)
+                _updateState.update { updateState }
+            }.onFailure {
+                Timber.e(it)
+                _updateState.update { UpdateState.NoUpdateAvailable }
+            }
+        }
+    }
+
+    private fun checkForUpdate(appVersion: String?, versionConfig: UpdateConfigModel): UpdateState {
+        val currentVersion = parseToSemVer(appVersion)
+        val latestAppVersion = parseToSemVer(versionConfig.latestVersion)
+
+        return when {
+            currentVersion.major < latestAppVersion.major -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
+            currentVersion.minor < latestAppVersion.minor -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
+            currentVersion.patch < latestAppVersion.patch -> UpdateState.PatchUpdateAvailable(versionConfig.optionalUpdateNotice)
+            else -> UpdateState.NoUpdateAvailable
+        }
+    }
+
+    private fun parseToSemVer(version: String?): SemVer {
+        return try {
+            if (version == null) return SemVer.parse(DEFAULT_VERSION)
+            SemVer.parse(version)
+        } catch (e: Exception) {
+            Timber.e(e)
+            SemVer.parse(DEFAULT_VERSION)
+        }
+    }
 }
