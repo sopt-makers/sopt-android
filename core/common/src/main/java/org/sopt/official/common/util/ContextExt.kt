@@ -9,20 +9,12 @@ private const val PLAY_STORE_URL =
     "https://play.google.com/store/apps/details?id="
 
 fun Context.getVersionName(): String? = runCatching {
-    packageManager.getPackageInfo(packageName, 0)
-}.fold(
-    onSuccess = { it.versionName },
-    onFailure = { e ->
-        Timber.e(e)
-        null
-    }
-)
+    packageManager.getPackageInfo(packageName, 0).versionName
+}.onFailure(Timber::e).getOrNull()
 
 fun Context.launchPlayStore() = runCatching {
     val playStoreUri = (PLAY_STORE_URL + packageName).toUri()
     Intent(Intent.ACTION_VIEW).apply { data = playStoreUri }
 }.onSuccess {
     startActivity(it)
-}.onFailure { e ->
-    Timber.e(e)
-}
+}.onFailure(Timber::e)

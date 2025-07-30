@@ -25,36 +25,20 @@
 package org.sopt.official.feature.auth
 
 import android.app.NotificationChannel
-import android.net.Uri
-import androidx.activity.compose.setContent
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import javax.inject.Inject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import org.sopt.official.BuildConfig
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.common.util.dp
-import org.sopt.official.common.util.getVersionName
-import org.sopt.official.common.util.launchPlayStore
-import org.sopt.official.common.util.setOnAnimationEndListener
-import org.sopt.official.common.util.setOnSingleClickListener
-import org.sopt.official.common.util.ui.setVisible
-import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityAuthBinding
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.auth.component.UpdateDialog
-import org.sopt.official.feature.mypage.web.WebUrlConstant
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import androidx.core.view.isVisible
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -64,14 +48,12 @@ import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
-import org.sopt.official.common.util.viewBinding
-import org.sopt.official.databinding.ActivityAuthBinding
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
+import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -87,8 +69,6 @@ class AuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.getUpdateConfig(this.getVersionName())
-        
         setContent {
             SoptTheme {
                 val context = LocalContext.current
@@ -96,24 +76,26 @@ class AuthActivity : AppCompatActivity() {
 
                 val updateState by viewModel.updateState.collectAsStateWithLifecycle()
 
-                LaunchedEffect(true) {
-                    try {
-                        if (dataStore.accessToken.isNotEmpty()) {
-                            startActivity(
-                                MainActivity.getIntent(
-                                    context = context,
-                                    args = MainActivity.StartArgs(UserStatus.ACTIVE)
-                                )
-                            )
-                        }
-                    } catch (e: Exception) {
-                        Timber.e(e)
-                    }
+                LaunchedEffect(Unit) {
+                    viewModel.getUpdateConfig(context.getVersionName())
                 }
 
-                when (updateState) {
+                when (val state = updateState) {
+                    is UpdateState.Default -> {}
                     is UpdateState.PatchUpdateAvailable -> {
-                        // TODO: 선택 업데이트 추가하기
+                        // TODO: 선택 업데이트 추가하기 + 아래 내용 삭제
+                        try {
+                            if (dataStore.accessToken.isNotEmpty()) {
+                                startActivity(
+                                    MainActivity.getIntent(
+                                        context = context,
+                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                    )
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e)
+                        }
                     }
 
                     is UpdateState.UpdateRequired -> {
@@ -124,8 +106,21 @@ class AuthActivity : AppCompatActivity() {
                             onNegativeClick = this@AuthActivity::finishAffinity,
                         )
                     }
-                    
-                    else -> {}
+
+                    else -> {
+                        try {
+                            if (dataStore.accessToken.isNotEmpty()) {
+                                startActivity(
+                                    MainActivity.getIntent(
+                                        context = context,
+                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                    )
+                                )
+                            }
+                        } catch (e: Exception) {
+                            Timber.e(e)
+                        }
+                    }
                 }
 
                 LaunchedEffect(true) {
@@ -185,13 +180,13 @@ class AuthActivity : AppCompatActivity() {
                     platform = dataStore.platform
                 )
             }
-                }
-            }
+        }
+    }
 
-            companion object {
-            @JvmStatic
-            fun newInstance(context: Context) = Intent(context, AuthActivity::class.java).apply {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
+    companion object {
+        @JvmStatic
+        fun newInstance(context: Context) = Intent(context, AuthActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        }
+    }
+}

@@ -13,8 +13,5 @@ class SoptRemoteConfigImpl @Inject constructor(
         remoteConfig.fetchAndActivate().await()
         val versionConfig = remoteConfig.getString(UPDATE_CONFIG)
         json.decodeFromString<UpdateConfigModel>(versionConfig)
-    }.fold(
-        onSuccess = { Result.success(it) },
-        onFailure = { Result.failure(it) }
-    )
+    }
 }
