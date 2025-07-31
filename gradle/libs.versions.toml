@@ -33,7 +33,7 @@ secret-gradle-plugin = "2.0.1"
 google-id = "1.1.1"
 
 junit = "4.13.2"
-androidx-test-junit = "1.2.1"
+androidx-test-junit = "1.3.0"
 androidx-test-espresso = "3.6.1"
 junit5-plugin = "1.13.1.0"
 junit5-jupiter = "5.13.4"
