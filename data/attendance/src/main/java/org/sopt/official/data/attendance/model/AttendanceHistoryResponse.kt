@@ -26,7 +26,13 @@ package org.sopt.official.data.attendance.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.domain.attendance.entity.*
+import org.sopt.official.domain.attendance.entity.AttendanceHistory
+import org.sopt.official.domain.attendance.entity.AttendanceLog
+import org.sopt.official.domain.attendance.entity.AttendanceStatus
+import org.sopt.official.domain.attendance.entity.AttendanceSummary
+import org.sopt.official.domain.attendance.entity.AttendanceUserInfo
+import org.sopt.official.domain.attendance.entity.EventAttribute
+import org.sopt.official.domain.attendance.entity.Part
 
 @Serializable
 data class AttendanceHistoryResponse(
