@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@ class AttendanceViewModel @Inject constructor(
     fun loadAttendanceData() {
         viewModelScope.launch {
             _uiState.value = AttendanceUiState.Initial
-            
+
             loadAttendanceDataUseCase()
                 .onSuccess { uiState ->
                     _uiState.value = uiState
@@ -85,13 +85,13 @@ class AttendanceViewModel @Inject constructor(
                 }
         }
     }
-    
+
     /**
      * 현재 출석 라운드 정보 로드 (다이얼로그용)
      */
     private suspend fun loadCurrentAttendanceRound(eventId: Long?): AttendanceRound? {
         if (eventId == null) return null
-        return suspendRunCatching { 
+        return suspendRunCatching {
             attendanceRepository.fetchAttendanceRound(eventId)
         }.mapCatching { result ->
             result.getOrThrow()

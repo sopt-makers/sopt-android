@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,16 +28,16 @@ import org.sopt.official.domain.attendance.entity.SoptEvent
 
 sealed class AttendanceProgressState {
     object BeforeAttendance : AttendanceProgressState()
-    
+
     data class FirstAttendanceCompleted(
         val isAttended: Boolean
     ) : AttendanceProgressState()
-    
+
     data class SecondAttendanceCompleted(
         val firstAttended: Boolean,
         val secondAttended: Boolean
     ) : AttendanceProgressState()
-    
+
     companion object {
         fun fromSoptEvent(soptEvent: SoptEvent): AttendanceProgressState {
             return when (soptEvent.attendances.size) {
@@ -71,10 +71,10 @@ data class ProgressBarUIState(
 ) {
     val isThirdProgressBarVisible: Boolean
         get() = isThirdProgressBarActive && isThirdProgressBarTardy
-    
+
     val isThirdProgressBarActiveAndBeforeAttendance: Boolean
         get() = isThirdProgressBarActive && isThirdProgressBarBeforeAttendance
-    
+
     companion object {
         fun fromProgressState(progressState: AttendanceProgressState): ProgressBarUIState {
             return when (progressState) {
@@ -96,7 +96,7 @@ data class ProgressBarUIState(
                         progressState.firstAttended,
                         progressState.secondAttended
                     )
-                    
+
                     ProgressBarUIState(
                         isFirstProgressBarActive = true,
                         isFirstProgressBarAttendance = progressState.firstAttended,
@@ -112,7 +112,7 @@ data class ProgressBarUIState(
                 }
             }
         }
-        
+
         private fun determineFinalAttendanceStatus(
             firstAttended: Boolean,
             secondAttended: Boolean
@@ -144,7 +144,7 @@ data class ProgressBarUIState(
                 }
             }
         }
-        
+
         private data class FinalAttendanceStatus(
             val isAttendance: Boolean,
             val isTardy: Boolean,

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ import javax.inject.Inject
  * - 재사용성: 다른 컴포넌트에서도 사용 가능
  */
 class AttendanceUiStateMapper @Inject constructor() {
-    
+
     /**
      * SoptEvent와 AttendanceHistory를 UI 상태로 변환
      */
@@ -52,7 +52,7 @@ class AttendanceUiStateMapper @Inject constructor() {
     ): AttendanceUiState {
         val progressState = createProgressState(soptEvent)
         val buttonState = createButtonState(attendanceRound, soptEvent.attendances.size)
-        
+
         return AttendanceUiState.success(
             soptEvent = soptEvent,
             attendanceHistory = attendanceHistory,
@@ -60,7 +60,7 @@ class AttendanceUiStateMapper @Inject constructor() {
             buttonState = buttonState
         )
     }
-    
+
     /**
      * 진행 상태 생성
      */
@@ -68,7 +68,7 @@ class AttendanceUiStateMapper @Inject constructor() {
         val progressState = AttendanceProgressState.fromSoptEvent(soptEvent)
         return ProgressBarUIState.fromProgressState(progressState)
     }
-    
+
     /**
      * 버튼 상태 생성
      */
@@ -79,38 +79,38 @@ class AttendanceUiStateMapper @Inject constructor() {
         if (attendanceRound == null) {
             return AttendanceButtonState.Hidden
         }
-        
+
         val roundState = AttendanceRoundState.fromRoundId(
             id = attendanceRound.id,
             roundText = attendanceRound.roundText,
             userAttendanceCount = userAttendanceCount
         )
-        
+
         return when (roundState) {
             is AttendanceRoundState.NoSession -> AttendanceButtonState.Hidden
-            
+
             is AttendanceRoundState.BeforeTime -> AttendanceButtonState.visible(
                 text = attendanceRound.roundText,
                 isEnabled = false
             )
-            
+
             is AttendanceRoundState.AfterTime -> AttendanceButtonState.visible(
                 text = "출석이 이미 종료되었습니다",
                 isEnabled = false
             )
-            
+
             is AttendanceRoundState.Available -> AttendanceButtonState.visible(
                 text = roundState.roundText,
                 isEnabled = true
             )
-            
+
             is AttendanceRoundState.Completed -> AttendanceButtonState.visible(
                 text = "${roundState.roundText.take(5)} 종료",
                 isEnabled = false
             )
         }
     }
-    
+
     /**
      * 에러 상태 생성
      */
@@ -119,7 +119,7 @@ class AttendanceUiStateMapper @Inject constructor() {
             message = error.message ?: "알 수 없는 오류가 발생했습니다"
         )
     }
-    
+
     /**
      * 로딩 상태 생성
      */

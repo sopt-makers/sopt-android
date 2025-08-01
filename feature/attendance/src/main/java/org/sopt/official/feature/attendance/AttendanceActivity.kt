@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,11 +37,11 @@ import org.sopt.official.designsystem.SoptTheme
 @AndroidEntryPoint
 @DeepLink("sopt://attendance")
 class AttendanceActivity : ComponentActivity() {
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        
+
         setContent {
             SoptTheme {
                 AttendanceScreen(
@@ -50,7 +50,7 @@ class AttendanceActivity : ComponentActivity() {
             }
         }
     }
-    
+
     companion object {
         fun newInstance(context: Context) = Intent(context, AttendanceActivity::class.java)
     }

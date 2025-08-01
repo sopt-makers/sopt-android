@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -83,19 +83,19 @@ fun AttendanceCodeDialog(
     modifier: Modifier = Modifier
 ) {
     val codeInputState = rememberCodeInputState()
-    
+
     // 에러 발생 시 입력 필드 초기화
     LaunchedEffect(errorMessage) {
         if (errorMessage != null) {
             codeInputState.clearAndFocusFirst()
         }
     }
-    
+
     // 다이얼로그 열릴 때 첫 번째 필드에 포커스
     LaunchedEffect(Unit) {
         codeInputState.focusFirst()
     }
-    
+
     Dialog(onDismissRequest = onDismiss) {
         AttendanceCodeDialogContent(
             title = title,
@@ -129,28 +129,28 @@ private fun AttendanceCodeDialogContent(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .clickable { 
+                .clickable {
                     // 빈 필드 클릭 시 해당 필드로 포커스 이동
                     codeInputState.focusFirstEmpty()
                 },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DialogHeader(onDismiss = onDismiss)
-            
+
             DialogTitle(title = title)
-            
+
             Spacer(modifier = Modifier.height(16.dp))
-            
+
             DialogSubtitle()
-            
+
             Spacer(modifier = Modifier.height(22.dp))
-            
+
             CodeInputFields(codeInputState = codeInputState)
-            
+
             ErrorMessage(errorMessage = errorMessage)
-            
+
             Spacer(modifier = Modifier.height(32.dp))
-            
+
             SubmitButton(
                 isEnabled = codeInputState.isComplete,
                 onClick = onCodeSubmit
@@ -352,28 +352,28 @@ private class CodeInputState(
 ) {
     var codeValues by mutableStateOf(List(AttendanceConstants.CODE_INPUT_FIELDS) { "" })
         private set
-    
+
     val focusRequesters = List(AttendanceConstants.CODE_INPUT_FIELDS) { FocusRequester() }
-    
+
     var focusedIndex by mutableStateOf(-1)
         private set
-    
+
     val isComplete: Boolean
         get() = codeValues.all { it.isNotEmpty() }
-    
+
     fun updateValue(index: Int, newValue: String) {
         if (newValue.length <= 1 && newValue.all { it.isDigit() }) {
             codeValues = codeValues.toMutableList().apply {
                 this[index] = newValue
             }
-            
+
             // 값 입력 시 다음 필드로 자동 이동
             if (newValue.isNotEmpty() && index < AttendanceConstants.CODE_INPUT_FIELDS - 1) {
                 focusRequesters[index + 1].requestFocus()
             }
         }
     }
-    
+
     fun handleBackspace(index: Int) {
         val value = codeValues[index]
         when {
@@ -390,7 +390,7 @@ private class CodeInputState(
             }
         }
     }
-    
+
     fun onFieldFocused(index: Int) {
         focusedIndex = index
         // 이미 값이 있는 필드 클릭 시 첫 번째 빈 필드로 이동
@@ -398,22 +398,22 @@ private class CodeInputState(
             focusFirstEmpty()
         }
     }
-    
+
     fun focusFirst() {
         focusRequesters[0].requestFocus()
     }
-    
+
     fun focusFirstEmpty() {
         val targetIndex = codeValues.indexOfFirst { it.isEmpty() }
             .takeIf { it != -1 } ?: (AttendanceConstants.CODE_INPUT_FIELDS - 1)
         focusRequesters[targetIndex].requestFocus()
     }
-    
+
     fun clearAndFocusFirst() {
         codeValues = List(AttendanceConstants.CODE_INPUT_FIELDS) { "" }
         focusFirst()
     }
-    
+
     fun getCompleteCode(): String = codeValues.joinToString("")
 }
 

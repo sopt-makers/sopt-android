@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -47,19 +47,19 @@ data class AttendanceUiState(
      */
     val isDataReady: Boolean
         get() = !isLoading && soptEvent != null && attendanceHistory != null && error == null
-    
+
     /**
      * 에러 상태인지 확인
      */
     val hasError: Boolean
         get() = error != null
-        
+
     companion object {
         /**
          * 초기 상태
          */
         val Initial = AttendanceUiState(isLoading = true)
-        
+
         /**
          * 에러 상태 생성
          */
@@ -67,7 +67,7 @@ data class AttendanceUiState(
             isLoading = false,
             error = message
         )
-        
+
         /**
          * 성공 상태 생성
          */
@@ -96,7 +96,7 @@ data class AttendanceButtonState(
 ) {
     companion object {
         val Hidden = AttendanceButtonState()
-        
+
         fun visible(text: String, isEnabled: Boolean = true) = AttendanceButtonState(
             isVisible = true,
             isEnabled = isEnabled,
@@ -110,11 +110,11 @@ data class AttendanceButtonState(
  */
 sealed class AttendanceDialogState {
     object Hidden : AttendanceDialogState()
-    
+
     data class CodeInput(
         val title: String
     ) : AttendanceDialogState()
-    
+
     data class Error(
         val title: String,
         val message: String
@@ -128,16 +128,16 @@ sealed class AttendanceRoundState {
     object NoSession : AttendanceRoundState()
     object BeforeTime : AttendanceRoundState()
     object AfterTime : AttendanceRoundState()
-    
+
     data class Available(
         val subLectureId: Long,
         val roundText: String
     ) : AttendanceRoundState()
-    
+
     data class Completed(
         val roundText: String
     ) : AttendanceRoundState()
-    
+
     companion object {
         /**
          * AttendanceRound ID를 기반으로 상태 결정

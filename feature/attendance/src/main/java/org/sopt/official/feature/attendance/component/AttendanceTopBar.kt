@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,7 +49,7 @@ fun AttendanceTopBar(
     modifier: Modifier = Modifier
 ) {
     var isRefreshing by remember { mutableStateOf(false) }
-    
+
     // Rotation animation
     val rotationAnimation by animateFloatAsState(
         targetValue = if (isRefreshing) 360f else 0f,
