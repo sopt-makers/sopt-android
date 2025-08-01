@@ -39,9 +39,7 @@ import org.sopt.official.stamp.designsystem.style.PretendardMedium
 @Composable
 fun RankScore(
     modifier: Modifier = Modifier,
-    rank: Int,
     score: Int,
-    isMyRankScore: Boolean = false,
 ) {
     val textColor = SoptTheme.colors.primary
 
@@ -70,6 +68,6 @@ fun RankScore(
 @Composable
 fun PreviewRankScore() {
     SoptTheme {
-        RankScore(rank = 1, score = 1000)
+        RankScore(score = 1000)
     }
 }

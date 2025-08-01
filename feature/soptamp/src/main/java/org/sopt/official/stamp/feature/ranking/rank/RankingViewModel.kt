@@ -43,63 +43,50 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RankingViewModel
-    @Inject
-    constructor(
-        private val rankingRepository: RankingRepository,
-        private val getNicknameUseCase: GetNicknameUseCase,
-    ) : ViewModel() {
-        private val _state: MutableStateFlow<RankingState> = MutableStateFlow(RankingState.Loading)
-        val state: StateFlow<RankingState> = _state.asStateFlow()
-        var isRefreshing by mutableStateOf(false)
-        val nickname = getNicknameUseCase()
+@Inject
+constructor(
+    private val rankingRepository: RankingRepository,
+    private val getNicknameUseCase: GetNicknameUseCase,
+) : ViewModel() {
+    private val _state: MutableStateFlow<RankingState> = MutableStateFlow(RankingState.Loading)
+    val state: StateFlow<RankingState> = _state.asStateFlow()
+    var isRefreshing by mutableStateOf(false)
+    val nickname = getNicknameUseCase()
 
-        fun onRefresh(
-            isCurrent: Boolean,
-            part: String,
-        ) {
-            viewModelScope.launch {
-                isRefreshing = true
-                fetchRanking(isCurrent, part)
+    fun onRefresh(
+        isCurrent: Boolean,
+        part: String,
+    ) {
+        viewModelScope.launch {
+            isRefreshing = true
+            fetchRanking(isCurrent, part)
+        }
+    }
+
+    fun fetchRanking(
+        isCurrent: Boolean,
+        part: String,
+    ) = viewModelScope.launch {
+        _state.value = RankingState.Loading
+
+        if (isCurrent) {
+            fetchCurrentRanking()
+        } else {
+            runCatching {
+                Part.getPartName(part)
+            }.onSuccess { partName ->
+                fetchPartRanking(partName)
+            }.onFailure {
+                _state.value = RankingState.Failure
             }
         }
+    }
 
-        fun fetchRanking(
-            isCurrent: Boolean,
-            part: String,
-        ) = viewModelScope.launch {
-            _state.value = RankingState.Loading
-
-            if (isCurrent) {
-                fetchCurrentRanking()
-            } else {
-                runCatching {
-                    Part.getPartName(part)
-                }.onSuccess { partName ->
-                    fetchPartRanking(partName)
-                }.onFailure {
-                    _state.value = RankingState.Failure
-                }
-            }
-        }
-
-        private suspend fun fetchCurrentRanking() {
-            rankingRepository.getRanking(
-                RankFetchType.Term(),
-            ).mapCatching { it.toUiModel() }
-                .onSuccess { ranking ->
-                    if (isRefreshing) {
-                        isRefreshing = false
-                    }
-                    onSuccessStateChange(ranking)
-                }.onFailure {
-                    _state.value = RankingState.Failure
-                }
-        }
-
-        private suspend fun fetchPartRanking(part: String) {
-            rankingRepository.getCurrentPartRanking(
-                part,
-            ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
+    private suspend fun fetchCurrentRanking() {
+        rankingRepository.getRanking(
+            RankFetchType.Term(),
+        ).mapCatching { it.toUiModel() }
+            .onSuccess { ranking ->
                 if (isRefreshing) {
                     isRefreshing = false
                 }
@@ -107,25 +94,38 @@ class RankingViewModel
             }.onFailure {
                 _state.value = RankingState.Failure
             }
-        }
+    }
 
-        enum class Part(val part: String) {
-            PLAN("기획"),
-            DESIGN("디자인"),
-            WEB("웹"),
-            IOS("아요"),
-            ANDROID("안드"),
-            SERVER("서버"),
-            ;
-
-            companion object {
-                fun getPartName(part: String): String {
-                    return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name : $part")
-                }
+    private suspend fun fetchPartRanking(part: String) {
+        rankingRepository.getCurrentPartRanking(
+            part,
+        ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
+            if (isRefreshing) {
+                isRefreshing = false
             }
-        }
-
-        private fun onSuccessStateChange(ranking: RankingListUiModel) {
-            _state.value = RankingState.Success(ranking, getNicknameUseCase())
+            onSuccessStateChange(ranking)
+        }.onFailure {
+            _state.value = RankingState.Failure
         }
     }
+
+    enum class Part(val part: String) {
+        PLAN("기획"),
+        DESIGN("디자인"),
+        WEB("웹"),
+        IOS("아요"),
+        ANDROID("안드"),
+        SERVER("서버"),
+        ;
+
+        companion object {
+            fun getPartName(part: String): String {
+                return entries.find { it.part == part }?.name ?: throw IllegalArgumentException("Wrong Part Name : $part")
+            }
+        }
+    }
+
+    private fun onSuccessStateChange(ranking: RankingListUiModel) {
+        _state.value = RankingState.Success(ranking, getNicknameUseCase())
+    }
+}

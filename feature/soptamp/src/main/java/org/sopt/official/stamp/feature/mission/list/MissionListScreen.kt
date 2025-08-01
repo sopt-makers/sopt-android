@@ -213,15 +213,12 @@ fun MissionListHeader(
     onReportButtonClick: () -> Unit = {},
     onOnboardingButtonClick: () -> Unit = {},
 ) {
-    var currentText by remember { mutableStateOf(title) }
-
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
         dropDownButton = {
             DropDownMenuButton(
                 menuTexts = menuTexts,
                 onMenuClick = { selectedMenuText ->
-                    currentText = selectedMenuText
                     onMenuClick(selectedMenuText)
                 },
             )
