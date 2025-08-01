@@ -22,10 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-enum class EventType {
-    NO_SESSION,
-    HAS_ATTENDANCE,
-    NO_ATTENDANCE
+data class AttendanceCodeResponse(
+    val subLectureId: Long
+) {
+    companion object {
+        val ERROR = AttendanceCodeResponse(-2)
+    }
 }

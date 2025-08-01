@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-enum class Part(val partName: String) {
-    PLAN("기획"),
-    DESIGN("디자인"),
-    ANDROID("안드로이드"),
-    IOS("iOS"),
-    WEB("웹"),
-    SERVER("서버")
-}
+data class AttendanceSummary(
+    val normal: Int,
+    val late: Int,
+    val abnormal: Int,
+    val participate: Int
+)

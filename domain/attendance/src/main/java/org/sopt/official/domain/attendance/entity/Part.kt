@@ -22,11 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-enum class AttendanceStatus(val statusKorean: String) {
-    ATTENDANCE("출석"),
-    ABSENT("결석"),
-    TARDY("지각"),
-    PARTICIPATE("참여")
+enum class Part(val partName: String) {
+    PLAN("기획"),
+    DESIGN("디자인"),
+    ANDROID("안드로이드"),
+    IOS("iOS"),
+    WEB("웹"),
+    SERVER("서버")
 }
