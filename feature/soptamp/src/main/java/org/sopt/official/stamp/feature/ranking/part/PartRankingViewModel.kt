@@ -42,37 +42,35 @@ import org.sopt.official.stamp.feature.ranking.model.toData
 import javax.inject.Inject
 
 @HiltViewModel
-class PartRankingViewModel
-    @Inject
-    constructor(
-        private val rankingRepository: RankingRepository,
-    ) : ViewModel() {
-        private val _state: MutableStateFlow<PartRankingState> = MutableStateFlow(PartRankingState.Loading)
-        val state: StateFlow<PartRankingState> = _state.asStateFlow()
-        var isRefreshing by mutableStateOf(false)
+class PartRankingViewModel @Inject constructor(
+    private val rankingRepository: RankingRepository,
+) : ViewModel() {
+    private val _state: MutableStateFlow<PartRankingState> = MutableStateFlow(PartRankingState.Loading)
+    val state: StateFlow<PartRankingState> = _state.asStateFlow()
+    var isRefreshing by mutableStateOf(false)
 
-        fun onRefresh() {
-            viewModelScope.launch {
-                isRefreshing = true
-                fetchRanking()
-            }
-        }
-
-        fun fetchRanking() =
-            viewModelScope.launch {
-                _state.value = PartRankingState.Loading
-                rankingRepository.getPartRanking()
-                    .onSuccess { ranking ->
-                        if (isRefreshing) {
-                            isRefreshing = false
-                        }
-                        onSuccessStateChange(ranking.toData().toImmutableList())
-                    }.onFailure {
-                        _state.value = PartRankingState.Failure
-                    }
-            }
-
-        private fun onSuccessStateChange(ranking: ImmutableList<PartRankModel>) {
-            _state.value = PartRankingState.Success(ranking)
+    fun onRefresh() {
+        viewModelScope.launch {
+            isRefreshing = true
+            fetchRanking()
         }
     }
+
+    fun fetchRanking() =
+        viewModelScope.launch {
+            _state.value = PartRankingState.Loading
+            rankingRepository.getPartRanking()
+                .onSuccess { ranking ->
+                    if (isRefreshing) {
+                        isRefreshing = false
+                    }
+                    onSuccessStateChange(ranking.toData().toImmutableList())
+                }.onFailure {
+                    _state.value = PartRankingState.Failure
+                }
+        }
+
+    private fun onSuccessStateChange(ranking: ImmutableList<PartRankModel>) {
+        _state.value = PartRankingState.Success(ranking)
+    }
+}
