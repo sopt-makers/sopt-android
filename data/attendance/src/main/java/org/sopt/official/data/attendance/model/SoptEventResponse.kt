@@ -22,14 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.attendance
+package org.sopt.official.data.attendance.model
 
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.domain.entity.attendance.AttendanceStatus
-import org.sopt.official.domain.entity.attendance.EventType
-import org.sopt.official.domain.entity.attendance.SoptEvent
+import org.sopt.official.domain.attendance.entity.AttendanceStatus
+import org.sopt.official.domain.attendance.entity.EventType
+import org.sopt.official.domain.attendance.entity.SoptEvent
 
 @Serializable
 data class SoptEventResponse(

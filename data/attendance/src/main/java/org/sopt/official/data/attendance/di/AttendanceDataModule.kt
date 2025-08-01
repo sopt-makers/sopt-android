@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.attendance
+package org.sopt.official.data.attendance.di
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import org.sopt.official.domain.entity.attendance.AttendanceRound
+import dagger.Binds
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.common.di.OperationRetrofit
+import org.sopt.official.data.attendance.repository.AttendanceRepositoryImpl
+import org.sopt.official.data.attendance.service.AttendanceService
+import org.sopt.official.domain.attendance.repository.AttendanceRepository
+import retrofit2.Retrofit
 
-@Serializable
-data class AttendanceRoundResponse(
-    @SerialName("id")
-    val id: Long,
-    @SerialName("round")
-    val round: Int
-) {
-    fun toEntity(): AttendanceRound = AttendanceRound(id, "${round}차 출석 인증하기")
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class AttendanceDataModule {
+    @Binds
+    @Singleton
+    abstract fun bindAttendanceRepository(attendanceRepositoryImpl: AttendanceRepositoryImpl): AttendanceRepository
+
+    companion object {
+        @Provides
+        @Singleton
+        fun provideAttendanceService(@OperationRetrofit retrofit: Retrofit): AttendanceService =
+            retrofit.create(AttendanceService::class.java)
+    }
 }

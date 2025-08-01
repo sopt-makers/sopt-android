@@ -22,17 +22,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.attendance
+package org.sopt.official.data.attendance.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.sopt.official.domain.attendance.entity.AttendanceRound
 
 @Serializable
-data class AttendanceCodeResponse(
-    @SerialName("subLectureId")
-    val subLectureId: Long
+data class AttendanceRoundResponse(
+    @SerialName("id")
+    val id: Long,
+    @SerialName("round")
+    val round: Int
 ) {
-    companion object {
-        val ERROR = AttendanceCodeResponse(-2)
-    }
+    fun toEntity(): AttendanceRound = AttendanceRound(id, "${round}차 출석 인증하기")
 }

@@ -22,22 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.repository.attendance
+package org.sopt.official.data.attendance.repository
 
 import javax.inject.Inject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.sopt.official.data.model.attendance.AttendanceCodeResponse
-import org.sopt.official.data.model.attendance.RequestAttendanceCode
-import org.sopt.official.data.service.attendance.AttendanceService
-import org.sopt.official.domain.entity.attendance.AttendanceButtonType
-import org.sopt.official.domain.entity.attendance.AttendanceErrorCode
-import org.sopt.official.domain.entity.attendance.AttendanceHistory
-import org.sopt.official.domain.entity.attendance.AttendanceRound
-import org.sopt.official.domain.entity.attendance.SoptEvent
-import org.sopt.official.domain.repository.attendance.AttendanceRepository
+import org.sopt.official.data.attendance.model.AttendanceCodeResponse
+import org.sopt.official.data.attendance.model.RequestAttendanceCode
+import org.sopt.official.data.attendance.service.AttendanceService
+import org.sopt.official.domain.attendance.entity.AttendanceButtonType
+import org.sopt.official.domain.attendance.entity.AttendanceErrorCode
+import org.sopt.official.domain.attendance.entity.AttendanceHistory
+import org.sopt.official.domain.attendance.entity.AttendanceRound
+import org.sopt.official.domain.attendance.entity.SoptEvent
+import org.sopt.official.domain.attendance.repository.AttendanceRepository
 import retrofit2.HttpException
 
 class AttendanceRepositoryImpl @Inject constructor(
@@ -67,8 +67,9 @@ class AttendanceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<AttendanceCodeResponse> = runCatching {
-        attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data ?: AttendanceCodeResponse(-1)
+    override suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<org.sopt.official.domain.attendance.entity.AttendanceCodeResponse> = runCatching {
+        val response = attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data!!
+        org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(response.subLectureId)
     }.recoverCatching { cause ->
         when (cause) {
             is HttpException -> {
@@ -76,13 +77,16 @@ class AttendanceRepositoryImpl @Inject constructor(
                 if (errorBodyString != null) {
                     val errorBody = json.parseToJsonElement(errorBodyString).jsonObject
                     val message = errorBody["message"]?.jsonPrimitive?.contentOrNull
-                    AttendanceErrorCode.of(message ?: "") ?: AttendanceCodeResponse.ERROR
+                    val errorCode = AttendanceErrorCode.of(message ?: "")
+                    org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(
+                        errorCode?.errorCode ?: -2L
+                    )
                 } else {
-                    AttendanceCodeResponse.ERROR
+                    org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(-2L)
                 }
             }
 
-            else -> AttendanceCodeResponse.ERROR
+            else -> org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(-2L)
         }
     }
 }

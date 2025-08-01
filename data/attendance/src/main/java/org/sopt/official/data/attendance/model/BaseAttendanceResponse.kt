@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,24 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.service.attendance
+package org.sopt.official.data.attendance.model
 
-import org.sopt.official.data.model.attendance.*
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import kotlinx.serialization.Serializable
 
-interface AttendanceService {
-    @GET("/api/v1/app/lectures")
-    suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse>
-
-    @GET("/api/v1/app/members/attendances")
-    suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse>
-
-    @GET("/api/v1/app/lectures/round/{lectureId}")
-    suspend fun getAttendanceRound(@Path("lectureId") lectureId: Long): BaseAttendanceResponse<AttendanceRoundResponse>
-
-    @POST("/api/v1/app/attendances/attend")
-    suspend fun confirmAttendanceCode(@Body param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse>
-}
+@Serializable
+data class BaseAttendanceResponse<T>(
+    val success: Boolean,
+    val message: String,
+    val data: T?
+)
