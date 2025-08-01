@@ -37,7 +37,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
@@ -67,6 +66,14 @@ import org.sopt.official.designsystem.Orange500
 import org.sopt.official.feature.attendance.R
 import org.sopt.official.feature.attendance.model.AttendanceConstants
 
+/**
+ * 출석 코드 입력 다이얼로그
+ *
+ * @param title 다이얼로그 제목
+ * @param onDismiss 다이얼로그 닫기 콜백
+ * @param onCodeSubmit 코드 제출 콜백
+ * @param errorMessage 에러 메시지 (null이면 표시하지 않음)
+ */
 @Composable
 fun AttendanceCodeDialog(
     title: String,
@@ -75,180 +82,219 @@ fun AttendanceCodeDialog(
     errorMessage: String?,
     modifier: Modifier = Modifier
 ) {
-    var codeValues by remember { mutableStateOf(List(AttendanceConstants.CODE_INPUT_FIELDS) { "" }) }
-    val focusRequesters = remember { List(AttendanceConstants.CODE_INPUT_FIELDS) { FocusRequester() } }
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    val isCodeComplete = codeValues.all { it.isNotEmpty() }
-
-    // Reset fields when error occurs
+    val codeInputState = rememberCodeInputState()
+    
+    // 에러 발생 시 입력 필드 초기화
     LaunchedEffect(errorMessage) {
         if (errorMessage != null) {
-            codeValues = List(AttendanceConstants.CODE_INPUT_FIELDS) { "" }
-            focusRequesters[0].requestFocus()
+            codeInputState.clearAndFocusFirst()
         }
     }
-
-    // Auto-focus first field on dialog open
+    
+    // 다이얼로그 열릴 때 첫 번째 필드에 포커스
     LaunchedEffect(Unit) {
-        focusRequesters[0].requestFocus()
+        codeInputState.focusFirst()
     }
-
-    // Function to find the first empty field or last field if all are filled
-    fun getTargetFieldIndex(): Int {
-        val firstEmptyIndex = codeValues.indexOfFirst { it.isEmpty() }
-        return if (firstEmptyIndex != -1) firstEmptyIndex else AttendanceConstants.CODE_INPUT_FIELDS - 1
-    }
-
+    
     Dialog(onDismissRequest = onDismiss) {
-        Card(
+        AttendanceCodeDialogContent(
+            title = title,
+            codeInputState = codeInputState,
+            errorMessage = errorMessage,
+            onDismiss = onDismiss,
+            onCodeSubmit = { onCodeSubmit(codeInputState.getCompleteCode()) },
             modifier = modifier
-                .fillMaxWidth()
-                .clip(RoundedCornerShape(16.dp)),
-            colors = CardDefaults.cardColors(containerColor = Gray800)
+        )
+    }
+}
+
+/**
+ * 다이얼로그 컨텐츠
+ */
+@Composable
+private fun AttendanceCodeDialogContent(
+    title: String,
+    codeInputState: CodeInputState,
+    errorMessage: String?,
+    onDismiss: () -> Unit,
+    onCodeSubmit: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp)),
+        colors = CardDefaults.cardColors(containerColor = Gray800)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .clickable { 
+                    // 빈 필드 클릭 시 해당 필드로 포커스 이동
+                    codeInputState.focusFirstEmpty()
+                },
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable { 
-                        // Focus on the first empty field when clicking outside input fields
-                        val targetIndex = getTargetFieldIndex()
-                        focusRequesters[targetIndex].requestFocus()
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Close button
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    IconButton(onClick = onDismiss) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_close),
-                            contentDescription = "닫기",
-                            tint = Gray300
-                        )
-                    }
-                }
-
-                // Title
-                Text(
-                    text = title,
-                    color = Gray10,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                // Subtitle
-                Text(
-                    text = "출석 코드 5자리를 입력해 주세요",
-                    color = Gray300,
-                    fontSize = 12.sp
-                )
-
-                Spacer(modifier = Modifier.height(22.dp))
-
-                // Code input fields
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    modifier = Modifier.width(AttendanceConstants.DIALOG_WIDTH_DP.dp)
-                ) {
-                    codeValues.forEachIndexed { index, value ->
-                        CodeInputField(
-                            value = value,
-                            onValueChange = { newValue ->
-                                if (newValue.length <= 1 && newValue.all { it.isDigit() }) {
-                                    val newCodeValues = codeValues.toMutableList()
-                                    newCodeValues[index] = newValue
-                                    codeValues = newCodeValues
-
-                                    // Auto-advance to next field when value is entered
-                                    if (newValue.isNotEmpty() && index < AttendanceConstants.CODE_INPUT_FIELDS - 1) {
-                                        focusRequesters[index + 1].requestFocus()
-                                    }
-                                }
-                            },
-                            onBackspace = {
-                                // Handle backspace navigation like original
-                                if (value.isEmpty() && index > 0) {
-                                    // Clear previous field and focus on it
-                                    val newCodeValues = codeValues.toMutableList()
-                                    newCodeValues[index - 1] = ""
-                                    codeValues = newCodeValues
-                                    focusRequesters[index - 1].requestFocus()
-                                } else if (index == 0 && value.isEmpty()) {
-                                    // Hide keyboard on first field backspace when empty
-                                    keyboardController?.hide()
-                                }
-                            },
-                            onFocusRequest = {
-                                // When field is clicked but already has value, move to first empty
-                                val targetIndex = getTargetFieldIndex()
-                                if (targetIndex != index) {
-                                    focusRequesters[targetIndex].requestFocus()
-                                }
-                            },
-                            focusRequester = focusRequesters[index],
-                            modifier = Modifier.weight(1f)
-                        )
-                    }
-                }
-
-                // Error message
-                if (errorMessage != null) {
-                    Spacer(modifier = Modifier.height(18.dp))
-                    Text(
-                        text = errorMessage,
-                        color = androidx.compose.material3.MaterialTheme.colorScheme.error,
-                        fontSize = 14.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Submit button
-                Button(
-                    onClick = {
-                        if (isCodeComplete) {
-                            onCodeSubmit(codeValues.joinToString(""))
-                        }
-                    },
-                    enabled = isCodeComplete,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(48.dp),
-                    shape = RoundedCornerShape(6.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = if (isCodeComplete) Orange500 else Gray700,
-                        disabledContainerColor = Gray700
-                    )
-                ) {
-                    Text(
-                        text = "출석하기",
-                        color = if (isCodeComplete) Color.Black else Gray400,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
+            DialogHeader(onDismiss = onDismiss)
+            
+            DialogTitle(title = title)
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
+            DialogSubtitle()
+            
+            Spacer(modifier = Modifier.height(22.dp))
+            
+            CodeInputFields(codeInputState = codeInputState)
+            
+            ErrorMessage(errorMessage = errorMessage)
+            
+            Spacer(modifier = Modifier.height(32.dp))
+            
+            SubmitButton(
+                isEnabled = codeInputState.isComplete,
+                onClick = onCodeSubmit
+            )
         }
     }
 }
 
+/**
+ * 다이얼로그 헤더 (닫기 버튼)
+ */
+@Composable
+private fun DialogHeader(
+    onDismiss: () -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+    ) {
+        IconButton(onClick = onDismiss) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_close),
+                contentDescription = "닫기",
+                tint = Gray300
+            )
+        }
+    }
+}
+
+/**
+ * 다이얼로그 제목
+ */
+@Composable
+private fun DialogTitle(title: String) {
+    Text(
+        text = title,
+        color = Gray10,
+        fontSize = 18.sp,
+        fontWeight = FontWeight.Bold
+    )
+}
+
+/**
+ * 다이얼로그 부제목
+ */
+@Composable
+private fun DialogSubtitle() {
+    Text(
+        text = "출석 코드 5자리를 입력해 주세요",
+        color = Gray300,
+        fontSize = 12.sp
+    )
+}
+
+/**
+ * 코드 입력 필드들
+ */
+@Composable
+private fun CodeInputFields(
+    codeInputState: CodeInputState
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.width(AttendanceConstants.DIALOG_WIDTH_DP.dp)
+    ) {
+        codeInputState.codeValues.forEachIndexed { index, value ->
+            CodeInputField(
+                value = value,
+                isFocused = codeInputState.focusedIndex == index,
+                onValueChange = { newValue ->
+                    codeInputState.updateValue(index, newValue)
+                },
+                onFocus = {
+                    codeInputState.onFieldFocused(index)
+                },
+                onBackspace = {
+                    codeInputState.handleBackspace(index)
+                },
+                focusRequester = codeInputState.focusRequesters[index],
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+/**
+ * 에러 메시지
+ */
+@Composable
+private fun ErrorMessage(
+    errorMessage: String?
+) {
+    if (errorMessage != null) {
+        Spacer(modifier = Modifier.height(18.dp))
+        Text(
+            text = errorMessage,
+            color = MaterialTheme.colorScheme.error,
+            fontSize = 14.sp
+        )
+    }
+}
+
+/**
+ * 제출 버튼
+ */
+@Composable
+private fun SubmitButton(
+    isEnabled: Boolean,
+    onClick: () -> Unit
+) {
+    Button(
+        onClick = onClick,
+        enabled = isEnabled,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(6.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = if (isEnabled) Orange500 else Gray700,
+            disabledContainerColor = Gray700
+        )
+    ) {
+        Text(
+            text = "출석하기",
+            color = if (isEnabled) Color.Black else Gray400,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+/**
+ * 개별 코드 입력 필드
+ */
 @Composable
 private fun CodeInputField(
     value: String,
+    isFocused: Boolean,
     onValueChange: (String) -> Unit,
+    onFocus: () -> Unit,
     onBackspace: () -> Unit,
-    onFocusRequest: () -> Unit,
     focusRequester: FocusRequester,
     modifier: Modifier = Modifier
 ) {
-    var isFocused by remember { mutableStateOf(false) }
-    
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
@@ -263,9 +309,8 @@ private fun CodeInputField(
             )
             .focusRequester(focusRequester)
             .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused
                 if (focusState.isFocused) {
-                    onFocusRequest()
+                    onFocus()
                 }
             }
             .onKeyEvent { keyEvent ->
@@ -286,9 +331,6 @@ private fun CodeInputField(
             keyboardType = KeyboardType.Number,
             imeAction = ImeAction.Next
         ),
-        keyboardActions = KeyboardActions(
-            onNext = { /* Handle next field focus */ }
-        ),
         singleLine = true,
         decorationBox = { innerTextField ->
             Box(
@@ -299,4 +341,87 @@ private fun CodeInputField(
             }
         }
     )
+}
+
+/**
+ * 코드 입력 상태 관리 클래스
+ */
+@Stable
+private class CodeInputState(
+    private val keyboardController: androidx.compose.ui.platform.SoftwareKeyboardController?
+) {
+    var codeValues by mutableStateOf(List(AttendanceConstants.CODE_INPUT_FIELDS) { "" })
+        private set
+    
+    val focusRequesters = List(AttendanceConstants.CODE_INPUT_FIELDS) { FocusRequester() }
+    
+    var focusedIndex by mutableStateOf(-1)
+        private set
+    
+    val isComplete: Boolean
+        get() = codeValues.all { it.isNotEmpty() }
+    
+    fun updateValue(index: Int, newValue: String) {
+        if (newValue.length <= 1 && newValue.all { it.isDigit() }) {
+            codeValues = codeValues.toMutableList().apply {
+                this[index] = newValue
+            }
+            
+            // 값 입력 시 다음 필드로 자동 이동
+            if (newValue.isNotEmpty() && index < AttendanceConstants.CODE_INPUT_FIELDS - 1) {
+                focusRequesters[index + 1].requestFocus()
+            }
+        }
+    }
+    
+    fun handleBackspace(index: Int) {
+        val value = codeValues[index]
+        when {
+            // 현재 필드가 비어있고 첫 번째가 아닌 경우 -> 이전 필드로 이동
+            value.isEmpty() && index > 0 -> {
+                codeValues = codeValues.toMutableList().apply {
+                    this[index - 1] = ""
+                }
+                focusRequesters[index - 1].requestFocus()
+            }
+            // 첫 번째 필드가 비어있는 경우 -> 키보드 숨김
+            index == 0 && value.isEmpty() -> {
+                keyboardController?.hide()
+            }
+        }
+    }
+    
+    fun onFieldFocused(index: Int) {
+        focusedIndex = index
+        // 이미 값이 있는 필드 클릭 시 첫 번째 빈 필드로 이동
+        if (codeValues[index].isNotEmpty()) {
+            focusFirstEmpty()
+        }
+    }
+    
+    fun focusFirst() {
+        focusRequesters[0].requestFocus()
+    }
+    
+    fun focusFirstEmpty() {
+        val targetIndex = codeValues.indexOfFirst { it.isEmpty() }
+            .takeIf { it != -1 } ?: (AttendanceConstants.CODE_INPUT_FIELDS - 1)
+        focusRequesters[targetIndex].requestFocus()
+    }
+    
+    fun clearAndFocusFirst() {
+        codeValues = List(AttendanceConstants.CODE_INPUT_FIELDS) { "" }
+        focusFirst()
+    }
+    
+    fun getCompleteCode(): String = codeValues.joinToString("")
+}
+
+/**
+ * 코드 입력 상태를 기억하는 Composable
+ */
+@Composable
+private fun rememberCodeInputState(): CodeInputState {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    return remember { CodeInputState(keyboardController) }
 }

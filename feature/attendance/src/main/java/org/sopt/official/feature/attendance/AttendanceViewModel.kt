@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.domain.attendance.entity.AttendanceHistory
 import org.sopt.official.domain.attendance.entity.AttendanceRound
 import org.sopt.official.domain.attendance.entity.SoptEvent
@@ -90,11 +91,11 @@ class AttendanceViewModel @Inject constructor(
      */
     private suspend fun loadCurrentAttendanceRound(eventId: Long?): AttendanceRound? {
         if (eventId == null) return null
-        return try {
-            attendanceRepository.fetchAttendanceRound(eventId).getOrNull()
-        } catch (error: Throwable) {
-            null
-        }
+        return suspendRunCatching { 
+            attendanceRepository.fetchAttendanceRound(eventId)
+        }.mapCatching { result ->
+            result.getOrThrow()
+        }.getOrNull()
     }
 
     /**
@@ -123,12 +124,18 @@ class AttendanceViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            try {
-                val result = attendanceRepository.confirmAttendanceCode(subLectureId, code)
-                handleAttendanceCodeResult(result.getOrThrow().subLectureId)
-            } catch (error: Throwable) {
-                showErrorDialog(AttendanceConstants.ERROR_INVALID_CODE)
-            }
+            suspendRunCatching {
+                attendanceRepository.confirmAttendanceCode(subLectureId, code)
+            }.mapCatching { result ->
+                result.getOrThrow()
+            }.fold(
+                onSuccess = { response ->
+                    handleAttendanceCodeResult(response.subLectureId)
+                },
+                onFailure = {
+                    showErrorDialog(AttendanceConstants.ERROR_INVALID_CODE)
+                }
+            )
         }
     }
 
@@ -164,24 +171,4 @@ class AttendanceViewModel @Inject constructor(
         val title = currentSoptEvent?.eventName ?: "출석 확인"
         _dialogState.value = AttendanceDialogState.Error(title, message)
     }
-
-
-    // Legacy methods for backward compatibility (will be removed)
-    @Deprecated("Use uiState instead")
-    val soptEvent: Nothing get() = throw UnsupportedOperationException("Use uiState.soptEvent")
-
-    @Deprecated("Use uiState instead")
-    val attendanceHistory: Nothing get() = throw UnsupportedOperationException("Use uiState.attendanceHistory")
-
-    @Deprecated("Use uiState instead")
-    val progressBarState: Nothing get() = throw UnsupportedOperationException("Use uiState.progressState")
-
-    @Deprecated("Use uiState instead")
-    val attendanceButtonState: Nothing get() = throw UnsupportedOperationException("Use uiState.buttonState")
-
-    @Deprecated("Use showAttendanceDialog() instead")
-    fun initDialogState() = showAttendanceDialog()
-
-    @Deprecated("Use loadAttendanceData() instead")
-    fun fetchData() = loadAttendanceData()
 }
