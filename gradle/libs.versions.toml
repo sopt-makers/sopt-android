@@ -1,5 +1,4 @@
 [versions]
-balloonCompose = "1.6.12"
 compileSdk = "35"
 minSdk = "30"
 targetSdk = "35"
@@ -54,7 +53,6 @@ soloader = "0.12.1"
 okhttp = "5.1.0"
 retrofit = "3.0.0"
 timber = "5.0.1"
-compose-destination = "1.11.9"
 coil = "2.7.0"
 coil3 = "3.3.0"
 lottie = "6.6.7"
@@ -62,6 +60,7 @@ dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
 rin = "0.3.0"
 mozilla-component-utils = "141.0.1"
+balloonCompose = "1.6.12"
 
 google-services = "4.4.3"
 playServicesAuth = "21.4.0"
@@ -129,8 +128,6 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-destination-core = { module = "io.github.raamcosta.compose-destinations:core", version.ref = "compose-destination" }
-compose-destination-ksp = { module = "io.github.raamcosta.compose-destinations:ksp", version.ref = "compose-destination" }
 compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "androidx-paging" }
