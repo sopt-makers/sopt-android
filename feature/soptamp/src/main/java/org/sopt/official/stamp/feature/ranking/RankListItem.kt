@@ -135,9 +135,7 @@ fun RankListItem(
         ) {
             RankScore(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                rank = newRank,
                 score = scorePoint,
-                isMyRankScore = isMyRanking,
             )
         }
     }

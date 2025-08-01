@@ -116,7 +116,6 @@ fun TopRankDescriptionBubble(
     bubble: TopRankerDescriptionBubble,
     onClickRankerDescriptionState: String,
 ) {
-    val isDefault = onClickRankerDescriptionState == RankerUiModel.DEFAULT_DESCRIPTION
     Box(
         contentAlignment = Alignment.Center,
     ) {

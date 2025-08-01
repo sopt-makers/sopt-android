@@ -72,7 +72,6 @@ fun TopRankerItem(
                 modifier =
                     Modifier
                         .padding(top = 8.dp),
-                rank = ranker.rank,
                 score = ranker.score,
             )
         }

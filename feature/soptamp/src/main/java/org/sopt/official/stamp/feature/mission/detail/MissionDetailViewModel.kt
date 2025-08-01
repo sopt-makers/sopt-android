@@ -76,276 +76,274 @@ data class PostUiState(
 @OptIn(FlowPreview::class)
 @HiltViewModel
 class MissionDetailViewModel
-    @Inject
-    constructor(
-        private val stampRepository: StampRepository,
-        private val imageUploaderRepository: ImageUploaderRepository,
-    ) : ViewModel() {
-        private val uiState = MutableStateFlow(PostUiState())
+@Inject
+constructor(
+    private val stampRepository: StampRepository,
+    private val imageUploaderRepository: ImageUploaderRepository,
+) : ViewModel() {
+    private val uiState = MutableStateFlow(PostUiState())
 
-        private val isMe = uiState.map { it.isMe }
-        val isSuccess = uiState.map { it.isSuccess }
-        val content = uiState.map { it.content }
-        val date = uiState.map { it.date }
-        val imageModel = uiState.map { it.imageUri }
-        val isSubmitEnabled =
-            combine(content, imageModel, isMe) { content, image, isMe ->
-                content.isNotEmpty() && !image.isEmpty() && isMe
-            }
-        val toolbarIconType = uiState.map { it.toolbarIconType }
-        val isEditable =
-            toolbarIconType.map {
-                it != ToolbarIconType.WRITE
-            }
-        val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
-        val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
-        val isError = uiState.map { it.isError }
-        val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
+    private val isMe = uiState.map { it.isMe }
+    val isSuccess = uiState.map { it.isSuccess }
+    val content = uiState.map { it.content }
+    val date = uiState.map { it.date }
+    val imageModel = uiState.map { it.imageUri }
+    val isSubmitEnabled =
+        combine(content, imageModel, isMe) { content, image, isMe ->
+            content.isNotEmpty() && !image.isEmpty() && isMe
+        }
+    val toolbarIconType = uiState.map { it.toolbarIconType }
+    val isEditable =
+        toolbarIconType.map {
+            it != ToolbarIconType.WRITE
+        }
+    val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
+    val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
+    val isError = uiState.map { it.isError }
+    val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
-        private val submitEvent = MutableSharedFlow<Unit>()
+    private val submitEvent = MutableSharedFlow<Unit>()
 
-        init {
-            viewModelScope.launch {
-                submitEvent.debounce(500).collect {
-                    handleSubmit()
-                }
+    init {
+        viewModelScope.launch {
+            submitEvent.debounce(500).collect {
+                handleSubmit()
             }
         }
+    }
 
-        fun initMissionState(
-            id: Int,
-            isCompleted: Boolean,
-            isMe: Boolean,
-            nickname: String,
-        ) {
-            viewModelScope.launch {
-                uiState.update {
-                    it.copy(
-                        id = id,
-                        isError = false,
-                        error = null,
-                        isLoading = true,
-                        isSuccess = false,
-                        isMe = isMe,
-                    )
-                }
-                if (isCompleted) {
-                    stampRepository.getMissionContent(id, nickname)
-                        .onSuccess {
-                            val option =
-                                if (!isMe) {
-                                    ToolbarIconType.NONE
-                                } else {
-                                    if (isCompleted) {
-                                        ToolbarIconType.WRITE
-                                    } else {
-                                        ToolbarIconType.NONE
-                                    }
-                                }
-                            val result =
-                                PostUiState.from(it).copy(
-                                    stampId = it.id,
-                                    imageUri = ImageModel.Remote(url = it.images),
-                                    isCompleted = isCompleted,
-                                    toolbarIconType = option,
-                                )
-                            uiState.update { result }
-                        }.onFailure { error ->
-                            Timber.e(error)
-                            if (error is HttpException && error.code() != 400) {
-                                uiState.update {
-                                    it.copy(isLoading = false, isError = true, error = error)
-                                }
+    fun initMissionState(
+        id: Int,
+        isCompleted: Boolean,
+        isMe: Boolean,
+        nickname: String,
+    ) {
+        viewModelScope.launch {
+            uiState.update {
+                it.copy(
+                    id = id,
+                    isError = false,
+                    error = null,
+                    isLoading = true,
+                    isSuccess = false,
+                    isMe = isMe,
+                )
+            }
+            if (isCompleted) {
+                stampRepository.getMissionContent(id, nickname)
+                    .onSuccess {
+                        val option = if (!isMe) {
+                            ToolbarIconType.NONE
+                        } else {
+                            if (isCompleted) {
+                                ToolbarIconType.WRITE
                             } else {
-                                uiState.update {
-                                    it.copy(isLoading = false, error = error)
-                                }
+                                ToolbarIconType.NONE
                             }
                         }
+                        val result = PostUiState.from(it).copy(
+                            stampId = it.id,
+                            imageUri = ImageModel.Remote(url = it.images),
+                            isCompleted = isCompleted,
+                            toolbarIconType = option,
+                        )
+                        uiState.update { result }
+                    }.onFailure { error ->
+                        Timber.e(error)
+                        if (error is HttpException && error.code() != 400) {
+                            uiState.update {
+                                it.copy(isLoading = false, isError = true, error = error)
+                            }
+                        } else {
+                            uiState.update {
+                                it.copy(isLoading = false, error = error)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+
+    fun onChangeContent(content: String) {
+        uiState.update {
+            it.copy(content = content)
+        }
+    }
+
+    private fun onChangeToolbarState(toolbarIconType: ToolbarIconType) {
+        uiState.update {
+            it.copy(toolbarIconType = toolbarIconType)
+        }
+    }
+
+    fun onPressToolbarIcon() {
+        when (uiState.value.toolbarIconType) {
+            ToolbarIconType.WRITE -> {
+                onChangeToolbarState(ToolbarIconType.DELETE)
+            }
+
+            ToolbarIconType.DELETE -> {
+                onChangeDeleteDialogVisibility(true)
+            }
+
+            ToolbarIconType.NONE -> {}
+        }
+    }
+
+    fun onChangeImage(imageModel: ImageModel) {
+        uiState.update {
+            it.copy(imageUri = imageModel)
+        }
+    }
+
+    fun onChangeDeleteDialogVisibility(value: Boolean) {
+        uiState.update {
+            it.copy(isDeleteDialogVisible = value)
+        }
+    }
+
+    fun onChangeDate(value: String) {
+        uiState.update {
+            it.copy(date = value)
+        }
+    }
+
+    fun onChangeDatePickerBottomSheetOpened(value: Boolean) {
+        uiState.update {
+            it.copy(isBottomSheetOpened = value)
+        }
+    }
+
+    fun onSubmit() {
+        viewModelScope.launch {
+            submitEvent.emit(Unit)
+        }
+    }
+
+    private suspend fun handleSubmit() {
+        val currentState = uiState.value
+        val (id, imageUri, content, date) = currentState
+        uiState.update {
+            it.copy(isError = false, error = null, isLoading = true)
+        }
+
+        val image =
+            when (imageUri) {
+                ImageModel.Empty -> {
+                    "ERROR"
+                }
+
+                is ImageModel.Local -> {
+                    imageUri.uri[0]
+                }
+
+                is ImageModel.Remote -> {
+                    imageUri.url[0]
+                }
+            }
+
+        if (imageUri is ImageModel.Remote) {
+            modifyMission(id, image, content, date)
+        } else {
+            imageUploaderRepository.getImageUploadURL().onSuccess { s3Url ->
+                val preSignedURL = s3Url.preSignedURL
+                val imageURL = s3Url.imageURL
+
+                runCatching {
+                    imageUploaderRepository.uploadImage(
+                        preSignedURL = preSignedURL,
+                        imageUri = image,
+                    )
+                }.onFailure {
+                    Timber.e(it.toString())
+                }
+
+                if (uiState.value.isCompleted) {
+                    modifyMission(id, imageURL, content, date)
+                } else {
+                    completeMission(id, imageURL, content, date)
+                }
+            }.onFailure { error ->
+                Timber.e(error)
+                uiState.update {
+                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
                 }
             }
         }
+    }
 
-        fun onChangeContent(content: String) {
+    private suspend fun modifyMission(
+        id: Int,
+        image: String,
+        content: String,
+        date: String,
+    ) {
+        stampRepository.modifyMission(
+            Stamp(
+                missionId = id,
+                image = image,
+                contents = content,
+                activityDate = date,
+            ),
+        ).onSuccess {
             uiState.update {
-                it.copy(content = content)
+                it.copy(isLoading = false, isSuccess = true)
             }
-        }
-
-        private fun onChangeToolbarState(toolbarIconType: ToolbarIconType) {
+        }.onFailure { error ->
+            Timber.e(error)
             uiState.update {
-                it.copy(toolbarIconType = toolbarIconType)
+                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
             }
         }
+    }
 
-        fun onPressToolbarIcon() {
-            when (uiState.value.toolbarIconType) {
-                ToolbarIconType.WRITE -> {
-                    onChangeToolbarState(ToolbarIconType.DELETE)
-                }
-
-                ToolbarIconType.DELETE -> {
-                    onChangeDeleteDialogVisibility(true)
-                }
-
-                ToolbarIconType.NONE -> {}
-            }
-        }
-
-        fun onChangeImage(imageModel: ImageModel) {
+    private suspend fun completeMission(
+        id: Int,
+        image: String,
+        content: String,
+        date: String,
+    ) {
+        stampRepository.completeMission(
+            Stamp(
+                missionId = id,
+                image = image,
+                contents = content,
+                activityDate = date,
+            ),
+        ).onSuccess {
             uiState.update {
-                it.copy(imageUri = imageModel)
+                it.copy(isLoading = false, isSuccess = true)
             }
-        }
-
-        fun onChangeDeleteDialogVisibility(value: Boolean) {
+        }.onFailure { error ->
+            Timber.e(error)
             uiState.update {
-                it.copy(isDeleteDialogVisible = value)
+                it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
             }
         }
+    }
 
-        fun onChangeDate(value: String) {
-            uiState.update {
-                it.copy(date = value)
-            }
-        }
-
-        fun onChangeDatePickerBottomSheetOpened(value: Boolean) {
-            uiState.update {
-                it.copy(isBottomSheetOpened = value)
-            }
-        }
-
-        fun onSubmit() {
-            viewModelScope.launch {
-                submitEvent.emit(Unit)
-            }
-        }
-
-        private suspend fun handleSubmit() {
-            val currentState = uiState.value
-            val (id, imageUri, content, date) = currentState
+    fun onDelete() {
+        viewModelScope.launch {
             uiState.update {
                 it.copy(isError = false, error = null, isLoading = true)
             }
-
-            val image =
-                when (imageUri) {
-                    ImageModel.Empty -> {
-                        "ERROR"
-                    }
-
-                    is ImageModel.Local -> {
-                        imageUri.uri[0]
-                    }
-
-                    is ImageModel.Remote -> {
-                        imageUri.url[0]
-                    }
-                }
-
-            if (imageUri is ImageModel.Remote) {
-                modifyMission(id, image, content, date)
-            } else {
-                imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
-                    val preSignedURL = S3URL.preSignedURL
-                    val imageURL = S3URL.imageURL
-
-                    runCatching {
-                        imageUploaderRepository.uploadImage(
-                            preSignedURL = preSignedURL,
-                            imageUri = image,
-                        )
-                    }.onFailure {
-                        Timber.e(it.toString())
-                    }
-
-                    if (uiState.value.isCompleted) {
-                        modifyMission(id, imageURL, content, date)
-                    } else {
-                        completeMission(id, imageURL, content, date)
+            stampRepository.deleteMission(uiState.value.stampId)
+                .onSuccess {
+                    uiState.update {
+                        it.copy(isLoading = false, isDeleteSuccess = true)
                     }
                 }.onFailure { error ->
                     Timber.e(error)
                     uiState.update {
-                        it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
+                        it.copy(isLoading = false, isError = true, error = error)
                     }
                 }
-            }
-        }
-
-        private suspend fun modifyMission(
-            id: Int,
-            image: String,
-            content: String,
-            date: String,
-        ) {
-            stampRepository.modifyMission(
-                Stamp(
-                    missionId = id,
-                    image = image,
-                    contents = content,
-                    activityDate = date,
-                ),
-            ).onSuccess {
-                uiState.update {
-                    it.copy(isLoading = false, isSuccess = true)
-                }
-            }.onFailure { error ->
-                Timber.e(error)
-                uiState.update {
-                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                }
-            }
-        }
-
-        private suspend fun completeMission(
-            id: Int,
-            image: String,
-            content: String,
-            date: String,
-        ) {
-            stampRepository.completeMission(
-                Stamp(
-                    missionId = id,
-                    image = image,
-                    contents = content,
-                    activityDate = date,
-                ),
-            ).onSuccess {
-                uiState.update {
-                    it.copy(isLoading = false, isSuccess = true)
-                }
-            }.onFailure { error ->
-                Timber.e(error)
-                uiState.update {
-                    it.copy(isLoading = false, isError = true, error = error, isSuccess = false)
-                }
-            }
-        }
-
-        fun onDelete() {
-            viewModelScope.launch {
-                uiState.update {
-                    it.copy(isError = false, error = null, isLoading = true)
-                }
-                stampRepository.deleteMission(uiState.value.stampId)
-                    .onSuccess {
-                        uiState.update {
-                            it.copy(isLoading = false, isDeleteSuccess = true)
-                        }
-                    }.onFailure { error ->
-                        Timber.e(error)
-                        uiState.update {
-                            it.copy(isLoading = false, isError = true, error = error)
-                        }
-                    }
-            }
-        }
-
-        fun onPressNetworkErrorDialog() {
-            uiState.update {
-                it.copy(isError = false, error = null)
-            }
         }
     }
+
+    fun onPressNetworkErrorDialog() {
+        uiState.update {
+            it.copy(isError = false, error = null)
+        }
+    }
+}

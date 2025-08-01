@@ -50,7 +50,7 @@ import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.util.DefaultPreview
 
 private enum class OnBoardingPageUiModel(
-    @DrawableRes val image: Int,
+    @field:DrawableRes val image: Int,
     val title: String,
     val content: String,
 ) {

@@ -384,12 +384,12 @@ private fun CustomDatePickerPreview() {
     SoptTheme {
         DatePickerUI(
             isValidDate = true,
-            chosenYear = chosenYear.value,
-            chosenMonth = chosenMonth.value,
-            chosenDay = chosenDay.value,
-            onYearChosen = { chosenYear.value = it },
-            onMonthChosen = { chosenMonth.value = it },
-            onDayChosen = { chosenDay.value = it },
+            chosenYear = chosenYear.intValue,
+            chosenMonth = chosenMonth.intValue,
+            chosenDay = chosenDay.intValue,
+            onYearChosen = { chosenYear.intValue = it },
+            onMonthChosen = { chosenMonth.intValue = it },
+            onDayChosen = { chosenDay.intValue = it },
         )
     }
 }

@@ -24,7 +24,6 @@
  */
 package org.sopt.official.stamp.feature.mission.detail.component
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.model.ImageModel
@@ -93,7 +93,7 @@ fun ImageContent(
                 when (imageModel) {
                     is ImageModel.Local -> {
                         AsyncImage(
-                            model = Uri.parse(imageModel.uri[page]),
+                            model = imageModel.uri[page].toUri(),
                             contentDescription = "",
                             modifier =
                                 Modifier
