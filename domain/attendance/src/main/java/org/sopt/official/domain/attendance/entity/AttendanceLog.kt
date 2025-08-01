@@ -22,10 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-data class AttendanceHistory(
-    val userInfo: AttendanceUserInfo,
-    val attendanceSummary: AttendanceSummary,
-    val attendanceLog: List<AttendanceLog>
+data class AttendanceLog(
+    val attribute: EventAttribute,
+    val attendanceState: String,
+    val eventName: String,
+    val date: String
 )

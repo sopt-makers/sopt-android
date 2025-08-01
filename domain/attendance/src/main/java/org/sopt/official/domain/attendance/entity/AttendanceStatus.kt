@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-data class AttendanceSummary(
-    val normal: Int,
-    val late: Int,
-    val abnormal: Int,
-    val participate: Int
-)
+enum class AttendanceStatus(val statusKorean: String) {
+    ATTENDANCE("출석"),
+    ABSENT("결석"),
+    TARDY("지각"),
+    PARTICIPATE("참여")
+}

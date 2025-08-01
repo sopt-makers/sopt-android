@@ -22,13 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.entity.attendance
+package org.sopt.official.domain.attendance.entity
 
-data class AttendanceRound(
-    val id: Long,
-    val roundText: String,
+enum class AttendanceErrorCode(
+    val errorCode: Long,
+    val message: String,
+    val serverMessages: List<String>
 ) {
+    WRONG_CODE(-2L, "코드가 일치하지 않아요!", listOf("[LectureException] : 코드가 일치하지 않아요!")),
+    BEFORE_ATTENDANCE(-1L, "출석 시작 전입니다", listOf("[LectureException] : 1차 출석 시작 전입니다", "[LectureException] : 2차 출석 시작 전입니다")),
+    AFTER_ATTENDANCE(
+        0L,
+        "출석이 이미 종료되었습니다",
+        listOf("[LectureException] : 1차 출석이 이미 종료되었습니다.", "[LectureException] : 2차 출석이 이미 종료되었습니다.")
+    );
+
     companion object {
-        val ERROR = AttendanceRound(-2, "")
+        fun of(message: String) = entries.find { it.serverMessages.contains(message) }
     }
 }
