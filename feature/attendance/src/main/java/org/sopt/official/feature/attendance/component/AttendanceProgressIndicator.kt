@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -68,9 +68,9 @@ fun AttendanceProgressIndicator(
                 isAttendance = progressState.isFirstProgressBarAttendance,
                 type = ProgressCircleType.FIRST
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Text(
                 text = stringResource(R.string.attendance_progress_first),
                 color = if (progressState.isFirstProgressBarActive) Gray10 else Gray500,
@@ -78,7 +78,7 @@ fun AttendanceProgressIndicator(
                 fontWeight = FontWeight.Normal
             )
         }
-        
+
         // First to Second Line - positioned at circle center height
         Box(
             modifier = Modifier
@@ -89,7 +89,7 @@ fun AttendanceProgressIndicator(
                     if (progressState.isFirstToSecondLineActive) Gray10 else Gray400
                 )
         )
-        
+
         // Second Progress with label
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -99,9 +99,9 @@ fun AttendanceProgressIndicator(
                 isAttendance = progressState.isSecondProgressBarAttendance,
                 type = ProgressCircleType.SECOND
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             Text(
                 text = stringResource(R.string.attendance_progress_second),
                 color = if (progressState.isSecondProgressBarActive) Gray10 else Gray500,
@@ -109,7 +109,7 @@ fun AttendanceProgressIndicator(
                 fontWeight = FontWeight.Normal
             )
         }
-        
+
         // Second to Third Line - positioned at circle center height
         Box(
             modifier = Modifier
@@ -120,7 +120,7 @@ fun AttendanceProgressIndicator(
                     if (progressState.isSecondToThirdLineActive) Gray10 else Gray400
                 )
         )
-        
+
         // Third Progress with label
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -132,14 +132,14 @@ fun AttendanceProgressIndicator(
                 isTardy = progressState.isThirdProgressBarTardy,
                 isBeforeAttendance = progressState.isThirdProgressBarBeforeAttendance
             )
-            
+
             Spacer(modifier = Modifier.height(12.dp))
-            
+
             val thirdProgressText = when {
                 progressState.isThirdProgressBarActiveAndBeforeAttendance -> {
-                    if (progressState.isThirdProgressBarTardy) 
+                    if (progressState.isThirdProgressBarTardy)
                         stringResource(R.string.attendance_progress_third_tardy)
-                    else 
+                    else
                         stringResource(R.string.attendance_progress_third_complete)
                 }
                 progressState.isThirdProgressBarActive -> {
@@ -149,7 +149,7 @@ fun AttendanceProgressIndicator(
                     stringResource(R.string.attendance_progress_before)
                 }
             }
-            
+
             Text(
                 text = thirdProgressText,
                 color = if (progressState.isThirdProgressBarActive) Gray10 else Gray500,
@@ -183,9 +183,9 @@ private fun ProgressCircle(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(
-                        if (isAttendance) 
-                            R.drawable.ic_attendance_check_gray 
-                        else 
+                        if (isAttendance)
+                            R.drawable.ic_attendance_check_gray
+                        else
                             R.drawable.ic_attendance_close_gray
                     ),
                     contentDescription = null,

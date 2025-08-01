@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,17 +29,17 @@ object AttendanceConstants {
     const val ERROR_CODE = -2L
     const val NO_SESSION_CODE = -1L
     const val TIME_RESTRICTION_CODE = 0L
-    
+
     // Error messages
     const val ERROR_WRONG_CODE = "코드가 일치하지 않아요!"
     const val ERROR_BEFORE_TIME = "출석 시간 전입니다."
     const val ERROR_AFTER_TIME = "출석이 이미 종료되었습니다."
     const val ERROR_INVALID_CODE = "출석 코드가 올바르지 않습니다"
-    
+
     // Attendance texts
     const val FIRST_ATTENDANCE_TEXT = "1차 출석"
     const val SECOND_ATTENDANCE_TEXT = "2차 출석"
-    
+
     // UI dimensions
     const val DIALOG_WIDTH_DP = 258
     const val CODE_INPUT_FIELDS = 5

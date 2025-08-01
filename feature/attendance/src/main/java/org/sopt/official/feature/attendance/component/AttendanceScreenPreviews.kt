@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -169,7 +169,7 @@ private fun AttendanceButtonEnabledPreview() {
     }
 }
 
-@Preview(name = "AttendanceButton - Disabled", showBackground = true)  
+@Preview(name = "AttendanceButton - Disabled", showBackground = true)
 @Composable
 private fun AttendanceButtonDisabledPreview() {
     SoptTheme {

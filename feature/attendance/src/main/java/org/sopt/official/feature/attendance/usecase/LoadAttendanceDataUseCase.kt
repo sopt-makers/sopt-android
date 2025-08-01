@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,24 +43,24 @@ class LoadAttendanceDataUseCase @Inject constructor(
     private val attendanceRepository: AttendanceRepository,
     private val mapToUiStateUseCase: MapToAttendanceUiStateUseCase
 ) {
-    
+
     suspend operator fun invoke(): Result<AttendanceUiState> = runCatching {
         coroutineScope {
             // 병렬로 기본 데이터 로드
             val soptEventDeferred = async { attendanceRepository.fetchSoptEvent() }
             val historyDeferred = async { attendanceRepository.fetchAttendanceHistory() }
-            
+
             val soptEvent = soptEventDeferred.await().getOrThrow()
             val history = historyDeferred.await().getOrThrow()
-            
+
             // AttendanceRound 로드 (실패해도 진행)
             val attendanceRound = loadAttendanceRound(soptEvent.id.toLong())
-            
+
             // UI 상태로 변환
             mapToUiStateUseCase(soptEvent, history, attendanceRound)
         }
     }
-    
+
     private suspend fun loadAttendanceRound(eventId: Long): AttendanceRound? {
         return try {
             attendanceRepository.fetchAttendanceRound(eventId).getOrNull()

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -90,7 +90,7 @@ fun AttendanceScreen(
                         attendanceHistory = uiState.attendanceHistory!!,
                         buttonState = uiState.buttonState,
                         progressState = uiState.progressState,
-                        onAttendanceClick = { 
+                        onAttendanceClick = {
                             viewModel.showAttendanceDialog()
                         },
                         modifier = Modifier.weight(1f)
