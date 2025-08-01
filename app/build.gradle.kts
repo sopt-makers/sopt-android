@@ -128,6 +128,7 @@ dependencies {
     implementation(projects.core.security)
     implementation(projects.core.webview)
 
+    implementation(projects.domain.attendance)
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
     implementation(projects.domain.poke)
@@ -136,6 +137,7 @@ dependencies {
     implementation(projects.domain.home)
     implementation(projects.domain.auth)
 
+    implementation(projects.data.attendance)
     implementation(projects.data.fortune)
     implementation(projects.data.soptamp)
     implementation(projects.data.mypage)
@@ -144,6 +146,7 @@ dependencies {
     implementation(projects.data.home)
     implementation(projects.data.auth)
 
+    implementation(projects.feature.attendance)
     implementation(projects.feature.soptamp)
     implementation(projects.data.schedule)
     implementation(projects.data.soptlog)
