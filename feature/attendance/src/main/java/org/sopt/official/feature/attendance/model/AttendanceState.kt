@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,9 @@
  */
 package org.sopt.official.feature.attendance.model
 
-sealed class DialogState {
-    data object Show : DialogState()
-    data object Close : DialogState()
-    data object Failure : DialogState()
+sealed class AttendanceState<out T> {
+    data object Init : AttendanceState<Nothing>()
+    data object Loading : AttendanceState<Nothing>()
+    data class Success<T>(val data: T) : AttendanceState<T>()
+    data class Failure(val error: Throwable?) : AttendanceState<Nothing>()
 }

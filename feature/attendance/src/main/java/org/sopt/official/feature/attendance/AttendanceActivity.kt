@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2024 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,34 @@
  */
 package org.sopt.official.feature.attendance
 
-import android.widget.EditText
-import androidx.core.widget.doAfterTextChanged
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import com.airbnb.deeplinkdispatch.DeepLink
+import dagger.hilt.android.AndroidEntryPoint
+import org.sopt.official.designsystem.SoptTheme
 
-fun EditText.requestFocusAfterTextChanged(to: EditText, otherLogic: () -> Unit = {}) {
-    doAfterTextChanged {
-        if (it?.length == 1) {
-            to.requestFocus()
-            this.isEnabled = false
+@AndroidEntryPoint
+@DeepLink("sopt://attendance")
+class AttendanceActivity : ComponentActivity() {
+    
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        
+        setContent {
+            SoptTheme {
+                AttendanceScreen(
+                    onBackClick = { finish() }
+                )
+            }
         }
-        otherLogic()
+    }
+    
+    companion object {
+        fun newInstance(context: Context) = Intent(context, AttendanceActivity::class.java)
     }
 }
