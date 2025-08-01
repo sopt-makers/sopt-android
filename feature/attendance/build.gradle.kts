@@ -36,5 +36,4 @@ dependencies {
     implementation(projects.domain.attendance)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
-    implementation("androidx.compose.runtime:runtime-livedata:1.5.4")
 }
