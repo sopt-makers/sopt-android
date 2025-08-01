@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="attendance_progress_first">1차 출석</string>
+    <string name="attendance_progress_second">2차 출석</string>
+    <string name="attendance_progress_third_tardy">지각</string>
+    <string name="attendance_progress_third_complete">출석 완료</string>
+    <string name="attendance_progress_third_absent">결석</string>
+    <string name="attendance_progress_before">출석 전</string>
+</resources>
