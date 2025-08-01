@@ -22,11 +22,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.model.attendance
+package org.sopt.official.data.attendance.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.domain.entity.attendance.*
+import org.sopt.official.domain.attendance.entity.*
 
 @Serializable
 data class AttendanceHistoryResponse(

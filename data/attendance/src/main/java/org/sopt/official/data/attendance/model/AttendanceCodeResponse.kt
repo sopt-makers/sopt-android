@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.di.attendance
+package org.sopt.official.data.attendance.model
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-import org.sopt.official.common.di.OperationRetrofit
-import org.sopt.official.data.repository.attendance.AttendanceRepositoryImpl
-import org.sopt.official.data.service.attendance.AttendanceService
-import org.sopt.official.domain.repository.attendance.AttendanceRepository
-import retrofit2.Retrofit
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class AttendanceBindsModule {
-    @Binds
-    @Singleton
-    abstract fun bindAttendanceRepository(attendanceRepositoryImpl: AttendanceRepositoryImpl): AttendanceRepository
-
+@Serializable
+data class AttendanceCodeResponse(
+    @SerialName("subLectureId")
+    val subLectureId: Long
+) {
     companion object {
-        @Provides
-        @Singleton
-        fun provideAttendanceService(@OperationRetrofit retrofit: Retrofit): AttendanceService =
-            retrofit.create(AttendanceService::class.java)
+        val ERROR = AttendanceCodeResponse(-2)
     }
 }
