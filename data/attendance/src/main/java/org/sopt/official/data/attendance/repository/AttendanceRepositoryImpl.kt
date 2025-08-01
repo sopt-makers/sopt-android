@@ -33,6 +33,7 @@ import org.sopt.official.data.attendance.model.AttendanceCodeResponse
 import org.sopt.official.data.attendance.model.RequestAttendanceCode
 import org.sopt.official.data.attendance.service.AttendanceService
 import org.sopt.official.domain.attendance.entity.AttendanceButtonType
+import org.sopt.official.domain.attendance.entity.AttendanceCodeResponse as DomainAttendanceCodeResponse
 import org.sopt.official.domain.attendance.entity.AttendanceErrorCode
 import org.sopt.official.domain.attendance.entity.AttendanceHistory
 import org.sopt.official.domain.attendance.entity.AttendanceRound
@@ -44,6 +45,10 @@ class AttendanceRepositoryImpl @Inject constructor(
     private val attendanceService: AttendanceService,
     private val json: Json
 ) : AttendanceRepository {
+    
+    companion object {
+        private const val UNKNOWN_ERROR_CODE = -2L
+    }
     override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data!!.toEntity() }
     override suspend fun fetchAttendanceHistory(): Result<AttendanceHistory> =
         runCatching { attendanceService.getAttendanceHistory().data!!.toEntity() }
@@ -67,9 +72,9 @@ class AttendanceRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<org.sopt.official.domain.attendance.entity.AttendanceCodeResponse> = runCatching {
+    override suspend fun confirmAttendanceCode(subLectureId: Long, code: String): Result<DomainAttendanceCodeResponse> = runCatching {
         val response = attendanceService.confirmAttendanceCode(RequestAttendanceCode(subLectureId, code)).data!!
-        org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(response.subLectureId)
+        DomainAttendanceCodeResponse(response.subLectureId)
     }.recoverCatching { cause ->
         when (cause) {
             is HttpException -> {
@@ -78,15 +83,15 @@ class AttendanceRepositoryImpl @Inject constructor(
                     val errorBody = json.parseToJsonElement(errorBodyString).jsonObject
                     val message = errorBody["message"]?.jsonPrimitive?.contentOrNull
                     val errorCode = AttendanceErrorCode.of(message ?: "")
-                    org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(
-                        errorCode?.errorCode ?: -2L
+                    DomainAttendanceCodeResponse(
+                        errorCode?.errorCode ?: UNKNOWN_ERROR_CODE
                     )
                 } else {
-                    org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(-2L)
+                    DomainAttendanceCodeResponse(UNKNOWN_ERROR_CODE)
                 }
             }
 
-            else -> org.sopt.official.domain.attendance.entity.AttendanceCodeResponse(-2L)
+            else -> DomainAttendanceCodeResponse(UNKNOWN_ERROR_CODE)
         }
     }
 }
