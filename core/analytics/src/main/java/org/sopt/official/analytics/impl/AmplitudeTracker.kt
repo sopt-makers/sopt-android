@@ -36,7 +36,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class AmplitudeTracker @Inject constructor(
-    @ApplicationContext private val context: Context
+    @field:ApplicationContext private val context: Context
 ) : Tracker {
     private val amplitude = Amplitude(
         Configuration(
