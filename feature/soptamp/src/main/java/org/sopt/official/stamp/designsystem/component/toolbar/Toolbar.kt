@@ -47,7 +47,7 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 enum class ToolbarIconType(
-    @DrawableRes private val resId: Int = -1,
+    @field:DrawableRes private val resId: Int = -1,
 ) {
     NONE,
     WRITE(R.drawable.ic_write),
