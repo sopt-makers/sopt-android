@@ -22,39 +22,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.feature.ranking.model
+package org.sopt.official.stamp.feature.navigation
 
-import org.sopt.official.domain.soptamp.model.Rank
+import kotlinx.serialization.Serializable
+import org.sopt.official.domain.soptamp.MissionLevel
 
-data class RankerUiModel(
-    val rank: Int,
+sealed interface SoptampRoute
+
+@Serializable
+data object MissionList : SoptampRoute
+
+@Serializable
+data class MissionDetail(
+    val id: Int,
+    val title: String,
+    val level: Int,
+    val isCompleted: Boolean,
+    val isMe: Boolean,
     val nickname: String,
-    private val description: String? = null,
-    val score: Int,
-) {
-    fun getDescription() = description ?: DEFAULT_DESCRIPTION
+) : SoptampRoute
 
-    fun isTopRank() = (rank <= STANDARD_TOP_RANK)
+@Serializable
+data class Ranking(val type: String) : SoptampRoute
 
-    fun isNotTopRank() = (rank > STANDARD_TOP_RANK)
+@Serializable
+data object PartRanking : SoptampRoute
 
-    companion object {
-        const val DEFAULT_USER_NAME = "-"
-        const val STANDARD_TOP_RANK = 3
-        const val DEFAULT_DESCRIPTION = "설정된 한 마디가 없습니다"
-        val DEFAULT_RANK = RankerUiModel(0, DEFAULT_USER_NAME, null, 0)
-    }
-}
+@Serializable
+data class UserMissionList(
+    val nickname: String,
+    val description: String,
+) : SoptampRoute
 
-fun List<Rank>.toUiModel(): RankingListUiModel =
-    RankingListUiModel(
-        this.map { it.toUiModel() },
+@Serializable
+data object Onboarding : SoptampRoute
+
+// Extension functions for converting from existing models
+fun org.sopt.official.stamp.feature.mission.model.MissionNavArgs.toRoute() =
+    MissionDetail(
+        id = this.id,
+        title = this.title,
+        level = this.level.value,
+        isCompleted = this.isCompleted,
+        isMe = this.isMe,
+        nickname = this.nickname,
     )
 
-fun Rank.toUiModel(): RankerUiModel =
-    RankerUiModel(
-        rank = this.rank,
+fun MissionDetail.toMissionLevel(): MissionLevel = MissionLevel.of(this.level)
+
+fun org.sopt.official.stamp.feature.ranking.model.RankerNavArg.toRoute() =
+    UserMissionList(
         nickname = this.nickname,
-        description = this.profileMessage,
-        score = this.point,
+        description = this.description,
     )

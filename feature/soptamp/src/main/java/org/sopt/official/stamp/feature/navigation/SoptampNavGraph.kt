@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.designsystem.component.mission
+package org.sopt.official.stamp.feature.navigation
 
-import androidx.compose.foundation.Image
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 
-@Composable
-fun CompletedStamp(
-    stamp: Stamp,
-    modifier: Modifier = Modifier,
+fun NavGraphBuilder.soptampNavGraph(
+    navController: NavController,
+    onBackClick: () -> Unit = { navController.popBackStack() },
 ) {
-    Image(
-        painter = painterResource(id = stamp.lottieImage),
-        contentDescription = "Completed Stamp Image",
-        modifier = modifier,
-    )
+    composable<MissionList> {
+        MissionListScreenRoute(navController)
+    }
+
+    composable<MissionDetail> { backStackEntry ->
+        val args = backStackEntry.toRoute<MissionDetail>()
+        MissionDetailScreenRoute(args, navController)
+    }
+
+    composable<Ranking> { backStackEntry ->
+        val args = backStackEntry.toRoute<Ranking>()
+        RankingScreenRoute(args, navController)
+    }
+
+    composable<PartRanking> {
+        PartRankingScreenRoute(navController)
+    }
+
+    composable<UserMissionList> { backStackEntry ->
+        val args = backStackEntry.toRoute<UserMissionList>()
+        UserMissionListScreenRoute(args, navController)
+    }
+
+    composable<Onboarding> {
+        OnboardingScreenRoute(navController)
+    }
 }

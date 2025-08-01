@@ -37,26 +37,31 @@ import org.sopt.official.stamp.designsystem.style.MontserratRegular
 import org.sopt.official.stamp.designsystem.style.PretendardMedium
 
 @Composable
-fun RankScore(modifier: Modifier = Modifier, rank: Int, score: Int, isMyRankScore: Boolean = false) {
+fun RankScore(
+    modifier: Modifier = Modifier,
+    rank: Int,
+    score: Int,
+    isMyRankScore: Boolean = false,
+) {
     val textColor = SoptTheme.colors.primary
 
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.Bottom,
     ) {
         Text(
             text = "$score",
             fontFamily = MontserratRegular,
             fontSize = 30.sp,
             fontWeight = FontWeight.W400,
-            color = textColor
+            color = textColor,
         )
         Text(
             text = "점",
             fontFamily = PretendardMedium,
             fontSize = 12.sp,
             fontWeight = FontWeight.W400,
-            color = textColor
+            color = textColor,
         )
     }
 }

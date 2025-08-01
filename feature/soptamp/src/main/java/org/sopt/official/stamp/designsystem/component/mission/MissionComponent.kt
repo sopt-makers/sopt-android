@@ -47,28 +47,33 @@ import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 
 @Composable
-fun MissionComponent(mission: MissionUiModel, onClick: () -> Unit = {}) {
+fun MissionComponent(
+    mission: MissionUiModel,
+    onClick: () -> Unit = {},
+) {
     val shape = MissionShape.DEFAULT_WAVE
     val stamp = Stamp.findStampByLevel(mission.level)
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .defaultMinSize(160.dp, 200.dp)
-            .aspectRatio(0.8f)
-            .background(
-                color = SoptTheme.colors.onSurface800,
-                shape = shape
-            )
-            .noRippleClickable(onClick = onClick),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .defaultMinSize(160.dp, 200.dp)
+                .aspectRatio(0.8f)
+                .background(
+                    color = SoptTheme.colors.onSurface800,
+                    shape = shape,
+                )
+                .noRippleClickable(onClick = onClick),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         if (mission.isCompleted) {
             CompletedStamp(
                 stamp = stamp,
-                modifier = Modifier
-                    .aspectRatio(1.3f)
-                    .padding(horizontal = 12.dp)
+                modifier =
+                    Modifier
+                        .aspectRatio(1.3f)
+                        .padding(horizontal = 12.dp),
             )
         } else {
             LevelOfMission(stamp = stamp, spaceSize = 10.dp)
@@ -87,9 +92,10 @@ private fun TitleOfMission(missionTitle: String) {
         textAlign = TextAlign.Center,
         overflow = TextOverflow.Ellipsis,
         maxLines = 2,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 22.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 22.dp),
     )
 }
 
@@ -97,14 +103,15 @@ private fun TitleOfMission(missionTitle: String) {
 @Composable
 fun PreviewMissionComponent() {
     SoptTheme {
-        val previewMission = MissionUiModel(
-            id = 1,
-            title = "일이삼사오육칠팔구십일일이삼사오육칠팔구십일",
-            level = MissionLevel.of(1),
-            isCompleted = true
-        )
+        val previewMission =
+            MissionUiModel(
+                id = 1,
+                title = "일이삼사오육칠팔구십일일이삼사오육칠팔구십일",
+                level = MissionLevel.of(1),
+                isCompleted = true,
+            )
         MissionComponent(
-            mission = previewMission
+            mission = previewMission,
         )
     }
 }

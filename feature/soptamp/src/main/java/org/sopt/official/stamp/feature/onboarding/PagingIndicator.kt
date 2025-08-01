@@ -57,7 +57,7 @@ fun PageIndicator(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(space),
-        modifier = modifier
+        modifier = modifier,
     ) {
         (0 until numberOfPages).forEach { page ->
             PageIndicatorView(
@@ -66,7 +66,7 @@ fun PageIndicator(
                 defaultColor = defaultColor,
                 defaultRadius = defaultRadius,
                 selectedLength = selectedLength,
-                animationDurationInMillis = animationDurationInMillis
+                animationDurationInMillis = animationDurationInMillis,
             )
         }
     }
@@ -83,46 +83,53 @@ fun PageIndicatorView(
     modifier: Modifier = Modifier,
 ) {
     val color: Color by animateColorAsState(
-        targetValue = if (isSelected) {
-            selectedColor
-        } else {
-            defaultColor
-        },
-        animationSpec = tween(
-            durationMillis = animationDurationInMillis
-        ),
-        label = "color"
+        targetValue =
+            if (isSelected) {
+                selectedColor
+            } else {
+                defaultColor
+            },
+        animationSpec =
+            tween(
+                durationMillis = animationDurationInMillis,
+            ),
+        label = "color",
     )
     val width: Dp by animateDpAsState(
-        targetValue = if (isSelected) {
-            selectedLength
-        } else {
-            7.dp
-        },
-        animationSpec = tween(
-            durationMillis = animationDurationInMillis
-        ),
-        label = "width"
+        targetValue =
+            if (isSelected) {
+                selectedLength
+            } else {
+                7.dp
+            },
+        animationSpec =
+            tween(
+                durationMillis = animationDurationInMillis,
+            ),
+        label = "width",
     )
 
     Canvas(
-        modifier = modifier
-            .size(
-                width = width,
-                height = defaultRadius
-            )
+        modifier =
+            modifier
+                .size(
+                    width = width,
+                    height = defaultRadius,
+                ),
     ) {
         drawRoundRect(
             color = color,
             topLeft = Offset.Zero,
-            size = Size(
-                width = width.toPx(),
-                height = 7.dp.toPx()
-            ),
-            cornerRadius = CornerRadius(
-                x = defaultRadius.toPx(),
-                y = defaultRadius.toPx()
-            )
+            size =
+                Size(
+                    width = width.toPx(),
+                    height = 7.dp.toPx(),
+                ),
+            cornerRadius =
+                CornerRadius(
+                    x = defaultRadius.toPx(),
+                    y = defaultRadius.toPx(),
+                ),
         )
     }
 }

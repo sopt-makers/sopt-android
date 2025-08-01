@@ -44,17 +44,22 @@ import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun OnboardingPage(@DrawableRes image: Int, title: String, content: String) {
+fun OnboardingPage(
+    @DrawableRes image: Int,
+    title: String,
+    content: String,
+) {
     Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Image(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
             painter = painterResource(id = image),
-            contentDescription = null
+            contentDescription = null,
         )
         Spacer(modifier = Modifier.size(16.dp))
         OnboardingPageTitle(text = title)
@@ -68,7 +73,7 @@ fun OnboardingPageTitle(text: String) {
     Text(
         text = text,
         style = SoptTheme.typography.heading20B,
-        color = SoptTheme.colors.primary
+        color = SoptTheme.colors.primary,
     )
 }
 
@@ -77,7 +82,7 @@ fun OnboardingPageContent(text: String) {
     Text(
         text = text,
         style = SoptTheme.typography.body16R,
-        color = SoptTheme.colors.onSurface200
+        color = SoptTheme.colors.onSurface200,
     )
 }
 
@@ -86,12 +91,12 @@ fun OnboardingPageContent(text: String) {
 private fun OnboardingPreview() {
     SoptTheme {
         SoptColumn(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             OnboardingPage(
                 R.drawable.ic_onboarding_1,
                 "title",
-                "content"
+                "content",
             )
         }
     }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,6 @@ fun NetworkErrorDialog(onRetry: () -> Unit = {}) {
     ErrorDialog(
         title = "네트워크가 원활하지 않습니다.",
         content = "인터넷 연결을 확인하고 다시 시도해 주세요.",
-        onRetry = onRetry
+        onRetry = onRetry,
     )
 }

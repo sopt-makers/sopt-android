@@ -80,28 +80,34 @@ fun SoptTopAppBar(
     SoptAppBar(
         backgroundColor = backgroundColor,
         elevation = elevation,
-        modifier = modifier.padding(
-            PaddingValues(
-                top = contentPadding?.calculateTopPadding()
-                    ?: SoptAppBarDefault.appBarDefaultVerticalPadding,
-                bottom = contentPadding?.calculateBottomPadding()
-                    ?: SoptAppBarDefault.appBarDefaultVerticalPadding,
-                start = contentPadding?.calculateStartPadding(layoutDirection)
-                    ?: SoptAppBarDefault.appBarDefaultHorizontalPadding,
-                end = contentPadding?.calculateEndPadding(layoutDirection)
-                    ?: SoptAppBarDefault.appBarDefaultHorizontalPadding
-            )
-        )
+        modifier =
+            modifier.padding(
+                PaddingValues(
+                    top =
+                        contentPadding?.calculateTopPadding()
+                            ?: SoptAppBarDefault.appBarDefaultVerticalPadding,
+                    bottom =
+                        contentPadding?.calculateBottomPadding()
+                            ?: SoptAppBarDefault.appBarDefaultVerticalPadding,
+                    start =
+                        contentPadding?.calculateStartPadding(layoutDirection)
+                            ?: SoptAppBarDefault.appBarDefaultHorizontalPadding,
+                    end =
+                        contentPadding?.calculateEndPadding(layoutDirection)
+                            ?: SoptAppBarDefault.appBarDefaultHorizontalPadding,
+                ),
+            ),
     ) {
         if (navigationIcon != null) {
             navigationIcon()
             Spacer(modifier = Modifier.size(2.dp))
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            verticalAlignment = Alignment.CenterVertically
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             title()
             if (dropDownButton != null) {
@@ -112,25 +118,31 @@ fun SoptTopAppBar(
         Row(
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically,
-            content = actions
+            content = actions,
         )
     }
 }
 
 @Composable
-fun SoptAppBar(backgroundColor: Color, elevation: Dp, modifier: Modifier, content: @Composable RowScope.() -> Unit) {
+fun SoptAppBar(
+    backgroundColor: Color,
+    elevation: Dp,
+    modifier: Modifier,
+    content: @Composable RowScope.() -> Unit,
+) {
     Surface(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(SoptAppBarDefault.height),
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(SoptAppBarDefault.height),
         color = backgroundColor,
-        shadowElevation = elevation
+        shadowElevation = elevation,
     ) {
         Row(
             modifier = modifier,
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically,
-            content = content
+            content = content,
         )
     }
 }
@@ -143,7 +155,7 @@ fun PreviewSoptTopBarOnlyMissionTitleAndDropDownMenu() {
             title = { Text(text = "hello") },
             dropDownButton = {
                 SoptampIconButton(imageVector = ImageVector.vectorResource(id = R.drawable.setting))
-            }
+            },
         )
     }
 }
@@ -156,7 +168,7 @@ fun PreviewSoptTopBarTitleWithNavigationButton() {
             title = { Text(text = "hello") },
             navigationIcon = {
                 SoptampIconButton(imageVector = ImageVector.vectorResource(id = R.drawable.setting))
-            }
+            },
         )
     }
 }
@@ -169,14 +181,14 @@ fun PreviewSoptTopBarTitleWithNavigationButtonAndActions() {
             title = { Text(text = "hello") },
             navigationIcon = {
                 SoptampIconButton(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.setting)
+                    imageVector = ImageVector.vectorResource(id = R.drawable.setting),
                 )
             },
             actions = {
                 SoptampIconButton(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.setting)
+                    imageVector = ImageVector.vectorResource(id = R.drawable.setting),
                 )
-            }
+            },
         )
     }
 }
@@ -189,16 +201,16 @@ fun PreviewSoptTopBarTitleWithNavigationButtonAndActionText() {
             title = { Text(text = "hello") },
             navigationIcon = {
                 SoptampIconButton(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.setting)
+                    imageVector = ImageVector.vectorResource(id = R.drawable.setting),
                 )
             },
             actions = {
                 Text(
                     modifier = Modifier.clickable {},
-                    text = "취소"
+                    text = "취소",
                 )
                 Spacer(modifier = Modifier.width(8.dp))
-            }
+            },
         )
     }
 }

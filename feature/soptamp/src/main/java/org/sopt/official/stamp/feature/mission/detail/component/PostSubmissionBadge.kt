@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,16 +35,20 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 
 @Composable
-fun PostSubmissionBadge(composition: LottieComposition?, progress: Float) {
+fun PostSubmissionBadge(
+    composition: LottieComposition?,
+    progress: Float,
+) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.55f)),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.55f)),
+        contentAlignment = Alignment.Center,
     ) {
         LottieAnimation(
             composition = composition,
-            progress = { progress }
+            progress = { progress },
         )
     }
 }

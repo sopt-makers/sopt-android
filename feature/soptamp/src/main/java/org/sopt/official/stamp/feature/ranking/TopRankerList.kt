@@ -52,17 +52,21 @@ import org.sopt.official.stamp.feature.ranking.model.RankersUiModel
 import org.sopt.official.stamp.feature.ranking.model.TopRankerDescriptionBubble
 
 @Composable
-fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiModel) -> Unit = {}) {
+fun TopRankerList(
+    topRanker: RankersUiModel,
+    onClickTopRankerBubble: (RankerUiModel) -> Unit = {},
+) {
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(
-                top = 6.dp,
-                bottom = 11.dp,
-                start = 6.dp,
-                end = 6.dp
-            ),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = 6.dp,
+                    bottom = 11.dp,
+                    start = 6.dp,
+                    end = 6.dp,
+                ),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         var onClickRankerState by remember {
             mutableStateOf(topRanker.first)
@@ -70,16 +74,17 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
         if (onClickRankerState.rank > 0) {
             TopRankDescriptionBubble(
                 bubble = TopRankerDescriptionBubble.findBubbleByRank(onClickRankerState.rank),
-                onClickRankerDescriptionState = onClickRankerState.getDescription()
+                onClickRankerDescriptionState = onClickRankerState.getDescription(),
             )
             Spacer(modifier = Modifier.size(8.dp))
         }
         Row(
-            horizontalArrangement = Arrangement.spacedBy(
-                20.dp,
-                Alignment.CenterHorizontally
-            ),
-            verticalAlignment = Alignment.Bottom
+            horizontalArrangement =
+                Arrangement.spacedBy(
+                    20.dp,
+                    Alignment.CenterHorizontally,
+                ),
+            verticalAlignment = Alignment.Bottom,
         ) {
             val onClickRanker = { ranker: RankerUiModel ->
                 onClickRankerState = ranker
@@ -88,59 +93,64 @@ fun TopRankerList(topRanker: RankersUiModel, onClickTopRankerBubble: (RankerUiMo
                 ranker = topRanker.second,
                 height = 110.dp,
                 onClick = onClickRanker,
-                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.second) }
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.second) },
             )
             TopRankerItem(
                 ranker = topRanker.first,
                 height = 150.dp,
                 onClick = onClickRanker,
-                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.first) }
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.first) },
             )
             TopRankerItem(
                 ranker = topRanker.third,
                 height = 70.dp,
                 onClick = onClickRanker,
-                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.third) }
+                onClickTopRankerBubble = { onClickTopRankerBubble(topRanker.third) },
             )
         }
     }
 }
 
 @Composable
-fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDescriptionState: String) {
+fun TopRankDescriptionBubble(
+    bubble: TopRankerDescriptionBubble,
+    onClickRankerDescriptionState: String,
+) {
     val isDefault = onClickRankerDescriptionState == RankerUiModel.DEFAULT_DESCRIPTION
     Box(
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             modifier = Modifier.fillMaxWidth(),
             painter = painterResource(id = bubble.background),
             contentDescription = "Top Ranker DescriptionBubble",
-            tint = SoptTheme.colors.onSurface800
+            tint = SoptTheme.colors.onSurface800,
         )
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = 7.dp,
-                    bottom = 17.dp
-                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        top = 7.dp,
+                        bottom = 17.dp,
+                    ),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             val maxLength = 19
-            val description = if (onClickRankerDescriptionState.length > maxLength) {
-                "${onClickRankerDescriptionState.substring(0 until maxLength)}..."
-            } else {
-                onClickRankerDescriptionState.ifBlank { "설정된 한 마디가 없습니다" }
-            }
+            val description =
+                if (onClickRankerDescriptionState.length > maxLength) {
+                    "${onClickRankerDescriptionState.substring(0 until maxLength)}..."
+                } else {
+                    onClickRankerDescriptionState.ifBlank { "설정된 한 마디가 없습니다" }
+                }
             Text(
                 text = description,
                 style = SoptTheme.typography.body14M,
                 color = SoptTheme.colors.onSurface300,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }
@@ -151,25 +161,25 @@ fun TopRankDescriptionBubble(bubble: TopRankerDescriptionBubble, onClickRankerDe
 fun PreviewTopRankerList() {
     SoptTheme {
         TopRankerList(
-            topRanker = RankersUiModel(
-                RankerUiModel(
-                    rank = 1,
-                    nickname = "jinsu",
-                    description = "일이삼사육칠팔구십일이삼사오육칠팔구십dlfdl",
-                    score = 1000
-
+            topRanker =
+                RankersUiModel(
+                    RankerUiModel(
+                        rank = 1,
+                        nickname = "jinsu",
+                        description = "일이삼사육칠팔구십일이삼사오육칠팔구십dlfdl",
+                        score = 1000,
+                    ),
+                    RankerUiModel(
+                        rank = 2,
+                        nickname = "jinsu",
+                        score = 900,
+                    ),
+                    RankerUiModel(
+                        rank = 3,
+                        nickname = "jinsu",
+                        score = 800,
+                    ),
                 ),
-                RankerUiModel(
-                    rank = 2,
-                    nickname = "jinsu",
-                    score = 900
-                ),
-                RankerUiModel(
-                    rank = 3,
-                    nickname = "jinsu",
-                    score = 800
-                )
-            )
         )
     }
 }

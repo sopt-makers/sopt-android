@@ -37,19 +37,20 @@ import org.sopt.official.stamp.util.DefaultPreview
 @Composable
 fun SoptampFloatingButton(
     text: String,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     FloatingActionButton(
         onClick = onClick,
         shape = CircleShape,
-        containerColor = SoptTheme.colors.primary
+        containerColor = SoptTheme.colors.primary,
     ) {
         Text(
             text = text,
             color = SoptTheme.colors.onSurface,
             style = SoptTheme.typography.body18M,
-            modifier = Modifier
-                .padding(horizontal = 24.dp, vertical = 16.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 24.dp, vertical = 16.dp),
         )
     }
 }

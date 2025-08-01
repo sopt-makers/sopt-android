@@ -51,14 +51,16 @@ enum class ToolbarIconType(
 ) {
     NONE,
     WRITE(R.drawable.ic_write),
-    DELETE(R.drawable.ic_delete);
+    DELETE(R.drawable.ic_delete),
+    ;
 
     companion object {
         @Composable
-        fun getResourceFrom(type: ToolbarIconType) = painterResource(
-            entries.find { it.name == type.name }?.resId
-                ?: throw IllegalArgumentException("There's no icon in this class. Icon: ${type.name}")
-        )
+        fun getResourceFrom(type: ToolbarIconType) =
+            painterResource(
+                entries.find { it.name == type.name }?.resId
+                    ?: throw IllegalArgumentException("There's no icon in this class. Icon: ${type.name}"),
+            )
     }
 }
 
@@ -71,24 +73,26 @@ fun Toolbar(
     onPressIcon: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .height(56.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .height(56.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             if (onBack != null) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_back),
                     contentDescription = "Back Button",
                     tint = SoptTheme.colors.onSurface10,
-                    modifier = Modifier
-                        .noRippleClickable(onClick = onBack)
-                        .align(Alignment.CenterVertically)
-                        .padding(8.dp)
+                    modifier =
+                        Modifier
+                            .noRippleClickable(onClick = onBack)
+                            .align(Alignment.CenterVertically)
+                            .padding(8.dp),
                 )
             }
             title?.invoke()
@@ -99,7 +103,7 @@ fun Toolbar(
                 painter = ToolbarIconType.getResourceFrom(iconOption),
                 contentDescription = "Option Menu Icon",
                 tint = SoptTheme.colors.onSurface10,
-                modifier = Modifier.noRippleClickable(onClick = onPressIcon)
+                modifier = Modifier.noRippleClickable(onClick = onPressIcon),
             )
         }
     }
@@ -110,7 +114,7 @@ fun Toolbar(
 private fun ToolbarPreview() {
     SoptTheme {
         Box(
-            Modifier.fillMaxSize()
+            Modifier.fillMaxSize(),
         ) {
             Toolbar(
                 title = {
@@ -118,11 +122,11 @@ private fun ToolbarPreview() {
                         text = "미션",
                         style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 2.dp),
-                        color = SoptTheme.colors.onSurface
+                        color = SoptTheme.colors.onSurface,
                     )
                 },
                 iconOption = ToolbarIconType.WRITE,
-                onBack = {}
+                onBack = {},
             )
         }
     }

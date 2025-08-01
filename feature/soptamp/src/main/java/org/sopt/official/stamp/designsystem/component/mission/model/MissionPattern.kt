@@ -37,7 +37,7 @@ internal class MissionPattern private constructor(
             return MissionPattern(
                 length = length,
                 diameter = length * DIAMETER_RATIO,
-                gap = length * GAP_RATIO
+                gap = length * GAP_RATIO,
             )
         }
     }

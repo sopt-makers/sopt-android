@@ -63,9 +63,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -74,6 +71,9 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 import org.sopt.official.stamp.util.DefaultPreview
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
 fun DatePicker(
@@ -85,48 +85,50 @@ fun DatePicker(
 ) {
     val isEmpty by remember(value) { derivedStateOf { value.isEmpty() } }
 
-    val newModifier = modifier
-        .fillMaxWidth()
-        .defaultMinSize(minHeight = 39.dp)
-        .clip(RoundedCornerShape(9.dp))
-        .then(
-            if (isEmpty || !isEditable) {
-                Modifier
-            } else {
-                Modifier.border(
-                    width = 1.dp,
-                    color = SoptTheme.colors.onSurface600,
-                    shape = RoundedCornerShape(9.dp)
-                )
-            }
-        )
+    val newModifier =
+        modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 39.dp)
+            .clip(RoundedCornerShape(9.dp))
+            .then(
+                if (isEmpty || !isEditable) {
+                    Modifier
+                } else {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = SoptTheme.colors.onSurface600,
+                        shape = RoundedCornerShape(9.dp),
+                    )
+                },
+            )
 
     Box(
-        modifier = newModifier
-            .background(
-                SoptTheme.colors.onSurface900,
-                RoundedCornerShape(9.dp)
-            )
-            .noRippleClickable { if (isEditable) onClicked() }
+        modifier =
+            newModifier
+                .background(
+                    SoptTheme.colors.onSurface900,
+                    RoundedCornerShape(9.dp),
+                )
+                .noRippleClickable { if (isEditable) onClicked() },
     ) {
         Row(
-            modifier = Modifier
-                .padding(horizontal = 14.dp, vertical = 10.dp)
-                .fillMaxWidth(),
+            modifier =
+                Modifier
+                    .padding(horizontal = 14.dp, vertical = 10.dp)
+                    .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 modifier = Modifier.padding(),
                 text = if (isEmpty) placeHolder else value,
                 color = if (isEmpty) SoptTheme.colors.onSurface300 else SoptTheme.colors.onSurface50,
-                style = SoptTheme.typography.label14SB
-
+                style = SoptTheme.typography.label14SB,
             )
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.right_forward),
                 contentDescription = "date picker icon",
-                tint = SoptTheme.colors.onSurface300
+                tint = SoptTheme.colors.onSurface300,
             )
         }
     }
@@ -134,7 +136,10 @@ fun DatePicker(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> Unit) {
+fun DataPickerBottomSheet(
+    onSelected: (String) -> Unit,
+    onDismissRequest: () -> Unit,
+) {
     val sheetState = rememberModalBottomSheetState()
 
     val formatter = SimpleDateFormat("yyyy.MM.dd", Locale.KOREA)
@@ -147,7 +152,7 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         sheetState = sheetState,
-        containerColor = SoptTheme.colors.onSurface800
+        containerColor = SoptTheme.colors.onSurface800,
     ) {
         DatePickerUI(
             isValidDate = isValidDate,
@@ -156,32 +161,39 @@ fun DataPickerBottomSheet(onSelected: (String) -> Unit, onDismissRequest: () -> 
             chosenDay = chosenDay,
             onYearChosen = { chosenYear = it },
             onMonthChosen = { chosenMonth = it },
-            onDayChosen = { chosenDay = it }
+            onDayChosen = { chosenDay = it },
         )
         Spacer(modifier = Modifier.height(20.dp))
         SoptampButton(
-            modifier = Modifier
-                .padding(horizontal = 20.dp),
+            modifier =
+                Modifier
+                    .padding(horizontal = 20.dp),
             text = "확인",
             onClicked = {
                 if (isValidDate) {
-                    val calendar = Calendar.getInstance().apply {
-                        set(chosenYear, chosenMonth - 1, chosenDay)
-                    }
+                    val calendar =
+                        Calendar.getInstance().apply {
+                            set(chosenYear, chosenMonth - 1, chosenDay)
+                        }
                     val formattedDate = formatter.format(calendar.time)
 
                     onSelected(formattedDate)
                 }
-            }
+            },
         )
         Spacer(modifier = Modifier.height(40.dp))
     }
 }
 
-fun calculateValidDate(year: Int, month: Int, day: Int): Boolean {
-    val givenCalendar = Calendar.getInstance().apply {
-        set(year, month - 1, day)
-    }
+fun calculateValidDate(
+    year: Int,
+    month: Int,
+    day: Int,
+): Boolean {
+    val givenCalendar =
+        Calendar.getInstance().apply {
+            set(year, month - 1, day)
+        }
     val referenceCalendar = Calendar.getInstance()
 
     return !givenCalendar.after(referenceCalendar)
@@ -199,9 +211,10 @@ fun DatePickerUI(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 10.dp, horizontal = 5.dp)
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(vertical = 10.dp, horizontal = 5.dp),
     ) {
         DateSelectionSection(
             isValidDate = isValidDate,
@@ -227,14 +240,14 @@ fun DateSelectionSection(
 ) {
     Row(
         horizontalArrangement = Arrangement.Center,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         DateItemsPicker(
             isValidDate = isValidDate,
             max = YEAR_INDEX,
             items = years,
             firstIndex = (chosenYear - START_YEAR),
-            onItemSelected = onYearChosen
+            onItemSelected = onYearChosen,
         )
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
@@ -242,20 +255,21 @@ fun DateSelectionSection(
             max = currentMonth,
             items = monthsNumber,
             firstIndex = chosenMonth,
-            onItemSelected = onMonthChosen
+            onItemSelected = onMonthChosen,
         )
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
             isValidDate = isValidDate,
             max = currentDay - 1,
-            items = when {
-                (chosenYear % 4 == 0) && chosenMonth == 2 -> days29
-                chosenMonth == 2 -> days28
-                days30Months.contains(chosenMonth) -> days30
-                else -> days31
-            },
+            items =
+                when {
+                    (chosenYear % 4 == 0) && chosenMonth == 2 -> days29
+                    chosenMonth == 2 -> days28
+                    days30Months.contains(chosenMonth) -> days30
+                    else -> days31
+                },
             firstIndex = chosenDay - 1,
-            onItemSelected = onDayChosen
+            onItemSelected = onDayChosen,
         )
     }
 }
@@ -288,19 +302,19 @@ fun DateItemsPicker(
 
     Box(
         modifier = modifier.height(108.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Column(
             modifier = modifier.fillMaxHeight(),
-            verticalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.SpaceEvenly,
         ) {
             HorizontalDivider(
                 modifier = Modifier.size(height = 1.dp, width = 60.dp),
-                color = SoptTheme.colors.onSurface700
+                color = SoptTheme.colors.onSurface700,
             )
             HorizontalDivider(
                 modifier = Modifier.size(height = 1.dp, width = 60.dp),
-                color = SoptTheme.colors.onSurface700
+                color = SoptTheme.colors.onSurface700,
             )
         }
         LazyColumn(
@@ -324,7 +338,7 @@ fun DateItemsPicker(
                     color = if (it == firstVisibleItemIndex + 1) SoptTheme.colors.onSurface10 else SoptTheme.colors.onSurface400,
                     modifier = Modifier.alpha(if (it == firstVisibleItemIndex + 1) 1f else 0.3f),
                     style = SoptTheme.typography.heading20B,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
                 )
 
                 Spacer(modifier = Modifier.height(6.dp))
@@ -356,7 +370,7 @@ private fun DatePickerPreview() {
             value = "2024.12.25",
             onClicked = {},
             placeHolder = "날짜를 입력해주세요.",
-            isEditable = true
+            isEditable = true,
         )
     }
 }
@@ -375,7 +389,7 @@ private fun CustomDatePickerPreview() {
             chosenDay = chosenDay.value,
             onYearChosen = { chosenYear.value = it },
             onMonthChosen = { chosenMonth.value = it },
-            onDayChosen = { chosenDay.value = it }
+            onDayChosen = { chosenDay.value = it },
         )
     }
 }

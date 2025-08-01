@@ -46,30 +46,38 @@ import org.sopt.official.stamp.feature.ranking.getStarColor
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Boolean, isCompleted: Boolean) {
+fun Header(
+    title: String,
+    stars: Int,
+    toolbarIconType: ToolbarIconType,
+    isMe: Boolean,
+    isCompleted: Boolean,
+) {
     val backgroundColor = SoptTheme.colors.onSurface800
 
     Surface(
-        modifier = Modifier
-            .background(
-                color = backgroundColor,
-                shape = RoundedCornerShape(10.dp)
-            )
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)
+        modifier =
+            Modifier
+                .background(
+                    color = backgroundColor,
+                    shape = RoundedCornerShape(10.dp),
+                )
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
     ) {
         Column(
-            modifier = Modifier
-                .background(backgroundColor)
-                .padding(horizontal = 40.dp),
+            modifier =
+                Modifier
+                    .background(backgroundColor)
+                    .padding(horizontal = 40.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             if (stars < 10) {
                 RatingBar(
                     icon = R.drawable.ic_star,
                     stars = stars,
-                    selectedColor = getStarColor(rank = stars)
+                    selectedColor = getStarColor(rank = stars),
                 )
             } else {
                 SpecialMissionTitle()
@@ -79,7 +87,7 @@ fun Header(title: String, stars: Int, toolbarIconType: ToolbarIconType, isMe: Bo
                 style = SoptTheme.typography.body16M,
                 color = SoptTheme.colors.primary,
                 textAlign = TextAlign.Center,
-                maxLines = 2
+                maxLines = 2,
             )
         }
     }
@@ -94,10 +102,11 @@ private fun HeaderPreview() {
             stars = 10,
             toolbarIconType = ToolbarIconType.WRITE,
             isMe = true,
-            isCompleted = false
+            isCompleted = false,
         )
     }
 }
+
 @DefaultPreview
 @Composable
 private fun HeaderPreview2() {
@@ -107,7 +116,7 @@ private fun HeaderPreview2() {
             stars = 1,
             toolbarIconType = ToolbarIconType.WRITE,
             isMe = true,
-            isCompleted = false
+            isCompleted = false,
         )
     }
 }

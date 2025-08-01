@@ -37,9 +37,10 @@ import org.sopt.official.stamp.util.DefaultPreview
 @Composable
 fun LoadingScreen() {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SoptTheme.colors.onSurface950),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(SoptTheme.colors.onSurface950),
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator()

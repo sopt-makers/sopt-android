@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,13 +29,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.input.pointer.pointerInput
 
-inline fun Modifier.addFocusCleaner(focusManager: FocusManager, crossinline doOnClear: () -> Unit = {}): Modifier {
+inline fun Modifier.addFocusCleaner(
+    focusManager: FocusManager,
+    crossinline doOnClear: () -> Unit = {},
+): Modifier {
     return this.pointerInput(Unit) {
         detectTapGestures(
             onTap = {
                 doOnClear()
                 focusManager.clearFocus()
-            }
+            },
         )
     }
 }
