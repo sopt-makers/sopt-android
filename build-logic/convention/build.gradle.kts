@@ -31,7 +31,7 @@ gradlePlugin {
             implementationClass = "org.sopt.official.plugin.AndroidFeaturePlugin"
         }
         create("android-kotlin") {
-            id = "org.sopt.official.kotlin"
+            id = "org.sopt.official.kotlin.android"
             implementationClass = "org.sopt.official.plugin.AndroidKotlinPlugin"
         }
         create("android-hilt") {
@@ -54,8 +54,8 @@ gradlePlugin {
             id = "org.sopt.official.serialization"
             implementationClass = "org.sopt.official.plugin.KotlinSerializationPlugin"
         }
-        create("kotlin") {
-            id = "org.sopt.official.kotlin"
+        create("kotlin-jvm") {
+            id = "org.sopt.official.kotlin.jvm"
             implementationClass = "org.sopt.official.plugin.KotlinJvmPlugin"
         }
         create("retrofit") {
