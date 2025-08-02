@@ -42,51 +42,51 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import com.ramcosta.composedestinations.navigation.EmptyDestinationsNavigator
+import androidx.navigation.NavController
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.util.DefaultPreview
 
 private enum class OnBoardingPageUiModel(
-    @DrawableRes val image: Int,
+    @field:DrawableRes val image: Int,
     val title: String,
     val content: String,
 ) {
     FIRST(
         image = R.drawable.ic_onboarding_1,
         title = "A부터 Z까지 SOPT 즐기기",
-        content = "동아리 활동을 더욱 재미있게\n즐기는 방법을 알려드려요!"
+        content = "동아리 활동을 더욱 재미있게\n즐기는 방법을 알려드려요!",
     ),
     SECOND(
         image = R.drawable.ic_onboarding_2,
         title = "랭킹으로 다같이 참여하기",
-        content = "미션을 달성하고 랭킹이 올라가는\n재미를 느껴보세요!"
+        content = "미션을 달성하고 랭킹이 올라가는\n재미를 느껴보세요!",
     ),
     THIRD(
         image = R.drawable.ic_onboarding_3,
         title = "완료된 미션으로 추억 감상하기",
-        content = "완료된 미션을 확인하며\n추억을 감상할 수 있어요"
-    )
+        content = "완료된 미션을 확인하며\n추억을 감상할 수 있어요",
+    ),
 }
 
-@MissionNavGraph
-@Destination("onboarding")
+interface SimpleNavigator {
+    fun popBackStack()
+}
+
 @Composable
-fun OnboardingScreen(navigator: DestinationsNavigator) {
+fun OnboardingScreen(navigator: SimpleNavigator) {
     val onboardingPages = OnBoardingPageUiModel.entries.toTypedArray()
     val pageState = rememberPagerState { onboardingPages.size }
     SoptTheme {
         SoptColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding()
-                .navigationBarsPadding(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Toolbar(
                 modifier = Modifier.padding(bottom = 10.dp),
@@ -95,19 +95,19 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                         text = "가이드",
                         style = SoptTheme.typography.heading18B,
                         modifier = Modifier.padding(start = 4.dp),
-                        color = SoptTheme.colors.onSurface10
+                        color = SoptTheme.colors.onSurface10,
                     )
                 },
-                onBack = navigator::popBackStack
+                onBack = navigator::popBackStack,
             )
             HorizontalPager(
                 modifier = Modifier.fillMaxWidth(),
-                state = pageState
+                state = pageState,
             ) {
                 OnboardingPage(
                     image = onboardingPages[pageState.currentPage].image,
                     title = onboardingPages[pageState.currentPage].title,
-                    content = onboardingPages[pageState.currentPage].content
+                    content = onboardingPages[pageState.currentPage].content,
                 )
             }
             Spacer(modifier = Modifier.size(28.dp))
@@ -119,14 +119,15 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
                 selectedColor = SoptTheme.colors.primary,
                 selectedLength = 20.dp,
                 space = 10.dp,
-                animationDurationInMillis = 100
+                animationDurationInMillis = 100,
             )
             Spacer(modifier = Modifier.weight(1f))
             OnboardingButton(
                 isButtonEnabled = (pageState.currentPage + 1 == onboardingPages.size),
                 onClick = navigator::popBackStack,
-                modifier = Modifier
-                    .padding(start = 16.dp, end = 16.dp, bottom = 40.dp)
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 40.dp),
             )
         }
     }
@@ -136,23 +137,24 @@ fun OnboardingScreen(navigator: DestinationsNavigator) {
 fun OnboardingButton(
     modifier: Modifier = Modifier,
     isButtonEnabled: Boolean = true,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Button(
         onClick = onClick,
         enabled = isButtonEnabled,
-        colors = ButtonDefaults.buttonColors(
-            backgroundColor = SoptTheme.colors.primary,
-            disabledBackgroundColor = SoptTheme.colors.onSurface800
-        ),
+        colors =
+            ButtonDefaults.buttonColors(
+                backgroundColor = SoptTheme.colors.primary,
+                disabledBackgroundColor = SoptTheme.colors.onSurface800,
+            ),
         modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(9.dp)
+        shape = RoundedCornerShape(9.dp),
     ) {
         Text(
             text = "확인",
             color = if (isButtonEnabled) SoptTheme.colors.onSurface else SoptTheme.colors.onSurface300,
             style = SoptTheme.typography.heading18B,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
     }
 }
@@ -161,6 +163,70 @@ fun OnboardingButton(
 @Composable
 private fun OnboardingScreenPreview() {
     SoptTheme {
-        OnboardingScreen(navigator = EmptyDestinationsNavigator)
+        OnboardingScreen(
+            navigator =
+                object : SimpleNavigator {
+                    override fun popBackStack() {}
+                },
+        )
+    }
+}
+
+// New AndroidX Navigation version
+@Composable
+fun OnboardingScreenNew(navController: NavController) {
+    val onboardingPages = OnBoardingPageUiModel.entries.toTypedArray()
+    val pagerState = rememberPagerState { onboardingPages.size }
+    SoptTheme {
+        SoptColumn(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding()
+                    .navigationBarsPadding(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Toolbar(
+                modifier = Modifier.padding(bottom = 10.dp),
+                title = {
+                    Text(
+                        text = "가이드",
+                        style = SoptTheme.typography.heading18B,
+                        modifier = Modifier.padding(start = 4.dp),
+                        color = SoptTheme.colors.onSurface10,
+                    )
+                },
+                onBack = { navController.popBackStack() },
+            )
+            HorizontalPager(
+                modifier = Modifier.fillMaxWidth(),
+                state = pagerState,
+            ) {
+                OnboardingPage(
+                    image = onboardingPages[pagerState.currentPage].image,
+                    title = onboardingPages[pagerState.currentPage].title,
+                    content = onboardingPages[pagerState.currentPage].content,
+                )
+            }
+            Spacer(modifier = Modifier.size(28.dp))
+            PageIndicator(
+                numberOfPages = onboardingPages.size,
+                selectedPage = pagerState.currentPage,
+                defaultRadius = 4.dp,
+                defaultColor = SoptTheme.colors.onSurface500,
+                selectedColor = SoptTheme.colors.primary,
+                selectedLength = 20.dp,
+                space = 10.dp,
+                animationDurationInMillis = 100,
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            OnboardingButton(
+                isButtonEnabled = (pagerState.currentPage + 1 == onboardingPages.size),
+                onClick = { navController.popBackStack() },
+                modifier =
+                    Modifier
+                        .padding(start = 16.dp, end = 16.dp, bottom = 40.dp),
+            )
+        }
     }
 }

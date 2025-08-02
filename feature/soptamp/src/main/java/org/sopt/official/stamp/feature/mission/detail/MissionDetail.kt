@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,16 +40,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.result.EmptyResultBackNavigator
-import com.ramcosta.composedestinations.result.ResultBackNavigator
 import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
@@ -56,7 +55,6 @@ import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.config.navigation.MissionNavGraph
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
@@ -70,14 +68,13 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
 
-@MissionNavGraph
-@Destination("detail")
 @Composable
 fun MissionDetailScreen(
     args: MissionNavArgs,
-    resultNavigator: ResultBackNavigator<Boolean>,
+    navController: NavController,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
@@ -92,20 +89,21 @@ fun MissionDetailScreen(
     val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsStateWithLifecycle(false)
     val isError by viewModel.isError.collectAsStateWithLifecycle(false)
     val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsStateWithLifecycle(false)
-    val lottieResId = remember(level) {
-        when (level.value) {
-            1 -> R.raw.pinkstamps
-            2 -> R.raw.purplestamp
-            3 -> R.raw.greenstamp
-            else -> R.raw.orangestamp
+    val lottieResId =
+        remember(level) {
+            when (level.value) {
+                1 -> R.raw.pinkstamps
+                2 -> R.raw.purplestamp
+                3 -> R.raw.greenstamp
+                else -> R.raw.orangestamp
+            }
         }
-    }
     val lottieComposition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(lottieResId)
+        spec = LottieCompositionSpec.RawRes(lottieResId),
     )
     val progress by animateLottieCompositionAsState(
         composition = lottieComposition,
-        isPlaying = isSuccess
+        isPlaying = isSuccess,
     )
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
@@ -114,21 +112,24 @@ fun MissionDetailScreen(
     LaunchedEffect(isSuccess, progress) {
         if (progress >= 0.99f && isSuccess) {
             delay(500L)
-            resultNavigator.navigateBack(true)
+            navController.setMissionDetailResult(true)
+            navController.popBackStack()
         }
     }
     LaunchedEffect(isDeleteSuccess) {
         if (isDeleteSuccess) {
-            resultNavigator.navigateBack(true)
+            navController.setMissionDetailResult(true)
+            navController.popBackStack()
         }
     }
 
     SoptColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SoptTheme.colors.onSurface950)
-            .statusBarsPadding()
-            .navigationBarsPadding()
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(SoptTheme.colors.onSurface950)
+                .statusBarsPadding()
+                .navigationBarsPadding(),
     ) {
         Toolbar(
             modifier = Modifier.padding(bottom = 10.dp),
@@ -137,28 +138,28 @@ fun MissionDetailScreen(
                     text = "미션",
                     style = SoptTheme.typography.heading18B,
                     modifier = Modifier.padding(start = 2.dp),
-                    color = SoptTheme.colors.onSurface10
+                    color = SoptTheme.colors.onSurface10,
                 )
             },
             iconOption = toolbarIconType,
-            onBack = resultNavigator::navigateBack,
-            onPressIcon = viewModel::onPressToolbarIcon
+            onBack = { navController.popBackStack() },
+            onPressIcon = viewModel::onPressToolbarIcon,
         )
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Header(
                 title = title,
                 stars = level.value,
                 toolbarIconType = toolbarIconType,
                 isMe = isMe,
-                isCompleted = isCompleted
+                isCompleted = isCompleted,
             )
             Spacer(modifier = Modifier.height(12.dp))
             ImageContent(
                 imageModel = imageModel,
                 onChangeImage = viewModel::onChangeImage,
-                isEditable = isEditable && isMe
+                isEditable = isEditable && isMe,
             )
             Spacer(modifier = Modifier.height(8.dp))
             DatePicker(
@@ -167,7 +168,7 @@ fun MissionDetailScreen(
                 onClicked = {
                     viewModel.onChangeDatePickerBottomSheetOpened(true)
                 },
-                isEditable = isEditable && isMe && !isSuccess
+                isEditable = isEditable && isMe && !isSuccess,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Memo(
@@ -175,7 +176,7 @@ fun MissionDetailScreen(
                 placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                 onValueChange = viewModel::onChangeContent,
                 borderColor = SoptTheme.colors.onSurface600,
-                isEditable = isEditable && isMe && !isSuccess
+                isEditable = isEditable && isMe && !isSuccess,
             )
         }
 
@@ -183,16 +184,17 @@ fun MissionDetailScreen(
             SoptampButton(
                 text = "미션 완료",
                 onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 9.dp, bottom = 40.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 9.dp, bottom = 40.dp),
             )
         }
     }
     if (isSuccess) {
         PostSubmissionBadge(
             composition = lottieComposition,
-            progress = progress
+            progress = progress,
         )
     }
     if (isDeleteDialogVisible) {
@@ -203,7 +205,7 @@ fun MissionDetailScreen(
             },
             onConfirm = {
                 viewModel.onDelete()
-            }
+            },
         )
     }
     if (isError) {
@@ -217,27 +219,38 @@ fun MissionDetailScreen(
                 viewModel.onChangeDate(date)
                 viewModel.onChangeDatePickerBottomSheetOpened(false)
             },
-            onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) }
+            onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) },
         )
     }
+}
+
+// Simple no-op NavController for previews
+private class PreviewNavController(context: Context) : NavController(context) {
+    override fun popBackStack(): Boolean = true
 }
 
 @DefaultPreview
 @Composable
 fun MissionDetailPreview() {
-    val args = MissionNavArgs(
-        id = 1,
-        title = "앱잼 팀원 다 함께 바다 보고 오기",
-        level = MissionLevel.of(2),
-        isCompleted = true,
-        isMe = true,
-        nickname = "Nunu",
-    )
+    val context = LocalContext.current
+    val args =
+        MissionNavArgs(
+            id = 1,
+            title = "앱잼 팀원 다 함께 바다 보고 오기",
+            level = MissionLevel.of(2),
+            isCompleted = true,
+            isMe = true,
+            nickname = "Nunu",
+        )
     SoptTheme {
         MissionDetailScreen(
-            args,
-            EmptyResultBackNavigator(),
-            MissionDetailViewModel(stampRepository = FakeStampRepository, imageUploaderRepository = FakeImageUploaderRepository)
+            args = args,
+            navController = PreviewNavController(context),
+            viewModel =
+                MissionDetailViewModel(
+                    stampRepository = FakeStampRepository,
+                    imageUploaderRepository = FakeImageUploaderRepository,
+                ),
         )
     }
 }

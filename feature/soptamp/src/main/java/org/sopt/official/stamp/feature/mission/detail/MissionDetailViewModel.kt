@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,6 +43,7 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import retrofit2.HttpException
 import timber.log.Timber
+import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -63,18 +63,21 @@ data class PostUiState(
     val isBottomSheetOpened: Boolean = false,
 ) {
     companion object {
-        fun from(data: Archive) = PostUiState(
-            id = data.missionId,
-            imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
-            content = data.contents,
-            date = data.activityDate
-        )
+        fun from(data: Archive) =
+            PostUiState(
+                id = data.missionId,
+                imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
+                content = data.contents,
+                date = data.activityDate,
+            )
     }
 }
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
-class MissionDetailViewModel @Inject constructor(
+class MissionDetailViewModel
+@Inject
+constructor(
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
 ) : ViewModel() {
@@ -85,13 +88,15 @@ class MissionDetailViewModel @Inject constructor(
     val content = uiState.map { it.content }
     val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
-    val isSubmitEnabled = combine(content, imageModel, isMe) { content, image, isMe ->
-        content.isNotEmpty() && !image.isEmpty() && isMe
-    }
+    val isSubmitEnabled =
+        combine(content, imageModel, isMe) { content, image, isMe ->
+            content.isNotEmpty() && !image.isEmpty() && isMe
+        }
     val toolbarIconType = uiState.map { it.toolbarIconType }
-    val isEditable = toolbarIconType.map {
-        it != ToolbarIconType.WRITE
-    }
+    val isEditable =
+        toolbarIconType.map {
+            it != ToolbarIconType.WRITE
+        }
     val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
@@ -107,7 +112,12 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun initMissionState(id: Int, isCompleted: Boolean, isMe: Boolean, nickname: String) {
+    fun initMissionState(
+        id: Int,
+        isCompleted: Boolean,
+        isMe: Boolean,
+        nickname: String,
+    ) {
         viewModelScope.launch {
             uiState.update {
                 it.copy(
@@ -116,7 +126,7 @@ class MissionDetailViewModel @Inject constructor(
                     error = null,
                     isLoading = true,
                     isSuccess = false,
-                    isMe = isMe
+                    isMe = isMe,
                 )
             }
             if (isCompleted) {
@@ -217,31 +227,32 @@ class MissionDetailViewModel @Inject constructor(
             it.copy(isError = false, error = null, isLoading = true)
         }
 
-        val image = when (imageUri) {
-            ImageModel.Empty -> {
-                "ERROR"
-            }
+        val image =
+            when (imageUri) {
+                ImageModel.Empty -> {
+                    "ERROR"
+                }
 
-            is ImageModel.Local -> {
-                imageUri.uri[0]
-            }
+                is ImageModel.Local -> {
+                    imageUri.uri[0]
+                }
 
-            is ImageModel.Remote -> {
-                imageUri.url[0]
+                is ImageModel.Remote -> {
+                    imageUri.url[0]
+                }
             }
-        }
 
         if (imageUri is ImageModel.Remote) {
             modifyMission(id, image, content, date)
         } else {
-            imageUploaderRepository.getImageUploadURL().onSuccess { S3URL ->
-                val preSignedURL = S3URL.preSignedURL
-                val imageURL = S3URL.imageURL
+            imageUploaderRepository.getImageUploadURL().onSuccess { s3Url ->
+                val preSignedURL = s3Url.preSignedURL
+                val imageURL = s3Url.imageURL
 
                 runCatching {
                     imageUploaderRepository.uploadImage(
                         preSignedURL = preSignedURL,
-                        imageUri = image
+                        imageUri = image,
                     )
                 }.onFailure {
                     Timber.e(it.toString())
@@ -261,14 +272,19 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun modifyMission(id: Int, image: String, content: String, date: String) {
+    private suspend fun modifyMission(
+        id: Int,
+        image: String,
+        content: String,
+        date: String,
+    ) {
         stampRepository.modifyMission(
             Stamp(
                 missionId = id,
                 image = image,
                 contents = content,
-                activityDate = date
-            )
+                activityDate = date,
+            ),
         ).onSuccess {
             uiState.update {
                 it.copy(isLoading = false, isSuccess = true)
@@ -281,14 +297,19 @@ class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun completeMission(id: Int, image: String, content: String, date: String) {
+    private suspend fun completeMission(
+        id: Int,
+        image: String,
+        content: String,
+        date: String,
+    ) {
         stampRepository.completeMission(
             Stamp(
                 missionId = id,
                 image = image,
                 contents = content,
-                activityDate = date
-            )
+                activityDate = date,
+            ),
         ).onSuccess {
             uiState.update {
                 it.copy(isLoading = false, isSuccess = true)

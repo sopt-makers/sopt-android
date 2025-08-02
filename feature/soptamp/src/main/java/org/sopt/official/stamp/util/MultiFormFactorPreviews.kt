@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,12 +30,12 @@ import androidx.compose.ui.tooling.preview.Preview
     name = "phone",
     device = "spec:shape=Normal,width=360,height=800,unit=dp,dpi=480",
     showBackground = true,
-    showSystemUi = true
+    showSystemUi = true,
 )
 @Preview(
     name = "tablet",
     device = "spec:shape=Normal,width=1280,height=800,unit=dp,dpi=480",
     showBackground = true,
-    showSystemUi = true
+    showSystemUi = true,
 )
 annotation class MultiFormFactorPreviews

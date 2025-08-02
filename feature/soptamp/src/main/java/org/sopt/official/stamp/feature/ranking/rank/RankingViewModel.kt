@@ -42,7 +42,9 @@ import org.sopt.official.stamp.feature.ranking.model.toUiModel
 import javax.inject.Inject
 
 @HiltViewModel
-class RankingViewModel @Inject constructor(
+class RankingViewModel
+@Inject
+constructor(
     private val rankingRepository: RankingRepository,
     private val getNicknameUseCase: GetNicknameUseCase,
 ) : ViewModel() {
@@ -51,14 +53,20 @@ class RankingViewModel @Inject constructor(
     var isRefreshing by mutableStateOf(false)
     val nickname = getNicknameUseCase()
 
-    fun onRefresh(isCurrent: Boolean, part: String) {
+    fun onRefresh(
+        isCurrent: Boolean,
+        part: String,
+    ) {
         viewModelScope.launch {
             isRefreshing = true
             fetchRanking(isCurrent, part)
         }
     }
 
-    fun fetchRanking(isCurrent: Boolean, part: String) = viewModelScope.launch {
+    fun fetchRanking(
+        isCurrent: Boolean,
+        part: String,
+    ) = viewModelScope.launch {
         _state.value = RankingState.Loading
 
         if (isCurrent) {
@@ -76,7 +84,7 @@ class RankingViewModel @Inject constructor(
 
     private suspend fun fetchCurrentRanking() {
         rankingRepository.getRanking(
-            RankFetchType.Term()
+            RankFetchType.Term(),
         ).mapCatching { it.toUiModel() }
             .onSuccess { ranking ->
                 if (isRefreshing) {
@@ -90,7 +98,7 @@ class RankingViewModel @Inject constructor(
 
     private suspend fun fetchPartRanking(part: String) {
         rankingRepository.getCurrentPartRanking(
-            part
+            part,
         ).mapCatching { it.toUiModel() }.onSuccess { ranking ->
             if (isRefreshing) {
                 isRefreshing = false
@@ -107,11 +115,12 @@ class RankingViewModel @Inject constructor(
         WEB("웹"),
         IOS("아요"),
         ANDROID("안드"),
-        SERVER("서버");
+        SERVER("서버"),
+        ;
 
         companion object {
             fun getPartName(part: String): String {
-                return entries.find { it.part == part }?.name ?: throw throw IllegalArgumentException("Wrong Part Name : $part")
+                return entries.find { it.part == part }?.name ?: throw IllegalArgumentException("Wrong Part Name : $part")
             }
         }
     }

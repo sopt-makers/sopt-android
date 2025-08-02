@@ -32,16 +32,19 @@ data class MissionListUiModel(
     val missionList: List<MissionUiModel>,
 )
 
-fun List<Mission>.toUiModel(title: String): MissionListUiModel = MissionListUiModel(
-    title = title,
-    missionList = this
-        .filter { it.level <= 10 }
-        .map { it.toUiModel() }
-)
+fun List<Mission>.toUiModel(title: String): MissionListUiModel =
+    MissionListUiModel(
+        title = title,
+        missionList =
+            this
+                .filter { it.level <= 10 }
+                .map { it.toUiModel() },
+    )
 
-fun Mission.toUiModel(): MissionUiModel = MissionUiModel(
-    id = this.id,
-    title = this.title,
-    level = MissionLevel.of(this.level),
-    isCompleted = this.isCompleted
-)
+fun Mission.toUiModel(): MissionUiModel =
+    MissionUiModel(
+        id = this.id,
+        title = this.title,
+        level = MissionLevel.of(this.level),
+        isCompleted = this.isCompleted,
+    )

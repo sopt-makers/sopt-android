@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 
 @Composable
-fun CompletedStamp(stamp: Stamp, modifier: Modifier = Modifier) {
+fun CompletedStamp(
+    stamp: Stamp,
+    modifier: Modifier = Modifier,
+) {
     Image(
         painter = painterResource(id = stamp.lottieImage),
         contentDescription = "Completed Stamp Image",
-        modifier = modifier
+        modifier = modifier,
     )
 }

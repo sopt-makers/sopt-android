@@ -24,7 +24,6 @@
  */
 package org.sopt.official.stamp.feature.mission.detail.component
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -44,55 +43,63 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import coil.compose.AsyncImage
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 
 @Composable
-fun ImageContent(imageModel: ImageModel, onChangeImage: (images: ImageModel) -> Unit, isEditable: Boolean) {
+fun ImageContent(
+    imageModel: ImageModel,
+    onChangeImage: (images: ImageModel) -> Unit,
+    isEditable: Boolean,
+) {
     val isImageEmpty = remember(imageModel) { imageModel.isEmpty() }
     val pagerState = rememberPagerState { imageModel.size }
-    val photoPickerLauncher = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
-        if (it.isNotEmpty()) {
-            onChangeImage(ImageModel.Local(it.map { uri -> uri.toString() }))
+    val photoPickerLauncher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
+            if (it.isNotEmpty()) {
+                onChangeImage(ImageModel.Local(it.map { uri -> uri.toString() }))
+            }
         }
-    }
 
     HorizontalPager(state = pagerState) { page ->
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f)
-                .background(
-                    color = SoptTheme.colors.onSurface900,
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .noRippleClickable {
-                    if (isEditable) {
-                        photoPickerLauncher.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    }
-                },
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f)
+                    .background(
+                        color = SoptTheme.colors.onSurface900,
+                        shape = RoundedCornerShape(10.dp),
+                    )
+                    .noRippleClickable {
+                        if (isEditable) {
+                            photoPickerLauncher.launch(
+                                PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                            )
+                        }
+                    },
+            contentAlignment = Alignment.Center,
         ) {
             if (isImageEmpty) {
                 Text(
                     text = "달성 사진을 올려주세요",
                     style = SoptTheme.typography.body16R,
-                    color = SoptTheme.colors.onSurface300
+                    color = SoptTheme.colors.onSurface300,
                 )
             } else {
                 when (imageModel) {
                     is ImageModel.Local -> {
                         AsyncImage(
-                            model = Uri.parse(imageModel.uri[page]),
+                            model = imageModel.uri[page].toUri(),
                             contentDescription = "",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(10.dp)),
-                            contentScale = ContentScale.Crop
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(10.dp)),
+                            contentScale = ContentScale.Crop,
                         )
                     }
 
@@ -100,10 +107,11 @@ fun ImageContent(imageModel: ImageModel, onChangeImage: (images: ImageModel) -> 
                         AsyncImage(
                             model = imageModel.url[page],
                             contentDescription = "",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(10.dp)),
-                            contentScale = ContentScale.Crop
+                            modifier =
+                                Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(10.dp)),
+                            contentScale = ContentScale.Crop,
                         )
                     }
 
@@ -111,6 +119,5 @@ fun ImageContent(imageModel: ImageModel, onChangeImage: (images: ImageModel) -> 
                 }
             }
         }
-
     }
 }

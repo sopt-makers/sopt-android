@@ -56,18 +56,19 @@ class PartRankingViewModel @Inject constructor(
         }
     }
 
-    fun fetchRanking() = viewModelScope.launch {
-        _state.value = PartRankingState.Loading
-        rankingRepository.getPartRanking()
-            .onSuccess { ranking ->
-                if (isRefreshing) {
-                    isRefreshing = false
+    fun fetchRanking() =
+        viewModelScope.launch {
+            _state.value = PartRankingState.Loading
+            rankingRepository.getPartRanking()
+                .onSuccess { ranking ->
+                    if (isRefreshing) {
+                        isRefreshing = false
+                    }
+                    onSuccessStateChange(ranking.toData().toImmutableList())
+                }.onFailure {
+                    _state.value = PartRankingState.Failure
                 }
-                onSuccessStateChange(ranking.toData().toImmutableList())
-            }.onFailure {
-                _state.value = PartRankingState.Failure
-            }
-    }
+        }
 
     private fun onSuccessStateChange(ranking: ImmutableList<PartRankModel>) {
         _state.value = PartRankingState.Success(ranking)

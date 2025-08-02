@@ -61,8 +61,6 @@ dependencies {
     implementation(libs.kotlin.collections.immutable)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
-    implementation(libs.compose.destination.core)
-    ksp(libs.compose.destination.ksp)
     implementation(libs.coil.compose)
     implementation(libs.process.phoenix)
     testImplementation(libs.junit)

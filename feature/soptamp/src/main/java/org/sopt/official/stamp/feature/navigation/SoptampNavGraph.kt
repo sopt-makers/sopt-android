@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.util
+package org.sopt.official.stamp.feature.navigation
 
-import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.input.pointer.pointerInput
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 
-inline fun Modifier.addFocusCleaner(focusManager: FocusManager, crossinline doOnClear: () -> Unit = {}): Modifier {
-    return this.pointerInput(Unit) {
-        detectTapGestures(
-            onTap = {
-                doOnClear()
-                focusManager.clearFocus()
-            }
-        )
+fun NavGraphBuilder.soptampNavGraph(
+    navController: NavController,
+    onBackClick: () -> Unit = { navController.popBackStack() },
+) {
+    composable<MissionList> {
+        MissionListScreenRoute(navController)
+    }
+
+    composable<MissionDetail> { backStackEntry ->
+        val args = backStackEntry.toRoute<MissionDetail>()
+        MissionDetailScreenRoute(args, navController)
+    }
+
+    composable<Ranking> { backStackEntry ->
+        val args = backStackEntry.toRoute<Ranking>()
+        RankingScreenRoute(args, navController)
+    }
+
+    composable<PartRanking> {
+        PartRankingScreenRoute(navController)
+    }
+
+    composable<UserMissionList> { backStackEntry ->
+        val args = backStackEntry.toRoute<UserMissionList>()
+        UserMissionListScreenRoute(args, navController)
+    }
+
+    composable<Onboarding> {
+        OnboardingScreenRoute(navController)
     }
 }

@@ -55,9 +55,11 @@ import org.sopt.official.stamp.designsystem.component.mission.model.MissionPatte
 internal class MissionShape(
     private val patternCount: Int,
 ) : Shape {
-
-    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline =
-        Outline.Generic(drawMissionPatternPath(size))
+    override fun createOutline(
+        size: Size,
+        layoutDirection: LayoutDirection,
+        density: Density,
+    ): Outline = Outline.Generic(drawMissionPatternPath(size))
 
     private fun drawMissionPatternPath(size: Size): Path {
         val pattern = MissionPattern(calculatePatternLength(size))
@@ -68,64 +70,80 @@ internal class MissionShape(
         return size.width * TOTAL_PATTERN_LENGTH / patternCount
     }
 
-    private fun drawMissionPatternPath(size: Size, pattern: MissionPattern): Path = Path().apply {
-        val sideSize = size.width * SIDE_SIZE_RATIO
-        reset()
-        moveTo(0f, 0f)
-        lineTo(sideSize, 0f)
-        drawTopMissionPattern(size, pattern)
-        lineTo(size.width, 0f)
-        lineTo(size.width, size.height)
-        lineTo(size.width - sideSize, size.height)
-        drawBottomMissionPattern(size, pattern)
-        lineTo(0f, size.height)
-        lineTo(0f, 0f)
-        close()
-    }
+    private fun drawMissionPatternPath(
+        size: Size,
+        pattern: MissionPattern,
+    ): Path =
+        Path().apply {
+            val sideSize = size.width * SIDE_SIZE_RATIO
+            reset()
+            moveTo(0f, 0f)
+            lineTo(sideSize, 0f)
+            drawTopMissionPattern(size, pattern)
+            lineTo(size.width, 0f)
+            lineTo(size.width, size.height)
+            lineTo(size.width - sideSize, size.height)
+            drawBottomMissionPattern(size, pattern)
+            lineTo(0f, size.height)
+            lineTo(0f, 0f)
+            close()
+        }
 
-    private fun Path.drawTopMissionPattern(size: Size, pattern: MissionPattern) {
+    private fun Path.drawTopMissionPattern(
+        size: Size,
+        pattern: MissionPattern,
+    ) {
         val sideSize = size.width * SIDE_SIZE_RATIO
         val rectHeight = pattern.diameter / 2
         for (i in 1..patternCount) {
             lineTo(sideSize + pattern.length * (i - 1) + pattern.gap, 0f)
             arcTo(
-                rect = Rect(
-                    topLeft = Offset(
-                        x = sideSize + pattern.length * (i - 1) + pattern.gap,
-                        y = -rectHeight
+                rect =
+                    Rect(
+                        topLeft =
+                            Offset(
+                                x = sideSize + pattern.length * (i - 1) + pattern.gap,
+                                y = -rectHeight,
+                            ),
+                        bottomRight =
+                            Offset(
+                                x = sideSize + pattern.length * (i - 1) + pattern.gap + pattern.diameter,
+                                y = rectHeight,
+                            ),
                     ),
-                    bottomRight = Offset(
-                        x = sideSize + pattern.length * (i - 1) + pattern.gap + pattern.diameter,
-                        y = rectHeight
-                    )
-                ),
                 startAngleDegrees = 180f,
                 sweepAngleDegrees = -180f,
-                forceMoveTo = false
+                forceMoveTo = false,
             )
             lineTo(sideSize + pattern.length * i, 0f)
         }
     }
 
-    private fun Path.drawBottomMissionPattern(size: Size, pattern: MissionPattern) {
+    private fun Path.drawBottomMissionPattern(
+        size: Size,
+        pattern: MissionPattern,
+    ) {
         val sideSize = size.width * SIDE_SIZE_RATIO
         val rectHeight = pattern.diameter / 2
         for (i in 1..patternCount) {
             lineTo(size.width - (sideSize + pattern.length * (i - 1) + pattern.gap), size.height)
             arcTo(
-                rect = Rect(
-                    topLeft = Offset(
-                        x = size.width - (sideSize + pattern.gap + pattern.length * (i - 1) + pattern.diameter),
-                        y = size.height - rectHeight
+                rect =
+                    Rect(
+                        topLeft =
+                            Offset(
+                                x = size.width - (sideSize + pattern.gap + pattern.length * (i - 1) + pattern.diameter),
+                                y = size.height - rectHeight,
+                            ),
+                        bottomRight =
+                            Offset(
+                                x = size.width - (sideSize + pattern.gap + pattern.length * (i - 1)),
+                                y = size.height + rectHeight,
+                            ),
                     ),
-                    bottomRight = Offset(
-                        x = size.width - (sideSize + pattern.gap + pattern.length * (i - 1)),
-                        y = size.height + rectHeight
-                    )
-                ),
                 startAngleDegrees = 0f,
                 sweepAngleDegrees = -180f,
-                forceMoveTo = false
+                forceMoveTo = false,
             )
             lineTo(size.width - (sideSize + pattern.length * i), size.height)
         }
@@ -145,29 +163,32 @@ fun PreviewMissionShape() {
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             val shape = MissionShape.DEFAULT_WAVE
             Card(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .fillMaxHeight(0.6f),
-                shape = shape
+                modifier =
+                    Modifier
+                        .fillMaxWidth(0.8f)
+                        .fillMaxHeight(0.6f),
+                shape = shape,
             ) {
                 Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(shape = shape, color = Color.Green),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .background(shape = shape, color = Color.Green),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = "Ticket Price : 20$",
-                        modifier = Modifier
-                            .padding(30.dp),
+                        modifier =
+                            Modifier
+                                .padding(30.dp),
                         color = Color.Black,
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
                     )
                 }
             }

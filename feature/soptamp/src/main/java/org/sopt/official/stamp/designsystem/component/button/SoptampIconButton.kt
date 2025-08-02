@@ -63,12 +63,12 @@ fun SoptampIconButton(
     onClick: () -> Unit = {},
 ) {
     Row(
-        modifier = modifier.noRippleClickable(onClick = onClick)
+        modifier = modifier.noRippleClickable(onClick = onClick),
     ) {
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
-            tint = tint
+            tint = tint,
         )
     }
 }
@@ -78,7 +78,7 @@ fun SoptampIconButton(
 fun PreviewTopBarIconButton() {
     SoptTheme {
         SoptampIconButton(
-            imageVector = ImageVector.vectorResource(id = R.drawable.up_expand)
+            imageVector = ImageVector.vectorResource(id = R.drawable.up_expand),
         )
     }
 }

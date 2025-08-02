@@ -116,65 +116,77 @@ class SoptTypography internal constructor(
 @Composable
 fun SoptTypography(): SoptTypography {
     return SoptTypography(
-        h1 = TextStyle(
-            fontFamily = PretendardBold,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold
-        ),
-        h2 = TextStyle(
-            fontFamily = PretendardBold,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold
-        ),
-        h3 = TextStyle(
-            fontFamily = PretendardBold,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        ),
-        h4 = TextStyle(
-            fontFamily = MontserratBold,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold
-        ),
-        sub1 = TextStyle(
-            fontFamily = PretendardMedium,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Medium
-        ),
-        sub2 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Normal
-        ),
-        sub3 = TextStyle(
-            fontFamily = PretendardMedium,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Medium
-        ),
-        sub4 = TextStyle(
-            fontFamily = MontserratRegular,
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Normal
-        ),
-        caption1 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal
-        ),
-        caption2 = TextStyle(
-            fontFamily = PretendardMedium,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium
-        ),
-        caption3 = TextStyle(
-            fontFamily = PretendardRegular,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Normal
-        ),
-        caption4 = TextStyle(
-            fontFamily = MontserratRegular,
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Normal
-        )
+        h1 =
+            TextStyle(
+                fontFamily = PretendardBold,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+        h2 =
+            TextStyle(
+                fontFamily = PretendardBold,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+        h3 =
+            TextStyle(
+                fontFamily = PretendardBold,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+        h4 =
+            TextStyle(
+                fontFamily = MontserratBold,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+        sub1 =
+            TextStyle(
+                fontFamily = PretendardMedium,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        sub2 =
+            TextStyle(
+                fontFamily = PretendardRegular,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+        sub3 =
+            TextStyle(
+                fontFamily = PretendardMedium,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        sub4 =
+            TextStyle(
+                fontFamily = MontserratRegular,
+                fontSize = 30.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+        caption1 =
+            TextStyle(
+                fontFamily = PretendardRegular,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+        caption2 =
+            TextStyle(
+                fontFamily = PretendardMedium,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Medium,
+            ),
+        caption3 =
+            TextStyle(
+                fontFamily = PretendardRegular,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+            ),
+        caption4 =
+            TextStyle(
+                fontFamily = MontserratRegular,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Normal,
+            ),
     )
 }

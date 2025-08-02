@@ -55,18 +55,19 @@ fun RankListItem(
     onClickPart: (PartRankModel) -> Unit = {},
     onClickUser: (RankerUiModel) -> Unit = {},
 ) {
-    val itemPadding = PaddingValues(
-        top = 12.dp,
-        bottom = 11.dp,
-        start = 16.dp,
-        end = 16.dp
-    )
-    val backgroundModifier = Modifier
-        .background(
-            color = SoptTheme.colors.onSurface900,
-            shape = RoundedCornerShape(8.dp)
+    val itemPadding =
+        PaddingValues(
+            top = 12.dp,
+            bottom = 11.dp,
+            start = 16.dp,
+            end = 16.dp,
         )
-
+    val backgroundModifier =
+        Modifier
+            .background(
+                color = SoptTheme.colors.onSurface900,
+                shape = RoundedCornerShape(8.dp),
+            )
 
     val isPartRankItem = partItem != null
 
@@ -95,54 +96,57 @@ fun RankListItem(
     }
 
     Row(
-        modifier = backgroundModifier
-            .fillMaxWidth()
-            .noRippleClickable {
-                if (partItem != null) {
-                    onClickPart(partItem)
-                } else if (rankerItem != null) {
-                    onClickUser(rankerItem)
+        modifier =
+            backgroundModifier
+                .fillMaxWidth()
+                .noRippleClickable {
+                    if (partItem != null) {
+                        onClickPart(partItem)
+                    } else if (rankerItem != null) {
+                        onClickUser(rankerItem)
+                    }
                 }
-            }
-            .padding(itemPadding),
+                .padding(itemPadding),
         horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier.weight(0.25f)
+            modifier = Modifier.weight(0.25f),
         ) {
             RankNumber(
                 modifier = Modifier.align(Alignment.Center),
                 rank = ranking,
                 isPartRankNumber = isPartRankItem,
-                isMyRankNumber = isMyRanking
+                isMyRankNumber = isMyRanking,
             )
         }
         Spacer(modifier = Modifier.weight(0.05f))
         Box(
-            modifier = Modifier.weight(0.53f)
+            modifier = Modifier.weight(0.53f),
         ) {
             RankerInformation(
                 user = name,
-                description = description
+                description = description,
             )
         }
         Spacer(modifier = Modifier.weight(0.04f))
         Box(
-            modifier = Modifier.weight(0.4f)
+            modifier = Modifier.weight(0.4f),
         ) {
             RankScore(
                 modifier = Modifier.align(Alignment.CenterEnd),
-                rank = newRank,
                 score = scorePoint,
-                isMyRankScore = isMyRanking
             )
         }
     }
 }
 
 @Composable
-fun RankerInformation(modifier: Modifier = Modifier, user: String, description: String? = null) {
+fun RankerInformation(
+    modifier: Modifier = Modifier,
+    user: String,
+    description: String? = null,
+) {
     Column(modifier) {
         Text(
             modifier = Modifier.fillMaxWidth(),
@@ -150,7 +154,7 @@ fun RankerInformation(modifier: Modifier = Modifier, user: String, description: 
             style = SoptTheme.typography.heading16B,
             color = SoptTheme.colors.onSurface10,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
         if (description != null) {
             Text(
@@ -159,7 +163,7 @@ fun RankerInformation(modifier: Modifier = Modifier, user: String, description: 
                 style = SoptTheme.typography.body14R,
                 color = SoptTheme.colors.onSurface300,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
         }
     }
@@ -171,33 +175,36 @@ fun PreviewRankListItem() {
     SoptTheme {
         Column(Modifier.padding(horizontal = 16.dp)) {
             RankListItem(
-                rankerItem = RankerUiModel(
-                    rank = 4,
-                    nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    score = 300
-                ),
-                isMyRanking = true
+                rankerItem =
+                    RankerUiModel(
+                        rank = 4,
+                        nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        score = 300,
+                    ),
+                isMyRanking = true,
             )
             Spacer(modifier = Modifier.size(10.dp))
             RankListItem(
-                rankerItem = RankerUiModel(
-                    rank = 10,
-                    nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    score = 340
-                ),
-                isMyRanking = false
+                rankerItem =
+                    RankerUiModel(
+                        rank = 10,
+                        nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        score = 340,
+                    ),
+                isMyRanking = false,
             )
             Spacer(modifier = Modifier.size(10.dp))
             RankListItem(
-                rankerItem = RankerUiModel(
-                    rank = 140,
-                    nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
-                    score = 945
-                ),
-                isMyRanking = false
+                rankerItem =
+                    RankerUiModel(
+                        rank = 140,
+                        nickname = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        description = "일이삼사오육칠팔구십일이삼사오육칠팔구십",
+                        score = 945,
+                    ),
+                isMyRanking = false,
             )
         }
     }

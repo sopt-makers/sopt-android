@@ -51,17 +51,18 @@ fun ErrorDialog(
     title: String,
     content: String? = null,
     retryButtonText: String = "확인",
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
 ) {
     var openDialog by remember {
         mutableStateOf(true)
     }
     if (openDialog) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.55f))
-                .noRippleClickable { }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.55f))
+                    .noRippleClickable { },
         ) {
             AlertDialog(
                 backgroundColor = SoptTheme.colors.onSurface700,
@@ -73,7 +74,7 @@ fun ErrorDialog(
                         style = SoptTheme.typography.heading16B,
                         color = SoptTheme.colors.onSurface10,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
+                        textAlign = TextAlign.Center,
                     )
                 },
                 text = {
@@ -83,36 +84,39 @@ fun ErrorDialog(
                             style = SoptTheme.typography.body14M,
                             color = SoptTheme.colors.onSurface30,
                             modifier = Modifier.fillMaxWidth(),
-                            textAlign = TextAlign.Center
+                            textAlign = TextAlign.Center,
                         )
                     }
                 },
                 buttons = {
                     Box(
-                        modifier = Modifier
-                            .padding(
-                                start = 7.dp, end = 7.dp,
-                                bottom = 10.dp, top = 14.dp
-                            )
-                            .fillMaxWidth()
-                            .background(
-                                color = SoptTheme.colors.onSurface10,
-                                shape = RoundedCornerShape(10.dp)
-                            )
-                            .noRippleClickable {
-                                onRetry()
-                                openDialog = false
-                            }
-                            .padding(vertical = 15.dp),
-                        contentAlignment = Alignment.Center
+                        modifier =
+                            Modifier
+                                .padding(
+                                    start = 7.dp,
+                                    end = 7.dp,
+                                    bottom = 10.dp,
+                                    top = 14.dp,
+                                )
+                                .fillMaxWidth()
+                                .background(
+                                    color = SoptTheme.colors.onSurface10,
+                                    shape = RoundedCornerShape(10.dp),
+                                )
+                                .noRippleClickable {
+                                    onRetry()
+                                    openDialog = false
+                                }
+                                .padding(vertical = 15.dp),
+                        contentAlignment = Alignment.Center,
                     ) {
                         Text(
                             text = retryButtonText,
                             style = SoptTheme.typography.title14SB,
-                            color = SoptTheme.colors.onSurface950
+                            color = SoptTheme.colors.onSurface950,
                         )
                     }
-                }
+                },
             )
         }
     }
@@ -124,7 +128,7 @@ fun PreviewErrorDialog() {
     SoptTheme {
         ErrorDialog(
             title = "네트워크가 원할하지 않습니다.",
-            content = "인터넷 연결을 확인하고 다시 시도해 주세요."
+            content = "인터넷 연결을 확인하고 다시 시도해 주세요.",
         )
     }
 }

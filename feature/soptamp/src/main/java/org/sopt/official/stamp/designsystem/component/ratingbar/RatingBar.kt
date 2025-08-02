@@ -59,24 +59,27 @@ fun RatingBar(
 
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(gapSize)
+        horizontalArrangement = Arrangement.spacedBy(gapSize),
     ) {
         repeat(maxStars) {
             val ordinalIndex = it + 1
             RatingIcon(
                 icon = icon,
-                tint = if (ordinalIndex > stars) unselectedColor else selectedColor
+                tint = if (ordinalIndex > stars) unselectedColor else selectedColor,
             )
         }
     }
 }
 
 @Composable
-private fun RatingIcon(@DrawableRes icon: Int, tint: Color) {
+private fun RatingIcon(
+    @DrawableRes icon: Int,
+    tint: Color,
+) {
     Icon(
         painter = painterResource(id = icon),
         contentDescription = "Rating Icon",
-        tint = tint
+        tint = tint,
     )
 }
 
@@ -85,13 +88,13 @@ private fun RatingIcon(@DrawableRes icon: Int, tint: Color) {
 private fun RatingBarPreview() {
     SoptTheme {
         Box(
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             RatingBar(
                 icon = R.drawable.ic_star,
                 maxStars = 3,
                 stars = 2,
-                gapSize = 10.dp
+                gapSize = 10.dp,
             )
         }
     }

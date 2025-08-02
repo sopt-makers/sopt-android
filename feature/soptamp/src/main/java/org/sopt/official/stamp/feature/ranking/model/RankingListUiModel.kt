@@ -28,7 +28,6 @@ class RankingListUiModel private constructor(
     val topRankingList: RankersUiModel,
     val otherRankingList: List<RankerUiModel>,
 ) {
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -55,7 +54,7 @@ class RankingListUiModel private constructor(
         operator fun invoke(rankingList: List<RankerUiModel>): RankingListUiModel {
             return RankingListUiModel(
                 rankingList.getTopRanking(),
-                rankingList.getOtherRanking()
+                rankingList.getOtherRanking(),
             )
         }
 
@@ -69,7 +68,7 @@ class RankingListUiModel private constructor(
             return RankersUiModel(
                 topRankPartition[0],
                 topRankPartition[1],
-                topRankPartition[2]
+                topRankPartition[2],
             )
         }
 

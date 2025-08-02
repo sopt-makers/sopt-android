@@ -27,7 +27,6 @@ package org.sopt.official.stamp.feature.mission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -41,6 +40,7 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class MissionsViewModel @Inject constructor(
@@ -49,7 +49,6 @@ class MissionsViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val stampRepository: StampRepository,
 ) : ViewModel() {
-
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
     private val _nickname = MutableStateFlow("")
@@ -62,7 +61,6 @@ class MissionsViewModel @Inject constructor(
         initUser()
         getReportUrl()
     }
-
 
     private fun initUser() {
         viewModelScope.launch {
@@ -84,15 +82,21 @@ class MissionsViewModel @Inject constructor(
         }
     }
 
-    fun fetchMissions(filter: String? = null, nickname: String = "") = viewModelScope.launch {
+    fun fetchMissions(
+        filter: String? = null,
+        nickname: String = "",
+    ) = viewModelScope.launch {
         _state.value = MissionsState.Loading
         fetchMissions(
             filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION,
-            nickname = nickname
+            nickname = nickname,
         )
     }
 
-    private suspend fun fetchMissions(filter: MissionsFilter, nickname: String) {
+    private suspend fun fetchMissions(
+        filter: MissionsFilter,
+        nickname: String,
+    ) {
         if (nickname.isEmpty()) {
             val missions = when (filter) {
                 MissionsFilter.ALL_MISSION -> missionsRepository.getAllMissions()
@@ -117,8 +121,9 @@ class MissionsViewModel @Inject constructor(
         viewModelScope.launch {
             rankingRepository.getRankDetail(nickname)
                 .onSuccess {
-                    val missions = it.userMissions
-                        .map { mission -> mission.toUiModel() }
+                    val missions =
+                        it.userMissions
+                            .map { mission -> mission.toUiModel() }
                     _state.value = MissionsState.Success(MissionListUiModel(filter.title, missions))
                 }.onFailure { throwable ->
                     when (throwable) {

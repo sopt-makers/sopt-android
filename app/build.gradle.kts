@@ -175,7 +175,6 @@ dependencies {
     implementation(libs.bundles.firebase)
     implementation(libs.process.phoenix)
 
-    implementation(libs.compose.destination.core)
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.appcompat)
     implementation(libs.material)

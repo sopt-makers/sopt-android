@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024 SOPT - Shout Our Passion Together
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,14 +33,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RankingBar(modifier: Modifier = Modifier, rank: Int, content: @Composable () -> Unit = {}) {
+fun RankingBar(
+    modifier: Modifier = Modifier,
+    rank: Int,
+    content: @Composable () -> Unit = {},
+) {
     Box(
-        modifier = modifier
-            .background(
-                color = getRankBackgroundColor(rank),
-                shape = RoundedCornerShape(8.dp)
-            ),
-        contentAlignment = Alignment.TopCenter
+        modifier =
+            modifier
+                .background(
+                    color = getRankBackgroundColor(rank),
+                    shape = RoundedCornerShape(8.dp),
+                ),
+        contentAlignment = Alignment.TopCenter,
     ) {
         content()
     }

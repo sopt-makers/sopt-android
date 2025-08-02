@@ -24,30 +24,13 @@
  */
 package org.sopt.official.stamp.feature.ranking.model
 
-import com.ramcosta.composedestinations.navargs.DestinationsNavTypeSerializer
-import com.ramcosta.composedestinations.navargs.NavTypeSerializer
-
 data class RankerNavArg(
     val nickname: String,
     val description: String,
 )
 
-fun RankerUiModel.toArgs() = RankerNavArg(
-    nickname = this.nickname,
-    description = this.getDescription()
-)
-
-@NavTypeSerializer
-class RankerNavArgsSerializer : DestinationsNavTypeSerializer<RankerNavArg> {
-    override fun fromRouteString(routeStr: String): RankerNavArg {
-        val (nickname, description) = routeStr.split("::")
-        return RankerNavArg(
-            nickname = nickname,
-            description = description
-        )
-    }
-
-    override fun toRouteString(value: RankerNavArg): String {
-        return "${value.nickname}::${value.description}"
-    }
-}
+fun RankerUiModel.toArgs() =
+    RankerNavArg(
+        nickname = this.nickname,
+        description = this.getDescription(),
+    )

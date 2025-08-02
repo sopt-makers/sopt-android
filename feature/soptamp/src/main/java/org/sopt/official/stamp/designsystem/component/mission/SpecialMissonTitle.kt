@@ -47,36 +47,36 @@ import org.sopt.official.stamp.designsystem.style.Orange300
 @Composable
 fun SpecialMissionTitle() {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(id = R.drawable.level_star),
             contentDescription = "Star Of Mission Level",
-            tint = Orange300
+            tint = Orange300,
         )
         Spacer(modifier = Modifier.width(2.dp))
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_text_close),
             contentDescription = null,
-            tint = White
+            tint = White,
         )
         Spacer(modifier = Modifier.width(2.dp))
         Text(
             text = "10",
             style = SoptTheme.typography.body14M,
-            color = White
+            color = White,
         )
         Spacer(modifier = Modifier.width(7.dp))
         VerticalDivider(
             thickness = 1.dp,
             modifier = Modifier.height(7.dp),
-            color = Gray600
+            color = Gray600,
         )
         Spacer(modifier = Modifier.width(7.dp))
         Text(
             text = "특별미션",
             style = SoptTheme.typography.body14M,
-            color = Orange300
+            color = Orange300,
         )
     }
 }

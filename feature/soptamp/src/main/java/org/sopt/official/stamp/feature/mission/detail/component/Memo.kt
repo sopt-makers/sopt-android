@@ -47,56 +47,59 @@ fun Memo(
     placeHolder: String,
     onValueChange: (String) -> Unit,
     borderColor: Color,
-    isEditable: Boolean
+    isEditable: Boolean,
 ) {
     val backgroundColor = SoptTheme.colors.onSurface900
     val isEmpty = remember(value) { value.isEmpty() }
 
-    val modifier = Modifier
-        .fillMaxWidth()
-        .defaultMinSize(minHeight = 100.dp)
-        .clip(RoundedCornerShape(12.dp))
+    val modifier =
+        Modifier
+            .fillMaxWidth()
+            .defaultMinSize(minHeight = 100.dp)
+            .clip(RoundedCornerShape(12.dp))
 
-    val modifierWithBorder = remember(isEmpty, isEditable) {
-        if (isEmpty || !isEditable) {
-            modifier
-        } else {
-            modifier
-                .border(
-                    width = 1.dp,
-                    color = borderColor,
-                    shape = RoundedCornerShape(12.dp)
-                )
+    val modifierWithBorder =
+        remember(isEmpty, isEditable) {
+            if (isEmpty || !isEditable) {
+                modifier
+            } else {
+                modifier
+                    .border(
+                        width = 1.dp,
+                        color = borderColor,
+                        shape = RoundedCornerShape(12.dp),
+                    )
+            }
         }
-    }
 
     TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifierWithBorder,
         shape = RoundedCornerShape(12.dp),
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = backgroundColor,
-            unfocusedContainerColor = backgroundColor,
-            disabledContainerColor = backgroundColor,
-            errorContainerColor = backgroundColor,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-            disabledIndicatorColor = Color.Transparent,
-            focusedTextColor = SoptTheme.colors.onSurface50,
-            disabledTextColor = SoptTheme.colors.onSurface50,
-            unfocusedTextColor = SoptTheme.colors.onSurface50,
-            focusedPlaceholderColor = SoptTheme.colors.onSurface300
-        ),
+        colors =
+            TextFieldDefaults.colors(
+                focusedContainerColor = backgroundColor,
+                unfocusedContainerColor = backgroundColor,
+                disabledContainerColor = backgroundColor,
+                errorContainerColor = backgroundColor,
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                disabledIndicatorColor = Color.Transparent,
+                focusedTextColor = SoptTheme.colors.onSurface50,
+                disabledTextColor = SoptTheme.colors.onSurface50,
+                unfocusedTextColor = SoptTheme.colors.onSurface50,
+                focusedPlaceholderColor = SoptTheme.colors.onSurface300,
+            ),
         textStyle = SoptTheme.typography.body14R,
         placeholder = {
             Text(
                 text = placeHolder,
                 style = SoptTheme.typography.body14R,
-                color = SoptTheme.colors.onSurface300
+                color = SoptTheme.colors.onSurface300,
             )
         },
-        enabled = isEditable
+        enabled = isEditable,
     )
 }
 
@@ -109,7 +112,7 @@ private fun MemoPreview() {
             onValueChange = {},
             borderColor = getRankBackgroundColor(2),
             placeHolder = "",
-            isEditable = false
+            isEditable = false,
         )
     }
 }
