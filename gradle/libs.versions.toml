@@ -1,5 +1,5 @@
 [versions]
-compileSdk = "35"
+compileSdk = "36"
 minSdk = "30"
 targetSdk = "35"
 appVersion = "3.0.10"
