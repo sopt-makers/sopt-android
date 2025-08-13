@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Orange300
@@ -88,7 +89,7 @@ private fun ProfileItem(
         modifier = modifier
             .width(IntrinsicSize.Min)
     ) {
-        if (profileImage.isNotBlank()) {
+        if (profileImage.isNotBlank() && !part.isNullOrBlank()) {
             UrlImage(
                 url = profileImage,
                 contentScale = ContentScale.Crop,
@@ -114,7 +115,8 @@ private fun ProfileItem(
             style = SoptTheme.typography.body10M,
             color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
-            maxLines = 1,
+            textAlign = TextAlign.Center,
+            maxLines = if (part.isNullOrBlank()) 2 else 1,
             modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
         )
         if (!part.isNullOrBlank()) {
