@@ -84,6 +84,7 @@ internal fun HomePopularNewsSection(
                     category = category,
                     title = title,
                     description = content,
+                    isAnonymous = userId == null,
                     onClick = {
                         navigateToWebLink(webLink)
                     },

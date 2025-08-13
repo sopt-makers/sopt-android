@@ -96,6 +96,7 @@ internal fun HomeLatestNewsSection(
                         category = category,
                         title = title,
                         description = content,
+                        isAnonymous = userId == null,
                         onClick = { navigateToWebLink(webLink) },
                         onProfileClick = { if (userId != null) navigateToMemberProfile(userId) }
                     )
