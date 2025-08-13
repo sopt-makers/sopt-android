@@ -149,7 +149,7 @@ class SoptWebViewClient(
         super.onPageStarted(view, url, favicon)
 
         val script = """
-            window.localStorage.setItem('serviceAccessToken', '${dataStore.playgroundToken}');
+            window.localStorage.setItem('serviceAccessToken', '${dataStore.accessToken}');
         """.trimIndent()
         view?.evaluateJavascript(script) {}
     }
