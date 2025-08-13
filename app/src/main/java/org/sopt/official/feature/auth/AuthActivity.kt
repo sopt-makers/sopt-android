@@ -36,7 +36,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
@@ -86,7 +86,7 @@ class AuthActivity : AppCompatActivity() {
                 when (val state = updateState) {
                     is UpdateState.Default -> {}
                     is UpdateState.PatchUpdateAvailable -> {
-                        var dialogVisibility by remember { mutableStateOf(true) }
+                        var dialogVisibility by rememberSaveable { mutableStateOf(true) }
 
                         if (dialogVisibility) {
                             UpdateDialog(
