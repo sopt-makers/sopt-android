@@ -41,6 +41,7 @@ internal fun HomePlaygroundPost(
     label: String,
     category: String,
     title: String,
+    isAnonymous: Boolean,
     description: String,
     onClick: () -> Unit,
     onProfileClick: () -> Unit,
@@ -62,6 +63,7 @@ internal fun HomePlaygroundPost(
             profileImage = profileImage,
             name = userName,
             part = userPart,
+            isAnonymous = isAnonymous,
             modifier = Modifier
                 .clickable(onClick = onProfileClick)
                 .padding(top = 18.dp, bottom = 22.dp)
@@ -81,6 +83,7 @@ private fun ProfileItem(
     profileImage: String,
     name: String,
     part: String?,
+    isAnonymous: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -89,20 +92,20 @@ private fun ProfileItem(
         modifier = modifier
             .width(IntrinsicSize.Min)
     ) {
-        if (profileImage.isNotBlank() && !part.isNullOrBlank()) {
-            UrlImage(
-                url = profileImage,
-                contentScale = ContentScale.Crop,
+        if (isAnonymous || profileImage.isBlank()) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_empty_profile),
+                contentDescription = null,
+                tint = Color.Unspecified,
                 modifier = Modifier
                     .size(54.dp)
                     .clip(shape = CircleShape)
                     .background(SoptTheme.colors.onSurface800)
             )
         } else {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_empty_profile),
-                contentDescription = null,
-                tint = Color.Unspecified,
+            UrlImage(
+                url = profileImage,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(54.dp)
                     .clip(shape = CircleShape)
@@ -116,7 +119,7 @@ private fun ProfileItem(
             color = SoptTheme.colors.primary,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
-            maxLines = if (part.isNullOrBlank()) 2 else 1,
+            maxLines = if (isAnonymous) 2 else 1,
             modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
         )
         if (!part.isNullOrBlank()) {
