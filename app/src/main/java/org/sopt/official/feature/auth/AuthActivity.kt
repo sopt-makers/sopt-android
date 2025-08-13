@@ -35,6 +35,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -83,12 +86,22 @@ class AuthActivity : AppCompatActivity() {
                 when (val state = updateState) {
                     is UpdateState.Default -> {}
                     is UpdateState.PatchUpdateAvailable -> {
-                        UpdateDialog(
-                            description = state.message,
-                            onDismiss = { navigateToMainActivity() },
-                            onPositiveClick = this@AuthActivity::launchPlayStore,
-                            onNegativeClick = { navigateToMainActivity() }
-                        )
+                        var dialogVisibility by remember { mutableStateOf(true) }
+
+                        if (dialogVisibility) {
+                            UpdateDialog(
+                                description = state.message,
+                                onDismiss = {
+                                    dialogVisibility = false
+                                    navigateToMainActivity()
+                                },
+                                onPositiveClick = this@AuthActivity::launchPlayStore,
+                                onNegativeClick = {
+                                    dialogVisibility = false
+                                    navigateToMainActivity()
+                                }
+                            )
+                        }
                     }
 
                     is UpdateState.UpdateRequired -> {
