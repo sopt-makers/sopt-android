@@ -33,7 +33,8 @@ data class CertificationState(
     val errorMessage: String = "",
     val buttonText: String = CertificationButtonText.GET_CODE.message,
     val isCodeEnable: Boolean = false,
-    val isButtonEnable: Boolean = false
+    val isCertificationButtonEnable: Boolean = true,
+    val isFinishButtonEnable: Boolean = false
 ) {
     val currentTime: String
         get() = String.format(

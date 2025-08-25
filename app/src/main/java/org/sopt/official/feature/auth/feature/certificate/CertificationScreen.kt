@@ -150,7 +150,8 @@ internal fun CertificationRoute(
         errorMessage = state.errorMessage,
         certificationButtonText = state.buttonText,
         isCodeEnable = state.isCodeEnable,
-        isButtonEnable = state.isButtonEnable
+        isCertificationButtonEnable = state.isCertificationButtonEnable,
+        isFinishButtonEnable = state.isFinishButtonEnable
     )
 }
 
@@ -170,7 +171,8 @@ private fun CertificationScreen(
     errorMessage: String,
     certificationButtonText: String,
     isCodeEnable: Boolean,
-    isButtonEnable: Boolean
+    isCertificationButtonEnable: Boolean,
+    isFinishButtonEnable: Boolean
 ) {
     Column {
         Image(
@@ -196,7 +198,8 @@ private fun CertificationScreen(
                 phoneNumber = phoneNumber,
                 visualTransformation = visualTransformation,
                 buttonText = certificationButtonText,
-                errorMessage = errorMessage
+                errorMessage = errorMessage,
+                isCertificationButtonEnable = isCertificationButtonEnable
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -254,7 +257,7 @@ private fun CertificationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 padding = PaddingValues(vertical = 16.dp),
                 onClick = onCertificateClick,
-                isEnabled = isButtonEnable,
+                isEnabled = isFinishButtonEnable,
                 containerColor = Gray10,
                 contentColor = Gray950,
                 disabledContentColor = Gray500,
@@ -319,6 +322,7 @@ private fun PhoneCertification(
     phoneNumber: String,
     buttonText: String,
     errorMessage: String,
+    isCertificationButtonEnable: Boolean,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
@@ -350,6 +354,7 @@ private fun PhoneCertification(
                 onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,
+                isEnabled = isCertificationButtonEnable
             ) {
                 Text(
                     text = buttonText,
@@ -379,7 +384,8 @@ private fun AuthCertificationPreview() {
             errorMessage = "",
             certificationButtonText = CertificationButtonText.GET_CODE.message,
             isCodeEnable = true,
-            isButtonEnable = true
+            isCertificationButtonEnable = true,
+            isFinishButtonEnable = true
         )
     }
 }

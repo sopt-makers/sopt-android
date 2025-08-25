@@ -59,7 +59,7 @@ internal enum class ErrorCase(val message: String) {
     // 코드 인증 에러
     CODE_ERROR("인증번호가 일치하지 않습니다."),
     TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요."),
-    CODE_UNKNOWN_ERROR("알 수 없는 오류예요."), ;
+    CODE_UNKNOWN_ERROR("알 수 없는 오류예요.");
 
     companion object {
         fun fromMessage(message: String): ErrorCase? = entries.firstOrNull { it.message == message }
@@ -115,12 +115,13 @@ class CertificationViewModel @Inject constructor(
                 ),
             ).onSuccess {
                 startTimer()
+                updateCertificationButtonState(false)
                 updateButtonText()
                 updateCodeTextField(true)
-                updateButtonState(true)
+                updateFinishButtonState(true)
             }.onFailure { throwable ->
                 updateCodeTextField(false)
-                updateButtonState(false)
+                updateFinishButtonState(false)
 
                 when (throwable) {
                     is HttpException -> {
@@ -205,7 +206,7 @@ class CertificationViewModel @Inject constructor(
         }
         timerJob = viewModelScope.launch {
             while (isActive) {
-                delay(1000L)
+                delay(1_000L)
 
                 if (_state.value.isTimerEnd) {
                     _state.update { currentState ->
@@ -216,6 +217,8 @@ class CertificationViewModel @Inject constructor(
 
                     timerJob?.cancelAndJoin()
                     timerJob = null
+
+                    updateCertificationButtonState(true)
                 } else {
                     _state.update { currentState ->
                         currentState.copy(
@@ -251,10 +254,18 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun updateButtonState(isEnable: Boolean) {
+    private fun updateCertificationButtonState(isEnable: Boolean) {
         _state.update { currentState ->
             currentState.copy(
-                isButtonEnable = isEnable
+                isCertificationButtonEnable = isEnable
+            )
+        }
+    }
+
+    private fun updateFinishButtonState(isEnable: Boolean) {
+        _state.update { currentState ->
+            currentState.copy(
+                isFinishButtonEnable = isEnable
             )
         }
     }
