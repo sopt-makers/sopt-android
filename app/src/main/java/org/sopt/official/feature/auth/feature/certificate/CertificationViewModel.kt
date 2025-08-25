@@ -161,6 +161,7 @@ class CertificationViewModel @Inject constructor(
                 }
             }.onFailure { throwable ->
                 updateCodeTextField(false)
+                updateCodeTextField(true)
 
                 when (throwable) {
                     is HttpException -> {
