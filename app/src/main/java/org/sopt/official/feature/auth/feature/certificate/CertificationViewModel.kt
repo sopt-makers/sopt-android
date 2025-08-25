@@ -57,15 +57,16 @@ internal enum class ErrorCase(val message: String) {
     PHONE_UNKNOWN_ERROR("알 수 없는 오류예요."),
 
     // 코드 인증 에러
-    CODE_ERROR("인증 번호가 일치하지 않아요."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.");
+    CODE_ERROR("인증번호가 일치하지 않습니다."),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요."),
+    CODE_UNKNOWN_ERROR("알 수 없는 오류예요."), ;
 
     companion object {
         fun fromMessage(message: String): ErrorCase? = entries.firstOrNull { it.message == message }
         fun isPhoneError(message: String) =
             persistentListOf(PHONE_ERROR, NOT_FOUND, NUMBER_ALREADY_EXISTS, PHONE_UNKNOWN_ERROR).any { it.message == message }
 
-        fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
+        fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR, CODE_UNKNOWN_ERROR).any { it.message == message }
     }
 }
 
@@ -158,8 +159,23 @@ class CertificationViewModel @Inject constructor(
                         )
                     )
                 }
-            }.onFailure {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
+            }.onFailure { throwable ->
+                updateCodeTextField(false)
+
+                when (throwable) {
+                    is HttpException -> {
+                        val errorBody = throwable.response()?.errorBody()?.string()
+                        val gson = Gson()
+                        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+                        val errorMessage = errorResponse.message
+
+                        _state.update { currentState ->
+                            currentState.copy(
+                                errorMessage = ErrorCase.fromMessage(errorMessage)?.message ?: ErrorCase.CODE_UNKNOWN_ERROR.message
+                            )
+                        }
+                    }
+                }
             }
         }
     }
