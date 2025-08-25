@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -49,24 +48,35 @@ import org.sopt.official.network.persistence.SoptDataStore
 import retrofit2.HttpException
 import javax.inject.Inject
 
-internal enum class ErrorCase(val message: String) {
+enum class ErrorType {
+    NONE,
+    PHONE,
+    CODE
+}
+
+enum class ErrorCase(
+    val message: String,
+    val type: ErrorType
+) {
+    // 기본
+    NONE("", ErrorType.NONE),
+
     // 전화번호 인증 에러
-    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
-    NOT_FOUND("가입 정보를 찾을 수 없습니다."),
-    NUMBER_ALREADY_EXISTS("이미 가입된 전화번호입니다."),
-    PHONE_UNKNOWN_ERROR("알 수 없는 오류예요."),
+    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요.", ErrorType.PHONE),
+    NOT_FOUND("가입 정보를 찾을 수 없습니다.", ErrorType.PHONE),
+    NUMBER_ALREADY_EXISTS("이미 가입된 전화번호입니다.", ErrorType.PHONE),
+    PHONE_UNKNOWN_ERROR("알 수 없는 오류예요.", ErrorType.PHONE),
 
     // 코드 인증 에러
-    CODE_ERROR("인증번호가 일치하지 않습니다."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요."),
-    CODE_UNKNOWN_ERROR("알 수 없는 오류예요.");
+    CODE_ERROR("인증번호가 일치하지 않습니다.", ErrorType.CODE),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.", ErrorType.CODE),
+    CODE_UNKNOWN_ERROR("알 수 없는 오류예요.", ErrorType.CODE);
 
     companion object {
         fun fromMessage(message: String): ErrorCase? = entries.firstOrNull { it.message == message }
-        fun isPhoneError(message: String) =
-            persistentListOf(PHONE_ERROR, NOT_FOUND, NUMBER_ALREADY_EXISTS, PHONE_UNKNOWN_ERROR).any { it.message == message }
 
-        fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR, CODE_UNKNOWN_ERROR).any { it.message == message }
+        fun isPhoneError(error: ErrorCase) = error.type == ErrorType.PHONE
+        fun isCodeError(error: ErrorCase) = error.type == ErrorType.CODE
     }
 }
 
@@ -132,7 +142,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage)?.message ?: ErrorCase.PHONE_UNKNOWN_ERROR.message
+                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
                             )
                         }
                     }
@@ -173,7 +183,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage)?.message ?: ErrorCase.CODE_UNKNOWN_ERROR.message
+                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
                             )
                         }
                     }
@@ -211,7 +221,7 @@ class CertificationViewModel @Inject constructor(
                 if (_state.value.isTimerEnd) {
                     _state.update { currentState ->
                         currentState.copy(
-                            errorMessage = ErrorCase.TIME_ERROR.message
+                            errorMessage = ErrorCase.TIME_ERROR
                         )
                     }
 
@@ -233,7 +243,7 @@ class CertificationViewModel @Inject constructor(
     fun resetErrorCase() {
         _state.update { currentState ->
             currentState.copy(
-                errorMessage = ""
+                errorMessage = ErrorCase.NONE
             )
         }
     }

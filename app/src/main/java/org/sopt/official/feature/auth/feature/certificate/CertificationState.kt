@@ -30,7 +30,7 @@ data class CertificationState(
     val phone: String = "",
     val code: String = "",
     val currentTimeValue: Int = 180,
-    val errorMessage: String = "",
+    val errorMessage: ErrorCase = ErrorCase.NONE,
     val buttonText: String = CertificationButtonText.GET_CODE.message,
     val isCodeEnable: Boolean = false,
     val isCertificationButtonEnable: Boolean = true,

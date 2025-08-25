@@ -168,7 +168,7 @@ private fun CertificationScreen(
     phoneNumber: String,
     code: String,
     visualTransformation: VisualTransformation,
-    errorMessage: String,
+    errorMessage: ErrorCase,
     certificationButtonText: String,
     isCodeEnable: Boolean,
     isCertificationButtonEnable: Boolean,
@@ -209,7 +209,7 @@ private fun CertificationScreen(
                 onTextChange = onCodeChange,
                 isError = ErrorCase.isCodeError(errorMessage),
                 isEnabled = isCodeEnable,
-                errorMessage = errorMessage
+                errorMessage = errorMessage.message
             ) {
                 Text(
                     text = currentTime,
@@ -321,7 +321,7 @@ private fun PhoneCertification(
     onTextChange: (String) -> Unit,
     phoneNumber: String,
     buttonText: String,
-    errorMessage: String,
+    errorMessage: ErrorCase,
     isCertificationButtonEnable: Boolean,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -343,7 +343,7 @@ private fun PhoneCertification(
                 onTextChange = onTextChange,
                 visualTransformation = visualTransformation,
                 isError = ErrorCase.isPhoneError(errorMessage),
-                errorMessage = errorMessage
+                errorMessage = errorMessage.message
             )
             AuthButton(
                 padding = PaddingValues(
@@ -381,7 +381,7 @@ private fun AuthCertificationPreview() {
             phoneNumber = "01012345678",
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
-            errorMessage = "",
+            errorMessage = ErrorCase.NONE,
             certificationButtonText = CertificationButtonText.GET_CODE.message,
             isCodeEnable = true,
             isCertificationButtonEnable = true,
