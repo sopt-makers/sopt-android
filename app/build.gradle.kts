@@ -192,6 +192,8 @@ dependencies {
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.google.id.identity)
     implementation(libs.semver)
+
+    implementation(libs.code.gson)
 }
 
 secrets {

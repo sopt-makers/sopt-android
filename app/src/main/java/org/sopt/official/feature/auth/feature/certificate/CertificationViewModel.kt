@@ -26,6 +26,7 @@ package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
@@ -42,17 +43,28 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.feature.auth.feature.certificate.model.ErrorResponse
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
+import retrofit2.HttpException
 import javax.inject.Inject
 
 internal enum class ErrorCase(val message: String) {
-    CODE_ERROR("인증 번호가 일치하지 않아요."),
+    // 전화번호 인증 에러
     PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
+    NOT_FOUND("가입 정보를 찾을 수 없습니다."),
+    NUMBER_ALREADY_EXISTS("이미 가입된 전화번호입니다."),
+    PHONE_UNKNOWN_ERROR("알 수 없는 오류예요."),
+
+    // 코드 인증 에러
+    CODE_ERROR("인증 번호가 일치하지 않아요."),
     TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.");
 
     companion object {
-        fun isPhoneError(message: String) = PHONE_ERROR.message == message
+        fun fromMessage(message: String): ErrorCase? = entries.firstOrNull { it.message == message }
+        fun isPhoneError(message: String) =
+            persistentListOf(PHONE_ERROR, NOT_FOUND, NUMBER_ALREADY_EXISTS, PHONE_UNKNOWN_ERROR).any { it.message == message }
+
         fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
     }
 }
@@ -105,14 +117,23 @@ class CertificationViewModel @Inject constructor(
                 updateButtonText()
                 updateCodeTextField(true)
                 updateButtonState(true)
-            }.onFailure {
+            }.onFailure { throwable ->
                 updateCodeTextField(false)
                 updateButtonState(false)
 
-                _state.update { currentState ->
-                    currentState.copy(
-                        errorMessage = ErrorCase.PHONE_ERROR.message
-                    )
+                when (throwable) {
+                    is HttpException -> {
+                        val errorBody = throwable.response()?.errorBody()?.string()
+                        val gson = Gson()
+                        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+                        val errorMessage = errorResponse.message
+
+                        _state.update { currentState ->
+                            currentState.copy(
+                                errorMessage = ErrorCase.fromMessage(errorMessage)?.message ?: ErrorCase.PHONE_UNKNOWN_ERROR.message
+                            )
+                        }
+                    }
                 }
             }
         }
