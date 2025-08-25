@@ -58,7 +58,7 @@ internal enum class ErrorCase(val message: String) {
 }
 
 internal enum class CertificationButtonText(val message: String) {
-    GET_CODE("인증번호 요청"),
+    GET_CODE("전송하기"),
     CHANGE_CODE("재전송하기")
 }
 

@@ -344,7 +344,7 @@ private fun PhoneCertification(
             AuthButton(
                 padding = PaddingValues(
                     vertical = 16.dp,
-                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 12.dp
+                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 24.dp
                     else 20.dp
                 ),
                 onClick = onPhoneNumberClick,
