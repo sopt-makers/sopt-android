@@ -220,6 +220,8 @@ class CertificationViewModel @Inject constructor(
                 delay(1_000L)
 
                 if (_state.value.isTimerEnd) {
+                    updateCertificationButtonState(true)
+
                     _state.update { currentState ->
                         currentState.copy(
                             errorMessage = ErrorCase.TIME_ERROR
@@ -228,8 +230,6 @@ class CertificationViewModel @Inject constructor(
 
                     timerJob?.cancelAndJoin()
                     timerJob = null
-
-                    updateCertificationButtonState(true)
                 } else {
                     _state.update { currentState ->
                         currentState.copy(
@@ -280,5 +280,4 @@ class CertificationViewModel @Inject constructor(
             )
         }
     }
-
 }
