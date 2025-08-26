@@ -58,7 +58,7 @@ enum class ErrorCase(
     val message: String,
     val type: ErrorType
 ) {
-    // 기본
+    // 에러가 아닌 경우
     NONE("", ErrorType.NONE),
 
     // 전화번호 인증 에러
