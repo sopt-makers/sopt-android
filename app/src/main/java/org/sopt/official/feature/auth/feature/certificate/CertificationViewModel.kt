@@ -65,6 +65,7 @@ enum class ErrorCase(
     PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요.", ErrorType.PHONE),
     NOT_FOUND("가입 정보를 찾을 수 없습니다.", ErrorType.PHONE),
     NUMBER_ALREADY_EXISTS("이미 가입된 전화번호입니다.", ErrorType.PHONE),
+    NUMBER_NOT_EXISTS("존재하지 않는 회원입니다.", ErrorType.PHONE),
     PHONE_UNKNOWN_ERROR("알 수 없는 오류예요.", ErrorType.PHONE),
 
     // 코드 인증 에러
