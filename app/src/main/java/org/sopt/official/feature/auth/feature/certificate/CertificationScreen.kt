@@ -127,6 +127,7 @@ internal fun CertificationRoute(
         currentTime = state.currentTime,
         onBackClick = onBackClick,
         onCreateCodeClick = {
+            viewModel.resetErrorCase()
             onShowSnackBar()
             scope.launch {
                 viewModel.createCode(status)
