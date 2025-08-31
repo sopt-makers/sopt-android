@@ -37,7 +37,6 @@ internal fun Project.configureAndroidCommonPlugin() {
             val playgroundTokenKeyAlias = properties["playgroundTokenKeyAlias"] as? String ?: ""
             val userStatusKeyAlias = properties["userStatusKeyAlias"] as? String ?: ""
             val pushTokenKeyAlias = properties["pushTokenKeyAlias"] as? String ?: ""
-            val devAuthApi = properties["devAuthApi"] as? String ?: ""
             val platformKeyAlias = properties["platform"] as? String ?: ""
             val devServerClientId = properties["devServerClientId"] as? String ?: ""
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
@@ -54,7 +53,6 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "PLAYGROUND_TOKEN_KEY_ALIAS", playgroundTokenKeyAlias)
             buildConfigField("String", "USER_STATUS_KEY_ALIAS", userStatusKeyAlias)
             buildConfigField("String", "PUSH_TOKEN_KEY_ALIAS", pushTokenKeyAlias)
-            buildConfigField("String", "DEV_AUTH_API", devAuthApi)
             buildConfigField("String", "PLATFORM", platformKeyAlias)
             buildConfigField("String", "DEV_SERVER_CLIENT_ID", devServerClientId)
         }
@@ -63,11 +61,16 @@ internal fun Project.configureAndroidCommonPlugin() {
             val debugPlaygroundApi = (properties["debugPlaygroundApi"] as? String).orEmpty()
             val releasePlaygroundApi = (properties["releasePlaygroundApi"] as? String).orEmpty()
 
+            val devAuthApi = (properties["devAuthApi"] as? String).orEmpty()
+            val prodAuthApi = (properties["prodAuthApi"] as? String).orEmpty()
+
             getByName("debug") {
                 buildConfigField("String", "PLAYGROUND_API", debugPlaygroundApi)
+                buildConfigField("String", "AUTH_API", devAuthApi)
             }
             getByName("release") {
                 buildConfigField("String", "PLAYGROUND_API", releasePlaygroundApi)
+                buildConfigField("String", "AUTH_API", prodAuthApi)
             }
         }
 
