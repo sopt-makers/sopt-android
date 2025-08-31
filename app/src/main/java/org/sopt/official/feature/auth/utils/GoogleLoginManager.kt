@@ -18,7 +18,7 @@ class GoogleLoginManager @Inject constructor() {
         var idToken = ""
         val credentialManager = CredentialManager.create(context)
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(BuildConfig.SERVER_CLIENT_ID)
+            .setServerClientId(if (BuildConfig.DEBUG) BuildConfig.DEV_SERVER_CLIENT_ID else BuildConfig.PROD_SERVER_CLIENT_ID)
             .setFilterByAuthorizedAccounts(false)
             .setAutoSelectEnabled(false)
             .build()

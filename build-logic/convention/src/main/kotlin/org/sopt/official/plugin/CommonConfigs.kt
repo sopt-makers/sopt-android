@@ -38,6 +38,10 @@ internal fun Project.configureAndroidCommonPlugin() {
             val userStatusKeyAlias = properties["userStatusKeyAlias"] as? String ?: ""
             val pushTokenKeyAlias = properties["pushTokenKeyAlias"] as? String ?: ""
             val platformKeyAlias = properties["platform"] as? String ?: ""
+            val devAuthApi = properties["devAuthApi"] as? String ?: ""
+            val prodAuthApi = properties["prodAuthApi"] as? String ?: ""
+            val devServerClientId = properties["devServerClientId"] as? String ?: ""
+            val prodServerClientId = properties["prodServerClientId"] as? String ?: ""
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
             buildConfigField("String", "POKE_DATA_STORE_KEY", pokeDataStoreKey)
@@ -53,27 +57,21 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "USER_STATUS_KEY_ALIAS", userStatusKeyAlias)
             buildConfigField("String", "PUSH_TOKEN_KEY_ALIAS", pushTokenKeyAlias)
             buildConfigField("String", "PLATFORM", platformKeyAlias)
+            buildConfigField("String", "DEV_AUTH_API", devAuthApi)
+            buildConfigField("String", "PROD_AUTH_API", prodAuthApi)
+            buildConfigField("String", "DEV_SERVER_CLIENT_ID", devServerClientId)
+            buildConfigField("String", "PROD_SERVER_CLIENT_ID", prodServerClientId)
         }
 
         buildTypes {
             val debugPlaygroundApi = (properties["debugPlaygroundApi"] as? String).orEmpty()
             val releasePlaygroundApi = (properties["releasePlaygroundApi"] as? String).orEmpty()
 
-            val devAuthApi = (properties["devAuthApi"] as? String).orEmpty()
-            val prodAuthApi = (properties["prodAuthApi"] as? String).orEmpty()
-
-            val devServerClientId = (properties["devServerClientId"] as? String).orEmpty()
-            val prodServerClientId = (properties["prodServerClientId"] as? String).orEmpty()
-
             getByName("debug") {
                 buildConfigField("String", "PLAYGROUND_API", debugPlaygroundApi)
-                buildConfigField("String", "AUTH_API", devAuthApi)
-                buildConfigField("String", "SERVER_CLIENT_ID", devServerClientId)
             }
             getByName("release") {
                 buildConfigField("String", "PLAYGROUND_API", releasePlaygroundApi)
-                buildConfigField("String", "AUTH_API", prodAuthApi)
-                buildConfigField("String", "SERVER_CLIENT_ID", prodServerClientId)
             }
         }
 
