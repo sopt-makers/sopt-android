@@ -191,7 +191,7 @@ private fun CertificationScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TopBar()
+            TopBar(status = status)
             Spacer(modifier = Modifier.height(44.dp))
             PhoneCertification(
                 onPhoneNumberClick = onCreateCodeClick,
@@ -277,6 +277,7 @@ private fun CertificationScreen(
 
 @Composable
 private fun TopBar(
+    status: AuthStatus,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -295,7 +296,7 @@ private fun TopBar(
                 style = SoptTheme.typography.label12SB
             )
             Text(
-                text = "소셜 계정 연동",
+                text = if (status == AuthStatus.REGISTER) "소셜 계정 연동" else "소셜 계정 재설정",
                 color = Gray100,
                 style = SoptTheme.typography.label12SB
             )
