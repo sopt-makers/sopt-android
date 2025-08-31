@@ -24,6 +24,11 @@
  */
 package org.sopt.official.feature.auth.model
 
+import androidx.annotation.Keep
+import kotlinx.serialization.Serializable
+
+@Keep
+@Serializable
 enum class AuthStatus(val type: String) {
     // 회원가입
     REGISTER(type = "REGISTER"),
