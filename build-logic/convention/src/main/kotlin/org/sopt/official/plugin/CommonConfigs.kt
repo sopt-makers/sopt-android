@@ -39,7 +39,7 @@ internal fun Project.configureAndroidCommonPlugin() {
             val pushTokenKeyAlias = properties["pushTokenKeyAlias"] as? String ?: ""
             val devAuthApi = properties["devAuthApi"] as? String ?: ""
             val platformKeyAlias = properties["platform"] as? String ?: ""
-            val serverClientId = properties["serverClientId"] as? String ?: ""
+            val devServerClientId = properties["devServerClientId"] as? String ?: ""
             buildConfigField("String", "SOPTAMP_API_KEY", apiKey)
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", dataStoreKey)
             buildConfigField("String", "POKE_DATA_STORE_KEY", pokeDataStoreKey)
@@ -56,7 +56,7 @@ internal fun Project.configureAndroidCommonPlugin() {
             buildConfigField("String", "PUSH_TOKEN_KEY_ALIAS", pushTokenKeyAlias)
             buildConfigField("String", "DEV_AUTH_API", devAuthApi)
             buildConfigField("String", "PLATFORM", platformKeyAlias)
-            buildConfigField("String", "SERVER_CLIENT_ID", serverClientId)
+            buildConfigField("String", "DEV_SERVER_CLIENT_ID", devServerClientId)
         }
 
         buildTypes {
