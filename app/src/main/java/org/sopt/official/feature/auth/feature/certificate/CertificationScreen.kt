@@ -101,6 +101,8 @@ internal fun CertificationRoute(
                 when (sideEffect) {
                     is CertificationSideEffect.ShowToast -> context.toast(sideEffect.message)
 
+                    is CertificationSideEffect.ShowSnackBar -> onShowSnackBar()
+
                     is CertificationSideEffect.NavigateToSocialAccount -> {
                         viewModel.timerJob?.cancelAndJoin()
                         viewModel.timerJob = null
@@ -128,7 +130,6 @@ internal fun CertificationRoute(
         onBackClick = onBackClick,
         onCreateCodeClick = {
             viewModel.resetErrorCase()
-            onShowSnackBar()
             scope.launch {
                 viewModel.createCode(status)
             }

@@ -130,6 +130,8 @@ class CertificationViewModel @Inject constructor(
                 updateButtonText()
                 updateCodeTextField(true)
                 updateFinishButtonState(true)
+
+                _sideEffect.emit(CertificationSideEffect.ShowSnackBar)
             }.onFailure { throwable ->
                 updateCodeTextField(false)
                 updateFinishButtonState(false)
