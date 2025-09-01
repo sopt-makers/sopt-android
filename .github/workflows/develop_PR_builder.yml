@@ -56,6 +56,9 @@ jobs:
                     USER_STATUS_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
                     PUSH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
                     DEV_AUTH_API: ${{secrets.DEV_AUTH_API}}
+                    PROD_AUTH_API: ${{secrets.PROD_AUTH_API}}
+                    DEV_SERVER_CLIENT_ID: ${{secrets.DEV_SERVER_CLIENT_ID}}
+                    PROD_SERVER_CLIENT_ID: ${{secrets.PROD_SERVER_CLIENT_ID}}
                     PLATFORM: ${{secrets.PLATFORM}}
                 run: |
                     echo apiKey=\"$API_KEY\" >> ./local.properties
@@ -82,6 +85,9 @@ jobs:
                     echo debugPlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
                     echo releasePlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
                     echo devAuthApi=\"DEV_AUTH_API\" >> ./local.properties
+                    echo prodAuthApi=\"PROD_AUTH_API\" >> ./local.properties
+                    echo devServerClientId=\"DEV_SERVER_CLIENT_ID\" >> ./local.properties
+                    echo prodServerClientId=\"PROD_SERVER_CLIENT_ID\" >> ./local.properties
                     echo platform=\"PLATFORM\" >> ./local.properties
 
             -   name: Access Firebase Service
