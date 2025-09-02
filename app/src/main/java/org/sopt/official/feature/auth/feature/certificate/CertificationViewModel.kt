@@ -138,10 +138,7 @@ class CertificationViewModel @Inject constructor(
 
                 when (throwable) {
                     is HttpException -> {
-                        val errorBody = throwable.response()?.errorBody()?.string()
-                        val gson = Gson()
-                        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-                        val errorMessage = errorResponse.message
+                        val errorMessage = extractErrorMessage(throwable)
 
                         _state.update { currentState ->
                             currentState.copy(
@@ -179,10 +176,7 @@ class CertificationViewModel @Inject constructor(
 
                 when (throwable) {
                     is HttpException -> {
-                        val errorBody = throwable.response()?.errorBody()?.string()
-                        val gson = Gson()
-                        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-                        val errorMessage = errorResponse.message
+                        val errorMessage = extractErrorMessage(throwable)
 
                         _state.update { currentState ->
                             currentState.copy(
@@ -281,5 +275,12 @@ class CertificationViewModel @Inject constructor(
                 isFinishButtonEnable = isEnable
             )
         }
+    }
+
+    private fun extractErrorMessage(throwable: HttpException): String {
+        val errorBody = throwable.response()?.errorBody()?.string()
+        val gson = Gson()
+        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+        return errorResponse.message
     }
 }
