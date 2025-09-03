@@ -32,8 +32,8 @@ import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
 data class PokeFriendOfFriendListResult(
     @SerialName("friendId")
     val friendId: Long,
-    @SerialName("playgroundId")
-    val playgroundId: Int,
+    @SerialName("userId")
+    val userId: Int,
     @SerialName("friendName")
     val friendName: String,
     @SerialName("friendProfileImage")
@@ -43,7 +43,7 @@ data class PokeFriendOfFriendListResult(
 ) {
     fun toEntity() = PokeFriendOfFriendList(
         friendId = friendId,
-        playgroundId = playgroundId,
+        userId = userId,
         friendName = friendName,
         friendProfileImage = friendProfileImage,
         friendList = friendList.map { it.toEntity() }

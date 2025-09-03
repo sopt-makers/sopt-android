@@ -57,7 +57,7 @@ class PokeNotificationAdapter(
 
             itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
                 if (currentList[position].isAnonymous) return@setOnClickListener
-                clickListener.onClickProfileImage(currentList[position].playgroundId)
+                clickListener.onClickProfileImage(currentList[position].userId)
             }
 
             itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {

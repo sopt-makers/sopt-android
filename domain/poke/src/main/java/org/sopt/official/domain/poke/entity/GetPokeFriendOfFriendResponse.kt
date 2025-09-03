@@ -28,7 +28,7 @@ class GetPokeFriendOfFriendListResponse : BaseResponse<List<PokeFriendOfFriendLi
 
 data class PokeFriendOfFriendList(
     val friendId: Long,
-    val playgroundId: Int,
+    val userId: Int,
     val friendName: String,
     val friendProfileImage: String,
     val friendList: List<PokeUser>,

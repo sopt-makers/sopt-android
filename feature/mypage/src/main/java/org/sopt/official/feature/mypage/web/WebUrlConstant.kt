@@ -58,5 +58,5 @@ object WebUrlConstant {
         PLAYGROUND_BASE_URL
     }
 
-    fun toMemberProfileUrl(playgroundId: Long): String = "$PLAYGROUND_MEMBER_URL/$playgroundId"
+    fun toMemberProfileUrl(userId: Long): String = "$PLAYGROUND_MEMBER_URL/$userId"
 }

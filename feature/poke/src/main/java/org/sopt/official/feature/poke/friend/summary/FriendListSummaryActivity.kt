@@ -275,7 +275,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
 
     private val pokeUserListClickLister =
         object : PokeUserListClickListener {
-            override fun onClickProfileImage(playgroundId: Int) {
+            override fun onClickProfileImage(userId: Int) {
                 tracker.track(
                     type = EventType.CLICK,
                     name = "memberprofile",
@@ -283,10 +283,10 @@ class FriendListSummaryActivity : AppCompatActivity() {
                         mapOf(
                             "view_type" to args?.userStatus,
                             "click_view_type" to "friend",
-                            "view_profile" to playgroundId,
+                            "view_profile" to userId,
                         ),
                 )
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, userId))))
             }
 
             override fun onClickPokeButton(user: PokeUser) {
@@ -297,7 +297,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                         mapOf(
                             "view_type" to args?.userStatus,
                             "click_view_type" to "friend",
-                            "view_profile" to user.playgroundId,
+                            "view_profile" to user.userId,
                         ),
                 )
                 messageListBottomSheet =
@@ -383,3 +383,4 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
     }
 }
+

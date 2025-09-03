@@ -67,7 +67,7 @@ class PokeUserListAdapter(
             onBind(currentList[position])
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
                 if (currentList[position].isAnonymous) return@setOnClickListener
-                clickListener.onClickProfileImage(currentList[position].playgroundId)
+                clickListener.onClickProfileImage(currentList[position].userId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
                 if (currentList[position].isAlreadyPoke) return@setOnClickListener
