@@ -81,8 +81,8 @@ android {
             }
         }
         val release by getting {
-            isMinifyEnabled = true
-            isShrinkResources = true
+            isMinifyEnabled = false
+            isShrinkResources = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -192,6 +192,8 @@ dependencies {
     implementation(libs.firebase.messaging.lifecycle.ktx)
     implementation(libs.google.id.identity)
     implementation(libs.semver)
+
+    implementation(libs.code.gson)
 }
 
 secrets {

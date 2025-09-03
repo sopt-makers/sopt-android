@@ -26,8 +26,8 @@ package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -42,23 +42,47 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.feature.auth.feature.certificate.model.ErrorResponse
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
+import retrofit2.HttpException
 import javax.inject.Inject
 
-internal enum class ErrorCase(val message: String) {
-    CODE_ERROR("인증 번호가 일치하지 않아요."),
-    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요."),
-    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.");
+enum class ErrorType {
+    NONE,
+    PHONE,
+    CODE
+}
+
+enum class ErrorCase(
+    val message: String,
+    val type: ErrorType
+) {
+    // 에러가 아닌 경우
+    NONE("", ErrorType.NONE),
+
+    // 전화번호 인증 에러
+    PHONE_ERROR("SOPT 활동 시 사용한 전화번호가 아니에요.", ErrorType.PHONE),
+    NOT_FOUND("가입 정보를 찾을 수 없습니다.", ErrorType.PHONE),
+    NUMBER_ALREADY_EXISTS("이미 가입된 전화번호입니다.", ErrorType.PHONE),
+    NUMBER_NOT_EXISTS("존재하지 않는 회원입니다.", ErrorType.PHONE),
+    PHONE_UNKNOWN_ERROR("알 수 없는 오류예요.", ErrorType.PHONE),
+
+    // 코드 인증 에러
+    CODE_ERROR("인증번호가 일치하지 않습니다.", ErrorType.CODE),
+    TIME_ERROR("3분이 초과되었어요. 인증번호를 다시 요청해주세요.", ErrorType.CODE),
+    CODE_UNKNOWN_ERROR("알 수 없는 오류예요.", ErrorType.CODE);
 
     companion object {
-        fun isPhoneError(message: String) = PHONE_ERROR.message == message
-        fun isCodeError(message: String) = persistentListOf(CODE_ERROR, TIME_ERROR).any { it.message == message }
+        fun fromMessage(message: String): ErrorCase? = entries.firstOrNull { it.message == message }
+
+        fun isPhoneError(error: ErrorCase) = error.type == ErrorType.PHONE
+        fun isCodeError(error: ErrorCase) = error.type == ErrorType.CODE
     }
 }
 
 internal enum class CertificationButtonText(val message: String) {
-    GET_CODE("인증번호 요청"),
+    GET_CODE("전송하기"),
     CHANGE_CODE("재전송하기")
 }
 
@@ -102,17 +126,26 @@ class CertificationViewModel @Inject constructor(
                 ),
             ).onSuccess {
                 startTimer()
+                updateCertificationButtonState(false)
                 updateButtonText()
                 updateCodeTextField(true)
-                updateButtonState(true)
-            }.onFailure {
-                updateCodeTextField(false)
-                updateButtonState(false)
+                updateFinishButtonState(true)
 
-                _state.update { currentState ->
-                    currentState.copy(
-                        errorMessage = ErrorCase.PHONE_ERROR.message
-                    )
+                _sideEffect.emit(CertificationSideEffect.ShowSnackBar)
+            }.onFailure { throwable ->
+                updateCodeTextField(false)
+                updateFinishButtonState(false)
+
+                when (throwable) {
+                    is HttpException -> {
+                        val errorMessage = extractErrorMessage(throwable)
+
+                        _state.update { currentState ->
+                            currentState.copy(
+                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
+                            )
+                        }
+                    }
                 }
             }
         }
@@ -137,8 +170,21 @@ class CertificationViewModel @Inject constructor(
                         )
                     )
                 }
-            }.onFailure {
-                _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
+            }.onFailure { throwable ->
+                updateCodeTextField(false)
+                updateCodeTextField(true)
+
+                when (throwable) {
+                    is HttpException -> {
+                        val errorMessage = extractErrorMessage(throwable)
+
+                        _state.update { currentState ->
+                            currentState.copy(
+                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -167,12 +213,14 @@ class CertificationViewModel @Inject constructor(
         }
         timerJob = viewModelScope.launch {
             while (isActive) {
-                delay(1000L)
+                delay(1_000L)
 
                 if (_state.value.isTimerEnd) {
+                    updateCertificationButtonState(true)
+
                     _state.update { currentState ->
                         currentState.copy(
-                            errorMessage = ErrorCase.TIME_ERROR.message
+                            errorMessage = ErrorCase.TIME_ERROR
                         )
                     }
 
@@ -192,7 +240,7 @@ class CertificationViewModel @Inject constructor(
     fun resetErrorCase() {
         _state.update { currentState ->
             currentState.copy(
-                errorMessage = ""
+                errorMessage = ErrorCase.NONE
             )
         }
     }
@@ -213,12 +261,26 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun updateButtonState(isEnable: Boolean) {
+    private fun updateCertificationButtonState(isEnable: Boolean) {
         _state.update { currentState ->
             currentState.copy(
-                isButtonEnable = isEnable
+                isCertificationButtonEnable = isEnable
             )
         }
     }
 
+    private fun updateFinishButtonState(isEnable: Boolean) {
+        _state.update { currentState ->
+            currentState.copy(
+                isFinishButtonEnable = isEnable
+            )
+        }
+    }
+
+    private fun extractErrorMessage(throwable: HttpException): String {
+        val errorBody = throwable.response()?.errorBody()?.string()
+        val gson = Gson()
+        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
+        return errorResponse.message
+    }
 }

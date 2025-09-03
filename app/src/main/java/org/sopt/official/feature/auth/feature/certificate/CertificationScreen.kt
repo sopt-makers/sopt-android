@@ -101,6 +101,8 @@ internal fun CertificationRoute(
                 when (sideEffect) {
                     is CertificationSideEffect.ShowToast -> context.toast(sideEffect.message)
 
+                    is CertificationSideEffect.ShowSnackBar -> onShowSnackBar()
+
                     is CertificationSideEffect.NavigateToSocialAccount -> {
                         viewModel.timerJob?.cancelAndJoin()
                         viewModel.timerJob = null
@@ -127,7 +129,7 @@ internal fun CertificationRoute(
         currentTime = state.currentTime,
         onBackClick = onBackClick,
         onCreateCodeClick = {
-            onShowSnackBar()
+            viewModel.resetErrorCase()
             scope.launch {
                 viewModel.createCode(status)
             }
@@ -150,7 +152,8 @@ internal fun CertificationRoute(
         errorMessage = state.errorMessage,
         certificationButtonText = state.buttonText,
         isCodeEnable = state.isCodeEnable,
-        isButtonEnable = state.isButtonEnable
+        isCertificationButtonEnable = state.isCertificationButtonEnable,
+        isFinishButtonEnable = state.isFinishButtonEnable
     )
 }
 
@@ -167,10 +170,11 @@ private fun CertificationScreen(
     phoneNumber: String,
     code: String,
     visualTransformation: VisualTransformation,
-    errorMessage: String,
+    errorMessage: ErrorCase,
     certificationButtonText: String,
     isCodeEnable: Boolean,
-    isButtonEnable: Boolean
+    isCertificationButtonEnable: Boolean,
+    isFinishButtonEnable: Boolean
 ) {
     Column {
         Image(
@@ -187,7 +191,7 @@ private fun CertificationScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TopBar()
+            TopBar(status = status)
             Spacer(modifier = Modifier.height(44.dp))
             PhoneCertification(
                 onPhoneNumberClick = onCreateCodeClick,
@@ -196,7 +200,8 @@ private fun CertificationScreen(
                 phoneNumber = phoneNumber,
                 visualTransformation = visualTransformation,
                 buttonText = certificationButtonText,
-                errorMessage = errorMessage
+                errorMessage = errorMessage,
+                isCertificationButtonEnable = isCertificationButtonEnable
             )
             Spacer(modifier = Modifier.height(10.dp))
             AuthTextField(
@@ -206,7 +211,7 @@ private fun CertificationScreen(
                 onTextChange = onCodeChange,
                 isError = ErrorCase.isCodeError(errorMessage),
                 isEnabled = isCodeEnable,
-                errorMessage = errorMessage
+                errorMessage = errorMessage.message
             ) {
                 Text(
                     text = currentTime,
@@ -254,7 +259,7 @@ private fun CertificationScreen(
                 modifier = Modifier.fillMaxWidth(),
                 padding = PaddingValues(vertical = 16.dp),
                 onClick = onCertificateClick,
-                isEnabled = isButtonEnable,
+                isEnabled = isFinishButtonEnable,
                 containerColor = Gray10,
                 contentColor = Gray950,
                 disabledContentColor = Gray500,
@@ -272,6 +277,7 @@ private fun CertificationScreen(
 
 @Composable
 private fun TopBar(
+    status: AuthStatus,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -290,7 +296,7 @@ private fun TopBar(
                 style = SoptTheme.typography.label12SB
             )
             Text(
-                text = "소셜 계정 연동",
+                text = if (status == AuthStatus.REGISTER) "소셜 계정 연동" else "소셜 계정 재설정",
                 color = Gray100,
                 style = SoptTheme.typography.label12SB
             )
@@ -318,7 +324,8 @@ private fun PhoneCertification(
     onTextChange: (String) -> Unit,
     phoneNumber: String,
     buttonText: String,
-    errorMessage: String,
+    errorMessage: ErrorCase,
+    isCertificationButtonEnable: Boolean,
     modifier: Modifier = Modifier,
     visualTransformation: VisualTransformation = VisualTransformation.None,
 ) {
@@ -339,17 +346,18 @@ private fun PhoneCertification(
                 onTextChange = onTextChange,
                 visualTransformation = visualTransformation,
                 isError = ErrorCase.isPhoneError(errorMessage),
-                errorMessage = errorMessage
+                errorMessage = errorMessage.message
             )
             AuthButton(
                 padding = PaddingValues(
                     vertical = 16.dp,
-                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 12.dp
+                    horizontal = if (buttonText == CertificationButtonText.GET_CODE.message) 24.dp
                     else 20.dp
                 ),
                 onClick = onPhoneNumberClick,
                 containerColor = Gray10,
                 contentColor = Gray950,
+                isEnabled = isCertificationButtonEnable
             ) {
                 Text(
                     text = buttonText,
@@ -376,10 +384,11 @@ private fun AuthCertificationPreview() {
             phoneNumber = "01012345678",
             code = "132456",
             visualTransformation = phoneNumberVisualTransformation(),
-            errorMessage = "",
+            errorMessage = ErrorCase.NONE,
             certificationButtonText = CertificationButtonText.GET_CODE.message,
             isCodeEnable = true,
-            isButtonEnable = true
+            isCertificationButtonEnable = true,
+            isFinishButtonEnable = true
         )
     }
 }

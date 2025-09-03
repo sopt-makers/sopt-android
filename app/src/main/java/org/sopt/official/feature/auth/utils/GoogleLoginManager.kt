@@ -6,7 +6,7 @@ import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import org.sopt.official.BuildConfig.serverClientId
+import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.coroutines.suspendRunCatching
 import timber.log.Timber
 import javax.inject.Inject
@@ -18,7 +18,7 @@ class GoogleLoginManager @Inject constructor() {
         var idToken = ""
         val credentialManager = CredentialManager.create(context)
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(serverClientId)
+            .setServerClientId(if (BuildConfig.DEBUG) BuildConfig.DEV_SERVER_CLIENT_ID else BuildConfig.PROD_SERVER_CLIENT_ID)
             .setFilterByAuthorizedAccounts(false)
             .setAutoSelectEnabled(false)
             .build()

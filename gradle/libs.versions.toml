@@ -76,6 +76,7 @@ constraintlayout = "2.2.1"
 benchmark-macro-junit4 = "1.4.0"
 androidx-baselineprofile = "1.4.0"
 profileinstaller = "1.4.1"
+code-gson = "2.10.1"
 
 semver = "2.1.0"
 
@@ -188,6 +189,7 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 firebase-messaging-lifecycle-ktx = { module = "com.github.skydoves:firebase-messaging-lifecycle-ktx", version.ref = "firebaseMessagingLifecycleKtx" }
 firebase-config = { group = "com.google.firebase", name = "firebase-config" }
+code-gson = { module = "com.google.code.gson:gson", version.ref = "code-gson" }
 
 ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlint" }
 
