@@ -53,4 +53,6 @@ interface AuthRepository {
         accessToken: String,
         refreshToken: String,
     )
+
+    suspend fun clearUserToken()
 }
