@@ -369,4 +369,3 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
         }
     }
 }
-

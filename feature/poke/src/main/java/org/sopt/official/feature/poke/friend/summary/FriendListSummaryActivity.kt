@@ -383,4 +383,3 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
     }
 }
-
