@@ -34,7 +34,7 @@ import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.auth.model.UserActiveState
-import org.sopt.official.auth.repository.AuthRepository
+import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import timber.log.Timber
 
@@ -72,13 +72,8 @@ fun rememberMyPageUiState(
                         runCatching {
                             FirebaseMessaging.getInstance().token.await()
                         }.onSuccess {
-                            authRepository.logout(it)
-                                .onSuccess {
-                                    authRepository.clearLocalData()
-                                    onRestartApp()
-                                }.onFailure { error ->
-                                    Timber.e(error)
-                                }
+                            authRepository.clearUserToken()
+                            onRestartApp()
                         }.onFailure {
                             Timber.e(it)
                         }

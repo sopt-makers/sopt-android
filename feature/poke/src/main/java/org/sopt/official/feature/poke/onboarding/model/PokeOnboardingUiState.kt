@@ -35,7 +35,6 @@ data class PokeOnboardingUiState(
 ) : Serializable {
     data class PokeUsers(
         val userId: Int,
-        val playgroundId: Int,
         val profileImage: String,
         val name: String,
         val message: String,
@@ -52,7 +51,6 @@ data class PokeOnboardingUiState(
     ) : Serializable {
         fun toEntity() = PokeUser(
             userId = userId,
-            playgroundId = playgroundId,
             profileImage = profileImage,
             name = name,
             message = message,
@@ -78,7 +76,6 @@ fun PokeRandomUserList.PokeRandomUsers.toSerializable() = PokeOnboardingUiState(
 
 fun PokeUser.toSerializable() = PokeOnboardingUiState.PokeUsers(
     userId = userId,
-    playgroundId = playgroundId,
     profileImage = profileImage,
     name = name,
     message = message,

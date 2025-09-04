@@ -28,7 +28,6 @@ class PokeUserResponse : BaseResponse<PokeUser>()
 
 data class PokeUser(
     val userId: Int,
-    val playgroundId: Int,
     val profileImage: String,
     val name: String,
     val message: String,

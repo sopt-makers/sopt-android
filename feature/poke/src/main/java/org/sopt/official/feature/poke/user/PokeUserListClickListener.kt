@@ -27,7 +27,7 @@ package org.sopt.official.feature.poke.user
 import org.sopt.official.domain.poke.entity.PokeUser
 
 interface PokeUserListClickListener {
-    fun onClickProfileImage(playgroundId: Int)
+    fun onClickProfileImage(userId: Int)
 
     fun onClickPokeButton(user: PokeUser)
 }

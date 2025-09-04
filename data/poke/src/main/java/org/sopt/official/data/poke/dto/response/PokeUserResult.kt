@@ -32,8 +32,6 @@ import org.sopt.official.domain.poke.entity.PokeUser
 data class PokeUserResult(
     @SerialName("userId")
     val userId: Int,
-    @SerialName("playgroundId")
-    val playgroundId: Int,
     @SerialName("profileImage")
     val profileImage: String,
     @SerialName("name")
@@ -63,7 +61,6 @@ data class PokeUserResult(
 ) {
     fun toEntity(): PokeUser = PokeUser(
         userId = userId,
-        playgroundId = playgroundId,
         profileImage = profileImage,
         name = name,
         message = message,

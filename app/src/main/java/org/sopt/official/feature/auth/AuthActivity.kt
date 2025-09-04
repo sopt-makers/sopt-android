@@ -46,9 +46,7 @@ import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.sopt.official.R
-import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.common.di.Auth
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
@@ -61,10 +59,6 @@ import timber.log.Timber
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     private val viewModel by viewModels<AuthViewModel>()
-
-    @Auth
-    @Inject
-    lateinit var authService: AuthService
 
     @Inject
     lateinit var dataStore: SoptDataStore

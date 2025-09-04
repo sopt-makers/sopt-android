@@ -146,15 +146,15 @@ class PokeNotificationActivity : AppCompatActivity() {
     }
 
     private val pokeUserListClickLister = object : PokeUserListClickListener {
-        override fun onClickProfileImage(playgroundId: Int) {
-            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, playgroundId))))
+        override fun onClickProfileImage(userId: Int) {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, userId))))
             tracker.track(
                 type = EventType.CLICK,
                 name = "memberprofile",
                 properties = mapOf(
                     "view_type" to args?.userStatus,
                     "click_view_type" to "poke_alarm",
-                    "view_profile" to playgroundId,
+                    "view_profile" to userId,
                 ),
             )
         }
@@ -180,7 +180,7 @@ class PokeNotificationActivity : AppCompatActivity() {
                 properties = mapOf(
                     "view_type" to args?.userStatus,
                     "click_view_type" to "poke_alarm",
-                    "view_profile" to user.playgroundId,
+                    "view_profile" to user.userId,
                 ),
             )
         }

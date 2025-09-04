@@ -52,7 +52,6 @@ import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.authRepository
-import timber.log.Timber
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
@@ -101,9 +100,12 @@ class SignOutActivity : AppCompatActivity() {
                                 .fillMaxWidth(),
                             onClick = {
                                 scope.launch {
-                                    authRepository.withdraw()
-                                        .onSuccess { ProcessPhoenix.triggerRebirth(this@SignOutActivity) }
-                                        .onFailure(Timber::e)
+                                    //TODO: 탈퇴 API가 없어요?
+//                                    authRepository.withdraw()
+//                                        .onSuccess { ProcessPhoenix.triggerRebirth(this@SignOutActivity) }
+//                                        .onFailure(Timber::e)
+                                    authRepository.clearUserToken()
+                                    ProcessPhoenix.triggerRebirth(this@SignOutActivity)
                                 }
                             },
                         ) {
