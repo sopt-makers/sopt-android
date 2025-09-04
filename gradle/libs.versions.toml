@@ -58,7 +58,7 @@ coil3 = "3.3.0"
 lottie = "6.6.7"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.2"
-rin = "0.3.0"
+rin = "0.4.0"
 mozilla-component-utils = "141.0.3"
 balloonCompose = "1.6.13"
 
