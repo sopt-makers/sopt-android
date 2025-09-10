@@ -5,7 +5,7 @@ targetSdk = "35"
 appVersion = "4.0.0"
 versionCode = "40000"
 
-kotlin = "2.2.10"
+kotlin = "2.2.20"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
