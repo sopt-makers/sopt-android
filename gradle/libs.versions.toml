@@ -74,7 +74,7 @@ amplitude = "1.22.2"
 spotless = "7.2.1"
 constraintlayout = "2.2.1"
 benchmark-macro-junit4 = "1.4.0"
-androidx-baselineprofile = "1.4.0"
+androidx-baselineprofile = "1.4.1"
 profileinstaller = "1.4.1"
 code-gson = "2.10.1"
 
