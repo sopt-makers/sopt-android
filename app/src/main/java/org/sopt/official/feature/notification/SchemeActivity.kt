@@ -70,7 +70,7 @@ class SchemeActivity : AppCompatActivity() {
             false -> TaskStackBuilder.create(this).apply {
                 if (!isIntentToHome()) {
                     addNextIntentWithParentStack(
-                        DeepLinkType.getMainIntent(UserStatus.of(dataStore.userStatus))
+                        DeepLinkType.getIntent(UserStatus.of(dataStore.userStatus))
                     )
                 }
                 addNextIntent(linkIntent)
@@ -83,7 +83,7 @@ class SchemeActivity : AppCompatActivity() {
         return try {
             val expiredAt = link.extractQueryParameter("expiredAt")
             when (expiredAt.isExpiredDate()) {
-                true -> DeepLinkType.getMainIntent(
+                true -> DeepLinkType.getIntent(
                     UserStatus.of(dataStore.userStatus),
                     DeepLinkType.EXPIRED
                 )
@@ -103,7 +103,7 @@ class SchemeActivity : AppCompatActivity() {
             }
         } catch (exception: Exception) {
             Timber.e(exception)
-            DeepLinkType.getMainIntent(
+            DeepLinkType.getIntent(
                 UserStatus.of(dataStore.userStatus),
                 DeepLinkType.UNKNOWN
             )
