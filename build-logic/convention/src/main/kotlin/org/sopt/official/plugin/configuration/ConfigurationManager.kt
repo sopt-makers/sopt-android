@@ -42,8 +42,10 @@ object ConfigurationManager {
 
             // Auth
             buildConfigField("String", "DEV_AUTH_API", properties.getQuotedProperty("devAuthApi"))
+            buildConfigField("String", "PROD_AUTH_API", properties.getQuotedProperty("prodAuthApi"))
             buildConfigField("String", "PLATFORM", properties.getQuotedProperty("platform"))
-            buildConfigField("String", "SERVER_CLIENT_ID", properties.getQuotedProperty("serverClientId"))
+            buildConfigField("String", "DEV_SERVER_CLIENT_ID", properties.getQuotedProperty("devServerClientId"))
+            buildConfigField("String", "PROD_SERVER_CLIENT_ID", properties.getQuotedProperty("prodServerClientId"))
         }
 
         buildTypes {
