@@ -26,7 +26,6 @@
 plugins {
     sopt("feature")
     sopt("compose")
-    alias(libs.plugins.google.services)
 }
 
 android {

@@ -1,24 +1,14 @@
 package org.sopt.official.plugin
 
-import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
+import org.sopt.official.plugin.base.BasePlugin
+import org.sopt.official.plugin.configuration.DependencyManager.addHiltDependencies
 
-class AndroidHiltPlugin : Plugin<Project> {
+class AndroidHiltPlugin : BasePlugin() {
     override fun apply(target: Project) = with(target) {
-        with(plugins) {
-            apply("com.google.devtools.ksp")
-            apply("com.google.dagger.hilt.android")
-        }
+        applyPlugin("com.google.devtools.ksp")
+        applyPlugin("com.google.dagger.hilt.android")
 
-        val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-        dependencies {
-            "implementation"(libs.findLibrary("hilt").get())
-            "ksp"(libs.findLibrary("hilt.ksp").get())
-            "testImplementation"(libs.findLibrary("hilt.testing").get())
-            "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
-        }
+        addHiltDependencies(libs)
     }
 }
