@@ -1,17 +1,12 @@
 package org.sopt.official.plugin
 
-import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
+import org.sopt.official.plugin.base.BasePlugin
 
-class JUnit5Plugin : Plugin<Project> {
+class JUnit5Plugin : BasePlugin() {
     override fun apply(target: Project): Unit = with(target) {
-        with(plugins) {
-            apply("de.mannodermaus.android-junit5")
-        }
-        val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+        applyPlugin("de.mannodermaus.android-junit5")
 
         dependencies {
             "testImplementation"(libs.findBundle("junit5.test").get())
