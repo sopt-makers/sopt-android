@@ -1,20 +1,11 @@
 package org.sopt.official.plugin
 
-import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
-import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
+import org.sopt.official.plugin.base.BasePlugin
+import org.sopt.official.plugin.configuration.DependencyManager.addRetrofitDependencies
 
-class RetrofitPlugin: Plugin<Project> {
+class RetrofitPlugin : BasePlugin() {
     override fun apply(target: Project) = with(target) {
-        val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
-        dependencies {
-            "implementation"(platform(libs.findLibrary("retrofit-bom").get()))
-            "implementation"(libs.findLibrary("retrofit").get())
-            "implementation"(libs.findLibrary("retrofit-kotlin-serialization-converter").get())
-            "implementation"(libs.findLibrary("retrofit-response-type-keeper").get())
-        }
+        addRetrofitDependencies(libs)
     }
 }
