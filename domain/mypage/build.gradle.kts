@@ -24,7 +24,7 @@
  */
 
 plugins {
-    sopt("kotlin")
+    sopt("kotlin.jvm")
 }
 
 kotlin {
