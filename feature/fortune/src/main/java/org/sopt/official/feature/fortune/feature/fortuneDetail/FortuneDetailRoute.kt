@@ -34,7 +34,6 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -64,9 +63,9 @@ internal fun FortuneDetailRoute(
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    var isAnonymous by remember { mutableStateOf(true) }
     var isPokeEnabled by remember { mutableStateOf(true) }
-    var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
+    // var isAnonymous by remember { mutableStateOf(true) }
+    // var selectedIndex by remember { mutableIntStateOf(DEFAULT_ID) }
     val bottomSheetState = rememberModalBottomSheetState(initialValue = Hidden)
     val scope = rememberCoroutineScope()
     val amplitudeTracker = LocalTracker.current
@@ -80,9 +79,9 @@ internal fun FortuneDetailRoute(
         }
     }
 
-    LaunchedEffect(key1 = bottomSheetState.currentValue) {
+    /*LaunchedEffect(key1 = bottomSheetState.currentValue) {
         if (bottomSheetState.currentValue == Hidden) isBottomSheetVisible(false)
-    }
+    }*/
 
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
