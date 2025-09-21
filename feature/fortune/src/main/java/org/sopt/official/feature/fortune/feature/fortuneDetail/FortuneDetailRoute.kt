@@ -30,7 +30,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetValue.Hidden
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -49,11 +48,8 @@ import org.sopt.official.analytics.EventType.CLICK
 import org.sopt.official.analytics.EventType.VIEW
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeMessageBottomSheetScreen
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Anonymous
-import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState.Poke
 
 internal const val DEFAULT_ID = -1
 
@@ -96,7 +92,7 @@ internal fun FortuneDetailRoute(
         ),
         sheetBackgroundColor = colors.onSurface800,
         sheetContent = {
-            PokeMessageBottomSheetScreen(
+            /*PokeMessageBottomSheetScreen(
                 selectedIndex = selectedIndex,
                 onItemClick = { newSelectedIndex, message ->
                     amplitudeTracker.track(
@@ -137,7 +133,7 @@ internal fun FortuneDetailRoute(
                     }
                 },
                 isAnonymous = isAnonymous,
-            )
+            )*/
         },
     ) {
         FortuneDetailScreen(
