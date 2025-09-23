@@ -35,9 +35,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.fortune.model.TodayFortuneWord
 import org.sopt.official.domain.fortune.usecase.GetTodayFortuneUseCase
-import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
@@ -55,7 +53,15 @@ internal class FortuneDetailViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<FortuneDetailUiState> = MutableStateFlow(Loading)
     val uiState: StateFlow<FortuneDetailUiState> get() = _uiState.asStateFlow()
     private var isAnonymous: Boolean = false
-    private var userId = DEFAULT_ID
+    // private var userId = DEFAULT_ID
+
+    private var dummyUser = UserInfo(
+        userId = 0L,
+        profile = "",
+        userName = "동민",
+        generation = 111,
+        part = "기획 파트"
+    )
 
     init {
         updateUi()
@@ -65,12 +71,12 @@ internal class FortuneDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 coroutineScope {
-                    awaitAll(async { getTodayFortuneUseCase() }, async { pokeRepository.getOnboardingPokeUserList(size = 1) })
+                    awaitAll(async { getTodayFortuneUseCase() } /*async { pokeRepository.getOnboardingPokeUserList(size = 1) }*/)
                 }
             }.onSuccess { result ->
-                val todayFortune = result[0] as TodayFortuneWord
-                val pokeUser = result[1] as GetOnboardingPokeUserListResponse
-                val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()
+                val todayFortune = result[0]
+                /*val pokeUser = result[1] as GetOnboardingPokeUserListResponse
+                val user = pokeUser.data?.randomInfoList?.get(0)?.userInfoList?.get(0) ?: throw IllegalArgumentException()*/
 
                 _uiState.update {
                     Success(
@@ -78,16 +84,22 @@ internal class FortuneDetailViewModel @Inject constructor(
                             userName = todayFortune.userName,
                             content = todayFortune.title,
                         ), userInfo = UserInfo(
-                            userId = user.userId.toLong(),
+                            /*userId = user.userId.toLong(),
                             profile = user.profileImage,
                             userName = user.name,
                             generation = user.generation,
-                            part = user.part,
+                            part = user.part,*/
+
+                            userId = dummyUser.userId,
+                            profile = dummyUser.profile,
+                            userName = dummyUser.userName,
+                            generation = dummyUser.generation,
+                            part = dummyUser.part
                         )
                     )
-                }.also {
+                }/*.also {
                     userId = user.userId
-                }
+                }*/
             }.onFailure { error ->
                 _uiState.update { Error(error) }
             }
@@ -98,7 +110,7 @@ internal class FortuneDetailViewModel @Inject constructor(
         viewModelScope.launch {
             runCatching {
                 pokeRepository.pokeUser(
-                    userId = userId, isAnonymous = isAnonymous, message = message
+                    userId = dummyUser.userId.toInt(), /*userId = userId,*/ isAnonymous = isAnonymous, message = message
                 )
             }.onSuccess {
                 _uiState.update { uiState.value as Success }
