@@ -30,7 +30,7 @@ import org.sopt.official.network.model.response.ValidTokenResponse
 
 fun CentralizeToken.toRequest(): ExpiredTokenRequest =
     ExpiredTokenRequest(
-        accessToken = accessToken,
+        accessToken = "Bearer $accessToken",
         refreshToken = refreshToken
     )
 

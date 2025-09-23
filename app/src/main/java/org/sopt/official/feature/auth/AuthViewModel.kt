@@ -35,9 +35,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
+import org.sopt.official.auth.model.CentralizeToken
 import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
+import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
 private const val DEFAULT_VERSION = "9.9.9"
@@ -56,7 +59,9 @@ sealed interface UpdateState {
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    private val remoteConfig: SoptRemoteConfig
+    private val remoteConfig: SoptRemoteConfig,
+    private val authRepository: CentralizeAuthRepository,
+    private val dataStore: SoptDataStore
 ) : ViewModel() {
     // TODO: 삭제 예정
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
@@ -64,6 +69,22 @@ class AuthViewModel @Inject constructor(
 
     private val _updateState = MutableStateFlow<UpdateState>(UpdateState.Default)
     val updateState get() = _updateState.asStateFlow()
+
+    init {
+        if (dataStore.accessToken.isNotEmpty() && dataStore.refreshToken.isNotEmpty()) {
+            viewModelScope.launch {
+                authRepository.refreshToken(
+                    CentralizeToken(
+                        accessToken = dataStore.accessToken,
+                        refreshToken = dataStore.refreshToken
+                    )
+                ).onFailure {
+                    Timber.e(it)
+                    dataStore.clear()
+                }
+            }
+        }
+    }
 
     fun getUpdateConfig(version: String?) {
         viewModelScope.launch {
