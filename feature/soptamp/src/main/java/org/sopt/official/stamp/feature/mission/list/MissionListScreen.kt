@@ -119,7 +119,7 @@ fun MissionListScreen(
         },
         floatingActionButton = {
             SoptampSegmentedFloatingButton(
-                option1 = "${generation}기 랭킹",
+                option1 = "개인별 랭킹",
                 option2 = "파트별 랭킹",
                 modifier = Modifier.padding(horizontal = 54.dp),
                 onClickFirstOption = onCurrentRankingButtonClick,
