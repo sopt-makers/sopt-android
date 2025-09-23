@@ -27,7 +27,11 @@ package org.sopt.official.network.authenticator
 import android.content.Context
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
@@ -37,8 +41,6 @@ import org.sopt.official.network.model.request.ExpiredTokenRequest
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshApi
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Singleton
 class CentralizeAuthenticator @Inject constructor(
@@ -47,35 +49,68 @@ class CentralizeAuthenticator @Inject constructor(
     @ApplicationContext private val context: Context,
     private val navigatorProvider: NavigatorProvider
 ) : Authenticator {
-    override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code == 401) {
-            val refreshToken = dataStore.refreshToken
-            if (refreshToken.isEmpty()) return null
-            val newTokens = runCatching {
-                runBlocking {
-                    refreshApi.refreshToken(
-                        ExpiredTokenRequest(
-                            accessToken = "$BEARER ${dataStore.accessToken}",
-                            refreshToken = refreshToken
-                        )
-                    )
-                }
-            }.onSuccess {
-                dataStore.accessToken = it.data?.accessToken.orEmpty()
-                dataStore.refreshToken = it.data?.refreshToken.orEmpty()
-            }.onFailure {
-                dataStore.clear()
-                Timber.e(it)
-                ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
-            }.getOrThrow()
+    private val mutex = Mutex()
 
-            return response.request.newBuilder()
-                .header(AUTHORIZATION, newTokens.data?.accessToken.orEmpty())
-                .build()
+    override fun authenticate(route: Route?, response: Response): Request? {
+        return runBlocking {
+            handleAuthentication(response)
+        }
+    }
+
+    private suspend fun handleAuthentication(response: Response): Request? = mutex.withLock {
+        val requestToken = getRequestToken(response.request)
+
+        // 다른 스레드에서 이미 토큰이 갱신된 경우 -> 갱신된 토큰으로 재요청
+        val currentAccessToken = dataStore.accessToken
+        if (isTokenRefreshed(currentAccessToken, requestToken)) {
+            Timber.d("토큰 이미 갱신 완료. 새 토큰으로 재시도: $BEARER $currentAccessToken")
+            return@withLock buildRequestWithToken(response.request, currentAccessToken)
         }
 
-        return null
+        // refreshToken이 없는 경우
+        val refreshToken = dataStore.refreshToken
+
+        if (refreshToken.isBlank()) {
+            Timber.d("리프레시 토큰 없어 재로그인 필요 -> 앱 재시작")
+            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+            return@withLock null
+        }
+
+        // 토큰 재발급 시작
+        val newTokens = runCatching {
+            refreshApi.refreshToken(
+                ExpiredTokenRequest(
+                    accessToken = "$BEARER $currentAccessToken",
+                    refreshToken = refreshToken
+                )
+            )
+        }.onSuccess {
+            Timber.d("토큰 재발급 성공. 요청 재시도.")
+            dataStore.accessToken = it.data?.accessToken.orEmpty()
+            dataStore.refreshToken = it.data?.refreshToken.orEmpty()
+        }.onFailure {
+            Timber.e(it, "토큰 재발급 실패. 토큰 삭제 및 앱 재시작.")
+            dataStore.clear()
+            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+        }.getOrThrow()
+
+        return buildRequestWithToken(response.request, newTokens.data?.accessToken.orEmpty())
     }
+
+    private fun getRequestToken(request: Request): String? =
+        request.header(AUTHORIZATION)?.removePrefix(BEARER)?.trim()
+
+    private fun isTokenRefreshed(currentToken: String, requestToken: String?): Boolean {
+        if (currentToken.isBlank()) return false
+
+        return requestToken != currentToken
+    }
+
+    private fun buildRequestWithToken(request: Request, token: String): Request =
+        request.newBuilder()
+            .removeHeader(AUTHORIZATION)
+            .addHeader(AUTHORIZATION, "$BEARER $token")
+            .build()
 
     companion object {
         private const val BEARER = "Bearer"

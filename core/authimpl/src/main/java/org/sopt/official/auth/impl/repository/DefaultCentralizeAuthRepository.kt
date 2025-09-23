@@ -24,17 +24,26 @@
  */
 package org.sopt.official.auth.impl.repository
 
+import javax.inject.Inject
 import org.sopt.official.auth.impl.mapper.toDomain
 import org.sopt.official.auth.impl.mapper.toRequest
 import org.sopt.official.auth.model.CentralizeToken
 import org.sopt.official.auth.repository.CentralizeAuthRepository
+import org.sopt.official.common.coroutines.suspendRunCatching
+import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshApi
-import javax.inject.Inject
 
 class DefaultCentralizeAuthRepository @Inject constructor(
-    private val refreshApi: RefreshApi
+    private val refreshApi: RefreshApi,
+    private val dataStore: SoptDataStore
 ) : CentralizeAuthRepository {
-    override suspend fun refreshToken(expiredToken: CentralizeToken): Result<CentralizeToken> = runCatching {
-        refreshApi.refreshToken(expiredToken.toRequest()).data?.toDomain() ?: CentralizeToken.setExpiredToken()
-    }
+    override suspend fun refreshToken(expiredToken: CentralizeToken): Result<CentralizeToken> =
+        suspendRunCatching {
+            val newTokens = refreshApi.refreshToken(expiredToken.toRequest()).data!!.toDomain()
+
+            dataStore.accessToken = newTokens.accessToken
+            dataStore.refreshToken = newTokens.refreshToken
+
+            newTokens
+        }
 }
