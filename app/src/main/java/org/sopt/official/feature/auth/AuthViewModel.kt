@@ -104,8 +104,15 @@ class AuthViewModel @Inject constructor(
 
         return when {
             currentVersion.major < latestAppVersion.major -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
-            currentVersion.minor < latestAppVersion.minor -> UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
-            currentVersion.patch < latestAppVersion.patch -> UpdateState.PatchUpdateAvailable(versionConfig.optionalUpdateNotice)
+
+            currentVersion.major == latestAppVersion.major && currentVersion.minor < latestAppVersion.minor ->
+                UpdateState.UpdateRequired(versionConfig.forcedUpdateNotice)
+
+            currentVersion.major == latestAppVersion.major &&
+                currentVersion.minor == latestAppVersion.minor &&
+                currentVersion.patch < latestAppVersion.patch ->
+                UpdateState.PatchUpdateAvailable(versionConfig.optionalUpdateNotice)
+
             else -> UpdateState.NoUpdateAvailable
         }
     }
