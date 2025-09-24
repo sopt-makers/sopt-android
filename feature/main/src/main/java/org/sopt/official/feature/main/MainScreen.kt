@@ -167,7 +167,7 @@ fun MainScreen(
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
                             override fun navigateToDeepLink(url: String) {
                                 if (userStatus == UNAUTHENTICATED) isOpenDialog = true
-                                else context.startActivity(DeepLinkType.of(url).getMainIntent(context, userStatus, url))
+                                else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
                             }
 
                             override fun navigateToWebUrl(url: String) {

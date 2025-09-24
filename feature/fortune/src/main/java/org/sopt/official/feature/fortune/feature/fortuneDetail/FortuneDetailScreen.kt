@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,6 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.component.FortuneButton
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.FortuneDetailErrorDialog
-import org.sopt.official.feature.fortune.feature.fortuneDetail.component.PokeRecommendationDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
@@ -79,7 +78,7 @@ internal fun FortuneDetailScreen(
                 todaySentence = uiState.todaySentence.content,
                 name = uiState.todaySentence.userName,
             )
-            Spacer(modifier = Modifier.height(height = 20.dp))
+            /*Spacer(modifier = Modifier.height(height = 20.dp))
             PokeRecommendationDashboard(
                 profile = uiState.userInfo.profile,
                 name = uiState.userInfo.userName,
@@ -87,7 +86,7 @@ internal fun FortuneDetailScreen(
                 userDescription = uiState.userInfo.userDescription,
                 onPokeClick = { onPokeClick(uiState.userInfo.userId) },
                 onProfileClick = { onProfileClick(uiState.userInfo.userId) },
-            )
+            )*/
             Spacer(modifier = Modifier.weight(weight = 1f))
             FortuneButton(
                 title = "오늘의 부적 받기",

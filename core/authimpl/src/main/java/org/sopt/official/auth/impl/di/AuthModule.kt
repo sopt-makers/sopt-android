@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2022-2024 SOPT - Shout Our Passion Together
+ * Copyright 2022-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -34,9 +34,11 @@ import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.local.DefaultLocalAuthDataSource
 import org.sopt.official.auth.impl.remote.DefaultRemoteAuthDataSource
 import org.sopt.official.auth.impl.repository.AuthRepositoryImpl
+import org.sopt.official.auth.impl.repository.DefaultCentralizeAuthRepository
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
 import org.sopt.official.auth.repository.AuthRepository
+import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
 import retrofit2.Retrofit
@@ -55,6 +57,10 @@ object AuthModule {
         @Binds
         @Singleton
         fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
+
+        @Binds
+        @Singleton
+        fun bindCentralizeAuthRepository(repository: DefaultCentralizeAuthRepository): CentralizeAuthRepository
 
         @Binds
         @Singleton
