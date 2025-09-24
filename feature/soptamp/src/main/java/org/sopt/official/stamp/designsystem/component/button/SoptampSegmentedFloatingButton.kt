@@ -28,7 +28,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
@@ -54,55 +55,57 @@ fun SoptampSegmentedFloatingButton(
     onClickSecondOption: () -> Unit = {},
 ) {
     Row(
-        modifier =
-            modifier
-                .clip(shape = CircleShape),
+        modifier = modifier.clip(shape = CircleShape),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Row(
             modifier =
                 Modifier
-                    .width(134.dp)
-                    .height(54.dp)
-                    .weight(1f)
                     .background(SoptTheme.colors.primary)
                     .clickable(onClick = onClickFirstOption)
-                    .padding(top = 11.dp, bottom = 11.dp, start = 13.dp, end = 6.dp),
+                    .padding(vertical = 11.dp)
+                    .padding(start = 13.dp, end = 4.dp)
+                    .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
                 tint = SoptTheme.colors.onSurface,
             )
+            Spacer(Modifier.width(4.dp))
             Text(
                 text = option1,
                 color = SoptTheme.colors.onSurface,
                 style = SoptTheme.typography.heading18B,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(
             modifier =
                 Modifier
-                    .width(134.dp)
-                    .height(54.dp)
-                    .weight(1f)
                     .background(SoptTheme.colors.onSurface)
                     .clickable(onClick = onClickSecondOption)
-                    .padding(top = 11.dp, bottom = 11.dp, start = 4.dp, end = 11.dp),
+                    .padding(vertical = 11.dp)
+                    .padding(start = 4.dp, end = 13.dp)
+                    .weight(1f),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
+            horizontalArrangement = Arrangement.Center
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.trophy),
                 contentDescription = "Extended Floating Action Button Trophy Icon",
                 tint = SoptTheme.colors.primary,
             )
+            Spacer(Modifier.width(4.dp))
             Text(
                 text = option2,
                 color = SoptTheme.colors.primary,
                 style = SoptTheme.typography.heading18B,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -112,6 +115,6 @@ fun SoptampSegmentedFloatingButton(
 @Composable
 private fun SoptampSegmentedFloatingButtonPreview() {
     SoptTheme {
-        SoptampSegmentedFloatingButton(option1 = "랭킹 보기", option2 = "전체 랭킹") { }
+        SoptampSegmentedFloatingButton(option1 = "37기 랭킹", option2 = "파트별 랭킹") { }
     }
 }
