@@ -28,7 +28,7 @@ import android.content.Context
 import androidx.credentials.CredentialManager
 import androidx.credentials.CustomCredential
 import androidx.credentials.GetCredentialRequest
-import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.coroutines.suspendRunCatching
@@ -40,14 +40,11 @@ import javax.inject.Singleton
 class GoogleLoginManager @Inject constructor() {
     suspend fun getGoogleIdToken(context: Context): String {
         var idToken = ""
+        val clientId = if (BuildConfig.DEBUG) BuildConfig.DEV_SERVER_CLIENT_ID else BuildConfig.PROD_SERVER_CLIENT_ID
         val credentialManager = CredentialManager.create(context)
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(if (BuildConfig.DEBUG) BuildConfig.DEV_SERVER_CLIENT_ID else BuildConfig.PROD_SERVER_CLIENT_ID)
-            .setFilterByAuthorizedAccounts(false)
-            .setAutoSelectEnabled(false)
-            .build()
+        val signInWithGoogleOption = GetSignInWithGoogleOption.Builder(serverClientId = clientId).build()
         val credentialRequest = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
+            .addCredentialOption(signInWithGoogleOption)
             .build()
 
         suspendRunCatching {
