@@ -121,7 +121,7 @@ fun MissionListScreen(
             SoptampSegmentedFloatingButton(
                 option1 = "개인별 랭킹",
                 option2 = "파트별 랭킹",
-                modifier = Modifier.padding(horizontal = 54.dp),
+                modifier = Modifier.padding(horizontal = 30.dp),
                 onClickFirstOption = onCurrentRankingButtonClick,
                 onClickSecondOption = onPartRankingButtonClick,
             )

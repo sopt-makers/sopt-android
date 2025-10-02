@@ -34,6 +34,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -105,6 +107,7 @@ fun MissionDetailScreen(
         composition = lottieComposition,
         isPlaying = isSuccess,
     )
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -146,7 +149,9 @@ fun MissionDetailScreen(
             onPressIcon = viewModel::onPressToolbarIcon,
         )
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .verticalScroll(scrollState),
         ) {
             Header(
                 title = title,
@@ -178,6 +183,7 @@ fun MissionDetailScreen(
                 borderColor = SoptTheme.colors.onSurface600,
                 isEditable = isEditable && isMe && !isSuccess,
             )
+            Spacer(modifier = Modifier.height(8.dp))
         }
 
         if (isEditable && isMe) {
@@ -187,7 +193,7 @@ fun MissionDetailScreen(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 9.dp, bottom = 40.dp),
+                        .padding(bottom = 20.dp),
             )
         }
     }
