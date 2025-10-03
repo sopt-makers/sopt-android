@@ -32,7 +32,6 @@ import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
-import org.sopt.official.domain.home.result.Result
 
 interface HomeRepository {
 

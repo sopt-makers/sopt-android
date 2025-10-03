@@ -1,3 +1,5 @@
+package org.sopt.official.common.util
+
 /*
  * MIT License
  * Copyright 2023-2025 SOPT - Shout Our Passion Together
@@ -22,19 +24,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.home.result
 
-sealed class Result<out R> {
-    data class Success<out T>(val data: T) : Result<T>()
-    data class Error(val exception: Throwable) : Result<Nothing>()
-}
+import timber.log.Timber
 
-fun <T> Result<T>.successOr(fallback: T): T {
-    return (this as? Result.Success<T>)?.data ?: fallback
-}
-
-inline fun <T, R> T.runCatching(block: T.() -> R): Result<R> = try {
-    Result.Success(block())
-} catch (e: Throwable) {
-    Result.Error(e)
-}
+/**
+ * Result 객체가 성공 상태일 때 값을 반환하고
+ * 실패 상태일 때는 예외를 에러 로그로 띄우고 fallback 값을 반환한다.
+ *
+ * @param fallback Result가 실패했을 때 반환할 기본값
+ * @return Result의 성공 값 또는 fallback 값
+ */
+fun <T> Result<T>.successOr(fallback: T): T =
+    this.getOrElse { exception ->
+        Timber.e(exception)
+        fallback
+    }
