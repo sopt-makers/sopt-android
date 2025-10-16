@@ -33,13 +33,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
-import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
@@ -52,7 +51,6 @@ class App : Application() {
         super.onCreate()
         appContext = this.applicationContext
 
-        initFlipper()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         lifecycleOwner.lifecycleScope.launch {
             lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -63,9 +61,5 @@ class App : Application() {
                 }.onFailure(Timber::e)
             }
         }
-    }
-
-    private fun initFlipper() {
-        FlipperInitializer.init(this)
     }
 }
