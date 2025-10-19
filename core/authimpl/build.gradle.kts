@@ -36,6 +36,7 @@ dependencies {
     implementation(projects.core.network)
     implementation(projects.core.common)
     implementation(projects.core.auth)
+    implementation(projects.core.model)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 }

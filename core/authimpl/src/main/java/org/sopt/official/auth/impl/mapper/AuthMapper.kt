@@ -26,7 +26,7 @@ package org.sopt.official.auth.impl.mapper
 
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.network.model.response.AuthResponse
 
 @Deprecated("이거 말고 TokenMapper 사용하세요.")

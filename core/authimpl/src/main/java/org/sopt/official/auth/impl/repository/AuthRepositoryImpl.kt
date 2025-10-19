@@ -29,7 +29,7 @@ import org.sopt.official.auth.impl.model.response.LogOutRequest
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
 import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.network.model.request.RefreshRequest
 import javax.inject.Inject
