@@ -29,6 +29,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
+import android.webkit.CookieManager
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -40,6 +41,8 @@ import timber.log.Timber
 class SoptWebViewClient(
     private val dataStore: SoptDataStore
 ) : WebViewClient() {
+    val cookieManager: CookieManager = CookieManager.getInstance()
+
     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
         val url = request?.url.toString().toUri()
 
@@ -105,7 +108,7 @@ class SoptWebViewClient(
                 return true
             }
         } catch (e: Exception) {
-            Timber.e("SoptWebViewClient#handleIntentScheme failed", e)
+            Timber.e("SoptWebViewClient#handleIntentScheme failed $e")
         }
         return false
     }
@@ -148,6 +151,10 @@ class SoptWebViewClient(
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
+        cookieManager.setCookie(COOKIE_DOMAIN, "Refresh-Token=${dataStore.refreshToken}") {
+            cookieManager.flush()
+        }
+
         val script = """
             window.localStorage.setItem('serviceAccessToken', '${dataStore.accessToken}');
         """.trimIndent()
@@ -157,5 +164,9 @@ class SoptWebViewClient(
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
+    }
+
+    private companion object {
+        const val COOKIE_DOMAIN = ".sopt.org"
     }
 }
