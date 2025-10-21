@@ -73,10 +73,9 @@ internal fun HomePopularNewsSection(
 
     Column(
         modifier = modifier
-            .padding(top = 22.dp)
     ) {
         Text(
-            text = "지금 인기 소식 🔥",
+            text = "실시간 인기글 🔥",
             style = SoptTheme.typography.heading20B,
             color = SoptTheme.colors.primary
         )
