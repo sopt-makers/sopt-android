@@ -33,7 +33,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.auth)
+    implementation(projects.core.model)
     implementation(projects.core.security)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)

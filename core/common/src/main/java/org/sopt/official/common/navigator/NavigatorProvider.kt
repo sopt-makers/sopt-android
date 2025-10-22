@@ -28,7 +28,7 @@ import android.content.Intent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 
 interface NavigatorProvider {
     fun getAuthActivityIntent(): Intent

@@ -74,8 +74,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
@@ -90,6 +88,7 @@ import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
+import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 
@@ -166,7 +165,7 @@ fun MainScreen(
 
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
                             override fun navigateToDeepLink(url: String) {
-                                if (userStatus == UNAUTHENTICATED) isOpenDialog = true
+                                if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
                                 else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
                             }
 

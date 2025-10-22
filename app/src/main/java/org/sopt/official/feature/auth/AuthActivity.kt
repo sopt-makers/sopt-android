@@ -46,7 +46,7 @@ import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 import org.sopt.official.R
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme

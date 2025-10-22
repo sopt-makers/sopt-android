@@ -35,7 +35,7 @@ import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessa
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.network.persistence.SoptDataStore

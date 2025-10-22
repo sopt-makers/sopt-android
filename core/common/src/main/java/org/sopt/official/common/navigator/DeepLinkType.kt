@@ -27,7 +27,7 @@ package org.sopt.official.common.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.util.extractQueryParameter
 import timber.log.Timber

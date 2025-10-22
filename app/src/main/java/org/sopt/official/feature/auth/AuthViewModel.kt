@@ -36,7 +36,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.CentralizeToken
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
