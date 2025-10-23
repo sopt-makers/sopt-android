@@ -314,8 +314,7 @@ private fun HomeScreenForMember(
                     postList = popularPosts,
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
 
