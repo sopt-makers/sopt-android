@@ -96,6 +96,7 @@ internal data class HomeSurveyData(
     val description: String = "여러분의 솝커톤 이야기를 들려주세요!",
     val buttonText: String = "지금 솝커톤 후기 쓰러가기",
     val surveyLink: String = "",
+    val isActive: Boolean = false
 )
 
 @Immutable
