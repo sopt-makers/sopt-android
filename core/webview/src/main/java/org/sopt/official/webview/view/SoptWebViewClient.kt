@@ -166,7 +166,7 @@ class SoptWebViewClient(
         (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
     }
 
-    private companion object {
-        const val COOKIE_DOMAIN = ".sopt.org"
+    companion object {
+        private const val COOKIE_DOMAIN = ".sopt.org"
     }
 }
