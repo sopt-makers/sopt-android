@@ -24,10 +24,10 @@
  */
 package org.sopt.official.feature.mypage.mypage.state
 
-import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.model.UserStatus
 
 data class MyPageUiState(
-    val user: UserActiveState,
+    val user: UserStatus,
     val dialogState: MyPageDialogState,
     val onEventSink: (action: MyPageAction) -> Unit,
 )

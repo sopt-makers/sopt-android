@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra

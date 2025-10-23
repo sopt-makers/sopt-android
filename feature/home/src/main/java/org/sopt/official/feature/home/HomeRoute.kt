@@ -61,8 +61,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -120,7 +119,7 @@ internal fun HomeRoute(
     }
 
     LaunchedEffect(userStatus) {
-        if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
+        if (userStatus != UserStatus.UNAUTHENTICATED) newHomeViewModel.refreshAll()
     }
 
     LaunchedEffect(Unit) {
@@ -307,19 +306,20 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.height(height = 56.dp))
+            if (popularPosts.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomePopularNewsSection(
-                postList = popularPosts,
-                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
-                navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(height = 56.dp))
+                HomePopularNewsSection(
+                    postList = popularPosts,
+                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
+                    navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+            }
 
             if (latestPosts.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
+
                 HomeLatestNewsSection(
                     feedList = latestPosts,
                     navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
@@ -328,21 +328,23 @@ private fun HomeScreenForMember(
                 )
             }
 
-            Spacer(modifier = Modifier.height(height = 56.dp))
+            if (surveyData.isActive) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomeSurveySection(
-                surveyTitle = surveyData.title,
-                surveyDescription = surveyData.description,
-                buttonText = surveyData.buttonText,
-                onClick = {
-                    homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
-                    trackClickEvent(tracker, "at36_survey_button")
-                },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
+                HomeSurveySection(
+                    surveyTitle = surveyData.title,
+                    surveyDescription = surveyData.description,
+                    buttonText = surveyData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
+                        trackClickEvent(tracker, "at36_survey_button")
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.height(height = 72.dp))
+            Spacer(modifier = Modifier.height(height = 70.dp))
 
             HomeOfficialChannelButton(
                 navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl,

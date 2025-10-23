@@ -24,6 +24,8 @@
  */
 package org.sopt.official.auth.model
 
+import org.sopt.official.model.UserStatus
+
 data class Auth(
     val token: Token,
     val status: UserStatus

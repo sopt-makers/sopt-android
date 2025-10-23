@@ -127,6 +127,7 @@ dependencies {
     implementation(projects.core.authimpl)
     implementation(projects.core.security)
     implementation(projects.core.webview)
+    implementation(projects.core.model)
 
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)

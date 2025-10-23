@@ -26,7 +26,7 @@ package org.sopt.official.auth.repository
 
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 
 @Deprecated("이거 말고 :domain:auth 의 AuthRepository 와 :core:auth 의 CentralizeAuthRepository 를 쓰세요")
 interface AuthRepository {

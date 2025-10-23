@@ -27,8 +27,7 @@ package org.sopt.official.feature.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.sopt.official.auth.model.UserActiveState
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -58,7 +57,7 @@ class NavigatorProviderIntent @Inject constructor(
 
     override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
         context,
-        MyPageActivity.Argument(UserActiveState.valueOf(name))
+        MyPageActivity.Argument(UserStatus.valueOf(name))
     )
 
     override fun getPokeActivityIntent(userStatus: UserStatus): Intent = PokeMainActivity.getIntent(
