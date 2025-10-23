@@ -26,7 +26,7 @@ package org.sopt.official.feature.auth
 
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.network.model.response.OAuthToken
 
 fun OAuthToken.toEntity() = Auth(

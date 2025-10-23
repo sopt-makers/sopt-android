@@ -47,7 +47,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.auth.model.UserActiveState
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
@@ -66,12 +65,13 @@ import org.sopt.official.feature.mypage.mypage.state.rememberMyPageUiState
 import org.sopt.official.feature.mypage.signout.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
+import org.sopt.official.model.UserStatus
 import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageActivity : AppCompatActivity() {
-    private val args by serializableExtra(Argument(UserActiveState.UNAUTHENTICATED))
+    private val args by serializableExtra(Argument(UserStatus.UNAUTHENTICATED))
 
     @Inject
     lateinit var navigatorProvider: NavigatorProvider
@@ -81,7 +81,7 @@ class MyPageActivity : AppCompatActivity() {
         setContent {
             SoptTheme {
                 val uiState = rememberMyPageUiState(
-                    userActiveState = args?.userActiveState ?: UserActiveState.UNAUTHENTICATED,
+                    userActiveState = args?.userActiveState ?: UserStatus.UNAUTHENTICATED,
                     authRepository = authRepository,
                     stampRepository = stampRepository,
                     onRestartApp = { startActivity(navigatorProvider.getAuthActivityIntent()) }
@@ -196,7 +196,7 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageSection(items = serviceSectionItems)
                         Spacer(modifier = Modifier.height(16.dp))
                         when (uiState.user) {
-                            UserActiveState.ACTIVE, UserActiveState.INACTIVE -> {
+                            UserStatus.ACTIVE, UserStatus.INACTIVE -> {
                                 MyPageSection(items = notificationSectionItems)
                                 Spacer(modifier = Modifier.height(16.dp))
                                 MyPageSection(items = soptampSectionItems)
@@ -204,7 +204,7 @@ class MyPageActivity : AppCompatActivity() {
                                 MyPageSection(items = etcSectionItems)
                             }
 
-                            UserActiveState.UNAUTHENTICATED -> {
+                            UserStatus.UNAUTHENTICATED -> {
                                 MyPageSection(items = etcLoginSectionItems)
                             }
                         }
@@ -225,7 +225,7 @@ class MyPageActivity : AppCompatActivity() {
     }
 
     data class Argument(
-        val userActiveState: UserActiveState,
+        val userActiveState: UserStatus,
     ) : Serializable
 
     companion object {

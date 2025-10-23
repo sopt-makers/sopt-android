@@ -25,7 +25,7 @@
 package org.sopt.official.auth.impl.source
 
 import org.sopt.official.auth.model.Token
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 
 interface LocalAuthDataSource {
     fun save(token: Token)

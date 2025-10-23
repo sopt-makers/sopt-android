@@ -28,16 +28,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.home.navigation.Home
 import org.sopt.official.feature.home.navigation.navigateToHome
 import org.sopt.official.feature.soptlog.navigation.navigateToSoptlog
+import org.sopt.official.model.UserStatus
 
 class MainNavigator(
     val navController: NavHostController,

@@ -33,14 +33,14 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.model.UserStatus
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import timber.log.Timber
 
 @Composable
 fun rememberMyPageUiState(
-    userActiveState: UserActiveState,
+    userActiveState: UserStatus,
     authRepository: AuthRepository,
     stampRepository: StampRepository,
     onRestartApp: () -> Unit,

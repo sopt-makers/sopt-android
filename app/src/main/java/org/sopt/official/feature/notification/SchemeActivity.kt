@@ -31,7 +31,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate

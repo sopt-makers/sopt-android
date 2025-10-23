@@ -34,12 +34,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.auth)
     implementation(projects.domain.auth)
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.model)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)

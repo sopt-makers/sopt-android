@@ -31,6 +31,7 @@ include(
     ":core:security",
     ":core:webview",
     ":core:navigation",
+    ":core:model",
 
     ":data:auth",
     ":data:fortune",

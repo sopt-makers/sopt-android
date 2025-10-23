@@ -61,8 +61,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -120,7 +119,7 @@ internal fun HomeRoute(
     }
 
     LaunchedEffect(userStatus) {
-        if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
+        if (userStatus != UserStatus.UNAUTHENTICATED) newHomeViewModel.refreshAll()
     }
 
     LaunchedEffect(Unit) {

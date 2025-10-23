@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.auth)
+    implementation(projects.core.model)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.designsystem)
