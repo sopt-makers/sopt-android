@@ -27,11 +27,14 @@ package org.sopt.official.stamp.feature.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.feature.mission.MissionsState
@@ -100,6 +103,7 @@ fun RankingScreenRoute(
     navController: NavController,
 ) {
     val rankingViewModel: RankingViewModel = hiltViewModel()
+    val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
@@ -113,6 +117,7 @@ fun RankingScreenRoute(
             NetworkErrorDialog {
                 navController.popBackStack()
             }
+
         is RankingState.Success -> {
             val successState = state as RankingState.Success
             RankingScreen(
@@ -129,6 +134,14 @@ fun RankingScreenRoute(
                 onClickUser = { ranker ->
                     navController.navigateToUserMissionList(ranker)
                 },
+                navigateToMyPageStamp = {
+                    val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
+                        context = context,
+                        userStatus = UserStatus.UNAUTHENTICATED,
+                        deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
+                    )
+                    context.startActivity(intent)
+                }
             )
         }
     }
@@ -136,6 +149,7 @@ fun RankingScreenRoute(
 
 @Composable
 fun PartRankingScreenRoute(navController: NavController) {
+    val context = LocalContext.current
     val partRankingViewModel: PartRankingViewModel = hiltViewModel()
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
 
@@ -149,6 +163,7 @@ fun PartRankingScreenRoute(navController: NavController) {
             NetworkErrorDialog {
                 partRankingViewModel.fetchRanking()
             }
+
         is PartRankingState.Success -> {
             val successState = state as PartRankingState.Success
             PartRankingScreen(
@@ -159,6 +174,14 @@ fun PartRankingScreenRoute(navController: NavController) {
                 onClickPart = { partName ->
                     navController.navigateToRanking(partName)
                 },
+                navigateToMyPageStamp = {
+                    val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
+                        context = context,
+                        userStatus = UserStatus.UNAUTHENTICATED,
+                        deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
+                    )
+                    context.startActivity(intent)
+                }
             )
         }
     }
@@ -172,6 +195,7 @@ fun UserMissionListScreenRoute(
     val missionsViewModel: MissionsViewModel = hiltViewModel()
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
+    val description by missionsViewModel.description.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         missionsViewModel.fetchMissions(
@@ -190,11 +214,12 @@ fun UserMissionListScreenRoute(
                     )
             }
         }
+
         is MissionsState.Success -> {
             val successState = state as MissionsState.Success
             UserMissionListScreen(
                 userName = args.nickname,
-                description = args.description,
+                description = if (args.nickname == nickname) description else args.description ?: "설정된 한 마디가 없습니다.",
                 missionListUiModel = successState.missionListUiModel,
                 isMe = args.nickname == nickname,
                 onMissionItemClick = { item ->
