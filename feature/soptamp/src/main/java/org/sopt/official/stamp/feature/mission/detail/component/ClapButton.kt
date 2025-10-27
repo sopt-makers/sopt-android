@@ -22,12 +22,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.Gray400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 
 @Composable
 fun ClapButton(
     clapCount: Int,
+    myClapCount: Int?,
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -56,11 +58,19 @@ fun ClapButton(
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
-            contentDescription = "clap icon",
-            tint = Color.Unspecified,
-        )
+        if (myClapCount == 0) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
+                contentDescription = "clap icon",
+                tint = Gray400,
+            )
+        } else {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
+                contentDescription = "clap icon",
+                tint = Color.Unspecified,
+            )
+        }
 
         Spacer(modifier = Modifier.width(8.dp))
 
@@ -78,6 +88,7 @@ private fun ClapButtonPreview() {
     SoptTheme {
         ClapButton(
             clapCount = 999,
+            myClapCount = 0,
             onClicked = {},
             modifier = Modifier
         )
