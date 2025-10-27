@@ -76,6 +76,7 @@ fun RankingScreen(
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
     nickname: String,
+    navigateToMyPageStamp: () -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickUser: (RankerNavArg) -> Unit = {},
 ) {
@@ -101,6 +102,7 @@ fun RankingScreen(
             RankingHeader(
                 title = if (isCurrent) "$type 랭킹" else type + "파트 랭킹",
                 onClickBack = onClickBack,
+                navigateToMyPageStamp = navigateToMyPageStamp,
             )
         },
         floatingActionButton = {
@@ -172,6 +174,7 @@ fun RankingScreen(
 fun RankingHeader(
     title: String,
     onClickBack: () -> Unit = {},
+    navigateToMyPageStamp: () -> Unit = {},
 ) {
     SoptTopAppBar(
         title = {
@@ -188,6 +191,13 @@ fun RankingHeader(
                 onClick = onClickBack,
             )
         },
+        actions = {
+            SoptampIconButton(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_missionlist_edit_message),
+                tint = SoptTheme.colors.onSurface10,
+                onClick = navigateToMyPageStamp,
+            )
+        }
     )
 }
 

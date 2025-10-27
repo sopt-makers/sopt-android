@@ -69,6 +69,7 @@ fun PartRankingScreen(
     onRefresh: () -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickPart: (String) -> Unit = {},
+    navigateToMyPageStamp: () -> Unit = {},
 ) {
     val refreshingState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -81,6 +82,7 @@ fun PartRankingScreen(
             RankingHeader(
                 title = "파트별 랭킹",
                 onClickBack = onClickBack,
+                navigateToMyPageStamp = navigateToMyPageStamp,
             )
         },
         modifier =
