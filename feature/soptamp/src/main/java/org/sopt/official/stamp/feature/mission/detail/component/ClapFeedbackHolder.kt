@@ -3,8 +3,7 @@ package org.sopt.official.stamp.feature.mission.detail.component
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -32,13 +31,16 @@ fun ClapFeedbackHolder(
     ) {
         ClapButton(
             clapCount = clapCount,
+            myClapCount = myClapCount,
             onClicked = onPressClap,
         )
 
         AnimatedVisibility(
             visible = isBadgeVisible,
-            enter = fadeIn() + scaleIn(initialScale = 0.7f),
-            exit = fadeOut() + scaleOut(targetScale = 0.7f),
+            enter = slideInVertically(
+                initialOffsetY = { it / 2 }
+            ) + fadeIn(),
+            exit = fadeOut(),
             modifier = Modifier
                 .padding(bottom = 64.dp)
         ) {
