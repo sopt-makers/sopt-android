@@ -123,9 +123,7 @@ fun MissionDetailScreen(
     var isClapUserListOpen by remember { mutableStateOf(false) }
 
     val viewCount by viewModel.viewCount.collectAsStateWithLifecycle(initialValue = 0)
-    var isBadgeVisible by remember {
-        mutableStateOf(false)
-    }
+    val isBadgeVisible by viewModel.isBadgeVisible.collectAsStateWithLifecycle(initialValue = false)
 
     var isZoomInDialogOpen by remember { mutableStateOf(false) }
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
@@ -154,13 +152,6 @@ fun MissionDetailScreen(
         if (isDeleteSuccess) {
             navController.setMissionDetailResult(true)
             navController.popBackStack()
-        }
-    }
-    LaunchedEffect(myClapCount) {
-        if (myClapCount != null && myClapCount!! > 0) {
-            isBadgeVisible = true
-            delay(500L)
-            isBadgeVisible = false
         }
     }
 

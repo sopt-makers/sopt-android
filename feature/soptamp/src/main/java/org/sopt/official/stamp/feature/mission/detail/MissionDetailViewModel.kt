@@ -32,6 +32,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -73,7 +74,8 @@ data class PostUiState(
     val viewCount: Int = 0,
     val myClapCount: Int? = 0, // UI 표시용
     val unSyncedClapCount: Int = 0, // 서버 전송용
-    val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf()
+    val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf(),
+    val isBadgeVisible: Boolean = false
 ) {
     companion object {
         fun from(data: Archive) =
@@ -120,11 +122,11 @@ constructor(
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
     val isError = uiState.map { it.isError }
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
+    val isBadgeVisible = uiState.map { it.isBadgeVisible }
 
     val totalClapCount = uiState.map { it.totalClapCount }
     val viewCount = uiState.map { it.viewCount }
     val myClapCount = uiState.map { it.myClapCount }
-    val unSyncedClapCount = uiState.map { it.unSyncedClapCount }
     val clappers = uiState.map { it.clappers }
 
     val stampId = uiState.map { it.stampId }
@@ -409,6 +411,20 @@ constructor(
         if (stateAfterUpdate.unSyncedClapCount > 0) {
             viewModelScope.launch {
                 clapEvent.emit(Unit)
+            }
+        }
+
+        viewModelScope.launch {
+            uiState.update {
+                it.copy(
+                    isBadgeVisible = true
+                )
+            }
+            delay(500L)
+            uiState.update {
+                it.copy(
+                    isBadgeVisible = false
+                )
             }
         }
     }
