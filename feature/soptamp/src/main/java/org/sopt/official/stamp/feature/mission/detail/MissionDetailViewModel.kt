@@ -27,13 +27,18 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
@@ -41,6 +46,9 @@ import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
+import org.sopt.official.stamp.feature.mission.detail.model.StampClapUiModel
+import org.sopt.official.stamp.feature.mission.detail.model.StampClapUserUiModel
+import org.sopt.official.stamp.feature.mission.detail.model.toUiModel
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
@@ -61,6 +69,11 @@ data class PostUiState(
     val isDeleteDialogVisible: Boolean = false,
     val isMe: Boolean = true,
     val isBottomSheetOpened: Boolean = false,
+    val totalClapCount: Int = 0,
+    val viewCount: Int = 0,
+    val myClapCount: Int? = 0, // UI 표시용
+    val unSyncedClapCount: Int = 0, // 서버 전송용
+    val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf()
 ) {
     companion object {
         fun from(data: Archive) =
@@ -69,6 +82,9 @@ data class PostUiState(
                 imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
                 content = data.contents,
                 date = data.activityDate,
+                totalClapCount = data.clapCount,
+                viewCount = data.viewCount,
+                myClapCount = data.myClapCount
             )
     }
 }
@@ -82,6 +98,9 @@ constructor(
     private val imageUploaderRepository: ImageUploaderRepository,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
+    private val clapEvent = MutableSharedFlow<Unit>()
+    private var debounceJob: Job? = null
+    private var isPosting = false
 
     private val isMe = uiState.map { it.isMe }
     val isSuccess = uiState.map { it.isSuccess }
@@ -102,9 +121,18 @@ constructor(
     val isError = uiState.map { it.isError }
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
 
+    val totalClapCount = uiState.map { it.totalClapCount }
+    val viewCount = uiState.map { it.viewCount }
+    val myClapCount = uiState.map { it.myClapCount }
+    val unSyncedClapCount = uiState.map { it.unSyncedClapCount }
+    val clappers = uiState.map { it.clappers }
+
+    val stampId = uiState.map { it.stampId }
+
     private val submitEvent = MutableSharedFlow<Unit>()
 
     init {
+        observeDebouncedClaps()
         viewModelScope.launch {
             submitEvent.debounce(500).collect {
                 handleSubmit()
@@ -146,6 +174,10 @@ constructor(
                             imageUri = ImageModel.Remote(url = it.images),
                             isCompleted = isCompleted,
                             toolbarIconType = option,
+                            totalClapCount = it.clapCount,
+                            viewCount = it.viewCount,
+                            myClapCount = it.myClapCount,
+                            isMe = it.mine ?: isMe
                         )
                         uiState.update { result }
                     }.onFailure { error ->
@@ -344,6 +376,89 @@ constructor(
     fun onPressNetworkErrorDialog() {
         uiState.update {
             it.copy(isError = false, error = null)
+        }
+    }
+
+    private fun observeDebouncedClaps() {
+        debounceJob?.cancel()
+        debounceJob = viewModelScope.launch {
+            clapEvent
+                .debounce(2000L)
+                .collect {
+                    val currentMyClapCount = uiState.value.myClapCount
+
+                    if (currentMyClapCount != null && currentMyClapCount > 0) {
+                        postClapDataIfNeeded()
+                    }
+                }
+        }
+    }
+
+    fun onPressClap() {
+        val stateAfterUpdate = uiState.updateAndGet { state ->
+            if (state.myClapCount != null && state.myClapCount < 50) {
+                state.copy(
+                    totalClapCount = state.totalClapCount + 1,
+                    myClapCount = state.myClapCount + 1,
+                    unSyncedClapCount = state.unSyncedClapCount + 1
+                )
+            } else state
+        }
+
+        // 값 변경이 될 경우에만 debounce
+        if (stateAfterUpdate.unSyncedClapCount > 0) {
+            viewModelScope.launch {
+                clapEvent.emit(Unit)
+            }
+        }
+    }
+
+
+    fun flushClapDataOnExit() {
+        debounceJob?.cancel()
+        postClapDataIfNeeded()
+    }
+
+    private fun postClapDataIfNeeded() {
+        val state = uiState.value
+        if (isPosting || state.unSyncedClapCount <= 0) return
+
+        isPosting = true
+        val stampId = state.stampId
+        val clapToSend = state.unSyncedClapCount
+
+        viewModelScope.launch {
+            val clapData = StampClapUiModel(clapCount = clapToSend)
+            stampRepository.clapStamp(stampId, clapData.toDomain())
+                .onSuccess { clapResult ->
+                    uiState.update {
+                        it.copy(
+                            totalClapCount = clapResult.totalClapCount,
+                            unSyncedClapCount = 0
+                        )
+                    }
+                }
+                .onFailure {
+                    Timber.e(it)
+                }
+
+            isPosting = false
+        }
+    }
+
+    fun getStampClappers(stampId: Int) {
+        viewModelScope.launch {
+            stampRepository.getClappers(stampId)
+                .onSuccess { result ->
+                    uiState.update { currentState ->
+                        currentState.copy(
+                            clappers = result.clappers.map { it.toUiModel() }.toPersistentList()
+                        )
+                    }
+                }
+                .onFailure {
+                    Timber.e(it)
+                }
         }
     }
 }
