@@ -31,14 +31,26 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.firstOrNull
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.stamp.feature.navigation.MissionDetail
 import org.sopt.official.stamp.feature.navigation.MissionList
+import org.sopt.official.stamp.feature.navigation.PartRanking
+import org.sopt.official.stamp.feature.navigation.Ranking
+import org.sopt.official.stamp.feature.navigation.UserMissionList
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
+import java.io.Serializable
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,36 +58,105 @@ class SoptampActivity : AppCompatActivity() {
     @Inject
     lateinit var tracker: Tracker
 
+    data class SoptampMissionArgs(
+        val id: Int,
+        val missionId: Int,
+        val isMine: Boolean,
+        val nickname: String?,
+        val part: String?,
+        val level: Int,
+        val title: String? = null
+    ) : Serializable
+
+    private val args by serializableExtra(
+        SoptampMissionArgs(
+            id = -1,
+            missionId = -1,
+            isMine = false,
+            nickname = null,
+            part = null,
+            level = 1,
+            title = null
+        )
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val deepLinkDestination: Any? = if (args?.missionId == -1 || args == null) {
+            null
+        } else {
+            MissionDetail(
+                id = args?.missionId ?: -1,
+                level = args?.level ?: 1,
+                isCompleted = true,
+                isMe = args?.isMine ?: false,
+                nickname = args?.nickname.orEmpty(),
+                title = args?.title.orEmpty(),
+            )
+        }
+
         setContent {
             SoptTheme {
                 ProvideTracker(tracker) {
-                    SoptampNavHost()
+                    SoptampNavHost(
+                        startDestination = MissionList,
+                        deepLinkDestination = deepLinkDestination,
+                        args = args
+                    )
                 }
             }
         }
     }
 
     companion object {
-        fun getIntent(context: Context): Intent {
-            return Intent(context, SoptampActivity::class.java)
+        fun getIntent(context: Context, args: SoptampMissionArgs? = null): Intent {
+            return Intent(context, SoptampActivity::class.java).apply {
+                putExtra("args", args)
+            }
         }
     }
 }
 
 @Composable
-private fun SoptampNavHost() {
+private fun SoptampNavHost(
+    startDestination: Any,
+    deepLinkDestination: Any?,
+    args: SoptampActivity.SoptampMissionArgs? = null
+) {
     val navController = rememberNavController()
+
+    // 딥링크 한 번만 처리하도록
+    var isDeepLinkHandled by remember { mutableStateOf(false) }
 
     NavHost(
         navController = navController,
-        startDestination = MissionList,
+        startDestination = startDestination,
     ) {
         soptampNavGraph(
             navController = navController,
             onBackClick = { navController.popBackStack() },
         )
+    }
+
+    LaunchedEffect(deepLinkDestination, isDeepLinkHandled) {
+        if (deepLinkDestination != null && deepLinkDestination != startDestination && !isDeepLinkHandled) {
+            isDeepLinkHandled = true
+
+            val destinationsToBuild = listOf(
+                PartRanking,
+                Ranking(args?.part.orEmpty()),
+                UserMissionList(args?.nickname ?: "", ""),
+                deepLinkDestination
+            )
+
+            for (destination in destinationsToBuild) {
+                navController.navigate(destination)
+                navController.currentBackStackEntryFlow.firstOrNull {
+                    it.destination.route?.startsWith(destination::class.qualifiedName!!) == true
+                }
+            }
+        }
     }
 }
