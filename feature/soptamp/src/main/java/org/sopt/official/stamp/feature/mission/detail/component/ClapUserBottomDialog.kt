@@ -2,6 +2,7 @@ package org.sopt.official.stamp.feature.mission.detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,9 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -126,8 +129,6 @@ private fun ClapUserHeader(
             )
         }
 
-        Spacer(modifier = Modifier.width(8.dp))
-
         Text(
             text = "박수 목록",
             style = SoptTheme.typography.title20SB,
@@ -142,15 +143,26 @@ private fun ClapUserItem(
     onClickUser: (String?, String?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clickable(
+                interactionSource = interactionSource,
+                indication = ripple(
+                    bounded = true,
+                    color = Color.White
+                ),
+                onClick = {
+                    onClickUser(
+                        user.nickname,
+                        if (user.profileMessage.isNullOrEmpty()) "설정된 한 마디가 없습니다" else user.profileMessage
+                    )
+                })
             .clip(RoundedCornerShape(8.dp))
             .background(color = SoptTheme.colors.onSurface800)
-            .padding(horizontal = 12.dp, vertical = 15.dp)
-            .clickable(onClick = {
-                onClickUser(user.nickname, if (user.profileMessage.isNullOrEmpty()) "설정된 한 마디가 없습니다" else user.profileMessage)
-            }),
+            .padding(horizontal = 8.dp, vertical = 15.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -182,6 +194,7 @@ private fun ClapUserItem(
         Spacer(modifier = Modifier.width(12.dp))
 
         Column(
+            modifier = Modifier.weight(1f),
             horizontalAlignment = Alignment.Start
         ) {
             Text(
@@ -201,25 +214,21 @@ private fun ClapUserItem(
 
         Spacer(modifier = Modifier.width(18.dp))
 
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "${user.clapCount}회",
-                style = SoptTheme.typography.heading16B,
-                color = Color.White
-            )
+        Text(
+            text = "${user.clapCount}회",
+            style = SoptTheme.typography.heading16B,
+            color = Color.White
+        )
 
-            Spacer(modifier = Modifier.width(5.dp))
+        Spacer(modifier = Modifier.width(5.dp))
 
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
-                contentDescription = "",
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(width = 20.dp, height = 18.dp)
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
+            contentDescription = "",
+            tint = Color.Unspecified,
+            modifier = Modifier
+                .size(width = 20.dp, height = 18.dp)
+        )
     }
 }
 
