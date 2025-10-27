@@ -35,6 +35,7 @@ interface NavigatorProvider {
     fun getNotificationActivityIntent(): Intent
     fun getNotificationDetailActivityIntent(notificationId: String): Intent
     fun getMyPageActivityIntent(name: String): Intent
+    fun getAdjustSentenceActivityIntent(): Intent
     fun getAttendanceActivityIntent(): Intent
     fun getSoptampActivityIntent(): Intent
     fun getPokeNotificationActivityIntent(name: String): Intent
@@ -43,6 +44,15 @@ interface NavigatorProvider {
     fun getFortuneActivityIntent(): Intent
     fun getScheduleActivityIntent(): Intent
 
+    fun getSoptampMissionDetailActivityIntent(
+        id: Int,
+        missionId: Int,
+        isMine: Boolean,
+        nickname: String?,
+        part: String?,
+        level: Int,
+        title: String?
+    ): Intent
 
     fun getMainActivityIntent(
         userStatus: UserStatus,
