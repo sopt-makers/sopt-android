@@ -84,7 +84,7 @@ fun UserMissionListScreen(
             Spacer(modifier = Modifier.size(33.dp))
             MissionsGridComponent(
                 missions = missionListUiModel.missionList.toImmutableList(),
-                onMissionItemClick = { onMissionItemClick(it) },
+                onMissionItemClick = onMissionItemClick,
                 isMe = isMe,
                 nickname = userName,
             )
