@@ -58,26 +58,18 @@ fun ClapButton(
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (myClapCount == 0) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
-                contentDescription = "clap icon",
-                tint = Gray400,
-            )
-        } else {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
-                contentDescription = "clap icon",
-                tint = Color.Unspecified,
-            )
-        }
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
+            contentDescription = "clap icon",
+            tint = if (myClapCount == 0) Gray400 else Color.Unspecified
+        )
 
         Spacer(modifier = Modifier.width(8.dp))
 
         Text(
             text = clapCount.toString(),
             style = SoptTheme.typography.heading20B,
-            color = Color.White,
+            color = SoptTheme.colors.primary,
         )
     }
 }
