@@ -72,9 +72,11 @@ import androidx.navigation.NavController
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
@@ -89,7 +91,6 @@ import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 import org.sopt.official.stamp.feature.mission.model.toArgs
 import org.sopt.official.stamp.feature.navigation.navigateToMissionDetail
-import org.sopt.official.stamp.feature.navigation.navigateToOnboarding
 import org.sopt.official.stamp.feature.navigation.navigateToPartRanking
 import org.sopt.official.stamp.feature.navigation.navigateToRanking
 import org.sopt.official.webview.view.WebViewActivity
@@ -105,7 +106,7 @@ fun MissionListScreen(
     onPartRankingButtonClick: () -> Unit = {},
     onCurrentRankingButtonClick: () -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onOnboardingButtonClick: () -> Unit = {},
+    navigateToMyPageStamp: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -114,7 +115,7 @@ fun MissionListScreen(
                 menuTexts = menuTexts,
                 onMenuClick = onMenuClick,
                 onReportButtonClick = onReportButtonClick,
-                onOnboardingButtonClick = onOnboardingButtonClick,
+                navigateToMyPageStamp = navigateToMyPageStamp
             )
         },
         floatingActionButton = {
@@ -211,7 +212,9 @@ fun MissionListHeader(
     menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onOnboardingButtonClick: () -> Unit = {},
+    navigateToMyPageStamp: () -> Unit = {},
+    //onOnboardingButtonClick: () -> Unit = {},
+
 ) {
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
@@ -237,9 +240,9 @@ fun MissionListHeader(
                 Spacer(modifier = Modifier.width(12.dp))
 
                 SoptampIconButton(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptamp_guide),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_missionlist_edit_message),
                     tint = SoptTheme.colors.onSurface10,
-                    onClick = onOnboardingButtonClick,
+                    onClick = navigateToMyPageStamp,
                 )
             }
         },
@@ -437,8 +440,13 @@ fun MissionListScreenNew(
                         context.startActivity(this)
                     }
                 },
-                onOnboardingButtonClick = {
-                    navController.navigateToOnboarding()
+                navigateToMyPageStamp = {
+                    val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
+                        context = context,
+                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                        deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
+                    )
+                    context.startActivity(intent)
                 },
             )
         }

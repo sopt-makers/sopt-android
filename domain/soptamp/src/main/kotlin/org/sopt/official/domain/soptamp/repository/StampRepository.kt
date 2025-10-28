@@ -26,6 +26,9 @@ package org.sopt.official.domain.soptamp.repository
 
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.domain.soptamp.model.StampClap
+import org.sopt.official.domain.soptamp.model.StampClapResult
+import org.sopt.official.domain.soptamp.model.StampClappers
 
 interface StampRepository {
     suspend fun completeMission(stamp: Stamp): Result<Archive>
@@ -39,4 +42,7 @@ interface StampRepository {
     suspend fun deleteAllStamps(): Result<Unit>
 
     suspend fun getReportUrl(): Result<String>
+
+    suspend fun getClappers(stampId: Int): Result<StampClappers>
+    suspend fun clapStamp(stampId: Int, clap: StampClap): Result<StampClapResult>
 }

@@ -51,7 +51,7 @@ data object PartRanking : SoptampRoute
 @Serializable
 data class UserMissionList(
     val nickname: String,
-    val description: String,
+    val description: String?,
 ) : SoptampRoute
 
 @Serializable

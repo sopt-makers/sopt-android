@@ -24,8 +24,10 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,18 +40,26 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
@@ -60,16 +70,20 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
-import org.sopt.official.stamp.designsystem.component.layout.SoptColumn
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
+import org.sopt.official.stamp.feature.mission.detail.component.ClapFeedbackHolder
+import org.sopt.official.stamp.feature.mission.detail.component.ClapUserBottomDialog
 import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
 import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
+import org.sopt.official.stamp.feature.mission.detail.component.DetailInfo
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
+import org.sopt.official.stamp.feature.mission.detail.component.ImageModal
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
+import org.sopt.official.stamp.feature.navigation.navigateToUserMissionList
 import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
 
@@ -81,6 +95,7 @@ fun MissionDetailScreen(
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsStateWithLifecycle("")
+    val stampId by viewModel.stampId.collectAsStateWithLifecycle(initialValue = -1)
     val date by viewModel.date.collectAsStateWithLifecycle("")
     val imageModel by viewModel.imageModel.collectAsStateWithLifecycle(ImageModel.Empty)
     val isSuccess by viewModel.isSuccess.collectAsStateWithLifecycle(false)
@@ -100,6 +115,20 @@ fun MissionDetailScreen(
                 else -> R.raw.orangestamp
             }
         }
+
+    val totalClapCount by viewModel.totalClapCount.collectAsStateWithLifecycle(0)
+    val myClapCount by viewModel.myClapCount.collectAsStateWithLifecycle(initialValue = 0)
+    val clappers by viewModel.clappers.collectAsStateWithLifecycle(initialValue = persistentListOf())
+
+    var isClapUserListOpen by remember { mutableStateOf(false) }
+
+    val viewCount by viewModel.viewCount.collectAsStateWithLifecycle(initialValue = 0)
+    val isBadgeVisible by viewModel.isBadgeVisible.collectAsStateWithLifecycle(initialValue = false)
+
+    var isZoomInDialogOpen by remember { mutableStateOf(false) }
+    var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     val lottieComposition by rememberLottieComposition(
         spec = LottieCompositionSpec.RawRes(lottieResId),
     )
@@ -126,77 +155,137 @@ fun MissionDetailScreen(
         }
     }
 
-    SoptColumn(
+    DisposableEffect(lifecycleOwner, viewModel) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                viewModel.flushClapDataOnExit()
+            }
+        }
+
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+
+    Box(
         modifier =
             Modifier
                 .fillMaxSize()
                 .background(SoptTheme.colors.onSurface950)
                 .statusBarsPadding()
-                .navigationBarsPadding(),
+                .navigationBarsPadding()
+                .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        Toolbar(
-            modifier = Modifier.padding(bottom = 10.dp),
-            title = {
-                Text(
-                    text = "미션",
-                    style = SoptTheme.typography.heading18B,
-                    modifier = Modifier.padding(start = 2.dp),
-                    color = SoptTheme.colors.onSurface10,
-                )
-            },
-            iconOption = toolbarIconType,
-            onBack = { navController.popBackStack() },
-            onPressIcon = viewModel::onPressToolbarIcon,
-        )
         Column(
             modifier = Modifier
-                .weight(1f)
-                .verticalScroll(scrollState),
+                .fillMaxSize()
+                .align(Alignment.TopStart)
         ) {
-            Header(
-                title = title,
-                stars = level.value,
-                toolbarIconType = toolbarIconType,
-                isMe = isMe,
-                isCompleted = isCompleted,
-            )
-            Spacer(modifier = Modifier.height(12.dp))
-            ImageContent(
-                imageModel = imageModel,
-                onChangeImage = viewModel::onChangeImage,
-                isEditable = isEditable && isMe,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            DatePicker(
-                value = date,
-                placeHolder = "날짜를 입력해 주세요.",
-                onClicked = {
-                    viewModel.onChangeDatePickerBottomSheetOpened(true)
+            Toolbar(
+                modifier = Modifier.padding(bottom = 10.dp),
+                title = {
+                    Text(
+                        text = if (isMe) "미션" else nickname,
+                        style = SoptTheme.typography.heading18B,
+                        modifier = Modifier.padding(start = 2.dp),
+                        color = SoptTheme.colors.onSurface10,
+                    )
                 },
-                isEditable = isEditable && isMe && !isSuccess,
+                iconOption = toolbarIconType,
+                onBack = { navController.popBackStack() },
+                onPressIcon = viewModel::onPressToolbarIcon,
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            Memo(
-                value = content,
-                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-                onValueChange = viewModel::onChangeContent,
-                borderColor = SoptTheme.colors.onSurface600,
-                isEditable = isEditable && isMe && !isSuccess,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(scrollState),
+            ) {
+                Header(
+                    title = title,
+                    stars = level.value,
+                    toolbarIconType = toolbarIconType,
+                    isMe = isMe,
+                    isCompleted = isCompleted,
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+                ImageContent(
+                    imageModel = imageModel,
+                    onChangeImage = viewModel::onChangeImage,
+                    isEditable = isEditable && isMe,
+                    onClickZoomIn = { url ->
+                        isZoomInDialogOpen = true
+                        selectedZoomInImage = url
+                    },
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                if (isEditable && isMe) {
+                    DatePicker(
+                        value = date,
+                        placeHolder = "날짜를 입력해 주세요.",
+                        onClicked = {
+                            viewModel.onChangeDatePickerBottomSheetOpened(true)
+                        },
+                        isEditable = isEditable && isMe && !isSuccess,
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Memo(
+                    value = content,
+                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                    onValueChange = viewModel::onChangeContent,
+                    borderColor = SoptTheme.colors.onSurface600,
+                    isEditable = isEditable && isMe && !isSuccess,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                if (isCompleted) {
+                    DetailInfo(
+                        date = date,
+                        clapCount = totalClapCount,
+                        viewCount = viewCount,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(120.dp))
+            }
         }
 
         if (isEditable && isMe) {
             SoptampButton(
                 text = "미션 완료",
                 onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+            )
+        }
+
+        if (!isEditable && isMe) {
+            SoptampButton(
+                text = "누가 박수쳤을까요?",
+                onClicked = {
+                    isClapUserListOpen = true
+                    viewModel.getStampClappers(stampId = stampId)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 20.dp),
+            )
+        }
+
+        if (!isMe) {
+            ClapFeedbackHolder(
+                clapCount = totalClapCount,
+                myClapCount = myClapCount,
+                isBadgeVisible = isBadgeVisible,
+                onPressClap = viewModel::onPressClap,
             )
         }
     }
+
+
     if (isSuccess) {
         PostSubmissionBadge(
             composition = lottieComposition,
@@ -228,12 +317,34 @@ fun MissionDetailScreen(
             onDismissRequest = { viewModel.onChangeDatePickerBottomSheetOpened(false) },
         )
     }
+    if (isZoomInDialogOpen) {
+        ImageModal(
+            image = selectedZoomInImage ?: "",
+            onDismiss = {
+                isZoomInDialogOpen = false
+                selectedZoomInImage = null
+            },
+        )
+    }
+    if (isClapUserListOpen) {
+        ClapUserBottomDialog(
+            onDismiss = { isClapUserListOpen = false },
+            userList = clappers,
+            onClickUser = { nickname, description ->
+                navController.navigateToUserMissionList(
+                    nickname = nickname.toString(),
+                    description = description ?: "설정된 한 마디가 없습니다.",
+                )
+            }
+        )
+    }
 }
 
 // Simple no-op NavController for previews
 private class PreviewNavController(context: Context) : NavController(context) {
     override fun popBackStack(): Boolean = true
 }
+
 
 @DefaultPreview
 @Composable
@@ -244,19 +355,22 @@ fun MissionDetailPreview() {
             id = 1,
             title = "앱잼 팀원 다 함께 바다 보고 오기",
             level = MissionLevel.of(2),
-            isCompleted = true,
-            isMe = true,
+            isCompleted = false,
+            isMe = false,
             nickname = "Nunu",
         )
+
+    @SuppressLint("ViewModelConstructorInComposable")
+    val fakeViewModel = MissionDetailViewModel(
+        stampRepository = FakeStampRepository,
+        imageUploaderRepository = FakeImageUploaderRepository,
+    )
+
     SoptTheme {
         MissionDetailScreen(
             args = args,
             navController = PreviewNavController(context),
-            viewModel =
-                MissionDetailViewModel(
-                    stampRepository = FakeStampRepository,
-                    imageUploaderRepository = FakeImageUploaderRepository,
-                ),
+            viewModel = fakeViewModel
         )
     }
 }

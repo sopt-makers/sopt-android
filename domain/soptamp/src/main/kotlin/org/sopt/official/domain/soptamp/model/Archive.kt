@@ -31,5 +31,9 @@ data class Archive(
     val id: Int,
     val contents: String,
     val images: List<String>,
-    val missionId: Int
+    val missionId: Int,
+    val clapCount: Int,
+    val viewCount: Int,
+    val myClapCount: Int? = null,
+    val mine: Boolean? = null
 )

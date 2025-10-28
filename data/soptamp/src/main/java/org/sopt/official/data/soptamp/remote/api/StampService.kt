@@ -24,10 +24,14 @@
  */
 package org.sopt.official.data.soptamp.remote.api
 
+import org.sopt.official.data.soptamp.remote.model.request.StampClapRequest
 import org.sopt.official.data.soptamp.remote.model.request.StampRequest
 import org.sopt.official.data.soptamp.remote.model.response.ModifyStampResponse
 import org.sopt.official.data.soptamp.remote.model.response.ReportUrlResponse
 import org.sopt.official.data.soptamp.remote.model.response.S3URLResponse
+import org.sopt.official.data.soptamp.remote.model.response.StampGetClappersResponse
+import org.sopt.official.data.soptamp.remote.model.response.StampGetResponse
+import org.sopt.official.data.soptamp.remote.model.response.StampPostClapResponse
 import org.sopt.official.data.soptamp.remote.model.response.StampResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -39,7 +43,7 @@ import retrofit2.http.Query
 
 interface StampService {
     @GET("stamp")
-    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampResponse
+    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampGetResponse
 
     @PUT("stamp")
     suspend fun modifyStamp(@Body body: StampRequest): ModifyStampResponse
@@ -58,4 +62,10 @@ interface StampService {
 
     @GET("s3/stamp")
     suspend fun getS3URL(): S3URLResponse
+
+    @GET("stamp/{stampId}/clappers")
+    suspend fun getClapUser(@Path("stampId") stampId: Int): StampGetClappersResponse
+
+    @POST("stamp/{stampId}/clap")
+    suspend fun postClapStamp(@Path("stampId") stampId: Int, @Body body: StampClapRequest): StampPostClapResponse
 }

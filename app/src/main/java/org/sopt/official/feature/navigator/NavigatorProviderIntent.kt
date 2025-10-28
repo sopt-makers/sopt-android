@@ -27,7 +27,6 @@ package org.sopt.official.feature.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -35,6 +34,7 @@ import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.fortune.FortuneActivity
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.mypage.MyPageActivity
+import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
@@ -42,11 +42,12 @@ import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.schedule.ScheduleActivity
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.SoptampActivity
 import javax.inject.Inject
 
 class NavigatorProviderIntent @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : NavigatorProvider {
     override fun getAuthActivityIntent(): Intent = AuthActivity.newInstance(context)
     override fun getNotificationActivityIntent() = NotificationActivity.newInstance(context)
@@ -58,6 +59,10 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
         context,
         MyPageActivity.Argument(UserStatus.valueOf(name))
+    )
+
+    override fun getAdjustSentenceActivityIntent(): Intent = AdjustSentenceActivity.getIntent(
+        context
     )
 
     override fun getPokeActivityIntent(userStatus: UserStatus): Intent = PokeMainActivity.getIntent(
@@ -73,6 +78,27 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
 
     override fun getSoptampActivityIntent() = SoptampActivity.getIntent(context)
+
+    override fun getSoptampMissionDetailActivityIntent(
+        id: Int,
+        missionId: Int,
+        isMine: Boolean,
+        nickname: String?,
+        part: String?,
+        level: Int,
+        title: String?
+    ) = SoptampActivity.getIntent(
+        context,
+        SoptampActivity.SoptampMissionArgs(
+            id = id,
+            missionId = missionId,
+            isMine = isMine,
+            nickname = nickname,
+            part = part,
+            level = level,
+            title = title
+        )
+    )
 
     override fun getPokeNotificationActivityIntent(name: String) = PokeNotificationActivity.getIntent(
         context,

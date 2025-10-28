@@ -42,3 +42,5 @@ val Mint200 = Color(0xFFD3FFF0)
 val Mint100 = Color(0xFFE5FFF6)
 
 val Orange300 = Color(0xFFFF834A)
+
+val BackgroundDim = Color(0xCC0F0F12)
