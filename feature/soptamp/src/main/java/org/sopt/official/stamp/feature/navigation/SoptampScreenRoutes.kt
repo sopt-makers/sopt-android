@@ -137,7 +137,7 @@ fun RankingScreenRoute(
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED,
+                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)
@@ -177,7 +177,7 @@ fun PartRankingScreenRoute(navController: NavController) {
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED,
+                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)
