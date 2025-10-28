@@ -48,6 +48,7 @@ import org.sopt.official.stamp.feature.navigation.MissionDetail
 import org.sopt.official.stamp.feature.navigation.MissionList
 import org.sopt.official.stamp.feature.navigation.PartRanking
 import org.sopt.official.stamp.feature.navigation.Ranking
+import org.sopt.official.stamp.feature.navigation.SoptampRoute
 import org.sopt.official.stamp.feature.navigation.UserMissionList
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import java.io.Serializable
@@ -84,7 +85,7 @@ class SoptampActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val deepLinkDestination: Any? = if (args?.missionId == -1 || args == null) {
+        val deepLinkDestination: SoptampRoute? = if (args?.missionId == -1 || args == null) {
             null
         } else {
             MissionDetail(
@@ -121,8 +122,8 @@ class SoptampActivity : AppCompatActivity() {
 
 @Composable
 private fun SoptampNavHost(
-    startDestination: Any,
-    deepLinkDestination: Any?,
+    startDestination: SoptampRoute,
+    deepLinkDestination: SoptampRoute?,
     args: SoptampActivity.SoptampMissionArgs? = null
 ) {
     val navController = rememberNavController()
