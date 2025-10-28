@@ -107,7 +107,6 @@ fun MissionListScreen(
     onCurrentRankingButtonClick: () -> Unit = {},
     onReportButtonClick: () -> Unit = {},
     navigateToMyPageStamp: () -> Unit = {},
-    //onOnboardingButtonClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -117,7 +116,6 @@ fun MissionListScreen(
                 onMenuClick = onMenuClick,
                 onReportButtonClick = onReportButtonClick,
                 navigateToMyPageStamp = navigateToMyPageStamp
-                //onOnboardingButtonClick = onOnboardingButtonClick,
             )
         },
         floatingActionButton = {
@@ -445,14 +443,11 @@ fun MissionListScreenNew(
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED,
+                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)
                 },
-                /*onOnboardingButtonClick = {
-                    navController.navigateToOnboarding()
-                },*/
             )
         }
     }
