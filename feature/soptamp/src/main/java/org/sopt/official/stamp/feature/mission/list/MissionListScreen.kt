@@ -72,6 +72,8 @@ import androidx.navigation.NavController
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
@@ -164,8 +166,10 @@ fun MissionsGridComponent(
     missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
-    nickname: String,
+    nickname: String
 ) {
+    val tracker = LocalTracker.current
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         verticalArrangement = Arrangement.spacedBy(40.dp, Alignment.Top),
@@ -178,6 +182,18 @@ fun MissionsGridComponent(
                 onClick = {
                     onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
                 },
+                onMissionItemClickTricked = {
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "click_feed_mission",
+                        properties = mapOf(
+                            "feedOwnerNick" to nickname,
+                            "missionId" to missionUiModel.id,
+                            "missionTitle" to missionUiModel.title,
+                            "missionLevel" to missionUiModel.level
+                        )
+                    )
+                }
             )
         }
         item {

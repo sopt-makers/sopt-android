@@ -50,6 +50,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 fun MissionComponent(
     mission: MissionUiModel,
     onClick: () -> Unit = {},
+    onMissionItemClickTricked: () -> Unit = {},
 ) {
     val shape = MissionShape.DEFAULT_WAVE
     val stamp = Stamp.findStampByLevel(mission.level)
@@ -63,7 +64,10 @@ fun MissionComponent(
                     color = SoptTheme.colors.onSurface800,
                     shape = shape,
                 )
-                .noRippleClickable(onClick = onClick),
+                .noRippleClickable {
+                    if(mission.isCompleted) { onMissionItemClickTricked() }
+                    onClick()
+                },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
