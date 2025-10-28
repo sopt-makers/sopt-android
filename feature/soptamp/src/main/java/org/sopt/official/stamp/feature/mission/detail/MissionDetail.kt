@@ -61,6 +61,8 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
+import org.sopt.official.analytics.EventType
+import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
@@ -86,6 +88,7 @@ import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.navigation.navigateToUserMissionList
 import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
+import kotlin.collections.mapOf
 
 @Composable
 fun MissionDetailScreen(
@@ -115,7 +118,7 @@ fun MissionDetailScreen(
                 else -> R.raw.orangestamp
             }
         }
-
+    val appliedCount by viewModel.appliedCount.collectAsStateWithLifecycle(0)
     val totalClapCount by viewModel.totalClapCount.collectAsStateWithLifecycle(0)
     val myClapCount by viewModel.myClapCount.collectAsStateWithLifecycle(initialValue = 0)
     val clappers by viewModel.clappers.collectAsStateWithLifecycle(initialValue = persistentListOf())
@@ -137,6 +140,8 @@ fun MissionDetailScreen(
         isPlaying = isSuccess,
     )
     val scrollState = rememberScrollState()
+
+    val tracker = LocalTracker.current
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -218,6 +223,15 @@ fun MissionDetailScreen(
                     onClickZoomIn = { url ->
                         isZoomInDialogOpen = true
                         selectedZoomInImage = url
+                        tracker.track(
+                            type = EventType.CLICK,
+                            name = "get_image_zoom",
+                            properties = mapOf(
+                                "image" to url,
+                                "stampId" to stampId,
+                                "missionId" to id
+                            )
+                        )
                     },
                 )
                 Spacer(modifier = Modifier.height(8.dp))
@@ -280,7 +294,20 @@ fun MissionDetailScreen(
                 clapCount = totalClapCount,
                 myClapCount = myClapCount,
                 isBadgeVisible = isBadgeVisible,
-                onPressClap = viewModel::onPressClap,
+                onPressClap = {
+                    tracker.track(
+                        type = EventType.CLICK,
+                        name = "click_update_clap",
+                        properties = mapOf(
+                            "stampId" to stampId,
+                            "missionId" to id,
+                            "appliedCount" to appliedCount,
+                            "totalClapCount" to totalClapCount,
+                            "receiverNick" to nickname
+                        )
+                    )
+                    viewModel.onPressClap()
+                },
             )
         }
     }
@@ -331,6 +358,13 @@ fun MissionDetailScreen(
             onDismiss = { isClapUserListOpen = false },
             userList = clappers,
             onClickUser = { nickname, description ->
+                tracker.track(
+                    type = EventType.CLICK,
+                    name = "click_clappersList",
+                    properties = mapOf(
+                        "receiverNick" to nickname
+                    )
+                )
                 navController.navigateToUserMissionList(
                     nickname = nickname.toString(),
                     description = description ?: "설정된 한 마디가 없습니다.",

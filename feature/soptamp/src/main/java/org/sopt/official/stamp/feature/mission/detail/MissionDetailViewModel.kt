@@ -70,6 +70,7 @@ data class PostUiState(
     val isDeleteDialogVisible: Boolean = false,
     val isMe: Boolean = true,
     val isBottomSheetOpened: Boolean = false,
+    val appliedCount: Int = 0, // 앰플(이번 요청으로 실제 반영된 증가량)
     val totalClapCount: Int = 0,
     val viewCount: Int = 0,
     val myClapCount: Int? = 0, // UI 표시용
@@ -123,6 +124,8 @@ constructor(
     val isError = uiState.map { it.isError }
     val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
     val isBadgeVisible = uiState.map { it.isBadgeVisible }
+
+    val appliedCount = uiState.map { it.appliedCount } // 앰플(이번 요청으로 실제 반영된 증가량)
 
     val totalClapCount = uiState.map { it.totalClapCount }
     val viewCount = uiState.map { it.viewCount }
@@ -450,6 +453,7 @@ constructor(
                     uiState.update {
                         it.copy(
                             totalClapCount = clapResult.totalClapCount,
+                            appliedCount = clapResult.appliedCount,
                             unSyncedClapCount = 0
                         )
                     }
