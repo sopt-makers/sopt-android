@@ -176,14 +176,14 @@ private fun ClapUserItem(
             if (user.profileImage != null) {
                 AsyncImage(
                     model = user.profileImage,
-                    contentDescription = "",
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
                     error = painterResource(id = R.drawable.ic_user_profile)
                 )
             } else {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_user_profile),
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = Color.White,
                     modifier = Modifier
                         .padding(6.dp)
@@ -224,7 +224,7 @@ private fun ClapUserItem(
 
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_clap),
-            contentDescription = "",
+            contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier
                 .size(width = 20.dp, height = 18.dp)

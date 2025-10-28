@@ -56,7 +56,7 @@ fun ImageModal(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = Color.Unspecified,
                     modifier = Modifier
                         .padding(6.dp)
@@ -70,7 +70,7 @@ fun ImageModal(
                     .data(image)
                     .transformations(RoundedCornersTransformation(20.0f))
                     .build(),
-                contentDescription = "",
+                contentDescription = null,
                 contentScale = ContentScale.Fit,
                 modifier = Modifier
                     .fillMaxWidth()
