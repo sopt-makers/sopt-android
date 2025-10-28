@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -454,9 +454,7 @@ constructor(
                         )
                     }
                 }
-                .onFailure {
-                    Timber.e(it)
-                }
+                .onFailure(Timber::e)
 
             isPosting = false
         }
@@ -468,13 +466,11 @@ constructor(
                 .onSuccess { result ->
                     uiState.update { currentState ->
                         currentState.copy(
-                            clappers = result.clappers.map { it.toUiModel() }.toPersistentList()
+                            clappers = result.clappers.map { it.toUiModel() }.toImmutableList()
                         )
                     }
                 }
-                .onFailure {
-                    Timber.e(it)
-                }
+                .onFailure(Timber::e)
         }
     }
 }

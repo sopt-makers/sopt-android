@@ -281,7 +281,6 @@ fun MissionDetailScreen(
                 myClapCount = myClapCount,
                 isBadgeVisible = isBadgeVisible,
                 onPressClap = viewModel::onPressClap,
-                modifier = Modifier
             )
         }
     }
