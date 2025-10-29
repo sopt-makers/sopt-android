@@ -297,7 +297,7 @@ fun MissionDetailScreen(
                 onPressClap = {
                     tracker.track(
                         type = EventType.CLICK,
-                        name = "click_update_clap",
+                        name = "update_clap",
                         properties = mapOf(
                             "stampId" to stampId,
                             "missionId" to id,
@@ -360,7 +360,7 @@ fun MissionDetailScreen(
             onClickUser = { nickname, description ->
                 tracker.track(
                     type = EventType.CLICK,
-                    name = "click_clappersList",
+                    name = "clappersList",
                     properties = mapOf(
                         "receiverNick" to nickname
                     )
