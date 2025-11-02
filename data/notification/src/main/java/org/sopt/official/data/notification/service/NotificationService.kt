@@ -29,8 +29,8 @@ import org.sopt.official.data.notification.model.response.NotificationDetailResp
 import org.sopt.official.data.notification.model.response.NotificationHistoryItemResponse
 import org.sopt.official.data.notification.model.response.UpdatePushTokenResponse
 import retrofit2.http.Body
-import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.HTTP
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -42,7 +42,7 @@ interface NotificationService {
         @Body body: UpdatePushTokenRequest
     ): UpdatePushTokenResponse
 
-    @DELETE("user/push-token")
+    @HTTP(method = "DELETE", path="user/push-token", hasBody = true)
     suspend fun deleteToken(
         @Body body: UpdatePushTokenRequest
     ): UpdatePushTokenResponse
