@@ -45,7 +45,7 @@ interface NotificationService {
     @HTTP(method = "DELETE", path="user/push-token", hasBody = true)
     suspend fun deleteToken(
         @Body body: UpdatePushTokenRequest
-    ): UpdatePushTokenResponse
+    )
 
     @GET("notification/all")
     suspend fun getNotificationHistory(
