@@ -54,12 +54,14 @@ import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.authRepository
+import org.sopt.official.feature.mypage.di.notificationRepository
 import org.sopt.official.feature.mypage.di.stampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiModel
 import org.sopt.official.feature.mypage.mypage.state.ClearSoptamp
 import org.sopt.official.feature.mypage.mypage.state.CloseDialog
-import org.sopt.official.feature.mypage.mypage.state.Logout
+import org.sopt.official.feature.mypage.mypage.state.ConfirmLogout
 import org.sopt.official.feature.mypage.mypage.state.MyPageDialogState
+import org.sopt.official.feature.mypage.mypage.state.RequestLogout
 import org.sopt.official.feature.mypage.mypage.state.ResetSoptamp
 import org.sopt.official.feature.mypage.mypage.state.rememberMyPageUiState
 import org.sopt.official.feature.mypage.signout.SignOutActivity
@@ -84,8 +86,10 @@ class MyPageActivity : AppCompatActivity() {
                     userActiveState = args?.userActiveState ?: UserStatus.UNAUTHENTICATED,
                     authRepository = authRepository,
                     stampRepository = stampRepository,
+                    notificationRepository = notificationRepository,
                     onRestartApp = { startActivity(navigatorProvider.getAuthActivityIntent()) }
                 )
+
                 val context = LocalContext.current
 
                 val scrollState = rememberScrollState()
@@ -152,7 +156,7 @@ class MyPageActivity : AppCompatActivity() {
                         MyPageUiModel.MyPageItem(
                             title = "로그아웃",
                             onItemClick = {
-                                uiState.onEventSink(Logout)
+                                uiState.onEventSink(RequestLogout)
                             }
                         ),
                         MyPageUiModel.MyPageItem(
@@ -216,7 +220,7 @@ class MyPageActivity : AppCompatActivity() {
                             dialogState = uiState.dialogState,
                             onDismissRequest = { uiState.onEventSink(CloseDialog) },
                             onClearSoptampClick = { uiState.onEventSink(ResetSoptamp) },
-                            onLogoutClick = { uiState.onEventSink(Logout) }
+                            onLogoutClick = { uiState.onEventSink(ConfirmLogout) }
                         )
                     }
                 }
@@ -255,7 +259,7 @@ private fun ShowMyPageDialog(
             )
         }
 
-        MyPageDialogState.LOGOUT -> {
+        MyPageDialogState.REQUEST_LOGOUT -> {
             MyPageDialog(
                 onDismissRequest = onDismissRequest,
                 title = "로그아웃",
