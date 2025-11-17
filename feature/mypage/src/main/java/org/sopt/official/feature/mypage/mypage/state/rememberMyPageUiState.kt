@@ -81,15 +81,15 @@ fun rememberMyPageUiState(
                         runCatching {
                             val pushToken = FirebaseMessaging.getInstance().token.await()
                             notificationRepository.deleteToken(pushToken)
-                        }.onSuccess {
-                            withContext(Dispatchers.IO) {
-                                authRepository.clearUserToken()
-                            }
-
-                            onRestartApp()
                         }.onFailure {
                             Timber.e(it)
                         }
+
+                        withContext(Dispatchers.IO) {
+                            authRepository.clearUserToken()
+                        }
+
+                        onRestartApp()
                     }
                 }
 
