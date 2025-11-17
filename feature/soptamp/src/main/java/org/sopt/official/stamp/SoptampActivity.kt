@@ -148,8 +148,8 @@ private fun SoptampNavHost(
 
             val destinationsToBuild = listOf(
                 PartRanking,
-                Ranking(args?.part.orEmpty()),
-                UserMissionList(args?.nickname ?: "", ""),
+                Ranking(args?.part.orEmpty(), ""),
+                UserMissionList(args?.nickname ?: "", "", null),
                 deepLinkDestination
             )
 

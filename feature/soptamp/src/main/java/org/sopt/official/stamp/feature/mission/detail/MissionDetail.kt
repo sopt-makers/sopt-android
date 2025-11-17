@@ -363,6 +363,7 @@ fun MissionDetailScreen(
                 navController.navigateToUserMissionList(
                     nickname = nickname.toString(),
                     description = description ?: "설정된 한 마디가 없습니다.",
+                    entrySource = "clappersList"
                 )
             }
         )

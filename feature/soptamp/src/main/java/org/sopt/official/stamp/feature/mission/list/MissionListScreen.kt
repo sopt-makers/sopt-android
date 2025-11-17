@@ -168,6 +168,7 @@ fun MissionsGridComponent(
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
     myName: String,
+    entrySource: String? = null,
     nickname: String
 ) {
     val tracker = LocalTracker.current
@@ -189,6 +190,7 @@ fun MissionsGridComponent(
                         type = EventType.CLICK,
                         name = "click_feed_mission",
                         properties = mapOf(
+                            "entrySource" to entrySource,
                             "feedOwnerNick" to nickname,
                             "viewerNick" to myName,
                             "missionId" to missionUiModel.id,
