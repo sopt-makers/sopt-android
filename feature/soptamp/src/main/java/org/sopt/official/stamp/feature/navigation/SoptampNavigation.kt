@@ -73,9 +73,10 @@ fun NavController.navigateToMissionDetail(
 
 fun NavController.navigateToRanking(
     type: String,
+    entrySource: String,
     navOptions: NavOptions? = null,
 ) {
-    navigate(Ranking(type), navOptions)
+    navigate(Ranking(type, entrySource), navOptions)
 }
 
 fun NavController.navigateToPartRanking(navOptions: NavOptions? = null) {
@@ -92,12 +93,14 @@ fun NavController.navigateToUserMissionList(
 fun NavController.navigateToUserMissionList(
     nickname: String,
     description: String,
+    entrySource: String,
     navOptions: NavOptions? = null,
 ) {
     navigate(
         UserMissionList(
             nickname = nickname,
             description = description,
+            entrySource = entrySource,
         ),
         navOptions,
     )
