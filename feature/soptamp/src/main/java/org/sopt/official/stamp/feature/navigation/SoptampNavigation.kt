@@ -47,6 +47,7 @@ fun NavController.navigateToMissionDetail(
     isCompleted: Boolean,
     isMe: Boolean,
     nickname: String,
+    myName: String,
     navOptions: NavOptions? = null,
 ) {
     navigate(
@@ -57,6 +58,7 @@ fun NavController.navigateToMissionDetail(
             isCompleted = isCompleted,
             isMe = isMe,
             nickname = nickname,
+            myName = myName,
         ),
         navOptions,
     )

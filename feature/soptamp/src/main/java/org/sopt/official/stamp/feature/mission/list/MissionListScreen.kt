@@ -155,6 +155,7 @@ fun MissionListScreen(
                     onMissionItemClick = onMissionItemClick,
                     isMe = true,
                     nickname = nickname,
+                    myName = "" // 나의 미션인 경우 nickName = myNam
                 )
             }
         }
@@ -166,6 +167,7 @@ fun MissionsGridComponent(
     missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
+    myName: String,
     nickname: String
 ) {
     val tracker = LocalTracker.current
@@ -180,7 +182,7 @@ fun MissionsGridComponent(
             MissionComponent(
                 mission = missionUiModel,
                 onClick = {
-                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
+                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname, myName))
                 },
                 onMissionItemClickTricked = {
                     tracker.track(
@@ -188,6 +190,7 @@ fun MissionsGridComponent(
                         name = "click_feed_mission",
                         properties = mapOf(
                             "feedOwnerNick" to nickname,
+                            "viewerNick" to myName,
                             "missionId" to missionUiModel.id,
                             "missionTitle" to missionUiModel.title,
                             "missionLevel" to missionUiModel.level
@@ -410,7 +413,7 @@ fun MissionListScreenNew(
 ) {
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
-    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
+    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle() // 나의 닉네임
     val reportUrl by missionsViewModel.reportUrl.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
@@ -445,7 +448,7 @@ fun MissionListScreenNew(
                     navController.navigateToPartRanking()
                 },
                 onCurrentRankingButtonClick = {
-                    navController.navigateToRanking("${generation}기")
+                    navController.navigateToRanking("${generation}기", "")
                 },
                 onReportButtonClick = {
                     Intent(context, WebViewActivity::class.java).apply {

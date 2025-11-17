@@ -96,7 +96,7 @@ fun MissionDetailScreen(
     navController: NavController,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
-    val (id, title, level, isCompleted, isMe, nickname) = args
+    val (id, title, level, isCompleted, isMe, nickname, myName) = args
     val content by viewModel.content.collectAsStateWithLifecycle("")
     val stampId by viewModel.stampId.collectAsStateWithLifecycle(initialValue = -1)
     val date by viewModel.date.collectAsStateWithLifecycle("")
@@ -229,7 +229,8 @@ fun MissionDetailScreen(
                             properties = mapOf(
                                 "image" to url,
                                 "stampId" to stampId,
-                                "missionId" to id
+                                "missionId" to id,
+                                "nickname" to myName
                             )
                         )
                     },
@@ -303,6 +304,7 @@ fun MissionDetailScreen(
                             "missionId" to id,
                             "appliedCount" to appliedCount,
                             "totalClapCount" to totalClapCount,
+                            "clappersNick" to myName,
                             "receiverNick" to nickname
                         )
                     )
@@ -358,13 +360,6 @@ fun MissionDetailScreen(
             onDismiss = { isClapUserListOpen = false },
             userList = clappers,
             onClickUser = { nickname, description ->
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "clappersList",
-                    properties = mapOf(
-                        "receiverNick" to nickname
-                    )
-                )
                 navController.navigateToUserMissionList(
                     nickname = nickname.toString(),
                     description = description ?: "설정된 한 마디가 없습니다.",
@@ -392,6 +387,7 @@ fun MissionDetailPreview() {
             isCompleted = false,
             isMe = false,
             nickname = "Nunu",
+            myName = "me",
         )
 
     @SuppressLint("ViewModelConstructorInComposable")

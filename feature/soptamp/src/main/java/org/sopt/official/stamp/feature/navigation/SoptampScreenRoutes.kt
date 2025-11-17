@@ -91,6 +91,7 @@ fun MissionDetailScreenRoute(
                 isCompleted = args.isCompleted,
                 isMe = args.isMe,
                 nickname = args.nickname,
+                myName = args.myName,
             ),
         navController = navController,
         viewModel = viewModel,
@@ -105,6 +106,7 @@ fun RankingScreenRoute(
     val rankingViewModel: RankingViewModel = hiltViewModel()
     val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
+    val receivedEntrySource = args.entrySource // 파트별 랭킹 화면에서 넘긴 entrySource
 
     LaunchedEffect(true) {
         val isCurrent = args.type.first().isDigit()
@@ -121,6 +123,7 @@ fun RankingScreenRoute(
         is RankingState.Success -> {
             val successState = state as RankingState.Success
             RankingScreen(
+                entrySource = receivedEntrySource.ifEmpty { "personalRanking" },
                 isCurrent = args.type.first().isDigit(),
                 type = args.type,
                 refreshing = rankingViewModel.isRefreshing,
@@ -152,6 +155,7 @@ fun PartRankingScreenRoute(navController: NavController) {
     val context = LocalContext.current
     val partRankingViewModel: PartRankingViewModel = hiltViewModel()
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
+    val partRankingEntrySource = "partRanking"
 
     LaunchedEffect(true) {
         partRankingViewModel.fetchRanking()
@@ -172,7 +176,7 @@ fun PartRankingScreenRoute(navController: NavController) {
                 onRefresh = partRankingViewModel::onRefresh,
                 onClickBack = { navController.popBackStack() },
                 onClickPart = { partName ->
-                    navController.navigateToRanking(partName)
+                    navController.navigateToRanking(partName, partRankingEntrySource)
                 },
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
@@ -194,7 +198,7 @@ fun UserMissionListScreenRoute(
 ) {
     val missionsViewModel: MissionsViewModel = hiltViewModel()
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
-    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
+    val myNickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
     val description by missionsViewModel.description.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
@@ -218,10 +222,12 @@ fun UserMissionListScreenRoute(
         is MissionsState.Success -> {
             val successState = state as MissionsState.Success
             UserMissionListScreen(
+                myName = myNickname,
+                entrySource = args.entrySource,
                 userName = args.nickname,
-                description = if (args.nickname == nickname) description else args.description ?: "설정된 한 마디가 없습니다.",
+                description = if (args.nickname == myNickname) description else args.description ?: "설정된 한 마디가 없습니다.",
                 missionListUiModel = successState.missionListUiModel,
-                isMe = args.nickname == nickname,
+                isMe = args.nickname == myNickname,
                 onMissionItemClick = { item ->
                     navController.navigateToMissionDetail(item)
                 },
