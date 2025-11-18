@@ -32,6 +32,9 @@ data class MyPageUiState(
     val onEventSink: (action: MyPageAction) -> Unit,
 )
 
+// 다이얼로그 상태 관리
 enum class MyPageDialogState {
-    CLEAR_SOPTAMP, LOGOUT, CLEAR;
+    CLEAR_SOPTAMP,
+    REQUEST_LOGOUT,
+    CLEAR;
 }

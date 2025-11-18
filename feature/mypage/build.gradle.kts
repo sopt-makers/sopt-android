@@ -36,6 +36,7 @@ android {
 dependencies {
     implementation(projects.domain.auth)
     implementation(projects.domain.soptamp)
+    implementation(projects.domain.notification)
     implementation(projects.domain.mypage)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
