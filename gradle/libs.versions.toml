@@ -44,7 +44,7 @@ androidx-test-rules = "1.7.0"
 mockk = "1.14.6"
 
 gradleplugin = "8.13.1"
-kspplugin = "2.2.20-2.0.4"
+kspplugin = "2.3.3"
 
 dagger-hilt = "2.57.2"
 dagger-hilt-navigation-compose = "1.3.0"
