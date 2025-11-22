@@ -107,6 +107,13 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeNotificationActivityIntent(userStatus.name))
     },
+    POKE_FRIEND_LIST_SUMMARY("home/poke/friend-list-summary") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
+            val friendType = deepLink.extractQueryParameter("type")
+            val intent = navigator.getPokeFriendListSummaryActivityIntent(userStatus.name, friendType)
+            return userStatus.setIntent(intent)
+        }
+    },
     POKE("home/poke") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeActivityIntent(userStatus))
