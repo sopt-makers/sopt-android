@@ -26,7 +26,6 @@ package org.sopt.official.feature.soptlog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +33,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -43,8 +41,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -56,6 +54,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
@@ -63,14 +62,17 @@ import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.component.SoptlogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
+import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
+import org.sopt.official.feature.soptlog.navigation.SoptlogUrl
+import androidx.core.net.toUri
 
 @Composable
 internal fun SoptlogRoute(
-    // TODO - navigate 솝탬프 완료 미션 이동
-    // TODO - navigate 콕 찌르기 이동 - 총 꼭지르기, 친한친구, 단짝 친구, 천생 연분
+    soptlogNavigation: SoptlogNavigation,
     navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
+    val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     DisposableEffect(lifecycleOwner) {
@@ -103,6 +105,32 @@ internal fun SoptlogRoute(
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
                     soptLogInfo = soptLogInfo,
+                    onNavigationClick = { url ->
+                        val soptlogAppServicesNavigation = soptlogNavigation as SoptlogNavigation.SoptlogAppServiceNavigation
+
+                        when(SoptlogUrl.from(url)) {
+                            SoptlogUrl.POKE, SoptlogUrl.POKE_FRIEND_SUMMARY -> {
+                                scope.launch {
+                                    viewModel.fetchIsNewPoke()
+                                        .onSuccess { isNewPoke ->
+                                            val uri = url.toUri()
+                                            val type = uri.getQueryParameter("type")
+
+                                            soptlogAppServicesNavigation.navigateToPoke(
+                                                url = url,
+                                                isNewPoke = isNewPoke,
+                                                currentDestination = 0,
+                                                friendType = type
+                                            )
+                                        }
+                                }
+                            }
+                            SoptlogUrl.SOPTAMP -> {
+                                soptlogAppServicesNavigation.navigateToDeepLink(url)
+                            }
+                            else -> {}
+                        }
+                    },
                     navigateToFortune = {
                         navigateToFortune()
                         tracker.track(
@@ -120,6 +148,7 @@ internal fun SoptlogRoute(
 @Composable
 private fun SoptlogScreen(
     soptLogInfo: SoptLogInfo,
+    onNavigationClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
     navigateToFortune: () -> Unit = {}
 ) {
@@ -167,7 +196,7 @@ private fun SoptlogScreen(
                     soptLogInfo = soptLogInfo,
                     onItemClick = { type ->
                         when (type) {
-                            MySoptLogItemType.COMPLETED_MISSION -> { }
+                            MySoptLogItemType.COMPLETED_MISSION -> { onNavigationClick(type.url) }
                             else -> {}
                         }
                     }
@@ -186,10 +215,10 @@ private fun SoptlogScreen(
                 soptLogInfo = soptLogInfo,
                 onItemClick = { type ->
                     when (type) {
-                        MySoptLogItemType.TOTAL_POKE -> { }
-                        MySoptLogItemType.CLOSE_FRIEND -> TODO("naviagte 친한 친구")
-                        MySoptLogItemType.BEST_FRIEND -> TODO("naviagte 단짝 친구")
-                        MySoptLogItemType.SOULMATE -> TODO("naviagte 천생 연분")
+                        MySoptLogItemType.TOTAL_POKE,
+                        MySoptLogItemType.CLOSE_FRIEND,
+                        MySoptLogItemType.BEST_FRIEND,
+                        MySoptLogItemType.SOULMATE -> { onNavigationClick(type.url) }
                         else -> {}
                     }
                 }
@@ -246,8 +275,16 @@ private fun PreviewSoptlogScreen() {
             soulmatesPokeCount = 761
         )
 
+        val dummyAppServiceNavigation = object : SoptlogNavigation.SoptlogAppServiceNavigation {
+            override fun navigateToDeepLink(url: String) {}
+            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {}
+        }
+
         SoptlogScreen(
-            soptLogInfo = soptLogInfo
+            soptLogInfo = soptLogInfo,
+            onNavigationClick = { url ->
+                dummyAppServiceNavigation.navigateToDeepLink(url)
+            }
         )
     }
 }

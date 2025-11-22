@@ -33,6 +33,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.poke.entity.ApiResult
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import timber.log.Timber
@@ -40,6 +43,7 @@ import timber.log.Timber
 @HiltViewModel
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
+    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
@@ -74,6 +78,28 @@ class SoptLogViewModel @Inject constructor(
                 it.copy(
                     isLoading = false
                 )
+            }
+        }
+    }
+
+    // 신규 유저인지 판단하는 함수 (콕 찌르기 온보딩)
+    suspend fun fetchIsNewPoke(): Result<Boolean> {
+        _soptLogInfo.update { it.copy(isLoading = true) }
+
+        return when (val apiResult: ApiResult<*> = checkNewInPokeUseCase()) {
+            is ApiResult.Success -> {
+                _soptLogInfo.update { it.copy(isLoading = false) }
+                Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
+            }
+
+            is ApiResult.ApiError -> {
+                _soptLogInfo.update { it.copy(isLoading = false) }
+                Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
+            }
+
+            is ApiResult.Failure -> {
+                _soptLogInfo.update { it.copy(isLoading = false) }
+                Result.failure(apiResult.throwable)
             }
         }
     }
