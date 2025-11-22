@@ -34,10 +34,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -49,10 +51,16 @@ import org.sopt.official.feature.soptlog.R
 @Composable
 fun TodayFortuneBanner(
     title: String,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(shape = RoundedCornerShape(12.dp))
+            .background(color = SoptTheme.colors.onSurface900)
+            .padding(top = 12.dp, bottom = 12.dp, start = 12.dp, end = 14.dp)
+            .clickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -86,7 +94,8 @@ fun TodayFortuneBanner(
 fun TodayFortuneBannerPreview() {
     SoptTheme {
         TodayFortuneBanner(
-            title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?"
+            title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?",
+            onClick = {}
         )
     }
 }

@@ -199,12 +199,7 @@ private fun SoptlogScreen(
 
             TodayFortuneBanner(
                 title = "오늘 내 운세는?",
-                modifier = modifier
-                    .fillMaxWidth()
-                    .clip(shape = RoundedCornerShape(12.dp))
-                    .background(color = SoptTheme.colors.onSurface900)
-                    .padding(top = 12.dp, bottom = 12.dp, start = 12.dp, end = 14.dp)
-                    .clickable { navigateToFortune },
+                onClick = navigateToFortune
             )
         }
 
