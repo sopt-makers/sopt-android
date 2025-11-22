@@ -81,17 +81,16 @@ class SoptLogViewModel @Inject constructor(
 
 data class SoptLogState(
     val soptLogInfo: SoptLogInfo = SoptLogInfo(
-        profileImageUrl = "",
-        userName = "",
-        part = "",
-        profileMessage = "",
-        soptLevel = "",
-        pokeCount = "",
         isActive = false,
-        soptampRank = "",
-        during = "",
-        todayFortuneTitle = "",
+        soptampCount = 0,
+        viewCount = 0,
+        myClapCount = 0,
+        clapCount = 0,
+        pokeCount = 0,
+        newFriendsPokeCount = 0,
+        bestFriendsPokeCount = 0,
+        soulmatesPokeCount = 0
     ),
     val isLoading: Boolean = false,
-    val isError: Boolean = false,
+    val isError: Boolean = false
 )

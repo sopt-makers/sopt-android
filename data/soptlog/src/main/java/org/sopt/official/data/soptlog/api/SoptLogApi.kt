@@ -29,6 +29,6 @@ import retrofit2.http.GET
 
 interface SoptLogApi {
 
-    @GET("user/sopt-log")
+    @GET("user/my-sopt-log")
     suspend fun getSoptLogInfo(): SoptLogInfoResponse
 }
