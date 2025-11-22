@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.R
 
 @Composable
-fun TodayFortuneBanner(
+internal fun TodayFortuneBanner(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -91,7 +91,7 @@ fun TodayFortuneBanner(
 
 @Preview(showBackground = true)
 @Composable
-fun TodayFortuneBannerPreview() {
+private fun TodayFortuneBannerPreview() {
     SoptTheme {
         TodayFortuneBanner(
             title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?",

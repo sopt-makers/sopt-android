@@ -246,7 +246,7 @@ private fun SoptlogScreen(
 }
 
 @Composable
-fun SoptlogContents(
+private fun SoptlogContents(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
