@@ -49,15 +49,10 @@ import org.sopt.official.feature.soptlog.R
 @Composable
 fun TodayFortuneBanner(
     title: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(SoptTheme.colors.onSurface800)
-            .padding(horizontal = 20.dp, vertical = 10.dp)
-            .clickable(onClick = onClick),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
@@ -91,8 +86,7 @@ fun TodayFortuneBanner(
 fun TodayFortuneBannerPreview() {
     SoptTheme {
         TodayFortuneBanner(
-            title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?",
-            onClick = {}
+            title = "차은우님, 잊지 말아야 할 말을 듣게 될것 같아요오오오?"
         )
     }
 }
