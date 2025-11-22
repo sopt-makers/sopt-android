@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-    sopt("test")
-    sopt("deeplink")
-}
+package org.sopt.official.feature.soptlog.navigation
 
-android {
-    namespace = "org.sopt.official.feature.soptlog"
-}
+enum class SoptlogUrl(val url: String) {
+    POKE("home/poke"),
+    SOPTAMP("home/soptamp"),
+    POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
+    UNKNOWN("");
 
-ksp {
-    arg("deepLink.incremental", "true")
-    arg("deepLink.customAnnotations", "com.airbnb.AppDeepLink|com.airbnb.WebDeepLink")
-}
+    companion object {
+        fun from(url: String?): SoptlogUrl {
+            if (url == null) return UNKNOWN
 
-dependencies {
-    // core
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.navigation)
-    implementation(projects.core.analytics)
+            val baseUrl = url.split("?")[0].trimEnd('/')
 
-    // domain
-    implementation(projects.domain.soptlog)
-    implementation(projects.domain.poke)
-
-    // etc
-    implementation(libs.coil.compose)
-    implementation(libs.balloon.compose)
+            return entries.find {
+                baseUrl.startsWith(it.url)
+            } ?: UNKNOWN
+        }
+    }
 }

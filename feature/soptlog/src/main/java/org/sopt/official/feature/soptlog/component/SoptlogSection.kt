@@ -295,7 +295,7 @@ private fun SoptLogSectionPreview() {
                     MySoptLogItemType.SOULMATE
                 ),
                 soptLogInfo = dummyStats,
-                onItemClick = { }
+                onItemClick = { _ -> }
             )
         }
     }
