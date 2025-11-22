@@ -65,7 +65,7 @@ import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 
 @Composable
-internal fun SoptlogRouteV2(
+internal fun SoptlogRoute(
     // TODO - navigate 솝탬프 완료 미션 이동
     // TODO - navigate 콕 찌르기 이동 - 총 꼭지르기, 친한친구, 단짝 친구, 천생 연분
     navigateToFortune: () -> Unit = {},
@@ -101,7 +101,7 @@ internal fun SoptlogRouteV2(
 
         else -> {
             with(receiver = soptLogState.soptLogInfo) {
-                SoptlogScreenV2(
+                SoptlogScreen(
                     soptLogInfo = soptLogInfo,
                     navigateToFortune = {
                         navigateToFortune()
@@ -118,7 +118,7 @@ internal fun SoptlogRouteV2(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SoptlogScreenV2(
+private fun SoptlogScreen(
     soptLogInfo: SoptLogInfo,
     modifier: Modifier = Modifier,
     navigateToFortune: () -> Unit = {}
@@ -154,7 +154,7 @@ private fun SoptlogScreenV2(
 
         Spacer(modifier = modifier.height(36.dp))
 
-        SoptlogContentsV2 {
+        SoptlogContents {
             if (soptLogInfo.isActive) {
                 SoptlogSection(
                     title = "솝탬프 로그",
@@ -222,7 +222,7 @@ private fun SoptlogScreenV2(
 }
 
 @Composable
-fun SoptlogContentsV2(
+fun SoptlogContents(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
@@ -237,7 +237,7 @@ fun SoptlogContentsV2(
 
 @Preview
 @Composable
-private fun PreviewSoptlogScreenV2() {
+private fun PreviewSoptlogScreen() {
     SoptTheme {
         val soptLogInfo = SoptLogInfo(
             isActive = true,
@@ -251,7 +251,7 @@ private fun PreviewSoptlogScreenV2() {
             soulmatesPokeCount = 761
         )
 
-        SoptlogScreenV2(
+        SoptlogScreen(
             soptLogInfo = soptLogInfo
         )
     }

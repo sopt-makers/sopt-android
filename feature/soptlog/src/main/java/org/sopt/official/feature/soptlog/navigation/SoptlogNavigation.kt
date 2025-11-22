@@ -42,7 +42,6 @@ fun NavGraphBuilder.soptlogNavGraph(
 ) {
     composable<SoptLog> {
         SoptlogRoute(
-            navigateToEditProfile = navigateToEditProfile,
             navigateToFortune = navigateToFortune
         )
     }
