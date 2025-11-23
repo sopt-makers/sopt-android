@@ -67,6 +67,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
+import org.sopt.official.domain.soptamp.fake.FakeUserRepository
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
@@ -88,7 +89,6 @@ import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.navigation.navigateToUserMissionList
 import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
-import kotlin.collections.mapOf
 
 @Composable
 fun MissionDetailScreen(
@@ -123,6 +123,8 @@ fun MissionDetailScreen(
     val myClapCount by viewModel.myClapCount.collectAsStateWithLifecycle(initialValue = 0)
     val clappers by viewModel.clappers.collectAsStateWithLifecycle(initialValue = persistentListOf())
 
+    val myNickname by viewModel.myNickname.collectAsStateWithLifecycle()
+
     var isClapUserListOpen by remember { mutableStateOf(false) }
 
     val viewCount by viewModel.viewCount.collectAsStateWithLifecycle(initialValue = 0)
@@ -142,6 +144,12 @@ fun MissionDetailScreen(
     val scrollState = rememberScrollState()
 
     val tracker = LocalTracker.current
+
+    LaunchedEffect(myName) {
+        if(myName == "deepLink") {
+            viewModel.getMyName()
+        }
+    }
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
@@ -230,7 +238,7 @@ fun MissionDetailScreen(
                                 "image" to url,
                                 "stampId" to stampId,
                                 "missionId" to id,
-                                "nickname" to myName
+                                "nickname" to if(myName == "deepLink") myNickname else myName
                             )
                         )
                     },
@@ -304,7 +312,7 @@ fun MissionDetailScreen(
                             "missionId" to id,
                             "appliedCount" to appliedCount,
                             "totalClapCount" to totalClapCount,
-                            "clappersNick" to myName,
+                            "clappersNick" to if(myName == "deepLink") myNickname else myName,
                             "receiverNick" to nickname
                         )
                     )
@@ -395,6 +403,7 @@ fun MissionDetailPreview() {
     val fakeViewModel = MissionDetailViewModel(
         stampRepository = FakeStampRepository,
         imageUploaderRepository = FakeImageUploaderRepository,
+        userRepository = FakeUserRepository
     )
 
     SoptTheme {

@@ -95,7 +95,7 @@ class SoptampActivity : AppCompatActivity() {
                 isMe = args?.isMine ?: false,
                 nickname = args?.nickname.orEmpty(),
                 title = args?.title.orEmpty(),
-                myName = "", // TODO - 현재 받을 방법이 없음
+                myName = "deepLink",
             )
         }
 
