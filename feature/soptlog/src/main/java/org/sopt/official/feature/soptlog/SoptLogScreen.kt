@@ -39,7 +39,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -48,10 +47,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
@@ -64,7 +62,6 @@ import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
 import org.sopt.official.feature.soptlog.navigation.SoptlogUrl
-import androidx.core.net.toUri
 
 @Composable
 internal fun SoptlogRoute(
@@ -73,19 +70,12 @@ internal fun SoptlogRoute(
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
     val scope = rememberCoroutineScope()
-    val lifecycleOwner = LocalLifecycleOwner.current
 
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                viewModel.getSoptLogInfo()
-            }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
+    LifecycleStartEffect(Unit) {
+        // ON_START
+        viewModel.getSoptLogInfo()
 
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
+        onStopOrDispose {}
     }
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
