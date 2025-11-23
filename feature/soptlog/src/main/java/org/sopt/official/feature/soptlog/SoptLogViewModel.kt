@@ -86,19 +86,19 @@ class SoptLogViewModel @Inject constructor(
     suspend fun fetchIsNewPoke(): Result<Boolean> {
         _soptLogInfo.update { it.copy(isLoading = true) }
 
-        return when (val apiResult: ApiResult<*> = checkNewInPokeUseCase()) {
+        val apiResult: ApiResult<*> = checkNewInPokeUseCase()
+        _soptLogInfo.update { it.copy(isLoading = false) }
+
+        return when (apiResult) {
             is ApiResult.Success -> {
-                _soptLogInfo.update { it.copy(isLoading = false) }
                 Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
             }
 
             is ApiResult.ApiError -> {
-                _soptLogInfo.update { it.copy(isLoading = false) }
                 Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
             }
 
             is ApiResult.Failure -> {
-                _soptLogInfo.update { it.copy(isLoading = false) }
                 Result.failure(apiResult.throwable)
             }
         }
