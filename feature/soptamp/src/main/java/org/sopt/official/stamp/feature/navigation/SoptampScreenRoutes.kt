@@ -106,7 +106,6 @@ fun RankingScreenRoute(
     val rankingViewModel: RankingViewModel = hiltViewModel()
     val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
-    val receivedEntrySource = args.entrySource // 파트별 랭킹 화면에서 넘긴 entrySource
 
     LaunchedEffect(true) {
         val isCurrent = args.type.first().isDigit()
@@ -123,7 +122,7 @@ fun RankingScreenRoute(
         is RankingState.Success -> {
             val successState = state as RankingState.Success
             RankingScreen(
-                entrySource = receivedEntrySource.ifEmpty { "personalRanking" },
+                entrySource = args.entrySource,
                 isCurrent = args.type.first().isDigit(),
                 type = args.type,
                 refreshing = rankingViewModel.isRefreshing,
