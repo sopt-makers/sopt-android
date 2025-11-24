@@ -166,7 +166,7 @@ private fun SoptlogScreen(
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_title),
-            contentDescription = "마이 솝트로그 로고",
+            contentDescription = null,
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -225,7 +225,7 @@ private fun SoptlogScreen(
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_bottom),
-            contentDescription = "마이 솝트로그 하단 이미지",
+            contentDescription = null,
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillWidth
         )
