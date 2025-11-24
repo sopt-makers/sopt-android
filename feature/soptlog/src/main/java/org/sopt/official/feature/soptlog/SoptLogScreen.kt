@@ -162,7 +162,7 @@ private fun SoptlogScreen(
             }
         )
 
-        Spacer(modifier = modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_title),
@@ -170,7 +170,7 @@ private fun SoptlogScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
         SoptlogContents {
             if (soptLogInfo.isActive) {
@@ -221,7 +221,7 @@ private fun SoptlogScreen(
             )
         }
 
-        Spacer(modifier = modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_bottom),
@@ -230,7 +230,7 @@ private fun SoptlogScreen(
             contentScale = ContentScale.FillWidth
         )
 
-        Spacer(modifier = modifier.height(72.dp))
+        Spacer(modifier = Modifier.height(72.dp))
     }
 }
 
