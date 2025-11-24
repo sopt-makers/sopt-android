@@ -5,6 +5,8 @@ import org.sopt.official.domain.soptlog.model.SoptLogInfo
 data class SoptLogState(
     val soptLogInfo: SoptLogInfo = SoptLogInfo(
         isActive = false,
+        isFortuneChecked = false,
+        todayFortuneText = "",
         soptampCount = 0,
         viewCount = 0,
         myClapCount = 0,

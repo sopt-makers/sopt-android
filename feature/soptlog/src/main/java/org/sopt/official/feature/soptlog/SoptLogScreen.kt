@@ -97,6 +97,7 @@ internal fun SoptlogRoute(
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
     val soptLogInfo = soptLogState.soptLogInfo
+    val todayFortuneText by viewModel.todayFortuneText.collectAsStateWithLifecycle("")
     val tracker = LocalTracker.current
 
     when {
@@ -112,6 +113,7 @@ internal fun SoptlogRoute(
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
                     soptLogInfo = soptLogInfo,
+                    todayFortuneText = todayFortuneText,
                     onNavigationClick = viewModel::onNavigationClick,
                     navigateToFortune = {
                         navigateToFortune()
@@ -130,6 +132,7 @@ internal fun SoptlogRoute(
 @Composable
 private fun SoptlogScreen(
     soptLogInfo: SoptLogInfo,
+    todayFortuneText: String,
     onNavigationClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
     navigateToFortune: () -> Unit = {}
@@ -209,7 +212,7 @@ private fun SoptlogScreen(
             Spacer(modifier = Modifier.height(38.dp))
 
             TodayFortuneBanner(
-                title = "오늘 내 운세는?",
+                title = todayFortuneText,
                 onClick = navigateToFortune
             )
         }
@@ -247,6 +250,8 @@ private fun PreviewSoptlogScreen() {
     SoptTheme {
         val soptLogInfo = SoptLogInfo(
             isActive = true,
+            isFortuneChecked = false,
+            todayFortuneText = "오늘의 운세",
             soptampCount = 0,
             viewCount = 216,
             myClapCount = 209,
@@ -264,6 +269,7 @@ private fun PreviewSoptlogScreen() {
 
         SoptlogScreen(
             soptLogInfo = soptLogInfo,
+            todayFortuneText = "오늘의 운세",
             onNavigationClick = { url ->
                 dummyAppServiceNavigation.navigateToDeepLink(url)
             }

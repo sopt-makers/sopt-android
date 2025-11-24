@@ -33,6 +33,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -53,6 +54,8 @@ class SoptLogViewModel @Inject constructor(
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
+
+    val todayFortuneText = _soptLogInfo.map { it.soptLogInfo.todayFortuneText }
 
     private val _navigationEvent = Channel<SoptlogNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()

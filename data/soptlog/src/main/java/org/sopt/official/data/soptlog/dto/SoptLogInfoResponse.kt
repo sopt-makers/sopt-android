@@ -31,6 +31,10 @@ import kotlinx.serialization.Serializable
 data class SoptLogInfoResponse(
     @SerialName("isActive")
     val isActive: Boolean,
+    @SerialName("isFortuneChecked")
+    val isFortuneChecked: Boolean,
+    @SerialName("todayFortuneText")
+    val todayFortuneText: String,
     @SerialName("soptampCount")
     val soptampCount: Int,
     @SerialName("viewCount")
