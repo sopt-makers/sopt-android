@@ -72,7 +72,6 @@ internal fun SoptlogRoute(
     val scope = rememberCoroutineScope()
 
     LifecycleStartEffect(Unit) {
-        // ON_START
         viewModel.getSoptLogInfo()
 
         onStopOrDispose {}
