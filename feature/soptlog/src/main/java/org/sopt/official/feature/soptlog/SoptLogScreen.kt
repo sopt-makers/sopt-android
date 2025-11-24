@@ -58,6 +58,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.component.SoptlogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
+import org.sopt.official.feature.soptlog.component.dialog.SoptLogErrorDialog
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
 import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
@@ -104,7 +105,7 @@ internal fun SoptlogRoute(
         }
 
         soptLogState.isError -> {
-            // TODO: 오류 화면
+            SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfo)
         }
 
         else -> {
