@@ -96,7 +96,7 @@ fun MissionDetailScreen(
     navController: NavController,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
-    val (id, title, level, isCompleted, isMe, nickname, myName) = args
+    val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsStateWithLifecycle("")
     val stampId by viewModel.stampId.collectAsStateWithLifecycle(initialValue = -1)
     val date by viewModel.date.collectAsStateWithLifecycle("")
@@ -145,10 +145,8 @@ fun MissionDetailScreen(
 
     val tracker = LocalTracker.current
 
-    LaunchedEffect(myName) {
-        if(myName == "deepLink") {
-            viewModel.getMyName()
-        }
+    LaunchedEffect(Unit) {
+        viewModel.getMyName()
     }
 
     LaunchedEffect(id, isCompleted, isMe, nickname) {
@@ -238,7 +236,7 @@ fun MissionDetailScreen(
                                 "image" to url,
                                 "stampId" to stampId,
                                 "missionId" to id,
-                                "nickname" to if(myName == "deepLink") myNickname else myName
+                                "nickname" to myNickname
                             )
                         )
                     },
@@ -312,7 +310,7 @@ fun MissionDetailScreen(
                             "missionId" to id,
                             "appliedCount" to appliedCount,
                             "totalClapCount" to totalClapCount,
-                            "clappersNick" to if(myName == "deepLink") myNickname else myName,
+                            "clappersNick" to myNickname,
                             "receiverNick" to nickname
                         )
                     )
@@ -396,7 +394,6 @@ fun MissionDetailPreview() {
             isCompleted = false,
             isMe = false,
             nickname = "Nunu",
-            myName = "me",
         )
 
     @SuppressLint("ViewModelConstructorInComposable")

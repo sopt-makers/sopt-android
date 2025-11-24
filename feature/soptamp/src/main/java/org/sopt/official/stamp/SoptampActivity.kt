@@ -94,8 +94,7 @@ class SoptampActivity : AppCompatActivity() {
                 isCompleted = true,
                 isMe = args?.isMine ?: false,
                 nickname = args?.nickname.orEmpty(),
-                title = args?.title.orEmpty(),
-                myName = "deepLink",
+                title = args?.title.orEmpty()
             )
         }
 

@@ -91,7 +91,6 @@ fun MissionDetailScreenRoute(
                 isCompleted = args.isCompleted,
                 isMe = args.isMe,
                 nickname = args.nickname,
-                myName = args.myName,
             ),
         navController = navController,
         viewModel = viewModel,

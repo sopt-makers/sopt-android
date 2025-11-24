@@ -183,7 +183,7 @@ fun MissionsGridComponent(
             MissionComponent(
                 mission = missionUiModel,
                 onClick = {
-                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname, myName))
+                    onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
                 },
                 onMissionItemClickTricked = {
                     tracker.track(

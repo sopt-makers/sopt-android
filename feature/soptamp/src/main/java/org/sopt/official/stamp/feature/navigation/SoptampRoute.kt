@@ -40,7 +40,6 @@ data class MissionDetail(
     val isCompleted: Boolean,
     val isMe: Boolean,
     val nickname: String,
-    val myName: String,
 ) : SoptampRoute
 
 @Serializable
@@ -68,7 +67,6 @@ fun org.sopt.official.stamp.feature.mission.model.MissionNavArgs.toRoute() =
         isCompleted = this.isCompleted,
         isMe = this.isMe,
         nickname = this.nickname,
-        myName = this.myName,
     )
 
 fun MissionDetail.toMissionLevel(): MissionLevel = MissionLevel.of(this.level)
