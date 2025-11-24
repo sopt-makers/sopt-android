@@ -191,7 +191,7 @@ fun MainScreen(
                     )
 
                     soptlogNavGraph(
-                        soptlogNavigation = object : SoptlogNavigation.SoptlogAppServiceNavigation {
+                        soptlogNavigation = object : SoptlogNavigation {
                             override fun navigateToDeepLink(url: String) {
                                 if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
                                 else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))

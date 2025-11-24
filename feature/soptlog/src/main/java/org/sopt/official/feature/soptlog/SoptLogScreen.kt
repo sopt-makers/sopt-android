@@ -95,8 +95,6 @@ internal fun SoptlogRoute(
                 SoptlogScreen(
                     soptLogInfo = soptLogInfo,
                     onNavigationClick = { url ->
-                        val soptlogAppServicesNavigation = soptlogNavigation as SoptlogNavigation.SoptlogAppServiceNavigation
-
                         when(SoptlogUrl.from(url)) {
                             SoptlogUrl.POKE, SoptlogUrl.POKE_FRIEND_SUMMARY -> {
                                 scope.launch {
@@ -105,7 +103,7 @@ internal fun SoptlogRoute(
                                             val uri = url.toUri()
                                             val type = uri.getQueryParameter("type")
 
-                                            soptlogAppServicesNavigation.navigateToPoke(
+                                            soptlogNavigation.navigateToPoke(
                                                 url = url,
                                                 isNewPoke = isNewPoke,
                                                 currentDestination = 0,
@@ -115,7 +113,7 @@ internal fun SoptlogRoute(
                                 }
                             }
                             SoptlogUrl.SOPTAMP -> {
-                                soptlogAppServicesNavigation.navigateToDeepLink(url)
+                                soptlogNavigation.navigateToDeepLink(url)
                             }
                             else -> {}
                         }
@@ -264,7 +262,7 @@ private fun PreviewSoptlogScreen() {
             soulmatesPokeCount = 761
         )
 
-        val dummyAppServiceNavigation = object : SoptlogNavigation.SoptlogAppServiceNavigation {
+        val dummyAppServiceNavigation = object : SoptlogNavigation {
             override fun navigateToDeepLink(url: String) {}
             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {}
         }
