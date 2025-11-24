@@ -24,7 +24,6 @@
  */
 package org.sopt.official.stamp.feature.mission.detail
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -157,7 +156,6 @@ constructor(
         viewModelScope.launch {
             userRepository.getUserInfo()
                 .onSuccess {
-                    Log.e("성민aa","미션 디테일 접속, getMyName: ${it.nickname}")
                     _myNickname.value = it.nickname
                 }
                 .onFailure(Timber::e)
