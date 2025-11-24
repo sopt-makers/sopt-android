@@ -39,6 +39,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -47,12 +48,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
@@ -61,7 +60,7 @@ import org.sopt.official.feature.soptlog.component.SoptlogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
-import org.sopt.official.feature.soptlog.navigation.SoptlogUrl
+import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
 
 @Composable
 internal fun SoptlogRoute(
@@ -75,6 +74,24 @@ internal fun SoptlogRoute(
         viewModel.getSoptLogInfo()
 
         onStopOrDispose {}
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.navigationEvent.collect { event ->
+            when (event) {
+                is SoptlogNavigationEvent.NavigateToPoke -> {
+                    soptlogNavigation.navigateToPoke(
+                        url = event.url,
+                        isNewPoke = event.isNewPoke,
+                        currentDestination = 0,
+                        friendType = event.friendType
+                    )
+                }
+                is SoptlogNavigationEvent.NavigateToDeepLink -> {
+                    soptlogNavigation.navigateToDeepLink(event.url)
+                }
+            }
+        }
     }
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
@@ -94,30 +111,7 @@ internal fun SoptlogRoute(
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
                     soptLogInfo = soptLogInfo,
-                    onNavigationClick = { url ->
-                        when(SoptlogUrl.from(url)) {
-                            SoptlogUrl.POKE, SoptlogUrl.POKE_FRIEND_SUMMARY -> {
-                                scope.launch {
-                                    viewModel.fetchIsNewPoke()
-                                        .onSuccess { isNewPoke ->
-                                            val uri = url.toUri()
-                                            val type = uri.getQueryParameter("type")
-
-                                            soptlogNavigation.navigateToPoke(
-                                                url = url,
-                                                isNewPoke = isNewPoke,
-                                                currentDestination = 0,
-                                                friendType = type
-                                            )
-                                        }
-                                }
-                            }
-                            SoptlogUrl.SOPTAMP -> {
-                                soptlogNavigation.navigateToDeepLink(url)
-                            }
-                            else -> {}
-                        }
-                    },
+                    onNavigationClick = viewModel::onNavigationClick,
                     navigateToFortune = {
                         navigateToFortune()
                         tracker.track(

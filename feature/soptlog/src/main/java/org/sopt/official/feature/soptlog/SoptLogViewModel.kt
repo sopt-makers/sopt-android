@@ -24,20 +24,25 @@
  */
 package org.sopt.official.feature.soptlog
 
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
-import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
+import org.sopt.official.feature.soptlog.navigation.SoptlogUrl
+import org.sopt.official.feature.soptlog.state.SoptLogState
+import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
 import timber.log.Timber
 
 @HiltViewModel
@@ -48,6 +53,50 @@ class SoptLogViewModel @Inject constructor(
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
+
+    private val _navigationEvent = Channel<SoptlogNavigationEvent>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
+
+    fun onNavigationClick(url: String) {
+        when (SoptlogUrl.from(url)) {
+            SoptlogUrl.POKE, SoptlogUrl.POKE_FRIEND_SUMMARY -> {
+                handlePokeNavigation(url)
+            }
+            SoptlogUrl.SOPTAMP -> {
+                viewModelScope.launch {
+                    _navigationEvent.send(
+                        SoptlogNavigationEvent.NavigateToDeepLink(url)
+                    )
+                }
+            }
+            else -> {}
+        }
+    }
+
+    private fun handlePokeNavigation(url: String) {
+        viewModelScope.launch {
+            _soptLogInfo.update { it.copy(isLoading = true) }
+
+            fetchIsNewPoke()
+                .onSuccess { isNewPoke ->
+                    val uri = url.toUri()
+                    val type = uri.getQueryParameter("type")
+
+                    _navigationEvent.send(
+                        SoptlogNavigationEvent.NavigateToPoke(
+                            url = url,
+                            isNewPoke = isNewPoke,
+                            friendType = type
+                        )
+                    )
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+
+            _soptLogInfo.update { it.copy(isLoading = false) }
+        }
+    }
 
     fun getSoptLogInfo() {
         viewModelScope.launch {
@@ -84,10 +133,7 @@ class SoptLogViewModel @Inject constructor(
 
     // 신규 유저인지 판단하는 함수 (콕 찌르기 온보딩)
     suspend fun fetchIsNewPoke(): Result<Boolean> {
-        _soptLogInfo.update { it.copy(isLoading = true) }
-
         val apiResult: ApiResult<*> = checkNewInPokeUseCase()
-        _soptLogInfo.update { it.copy(isLoading = false) }
 
         return when (apiResult) {
             is ApiResult.Success -> {
@@ -105,18 +151,3 @@ class SoptLogViewModel @Inject constructor(
     }
 }
 
-data class SoptLogState(
-    val soptLogInfo: SoptLogInfo = SoptLogInfo(
-        isActive = false,
-        soptampCount = 0,
-        viewCount = 0,
-        myClapCount = 0,
-        clapCount = 0,
-        pokeCount = 0,
-        newFriendsPokeCount = 0,
-        bestFriendsPokeCount = 0,
-        soulmatesPokeCount = 0
-    ),
-    val isLoading: Boolean = false,
-    val isError: Boolean = false
-)

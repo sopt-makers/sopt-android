@@ -69,8 +69,8 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.R
-import org.sopt.official.feature.soptlog.SoptLogState
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
+import org.sopt.official.feature.soptlog.state.SoptLogState
 
 @Composable
 internal fun SoptlogSection(
