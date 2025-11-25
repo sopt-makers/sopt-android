@@ -41,7 +41,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -69,8 +68,6 @@ internal fun SoptlogRoute(
     navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
-    val scope = rememberCoroutineScope()
-
     LifecycleStartEffect(Unit) {
         viewModel.getSoptLogInfo()
 
