@@ -87,7 +87,8 @@ import org.sopt.official.feature.main.MainTab.Home
 import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
-import org.sopt.official.feature.soptlog.navigation.soptlogNavGraph
+import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
+import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
 import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
@@ -189,12 +190,27 @@ fun MainScreen(
                         }
                     )
 
-                    soptlogNavGraph(
-                        navigateToEditProfile = {
-                            val intent = Intent(context, WebViewActivity::class.java).apply {
-                                putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
+                    soptLogNavGraph(
+                        soptLogNavigation = object : SoptLogNavigation {
+                            override fun navigateToDeepLink(url: String) {
+                                if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
+                                else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
                             }
-                            context.startActivity(intent)
+
+                            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) =
+                                context.startActivity(
+                                    when {
+                                        isNewPoke -> {
+                                            applicationNavigator.getPokeOnboardingActivityIntent(currentDestination, userStatus)
+                                        }
+                                        url.contains("home/poke/friend-list-summary") -> {
+                                            applicationNavigator.getPokeFriendListSummaryActivityIntent(userStatus.name, friendType)
+                                        }
+                                        else -> {
+                                            applicationNavigator.getPokeActivityIntent(userStatus)
+                                        }
+                                    }
+                                )
                         },
                         navigateToFortune = {
                             context.startActivity(

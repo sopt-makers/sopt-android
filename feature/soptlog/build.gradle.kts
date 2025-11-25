@@ -47,6 +47,7 @@ dependencies {
 
     // domain
     implementation(projects.domain.soptlog)
+    implementation(projects.domain.poke)
 
     // etc
     implementation(libs.coil.compose)

@@ -38,6 +38,7 @@ import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
+import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.notification.PokeNotificationActivity
 import org.sopt.official.feature.poke.onboarding.OnboardingActivity
@@ -103,6 +104,10 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getPokeNotificationActivityIntent(name: String) = PokeNotificationActivity.getIntent(
         context,
         PokeNotificationActivity.Argument(name)
+    )
+
+    override fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?) = FriendListSummaryActivity.getIntent(
+        context, FriendListSummaryActivity.StartArgs(name, friendType)
     )
 
     override fun getFortuneActivityIntent(): Intent = FortuneActivity.getIntent(context)

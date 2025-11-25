@@ -28,14 +28,15 @@ import org.sopt.official.data.soptlog.dto.SoptLogInfoResponse
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
 internal fun SoptLogInfoResponse.toDomain() = SoptLogInfo(
-    profileImageUrl = profileImageUrl ?: "",
-    userName = userName ?: "",
-    part = part ?: "",
-    soptampRank = soptampRank ?: "",
-    pokeCount = pokeCount ?: "",
-    soptLevel = soptLevel ?: "",
-    during = during ?: "-",
-    profileMessage = profileMessage,
-    isActive = isActive,
-    todayFortuneTitle = todayFortuneTitle ?: ""
+    isActive = this.isActive,
+    isFortuneChecked = this.isFortuneChecked,
+    todayFortuneText = this.todayFortuneText,
+    soptampCount = this.soptampCount,
+    viewCount = this.viewCount,
+    myClapCount = this.myClapCount,
+    clapCount = this.clapCount,
+    pokeCount = this.totalPokeCount,
+    newFriendsPokeCount = this.newFriendsPokeCount,
+    bestFriendsPokeCount = this.bestFriendsPokeCount,
+    soulmatesPokeCount = this.soulmatesPokeCount
 )

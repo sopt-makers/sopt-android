@@ -103,6 +103,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         initFriendListBlock()
         launchFriendListSummaryUiStateFlow()
         launchPokeUserUiStateFlow()
+        handleDeepLinkInitialType()
     }
 
     override fun onResume() {
@@ -372,8 +373,22 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
     }
 
+    // 솝트로그에서 딥링크로 들어왔을 때 바텀시트 띄우는 함수
+    private fun handleDeepLinkInitialType() {
+        val typeName = args?.initialFriendType
+
+        if (typeName.isNullOrEmpty()) return
+
+        val initialType = PokeFriendType.entries.find {
+            it.typeName.equals(typeName, ignoreCase = true)
+        } ?: return
+
+        showFriendListDetailBottomSheet(initialType)
+    }
+
     data class StartArgs(
         val userStatus: String,
+        val initialFriendType: String? = null // 솝트로그에서 딥링크로 넘어왔을 때 띄울 바텀시트 타입
     ) : Serializable
 
     companion object {

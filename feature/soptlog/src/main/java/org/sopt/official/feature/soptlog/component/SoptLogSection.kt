@@ -22,27 +22,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
 package org.sopt.official.feature.soptlog.component
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,114 +64,139 @@ import com.skydoves.balloon.compose.setBackgroundColor
 import com.skydoves.balloon.compose.setOverlayColor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.White
+import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.R
+import org.sopt.official.feature.soptlog.model.MySoptLogItemType
+import org.sopt.official.feature.soptlog.model.SoptLogCategory
+import org.sopt.official.feature.soptlog.state.SoptLogState
 
 @Composable
-fun SoptlogDashBoard(
-    dashBoardItems: ImmutableList<DashBoardItem>,
-    modifier: Modifier = Modifier,
+internal fun SoptLogSection(
+    title: String,
+    items: ImmutableList<MySoptLogItemType>,
+    soptLogInfo: SoptLogInfo,
+    onItemClick: (MySoptLogItemType) -> Unit
 ) {
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Text(
+            text = title,
+            color = White,
+            style = SoptTheme.typography.title16SB,
+        )
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Column(
+            modifier = Modifier
+                .clip(shape = RoundedCornerShape(12.dp))
+                .background(color = SoptTheme.colors.onSurface900)
+                .padding(vertical = 6.dp)
+        ) {
+            items.forEachIndexed { index, type ->
+                MySoptLogRowItem(
+                    onClick = { onItemClick(type) },
+                    soptLogInfo = soptLogInfo,
+                    mySoptLogItemType = type
+                )
+
+                if (index < items.size - 1) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal =16.dp),
+                        thickness = 1.dp,
+                        color = SoptTheme.colors.onSurface800
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MySoptLogRowItem(
+    onClick: () -> Unit,
+    soptLogInfo: SoptLogInfo,
+    mySoptLogItemType: MySoptLogItemType
+) {
+    val count = mySoptLogItemType.count(soptLogInfo)
+    val balloonBuilder = rememberCustomBalloonBuilder()
+
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(12.dp))
-            .background(SoptTheme.colors.onSurface800)
-            .padding(horizontal = 20.dp, vertical = 6.dp),
+            .padding(top = 13.dp, bottom = 13.dp, start = 20.dp, end = 13.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        dashBoardItems.forEach { item ->
-            key(
-                item
-            ) {
-                SoptlogDashBoardItem(
-                    title = item.title,
-                    icon = item.icon,
-                    content = item.content,
-                    textIcon = item.textIcon
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = mySoptLogItemType.title,
+                color = White,
+                style = SoptTheme.typography.title14SB
+            )
+            if (mySoptLogItemType.hasHelpIcon) {
+                Balloon(
+                    builder = balloonBuilder,
+                    balloonContent = {
+                        SoptLogBalloon(modifier = Modifier.width(IntrinsicSize.Max))
+                    }
+                ) { balloon ->
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_helper),
+                        contentDescription = "조회수 설명 툴팁",
+                        tint = SoptTheme.colors.onSurface100,
+                        modifier = Modifier
+                            .padding(top = 2.dp, bottom = 2.dp, start = 2.dp)
+                            .clickable { balloon.showAlignTop() }
+                    )
+                }
+            }
+        }
+
+        Row(
+            modifier = Modifier.clickable(
+                enabled = mySoptLogItemType.hasArrow,
+                onClick = onClick
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "${count}회",
+                color = White,
+                style = SoptTheme.typography.title14SB
+            )
+            if (mySoptLogItemType.hasArrow) {
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptlog_arrow_right),
+                    contentDescription = "${mySoptLogItemType.title} 이동",
+                    tint = SoptTheme.colors.onSurface200,
+                    modifier = Modifier.size(size = 20.dp)
                 )
             }
         }
     }
 }
 
-data class DashBoardItem(
-    val title: String,
-    @DrawableRes val icon: Int,
-    val content: String,
-    @DrawableRes val textIcon: Int? = null
-)
-
 @Composable
-private fun SoptlogDashBoardItem(
-    title: String,
-    @DrawableRes icon: Int,
-    content: String,
-    modifier: Modifier = Modifier,
-    @DrawableRes textIcon: Int? = null
-) {
-    val balloonBuilder = rememberCustomBalloonBuilder()
-
-    Column(
-        modifier = modifier.padding(10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Row(
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = title,
-                style = SoptTheme.typography.body14M,
-                color = SoptTheme.colors.onSurface200
-            )
-            Spacer(modifier = Modifier.width(1.dp))
-
-            if (textIcon != null) {
-                Balloon(
-                    builder = balloonBuilder,
-                    balloonContent = {
-                        SoptlogBalloon(Modifier.fillMaxWidth())
-                    }
-                ) { balloon ->
-                    Icon(
-                        imageVector = ImageVector.vectorResource(textIcon),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                        modifier = Modifier.clickable {
-                            balloon.showAlignBottom()
-                        }
-                    )
-                }
-            }
-        }
-
-        Image(
-            imageVector = ImageVector.vectorResource(icon),
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-                .background(SoptTheme.colors.onSurface700)
-                .padding(vertical = 7.dp, horizontal = 6.dp),
-            contentDescription = null
-        )
-
-        Text(
-            text = content,
-            style = SoptTheme.typography.heading16B,
-            color = SoptTheme.colors.surface,
-            modifier = Modifier.padding(top = 4.dp)
-        )
-    }
-}
-
-@Composable
-private fun SoptlogBalloon(
+private fun SoptLogBalloon(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.padding(horizontal = 18.dp, vertical = 16.dp)
+        modifier = modifier
+            .padding(horizontal = 18.dp, vertical = 16.dp)
+            .background(color = SoptTheme.colors.onSurface600)
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -185,24 +211,30 @@ private fun SoptlogBalloon(
                     contentDescription = null,
                     tint = SoptTheme.colors.primary
                 )
+
                 Spacer(modifier = Modifier.width(4.dp))
+
                 Text(
-                    text = "솝레벨이란?",
+                    text = "조회수",
                     style = SoptTheme.typography.title14SB,
-                    color = SoptTheme.colors.primary,
+                    color = SoptTheme.colors.primary
                 )
             }
+
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_close_18),
-                contentDescription = null,
+                contentDescription = "조회수 툴팁 닫기",
                 tint = Color.Unspecified
             )
         }
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Text(
-            text = "앱잼, 솝커톤, 솝텀, 모임 등 다양한\n솝트 활동에 참여한 횟수를 의미해요.",
+            text = "솝트 전체 회원들이 내 솝탬프 미션을\n조회한 횟수를 의미해요.",
             style = SoptTheme.typography.body13M,
-            color = SoptTheme.colors.onSurface50
+            color = SoptTheme.colors.onSurface50,
+            modifier = Modifier.padding(end = 34.dp)
         )
     }
 }
@@ -227,46 +259,37 @@ private fun rememberCustomBalloonBuilder(): Balloon.Builder {
         setDismissWhenOverlayClicked(false)
         setDismissWhenTouchOutside(false)
         setDismissWhenClicked(true)
-    }
-}
-
-
-@Preview
-@Composable
-fun SoptlogDashBoardItemPreview() {
-    SoptTheme {
-        SoptlogDashBoardItem(
-            title = "솝트레벨",
-            icon = R.drawable.ic_sopt_level,
-            content = "Lv.6",
-        )
+        setElevation(4)
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SoptlogDashBoardPreview() {
-    SoptTheme {
-        SoptlogDashBoard(
-            dashBoardItems = persistentListOf(
-                DashBoardItem(
-                    title = "솝트레벨",
-                    icon = R.drawable.ic_sopt_level,
-                    content = "Lv.6",
-                ),
-                DashBoardItem(
-                    title = "콕찌르기",
-                    icon = R.drawable.ic_poke_hand,
-                    content = "208회",
-                ),
-                DashBoardItem(
-                    title = "솝트와",
-                    icon = R.drawable.ic_calender,
-                    content = "33개월",
-                )
-            ),
-            modifier = Modifier
-                .fillMaxWidth()
-        )
+private fun SoptLogSectionPreview() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Gray950)
+            .padding(all = 16.dp)
+    ) {
+        Column {
+            val dummyStats = SoptLogState().soptLogInfo
+
+            SoptLogSection(
+                title = "솝탬프 로그",
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
+                soptLogInfo = dummyStats,
+                onItemClick = { }
+            )
+
+            Spacer(modifier = Modifier.height(28.dp))
+
+            SoptLogSection(
+                title = "콕찌르기 로그",
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
+                soptLogInfo = dummyStats,
+                onItemClick = { _ -> }
+            )
+        }
     }
 }

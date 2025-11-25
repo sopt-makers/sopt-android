@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.soptlog.api
+package org.sopt.official.feature.soptlog.navigation
 
-import org.sopt.official.data.soptlog.dto.SoptLogInfoResponse
-import retrofit2.http.GET
+enum class SoptLogUrl(val url: String) {
+    POKE("home/poke"),
+    SOPTAMP("home/soptamp"),
+    POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
+    UNKNOWN("");
 
-interface SoptLogApi {
+    companion object {
+        fun from(url: String?): SoptLogUrl {
+            if (url == null) return UNKNOWN
 
-    @GET("user/my-sopt-log")
-    suspend fun getSoptLogInfo(): SoptLogInfoResponse
+            val baseUrl = url.split("?")[0].trimEnd('/')
+
+            return entries.find {
+                baseUrl.startsWith(it.url)
+            } ?: UNKNOWN
+        }
+    }
 }

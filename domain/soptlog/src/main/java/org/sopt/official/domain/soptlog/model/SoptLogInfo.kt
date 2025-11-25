@@ -25,14 +25,15 @@
 package org.sopt.official.domain.soptlog.model
 
 data class SoptLogInfo(
-    val userName: String,
-    val profileImageUrl: String,
-    val part: String,
-    val soptampRank: String,
-    val pokeCount: String,
-    val soptLevel: String,
-    val during: String,
-    val profileMessage: String?,
     val isActive: Boolean,
-    val todayFortuneTitle: String,
+    val isFortuneChecked: Boolean,
+    val todayFortuneText: String,
+    val soptampCount: Int,
+    val viewCount: Int,
+    val myClapCount: Int,
+    val clapCount: Int,
+    val pokeCount: Int?,
+    val newFriendsPokeCount: Int?,
+    val bestFriendsPokeCount: Int?,
+    val soulmatesPokeCount: Int?
 )
