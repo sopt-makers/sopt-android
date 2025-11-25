@@ -64,12 +64,14 @@ import com.skydoves.balloon.compose.setBackgroundColor
 import com.skydoves.balloon.compose.setOverlayColor
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.R
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
+import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.state.SoptLogState
 
 @Composable
@@ -275,12 +277,7 @@ private fun SoptLogSectionPreview() {
 
             SoptlogSection(
                 title = "솝탬프 로그",
-                items = persistentListOf(
-                    MySoptLogItemType.COMPLETED_MISSION,
-                    MySoptLogItemType.VIEW_COUNT,
-                    MySoptLogItemType.RECEIVED_CLAP,
-                    MySoptLogItemType.SENT_CLAP
-                ),
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
                 soptLogInfo = dummyStats,
                 onItemClick = { }
             )

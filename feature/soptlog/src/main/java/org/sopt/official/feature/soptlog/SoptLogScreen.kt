@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
@@ -59,6 +59,7 @@ import org.sopt.official.feature.soptlog.component.SoptlogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.component.dialog.SoptLogErrorDialog
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
+import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
 import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
 
@@ -169,18 +170,10 @@ private fun SoptlogScreen(
             if (soptLogInfo.isActive) {
                 SoptlogSection(
                     title = "솝탬프 로그",
-                    items = persistentListOf(
-                        MySoptLogItemType.COMPLETED_MISSION,
-                        MySoptLogItemType.VIEW_COUNT,
-                        MySoptLogItemType.RECEIVED_CLAP,
-                        MySoptLogItemType.SENT_CLAP
-                    ),
+                    items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
                     soptLogInfo = soptLogInfo,
                     onItemClick = { type ->
-                        when (type) {
-                            MySoptLogItemType.COMPLETED_MISSION -> { onNavigationClick(type.url) }
-                            else -> {}
-                        }
+                        if (type.url.isNotEmpty()) { onNavigationClick(type.url) }
                     }
                 )
                 Spacer(modifier = Modifier.height(28.dp))
@@ -188,21 +181,10 @@ private fun SoptlogScreen(
 
             SoptlogSection(
                 title = "콕찌르기 로그",
-                items = persistentListOf(
-                    MySoptLogItemType.TOTAL_POKE,
-                    MySoptLogItemType.CLOSE_FRIEND,
-                    MySoptLogItemType.BEST_FRIEND,
-                    MySoptLogItemType.SOULMATE
-                ),
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
                 soptLogInfo = soptLogInfo,
                 onItemClick = { type ->
-                    when (type) {
-                        MySoptLogItemType.TOTAL_POKE,
-                        MySoptLogItemType.CLOSE_FRIEND,
-                        MySoptLogItemType.BEST_FRIEND,
-                        MySoptLogItemType.SOULMATE -> { onNavigationClick(type.url) }
-                        else -> {}
-                    }
+                    if (type.url.isNotEmpty()) { onNavigationClick(type.url) }
                 }
             )
 
