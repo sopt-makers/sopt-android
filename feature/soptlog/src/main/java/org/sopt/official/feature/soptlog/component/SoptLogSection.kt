@@ -75,7 +75,7 @@ import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.state.SoptLogState
 
 @Composable
-internal fun SoptlogSection(
+internal fun SoptLogSection(
     title: String,
     items: ImmutableList<MySoptLogItemType>,
     soptLogInfo: SoptLogInfo,
@@ -99,7 +99,7 @@ internal fun SoptlogSection(
                 .padding(vertical = 6.dp)
         ) {
             items.forEachIndexed { index, type ->
-                MySoptlogRowItem(
+                MySoptLogRowItem(
                     onClick = { onItemClick(type) },
                     soptLogInfo = soptLogInfo,
                     mySoptLogItemType = type
@@ -120,7 +120,7 @@ internal fun SoptlogSection(
 }
 
 @Composable
-private fun MySoptlogRowItem(
+private fun MySoptLogRowItem(
     onClick: () -> Unit,
     soptLogInfo: SoptLogInfo,
     mySoptLogItemType: MySoptLogItemType
@@ -148,7 +148,7 @@ private fun MySoptlogRowItem(
                 Balloon(
                     builder = balloonBuilder,
                     balloonContent = {
-                        SoptlogBalloon(modifier = Modifier.width(IntrinsicSize.Max))
+                        SoptLogBalloon(modifier = Modifier.width(IntrinsicSize.Max))
                     }
                 ) { balloon ->
                     Icon(
@@ -190,7 +190,7 @@ private fun MySoptlogRowItem(
 }
 
 @Composable
-private fun SoptlogBalloon(
+private fun SoptLogBalloon(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -275,23 +275,18 @@ private fun SoptLogSectionPreview() {
         Column {
             val dummyStats = SoptLogState().soptLogInfo
 
-            SoptlogSection(
+            SoptLogSection(
                 title = "솝탬프 로그",
-                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
                 soptLogInfo = dummyStats,
                 onItemClick = { }
             )
 
             Spacer(modifier = Modifier.height(28.dp))
 
-            SoptlogSection(
+            SoptLogSection(
                 title = "콕찌르기 로그",
-                items = persistentListOf(
-                    MySoptLogItemType.TOTAL_POKE,
-                    MySoptLogItemType.CLOSE_FRIEND,
-                    MySoptLogItemType.BEST_FRIEND,
-                    MySoptLogItemType.SOULMATE
-                ),
+                items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
                 soptLogInfo = dummyStats,
                 onItemClick = { _ -> }
             )

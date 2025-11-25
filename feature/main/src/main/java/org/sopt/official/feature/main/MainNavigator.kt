@@ -35,7 +35,7 @@ import androidx.navigation.navOptions
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.home.navigation.Home
 import org.sopt.official.feature.home.navigation.navigateToHome
-import org.sopt.official.feature.soptlog.navigation.navigateToSoptlog
+import org.sopt.official.feature.soptlog.navigation.navigateToSoptLog
 import org.sopt.official.model.UserStatus
 
 class MainNavigator(
@@ -73,7 +73,7 @@ class MainNavigator(
             MainTab.SoptLog -> {
                 when (userStatus) {
                     UserStatus.ACTIVE, UserStatus.INACTIVE -> {
-                        navController.navigateToSoptlog(
+                        navController.navigateToSoptLog(
                             navOptions = navOptions
                         )
                     }

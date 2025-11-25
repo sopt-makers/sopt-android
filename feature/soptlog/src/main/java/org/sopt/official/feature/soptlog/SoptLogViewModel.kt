@@ -41,9 +41,9 @@ import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
-import org.sopt.official.feature.soptlog.navigation.SoptlogUrl
+import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
 import org.sopt.official.feature.soptlog.state.SoptLogState
-import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
+import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 import timber.log.Timber
 
 @HiltViewModel
@@ -57,18 +57,18 @@ class SoptLogViewModel @Inject constructor(
 
     val todayFortuneText = _soptLogInfo.map { it.soptLogInfo.todayFortuneText }
 
-    private val _navigationEvent = Channel<SoptlogNavigationEvent>()
+    private val _navigationEvent = Channel<SoptLogNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
     fun onNavigationClick(url: String) {
-        when (SoptlogUrl.from(url)) {
-            SoptlogUrl.POKE, SoptlogUrl.POKE_FRIEND_SUMMARY -> {
+        when (SoptLogUrl.from(url)) {
+            SoptLogUrl.POKE, SoptLogUrl.POKE_FRIEND_SUMMARY -> {
                 handlePokeNavigation(url)
             }
-            SoptlogUrl.SOPTAMP -> {
+            SoptLogUrl.SOPTAMP -> {
                 viewModelScope.launch {
                     _navigationEvent.send(
-                        SoptlogNavigationEvent.NavigateToDeepLink(url)
+                        SoptLogNavigationEvent.NavigateToDeepLink(url)
                     )
                 }
             }
@@ -86,7 +86,7 @@ class SoptLogViewModel @Inject constructor(
                     val type = uri.getQueryParameter("type")
 
                     _navigationEvent.send(
-                        SoptlogNavigationEvent.NavigateToPoke(
+                        SoptLogNavigationEvent.NavigateToPoke(
                             url = url,
                             isNewPoke = isNewPoke,
                             friendType = type

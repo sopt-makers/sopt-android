@@ -24,14 +24,14 @@
  */
 package org.sopt.official.feature.soptlog.navigation
 
-enum class SoptlogUrl(val url: String) {
+enum class SoptLogUrl(val url: String) {
     POKE("home/poke"),
     SOPTAMP("home/soptamp"),
     POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
     UNKNOWN("");
 
     companion object {
-        fun from(url: String?): SoptlogUrl {
+        fun from(url: String?): SoptLogUrl {
             if (url == null) return UNKNOWN
 
             val baseUrl = url.split("?")[0].trimEnd('/')

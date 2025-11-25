@@ -55,17 +55,17 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
-import org.sopt.official.feature.soptlog.component.SoptlogSection
+import org.sopt.official.feature.soptlog.component.SoptLogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.component.dialog.SoptLogErrorDialog
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
-import org.sopt.official.feature.soptlog.navigation.SoptlogNavigation
-import org.sopt.official.feature.soptlog.state.SoptlogNavigationEvent
+import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
+import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 
 @Composable
-internal fun SoptlogRoute(
-    soptlogNavigation: SoptlogNavigation,
+internal fun SoptLogRoute(
+    soptLogNavigation: SoptLogNavigation,
     navigateToFortune: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel(),
 ) {
@@ -78,16 +78,16 @@ internal fun SoptlogRoute(
     LaunchedEffect(Unit) {
         viewModel.navigationEvent.collect { event ->
             when (event) {
-                is SoptlogNavigationEvent.NavigateToPoke -> {
-                    soptlogNavigation.navigateToPoke(
+                is SoptLogNavigationEvent.NavigateToPoke -> {
+                    soptLogNavigation.navigateToPoke(
                         url = event.url,
                         isNewPoke = event.isNewPoke,
                         currentDestination = 0,
                         friendType = event.friendType
                     )
                 }
-                is SoptlogNavigationEvent.NavigateToDeepLink -> {
-                    soptlogNavigation.navigateToDeepLink(event.url)
+                is SoptLogNavigationEvent.NavigateToDeepLink -> {
+                    soptLogNavigation.navigateToDeepLink(event.url)
                 }
             }
         }
@@ -168,7 +168,7 @@ private fun SoptlogScreen(
 
         SoptlogContents {
             if (soptLogInfo.isActive) {
-                SoptlogSection(
+                SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
                     soptLogInfo = soptLogInfo,
@@ -179,7 +179,7 @@ private fun SoptlogScreen(
                 Spacer(modifier = Modifier.height(28.dp))
             }
 
-            SoptlogSection(
+            SoptLogSection(
                 title = "콕찌르기 로그",
                 items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
                 soptLogInfo = soptLogInfo,
@@ -241,7 +241,7 @@ private fun PreviewSoptlogScreen() {
             soulmatesPokeCount = 761
         )
 
-        val dummyAppServiceNavigation = object : SoptlogNavigation {
+        val dummyAppServiceNavigation = object : SoptLogNavigation {
             override fun navigateToDeepLink(url: String) {}
             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {}
         }
