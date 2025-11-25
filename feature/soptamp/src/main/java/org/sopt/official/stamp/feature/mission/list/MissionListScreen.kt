@@ -155,6 +155,7 @@ fun MissionListScreen(
                     onMissionItemClick = onMissionItemClick,
                     isMe = true,
                     nickname = nickname,
+                    myName = "" // 나의 미션인 경우 nickName = myNam
                 )
             }
         }
@@ -166,6 +167,8 @@ fun MissionsGridComponent(
     missions: ImmutableList<MissionUiModel>,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
+    myName: String,
+    entrySource: String? = null,
     nickname: String
 ) {
     val tracker = LocalTracker.current
@@ -187,7 +190,9 @@ fun MissionsGridComponent(
                         type = EventType.CLICK,
                         name = "click_feed_mission",
                         properties = mapOf(
+                            "entrySource" to entrySource,
                             "feedOwnerNick" to nickname,
+                            "viewerNick" to myName,
                             "missionId" to missionUiModel.id,
                             "missionTitle" to missionUiModel.title,
                             "missionLevel" to missionUiModel.level
@@ -410,8 +415,9 @@ fun MissionListScreenNew(
 ) {
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
-    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
+    val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle() // 나의 닉네임
     val reportUrl by missionsViewModel.reportUrl.collectAsStateWithLifecycle()
+    val personalRankingEntrySource = "personalRanking"
 
     val context = LocalContext.current
 
@@ -445,7 +451,7 @@ fun MissionListScreenNew(
                     navController.navigateToPartRanking()
                 },
                 onCurrentRankingButtonClick = {
-                    navController.navigateToRanking("${generation}기")
+                    navController.navigateToRanking("${generation}기", personalRankingEntrySource)
                 },
                 onReportButtonClick = {
                     Intent(context, WebViewActivity::class.java).apply {

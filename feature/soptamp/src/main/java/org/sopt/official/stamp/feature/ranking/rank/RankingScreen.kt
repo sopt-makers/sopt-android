@@ -70,6 +70,7 @@ import org.sopt.official.stamp.util.toPx
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RankingScreen(
+    entrySource: String,
     isCurrent: Boolean,
     type: String,
     refreshing: Boolean = false,
@@ -151,7 +152,7 @@ fun RankingScreen(
                     TopRankerList(
                         topRanker = rankingListUiModel.topRankingList,
                         onClickTopRankerBubble = { ranker ->
-                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs())
+                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs(entrySource))
                         },
                     )
                 }
@@ -160,7 +161,7 @@ fun RankingScreen(
                         rankerItem = item,
                         isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
-                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
+                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs(entrySource))
                         },
                     )
                 }
@@ -216,6 +217,7 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
+            entrySource = "personalRanking",
             isCurrent = true,
             type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),

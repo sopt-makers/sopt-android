@@ -56,6 +56,8 @@ import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 
 @Composable
 fun UserMissionListScreen(
+    myName: String,
+    entrySource: String?,
     userName: String,
     description: String,
     missionListUiModel: MissionListUiModel,
@@ -92,6 +94,8 @@ fun UserMissionListScreen(
                 missions = missionListUiModel.missionList.toImmutableList(),
                 onMissionItemClick = onMissionItemClick,
                 isMe = isMe,
+                myName = myName,
+                entrySource = entrySource,
                 nickname = userName,
             )
         }
@@ -147,7 +151,9 @@ fun UserMissionListHeader(
 fun PreviewUserMissionListScreen() {
     SoptTheme {
         UserMissionListScreen(
+            myName = "me",
             userName = "hello",
+            entrySource = "",
             description = "일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이",
             missionListUiModel =
                 MissionListUiModel(

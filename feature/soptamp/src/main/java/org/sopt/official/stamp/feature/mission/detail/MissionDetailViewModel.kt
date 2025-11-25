@@ -35,12 +35,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
@@ -99,6 +101,7 @@ class MissionDetailViewModel
 constructor(
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     private val uiState = MutableStateFlow(PostUiState())
     private val clapEvent = MutableSharedFlow<Unit>()
@@ -134,6 +137,9 @@ constructor(
 
     val stampId = uiState.map { it.stampId }
 
+    private val _myNickname = MutableStateFlow("")
+    val myNickname = _myNickname.asStateFlow()
+
     private val submitEvent = MutableSharedFlow<Unit>()
 
     init {
@@ -142,6 +148,17 @@ constructor(
             submitEvent.debounce(500).collect {
                 handleSubmit()
             }
+        }
+    }
+
+    // 딥링크로 미션 상세 뷰에 접속한 경우 "나"의 닉네임을 얻음 (앰플리튜드 삽입 목적)
+    fun getMyName() {
+        viewModelScope.launch {
+            userRepository.getUserInfo()
+                .onSuccess {
+                    _myNickname.value = it.nickname
+                }
+                .onFailure(Timber::e)
         }
     }
 
