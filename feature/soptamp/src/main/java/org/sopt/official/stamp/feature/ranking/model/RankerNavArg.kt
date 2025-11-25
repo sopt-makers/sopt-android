@@ -27,10 +27,12 @@ package org.sopt.official.stamp.feature.ranking.model
 data class RankerNavArg(
     val nickname: String,
     val description: String,
+    val entrySource: String,
 )
 
-fun RankerUiModel.toArgs() =
+fun RankerUiModel.toArgs(entrySource: String) =
     RankerNavArg(
         nickname = this.nickname,
         description = this.getDescription(),
+        entrySource = entrySource
     )

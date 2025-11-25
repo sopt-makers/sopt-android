@@ -94,7 +94,7 @@ class SoptampActivity : AppCompatActivity() {
                 isCompleted = true,
                 isMe = args?.isMine ?: false,
                 nickname = args?.nickname.orEmpty(),
-                title = args?.title.orEmpty(),
+                title = args?.title.orEmpty()
             )
         }
 
@@ -147,15 +147,22 @@ private fun SoptampNavHost(
 
             val destinationsToBuild = listOf(
                 PartRanking,
-                Ranking(args?.part.orEmpty()),
-                UserMissionList(args?.nickname ?: "", ""),
+                Ranking(
+                    type = args?.part.orEmpty(),
+                    entrySource = ""
+                ),
+                UserMissionList(
+                    nickname = args?.nickname ?: "",
+                    description = "",
+                    entrySource = null
+                ),
                 deepLinkDestination
             )
 
             for (destination in destinationsToBuild) {
                 navController.navigate(destination)
                 navController.currentBackStackEntryFlow.firstOrNull {
-                    it.destination.route?.startsWith(destination::class.qualifiedName!!) == true
+                    it.destination.route?.startsWith(prefix = destination::class.qualifiedName!!) == true
                 }
             }
         }
