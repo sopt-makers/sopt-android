@@ -94,19 +94,19 @@ class SoptampActivity : AppCompatActivity() {
                 isCompleted = true,
                 isMe = args?.isMine ?: false,
                 nickname = args?.nickname.orEmpty(),
-                title = args?.title.orEmpty()
+                title = args?.title.orEmpty(),
             )
         }
 
         setContent {
             SoptTheme {
-                ProvideTracker(tracker) {
+                /*ProvideTracker(tracker) {
                     SoptampNavHost(
                         startDestination = MissionList,
                         deepLinkDestination = deepLinkDestination,
                         args = args
                     )
-                }
+                }*/
             }
         }
     }
@@ -135,36 +135,29 @@ private fun SoptampNavHost(
         navController = navController,
         startDestination = startDestination,
     ) {
-        soptampNavGraph(
+        /*soptampNavGraph(
             navController = navController,
             onBackClick = { navController.popBackStack() },
-        )
+        )*/
     }
 
-    LaunchedEffect(deepLinkDestination, isDeepLinkHandled) {
+    /*LaunchedEffect(deepLinkDestination, isDeepLinkHandled) {
         if (deepLinkDestination != null && deepLinkDestination != startDestination && !isDeepLinkHandled) {
             isDeepLinkHandled = true
 
             val destinationsToBuild = listOf(
                 PartRanking,
-                Ranking(
-                    type = args?.part.orEmpty(),
-                    entrySource = ""
-                ),
-                UserMissionList(
-                    nickname = args?.nickname ?: "",
-                    description = "",
-                    entrySource = null
-                ),
+                Ranking(args?.part.orEmpty()),
+                UserMissionList(args?.nickname ?: "", ""),
                 deepLinkDestination
             )
 
             for (destination in destinationsToBuild) {
                 navController.navigate(destination)
                 navController.currentBackStackEntryFlow.firstOrNull {
-                    it.destination.route?.startsWith(prefix = destination::class.qualifiedName!!) == true
+                    it.destination.route?.startsWith(destination::class.qualifiedName!!) == true
                 }
             }
         }
-    }
+    }*/
 }
