@@ -24,8 +24,10 @@
  */
 package org.sopt.official.feature.poke.friend.summary
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,13 +40,16 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.feature.poke.navigation.PokeFriendList
 import javax.inject.Inject
 
 @HiltViewModel
 class FriendListSummaryViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
+    val friendType = savedStateHandle.toRoute<PokeFriendList>()
     private val _friendListSummaryUiState = MutableStateFlow<UiState<FriendListSummary>>(UiState.Loading)
     val friendListSummaryUiState: StateFlow<UiState<FriendListSummary>> get() = _friendListSummaryUiState
 
