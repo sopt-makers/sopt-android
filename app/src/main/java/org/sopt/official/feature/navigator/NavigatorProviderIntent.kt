@@ -38,13 +38,9 @@ import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
-import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
-import org.sopt.official.feature.poke.main.PokeMainActivity
-import org.sopt.official.feature.poke.notification.PokeNotificationActivity
-import org.sopt.official.feature.poke.onboarding.OnboardingActivity
 import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.model.UserStatus
-import org.sopt.official.stamp.SoptampActivity
+import org.sopt.official.stamp.feature.navigation.SoptampMissionArgs
 import javax.inject.Inject
 
 class NavigatorProviderIntent @Inject constructor(
@@ -66,19 +62,31 @@ class NavigatorProviderIntent @Inject constructor(
         context
     )
 
-    override fun getPokeActivityIntent(userStatus: UserStatus): Intent = PokeMainActivity.getIntent(
-        context,
-        PokeMainActivity.StartArgs(userStatus = userStatus.name)
-    )
+    override fun getPokeActivityIntent(userStatus: UserStatus): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            // MainScreen이 Pke 탭으로 이동 시키기 위한 트리거용
+            putExtra("isPokeDeepLink", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
 
-    override fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent = OnboardingActivity.getIntent(
-        context,
-        OnboardingActivity.StartArgs(currentGeneration = currentGeneration, userStatus = userStatus.name)
-    )
+    override fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            // MainScreen이 Pke 탭으로 이동 시키기 위한 트리거용
+            putExtra("isPokeDeepLink", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
 
     override fun getAttendanceActivityIntent() = AttendanceActivity.newInstance(context)
 
-    override fun getSoptampActivityIntent() = SoptampActivity.getIntent(context)
+    override fun getSoptampActivityIntent(): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            // MainScreen이 솝탬프 탭으로 이동 시키기 위한 트리거용
+            putExtra("isSoptampDeepLink", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
 
     override fun getSoptampMissionDetailActivityIntent(
         id: Int,
@@ -88,9 +96,8 @@ class NavigatorProviderIntent @Inject constructor(
         part: String?,
         level: Int,
         title: String?
-    ) = SoptampActivity.getIntent(
-        context,
-        SoptampActivity.SoptampMissionArgs(
+    ): Intent {
+        val args = SoptampMissionArgs(
             id = id,
             missionId = missionId,
             isMine = isMine,
@@ -99,16 +106,29 @@ class NavigatorProviderIntent @Inject constructor(
             level = level,
             title = title
         )
-    )
 
-    override fun getPokeNotificationActivityIntent(name: String) = PokeNotificationActivity.getIntent(
-        context,
-        PokeNotificationActivity.Argument(name)
-    )
+        return Intent(context, MainActivity::class.java).apply {
+            putExtra("soptampArgs", args)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
 
-    override fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?) = FriendListSummaryActivity.getIntent(
-        context, FriendListSummaryActivity.StartArgs(name, friendType)
-    )
+    override fun getPokeNotificationActivityIntent(name: String) : Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            putExtra("userStatus", name)
+            putExtra("isPokeNotification", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
+
+    override fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?) : Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            putExtra("userStatus", name)
+            putExtra("friendType", friendType)
+            putExtra("isPokeFriendList", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
 
     override fun getFortuneActivityIntent(): Intent = FortuneActivity.getIntent(context)
     override fun getScheduleActivityIntent(): Intent = ScheduleActivity.getIntent(context)

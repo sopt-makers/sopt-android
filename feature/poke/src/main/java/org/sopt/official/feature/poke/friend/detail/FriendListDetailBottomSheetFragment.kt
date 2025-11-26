@@ -179,7 +179,6 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 }
             }
 
-            imageButton.setBackgroundResource(R.drawable.icon_close)
             imageButton.setOnClickListener { dismiss() }
             recyclerView.addOnScrollListener(scrollListener)
             recyclerView.addItemDecoration(recyclerViewItemDecorationDivider)
