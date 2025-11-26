@@ -27,36 +27,67 @@ package org.sopt.official.stamp.feature.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
+import kotlinx.serialization.Serializable
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.core.navigation.MainTabRoute
+import org.sopt.official.stamp.SoptampEntryRoute
+
+@Serializable
+data object SoptampGraph : MainTabRoute
+
+data class SoptampMissionArgs(
+    val id: Int,
+    val missionId: Int,
+    val isMine: Boolean,
+    val nickname: String?,
+    val part: String?,
+    val level: Int,
+    val title: String? = null,
+    val generation: Int? = null,
+    val entrySource: String? = null
+) : java.io.Serializable
 
 fun NavGraphBuilder.soptampNavGraph(
     navController: NavController,
-    onBackClick: () -> Unit = { navController.popBackStack() },
+    tracker: Tracker,
 ) {
-    composable<MissionList> {
-        MissionListScreenRoute(navController)
-    }
+    navigation<SoptampGraph>(
+        startDestination = MissionList
+    ) {
+        composable<MissionList> {
+            SoptampEntryRoute(
+                navController = navController,
+                tracker = tracker,
+                content = {
+                    // 브릿지 로직 후 보여줄 화면
+                    MissionListScreenRoute(navController)
+                }
+            )
+        }
 
-    composable<MissionDetail> { backStackEntry ->
-        val args = backStackEntry.toRoute<MissionDetail>()
-        MissionDetailScreenRoute(args, navController)
-    }
+        composable<MissionDetail> { backStackEntry ->
+            val args = backStackEntry.toRoute<MissionDetail>()
+            MissionDetailScreenRoute(args, navController)
+        }
 
-    composable<Ranking> { backStackEntry ->
-        val args = backStackEntry.toRoute<Ranking>()
-        RankingScreenRoute(args, navController)
-    }
+        composable<Ranking> { backStackEntry ->
+            val args = backStackEntry.toRoute<Ranking>()
+            RankingScreenRoute(args, navController)
+        }
 
-    composable<PartRanking> {
-        PartRankingScreenRoute(navController)
-    }
+        composable<PartRanking> {
+            PartRankingScreenRoute(navController)
+        }
 
-    composable<UserMissionList> { backStackEntry ->
-        val args = backStackEntry.toRoute<UserMissionList>()
-        UserMissionListScreenRoute(args, navController)
-    }
+        composable<UserMissionList> { backStackEntry ->
+            val args = backStackEntry.toRoute<UserMissionList>()
+            UserMissionListScreenRoute(args, navController)
+        }
 
-    composable<Onboarding> {
-        OnboardingScreenRoute(navController)
+        composable<Onboarding> {
+            OnboardingScreenRoute(navController)
+        }
     }
 }
