@@ -24,28 +24,38 @@
  */
 package org.sopt.official.feature.main
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.vector.ImageVector
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
 
 enum class MainTab(
-    val icon: ImageVector,
+    @param:DrawableRes val icon: Int,
     internal val contentDescription: String,
     val route: MainTabRoute,
-    val loggingName: String,
+    val loggingName: String? = null,
 ) {
     Home(
-        icon = Icons.Default.Home,
+        icon = R.drawable.ic_main_home_filled,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
         loggingName = "at36_navi_home"
     ),
+
+    Soptamp(
+        icon = R.drawable.ic_main_soptamp,
+        contentDescription = "솝탬프",
+        route = org.sopt.official.stamp.feature.navigation.SoptampGraph,
+    ),
+
+    Poke(
+        icon = R.drawable.ic_main_poke,
+        contentDescription = "콕찌르기",
+        route = org.sopt.official.feature.poke.navigation.PokeGraph,
+    ),
+
     SoptLog(
-        icon = Icons.Default.Person,
+        icon = R.drawable.ic_main_soptlog,
         contentDescription = "솝트로그",
         route = org.sopt.official.feature.soptlog.navigation.SoptLog,
         loggingName = "at36_navi_soptlog"

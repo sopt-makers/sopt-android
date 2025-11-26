@@ -28,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -35,8 +36,10 @@ import androidx.navigation.navOptions
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.home.navigation.Home
 import org.sopt.official.feature.home.navigation.navigateToHome
+import org.sopt.official.feature.poke.navigation.navigateToPokeEntry
 import org.sopt.official.feature.soptlog.navigation.navigateToSoptLog
 import org.sopt.official.model.UserStatus
+import org.sopt.official.stamp.feature.navigation.navigateToSoptamp
 
 class MainNavigator(
     val navController: NavHostController,
@@ -49,7 +52,7 @@ class MainNavigator(
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
-            currentDestination?.hasRoute(tab::class) == true
+            currentDestination?.hierarchy?.any { it.hasRoute(tab::class) } == true
         }
 
 
@@ -69,6 +72,18 @@ class MainNavigator(
             MainTab.Home -> navController.navigateToHome(
                 navOptions = navOptions
             )
+
+            MainTab.Soptamp -> {
+                navController.navigateToSoptamp(
+                    navOptions = navOptions
+                )
+            }
+
+            MainTab.Poke ->{
+                navController.navigateToPokeEntry(
+                    navOptions = navOptions
+                )
+            }
 
             MainTab.SoptLog -> {
                 when (userStatus) {
@@ -99,8 +114,8 @@ class MainNavigator(
     }
 
     @Composable
-    fun shouldShowBottomBar() = MainTab.contains {
-        currentDestination?.hasRoute(it::class) == true
+    fun shouldShowBottomBar() = MainTab.contains { tab ->
+        currentDestination?.hierarchy?.any { it.hasRoute(tab::class) } == true
     }
 }
 
