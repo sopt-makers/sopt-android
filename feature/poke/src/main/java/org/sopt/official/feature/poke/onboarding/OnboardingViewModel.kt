@@ -24,8 +24,10 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,14 +40,18 @@ import org.sopt.official.domain.poke.usecase.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.feature.poke.navigation.PokeOnboarding
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,
     private val updateNewInPokeOnboardingUseCase: UpdateNewInPokeOnboardingUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
 ) : ViewModel() {
+    val args = savedStateHandle.toRoute<PokeOnboarding>()
+
     private val _checkNewInPokeOnboardingState = MutableStateFlow<Boolean?>(null)
     val checkNewInPokeOnboardingState: StateFlow<Boolean?> get() = _checkNewInPokeOnboardingState
 
