@@ -61,7 +61,6 @@ import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -95,6 +94,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesN
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.HomeUrl
+import org.sopt.official.model.UserStatus
 
 @Composable
 internal fun HomeRoute(
@@ -161,11 +161,6 @@ internal fun HomeRoute(
                                         )
                                     }
                             }
-                        }
-
-                        HomeUrl.FORTUNE -> {
-                            homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "at36_todaysoptmadi_menu")
                         }
 
                         HomeUrl.SOPTAMP -> {
@@ -251,7 +246,7 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 16.dp))
 
             HomeUserSoptLogDashboardForMember(
-                onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                onDashboardClick = homeDashboardNavigation::navigateToEditProfile,
                 homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -361,7 +356,7 @@ private fun HomeScreenForMember(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 40.dp)
+                    .padding(bottom = 82.dp)
             ) {
                 HomeToastButton(
                     imageUrl = toastData.imageUrl,
@@ -381,7 +376,7 @@ private fun HomeScreenForMember(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 40.dp)
+                    .padding(bottom = 82.dp)
             ) {
                 HomeFloatingButton(
                     imageUrl = toastData.imageUrl,
@@ -415,7 +410,7 @@ private fun HomeScreenForVisitor(
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForVisitor(onSettingClick = homeDashboardNavigation::navigateToSetting)
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToSoptlog)
+        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToEditProfile)
         Spacer(modifier = Modifier.height(height = 36.dp))
         Text(
             text = "SOPT를 더 알고 싶다면, 둘러보세요",
