@@ -106,10 +106,10 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            includeAppBar.toolbar.setOnClickListener {
+            /*includeAppBar.toolbar.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_quit")
                 finish()
-            }
+            }*/
 
             btnNextSomeonePokeMe.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
