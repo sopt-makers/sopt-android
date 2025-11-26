@@ -39,6 +39,8 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.core.webview)
 
+    implementation(projects.feature.poke)
+    implementation(projects.feature.soptamp)
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)
 }
