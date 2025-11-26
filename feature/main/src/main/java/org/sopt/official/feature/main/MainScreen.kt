@@ -54,6 +54,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -62,21 +63,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
@@ -84,30 +85,30 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNav
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.main.MainTab.Home
-import org.sopt.official.feature.main.MainTab.SoptLog
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
+import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
+import org.sopt.official.feature.poke.navigation.navigateToPokeMain
+import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
+import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
+import org.sopt.official.feature.poke.navigation.pokeNavGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
 import org.sopt.official.model.UserStatus
+import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 
 private const val EXIT_MILLIS = 3000L
 
-private val applicationNavigator by lazy {
-    EntryPointAccessors.fromApplication(
-        appContext,
-        NavigatorEntryPoint::class.java
-    ).navigatorProvider()
-}
-
 @Composable
 fun MainScreen(
     userStatus: UserStatus,
-    navigator: MainNavigator = rememberMainNavigator(),
+    applicationNavigator: NavigatorProvider,
+    navigator: MainNavigator = rememberMainNavigator()
 ) {
     val context = LocalContext.current
+    val activity = context as Activity
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
 
@@ -115,11 +116,62 @@ fun MainScreen(
 
     BackHandler {
         if (System.currentTimeMillis() - backPressedTime <= EXIT_MILLIS) {
-            (context as Activity).finish()
+            activity.finish()
         } else {
-            (context as Activity).toast("한번 더 누르면 앱을 종료할 수 있어요")
+            activity.toast("한번 더 누르면 앱을 종료할 수 있어요")
         }
         backPressedTime = System.currentTimeMillis()
+    }
+
+    // soptamp 검사 로직
+    val shouldNavigateToSoptamp = remember(activity.intent) {
+        val intent = activity.intent
+        val hasSoptampFlag = intent?.getBooleanExtra("isSoptampDeepLink", false) == true
+        val hasMissionArgs = intent?.hasExtra("soptampArgs") == true
+
+        hasSoptampFlag || hasMissionArgs
+    }
+
+    // poke 검사 로직
+    val shouldNavigateToPoke = remember(activity.intent) {
+        val intent = activity.intent
+        intent?.getBooleanExtra("isPokeDeepLink", false) == true
+    }
+
+    val shouldNavigateToPokeNotification = remember(activity.intent) {
+        val intent = activity.intent
+        intent?.getBooleanExtra("isPokeNotification", false) == true
+    }
+
+    val shouldNavigatePokeFriendList = remember(activity.intent) {
+        val intent = activity.intent
+        intent?.getBooleanExtra("isPokeFriendList", false) == true
+        intent?.hasExtra("friendType") == true
+    }
+
+    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke) {
+        if (shouldNavigateToSoptamp) {
+            navigator.navigate(MainTab.Soptamp, userStatus)
+            activity.intent?.putExtra("isSoptampDeepLink", false)
+        }
+
+        if (shouldNavigateToPoke) {
+            navigator.navigate(MainTab.Poke, userStatus)
+            activity.intent?.putExtra("isPokeDeepLink", false)
+        }
+
+        if (shouldNavigateToPokeNotification) {
+            navigator.navController.navigateToPokeNotification(userStatus.name, null)
+            activity.intent?.putExtra("isPokeNotification", false)
+        }
+
+        if (shouldNavigatePokeFriendList) {
+            navigator.navController.navigateToPokeFriendList(
+                activity.intent?.getStringExtra("friendType"),
+                null
+            )
+            activity.intent?.putExtra("isPokeFriendList", false)
+        }
     }
 
     Scaffold(
@@ -160,14 +212,31 @@ fun MainScreen(
                                 context.startActivity(applicationNavigator.getMyPageActivityIntent(userStatus.name))
 
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
-                            override fun navigateToSoptlog() = navigator.navigate(SoptLog, userStatus) {
-                                isOpenDialog = true
+                            override fun navigateToEditProfile() {
+                                val intent = Intent(context, WebViewActivity::class.java).apply {
+                                    putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
+                                }
+                                context.startActivity(intent)
                             }
 
                             override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
                             override fun navigateToDeepLink(url: String) {
-                                if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
-                                else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
+                                if (userStatus == UserStatus.UNAUTHENTICATED) {
+                                    isOpenDialog = true
+                                    return
+                                }
+
+                                val deepLinkType = DeepLinkType.of(url)
+
+                                when (deepLinkType) {
+                                    DeepLinkType.SOPTAMP -> {
+                                        navigator.navigate(MainTab.Soptamp, userStatus)
+                                    }
+
+                                    else -> {
+                                        context.startActivity(deepLinkType.getIntent(context, userStatus, url))
+                                    }
+                                }
                             }
 
                             override fun navigateToWebUrl(url: String) {
@@ -175,12 +244,16 @@ fun MainScreen(
                             }
 
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
-                                context.startActivity(
+                                /*context.startActivity(
                                     when (isNewPoke) {
                                         true -> applicationNavigator.getPokeOnboardingActivityIntent(currentDestination, userStatus)
                                         false -> applicationNavigator.getPokeActivityIntent(userStatus)
                                     }
-                                )
+                                )*/
+                                when (isNewPoke) {
+                                    true -> navigator.navController.navigateToPokeMain(null)
+                                    false -> navigator.navigate(MainTab.Poke, userStatus)
+                                }
 
                             override fun navigateToPlaygroundMemberProfile(userId: Int) {
                                 context.startActivity(
@@ -190,27 +263,43 @@ fun MainScreen(
                         }
                     )
 
+                    soptampNavGraph(
+                        navController = navigator.navController,
+                        tracker = tracker,
+                    )
+
+                    pokeNavGraph(
+                        navController = navigator.navController,
+                        paddingValues = innerPadding,
+                        userStatus = userStatus
+                    )
+
                     soptLogNavGraph(
                         soptLogNavigation = object : SoptLogNavigation {
                             override fun navigateToDeepLink(url: String) {
                                 if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
-                                else context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
+                                else if (url == DeepLinkType.SOPTAMP.link) {
+                                    navigator.navigate(MainTab.Soptamp, userStatus)
+                                } else {
+                                    context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
+                                }
                             }
 
-                            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) =
-                                context.startActivity(
-                                    when {
-                                        isNewPoke -> {
-                                            applicationNavigator.getPokeOnboardingActivityIntent(currentDestination, userStatus)
-                                        }
-                                        url.contains("home/poke/friend-list-summary") -> {
-                                            applicationNavigator.getPokeFriendListSummaryActivityIntent(userStatus.name, friendType)
-                                        }
-                                        else -> {
-                                            applicationNavigator.getPokeActivityIntent(userStatus)
-                                        }
+                            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {
+                                when {
+                                    url.contains("home/poke/friend-list-summary") -> {
+                                        navigator.navController.navigateToPokeFriendList(friendType, null)
                                     }
-                                )
+
+                                    isNewPoke -> {
+                                        navigator.navController.navigateToPokeOnboarding(currentDestination, userStatus.name)
+                                    }
+
+                                    else -> {
+                                        navigator.navigate(MainTab.Poke, userStatus)
+                                    }
+                                }
+                            }
                         },
                         navigateToFortune = {
                             context.startActivity(
@@ -225,10 +314,12 @@ fun MainScreen(
                     tabs = MainTab.entries.toPersistentList(),
                     currentTab = navigator.currentTab,
                     onTabSelected = { selectedTab ->
-                        tracker.track(
-                            name = selectedTab.loggingName,
-                            type = EventType.CLICK
-                        )
+                        if (selectedTab.loggingName != null) {
+                            tracker.track(
+                                name = selectedTab.loggingName,
+                                type = EventType.CLICK
+                            )
+                        }
 
                         navigator.navigate(selectedTab, userStatus) {
                             isOpenDialog = true
@@ -237,9 +328,13 @@ fun MainScreen(
                 )
             }
 
-            MainFloatingButton(
-                paddingValues = innerPadding
-            )
+            SlideUpDownWithFadeAnimatedVisibility(
+                visible = navigator.currentTab != MainTab.Soptamp && navigator.currentTab != MainTab.Poke,
+            ) {
+                MainFloatingButton(
+                    paddingValues = innerPadding
+                )
+            }
         }
     )
 
@@ -357,7 +452,6 @@ fun SoptBottomBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
                 .background(color = SoptTheme.colors.onSurface800),
         ) {
             tabs.forEach { tab ->
@@ -369,7 +463,7 @@ fun SoptBottomBar(
                         .clickable { onTabSelected(tab) }
                 ) {
                     Icon(
-                        imageVector = tab.icon,
+                        imageVector = ImageVector.vectorResource(tab.icon),
                         contentDescription = tab.contentDescription,
                         tint = if (tab == currentTab) {
                             SoptTheme.colors.primary
