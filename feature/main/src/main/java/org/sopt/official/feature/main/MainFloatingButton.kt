@@ -93,7 +93,7 @@ private val menuList = listOf(
 
 @Composable
 internal fun MainFloatingButton(
-    paddingValues: PaddingValues,
+    paddingValues: PaddingValues
 ) {
     var isFloatingButtonClicked by remember { mutableStateOf(false) }
 
@@ -108,19 +108,15 @@ internal fun MainFloatingButton(
     )
 
     Box(
-        contentAlignment = Alignment.BottomCenter,
+        contentAlignment = Alignment.BottomEnd,
         modifier = Modifier
             .fillMaxSize()
-            .padding(paddingValues)
     ) {
         if (isFloatingButtonClicked) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .then(
-                        if (isFloatingButtonClicked) Modifier.background(SoptTheme.colors.onSurface.copy(backgroundAlpha))
-                        else Modifier
-                    )
+                    .background(SoptTheme.colors.onSurface.copy(alpha = backgroundAlpha))
                     .clickable {
                         isFloatingButtonClicked = false
                     }
@@ -141,10 +137,11 @@ internal fun MainFloatingButton(
                 animationSpec = tween(durationMillis = ANIMATION_DURATION)
             ),
             modifier = Modifier
-                .padding(bottom = 106.dp)
+                .padding(bottom = 146.dp, end = 20.dp)
         ) {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalAlignment = Alignment.End
             ) {
                 menuList.forEach { (title, menu) ->
                     FloatingMenuItem(title = title, menuList = menu)
@@ -157,7 +154,9 @@ internal fun MainFloatingButton(
             shape = RoundedCornerShape(18.dp),
             containerColor = SoptTheme.colors.primary,
             modifier = Modifier
-                .padding(bottom = 44.dp)
+                .align(Alignment.BottomEnd)
+                .padding(paddingValues)
+                .padding(bottom = 84.dp, end = 20.dp)
                 .size(48.dp)
         ) {
             Icon(
