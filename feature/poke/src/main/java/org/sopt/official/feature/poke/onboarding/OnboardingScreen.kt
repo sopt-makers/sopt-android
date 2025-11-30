@@ -1,9 +1,11 @@
 package org.sopt.official.feature.poke.onboarding
 
 import android.view.View
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -20,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.context.findActivity
-import org.sopt.official.feature.poke.R
+import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.component.PokeErrorDialog
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
@@ -73,45 +77,62 @@ fun OnboardingScreen(
         }
     }
 
-    AndroidViewBinding(
-        factory = ActivityOnboardingBinding::inflate,
+    Column (
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
     ) {
-        if (viewpager.adapter == null) {
-            includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
+        Text(
+            text = "콕 찌르기",
+            style = SoptTheme.typography.heading16B,
+            color = colorResource(id = org.sopt.official.designsystem.R.color.mds_gray_30),
+            modifier = Modifier
+                .padding(16.dp)
+        )
 
-            animationViewLottie.addOnAnimationEndListener {
-                layoutLottie.visibility = View.GONE
-                navigateToPokeMain()
-            }
+        Text(
+            text = "아는 사람을 콕 찔러서 친구를 맺어보세요",
+            modifier = Modifier
+                .padding(horizontal = 16.dp),
+            style = SoptTheme.typography.heading16B,
+            color = colorResource(id = org.sopt.official.designsystem.R.color.mds_gray_30),
+        )
 
-            layoutLottie.setOnClickListener {}
-        }
-
-        when (val state = onboardingUiState) {
-            is UiState.Success -> {
-                val profiles = state.data
-
-                if (fragmentActivity != null && viewpager.adapter == null) {
-                    viewpager.adapter = OnboardingViewPagerAdapter(
-                        fragmentActivity = fragmentActivity,
-                        profiles = profiles,
-                        args = args,
-                    )
-                    dotsIndicator.attachTo(viewpager)
+        AndroidViewBinding(
+            factory = ActivityOnboardingBinding::inflate,
+        ) {
+            if (viewpager.adapter == null) {
+                animationViewLottie.addOnAnimationEndListener {
+                    layoutLottie.visibility = View.GONE
+                    navigateToPokeMain()
                 }
 
-                layoutLottie.visibility = View.GONE
-                viewpager.visibility = View.VISIBLE
-                dotsIndicator.visibility = View.VISIBLE
+                layoutLottie.setOnClickListener {}
             }
-            is UiState.Loading -> {
 
-            }
-            else -> {
+            when (val state = onboardingUiState) {
+                is UiState.Success -> {
+                    val profiles = state.data
 
+                    if (fragmentActivity != null && viewpager.adapter == null) {
+                        viewpager.adapter = OnboardingViewPagerAdapter(
+                            fragmentActivity = fragmentActivity,
+                            profiles = profiles,
+                            args = args,
+                        )
+                        dotsIndicator.attachTo(viewpager)
+                    }
+
+                    layoutLottie.visibility = View.GONE
+                    viewpager.visibility = View.VISIBLE
+                    dotsIndicator.visibility = View.VISIBLE
+                }
+                is UiState.Loading -> {
+
+                }
+                else -> {
+
+                }
             }
         }
     }

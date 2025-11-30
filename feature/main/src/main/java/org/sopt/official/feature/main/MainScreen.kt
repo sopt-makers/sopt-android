@@ -91,7 +91,6 @@ import org.sopt.official.feature.main.component.MainBottomBarAlarmBadge
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
-import org.sopt.official.feature.poke.navigation.navigateToPokeMain
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
@@ -260,7 +259,10 @@ fun MainScreen(
 
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
                                 when (isNewPoke) {
-                                    true -> navigator.navController.navigateToPokeMain(null)
+                                    true -> navigator.navController.navigateToPokeOnboarding(
+                                        generation = currentDestination,
+                                        userStatus = userStatus.name
+                                    )
                                     false -> navigator.navigate(MainTab.Poke, userStatus)
                                 }
 

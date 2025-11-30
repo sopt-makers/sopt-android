@@ -79,9 +79,9 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun initAppBar() {
-        with(binding.includeAppBar) {
+        /*with(binding.includeAppBar) {
             textViewTitle.text = getString(R.string.poke_title)
-        }
+        }*/
     }
 
     private fun initLottieAnimatorListener() {
