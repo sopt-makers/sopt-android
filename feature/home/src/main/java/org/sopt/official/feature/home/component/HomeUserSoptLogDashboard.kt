@@ -51,12 +51,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import org.sopt.official.designsystem.Black40
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.SuitBold
+import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.R.drawable.ic_edit_profile
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
@@ -137,8 +137,8 @@ internal fun HomeUserSoptLogDashboardForMember(
                 Spacer(modifier = Modifier.weight(weight = 1f))
 
                 if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
-                    AsyncImage(
-                        model = homeUserSoptLogDashboardModel.userProfile,
+                    UrlImage(
+                        url = homeUserSoptLogDashboardModel.userProfile,
                         contentDescription = null,
                         modifier = Modifier
                             .size(54.dp)
