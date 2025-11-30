@@ -34,7 +34,6 @@ fun SoptampEntryRoute(
     }
 
     val deepLinkDestination: SoptampRoute? = remember(args) {
-        Timber.d("DeepLink: args parsed? $args")
         if (args?.missionId == -1 || args == null) {
             null
         } else {
@@ -60,14 +59,13 @@ fun SoptampEntryRoute(
             }
 
             LaunchedEffect(deepLinkDestination) {
-                Timber.e("deepLinkDestination: $args")
                 if (deepLinkDestination != null && !isDeepLinkHandled.value) {
                     isDeepLinkHandled.value = true
 
                     val destinationsToBuild = listOf(
                         PartRanking,
                         Ranking(
-                            type = "${args?.generation ?: 36}기",
+                            type = args?.part.orEmpty(),
                             entrySource = args?.entrySource ?: "personalRanking"
                         ),
                         UserMissionList(args?.nickname ?: "", "", args?.entrySource ?: ""),

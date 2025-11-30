@@ -57,6 +57,8 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
@@ -101,12 +103,24 @@ internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
+    onUpdateBottomBadge: (ImmutableList<String>) -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val badgeContentList = remember(uiState) {
+        when (val state = uiState) {
+            is Member -> {
+                state.homeServices
+                    .filter { it.isShowAlarmBadge && it.alarmBadgeContent != "N" }
+                    .map { it.alarmBadgeContent }.toImmutableList()
+            }
+            else -> persistentListOf()
+        }
+    }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -127,6 +141,10 @@ internal fun HomeRoute(
             name = "at36_apphome",
             type = EventType.VIEW
         )
+    }
+
+    LaunchedEffect(badgeContentList) {
+        onUpdateBottomBadge(badgeContentList)
     }
 
     when (val state = uiState) {

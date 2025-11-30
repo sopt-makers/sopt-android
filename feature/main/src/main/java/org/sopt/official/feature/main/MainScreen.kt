@@ -48,6 +48,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -73,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
@@ -85,6 +87,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNav
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.homeNavGraph
 import org.sopt.official.feature.main.MainTab.Home
+import org.sopt.official.feature.main.component.MainBottomBarAlarmBadge
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
 import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
@@ -98,7 +101,6 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
-import timber.log.Timber
 
 private const val EXIT_MILLIS = 3000L
 
@@ -113,6 +115,14 @@ fun MainScreen(
     val activity = LocalActivity.current
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
+    var badgeList by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
+    val visibleTabs = remember(userStatus) {
+        if (userStatus == UserStatus.ACTIVE) {
+            MainTab.entries.toPersistentList()
+        } else {
+            MainTab.entries.filter { it != MainTab.Soptamp }.toPersistentList()
+        }
+    }
 
     var backPressedTime = 0L
 
@@ -126,11 +136,10 @@ fun MainScreen(
     }
 
     // soptamp 검사 로직
-    val shouldNavigateToSoptamp = remember(intentState) {
+    val shouldNavigateToSoptamp = {
         val intent = intentState
         val hasSoptampFlag = intent?.getBooleanExtra("isSoptampDeepLink", false) == true
         val hasMissionArgs = intent?.hasExtra("soptampArgs") == true
-
         hasSoptampFlag || hasMissionArgs
     }
 
@@ -152,8 +161,7 @@ fun MainScreen(
     }
 
     LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList) {
-        if (shouldNavigateToSoptamp) {
-            Timber.e("shouldNavigateToSoptamp : $shouldNavigateToSoptamp")
+        if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
         }
@@ -194,6 +202,9 @@ fun MainScreen(
                     homeNavGraph(
                         userStatus = userStatus,
                         paddingValues = innerPadding,
+                        onUpdateBottomBadge = { badges ->
+                            badgeList = badges
+                        },
                         homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
@@ -233,7 +244,8 @@ fun MainScreen(
 
                                 when (deepLinkType) {
                                     DeepLinkType.SOPTAMP -> {
-                                        navigator.navigate(MainTab.Soptamp, userStatus)
+                                        //navigator.navigate(MainTab.Soptamp, userStatus)
+                                        navigator.navController.navigateToPokeOnboarding(37, userStatus.name)
                                     }
 
                                     else -> {
@@ -309,7 +321,8 @@ fun MainScreen(
 
                 SoptBottomBar(
                     visible = navigator.shouldShowBottomBar(),
-                    tabs = MainTab.entries.toPersistentList(),
+                    tabs = visibleTabs,
+                    showBadgeContent = badgeList,
                     currentTab = navigator.currentTab,
                     onTabSelected = { selectedTab ->
                         if (selectedTab.loggingName != null) {
@@ -446,6 +459,7 @@ fun SoptButton(
 fun SoptBottomBar(
     visible: Boolean,
     tabs: ImmutableList<MainTab>,
+    showBadgeContent: ImmutableList<String>,
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,
     modifier: Modifier = Modifier,
@@ -466,17 +480,37 @@ fun SoptBottomBar(
                         .weight(1f)
                         .clickable { onTabSelected(tab) }
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(tab.icon),
-                        contentDescription = tab.contentDescription,
-                        tint = if (tab == currentTab) {
-                            SoptTheme.colors.primary
-                        } else {
-                            SoptTheme.colors.onSurface500
-                        },
-                        modifier = Modifier
-                            .size(24.dp)
-                    )
+                    BadgedBox (
+                        badge = {
+                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty()) {
+                                MainBottomBarAlarmBadge(
+                                    text = showBadgeContent.first(),
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                )
+                            }
+
+                            if (tab == MainTab.Soptamp && showBadgeContent.isNotEmpty()) {
+                                MainBottomBarAlarmBadge(
+                                    text = showBadgeContent.last(),
+                                    modifier = Modifier
+                                        .align(Alignment.TopEnd)
+                                )
+                            }
+                        }
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(tab.icon),
+                            contentDescription = tab.contentDescription,
+                            tint = if (tab == currentTab) {
+                                SoptTheme.colors.primary
+                            } else {
+                                SoptTheme.colors.onSurface500
+                            },
+                            modifier = Modifier
+                                .size(24.dp)
+                        )
+                    }
                     Text(
                         text = tab.contentDescription,
                         style = SoptTheme.typography.body10M,
@@ -517,6 +551,7 @@ fun MainScreenPreview() {
             tabs = MainTab.entries.toPersistentList(),
             currentTab = Home,
             onTabSelected = {},
+            showBadgeContent = persistentListOf()
         )
     }
 }
