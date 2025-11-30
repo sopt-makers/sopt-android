@@ -36,9 +36,11 @@ import androidx.navigation.navOptions
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.home.navigation.Home
 import org.sopt.official.feature.home.navigation.navigateToHome
+import org.sopt.official.feature.poke.navigation.PokeGraph
 import org.sopt.official.feature.poke.navigation.navigateToPokeEntry
 import org.sopt.official.feature.soptlog.navigation.navigateToSoptLog
 import org.sopt.official.model.UserStatus
+import org.sopt.official.stamp.feature.navigation.SoptampGraph
 import org.sopt.official.stamp.feature.navigation.navigateToSoptamp
 
 class MainNavigator(
@@ -48,14 +50,18 @@ class MainNavigator(
         @Composable get() = navController
             .currentBackStackEntryAsState().value?.destination
 
+    private val currentDestinationCheck: NavDestination?
+        get() = navController.currentDestination
+
+    fun isSameTab(tab: MainTab): Boolean {
+        return currentDestinationCheck?.hierarchy?.any { it.hasRoute(tab::class) } == true
+    }
     val startDestination = Home
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
             currentDestination?.hierarchy?.any { it.hasRoute(tab::class) } == true
         }
-
-
     fun navigate(tab: MainTab, userStatus: UserStatus, onFailure: () -> Unit = {}) {
         val navOptions = navOptions {
             navController.currentDestination?.route?.let {
@@ -73,11 +79,9 @@ class MainNavigator(
                 navOptions = navOptions
             )
 
-            MainTab.Soptamp -> {
-                navController.navigateToSoptamp(
-                    navOptions = navOptions
-                )
-            }
+            MainTab.Soptamp -> navController.navigateToSoptamp(
+                navOptions = navOptions
+            )
 
             MainTab.Poke ->{
                 navController.navigateToPokeEntry(
@@ -93,6 +97,52 @@ class MainNavigator(
                         )
                     }
 
+                    UserStatus.UNAUTHENTICATED -> onFailure()
+                }
+            }
+        }
+    }
+
+    fun navigateAndClear(
+        tab: MainTab,
+        userStatus: UserStatus,
+        onFailure: () -> Unit = {}
+    ) {
+        when (tab) {
+            MainTab.Home -> navController.navigateToHome(
+                navOptions = navOptions {
+                    popUpTo<Home> { inclusive = true }
+                    launchSingleTop = true
+                }
+            )
+
+            MainTab.Soptamp -> {
+                navController.navigateToSoptamp(
+                    navOptions = navOptions {
+                        popUpTo<SoptampGraph> { inclusive = true }
+                        launchSingleTop = true
+                    }
+                )
+            }
+
+            MainTab.Poke -> { // PokeGraph가 있다고 가정
+                navController.navigateToPokeEntry(
+                    navOptions = navOptions {
+                        popUpTo<PokeGraph> { inclusive = true }
+                        launchSingleTop = true
+                    }
+                )
+            }
+
+            MainTab.SoptLog -> {
+                when (userStatus) {
+                    UserStatus.ACTIVE, UserStatus.INACTIVE -> {
+                        navController.navigateToSoptLog(
+                            navOptions = navOptions {
+                                launchSingleTop = true
+                            }
+                        )
+                    }
                     UserStatus.UNAUTHENTICATED -> onFailure()
                 }
             }

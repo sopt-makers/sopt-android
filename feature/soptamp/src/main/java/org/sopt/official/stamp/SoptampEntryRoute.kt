@@ -1,12 +1,11 @@
 package org.sopt.official.stamp
 
-import android.app.Activity
-import android.os.Build
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.IntentCompat
 import androidx.navigation.NavController
 import kotlinx.coroutines.flow.firstOrNull
 import org.sopt.official.analytics.Tracker
@@ -24,26 +23,18 @@ import timber.log.Timber
 fun SoptampEntryRoute(
     navController: NavController,
     tracker: Tracker,
+    currentIntent: Intent?,
     content: @Composable () -> Unit
 ) {
-    val context = LocalContext.current
-    val activity = context as? Activity
-
-    val args = remember(activity) {
-        val intent = activity?.intent
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                intent?.getSerializableExtra("soptampArgs", SoptampMissionArgs::class.java)
-            } else {
-                intent?.getSerializableExtra("soptampArgs") as? SoptampMissionArgs
-            }
-        } catch (e: ClassCastException) {
-            Timber.e(e)
-            null
+    val args = remember(currentIntent) {
+        currentIntent?.let { intent ->
+            Timber.d("DeepLink: Intent Received? ${intent}, HasExtra? ${intent.hasExtra("soptampArgs")}")
+            IntentCompat.getSerializableExtra(intent, "soptampArgs", SoptampMissionArgs::class.java)
         }
     }
 
     val deepLinkDestination: SoptampRoute? = remember(args) {
+        Timber.d("DeepLink: args parsed? $args")
         if (args?.missionId == -1 || args == null) {
             null
         } else {
@@ -63,16 +54,23 @@ fun SoptampEntryRoute(
             val isDeepLinkHandled = remember { mutableStateOf(false) }
 
             LaunchedEffect(deepLinkDestination) {
+                if (deepLinkDestination != null) {
+                    isDeepLinkHandled.value = false
+                }
+            }
+
+            LaunchedEffect(deepLinkDestination) {
+                Timber.e("deepLinkDestination: $args")
                 if (deepLinkDestination != null && !isDeepLinkHandled.value) {
                     isDeepLinkHandled.value = true
 
                     val destinationsToBuild = listOf(
                         PartRanking,
                         Ranking(
-                            type = "${args?.generation}기",
+                            type = "${args?.generation ?: 36}기",
                             entrySource = args?.entrySource ?: "personalRanking"
                         ),
-                        UserMissionList(args?.nickname ?: "", "", args?.entrySource ?: "personalRanking"),
+                        UserMissionList(args?.nickname ?: "", "", args?.entrySource ?: ""),
                         deepLinkDestination
                     )
 
@@ -82,6 +80,8 @@ fun SoptampEntryRoute(
                             it.destination.route?.startsWith(destination::class.qualifiedName!!) == true
                         }
                     }
+
+                    currentIntent?.removeExtra("soptampArgs")
                 }
             }
 

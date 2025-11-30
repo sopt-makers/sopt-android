@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.feature.navigation
 
+import android.content.Intent
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -52,6 +53,7 @@ data class SoptampMissionArgs(
 fun NavGraphBuilder.soptampNavGraph(
     navController: NavController,
     tracker: Tracker,
+    currentIntent: Intent?,
 ) {
     navigation<SoptampGraph>(
         startDestination = MissionList
@@ -60,8 +62,8 @@ fun NavGraphBuilder.soptampNavGraph(
             SoptampEntryRoute(
                 navController = navController,
                 tracker = tracker,
+                currentIntent = currentIntent,
                 content = {
-                    // 브릿지 로직 후 보여줄 화면
                     MissionListScreenRoute(navController)
                 }
             )

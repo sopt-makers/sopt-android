@@ -109,6 +109,7 @@ class NavigatorProviderIntent @Inject constructor(
 
         return Intent(context, MainActivity::class.java).apply {
             putExtra("soptampArgs", args)
+            putExtra("isSoptampDeepLink", true)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         }
     }
