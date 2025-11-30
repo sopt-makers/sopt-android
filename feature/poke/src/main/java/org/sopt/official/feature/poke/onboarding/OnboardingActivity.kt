@@ -50,6 +50,7 @@ import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
 
+@Deprecated("OnboardingScreen으로 대체")
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityOnboardingBinding::inflate)
