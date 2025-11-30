@@ -119,6 +119,7 @@ compose-activity = { module = "androidx.activity:activity-compose", version.ref 
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-three = { module = "androidx.compose.material3:material3" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }

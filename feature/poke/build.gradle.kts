@@ -42,7 +42,6 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.core.analytics)
 
-
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
 
@@ -56,4 +55,5 @@ dependencies {
     implementation(libs.dotsindicator)
     implementation(libs.compose.navigation)
     implementation(libs.compose.hilt.navigation)
+    implementation(libs.compose.ui.viewbinding)
 }
