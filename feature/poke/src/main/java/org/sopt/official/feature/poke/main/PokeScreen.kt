@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -55,6 +57,9 @@ fun PokeScreen(
     val activity = LocalActivity.current
     val coroutineScope = rememberCoroutineScope()
 
+    var binding by remember {
+        mutableStateOf<ActivityPokeMainBinding?>(null)
+    }
     val fragmentActivity = remember {
         context.findActivity<FragmentActivity>()
     }
@@ -63,6 +68,7 @@ fun PokeScreen(
     val pokeFriendUiState by viewModel.pokeFriendUiState.collectAsStateWithLifecycle()
     val pokeSimilarFriendUiState by viewModel.pokeSimilarFriendUiState.collectAsStateWithLifecycle()
     val pokeUserUiState by viewModel.pokeUserUiState.collectAsStateWithLifecycle()
+    val pokeAnonymousFriend by viewModel.anonymousFriend.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getPokeMe()
@@ -114,32 +120,97 @@ fun PokeScreen(
         })
     }
 
-    LaunchedEffect(pokeFriendUiState) {
-        if (pokeFriendUiState is UiState.ApiError || pokeFriendUiState is UiState.Failure) {
-            activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+    LaunchedEffect(pokeSimilarFriendUiState) {
+        binding?.let { currentBinding ->
+            when (val state = pokeSimilarFriendUiState) {
+                is UiState.Success -> {
+                    pokeMainListAdapter.submitList(state.data)
+                    currentBinding.refreshLayoutPokeMain.isRefreshing = false
+                }
+                is UiState.ApiError, is UiState.Failure -> {
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                    currentBinding.refreshLayoutPokeMain.isRefreshing = false
+                }
+                is UiState.Loading -> {}
+            }
         }
     }
 
-    LaunchedEffect(pokeSimilarFriendUiState) {
-        if (pokeSimilarFriendUiState is UiState.ApiError || pokeSimilarFriendUiState is UiState.Failure) {
-            activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+    LaunchedEffect(pokeMeUiState) {
+        binding?.let { currentBinding ->
+            when (val state = pokeMeUiState) {
+                is UiState.Success -> {
+                    if (activity is FragmentActivity) {
+                        initPokeMeView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
+                    }
+                }
+                is UiState.ApiError, is UiState.Failure -> {
+                    currentBinding.layoutSomeonePokeMe.setVisible(false)
+                }
+                else -> {}
+            }
+        }
+    }
+
+    LaunchedEffect(pokeFriendUiState) {
+        binding?.let { currentBinding ->
+            when (val state = pokeFriendUiState) {
+                is UiState.Success -> {
+                    if (activity is FragmentActivity) {
+                        initPokeFriendView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
+                    }
+                }
+                is UiState.ApiError -> activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                is UiState.Failure -> activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                else -> {}
+            }
         }
     }
 
     LaunchedEffect(pokeUserUiState) {
-        when (val state = pokeUserUiState) {
-            is UiState.Success -> {
-                viewModel.updatePokeUserState(state.data.userId)
+        binding?.let { currentBinding ->
+            when (val state = pokeUserUiState) {
+                is UiState.Success -> {
+                    viewModel.updatePokeUserState(state.data.userId)
+                    val user = state.data
 
-                val isFriend = state.isFirstMeet && !state.data.isFirstMeet
-                if (!isFriend && !isBestFriend(state.data.pokeNum, state.data.isAnonymous) && !isSoulMate(state.data.pokeNum, state.data.isAnonymous)) {
-                    activity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                    val isFriend = state.isFirstMeet && !user.isFirstMeet
+
+                    if (isFriend) {
+                        with(currentBinding) {
+                            layoutLottie.visibility = View.VISIBLE
+                            tvLottie.text = context.getString(
+                                R.string.friend_complete,
+                                if (user.isAnonymous) user.anonymousName else user.name
+                            )
+                            animationViewLottie.playAnimation()
+                        }
+                    } else {
+                        if (isBestFriend(user.pokeNum, user.isAnonymous)) {
+                            with(currentBinding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                                tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                                animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
+                                animationFriendViewLottie.playAnimation()
+                            }
+                        } else if (isSoulMate(user.pokeNum, user.isAnonymous)) {
+                            viewModel.setAnonymousFriend(user)
+                            with(currentBinding) {
+                                layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                                animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
+                                animationFriendViewLottie.playAnimation()
+                            }
+                        } else {
+                            activity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                        }
+                    }
                 }
+                is UiState.ApiError -> activity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                is UiState.Failure -> activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                else -> {}
             }
-
-            is UiState.ApiError -> activity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
-            is UiState.Failure -> activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
-            else -> {}
         }
     }
 
@@ -149,6 +220,7 @@ fun PokeScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
+        binding = this
         if (recyclerViewPokeMain.adapter == null) {
             recyclerViewPokeMain.adapter = pokeMainListAdapter
 
@@ -185,13 +257,12 @@ fun PokeScreen(
             }
 
             animationFriendViewLottie.addOnAnimationEndListener {
-                if (viewModel.anonymousFriend.value != null) {
+                if (pokeAnonymousFriend != null) {
                     coroutineScope.launch {
                         layoutAnonymousFriendLottie.visibility = View.GONE
                         layoutAnonymousFriendOpen.visibility = View.VISIBLE
 
-                        val anonymousFriend = viewModel.anonymousFriend.value
-                        anonymousFriend?.let {
+                        pokeAnonymousFriend?.let {
                             tvAnonymousFreindName.text = context.getString(R.string.anonymous_user_identity, it.anonymousName)
                             tvAnonymousFreindInfo.text = context.getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
                             imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
@@ -210,68 +281,6 @@ fun PokeScreen(
             }
 
             layoutLottie.setOnClickListener { }
-        }
-
-        when (val state = pokeMeUiState) {
-            is UiState.Success -> {
-                if (activity is FragmentActivity) {
-                    initPokeMeView(this, state.data, tracker, userStatus, activity, viewModel)
-                }
-            }
-            is UiState.ApiError, is UiState.Failure -> layoutSomeonePokeMe.setVisible(false)
-            else -> {}
-        }
-
-        when (val state = pokeFriendUiState) {
-            is UiState.Success -> {
-                if (activity is FragmentActivity) {
-                    initPokeFriendView(this, state.data, tracker, userStatus, activity, viewModel)
-                }
-            }
-            else -> {}
-        }
-
-        when (val state = pokeSimilarFriendUiState) {
-            is UiState.Success -> {
-                pokeMainListAdapter.submitList(state.data)
-                refreshLayoutPokeMain.isRefreshing = false
-            }
-            else -> {}
-        }
-
-        if (pokeUserUiState is UiState.Success) {
-            val state = (pokeUserUiState as UiState.Success<PokeUser>)
-            val user = state.data
-
-            when (state.isFirstMeet && !user.isFirstMeet) {
-                true -> {
-                    if (layoutLottie.visibility != View.VISIBLE) {
-                        layoutLottie.visibility = View.VISIBLE
-                        tvLottie.text = context.getString(
-                            R.string.friend_complete,
-                            if (user.isAnonymous) user.anonymousName else user.name
-                        )
-                        animationViewLottie.playAnimation()
-                    }
-                }
-                false -> {
-                    if (!animationFriendViewLottie.isAnimating) {
-                        if (isBestFriend(user.pokeNum, user.isAnonymous)) {
-                            layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                            tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
-                            tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
-                            animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
-                            animationFriendViewLottie.playAnimation()
-                        } else if (isSoulMate(user.pokeNum, user.isAnonymous)) {
-                            viewModel.setAnonymousFriend(user)
-                            layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                            tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
-                            animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
-                            animationFriendViewLottie.playAnimation()
-                        }
-                    }
-                }
-            }
         }
     }
 }

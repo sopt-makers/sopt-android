@@ -484,7 +484,7 @@ fun SoptBottomBar(
                 ) {
                     BadgedBox (
                         badge = {
-                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty()) {
+                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty() && showBadgeContent.size >= 2) {
                                 MainBottomBarAlarmBadge(
                                     text = showBadgeContent.first(),
                                     modifier = Modifier

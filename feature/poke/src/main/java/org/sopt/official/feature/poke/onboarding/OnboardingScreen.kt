@@ -43,6 +43,11 @@ fun OnboardingScreen(
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
+
+    var binding by remember {
+        mutableStateOf<ActivityOnboardingBinding?>(null)
+    }
+
     val fragmentActivity = remember(context) {
         context.findActivity<FragmentActivity>()
     }
@@ -77,6 +82,31 @@ fun OnboardingScreen(
         }
     }
 
+    LaunchedEffect(onboardingUiState, binding) {
+        val currentBinding = binding ?: return@LaunchedEffect
+
+        when (val state = onboardingUiState) {
+            is UiState.Success -> {
+                val profiles = state.data
+
+                if (fragmentActivity != null && currentBinding.viewpager.adapter == null) {
+                    currentBinding.viewpager.adapter = OnboardingViewPagerAdapter(
+                        fragmentActivity = fragmentActivity,
+                        profiles = profiles,
+                        args = args,
+                    )
+                    currentBinding.dotsIndicator.attachTo(currentBinding.viewpager)
+                }
+
+                currentBinding.layoutLottie.visibility = View.GONE
+                currentBinding.viewpager.visibility = View.VISIBLE
+                currentBinding.dotsIndicator.visibility = View.VISIBLE
+            }
+            is UiState.Loading -> {}
+            else -> {}
+        }
+    }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -101,6 +131,7 @@ fun OnboardingScreen(
         AndroidViewBinding(
             factory = ActivityOnboardingBinding::inflate,
         ) {
+            binding = this
             if (viewpager.adapter == null) {
                 animationViewLottie.addOnAnimationEndListener {
                     layoutLottie.visibility = View.GONE
@@ -108,31 +139,6 @@ fun OnboardingScreen(
                 }
 
                 layoutLottie.setOnClickListener {}
-            }
-
-            when (val state = onboardingUiState) {
-                is UiState.Success -> {
-                    val profiles = state.data
-
-                    if (fragmentActivity != null && viewpager.adapter == null) {
-                        viewpager.adapter = OnboardingViewPagerAdapter(
-                            fragmentActivity = fragmentActivity,
-                            profiles = profiles,
-                            args = args,
-                        )
-                        dotsIndicator.attachTo(viewpager)
-                    }
-
-                    layoutLottie.visibility = View.GONE
-                    viewpager.visibility = View.VISIBLE
-                    dotsIndicator.visibility = View.VISIBLE
-                }
-                is UiState.Loading -> {
-
-                }
-                else -> {
-
-                }
             }
         }
     }

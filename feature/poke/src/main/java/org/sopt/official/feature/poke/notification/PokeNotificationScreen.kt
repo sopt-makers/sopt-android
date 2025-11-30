@@ -9,8 +9,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -57,6 +59,10 @@ fun PokeNotificationScreen(
     val pokeNotificationUiState by viewModel.pokeNotification.collectAsStateWithLifecycle()
     val pokeUserUiState by viewModel.pokeUserUiState.collectAsStateWithLifecycle()
     val anonymousFriend by viewModel.anonymousFriend.collectAsStateWithLifecycle()
+
+    var binding by remember {
+        mutableStateOf<ActivityPokeNotificationBinding?>(null)
+    }
 
     val fragmentActivity = remember(context) {
         context.findActivity<FragmentActivity>()
@@ -126,37 +132,64 @@ fun PokeNotificationScreen(
     }
 
     LaunchedEffect(pokeUserUiState) {
-        when (val state = pokeUserUiState) {
-            is UiState.Loading -> {}
-            is UiState.Success<PokeUser> -> {
-                dismissBottomSheet(
-                    fragmentManager = fragmentManager,
-                    bottomSheetTag = bottomSheetTag
-                )
+        binding?.let { currentBinding ->
+            when (val state = pokeUserUiState) {
+                is UiState.Loading -> {}
+                is UiState.Success<PokeUser> -> {
+                    dismissBottomSheet(
+                        fragmentManager = fragmentManager,
+                        bottomSheetTag = bottomSheetTag
+                    )
 
-                adapter.updatePokeUserItemPokeState(state.data.userId)
+                    adapter.updatePokeUserItemPokeState(state.data.userId)
+                    val user = state.data
 
-                if (state.isFirstMeet || (!isBestFriend(state.data.pokeNum, state.data.isAnonymous) && !isSoulMate(state.data.pokeNum, state.data.isAnonymous))) {
-                    if (!state.isFirstMeet) {
-                        fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                    if (state.isFirstMeet && !user.isFirstMeet) {
+                        if (currentBinding.layoutLottie.visibility != View.VISIBLE) {
+                            currentBinding.layoutLottie.visibility = View.VISIBLE
+                            currentBinding.tvLottie.text = context.getString(
+                                R.string.friend_complete,
+                                if (user.isAnonymous) user.anonymousName else user.name
+                            )
+                            currentBinding.animationViewLottie.playAnimation()
+                        }
+                    } else {
+                        val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
+                        val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+
+                        if (!isBestFriend && !isSoulMate) {
+                            if (!state.isFirstMeet) {
+                                fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                            }
+                        } else {
+                            if (!currentBinding.animationFriendViewLottie.isAnimating) {
+                                if (isBestFriend) {
+                                    currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                    currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                                    currentBinding.tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                                    currentBinding.animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
+                                    currentBinding.animationFriendViewLottie.playAnimation()
+                                } else if (isSoulMate) {
+                                    viewModel.setAnonymousFriend(user)
+                                    currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                    currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                                    currentBinding.animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
+                                    currentBinding.animationFriendViewLottie.playAnimation()
+                                }
+                            }
+                        }
                     }
                 }
-            }
 
-            is UiState.ApiError -> {
-                dismissBottomSheet(
-                    fragmentManager = fragmentManager,
-                    bottomSheetTag = bottomSheetTag
-                )
-                fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
-            }
+                is UiState.ApiError -> {
+                    dismissBottomSheet(fragmentManager, bottomSheetTag)
+                    fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                }
 
-            is UiState.Failure -> {
-                dismissBottomSheet(
-                    fragmentManager = fragmentManager,
-                    bottomSheetTag = bottomSheetTag
-                )
-                fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                is UiState.Failure -> {
+                    dismissBottomSheet(fragmentManager, bottomSheetTag)
+                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                }
             }
         }
     }
@@ -177,6 +210,7 @@ fun PokeNotificationScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
+        binding = this
         if (recyclerviewPokeNotification.adapter == null) {
             includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
 
@@ -214,41 +248,6 @@ fun PokeNotificationScreen(
             }
 
             layoutLottie.setOnClickListener { }
-        }
-
-        if (pokeUserUiState is UiState.Success) {
-            val state = (pokeUserUiState as UiState.Success<PokeUser>)
-            val user = state.data
-
-            if (state.isFirstMeet && !user.isFirstMeet) {
-                if (layoutLottie.visibility != View.VISIBLE) {
-                    layoutLottie.visibility = View.VISIBLE
-                    tvLottie.text = context.getString(
-                        R.string.friend_complete,
-                        if (user.isAnonymous) user.anonymousName else user.name
-                    )
-                    animationViewLottie.playAnimation()
-                }
-            } else {
-                val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-                val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
-
-                if (!animationFriendViewLottie.isAnimating) {
-                    if (isBestFriend) {
-                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
-                        tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
-                        animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
-                        animationFriendViewLottie.playAnimation()
-                    } else if (isSoulMate) {
-                        viewModel.setAnonymousFriend(user)
-                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
-                        animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
-                        animationFriendViewLottie.playAnimation()
-                    }
-                }
-            }
         }
     }
 }

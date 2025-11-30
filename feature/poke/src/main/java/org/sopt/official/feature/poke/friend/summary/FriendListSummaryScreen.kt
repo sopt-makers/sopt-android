@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
@@ -63,6 +65,10 @@ fun FriendListSummaryScreen(
     val coroutineScope = rememberCoroutineScope()
 
     val initialFriendType = viewModel.friendType.initialFriendType
+
+    var binding by remember {
+        mutableStateOf<ActivityFriendListSummaryBinding?>(null)
+    }
 
     val fragmentActivity = remember {
         context.findActivity<FragmentActivity>()
@@ -127,9 +133,9 @@ fun FriendListSummaryScreen(
         }
     }
 
-    val newFriendListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
-    val bestFriendListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
-    val soulmateListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    val newFriendListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
+    val bestFriendListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
+    val soulmateListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
 
     val detailSheetLauncher: (PokeFriendType) -> Unit = { type ->
         showFriendListDetailBottomSheet(
@@ -140,42 +146,68 @@ fun FriendListSummaryScreen(
     }
 
     LaunchedEffect(friendListSummaryUiState) {
-        when (val state = friendListSummaryUiState) {
-            is UiState.Loading -> {}
-            is UiState.ApiError -> fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
-            is UiState.Failure -> fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
-            else -> {}
+        binding?.let { currentBinding ->
+            when (val state = friendListSummaryUiState) {
+                is UiState.Success<FriendListSummary> -> {
+                    fragmentActivity?.let { activity ->
+                        updateRecyclerView(currentBinding, state.data, activity, newFriendListAdapter, bestFriendListAdapter, soulmateListAdapter)
+                    }
+                    currentBinding.swipeRefreshLayout.isRefreshing = false
+                }
+                is UiState.ApiError -> {
+                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                    currentBinding.swipeRefreshLayout.isRefreshing = false
+                }
+                is UiState.Failure -> {
+                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    currentBinding.swipeRefreshLayout.isRefreshing = false
+                }
+                is UiState.Loading -> {}
+            }
         }
     }
 
     LaunchedEffect(pokeUserUiState) {
-        when (val state = pokeUserUiState) {
-            is UiState.Loading -> {}
-            is UiState.Success<PokeUser> -> {
-                dismissBottomSheet(
-                    fragmentManager = fragmentManager,
-                    bottomSheetTag = bottomSheetTag
-                )
-                viewModel.getFriendListSummary()
+        binding?.let { currentBinding ->
+            when (val state = pokeUserUiState) {
+                is UiState.Success<PokeUser> -> {
+                    dismissBottomSheet(fragmentManager = fragmentManager, bottomSheetTag = bottomSheetTag)
+                    viewModel.getFriendListSummary()
 
-                val user = state.data
+                    val user = state.data
+                    val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
+                    val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
 
-                val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-                val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
-
-                if (!isBestFriend && !isSoulMate) {
-                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                    if (!isBestFriend && !isSoulMate) {
+                        fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
+                    } else {
+                        if (!currentBinding.animationFriendViewLottie.isAnimating) {
+                            if (isBestFriend) {
+                                currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                                currentBinding.tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                                currentBinding.animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
+                                currentBinding.animationFriendViewLottie.playAnimation()
+                            } else if (isSoulMate) {
+                                currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                                currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                                currentBinding.animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
+                                currentBinding.animationFriendViewLottie.playAnimation()
+                            }
+                        }
+                    }
                 }
-            }
 
-            is UiState.ApiError -> {
-                dismissBottomSheet(fragmentManager, bottomSheetTag)
-                fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
-            }
+                is UiState.ApiError -> {
+                    dismissBottomSheet(fragmentManager, bottomSheetTag)
+                    fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                }
 
-            is UiState.Failure -> {
-                dismissBottomSheet(fragmentManager, bottomSheetTag)
-                fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                is UiState.Failure -> {
+                    dismissBottomSheet(fragmentManager, bottomSheetTag)
+                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                }
+                else -> {}
             }
         }
     }
@@ -211,6 +243,7 @@ fun FriendListSummaryScreen(
             .fillMaxSize()
             .padding(paddingValues)
     ) {
+        binding = this
         if (includeFriendListBlockNewFriend.recyclerView.adapter == null) {
             includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
 
@@ -253,36 +286,6 @@ fun FriendListSummaryScreen(
                     }
                 } else {
                     layoutAnonymousFriendLottie.visibility = View.GONE
-                }
-            }
-        }
-
-        when (val state = friendListSummaryUiState) {
-            is UiState.Success<FriendListSummary> -> {
-                fragmentActivity?.let { activity ->
-                    updateRecyclerView(this, state.data, activity, newFriendListAdapter, bestFriendListAdapter, soulmateListAdapter)
-                }
-            }
-            else -> {}
-        }
-
-        if (pokeUserUiState is UiState.Success) {
-            val user = (pokeUserUiState as UiState.Success<PokeUser>).data
-            val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-            val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
-
-            if (!animationFriendViewLottie.isAnimating) {
-                if (isBestFriend) {
-                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                    tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
-                    tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
-                    animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
-                    animationFriendViewLottie.playAnimation()
-                } else if (isSoulMate) {
-                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                    tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
-                    animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
-                    animationFriendViewLottie.playAnimation()
                 }
             }
         }
