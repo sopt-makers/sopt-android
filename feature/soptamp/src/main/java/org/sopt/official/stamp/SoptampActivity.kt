@@ -54,6 +54,7 @@ import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import java.io.Serializable
 import javax.inject.Inject
 
+@Deprecated("SoptampEntryRoute로 대체")
 @AndroidEntryPoint
 class SoptampActivity : AppCompatActivity() {
     @Inject
