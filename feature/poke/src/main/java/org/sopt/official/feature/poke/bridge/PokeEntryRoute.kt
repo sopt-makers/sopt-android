@@ -53,10 +53,8 @@ fun PokeEntryRoute(
             OnboardingScreen(
                 paddingValues = paddingValues,
                 userStatus = userStatus,
-                navigateUp = { navController.popBackStack() },
-                navigateToPokeMain = {
-                    viewModel.updateToOldUser()
-                },
+                navigateUp = navController::popBackStack,
+                navigateToPokeMain = viewModel::updateToOldUser,
             )
         }
 
