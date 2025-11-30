@@ -2,7 +2,6 @@ package org.sopt.official.feature.poke.friend.summary
 
 import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -65,10 +64,6 @@ fun FriendListSummaryScreen(
 
     val initialFriendType = viewModel.friendType.initialFriendType
 
-    val binding = remember {
-        ActivityFriendListSummaryBinding.inflate(LayoutInflater.from(context))
-    }
-
     val fragmentActivity = remember {
         context.findActivity<FragmentActivity>()
     }
@@ -80,12 +75,10 @@ fun FriendListSummaryScreen(
     val pokeUserUiState by viewModel.pokeUserUiState.collectAsStateWithLifecycle()
     val anonymousFriend by viewModel.anonymousFriend.collectAsStateWithLifecycle()
 
-    val recyclerViewItemDecorationDivider = remember {
-        ItemDecorationDivider(
-            color = context.colorOf(org.sopt.official.designsystem.R.color.mds_gray_800),
-            height = 1.dp,
-        )
-    }
+    val recyclerViewItemDecorationDivider = ItemDecorationDivider(
+        color = context.colorOf(org.sopt.official.designsystem.R.color.mds_gray_800),
+        height = 1.dp,
+    )
 
     val pokeUserListClickLister = remember {
         object : PokeUserListClickListener {
@@ -134,15 +127,9 @@ fun FriendListSummaryScreen(
         }
     }
 
-    val newFriendListAdapter = remember {
-        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
-    }
-    val bestFriendListAdapter = remember {
-        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
-    }
-    val soulmateListAdapter = remember {
-        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
-    }
+    val newFriendListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    val bestFriendListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    val soulmateListAdapter = PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
 
     val detailSheetLauncher: (PokeFriendType) -> Unit = { type ->
         showFriendListDetailBottomSheet(
@@ -155,13 +142,9 @@ fun FriendListSummaryScreen(
     LaunchedEffect(friendListSummaryUiState) {
         when (val state = friendListSummaryUiState) {
             is UiState.Loading -> {}
-            is UiState.Success<FriendListSummary> -> {
-                fragmentActivity?.let {
-                    updateRecyclerView(binding, state.data, it, newFriendListAdapter, bestFriendListAdapter, soulmateListAdapter)
-                }
-            }
             is UiState.ApiError -> fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
             is UiState.Failure -> fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+            else -> {}
         }
     }
 
@@ -180,24 +163,7 @@ fun FriendListSummaryScreen(
                 val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
                 val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
 
-                if (isBestFriend) {
-                    with(binding) {
-                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
-                        tvFreindLottieHint.text =
-                            context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
-                        animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
-                        animationFriendViewLottie.playAnimation()
-                    }
-                } else if (isSoulMate) {
-                    viewModel.setAnonymousFriend(user)
-                    with(binding) {
-                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
-                        animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
-                        animationFriendViewLottie.playAnimation()
-                    }
-                } else {
+                if (!isBestFriend && !isSoulMate) {
                     fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
                 }
             }
@@ -236,71 +202,91 @@ fun FriendListSummaryScreen(
             properties = mapOf("view_type" to userStatus.name),
         )
 
-        with(binding) {
-            layoutAnonymousFriendOpen.visibility = View.GONE
-            layoutAnonymousFriendLottie.visibility = View.GONE
-        }
-
         onPauseOrDispose {  }
     }
 
-
-
-    AndroidView(
-        factory = { _ ->
-            with(binding) {
-                includeAppBar.textViewTitle.text = binding.root.context.getString(R.string.poke_title)
-
-                swipeRefreshLayout.setOnRefreshListener {
-                    viewModel.getFriendListSummary()
-                    swipeRefreshLayout.isRefreshing = false
-                }
-
-                animationFriendViewLottie.addOnAnimationEndListener {
-                    if (anonymousFriend != null) { // 천생연분 -> 정체 공개
-                        coroutineScope.launch {
-                            // 로티
-                            layoutAnonymousFriendLottie.visibility = View.GONE
-                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
-
-                            anonymousFriend?.let {
-                                tvAnonymousFreindName.text = context.getString(R.string.anonymous_user_identity, it.anonymousName)
-                                tvAnonymousFreindInfo.text = context.getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                                imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                                    transformations(CircleCropTransformation())
-                                }
-
-                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                            }
-
-                            delay(2000)
-                            layoutAnonymousFriendOpen.visibility = View.GONE
-                            viewModel.setAnonymousFriend(null)
-                        }
-                    } else {
-                        layoutAnonymousFriendLottie.visibility = View.GONE
-                    }
-                }
-
-                initFriendListBlock(
-                    includeFriendListBlockNewFriend, PokeFriendType.NEW, newFriendListAdapter,
-                    context, recyclerViewItemDecorationDivider, detailSheetLauncher
-                )
-                initFriendListBlock(
-                    includeFriendListBlockBestFriend, PokeFriendType.BEST_FRIEND, bestFriendListAdapter,
-                    context, recyclerViewItemDecorationDivider, detailSheetLauncher
-                )
-                initFriendListBlock(
-                    includeFriendListBlockSoulmate, PokeFriendType.SOULMATE, soulmateListAdapter,
-                    context, recyclerViewItemDecorationDivider, detailSheetLauncher
-                )
-            }
-            binding.root
-        },
+    AndroidViewBinding(
+        factory = ActivityFriendListSummaryBinding::inflate,
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-    )
+    ) {
+        if (includeFriendListBlockNewFriend.recyclerView.adapter == null) {
+            includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
+
+            swipeRefreshLayout.setOnRefreshListener {
+                viewModel.getFriendListSummary()
+                swipeRefreshLayout.isRefreshing = false
+            }
+
+            initFriendListBlock(
+                includeFriendListBlockNewFriend, PokeFriendType.NEW, newFriendListAdapter,
+                context, recyclerViewItemDecorationDivider, detailSheetLauncher
+            )
+            initFriendListBlock(
+                includeFriendListBlockBestFriend, PokeFriendType.BEST_FRIEND,
+                bestFriendListAdapter, context, recyclerViewItemDecorationDivider, detailSheetLauncher
+            )
+            initFriendListBlock(
+                includeFriendListBlockSoulmate, PokeFriendType.SOULMATE,
+                soulmateListAdapter, context, recyclerViewItemDecorationDivider, detailSheetLauncher
+            )
+
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (anonymousFriend != null) {
+                    coroutineScope.launch {
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = context.getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = context.getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                        }
+
+                        delay(2000)
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
+                    }
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
+        }
+
+        when (val state = friendListSummaryUiState) {
+            is UiState.Success<FriendListSummary> -> {
+                fragmentActivity?.let { activity ->
+                    updateRecyclerView(this, state.data, activity, newFriendListAdapter, bestFriendListAdapter, soulmateListAdapter)
+                }
+            }
+            else -> {}
+        }
+
+        if (pokeUserUiState is UiState.Success) {
+            val user = (pokeUserUiState as UiState.Success<PokeUser>).data
+            val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
+            val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+
+            if (!animationFriendViewLottie.isAnimating) {
+                if (isBestFriend) {
+                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                    tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                    tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                    animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
+                    animationFriendViewLottie.playAnimation()
+                } else if (isSoulMate) {
+                    layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                    tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                    animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
+                    animationFriendViewLottie.playAnimation()
+                }
+            }
+        }
+    }
 }
 
 fun showFriendListDetailBottomSheet(

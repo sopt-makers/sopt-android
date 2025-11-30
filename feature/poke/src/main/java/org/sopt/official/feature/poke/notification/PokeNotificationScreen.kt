@@ -1,7 +1,6 @@
 package org.sopt.official.feature.poke.notification
 
 import android.content.Intent
-import android.view.LayoutInflater
 import android.view.View
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -58,10 +57,6 @@ fun PokeNotificationScreen(
     val pokeNotificationUiState by viewModel.pokeNotification.collectAsStateWithLifecycle()
     val pokeUserUiState by viewModel.pokeUserUiState.collectAsStateWithLifecycle()
     val anonymousFriend by viewModel.anonymousFriend.collectAsStateWithLifecycle()
-
-    val binding = remember {
-        ActivityPokeNotificationBinding.inflate(LayoutInflater.from(context))
-    }
 
     val fragmentActivity = remember(context) {
         context.findActivity<FragmentActivity>()
@@ -141,37 +136,8 @@ fun PokeNotificationScreen(
 
                 adapter.updatePokeUserItemPokeState(state.data.userId)
 
-                // 첫 만남 일떄
-                if (state.isFirstMeet && !state.data.isFirstMeet) {
-                    with(binding) {
-                        layoutLottie.visibility = View.VISIBLE
-                        tvLottie.text = context.getString(
-                            R.string.friend_complete,
-                            if (state.data.isAnonymous) state.data.anonymousName else state.data.name
-                        )
-                        animationViewLottie.playAnimation()
-                    }
-                } else {
-                    val isBestFriend = isBestFriend(state.data.pokeNum, state.data.isAnonymous)
-                    val isSoulMate = isSoulMate(state.data.pokeNum, state.data.isAnonymous)
-
-                    if (isBestFriend) {
-                        with(binding) {
-                            layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                            tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, state.data.anonymousName, "단짝친구가")
-                            tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, state.data.generation, state.data.part)
-                            animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
-                            animationFriendViewLottie.playAnimation()
-                        }
-                    } else if (isSoulMate) {
-                        viewModel.setAnonymousFriend(state.data)
-                        with(binding) {
-                            layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                            tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, state.data.anonymousName, "천생연분이")
-                            animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
-                            animationFriendViewLottie.playAnimation()
-                        }
-                    } else {
+                if (state.isFirstMeet || (!isBestFriend(state.data.pokeNum, state.data.isAnonymous) && !isSoulMate(state.data.pokeNum, state.data.isAnonymous))) {
+                    if (!state.isFirstMeet) {
                         fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))
                     }
                 }
@@ -202,59 +168,87 @@ fun PokeNotificationScreen(
             properties = mapOf("view_type" to userStatus.name),
         )
 
-        with(binding) {
-            layoutLottie.visibility = View.GONE
-            layoutAnonymousFriendOpen.visibility = View.GONE
-            layoutAnonymousFriendLottie.visibility = View.GONE
-        }
         onPauseOrDispose {  }
     }
 
-    AndroidView(
-        factory = { _ ->
-            with(binding) {
-                includeAppBar.textViewTitle.text = binding.root.context.getString(R.string.poke_title)
-
-                recyclerviewPokeNotification.adapter = adapter
-                recyclerviewPokeNotification.addOnScrollListener(scrollListener)
-
-                animationViewLottie.addOnAnimationEndListener {
-                    layoutLottie.visibility = View.GONE
-                }
-
-                animationFriendViewLottie.addOnAnimationEndListener {
-                    if (anonymousFriend != null) { // 천생연분 -> 정체 공개
-                        coroutineScope.launch {
-                            layoutAnonymousFriendLottie.visibility = View.GONE
-                            layoutAnonymousFriendOpen.visibility = View.VISIBLE
-
-                            anonymousFriend?.let {
-                                tvAnonymousFreindName.text = context.getString(R.string.anonymous_user_identity, it.anonymousName)
-                                tvAnonymousFreindInfo.text = context.getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
-                                imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
-                                    transformations(CircleCropTransformation())
-                                }
-
-                                imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
-                            }
-
-                            delay(2000)
-                            layoutAnonymousFriendOpen.visibility = View.GONE
-                            viewModel.setAnonymousFriend(null)
-                        }
-                    } else {
-                        layoutAnonymousFriendLottie.visibility = View.GONE
-                    }
-                }
-
-                layoutLottie.setOnClickListener {
-                    // do nothing
-                }
-            }
-            binding.root
-        },
+    AndroidViewBinding(
+        factory = ActivityPokeNotificationBinding::inflate,
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-    )
+    ) {
+        if (recyclerviewPokeNotification.adapter == null) {
+            includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
+
+            recyclerviewPokeNotification.adapter = adapter
+
+            recyclerviewPokeNotification.addOnScrollListener(scrollListener)
+
+            animationViewLottie.addOnAnimationEndListener {
+                layoutLottie.visibility = View.GONE
+            }
+
+            animationFriendViewLottie.addOnAnimationEndListener {
+                if (anonymousFriend != null) {
+                    coroutineScope.launch {
+                        layoutAnonymousFriendLottie.visibility = View.GONE
+                        layoutAnonymousFriendOpen.visibility = View.VISIBLE
+
+
+                        anonymousFriend?.let {
+                            tvAnonymousFreindName.text = context.getString(R.string.anonymous_user_identity, it.anonymousName)
+                            tvAnonymousFreindInfo.text = context.getString(R.string.anonymous_user_info, it.generation, it.part, it.name)
+                            imgAnonymousFriendOpen.load(it.profileImage.ifEmpty { R.drawable.ic_empty_profile }) {
+                                transformations(CircleCropTransformation())
+                            }
+                            imgAnonymousFriendOpenOutline.setRelationStrokeColor(it.mutualRelationMessage)
+                        }
+
+                        delay(2000)
+                        layoutAnonymousFriendOpen.visibility = View.GONE
+                        viewModel.setAnonymousFriend(null)
+                    }
+                } else {
+                    layoutAnonymousFriendLottie.visibility = View.GONE
+                }
+            }
+
+            layoutLottie.setOnClickListener { }
+        }
+
+        if (pokeUserUiState is UiState.Success) {
+            val state = (pokeUserUiState as UiState.Success<PokeUser>)
+            val user = state.data
+
+            if (state.isFirstMeet && !user.isFirstMeet) {
+                if (layoutLottie.visibility != View.VISIBLE) {
+                    layoutLottie.visibility = View.VISIBLE
+                    tvLottie.text = context.getString(
+                        R.string.friend_complete,
+                        if (user.isAnonymous) user.anonymousName else user.name
+                    )
+                    animationViewLottie.playAnimation()
+                }
+            } else {
+                val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
+                val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+
+                if (!animationFriendViewLottie.isAnimating) {
+                    if (isBestFriend) {
+                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                        tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                        animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
+                        animationFriendViewLottie.playAnimation()
+                    } else if (isSoulMate) {
+                        viewModel.setAnonymousFriend(user)
+                        layoutAnonymousFriendLottie.visibility = View.VISIBLE
+                        tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                        animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
+                        animationFriendViewLottie.playAnimation()
+                    }
+                }
+            }
+        }
+    }
 }
