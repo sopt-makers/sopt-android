@@ -24,9 +24,9 @@
  */
 package org.sopt.official.feature.main
 
-import android.app.Activity
 import android.content.Intent
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.fadeIn
@@ -98,6 +98,7 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
+import timber.log.Timber
 
 private const val EXIT_MILLIS = 3000L
 
@@ -105,10 +106,11 @@ private const val EXIT_MILLIS = 3000L
 fun MainScreen(
     userStatus: UserStatus,
     applicationNavigator: NavigatorProvider,
+    intentState: Intent?,
     navigator: MainNavigator = rememberMainNavigator()
 ) {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = LocalActivity.current
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
 
@@ -116,16 +118,16 @@ fun MainScreen(
 
     BackHandler {
         if (System.currentTimeMillis() - backPressedTime <= EXIT_MILLIS) {
-            activity.finish()
+            activity?.finish()
         } else {
-            activity.toast("한번 더 누르면 앱을 종료할 수 있어요")
+            activity?.toast("한번 더 누르면 앱을 종료할 수 있어요")
         }
         backPressedTime = System.currentTimeMillis()
     }
 
     // soptamp 검사 로직
-    val shouldNavigateToSoptamp = remember(activity.intent) {
-        val intent = activity.intent
+    val shouldNavigateToSoptamp = remember(intentState) {
+        val intent = intentState
         val hasSoptampFlag = intent?.getBooleanExtra("isSoptampDeepLink", false) == true
         val hasMissionArgs = intent?.hasExtra("soptampArgs") == true
 
@@ -133,44 +135,45 @@ fun MainScreen(
     }
 
     // poke 검사 로직
-    val shouldNavigateToPoke = remember(activity.intent) {
-        val intent = activity.intent
+    val shouldNavigateToPoke = remember(intentState) {
+        val intent = intentState
         intent?.getBooleanExtra("isPokeDeepLink", false) == true
     }
 
-    val shouldNavigateToPokeNotification = remember(activity.intent) {
-        val intent = activity.intent
+    val shouldNavigateToPokeNotification = remember(intentState) {
+        val intent = intentState
         intent?.getBooleanExtra("isPokeNotification", false) == true
     }
 
-    val shouldNavigatePokeFriendList = remember(activity.intent) {
-        val intent = activity.intent
+    val shouldNavigatePokeFriendList = remember(intentState) {
+        val intent = intentState
         intent?.getBooleanExtra("isPokeFriendList", false) == true
         intent?.hasExtra("friendType") == true
     }
 
-    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke) {
+    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList) {
         if (shouldNavigateToSoptamp) {
-            navigator.navigate(MainTab.Soptamp, userStatus)
-            activity.intent?.putExtra("isSoptampDeepLink", false)
+            Timber.e("shouldNavigateToSoptamp : $shouldNavigateToSoptamp")
+            navigator.navigateAndClear(MainTab.Soptamp, userStatus)
+            activity?.intent?.putExtra("isSoptampDeepLink", false)
         }
 
         if (shouldNavigateToPoke) {
             navigator.navigate(MainTab.Poke, userStatus)
-            activity.intent?.putExtra("isPokeDeepLink", false)
+            activity?.intent?.putExtra("isPokeDeepLink", false)
         }
 
         if (shouldNavigateToPokeNotification) {
             navigator.navController.navigateToPokeNotification(userStatus.name, null)
-            activity.intent?.putExtra("isPokeNotification", false)
+            activity?.intent?.putExtra("isPokeNotification", false)
         }
 
         if (shouldNavigatePokeFriendList) {
             navigator.navController.navigateToPokeFriendList(
-                activity.intent?.getStringExtra("friendType"),
+                activity?.intent?.getStringExtra("friendType"),
                 null
             )
-            activity.intent?.putExtra("isPokeFriendList", false)
+            activity?.intent?.putExtra("isPokeFriendList", false)
         }
     }
 
@@ -244,12 +247,6 @@ fun MainScreen(
                             }
 
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
-                                /*context.startActivity(
-                                    when (isNewPoke) {
-                                        true -> applicationNavigator.getPokeOnboardingActivityIntent(currentDestination, userStatus)
-                                        false -> applicationNavigator.getPokeActivityIntent(userStatus)
-                                    }
-                                )*/
                                 when (isNewPoke) {
                                     true -> navigator.navController.navigateToPokeMain(null)
                                     false -> navigator.navigate(MainTab.Poke, userStatus)
@@ -266,6 +263,7 @@ fun MainScreen(
                     soptampNavGraph(
                         navController = navigator.navController,
                         tracker = tracker,
+                        currentIntent = intentState
                     )
 
                     pokeNavGraph(
@@ -321,8 +319,14 @@ fun MainScreen(
                             )
                         }
 
-                        navigator.navigate(selectedTab, userStatus) {
-                            isOpenDialog = true
+                        if (navigator.isSameTab(selectedTab)) {
+                            navigator.navigateAndClear(selectedTab, userStatus) {
+                                isOpenDialog = true
+                            }
+                        } else {
+                            navigator.navigate(selectedTab, userStatus) {
+                                isOpenDialog = true
+                            }
                         }
                     },
                 )

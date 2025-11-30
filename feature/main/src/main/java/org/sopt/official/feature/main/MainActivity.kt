@@ -30,6 +30,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.analytics.Tracker
@@ -56,9 +59,11 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var tracker: Tracker
 
+    private var intentState by mutableStateOf<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        intentState = intent
         val startArgs = intent.getSerializableExtra(ARGS) as? StartArgs
 
         enableEdgeToEdge()
@@ -67,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                 ProvideTracker(tracker) {
                     MainScreen(
                         userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                        intentState = intentState,
                         applicationNavigator = applicationNavigator
                     )
                 }
@@ -77,6 +83,8 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
+
+        intentState = intent
     }
 
     data class StartArgs(
