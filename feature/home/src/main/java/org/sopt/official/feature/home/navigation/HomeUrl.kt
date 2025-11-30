@@ -26,7 +26,6 @@ package org.sopt.official.feature.home.navigation
 
 enum class HomeUrl(val url: String) {
     POKE("home/poke"),
-    //FORTUNE("home/fortune"),
     SOPTAMP("home/soptamp"),
     UNKNOWN("");
 
