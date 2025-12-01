@@ -85,6 +85,7 @@ internal fun SoptLogEmptySection(
             .background(color = SoptTheme.colors.onSurface900)
             .padding(horizontal = 18.dp)
             .padding(top = 48.dp, bottom = 54.dp),
+        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
@@ -92,8 +93,6 @@ internal fun SoptLogEmptySection(
             contentDescription = null,
             tint = SoptTheme.colors.onSurface700
         )
-
-        Spacer(modifier = Modifier.height(10.dp))
 
         Text(
             text = content,
