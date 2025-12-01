@@ -115,6 +115,8 @@ fun MainScreen(
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
     var badgeList by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
+
+    // Todo : 서버 응답에 따라 동적으로 변경될 수 있음 체크하기
     val visibleTabs = remember(userStatus) {
         if (userStatus == UserStatus.ACTIVE) {
             MainTab.entries.toPersistentList()
@@ -243,8 +245,7 @@ fun MainScreen(
 
                                 when (deepLinkType) {
                                     DeepLinkType.SOPTAMP -> {
-                                        //navigator.navigate(MainTab.Soptamp, userStatus)
-                                        navigator.navController.navigateToPokeOnboarding(37, userStatus.name)
+                                        navigator.navigate(MainTab.Soptamp, userStatus)
                                     }
 
                                     else -> {
@@ -492,6 +493,7 @@ fun SoptBottomBar(
                                 )
                             }
 
+                            // Todo : 서버 응답에 따라 동적으로 변경될 수 있음 체크하기
                             if (tab == MainTab.Soptamp && showBadgeContent.isNotEmpty()) {
                                 MainBottomBarAlarmBadge(
                                     text = showBadgeContent.last(),

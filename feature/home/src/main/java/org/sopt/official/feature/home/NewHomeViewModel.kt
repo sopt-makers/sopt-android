@@ -227,7 +227,7 @@ private data class HomeViewModelState(
                 date = recentCalendar.date,
                 title = recentCalendar.title,
             ),
-            homeServices = appServices.drop(1).map {
+            homeServices = appServices.map {
                 HomeAppService(
                     serviceName = it.serviceName,
                     isShowAlarmBadge = it.displayAlarmBadge,
