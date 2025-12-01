@@ -183,7 +183,7 @@ private fun SoptlogScreen(
             // TODO: 운영 서버 콕 찌르기 API 불안정 이슈로 콕 찌르기 로그를 엠티뷰로 표시함.
             // TODO: 해당 이슈 해결되면 엠티뷰 제거하고 원래 SoptLogSection 표시 해야 함.
             SoptLogEmptySection(
-               content = "솝탬프 기능 정비 중입니다.\n곧 사용할 수 있어요!"
+               content = "콕찌르기 기능 정비 중입니다.\n곧 사용할 수 있어요!"
             )
 
             Spacer(modifier = Modifier.height(38.dp))
