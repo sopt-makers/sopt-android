@@ -37,9 +37,4 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.process.phoenix)
-    debugImplementation(libs.bundles.flipper)
-    releaseImplementation(libs.flipper.noop)
-    debugImplementation(libs.flipper.network) {
-        exclude(group = "com.squareup.okhttp3", module = "okhttp")
-    }
 }

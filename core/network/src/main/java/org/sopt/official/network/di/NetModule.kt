@@ -39,7 +39,6 @@ import org.sopt.official.common.di.Auth
 import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.common.di.Logging
 import org.sopt.official.common.di.OperationRetrofit
-import org.sopt.official.network.FlipperInitializer
 import org.sopt.official.network.authenticator.CentralizeAuthenticator
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
@@ -68,14 +67,12 @@ object NetModule {
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)
         .authenticator(authenticator)
-        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
 
     @Provides
     @Singleton
     fun provideNonAuthOkHttpClient(@Logging loggingInterceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .apply { FlipperInitializer.addFlipperNetworkPlugin(this) }
         .build()
 
     @Provides
