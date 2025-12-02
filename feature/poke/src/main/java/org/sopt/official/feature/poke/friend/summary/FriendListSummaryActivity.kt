@@ -68,6 +68,7 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
+@Deprecated("FriendListSummaryScreen으로 대체")
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityFriendListSummaryBinding::inflate)

@@ -46,7 +46,7 @@ sealed interface HomeNavigation {
         fun navigateToNotification()
         fun navigateToSetting()
         fun navigateToSchedule()
-        fun navigateToSoptlog()
+        fun navigateToEditProfile()
         fun navigateToAttendance()
     }
 

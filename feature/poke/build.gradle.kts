@@ -25,6 +25,7 @@
 
 plugins {
     sopt("feature")
+    sopt("compose")
 }
 
 android {
@@ -38,6 +39,8 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
+    implementation(projects.core.navigation)
+    implementation(projects.core.analytics)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
@@ -48,7 +51,9 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
-    implementation(projects.core.analytics)
     implementation(libs.fragment.ktx)
     implementation(libs.dotsindicator)
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.hilt.navigation)
+    implementation(libs.compose.ui.viewbinding)
 }

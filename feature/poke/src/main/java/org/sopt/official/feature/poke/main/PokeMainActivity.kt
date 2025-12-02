@@ -62,6 +62,7 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
+@Deprecated("PokeScreen으로 대체")
 @AndroidEntryPoint
 class PokeMainActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
@@ -106,10 +107,10 @@ class PokeMainActivity : AppCompatActivity() {
 
     private fun initListener() {
         with(binding) {
-            includeAppBar.toolbar.setOnClickListener {
+            /*includeAppBar.toolbar.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_quit")
                 finish()
-            }
+            }*/
 
             btnNextSomeonePokeMe.setOnClickListener {
                 tracker.track(type = EventType.CLICK, name = "poke_alarm_detail", properties = mapOf("view_type" to args?.userStatus))
