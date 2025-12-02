@@ -56,7 +56,7 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getMyPageActivityIntent(userStatus.name))
     },
-    MY_PAGE_SOPTAMP("home/mypage/soptamp") {
+    MY_PAGE_SOPTAMP("mypage/soptamp") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getAdjustSentenceActivityIntent())
     },
@@ -68,15 +68,15 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getAttendanceActivityIntent())
     },
-    SOPTAMP("home/soptamp") {
+    SOPTAMP("soptamp") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
     },
-    SOPTAMP_ENTIRE_RANKING("home/soptamp/entire-ranking") {
+    SOPTAMP_ENTIRE_RANKING("soptamp/entire-ranking") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
     },
-    SOPTAMP_MISSION_DETAIL("home/soptamp/entire-part-ranking/part-ranking/missions/missionDetail") {
+    SOPTAMP_MISSION_DETAIL("soptamp/entire-part-ranking/part-ranking/missions/missionDetail") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
             val id = deepLink.extractQueryParameter("id").toIntOrNull() ?: -1
             val missionId = deepLink.extractQueryParameter("missionId").toIntOrNull() ?: -1
@@ -99,7 +99,7 @@ enum class DeepLinkType(
             return userStatus.setIntent(intent)
         }
     },
-    SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
+    SOPTAMP_CURRENT_GENERATION_RANKING("soptamp/current-generation-ranking") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
     },

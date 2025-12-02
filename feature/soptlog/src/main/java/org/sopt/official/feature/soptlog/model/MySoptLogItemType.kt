@@ -11,7 +11,7 @@ internal enum class MySoptLogItemType(
     val hasArrow: Boolean = true
 ) {
     // 솝탬프 로그
-    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = "home/soptamp", count = { it.soptampCount }),
+    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = "soptamp", count = { it.soptampCount }),
     VIEW_COUNT(title = "조회수", category = SoptLogCategory.SOPTAMP, hasHelpIcon = true, hasArrow = false, count = { it.viewCount }),
     RECEIVED_CLAP(title = "받은 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.myClapCount }),
     SENT_CLAP(title = "쳐준 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.clapCount }),
