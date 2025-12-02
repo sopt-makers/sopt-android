@@ -115,7 +115,7 @@ internal fun HomeRoute(
         when (val state = uiState) {
             is Member -> {
                 state.homeServices
-                    .filter { it.isShowAlarmBadge && it.alarmBadgeContent != "N" }
+                    .filter { it.isShowAlarmBadge }
                     .map { it.alarmBadgeContent }.toImmutableList()
             }
             else -> persistentListOf()
