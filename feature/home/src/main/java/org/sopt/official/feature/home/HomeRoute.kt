@@ -57,12 +57,12 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.auth.model.UserStatus
-import org.sopt.official.auth.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -96,18 +96,31 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesN
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.feature.home.navigation.HomeUrl
+import org.sopt.official.model.UserStatus
 
 @Composable
 internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
+    onUpdateBottomBadge: (ImmutableList<String>) -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
     val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
+
+    val badgeContentList = remember(uiState) {
+        when (val state = uiState) {
+            is Member -> {
+                state.homeServices
+                    .filter { it.isShowAlarmBadge }
+                    .map { it.alarmBadgeContent }.toImmutableList()
+            }
+            else -> persistentListOf()
+        }
+    }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -120,7 +133,7 @@ internal fun HomeRoute(
     }
 
     LaunchedEffect(userStatus) {
-        if (userStatus != UNAUTHENTICATED) newHomeViewModel.refreshAll()
+        if (userStatus != UserStatus.UNAUTHENTICATED) newHomeViewModel.refreshAll()
     }
 
     LaunchedEffect(Unit) {
@@ -128,6 +141,10 @@ internal fun HomeRoute(
             name = "at36_apphome",
             type = EventType.VIEW
         )
+    }
+
+    LaunchedEffect(badgeContentList) {
+        onUpdateBottomBadge(badgeContentList)
     }
 
     when (val state = uiState) {
@@ -162,11 +179,6 @@ internal fun HomeRoute(
                                         )
                                     }
                             }
-                        }
-
-                        HomeUrl.FORTUNE -> {
-                            homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "at36_todaysoptmadi_menu")
                         }
 
                         HomeUrl.SOPTAMP -> {
@@ -252,7 +264,7 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 16.dp))
 
             HomeUserSoptLogDashboardForMember(
-                onDashboardClick = homeDashboardNavigation::navigateToSoptlog,
+                onDashboardClick = homeDashboardNavigation::navigateToEditProfile,
                 homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -307,19 +319,20 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.height(height = 56.dp))
+            if (popularPosts.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomePopularNewsSection(
-                postList = popularPosts,
-                navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
-                navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.height(height = 56.dp))
+                HomePopularNewsSection(
+                    postList = popularPosts,
+                    navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
+                    navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
+                    modifier = Modifier.padding(horizontal = 20.dp)
+                )
+            }
 
             if (latestPosts.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
+
                 HomeLatestNewsSection(
                     feedList = latestPosts,
                     navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
@@ -328,21 +341,23 @@ private fun HomeScreenForMember(
                 )
             }
 
-            Spacer(modifier = Modifier.height(height = 56.dp))
+            if (surveyData.isActive) {
+                Spacer(modifier = Modifier.height(height = 56.dp))
 
-            HomeSurveySection(
-                surveyTitle = surveyData.title,
-                surveyDescription = surveyData.description,
-                buttonText = surveyData.buttonText,
-                onClick = {
-                    homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
-                    trackClickEvent(tracker, "at36_survey_button")
-                },
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
+                HomeSurveySection(
+                    surveyTitle = surveyData.title,
+                    surveyDescription = surveyData.description,
+                    buttonText = surveyData.buttonText,
+                    onClick = {
+                        homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
+                        trackClickEvent(tracker, "at36_survey_button")
+                    },
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                )
+            }
 
-            Spacer(modifier = Modifier.height(height = 72.dp))
+            Spacer(modifier = Modifier.height(height = 70.dp))
 
             HomeOfficialChannelButton(
                 navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl,
@@ -359,7 +374,7 @@ private fun HomeScreenForMember(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 40.dp)
+                    .padding(bottom = 82.dp)
             ) {
                 HomeToastButton(
                     imageUrl = toastData.imageUrl,
@@ -379,7 +394,7 @@ private fun HomeScreenForMember(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 40.dp)
+                    .padding(bottom = 82.dp)
             ) {
                 HomeFloatingButton(
                     imageUrl = toastData.imageUrl,
@@ -413,7 +428,7 @@ private fun HomeScreenForVisitor(
         Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForVisitor(onSettingClick = homeDashboardNavigation::navigateToSetting)
         Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToSoptlog)
+        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToEditProfile)
         Spacer(modifier = Modifier.height(height = 36.dp))
         Text(
             text = "SOPT를 더 알고 싶다면, 둘러보세요",

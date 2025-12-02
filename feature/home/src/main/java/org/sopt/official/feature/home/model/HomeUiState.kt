@@ -72,7 +72,7 @@ internal sealed interface HomeUiState {
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
         override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
-        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
     ) : Member
 
     @Immutable
@@ -86,7 +86,7 @@ internal sealed interface HomeUiState {
         override val surveyData: HomeSurveyData = HomeSurveyData(),
         override val floatingToastData: HomeFloatingToastData = HomeFloatingToastData(),
         override val popularPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
-        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
+        override val latestPosts: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
     ) : Member
 }
 
@@ -96,6 +96,7 @@ internal data class HomeSurveyData(
     val description: String = "여러분의 솝커톤 이야기를 들려주세요!",
     val buttonText: String = "지금 솝커톤 후기 쓰러가기",
     val surveyLink: String = "",
+    val isActive: Boolean = false
 )
 
 @Immutable
@@ -135,6 +136,7 @@ internal data class HomeSoptScheduleModel(
 
 @Immutable
 internal data class HomeUserSoptLogDashboardModel(
+    val userProfile: String = "",
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
     val isActivated: Boolean = false,
@@ -165,10 +167,6 @@ internal val defaultAppServices: ImmutableList<HomeAppService> = persistentListO
     HomeAppService(
         serviceName = "콕찌르기",
         defaultIcon = img_poke,
-    ),
-    HomeAppService(
-        serviceName = "솝마디",
-        defaultIcon = img_soptmadi,
     ),
     HomeAppService(
         serviceName = "솝탬프",

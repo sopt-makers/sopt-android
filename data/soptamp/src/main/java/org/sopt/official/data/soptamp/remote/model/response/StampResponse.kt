@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,11 @@ data class StampResponse(
     @SerialName("images")
     val images: List<String>? = null,
     @SerialName("missionId")
-    val missionId: Int = -1
+    val missionId: Int = -1,
+    @SerialName("clapCount")
+    val clapCount: Int = 0,
+    @SerialName("viewCount")
+    val viewCount: Int = 0,
 ) {
     fun toDomain() = Archive(
         activityDate = activityDate,
@@ -52,6 +56,8 @@ data class StampResponse(
         id = id,
         contents = contents,
         images = images ?: emptyList(),
-        missionId = missionId
+        missionId = missionId,
+        clapCount = clapCount,
+        viewCount = viewCount
     )
 }

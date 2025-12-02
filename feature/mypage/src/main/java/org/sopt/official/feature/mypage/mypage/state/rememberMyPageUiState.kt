@@ -31,18 +31,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import com.google.firebase.messaging.FirebaseMessaging
 import io.github.takahirom.rin.rememberRetained
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import org.sopt.official.auth.model.UserActiveState
+import kotlinx.coroutines.withContext
 import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
 
 @Composable
 fun rememberMyPageUiState(
-    userActiveState: UserActiveState,
+    userActiveState: UserStatus,
     authRepository: AuthRepository,
     stampRepository: StampRepository,
+    notificationRepository: NotificationRepository,
     onRestartApp: () -> Unit,
 ): MyPageUiState {
     var userActiveState by rememberRetained { mutableStateOf(userActiveState) }
@@ -55,6 +59,11 @@ fun rememberMyPageUiState(
         dialogState = dialogState,
         onEventSink = { action ->
             when (action) {
+                // 초기화 다이얼로그 띄우기용
+                is ClearSoptamp -> {
+                    dialogState = MyPageDialogState.CLEAR_SOPTAMP
+                }
+
                 is ResetSoptamp -> {
                     scope.launch {
                         stampRepository.deleteAllStamps()
@@ -63,20 +72,24 @@ fun rememberMyPageUiState(
                     }
                 }
 
-                is ClearSoptamp -> {
-                    dialogState = MyPageDialogState.CLEAR_SOPTAMP
+                is RequestLogout -> {
+                    dialogState = MyPageDialogState.REQUEST_LOGOUT
                 }
 
-                is Logout -> {
+                is ConfirmLogout -> {
                     scope.launch {
                         runCatching {
-                            FirebaseMessaging.getInstance().token.await()
-                        }.onSuccess {
-                            authRepository.clearUserToken()
-                            onRestartApp()
+                            val pushToken = FirebaseMessaging.getInstance().token.await()
+                            notificationRepository.deleteToken(pushToken)
                         }.onFailure {
                             Timber.e(it)
                         }
+
+                        withContext(Dispatchers.IO) {
+                            authRepository.clearUserToken()
+                        }
+
+                        onRestartApp()
                     }
                 }
 

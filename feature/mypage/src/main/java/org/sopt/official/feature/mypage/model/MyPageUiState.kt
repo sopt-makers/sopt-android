@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,7 +26,7 @@ package org.sopt.official.feature.mypage.model
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import org.sopt.official.auth.model.UserActiveState
+import org.sopt.official.model.UserStatus
 
 @Stable
 sealed interface MyPageUiState {
@@ -36,7 +36,7 @@ sealed interface MyPageUiState {
 
     @Immutable
     data class Authenticated(
-        val activeState: UserActiveState,
+        val activeState: UserStatus,
     ) : MyPageUiState
 
     @Immutable

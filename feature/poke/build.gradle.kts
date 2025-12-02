@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@
 
 plugins {
     sopt("feature")
+    sopt("compose")
 }
 
 android {
@@ -34,9 +35,11 @@ android {
 dependencies {
     implementation(projects.domain.poke)
 
-    implementation(projects.core.auth)
+    implementation(projects.core.model)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.analytics)
+    implementation(projects.core.navigation)
     implementation(projects.core.analytics)
 
     implementation(platform(libs.firebase))
@@ -48,7 +51,9 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
-    implementation(projects.core.analytics)
     implementation(libs.fragment.ktx)
     implementation(libs.dotsindicator)
+    implementation(libs.compose.navigation)
+    implementation(libs.compose.hilt.navigation)
+    implementation(libs.compose.ui.viewbinding)
 }

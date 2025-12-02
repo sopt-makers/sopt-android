@@ -29,8 +29,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -53,6 +56,8 @@ import org.sopt.official.stamp.feature.mission.model.MissionUiModel
 
 @Composable
 fun UserMissionListScreen(
+    myName: String,
+    entrySource: String?,
     userName: String,
     description: String,
     missionListUiModel: MissionListUiModel,
@@ -67,6 +72,9 @@ fun UserMissionListScreen(
                 onClickBack = onClickBack,
             )
         },
+        modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
     ) { paddingValues ->
         Column(
             modifier =
@@ -84,8 +92,10 @@ fun UserMissionListScreen(
             Spacer(modifier = Modifier.size(33.dp))
             MissionsGridComponent(
                 missions = missionListUiModel.missionList.toImmutableList(),
-                onMissionItemClick = { onMissionItemClick(it) },
+                onMissionItemClick = onMissionItemClick,
                 isMe = isMe,
+                myName = myName,
+                entrySource = entrySource,
                 nickname = userName,
             )
         }
@@ -141,7 +151,9 @@ fun UserMissionListHeader(
 fun PreviewUserMissionListScreen() {
     SoptTheme {
         UserMissionListScreen(
+            myName = "me",
             userName = "hello",
+            entrySource = "",
             description = "일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이",
             missionListUiModel =
                 MissionListUiModel(

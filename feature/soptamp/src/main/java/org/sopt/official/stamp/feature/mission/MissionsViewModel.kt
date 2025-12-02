@@ -53,6 +53,10 @@ class MissionsViewModel @Inject constructor(
     val state: StateFlow<MissionsState> = _state.asStateFlow()
     private val _nickname = MutableStateFlow("")
     val nickname = _nickname.asStateFlow()
+
+    private val _description = MutableStateFlow("")
+    val description = _description.asStateFlow()
+
     private val _generation = MutableStateFlow(-1)
     val generation = _generation.asStateFlow()
     val reportUrl = MutableStateFlow("")
@@ -65,7 +69,10 @@ class MissionsViewModel @Inject constructor(
     private fun initUser() {
         viewModelScope.launch {
             userRepository.getUserInfo()
-                .onSuccess { _nickname.value = it.nickname }
+                .onSuccess {
+                    _nickname.value = it.nickname
+                    _description.value = it.profileMessage
+                }
                 .onFailure(Timber::e)
 
             userRepository.getUserGeneration()

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.soptlog.navigation
+package org.sopt.official.data.soptamp.remote.model.request
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.MainTabRoute
-import org.sopt.official.feature.soptlog.SoptlogRoute
-
-fun NavController.navigateToSoptlog(navOptions: NavOptions) {
-    navigate(SoptLog, navOptions)
-}
-
-fun NavGraphBuilder.soptlogNavGraph(
-    navigateToEditProfile: () -> Unit,
-    navigateToFortune: () -> Unit,
-) {
-    composable<SoptLog> {
-        SoptlogRoute(
-            navigateToEditProfile = navigateToEditProfile,
-            navigateToFortune = navigateToFortune
-        )
-    }
-}
+import org.sopt.official.domain.soptamp.model.StampClap
 
 @Serializable
-data object SoptLog : MainTabRoute
+data class StampClapRequest(
+    @SerialName("clapCount")
+    val clapCount: Int
+)
+
+fun StampClap.toData(): StampClapRequest {
+    return StampClapRequest(
+        clapCount = this.clapCount
+    )
+}

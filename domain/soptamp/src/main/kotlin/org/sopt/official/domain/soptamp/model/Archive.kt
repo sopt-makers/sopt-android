@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,5 +31,9 @@ data class Archive(
     val id: Int,
     val contents: String,
     val images: List<String>,
-    val missionId: Int
+    val missionId: Int,
+    val clapCount: Int,
+    val viewCount: Int,
+    val myClapCount: Int? = null,
+    val mine: Boolean? = null
 )

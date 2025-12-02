@@ -30,14 +30,28 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.common.context.appContext
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
+import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import java.io.Serializable
 import javax.inject.Inject
+
+private val applicationNavigator by lazy {
+    EntryPointAccessors.fromApplication(
+        appContext,
+        NavigatorEntryPoint::class.java
+    ).navigatorProvider()
+}
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -45,9 +59,11 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var tracker: Tracker
 
+    private var intentState by mutableStateOf<Intent?>(null)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        intentState = intent
         val startArgs = intent.getSerializableExtra(ARGS) as? StartArgs
 
         enableEdgeToEdge()
@@ -56,10 +72,19 @@ class MainActivity : AppCompatActivity() {
                 ProvideTracker(tracker) {
                     MainScreen(
                         userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                        intentState = intentState,
+                        applicationNavigator = applicationNavigator
                     )
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+
+        intentState = intent
     }
 
     data class StartArgs(

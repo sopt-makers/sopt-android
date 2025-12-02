@@ -56,6 +56,8 @@ dependencies {
     implementation(projects.core.analytics)
     implementation(projects.core.webview)
     implementation(projects.core.designsystem)
+    implementation(projects.core.model)
+    implementation(projects.core.navigation)
 
     implementation(libs.kotlin.datetime)
     implementation(libs.kotlin.collections.immutable)

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,65 +22,66 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.soptlog.component
+package org.sopt.official.stamp.feature.mission.detail.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun SoptlogIntroduction(
-    introduction: String?,
-    modifier: Modifier = Modifier,
+fun ClapFeedbackHolder(
+    clapCount: Int,
+    myClapCount: Int?,
+    isBadgeVisible: Boolean,
+    onPressClap: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(8.dp))
-            .background(
-                SoptTheme.colors.onSurface800
-            )
-            .padding(horizontal = 20.dp, vertical = 8.dp),
-        contentAlignment = Alignment.Center
+            .padding(bottom = 30.dp)
+            .background(Color.Transparent),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        IntroductionText(
-            introduction = if (introduction.isNullOrBlank()) "프로필 수정에서 한 줄 소개 등록해보세요!" else introduction
+        ClapButton(
+            clapCount = clapCount,
+            myClapCount = myClapCount,
+            onClicked = onPressClap,
         )
+
+        AnimatedVisibility(
+            visible = isBadgeVisible,
+            enter = slideInVertically(
+                initialOffsetY = { it / 2 }
+            ) + fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier
+                .padding(bottom = 64.dp)
+        ) {
+            BadgeClap(myClapCount = myClapCount ?: 0)
+        }
     }
-
-}
-
-@Composable
-fun IntroductionText(introduction: String) {
-    Text(
-        text = introduction,
-        style = SoptTheme.typography.body14M,
-        color = SoptTheme.colors.onSurface100
-    )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSoptlogIntroduction() {
+private fun ClapFeedbackHolderPreview() {
     SoptTheme {
-        Column {
-            SoptlogIntroduction(
-                introduction = "이건 null이 아니에요",
-            )
-            SoptlogIntroduction(
-                introduction = null,
-            )
-        }
+        ClapFeedbackHolder(
+            clapCount = 10,
+            myClapCount = 5,
+            isBadgeVisible = true,
+            onPressClap = {}
+        )
     }
 }

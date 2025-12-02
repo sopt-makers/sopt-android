@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,9 @@ package org.sopt.official.domain.soptamp.fake
 
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.domain.soptamp.model.StampClap
+import org.sopt.official.domain.soptamp.model.StampClapResult
+import org.sopt.official.domain.soptamp.model.StampClappers
 import org.sopt.official.domain.soptamp.repository.StampRepository
 
 object FakeStampRepository : StampRepository {
@@ -34,7 +37,9 @@ object FakeStampRepository : StampRepository {
         contents = "",
         images = listOf(""),
         missionId = 1,
-        activityDate = ""
+        activityDate = "",
+        clapCount = 100,
+        viewCount = 999
     )
 
     override suspend fun completeMission(stamp: Stamp): Result<Archive> = runCatching { fakeArchive }
@@ -48,4 +53,10 @@ object FakeStampRepository : StampRepository {
     override suspend fun deleteAllStamps(): Result<Unit> = runCatching { }
 
     override suspend fun getReportUrl(): Result<String> = runCatching { "" }
+    override suspend fun getClappers(stampId: Int): Result<StampClappers> = runCatching { StampClappers(listOf()) }
+
+    override suspend fun clapStamp(
+        stampId: Int,
+        clap: StampClap
+    ): Result<StampClapResult> = runCatching { StampClapResult(1, 1, 1) }
 }

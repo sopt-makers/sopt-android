@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ dependencies {
   implementation(projects.core.network)
   implementation(projects.core.common)
   implementation(projects.core.auth)
+  implementation(projects.core.model)
   implementation(platform(libs.okhttp.bom))
   implementation(libs.bundles.okhttp)
 }

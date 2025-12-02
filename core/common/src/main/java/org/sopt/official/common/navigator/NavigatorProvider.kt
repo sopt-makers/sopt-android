@@ -28,21 +28,32 @@ import android.content.Intent
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 
 interface NavigatorProvider {
     fun getAuthActivityIntent(): Intent
     fun getNotificationActivityIntent(): Intent
     fun getNotificationDetailActivityIntent(notificationId: String): Intent
     fun getMyPageActivityIntent(name: String): Intent
+    fun getAdjustSentenceActivityIntent(): Intent
     fun getAttendanceActivityIntent(): Intent
     fun getSoptampActivityIntent(): Intent
     fun getPokeNotificationActivityIntent(name: String): Intent
+    fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?): Intent
     fun getPokeActivityIntent(userStatus: UserStatus): Intent
     fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent
     fun getFortuneActivityIntent(): Intent
     fun getScheduleActivityIntent(): Intent
 
+    fun getSoptampMissionDetailActivityIntent(
+        id: Int,
+        missionId: Int,
+        isMine: Boolean,
+        nickname: String?,
+        part: String?,
+        level: Int,
+        title: String?
+    ): Intent
 
     fun getMainActivityIntent(
         userStatus: UserStatus,

@@ -24,26 +24,82 @@
  */
 package org.sopt.official.feature.soptlog
 
+import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.soptlog.model.SoptLogInfo
+import org.sopt.official.domain.poke.entity.ApiResult
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
+import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
+import org.sopt.official.feature.soptlog.state.SoptLogState
+import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 import timber.log.Timber
 
 @HiltViewModel
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
+    private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
+
+    val todayFortuneText = _soptLogInfo.map { it.soptLogInfo.todayFortuneText }
+
+    private val _navigationEvent = Channel<SoptLogNavigationEvent>()
+    val navigationEvent = _navigationEvent.receiveAsFlow()
+
+    fun onNavigationClick(url: String) {
+        when (SoptLogUrl.from(url)) {
+            SoptLogUrl.POKE, SoptLogUrl.POKE_FRIEND_SUMMARY -> {
+                handlePokeNavigation(url)
+            }
+            SoptLogUrl.SOPTAMP -> {
+                viewModelScope.launch {
+                    _navigationEvent.send(
+                        SoptLogNavigationEvent.NavigateToDeepLink(url)
+                    )
+                }
+            }
+            else -> {}
+        }
+    }
+
+    private fun handlePokeNavigation(url: String) {
+        viewModelScope.launch {
+            _soptLogInfo.update { it.copy(isLoading = true) }
+
+            fetchIsNewPoke()
+                .onSuccess { isNewPoke ->
+                    val uri = url.toUri()
+                    val type = uri.getQueryParameter("type")
+
+                    _navigationEvent.send(
+                        SoptLogNavigationEvent.NavigateToPoke(
+                            url = url,
+                            isNewPoke = isNewPoke,
+                            friendType = type
+                        )
+                    )
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                }
+
+            _soptLogInfo.update { it.copy(isLoading = false) }
+        }
+    }
 
     fun getSoptLogInfo() {
         viewModelScope.launch {
@@ -77,21 +133,24 @@ class SoptLogViewModel @Inject constructor(
             }
         }
     }
+
+    // 신규 유저인지 판단하는 함수 (콕 찌르기 온보딩)
+    suspend fun fetchIsNewPoke(): Result<Boolean> {
+        val apiResult: ApiResult<*> = checkNewInPokeUseCase()
+
+        return when (apiResult) {
+            is ApiResult.Success -> {
+                Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
+            }
+
+            is ApiResult.ApiError -> {
+                Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
+            }
+
+            is ApiResult.Failure -> {
+                Result.failure(apiResult.throwable)
+            }
+        }
+    }
 }
 
-data class SoptLogState(
-    val soptLogInfo: SoptLogInfo = SoptLogInfo(
-        profileImageUrl = "",
-        userName = "",
-        part = "",
-        profileMessage = "",
-        soptLevel = "",
-        pokeCount = "",
-        isActive = false,
-        soptampRank = "",
-        during = "",
-        todayFortuneTitle = "",
-    ),
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-)

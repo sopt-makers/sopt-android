@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.soptlog.component
+package org.sopt.official.stamp.feature.mission.detail.component
 
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.OrangeAlpha900
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-fun EditProfileButton(
-    onClick: () -> Unit,
+fun BadgeClap(
+    myClapCount: Int,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = SoptTheme.colors.onSurface100,
-                shape = CircleShape
+            .clip(RoundedCornerShape(12.dp))
+            .background(
+                color = OrangeAlpha900
             )
-            .padding(vertical = 9.dp)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+            .padding(horizontal = 7.dp, vertical = 2.dp)
     ) {
         Text(
-            text = "프로필 수정",
-            style = SoptTheme.typography.label14SB,
-            color = SoptTheme.colors.onSurface100
+            text = "+$myClapCount",
+            style = SoptTheme.typography.body13M,
+            color = Color.White
         )
     }
 }
 
 @Preview
 @Composable
-fun EditProfileButtonPreview() {
+private fun BadgeClapPreview() {
     SoptTheme {
-        EditProfileButton(
-            onClick = {}
+        BadgeClap(
+            myClapCount = 50
         )
     }
 }

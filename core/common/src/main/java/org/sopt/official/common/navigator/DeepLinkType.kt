@@ -27,9 +27,9 @@ package org.sopt.official.common.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.auth.model.UserStatus
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.util.extractQueryParameter
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
 
 internal val navigator by lazy {
@@ -56,6 +56,10 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getMyPageActivityIntent(userStatus.name))
     },
+    MY_PAGE_SOPTAMP("home/mypage/soptamp") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
+            userStatus.setIntent(navigator.getAdjustSentenceActivityIntent())
+    },
     ATTENDANCE("home/attendance") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getAttendanceActivityIntent())
@@ -72,6 +76,29 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
     },
+    SOPTAMP_MISSION_DETAIL("home/soptamp/entire-part-ranking/part-ranking/missions/missionDetail") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
+            val id = deepLink.extractQueryParameter("id").toIntOrNull() ?: -1
+            val missionId = deepLink.extractQueryParameter("missionId").toIntOrNull() ?: -1
+            val isMine = deepLink.extractQueryParameter("isMine").toBoolean()
+            val nickname = deepLink.extractQueryParameter("nickname")
+            val part = deepLink.extractQueryParameter("part")
+            val level = deepLink.extractQueryParameter("level").toIntOrNull() ?: -1
+            val title = deepLink.extractQueryParameter("missionTitle")
+
+            val intent = navigator.getSoptampMissionDetailActivityIntent(
+                id = id,
+                missionId = missionId,
+                isMine = isMine,
+                nickname = nickname,
+                part = part,
+                level = level,
+                title = title
+            )
+
+            return userStatus.setIntent(intent)
+        }
+    },
     SOPTAMP_CURRENT_GENERATION_RANKING("home/soptamp/current-generation-ranking") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
@@ -79,6 +106,13 @@ enum class DeepLinkType(
     POKE_NOTIFICATION_LIST("home/poke/notification-list") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeNotificationActivityIntent(userStatus.name))
+    },
+    POKE_FRIEND_LIST_SUMMARY("home/poke/friend-list-summary") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
+            val friendType = deepLink.extractQueryParameter("type")
+            val intent = navigator.getPokeFriendListSummaryActivityIntent(userStatus.name, friendType)
+            return userStatus.setIntent(intent)
+        }
     },
     POKE("home/poke") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
@@ -103,10 +137,11 @@ enum class DeepLinkType(
 
     companion object {
         private fun UserStatus.setIntent(intent: Intent): Intent {
-            return when (this == UserStatus.UNAUTHENTICATED) {
+            /*return when (this == UserStatus.UNAUTHENTICATED) {
                 true -> navigator.getAuthActivityIntent()
                 false -> intent
-            }
+            }*/
+            return intent
         }
 
         fun getIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent =

@@ -43,7 +43,7 @@ data class MissionDetail(
 ) : SoptampRoute
 
 @Serializable
-data class Ranking(val type: String) : SoptampRoute
+data class Ranking(val type: String, val entrySource: String) : SoptampRoute
 
 @Serializable
 data object PartRanking : SoptampRoute
@@ -51,7 +51,8 @@ data object PartRanking : SoptampRoute
 @Serializable
 data class UserMissionList(
     val nickname: String,
-    val description: String,
+    val description: String?,
+    val entrySource: String?
 ) : SoptampRoute
 
 @Serializable
@@ -74,4 +75,5 @@ fun org.sopt.official.stamp.feature.ranking.model.RankerNavArg.toRoute() =
     UserMissionList(
         nickname = this.nickname,
         description = this.description,
+        entrySource = this.entrySource,
     )

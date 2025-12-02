@@ -36,7 +36,8 @@ internal fun ReviewForm.toModel(): HomeSurveyData = HomeSurveyData(
     title = title,
     description = subTitle,
     buttonText = actionButtonName,
-    surveyLink = linkUrl
+    surveyLink = linkUrl,
+    isActive = isActive
 )
 
 internal fun FloatingToast.toModel(): HomeFloatingToastData = HomeFloatingToastData(

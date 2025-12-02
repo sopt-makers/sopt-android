@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessa
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.network.persistence.SoptDataStore

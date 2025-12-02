@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="27dp"
+    android:height="30dp"
+    android:viewportWidth="27"
+    android:viewportHeight="30">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M8.2 7.19c0.7 0.5 1.16 1.32 1.17 2.24l0.02 0.9 7.7-7.77c0.54-0.54 0.62-1.4 0.15-2C16.94 0.2 16.5 0 16.06 0c-0.38 0-0.76 0.14-1.05 0.43L8.2 7.2Z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M1.88 19.7l0.5-0.58 1.35-9.77c0.05-1.3 0.98-2.36 2.21-2.63L5.9 5.35c0-0.8-0.66-1.47-1.48-1.47-0.81 0-1.48 0.66-1.48 1.47L1.52 15.6l-1.37 1.58c-0.21 0.25-0.2 0.62 0.03 0.85l1.7 1.68Z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M18.84 2.85c0.62 0.14 1.17 0.49 1.57 0.99 0.27 0.34 0.45 0.72 0.54 1.11l0.8-0.79c0.54-0.54 0.62-1.4 0.14-2-0.3-0.37-0.73-0.56-1.17-0.56-0.38 0-0.76 0.15-1.06 0.43l-0.82 0.82Z"/>
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M26.56 18.03c0.63-0.61 0.58-1.65-0.13-2.2-0.26-0.22-0.58-0.32-0.9-0.32-0.4 0-0.8 0.16-1.11 0.46l-3.35 3.32c-0.13 0.13-0.3 0.2-0.48 0.2s-0.36-0.07-0.5-0.2v-0.01c-0.3-0.29-0.3-0.76 0-1.05l5.4-5.35c0.54-0.54 0.62-1.4 0.15-2-0.3-0.37-0.74-0.56-1.18-0.56-0.38 0-0.76 0.15-1.05 0.43l-5.45 5.4c-0.14 0.15-0.33 0.22-0.51 0.22-0.19 0-0.37-0.07-0.51-0.21-0.29-0.29-0.29-0.74 0-1.03l6.93-6.87c0.54-0.53 0.62-1.4 0.15-2-0.3-0.37-0.74-0.56-1.17-0.56-0.39 0-0.77 0.15-1.06 0.44l-6.96 6.9c-0.15 0.14-0.33 0.21-0.52 0.21s-0.37-0.07-0.52-0.21c-0.28-0.28-0.28-0.73 0-1.01l5.42-5.37c0.54-0.54 0.63-1.4 0.15-2-0.3-0.37-0.74-0.56-1.17-0.56-0.39 0-0.77 0.14-1.06 0.43l-7.86 7.8c-0.14 0.14-0.31 0.2-0.48 0.2-0.35 0-0.68-0.26-0.7-0.66L8.04 9.45c0-0.8-0.67-1.47-1.48-1.47-0.82 0-1.48 0.66-1.48 1.47L3.65 19.7l-1.37 1.58c-0.22 0.25-0.2 0.62 0.03 0.85l7.78 7.7C10.2 29.94 10.37 30 10.53 30c0.13 0 0.27-0.04 0.38-0.13l1.75-1.33c0.07-0.06 0.16-0.1 0.25-0.11 3.03-0.66 6.49-3.29 9.79-6.56l3.86-3.84Z"/>
+</vector>

@@ -48,6 +48,7 @@ import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentOnboardingFriendsBinding
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.onboarding.model.PokeOnboardingUiState
+import org.sopt.official.feature.poke.onboarding.model.StartArgs
 import org.sopt.official.feature.poke.onboarding.model.toSerializable
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
@@ -217,7 +218,7 @@ class OnboardingPokeUserFragment : Fragment() {
         private const val ARG_ARGS = "args"
 
         @JvmStatic
-        fun newInstance(pokeUsers: PokeRandomUserList.PokeRandomUsers, args: OnboardingActivity.StartArgs?) =
+        fun newInstance(pokeUsers: PokeRandomUserList.PokeRandomUsers, args: StartArgs?) =
             OnboardingPokeUserFragment().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_PROFILES, pokeUsers.toSerializable())

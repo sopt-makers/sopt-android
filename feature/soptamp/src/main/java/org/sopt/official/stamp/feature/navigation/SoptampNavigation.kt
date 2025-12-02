@@ -35,6 +35,10 @@ import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
 // Result navigation keys
 const val MISSION_DETAIL_RESULT_KEY = "mission_detail_result"
 
+fun NavController.navigateToSoptamp(navOptions: NavOptions? = null) {
+    navigate(SoptampGraph, navOptions)
+}
+
 // Navigation functions
 fun NavController.navigateToMissionList(navOptions: NavOptions? = null) {
     navigate(MissionList, navOptions)
@@ -71,9 +75,10 @@ fun NavController.navigateToMissionDetail(
 
 fun NavController.navigateToRanking(
     type: String,
+    entrySource: String,
     navOptions: NavOptions? = null,
 ) {
-    navigate(Ranking(type), navOptions)
+    navigate(Ranking(type, entrySource), navOptions)
 }
 
 fun NavController.navigateToPartRanking(navOptions: NavOptions? = null) {
@@ -90,12 +95,14 @@ fun NavController.navigateToUserMissionList(
 fun NavController.navigateToUserMissionList(
     nickname: String,
     description: String,
+    entrySource: String,
     navOptions: NavOptions? = null,
 ) {
     navigate(
         UserMissionList(
             nickname = nickname,
             description = description,
+            entrySource = entrySource,
         ),
         navOptions,
     )

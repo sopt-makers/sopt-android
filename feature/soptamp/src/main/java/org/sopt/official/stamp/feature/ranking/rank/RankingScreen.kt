@@ -70,12 +70,14 @@ import org.sopt.official.stamp.util.toPx
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RankingScreen(
+    entrySource: String,
     isCurrent: Boolean,
     type: String,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
     nickname: String,
+    navigateToMyPageStamp: () -> Unit = {},
     onClickBack: () -> Unit = {},
     onClickUser: (RankerNavArg) -> Unit = {},
 ) {
@@ -101,6 +103,7 @@ fun RankingScreen(
             RankingHeader(
                 title = if (isCurrent) "$type 랭킹" else type + "파트 랭킹",
                 onClickBack = onClickBack,
+                navigateToMyPageStamp = navigateToMyPageStamp,
             )
         },
         floatingActionButton = {
@@ -149,7 +152,7 @@ fun RankingScreen(
                     TopRankerList(
                         topRanker = rankingListUiModel.topRankingList,
                         onClickTopRankerBubble = { ranker ->
-                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs())
+                            if (ranker.nickname != DEFAULT_USER_NAME) onClickUser(ranker.toArgs(entrySource))
                         },
                     )
                 }
@@ -158,7 +161,7 @@ fun RankingScreen(
                         rankerItem = item,
                         isMyRanking = item.nickname == nickname,
                         onClickUser = { ranker ->
-                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs())
+                            if (nickname != ranker.nickname) onClickUser(ranker.toArgs(entrySource))
                         },
                     )
                 }
@@ -172,6 +175,7 @@ fun RankingScreen(
 fun RankingHeader(
     title: String,
     onClickBack: () -> Unit = {},
+    navigateToMyPageStamp: () -> Unit = {},
 ) {
     SoptTopAppBar(
         title = {
@@ -188,6 +192,13 @@ fun RankingHeader(
                 onClick = onClickBack,
             )
         },
+        actions = {
+            SoptampIconButton(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_missionlist_edit_message),
+                tint = SoptTheme.colors.onSurface10,
+                onClick = navigateToMyPageStamp,
+            )
+        }
     )
 }
 
@@ -206,6 +217,7 @@ fun PreviewRankingScreen() {
     }
     SoptTheme {
         RankingScreen(
+            entrySource = "personalRanking",
             isCurrent = true,
             type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2025 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,12 @@ package org.sopt.official.data.soptamp.repository
 
 import org.sopt.official.data.soptamp.remote.api.StampService
 import org.sopt.official.data.soptamp.remote.mapper.toData
+import org.sopt.official.data.soptamp.remote.model.request.toData
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.Stamp
+import org.sopt.official.domain.soptamp.model.StampClap
+import org.sopt.official.domain.soptamp.model.StampClapResult
+import org.sopt.official.domain.soptamp.model.StampClappers
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import javax.inject.Inject
 
@@ -74,5 +78,13 @@ class StampRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAllStamps(): Result<Unit> {
         return runCatching { service.deleteAllStamps() }
+    }
+
+    override suspend fun getClappers(stampId: Int): Result<StampClappers> = runCatching {
+        service.getClapUser(stampId).toDomain()
+    }
+
+    override suspend fun clapStamp(stampId: Int, clap: StampClap): Result<StampClapResult> = runCatching {
+        service.postClapStamp(stampId, clap.toData()).toDomain()
     }
 }

@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
-import org.sopt.official.auth.model.UserStatus
+import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
@@ -68,6 +68,7 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
+@Deprecated("FriendListSummaryScreen으로 대체")
 @AndroidEntryPoint
 class FriendListSummaryActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityFriendListSummaryBinding::inflate)
@@ -103,6 +104,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
         initFriendListBlock()
         launchFriendListSummaryUiStateFlow()
         launchPokeUserUiStateFlow()
+        handleDeepLinkInitialType()
     }
 
     override fun onResume() {
@@ -372,8 +374,22 @@ class FriendListSummaryActivity : AppCompatActivity() {
         }
     }
 
+    // 솝트로그에서 딥링크로 들어왔을 때 바텀시트 띄우는 함수
+    private fun handleDeepLinkInitialType() {
+        val typeName = args?.initialFriendType
+
+        if (typeName.isNullOrEmpty()) return
+
+        val initialType = PokeFriendType.entries.find {
+            it.typeName.equals(typeName, ignoreCase = true)
+        } ?: return
+
+        showFriendListDetailBottomSheet(initialType)
+    }
+
     data class StartArgs(
         val userStatus: String,
+        val initialFriendType: String? = null // 솝트로그에서 딥링크로 넘어왔을 때 띄울 바텀시트 타입
     ) : Serializable
 
     companion object {

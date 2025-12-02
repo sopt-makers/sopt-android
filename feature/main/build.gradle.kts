@@ -32,13 +32,15 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.auth)
+    implementation(projects.core.model)
     implementation(projects.core.common)
     implementation(projects.core.analytics)
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
     implementation(projects.core.webview)
 
+    implementation(projects.feature.poke)
+    implementation(projects.feature.soptamp)
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)
 }
