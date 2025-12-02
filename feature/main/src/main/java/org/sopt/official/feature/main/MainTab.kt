@@ -39,26 +39,28 @@ enum class MainTab(
         icon = R.drawable.ic_main_home_filled,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
-        loggingName = "at36_navi_home"
+        loggingName = "navi_home"
     ),
 
     Soptamp(
         icon = R.drawable.ic_main_soptamp,
         contentDescription = "솝탬프",
         route = org.sopt.official.stamp.feature.navigation.SoptampGraph,
+        loggingName = "navi_soptamp"
     ),
 
     Poke(
         icon = R.drawable.ic_main_poke,
         contentDescription = "콕찌르기",
         route = org.sopt.official.feature.poke.navigation.PokeGraph,
+        loggingName = "navi_poke"
     ),
 
     SoptLog(
         icon = R.drawable.ic_main_soptlog,
         contentDescription = "솝트로그",
         route = org.sopt.official.feature.soptlog.navigation.SoptLog,
-        loggingName = "at36_navi_soptlog"
+        loggingName = "navi_soptlog"
     );
 
     companion object {

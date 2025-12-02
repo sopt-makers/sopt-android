@@ -264,6 +264,7 @@ fun MainScreen(
                                         generation = currentDestination,
                                         userStatus = userStatus.name
                                     )
+
                                     false -> navigator.navigate(MainTab.Poke, userStatus)
                                 }
 
@@ -331,7 +332,8 @@ fun MainScreen(
                         if (selectedTab.loggingName != null) {
                             tracker.track(
                                 name = selectedTab.loggingName,
-                                type = EventType.CLICK
+                                type = EventType.CLICK,
+                                properties = mapOf("view_type" to userStatus.value)
                             )
                         }
 
@@ -483,7 +485,7 @@ fun SoptBottomBar(
                         .weight(1f)
                         .clickable { onTabSelected(tab) }
                 ) {
-                    BadgedBox (
+                    BadgedBox(
                         badge = {
                             if (tab == MainTab.Poke && showBadgeContent.isNotEmpty() && showBadgeContent.size >= 2) {
                                 MainBottomBarAlarmBadge(
