@@ -61,6 +61,7 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
+@Deprecated("PokeNotificationScreen으로 대체")
 @AndroidEntryPoint
 class PokeNotificationActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)

@@ -32,7 +32,9 @@ import android.view.LayoutInflater
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import org.sopt.official.common.util.dp
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.R
@@ -100,5 +102,22 @@ fun Fragment.showPokeToast(message: String) {
         it.view = binding.root
         it.setGravity(Gravity.TOP, 0, 0)
         it.show()
+    }
+}
+
+private val bestFriendRange = 5..6
+private val soulMateRange = 11..12
+
+fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
+fun isSoulMate(pokeNum: Int, isAnonymous: Boolean) = pokeNum in soulMateRange && isAnonymous
+
+fun dismissBottomSheet(
+    fragmentManager: FragmentManager?,
+    bottomSheetTag: String
+) {
+    fragmentManager?.let { manager ->
+        val fragment = manager.findFragmentByTag(bottomSheetTag)
+
+        (fragment as? DialogFragment)?.dismissAllowingStateLoss()
     }
 }

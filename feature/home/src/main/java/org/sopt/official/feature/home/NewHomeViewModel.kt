@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -70,6 +69,7 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
@@ -77,7 +77,6 @@ internal class NewHomeViewModel @Inject constructor(
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase
 ) : ViewModel() {
-
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
         MutableStateFlow(HomeViewModelState())
 
@@ -204,7 +203,6 @@ private data class HomeViewModelState(
     val popularPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf(),
     val latestPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
 ) {
-
     fun toUiState(): HomeUiState = when (userState) {
         UNAUTHENTICATED -> Unauthenticated(
             isLoading = isLoading,
@@ -219,6 +217,7 @@ private data class HomeViewModelState(
             isError = isError,
             hasNotification = userInfo.isAllConfirm.not(),
             homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(
+                userProfile = userInfo.user.profileImage,
                 activityDescription = userDescription.activityDescription,
                 generations = userInfo.user.generationList.toImmutableList(),
                 isActivated = true,
@@ -240,7 +239,7 @@ private data class HomeViewModelState(
             surveyData = surveyData,
             floatingToastData = toastData,
             popularPosts = popularPostData,
-            latestPosts = latestPostData
+            latestPosts = latestPostData,
         )
 
         INACTIVE -> InactiveMember(
@@ -248,6 +247,7 @@ private data class HomeViewModelState(
             isError = isError,
             hasNotification = userInfo.isAllConfirm.not(),
             homeUserSoptLogDashboardModel = HomeUserSoptLogDashboardModel(
+                userProfile = userInfo.user.profileImage,
                 activityDescription = userDescription.activityDescription,
                 generations = userInfo.user.generationList.toImmutableList(),
                 isActivated = false,
@@ -269,7 +269,7 @@ private data class HomeViewModelState(
             surveyData = surveyData,
             floatingToastData = toastData,
             popularPosts = popularPostData,
-            latestPosts = latestPostData
+            latestPosts = latestPostData,
         )
     }
 }

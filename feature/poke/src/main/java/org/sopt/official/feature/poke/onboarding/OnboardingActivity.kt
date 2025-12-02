@@ -50,6 +50,7 @@ import org.sopt.official.feature.poke.util.showPokeToast
 import java.io.Serializable
 import javax.inject.Inject
 
+@Deprecated("OnboardingScreen으로 대체")
 @AndroidEntryPoint
 class OnboardingActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityOnboardingBinding::inflate)
@@ -79,10 +80,9 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun initAppBar() {
-        with(binding.includeAppBar) {
-            toolbar.setOnClickListener { finish() }
+        /*with(binding.includeAppBar) {
             textViewTitle.text = getString(R.string.poke_title)
-        }
+        }*/
     }
 
     private fun initLottieAnimatorListener() {
@@ -122,7 +122,7 @@ class OnboardingActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> {}
-                    is UiState.Success<PokeRandomUserList> -> updateRecyclerView(it.data)
+                    is UiState.Success<PokeRandomUserList> -> {}//updateRecyclerView(it.data)
                     is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
                     is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
                 }
@@ -130,7 +130,7 @@ class OnboardingActivity : AppCompatActivity() {
             .launchIn(lifecycleScope)
     }
 
-    private fun updateRecyclerView(data: PokeRandomUserList) {
+    /*private fun updateRecyclerView(data: PokeRandomUserList) {
         with(binding) {
             viewpager.adapter = OnboardingViewPagerAdapter(
                 this@OnboardingActivity,
@@ -139,7 +139,7 @@ class OnboardingActivity : AppCompatActivity() {
             )
             dotsIndicator.attachTo(binding.viewpager)
         }
-    }
+    }*/
 
     private fun setIntentToPokeMain() {
         if (binding.layoutLottie.isVisible) return

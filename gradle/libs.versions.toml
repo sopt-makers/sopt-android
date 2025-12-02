@@ -59,7 +59,7 @@ lottie = "6.7.1"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.3"
 rin = "0.4.0"
-mozilla-component-utils = "145.0.1"
+mozilla-component-utils = "145.0.2"
 balloonCompose = "1.6.13"
 
 google-services = "4.4.4"
@@ -119,6 +119,7 @@ compose-activity = { module = "androidx.activity:activity-compose", version.ref 
 compose-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-animation = { module = "androidx.compose.animation:animation" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+compose-ui-viewbinding = { module = "androidx.compose.ui:ui-viewbinding" }
 compose-material = { module = "androidx.compose.material:material" }
 compose-material-three = { module = "androidx.compose.material3:material3" }
 compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
