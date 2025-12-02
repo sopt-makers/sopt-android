@@ -37,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.sopt.official.designsystem.PretendardRegular
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.feature.ranking.getRankBackgroundColor
 import org.sopt.official.stamp.util.DefaultPreview
@@ -91,11 +92,11 @@ fun Memo(
                 unfocusedTextColor = SoptTheme.colors.onSurface50,
                 focusedPlaceholderColor = SoptTheme.colors.onSurface300,
             ),
-        textStyle = SoptTheme.typography.body14R,
+        textStyle = SoptTheme.typography.body14R.copy(fontFamily = PretendardRegular),
         placeholder = {
             Text(
                 text = placeHolder,
-                style = SoptTheme.typography.body14R,
+                style = SoptTheme.typography.body14R.copy(fontFamily = PretendardRegular),
                 color = SoptTheme.colors.onSurface300,
             )
         },

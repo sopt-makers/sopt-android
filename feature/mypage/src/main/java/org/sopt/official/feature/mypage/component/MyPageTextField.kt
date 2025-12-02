@@ -43,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray800
+import org.sopt.official.designsystem.PretendardMedium
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
@@ -74,13 +75,13 @@ fun MyPageTextField(
                 bottom = 36.dp,
                 start = 20.dp
             ),
-        textStyle = SoptTheme.typography.body16M.copy(color = White),
+        textStyle = SoptTheme.typography.body16M.copy(color = White, fontFamily = PretendardMedium),
         decorationBox = { innerTextField ->
             if (sentence.isEmpty())
                 Text(
                     text = stringResource(id = R.string.adjust_sentence_hint),
                     color = Gray300,
-                    style = SoptTheme.typography.body16M
+                    style = SoptTheme.typography.body16M.copy(fontFamily = PretendardMedium)
                 )
             innerTextField()
         }
