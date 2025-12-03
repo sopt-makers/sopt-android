@@ -119,7 +119,7 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeActivityIntent(userStatus))
     },
-    FORTUNE(HOME_FORTUNE) {
+    FORTUNE(SOPTLOG_FORTUNE) {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getFortuneActivityIntent())
     },
@@ -161,4 +161,4 @@ enum class DeepLinkType(
     }
 }
 
-const val HOME_FORTUNE = "home/fortune"
+const val SOPTLOG_FORTUNE = "soptlog/fortune"
