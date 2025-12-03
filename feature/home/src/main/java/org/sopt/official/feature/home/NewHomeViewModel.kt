@@ -70,12 +70,14 @@ import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
 import javax.inject.Inject
+import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
-    private val registerPushTokenUseCase: RegisterPushTokenUseCase
+    private val registerPushTokenUseCase: RegisterPushTokenUseCase,
+    private val getAppServiceUseCase: GetAppServiceUseCase
 ) : ViewModel() {
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
         MutableStateFlow(HomeViewModelState())
@@ -95,7 +97,7 @@ internal class NewHomeViewModel @Inject constructor(
             val userInfoDeferred = async { homeRepository.getUserInfo() }
             val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
-            val appServiceDeferred = async { homeRepository.getHomeAppService() }
+            val appServiceDeferred = async { getAppServiceUseCase() }
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
             val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
