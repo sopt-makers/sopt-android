@@ -44,6 +44,7 @@ interface NavigatorProvider {
     fun getPokeOnboardingActivityIntent(currentGeneration: Int, userStatus: UserStatus): Intent
     fun getFortuneActivityIntent(): Intent
     fun getScheduleActivityIntent(): Intent
+    fun getSoptLogIntent(): Intent
 
     fun getSoptampMissionDetailActivityIntent(
         id: Int,
