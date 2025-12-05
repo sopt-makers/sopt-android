@@ -24,7 +24,9 @@ output.json
 
 # IntelliJ
 *.iml
-.idea/
+.idea/*
+!.idea/codeInsightSettings.xml
+!.idea/icon.svg
 misc.xml
 deploymentTargetDropDown.xml
 render.experimental.xml
