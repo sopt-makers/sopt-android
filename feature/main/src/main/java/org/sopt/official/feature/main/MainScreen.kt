@@ -120,7 +120,7 @@ fun MainScreen(
     var isOpenDialog by remember { mutableStateOf(false) }
     var badgeList by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
-    val visibleTabs = viewModel.mainTabs.collectAsStateWithLifecycle()
+    val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
 
     var backPressedTime = 0L
 
@@ -322,7 +322,7 @@ fun MainScreen(
 
                 SoptBottomBar(
                     visible = navigator.shouldShowBottomBar(),
-                    tabs = visibleTabs.value.toImmutableList(),
+                    tabs = visibleTabs.toImmutableList(),
                     showBadgeContent = badgeList,
                     currentTab = navigator.currentTab,
                     onTabSelected = { selectedTab ->
