@@ -120,7 +120,7 @@ class MainNavigator(
             MainTab.Soptamp -> {
                 navController.navigateToSoptamp(
                     navOptions = navOptions {
-                        popUpTo<SoptampGraph> { inclusive = true }
+                        popUpTo<Home> { inclusive = true }
                         launchSingleTop = true
                     }
                 )

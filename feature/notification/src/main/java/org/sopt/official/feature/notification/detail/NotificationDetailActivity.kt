@@ -63,14 +63,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import java.time.LocalDate
 import kotlinx.coroutines.launch
 import org.sopt.official.common.context.appContext
-import org.sopt.official.common.navigator.HOME_FORTUNE
 import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.SOPTLOG_FORTUNE
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
+import java.time.LocalDate
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -173,7 +173,7 @@ class NotificationDetailActivity : AppCompatActivity() {
                                         val link = notification?.webLink ?: notification?.deepLink
 
                                         when {
-                                            link == HOME_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
+                                            link == SOPTLOG_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
                                                 onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
                                             }
 

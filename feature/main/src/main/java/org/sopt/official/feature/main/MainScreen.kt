@@ -141,6 +141,12 @@ fun MainScreen(
         hasSoptampFlag || hasMissionArgs
     }
 
+    // soptLog 검사 로직
+    val shouldNavigateToSoptLog = remember(intentState) {
+        val intent = intentState
+        intent?.getBooleanExtra("isSoptLogDeepLink", false) == true
+    }
+
     // poke 검사 로직
     val shouldNavigateToPoke = remember(intentState) {
         val intent = intentState
@@ -158,10 +164,15 @@ fun MainScreen(
         intent?.hasExtra("friendType") == true
     }
 
-    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList) {
+    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList, shouldNavigateToSoptLog) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
+        }
+
+        if(shouldNavigateToSoptLog) {
+            navigator.navigate(MainTab.SoptLog, userStatus)
+            activity?.intent?.putExtra("isSoptLogDeepLink", false)
         }
 
         if (shouldNavigateToPoke) {

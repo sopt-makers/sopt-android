@@ -26,7 +26,7 @@ package org.sopt.official.feature.soptlog.navigation
 
 enum class SoptLogUrl(val url: String) {
     POKE("home/poke"),
-    SOPTAMP("home/soptamp"),
+    SOPTAMP("soptamp"),
     POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
     UNKNOWN("");
 
