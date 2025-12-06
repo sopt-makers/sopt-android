@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+    <component name="JavaProjectCodeInsightSettings">
+        <excluded-names>
+            <name>java.lang.reflect.Modifier</name>
+            <name>java.nio.file.WatchEvent.Modifier</name>
+            <name>java.lang.module.ModuleDescriptor.Modifier</name>
+            <name>java.lang.module.ModuleDescriptor.Opens.Modifier</name>
+            <name>java.lang.module.ModuleDescriptor.Requires.Modifier</name>
+            <name>java.lang.module.ModuleDescriptor.Exports.Modifier</name>
+            <name>javax.lang.model.element.Modifier</name>
+
+            <name>android.text.Layout.Alignment</name>
+            <name>android.widget.GridLayout.Alignment</name>
+
+            <name>android.graphics.Color</name>
+
+            <name>android.graphics.drawable.shapes.Shape</name>
+        </excluded-names>
+    </component>
+</project>
