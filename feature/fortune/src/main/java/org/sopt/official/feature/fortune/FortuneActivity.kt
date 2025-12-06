@@ -61,7 +61,9 @@ class FortuneActivity : AppCompatActivity() {
             SoptTheme {
                 ProvideTracker(amplitudeTracker) {
                     FoundationScreen(
-                        onClickLeadingIcon = ::finish,
+                        navigateToSoptLog = {
+                            startActivity(navigator.getSoptLogIntent())
+                        },
                         navigateToHome = {
                             startActivity(navigator.getAuthActivityIntent())
                         },

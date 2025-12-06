@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.fortune
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -63,7 +64,7 @@ import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 
 @Composable
 fun FoundationScreen(
-    onClickLeadingIcon: () -> Unit,
+    navigateToSoptLog: () -> Unit,
     navigateToHome: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
@@ -76,6 +77,8 @@ fun FoundationScreen(
             is Anonymous -> ic_alert to "익명 해제 시, 상대방이 나를 알 수 있어요."
         }
     }
+
+    BackHandler { navigateToSoptLog() }
 
     Scaffold(
         snackbarHost = {
@@ -100,7 +103,7 @@ fun FoundationScreen(
         topBar = {
             FortuneTopBar(
                 isEnabled = !isBottomSheetVisible,
-                onClickNavigationIcon = onClickLeadingIcon,
+                onClickNavigationIcon = navigateToSoptLog,
             )
         },
         content = { paddingValue ->
@@ -148,7 +151,7 @@ fun FoundationScreenPreview() {
     SoptTheme {
         ProvideTracker(FakeTracker) {
             FoundationScreen(
-                onClickLeadingIcon = {},
+                navigateToSoptLog = {},
                 navigateToHome = {}
             )
         }
