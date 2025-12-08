@@ -34,33 +34,38 @@ enum class MainTab(
     internal val contentDescription: String,
     val route: MainTabRoute,
     val loggingName: String? = null,
+    val deeplink: String? = null
 ) {
     Home(
         icon = R.drawable.ic_main_home_filled,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
-        loggingName = "navi_home"
+        loggingName = "navi_home",
+        deeplink = "home"
     ),
 
     Soptamp(
         icon = R.drawable.ic_main_soptamp,
         contentDescription = "솝탬프",
         route = org.sopt.official.stamp.feature.navigation.SoptampGraph,
-        loggingName = "navi_soptamp"
+        loggingName = "navi_soptamp",
+        deeplink = "soptamp"
     ),
 
     Poke(
         icon = R.drawable.ic_main_poke,
         contentDescription = "콕찌르기",
         route = org.sopt.official.feature.poke.navigation.PokeGraph,
-        loggingName = "navi_poke"
+        loggingName = "navi_poke",
+        deeplink = "poke"
     ),
 
     SoptLog(
         icon = R.drawable.ic_main_soptlog,
         contentDescription = "솝트로그",
         route = org.sopt.official.feature.soptlog.navigation.SoptLog,
-        loggingName = "navi_soptlog"
+        loggingName = "navi_soptlog",
+        deeplink = "soptlog"
     );
 
     companion object {
@@ -72,6 +77,14 @@ enum class MainTab(
         @Composable
         fun contains(predicate: @Composable (Route) -> Boolean): Boolean {
             return entries.map { it.route }.any { predicate(it) }
+        }
+
+        fun getActiveTabs(activeServices: List<String>): List<MainTab> {
+            val activeServices = entries.filter { tab ->
+                tab.deeplink != null && activeServices.contains(tab.deeplink)
+            }
+
+            return listOf(Home) + activeServices + listOf(SoptLog)
         }
     }
 }

@@ -134,6 +134,14 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getFortuneActivityIntent(): Intent = FortuneActivity.getIntent(context)
     override fun getScheduleActivityIntent(): Intent = ScheduleActivity.getIntent(context)
 
+    override fun getSoptLogIntent(): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            // MainScreen이 솝트로그 탭으로 이동 시키기 위한 트리거용
+            putExtra("isSoptLogDeepLink", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
+
     override fun getSchemeActivityIntent(
         notificationId: String,
         link: String,

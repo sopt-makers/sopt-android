@@ -72,9 +72,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
@@ -108,7 +111,8 @@ fun MainScreen(
     userStatus: UserStatus,
     applicationNavigator: NavigatorProvider,
     intentState: Intent?,
-    navigator: MainNavigator = rememberMainNavigator()
+    navigator: MainNavigator = rememberMainNavigator(),
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current
@@ -116,14 +120,7 @@ fun MainScreen(
     var isOpenDialog by remember { mutableStateOf(false) }
     var badgeList by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
-    // Todo : 서버 응답에 따라 동적으로 변경될 수 있음 체크하기
-    val visibleTabs = remember(userStatus) {
-        if (userStatus == UserStatus.ACTIVE) {
-            MainTab.entries.toPersistentList()
-        } else {
-            MainTab.entries.filter { it != MainTab.Soptamp }.toPersistentList()
-        }
-    }
+    val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
 
     var backPressedTime = 0L
 
@@ -144,6 +141,12 @@ fun MainScreen(
         hasSoptampFlag || hasMissionArgs
     }
 
+    // soptLog 검사 로직
+    val shouldNavigateToSoptLog = remember(intentState) {
+        val intent = intentState
+        intent?.getBooleanExtra("isSoptLogDeepLink", false) == true
+    }
+
     // poke 검사 로직
     val shouldNavigateToPoke = remember(intentState) {
         val intent = intentState
@@ -161,10 +164,15 @@ fun MainScreen(
         intent?.hasExtra("friendType") == true
     }
 
-    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList) {
+    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList, shouldNavigateToSoptLog) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
+        }
+
+        if(shouldNavigateToSoptLog) {
+            navigator.navigate(MainTab.SoptLog, userStatus)
+            activity?.intent?.putExtra("isSoptLogDeepLink", false)
         }
 
         if (shouldNavigateToPoke) {
@@ -325,7 +333,7 @@ fun MainScreen(
 
                 SoptBottomBar(
                     visible = navigator.shouldShowBottomBar(),
-                    tabs = visibleTabs,
+                    tabs = visibleTabs.toImmutableList(),
                     showBadgeContent = badgeList,
                     currentTab = navigator.currentTab,
                     onTabSelected = { selectedTab ->

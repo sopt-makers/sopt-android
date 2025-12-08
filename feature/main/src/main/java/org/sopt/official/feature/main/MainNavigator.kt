@@ -56,12 +56,14 @@ class MainNavigator(
     fun isSameTab(tab: MainTab): Boolean {
         return currentDestinationCheck?.hierarchy?.any { it.hasRoute(tab::class) } == true
     }
+
     val startDestination = Home
 
     val currentTab: MainTab?
         @Composable get() = MainTab.find { tab ->
             currentDestination?.hierarchy?.any { it.hasRoute(tab::class) } == true
         }
+
     fun navigate(tab: MainTab, userStatus: UserStatus, onFailure: () -> Unit = {}) {
         val navOptions = navOptions {
             navController.currentDestination?.route?.let {
@@ -74,6 +76,11 @@ class MainNavigator(
             }
         }
 
+        if (userStatus == UserStatus.UNAUTHENTICATED) {
+            onFailure()
+            return
+        }
+
         when (tab) {
             MainTab.Home -> navController.navigateToHome(
                 navOptions = navOptions
@@ -83,22 +90,16 @@ class MainNavigator(
                 navOptions = navOptions
             )
 
-            MainTab.Poke ->{
+            MainTab.Poke -> {
                 navController.navigateToPokeEntry(
                     navOptions = navOptions
                 )
             }
 
             MainTab.SoptLog -> {
-                when (userStatus) {
-                    UserStatus.ACTIVE, UserStatus.INACTIVE -> {
-                        navController.navigateToSoptLog(
-                            navOptions = navOptions
-                        )
-                    }
-
-                    UserStatus.UNAUTHENTICATED -> onFailure()
-                }
+                navController.navigateToSoptLog(
+                    navOptions = navOptions
+                )
             }
         }
     }
@@ -119,7 +120,7 @@ class MainNavigator(
             MainTab.Soptamp -> {
                 navController.navigateToSoptamp(
                     navOptions = navOptions {
-                        popUpTo<SoptampGraph> { inclusive = true }
+                        popUpTo<Home> { inclusive = true }
                         launchSingleTop = true
                     }
                 )
@@ -143,6 +144,7 @@ class MainNavigator(
                             }
                         )
                     }
+
                     UserStatus.UNAUTHENTICATED -> onFailure()
                 }
             }

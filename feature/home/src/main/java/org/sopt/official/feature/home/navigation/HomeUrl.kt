@@ -26,7 +26,7 @@ package org.sopt.official.feature.home.navigation
 
 enum class HomeUrl(val url: String) {
     POKE("home/poke"),
-    SOPTAMP("home/soptamp"),
+    SOPTAMP("soptamp"),
     UNKNOWN("");
 
     companion object {
