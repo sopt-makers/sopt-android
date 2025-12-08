@@ -62,13 +62,13 @@ internal fun HomeTopBarForMember(
             ),
             contentDescription = null,
             tint = Unspecified,
-            modifier = Modifier.clickable { onNotificationClick() },
+            modifier = Modifier.clickable(onClick = onNotificationClick),
         )
         Icon(
             imageVector = ImageVector.vectorResource(ic_setting),
             contentDescription = null,
             tint = Unspecified,
-            modifier = Modifier.clickable { onSettingClick() },
+            modifier = Modifier.clickable(onClick = onSettingClick),
         )
     }
 }

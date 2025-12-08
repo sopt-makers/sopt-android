@@ -25,6 +25,7 @@
 package org.sopt.official.feature.home.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -105,16 +106,21 @@ internal fun HomeUserSoptLogDashboardForMember(
     onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val profileModifier = Modifier
+        .clickable(onClick = onDashboardClick)
+        .padding(horizontal = 14.dp, vertical = 35.dp)
+
     HomeBox(
         modifier = modifier.fillMaxWidth(),
         content = {
             Row(
                 verticalAlignment = CenterVertically,
-                modifier = Modifier
-                    .padding(all = 16.dp)
-                    .clickable { onDashboardClick() },
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
-                Column {
+                Column(
+                    modifier = Modifier.padding(start = 18.dp)
+                ) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = ParagraphStyle(lineHeight = 28.sp)) {
@@ -129,27 +135,27 @@ internal fun HomeUserSoptLogDashboardForMember(
                             }
                         },
                         style = typography.body18M,
-                        color = colors.onBackground,
+                        color = colors.onBackground
                     )
-                    Spacer(modifier = Modifier.height(height = 12.dp))
+                    Spacer(modifier = Modifier.height(height = 9.dp))
                     HomeGenerationChips(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
                 }
-                Spacer(modifier = Modifier.weight(weight = 1f))
 
                 if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
                     UrlImage(
                         url = homeUserSoptLogDashboardModel.userProfile,
                         contentDescription = null,
-                        modifier = Modifier
+                        modifier = profileModifier
                             .size(54.dp)
                             .clip(CircleShape),
-                        contentScale = ContentScale.Crop,
+                        contentScale = ContentScale.Crop
                     )
                 } else {
                     Icon(
                         imageVector = ImageVector.vectorResource(ic_edit_profile),
                         contentDescription = null,
                         tint = Unspecified,
+                        modifier = profileModifier
                     )
                 }
             }

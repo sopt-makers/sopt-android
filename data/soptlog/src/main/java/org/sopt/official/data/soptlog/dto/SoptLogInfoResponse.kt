@@ -36,13 +36,13 @@ data class SoptLogInfoResponse(
     @SerialName("todayFortuneText")
     val todayFortuneText: String,
     @SerialName("soptampCount")
-    val soptampCount: Int,
+    val soptampCount: Int? = null,
     @SerialName("viewCount")
-    val viewCount: Int,
+    val viewCount: Int? = null,
     @SerialName("myClapCount")
-    val myClapCount: Int,
+    val myClapCount: Int? = null,
     @SerialName("clapCount")
-    val clapCount: Int,
+    val clapCount: Int? = null,
     @SerialName("totalPokeCount")
     val totalPokeCount: Int?,
     @SerialName("newFriendsPokeCount")
