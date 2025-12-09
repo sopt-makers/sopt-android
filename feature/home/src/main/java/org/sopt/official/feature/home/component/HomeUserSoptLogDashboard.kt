@@ -26,6 +26,7 @@ package org.sopt.official.feature.home.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,6 +38,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,7 +60,8 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.SuitBold
 import org.sopt.official.designsystem.component.UrlImage
-import org.sopt.official.feature.home.R.drawable.ic_edit_profile
+import org.sopt.official.feature.home.R.drawable.ic_empty_profile
+import org.sopt.official.feature.home.R.drawable.ic_edit_profile_pencil
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
@@ -141,22 +144,48 @@ internal fun HomeUserSoptLogDashboardForMember(
                     HomeGenerationChips(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
                 }
 
-                if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
-                    UrlImage(
-                        url = homeUserSoptLogDashboardModel.userProfile,
-                        contentDescription = null,
-                        modifier = profileModifier
-                            .size(54.dp)
-                            .clip(CircleShape),
-                        contentScale = ContentScale.Crop
-                    )
-                } else {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(ic_edit_profile),
-                        contentDescription = null,
-                        tint = Unspecified,
-                        modifier = profileModifier
-                    )
+                Box(
+                    modifier = profileModifier
+                        .padding(end = 5.dp)
+                        .size(size = 54.dp)
+                ) {
+                    if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
+                        UrlImage(
+                            url = homeUserSoptLogDashboardModel.userProfile,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(size = 50.dp)
+                                .align(Alignment.Center)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.Crop
+                        )
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
+                            contentDescription = null,
+                            tint = Unspecified,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(size = 15.dp)
+                        )
+                    } else {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(ic_empty_profile),
+                            contentDescription = null,
+                            tint = Unspecified,
+                            modifier = Modifier
+                                .size(size = 50.dp)
+                                .align(Alignment.Center)
+                        )
+
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
+                            contentDescription = null,
+                            tint = Unspecified,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(size = 15.dp)
+                        )
+                    }
                 }
             }
         }
