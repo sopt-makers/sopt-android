@@ -176,7 +176,6 @@ internal fun HomeUserSoptLogDashboardForMember(
                                 .size(size = 50.dp)
                                 .align(Alignment.Center)
                         )
-
                         Icon(
                             imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
                             contentDescription = null,
