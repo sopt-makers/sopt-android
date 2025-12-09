@@ -340,7 +340,8 @@ fun MainScreen(
                         if (selectedTab.loggingName != null) {
                             tracker.track(
                                 name = selectedTab.loggingName,
-                                type = EventType.CLICK
+                                type = EventType.CLICK,
+                                properties = mapOf("view_type" to userStatus.value)
                             )
                         }
 

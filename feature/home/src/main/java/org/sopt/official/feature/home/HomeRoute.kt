@@ -171,7 +171,7 @@ internal fun HomeRoute(
                             scope.launch {
                                 newHomeViewModel.fetchIsNewPoke()
                                     .onSuccess { isNewPoke ->
-                                        trackClickEvent(tracker, "at36_poke_menu")
+                                        trackClickEvent(tracker, "poke_menu")
                                         homeAppServicesNavigation.navigateToPoke(
                                             url = url,
                                             isNewPoke = isNewPoke,
@@ -183,7 +183,7 @@ internal fun HomeRoute(
 
                         HomeUrl.SOPTAMP -> {
                             homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "at36_soptamp_menu")
+                            trackClickEvent(tracker, "soptamp_menu")
                         }
 
                         HomeUrl.UNKNOWN -> {

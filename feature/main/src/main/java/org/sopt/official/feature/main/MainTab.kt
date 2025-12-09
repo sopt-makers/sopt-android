@@ -40,7 +40,7 @@ enum class MainTab(
         icon = R.drawable.ic_main_home_filled,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
-        loggingName = "at36_navi_home",
+        loggingName = "navi_home",
         deeplink = "home"
     ),
 
@@ -48,6 +48,7 @@ enum class MainTab(
         icon = R.drawable.ic_main_soptamp,
         contentDescription = "솝탬프",
         route = org.sopt.official.stamp.feature.navigation.SoptampGraph,
+        loggingName = "navi_soptamp",
         deeplink = "soptamp"
     ),
 
@@ -55,6 +56,7 @@ enum class MainTab(
         icon = R.drawable.ic_main_poke,
         contentDescription = "콕찌르기",
         route = org.sopt.official.feature.poke.navigation.PokeGraph,
+        loggingName = "navi_poke",
         deeplink = "poke"
     ),
 
@@ -62,7 +64,7 @@ enum class MainTab(
         icon = R.drawable.ic_main_soptlog,
         contentDescription = "솝트로그",
         route = org.sopt.official.feature.soptlog.navigation.SoptLog,
-        loggingName = "at36_navi_soptlog",
+        loggingName = "navi_soptlog",
         deeplink = "soptlog"
     );
 
