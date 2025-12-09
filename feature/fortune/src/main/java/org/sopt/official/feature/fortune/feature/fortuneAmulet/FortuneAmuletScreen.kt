@@ -53,7 +53,7 @@ import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 
 @Composable
 internal fun FortuneAmuletRoute(
-    onHomeClick: () -> Unit,
+    onSoptLogClick: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
     val amplitudeTracker = LocalTracker.current
@@ -88,9 +88,9 @@ internal fun FortuneAmuletRoute(
                 onHomeClick = {
                     amplitudeTracker.track(
                         type = EventType.CLICK,
-                        name = "done_home",
+                        name = "done_soptLog",
                     )
-                    onHomeClick()
+                    onSoptLogClick()
                 }
             ).also {
                 amplitudeTracker.track(
@@ -142,7 +142,7 @@ private fun FortuneAmuletScreen(
         CircleShapeBorderButton(
             content = {
                 Text(
-                    text = "홈으로 돌아가기",
+                    text = "돌아가기",
                     style = SoptTheme.typography.label18SB,
                     color = SoptTheme.colors.onBackground,
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)

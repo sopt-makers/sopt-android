@@ -65,7 +65,6 @@ import org.sopt.official.feature.fortune.feature.home.navigation.homeNavGraph
 @Composable
 fun FoundationScreen(
     navigateToSoptLog: () -> Unit,
-    navigateToHome: () -> Unit,
     navController: NavHostController = rememberNavController(),
 ) {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
@@ -137,7 +136,7 @@ fun FoundationScreen(
                     )
 
                     fortuneAmuletNavGraph(
-                        navigateToHome = navigateToHome
+                        navigateToSoptLog = navigateToSoptLog
                     )
                 }
             }
@@ -151,8 +150,7 @@ fun FoundationScreenPreview() {
     SoptTheme {
         ProvideTracker(FakeTracker) {
             FoundationScreen(
-                navigateToSoptLog = {},
-                navigateToHome = {}
+                navigateToSoptLog = {}
             )
         }
     }
