@@ -109,10 +109,6 @@ internal fun HomeUserSoptLogDashboardForMember(
     onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val profileModifier = Modifier
-        .clickable(onClick = onDashboardClick)
-        .padding(horizontal = 14.dp, vertical = 35.dp)
-
     HomeBox(
         modifier = modifier.fillMaxWidth(),
         content = {
@@ -145,27 +141,21 @@ internal fun HomeUserSoptLogDashboardForMember(
                 }
 
                 Box(
-                    modifier = profileModifier
-                        .padding(end = 5.dp)
-                        .size(size = 54.dp)
+                    modifier = Modifier
+                        .clickable(onClick = onDashboardClick)
+                        .padding(start = 16.dp, end = 20.dp)
+                        .padding(vertical = 35.dp)
                 ) {
                     if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
                         UrlImage(
                             url = homeUserSoptLogDashboardModel.userProfile,
                             contentDescription = null,
                             modifier = Modifier
-                                .size(size = 50.dp)
+                                .size(size = 54.dp)
                                 .align(Alignment.Center)
+                                .padding(end = 2.dp)
                                 .clip(CircleShape),
                             contentScale = ContentScale.Crop
-                        )
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
-                            contentDescription = null,
-                            tint = Unspecified,
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(size = 15.dp)
                         )
                     } else {
                         Icon(
@@ -173,18 +163,19 @@ internal fun HomeUserSoptLogDashboardForMember(
                             contentDescription = null,
                             tint = Unspecified,
                             modifier = Modifier
-                                .size(size = 50.dp)
+                                .size(size = 54.dp)
                                 .align(Alignment.Center)
-                        )
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
-                            contentDescription = null,
-                            tint = Unspecified,
-                            modifier = Modifier
-                                .align(Alignment.BottomEnd)
-                                .size(size = 15.dp)
+                                .padding(end = 2.dp)
                         )
                     }
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
+                        contentDescription = null,
+                        tint = Unspecified,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .size(size = 19.dp)
+                    )
                 }
             }
         }
