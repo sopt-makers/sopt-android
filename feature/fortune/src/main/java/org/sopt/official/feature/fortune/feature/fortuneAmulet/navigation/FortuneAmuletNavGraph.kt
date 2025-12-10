@@ -37,7 +37,7 @@ fun NavGraphBuilder.fortuneAmuletNavGraph(
 ) {
     composable<FortuneAmulet> {
         FortuneAmuletRoute(
-            onSoptLogClick = navigateToSoptLog
+            navigateToSoptLog = navigateToSoptLog
         )
     }
 }

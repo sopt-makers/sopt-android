@@ -53,7 +53,7 @@ import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 
 @Composable
 internal fun FortuneAmuletRoute(
-    onSoptLogClick: () -> Unit,
+    navigateToSoptLog: () -> Unit,
     viewModel: FortuneAmuletViewModel = hiltViewModel(),
 ) {
     val amplitudeTracker = LocalTracker.current
@@ -85,12 +85,12 @@ internal fun FortuneAmuletRoute(
                     )
                 },
                 imageUrl = state.imageUrl,
-                onHomeClick = {
+                onBackClick = {
                     amplitudeTracker.track(
                         type = EventType.CLICK,
                         name = "done_soptLog",
                     )
-                    onSoptLogClick()
+                    navigateToSoptLog()
                 }
             ).also {
                 amplitudeTracker.track(
@@ -107,7 +107,7 @@ private fun FortuneAmuletScreen(
     description: String,
     amuletDescription: @Composable ColumnScope.() -> Unit,
     imageUrl: String,
-    onHomeClick: () -> Unit,
+    onBackClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -148,7 +148,7 @@ private fun FortuneAmuletScreen(
                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp)
                 )
             },
-            onClick = onHomeClick
+            onClick = onBackClick
         )
 
         Spacer(modifier = Modifier.height(50.dp))
@@ -175,7 +175,7 @@ fun PreviewFortuneAmuletScreen() {
                 )
             },
             imageUrl = "https://sopt-makers.s3.ap-northeast-2.amazonaws.com/mainpage/makers-app-img/test_fortune_card.png",
-            onHomeClick = {}
+            onBackClick = {}
         )
     }
 }
