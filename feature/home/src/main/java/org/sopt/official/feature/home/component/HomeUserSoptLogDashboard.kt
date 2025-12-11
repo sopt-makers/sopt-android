@@ -143,8 +143,7 @@ internal fun HomeUserSoptLogDashboardForMember(
                 Box(
                     modifier = Modifier
                         .clickable(onClick = onDashboardClick)
-                        .padding(start = 16.dp, end = 20.dp)
-                        .padding(vertical = 35.dp)
+                        .padding(horizontal = 14.dp, vertical = 35.dp)
                 ) {
                     if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
                         UrlImage(
