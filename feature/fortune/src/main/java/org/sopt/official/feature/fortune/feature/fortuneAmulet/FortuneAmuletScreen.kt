@@ -86,7 +86,6 @@ internal fun FortuneAmuletRoute(
                 },
                 imageUrl = state.imageUrl,
                 onBackClick = {
-                    // 현재 데이터 수집에 사용되지 않는 앰플
                     amplitudeTracker.track(
                         type = EventType.CLICK,
                         name = "done_home",
