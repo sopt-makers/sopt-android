@@ -43,7 +43,7 @@ androidx-test = "1.7.0"
 androidx-test-rules = "1.7.0"
 mockk = "1.14.7"
 
-gradleplugin = "8.13.1"
+gradleplugin = "8.13.2"
 kspplugin = "2.3.3"
 
 dagger-hilt = "2.57.2"
@@ -57,7 +57,7 @@ lottie = "6.7.1"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.3"
 rin = "0.4.0"
-mozilla-component-utils = "145.0.2"
+mozilla-component-utils = "146.0"
 balloonCompose = "1.6.13"
 
 google-services = "4.4.4"
