@@ -43,7 +43,7 @@ androidx-test = "1.7.0"
 androidx-test-rules = "1.7.0"
 mockk = "1.14.7"
 
-gradleplugin = "8.13.1"
+gradleplugin = "8.13.2"
 kspplugin = "2.3.3"
 
 dagger-hilt = "2.57.2"
