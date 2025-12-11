@@ -249,12 +249,6 @@ private fun SoptLogBalloon(
                     color = SoptTheme.colors.primary
                 )
             }
-
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_close_18),
-                contentDescription = "조회수 툴팁 닫기",
-                tint = Color.Unspecified
-            )
         }
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -285,9 +279,9 @@ private fun rememberCustomBalloonBuilder(): Balloon.Builder {
         setWidth(BalloonSizeSpec.WRAP)
         setIsVisibleOverlay(true)
         setOverlayColor(color.onSurface.copy(alpha = 0.5f))
-        setDismissWhenOverlayClicked(false)
-        setDismissWhenTouchOutside(false)
-        setDismissWhenClicked(true)
+        setDismissWhenOverlayClicked(true)
+        setDismissWhenTouchOutside(true)
+        setDismissWhenClicked(false)
         setElevation(4)
     }
 }

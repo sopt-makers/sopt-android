@@ -63,10 +63,7 @@ class FortuneActivity : AppCompatActivity() {
                     FoundationScreen(
                         navigateToSoptLog = {
                             startActivity(navigator.getSoptLogIntent())
-                        },
-                        navigateToHome = {
-                            startActivity(navigator.getAuthActivityIntent())
-                        },
+                        }
                     )
                 }
             }

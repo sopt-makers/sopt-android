@@ -33,11 +33,11 @@ import org.sopt.official.feature.fortune.feature.fortuneAmulet.FortuneAmuletRout
 data object FortuneAmulet
 
 fun NavGraphBuilder.fortuneAmuletNavGraph(
-    navigateToHome: () -> Unit,
+    navigateToSoptLog: () -> Unit,
 ) {
     composable<FortuneAmulet> {
         FortuneAmuletRoute(
-            onHomeClick = navigateToHome
+            navigateToSoptLog = navigateToSoptLog
         )
     }
 }
