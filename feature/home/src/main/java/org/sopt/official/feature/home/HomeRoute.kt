@@ -310,14 +310,16 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.height(height = 40.dp))
+            if(homeAppServices.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(height = 40.dp))
 
-            HomeEnjoySoptServicesBlock(
-                appServices = homeAppServices,
-                onAppServiceClick = onAppServiceClick,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
+                HomeEnjoySoptServicesBlock(
+                    appServices = homeAppServices,
+                    onAppServiceClick = onAppServiceClick,
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp)
+                )
+            }
 
             if (popularPosts.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 56.dp))
