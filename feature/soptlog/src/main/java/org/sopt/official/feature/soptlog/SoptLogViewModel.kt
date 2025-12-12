@@ -153,4 +153,3 @@ class SoptLogViewModel @Inject constructor(
         }
     }
 }
-
