@@ -27,7 +27,7 @@ package org.sopt.official.feature.home.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
@@ -47,7 +47,7 @@ internal fun HomeProgressIndicator(
             .background(color = colors.background.copy(alpha = 0.55f)),
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.width(width = 32.dp),
+            modifier = Modifier.size(32.dp),
             color = colorScheme.secondary,
             trackColor = colorScheme.surfaceVariant,
             strokeWidth = 4.dp,
