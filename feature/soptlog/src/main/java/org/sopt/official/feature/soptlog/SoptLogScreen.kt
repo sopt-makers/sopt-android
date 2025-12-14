@@ -48,7 +48,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
@@ -68,12 +67,10 @@ import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 internal fun SoptLogRoute(
     soptLogNavigation: SoptLogNavigation,
     navigateToFortune: () -> Unit = {},
-    viewModel: SoptLogViewModel = hiltViewModel(),
+    viewModel: SoptLogViewModel = hiltViewModel()
 ) {
-    LifecycleStartEffect(Unit) {
+    LaunchedEffect(Unit) {
         viewModel.getSoptLogInfo()
-
-        onStopOrDispose {}
     }
 
     LaunchedEffect(Unit) {
@@ -87,6 +84,7 @@ internal fun SoptLogRoute(
                         friendType = event.friendType
                     )
                 }
+
                 is SoptLogNavigationEvent.NavigateToDeepLink -> {
                     soptLogNavigation.navigateToDeepLink(event.url)
                 }
@@ -174,7 +172,9 @@ private fun SoptlogScreen(
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
                     soptLogInfo = soptLogInfo,
                     onItemClick = { type ->
-                        if (type.url.isNotEmpty()) { onNavigationClick(type.url) }
+                        if (type.url.isNotEmpty()) {
+                            onNavigationClick(type.url)
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.height(28.dp))
@@ -183,7 +183,7 @@ private fun SoptlogScreen(
             // TODO: 운영 서버 콕 찌르기 API 불안정 이슈로 콕 찌르기 로그를 엠티뷰로 표시함.
             // TODO: 해당 이슈 해결되면 엠티뷰 제거하고 원래 SoptLogSection 표시 해야 함.
             SoptLogEmptySection(
-               content = "콕찌르기 기능 정비 중입니다.\n곧 사용할 수 있어요!"
+                content = "콕찌르기 기능 정비 중입니다.\n곧 사용할 수 있어요!"
             )
 
             Spacer(modifier = Modifier.height(38.dp))
