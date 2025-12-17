@@ -55,6 +55,7 @@ class SoptWebViewClient(
                 || handleTelScheme(view, url)
                 || handleMailScheme(view, url)
                 || handleIntentScheme(view, url)
+                || handleNotionScheme(view, url)
         }
     }
 
@@ -75,6 +76,7 @@ class SoptWebViewClient(
                 || handleTelScheme(view, uri)
                 || handleMailScheme(view, uri)
                 || handleIntentScheme(view, uri)
+                || handleNotionScheme(view, uri)
         }
     }
 
@@ -133,6 +135,16 @@ class SoptWebViewClient(
     private fun handleMarketScheme(view: WebView?, url: Uri): Boolean {
         if (url.scheme == "market") {
             view?.context?.navigateTo(url)
+            return true
+        }
+        return false
+    }
+
+    private fun handleNotionScheme(view: WebView?, url: Uri?): Boolean {
+        if (url?.scheme?.startsWith("notion") == true) {
+            Intent(Intent.ACTION_VIEW, url).apply {
+                view?.context?.startActivity(this)
+            }
             return true
         }
         return false
