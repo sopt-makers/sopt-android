@@ -53,6 +53,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.component.SoptLogEmptySection
 import org.sopt.official.feature.soptlog.component.SoptLogSection
@@ -98,10 +99,7 @@ internal fun SoptLogRoute(
     val tracker = LocalTracker.current
 
     when {
-        soptLogState.isLoading -> {
-            // TODO: 로딩 화면
-        }
-
+        soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
             SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfo)
         }
