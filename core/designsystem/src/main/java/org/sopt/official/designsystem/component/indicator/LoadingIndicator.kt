@@ -22,12 +22,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.home.component
+package org.sopt.official.designsystem.component.indicator
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
@@ -37,20 +37,20 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme.colors
 
 @Composable
-internal fun HomeProgressIndicator(
-    modifier: Modifier = Modifier,
+fun LoadingIndicator(
+    modifier: Modifier = Modifier
 ) {
     Box(
         contentAlignment = Center,
         modifier = modifier
             .fillMaxSize()
-            .background(color = colors.background.copy(alpha = 0.55f)),
+            .background(color = colors.background.copy(alpha = 0.55f))
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.width(width = 32.dp),
+            modifier = Modifier.size(32.dp),
             color = colorScheme.secondary,
             trackColor = colorScheme.surfaceVariant,
-            strokeWidth = 4.dp,
+            strokeWidth = 4.dp
         )
     }
 }
