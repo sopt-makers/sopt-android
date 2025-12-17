@@ -62,5 +62,6 @@ include(
     ":feature:schedule",
     ":feature:soptamp",
     ":feature:soptlog",
-    ":feature:main"
+    ":feature:main",
+    ":feature:appjamtamp"
 )
