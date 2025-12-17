@@ -48,7 +48,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
@@ -69,12 +68,10 @@ import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 internal fun SoptLogRoute(
     soptLogNavigation: SoptLogNavigation,
     navigateToFortune: () -> Unit = {},
-    viewModel: SoptLogViewModel = hiltViewModel(),
+    viewModel: SoptLogViewModel = hiltViewModel()
 ) {
-    LifecycleStartEffect(Unit) {
+    LaunchedEffect(Unit) {
         viewModel.getSoptLogInfo()
-
-        onStopOrDispose {}
     }
 
     LaunchedEffect(Unit) {

@@ -93,9 +93,7 @@ class SoptLogViewModel @Inject constructor(
                         )
                     )
                 }
-                .onFailure { error ->
-                    Timber.e(error)
-                }
+                .onFailure(Timber::e)
 
             _soptLogInfo.update { it.copy(isLoading = false) }
         }
