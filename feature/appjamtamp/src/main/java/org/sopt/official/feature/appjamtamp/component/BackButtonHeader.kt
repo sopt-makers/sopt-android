@@ -3,6 +3,7 @@ package org.sopt.official.feature.appjamtamp.component
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -19,7 +20,8 @@ import org.sopt.official.feature.appjamtamp.R
 @Composable
 internal fun BackButtonHeader(
     title: String,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    trailingIcon: @Composable RowScope.() -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -36,8 +38,11 @@ internal fun BackButtonHeader(
         Text(
             text = title,
             style = SoptTheme.typography.heading18B,
-            color = SoptTheme.colors.onSurface10
+            color = SoptTheme.colors.onSurface10,
+            modifier = Modifier.weight(1f)
         )
+
+        trailingIcon()
     }
 }
 
