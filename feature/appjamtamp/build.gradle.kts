@@ -13,5 +13,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.model)
 
+    implementation(projects.domain.appjamtamp)
+
     implementation(libs.kotlin.collections.immutable)
 }
