@@ -42,6 +42,7 @@ include(
     ":data:schedule",
     ":data:soptamp",
     ":data:soptlog",
+    ":data:appjamtamp",
 
     ":domain:auth",
     ":domain:fortune",
