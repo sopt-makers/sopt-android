@@ -31,6 +31,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.webkit.CookieManager
+import android.webkit.JsResult
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -122,6 +123,23 @@ class WebViewActivity : AppCompatActivity() {
                 permissionRequestLauncher.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             }
         }
+
+        binding.webView.webChromeClient = object : WebChromeClient() {
+            override fun onJsAlert(
+                view: WebView?,
+                url: String?,
+                message: String?,
+                result: JsResult?
+            ): Boolean {
+                if (message?.contains("android: false") == true) {
+                    result?.confirm()
+                    return true
+                }
+
+                return super.onJsAlert(view, url, message, result)
+            }
+        }
+
         handleLinkUrl()
         handleOnBackPressed()
     }
