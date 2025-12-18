@@ -77,7 +77,7 @@ open class SoptWebView : WebView {
             javaScriptCanOpenWindowsAutomatically = true
             setSupportZoom(false)
             webViewClient = SoptWebViewClient(dataStore)
-            userAgentString = "Chrome/56.0.0.0 Mobile"
+            userAgentString = "Chrome/130.0.0.0 Mobile"
         }
         initWebView()
     }

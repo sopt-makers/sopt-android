@@ -67,13 +67,13 @@ import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
-import org.sopt.official.feature.home.component.HomeProgressIndicator
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForMember
 import org.sopt.official.feature.home.component.HomeShortcutButtonsForVisitor
 import org.sopt.official.feature.home.component.HomeSoptScheduleDashboard
@@ -118,6 +118,7 @@ internal fun HomeRoute(
                     .filter { it.isShowAlarmBadge }
                     .map { it.alarmBadgeContent }.toImmutableList()
             }
+
             else -> persistentListOf()
         }
     }
@@ -207,7 +208,7 @@ internal fun HomeRoute(
         }
     }
 
-    if (uiState.isLoading) HomeProgressIndicator()
+    if (uiState.isLoading) LoadingIndicator()
     if (uiState.isError) HomeErrorDialog(onCheckClick = { newHomeViewModel.refreshAll() })
 }
 
@@ -310,7 +311,7 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            if(homeAppServices.isNotEmpty()) {
+            if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
