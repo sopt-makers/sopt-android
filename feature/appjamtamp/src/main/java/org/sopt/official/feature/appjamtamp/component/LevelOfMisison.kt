@@ -53,7 +53,7 @@ private fun SpecialMissionTitle() {
         Spacer(modifier = Modifier.width(2.dp))
 
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_close),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_star_close),
             contentDescription = null,
             tint = SoptTheme.colors.primary,
         )

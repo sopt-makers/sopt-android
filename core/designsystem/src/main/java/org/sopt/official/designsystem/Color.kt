@@ -129,9 +129,6 @@ val Mint300 = Color(0xFF53FFC0)
 val Mint200 = Color(0xFFD3FFF0)
 val Mint100 = Color(0xFFE5FFF6)
 
-val BackgroundDim = Color(0xCC0F0F12)
-
-
 // Red-Alpha Scale
 val RedAlpha900 = AlphaColor(0xF04251, 90)
 val RedAlpha800 = AlphaColor(0xF04251, 80)
