@@ -53,6 +53,7 @@ include(
     ":domain:schedule",
     ":domain:soptamp",
     ":domain:soptlog",
+    ":domain:appjamtamp",
 
     ":feature:auth",
     ":feature:fortune",
