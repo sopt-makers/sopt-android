@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023-2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="15dp"
+    android:height="15dp"
+    android:viewportWidth="15"
+    android:viewportHeight="15">
+    <path
+        android:fillColor="#D3D4D5"
+        android:pathData="M5.656,1.39C6.236,-0.463 8.764,-0.463 9.344,1.39L9.785,2.799C10.045,3.628 10.789,4.189 11.629,4.189H13.057C14.936,4.189 15.717,6.683 14.197,7.828L13.042,8.699C12.362,9.212 12.078,10.12 12.337,10.948L12.779,12.358C13.359,14.211 11.315,15.752 9.795,14.607L8.64,13.736C7.96,13.223 7.04,13.223 6.36,13.736L5.205,14.607C3.685,15.752 1.641,14.211 2.221,12.358L2.663,10.948C2.922,10.12 2.638,9.212 1.958,8.699L0.803,7.828C-0.717,6.683 0.064,4.189 1.943,4.189H3.371C4.211,4.189 4.955,3.628 5.215,2.799L5.656,1.39Z" />
+</vector>

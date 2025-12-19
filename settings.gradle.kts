@@ -42,6 +42,7 @@ include(
     ":data:schedule",
     ":data:soptamp",
     ":data:soptlog",
+    ":data:appjamtamp",
 
     ":domain:auth",
     ":domain:fortune",
@@ -52,6 +53,7 @@ include(
     ":domain:schedule",
     ":domain:soptamp",
     ":domain:soptlog",
+    ":domain:appjamtamp",
 
     ":feature:auth",
     ":feature:fortune",
@@ -62,5 +64,6 @@ include(
     ":feature:schedule",
     ":feature:soptamp",
     ":feature:soptlog",
-    ":feature:main"
+    ":feature:main",
+    ":feature:appjamtamp"
 )
