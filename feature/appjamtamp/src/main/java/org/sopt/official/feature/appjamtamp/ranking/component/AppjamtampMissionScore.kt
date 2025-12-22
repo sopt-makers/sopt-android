@@ -106,7 +106,7 @@ internal fun TopRankingTeamMission(
                     url = "",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
-                        .size(20.dp)
+                        .size(size = 20.dp)
                         .clip(shape = CircleShape)
                 )
             }
