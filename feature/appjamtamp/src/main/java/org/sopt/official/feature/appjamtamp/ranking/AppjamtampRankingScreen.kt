@@ -55,7 +55,7 @@ internal fun AppjamtampRankingScreen(
                 onBackButtonClick = {}, // TODO - 뒤로가기
                 modifier = Modifier
                     .padding(vertical = 12.dp)
-                    .padding(start = 20.dp)
+                    .padding(start = 16.dp)
             )
         }
     ) { paddingValues ->
