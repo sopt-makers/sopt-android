@@ -23,10 +23,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import org.sopt.official.designsystem.GrayAlpha100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
@@ -92,23 +94,29 @@ internal fun TopRankingTeamMission(
         Row(
             modifier = Modifier.fillMaxWidth()
         ) {
-            if (true) { // TODO - 프로필 이미지 존재 여부
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_empty_profile),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = CircleShape)
-                )
-            } else {
-                UrlImage(
-                    url = "",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(size = 20.dp)
-                        .clip(shape = CircleShape)
-                )
+            Box(
+                modifier = Modifier
+                    .size(size = 20.dp)
+                    .clip(CircleShape)
+                    .background(color = SoptTheme.colors.onSurface700),
+                contentAlignment = Alignment.Center
+            ) {
+                if (false) { // TODO - 프로필 이미지 존재 여부
+                    AsyncImage(
+                        model = "",
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        error = painterResource(id = R.drawable.ic_user_profile)
+                    )
+                } else {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_user_profile),
+                        contentDescription = null,
+                        tint = SoptTheme.colors.onSurface500,
+                        modifier = Modifier
+                            .padding(all = 4.dp)
+                    )
+                }
             }
 
             Text(
