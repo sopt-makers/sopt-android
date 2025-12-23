@@ -21,12 +21,13 @@ import org.sopt.official.feature.appjamtamp.R
 internal fun BackButtonHeader(
     title: String,
     onBackButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
     trailingIcon: @Composable RowScope.() -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(2.dp),
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_back_32),
