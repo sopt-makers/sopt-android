@@ -137,52 +137,49 @@ internal fun TodayScoreRaking(
     // TODO - 서버 응답 값
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Column(
         modifier = modifier
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = SoptTheme.colors.onSurface900)
+            .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Start),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.Start),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_rank_1),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-
-                Text(
-                    text = "노바",
-                    color = White,
-                    style = SoptTheme.typography.heading16B,
-                    modifier = Modifier
-                        .padding(vertical = 2.dp)
-                        .padding(start = 5.dp)
-                )
-            }
-
-            Spacer(modifier = Modifier.height(height = 14.dp))
-
-            Text(
-                text = "총 3000점",
-                color = SoptTheme.colors.onSurface300,
-                style = SoptTheme.typography.title14SB,
-                modifier = Modifier.align(Alignment.End)
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_rank_1),
+                contentDescription = null,
+                tint = Color.Unspecified
             )
 
             Text(
-                text = "+1000점",
+                text = "노바",
                 color = White,
-                style = SoptTheme.typography.heading20B,
-                modifier = Modifier.align(Alignment.End)
+                style = SoptTheme.typography.heading16B,
+                modifier = Modifier
+                    .padding(vertical = 2.dp)
+                    .padding(start = 5.dp)
             )
         }
+
+        Spacer(modifier = Modifier.height(height = 14.dp))
+
+        Text(
+            text = "총 3000점",
+            color = SoptTheme.colors.onSurface300,
+            style = SoptTheme.typography.title14SB,
+            modifier = Modifier.align(Alignment.End)
+        )
+
+        Text(
+            text = "+1000점",
+            color = White,
+            style = SoptTheme.typography.heading20B,
+            modifier = Modifier.align(Alignment.End)
+        )
     }
 }
 
