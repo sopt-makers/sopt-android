@@ -66,7 +66,7 @@ internal fun AppjamtampTeamMissionListScreen(
 }
 
 @Composable
-fun DescriptionText(
+private fun DescriptionText(
     description: String,
     modifier: Modifier = Modifier
 ) {
