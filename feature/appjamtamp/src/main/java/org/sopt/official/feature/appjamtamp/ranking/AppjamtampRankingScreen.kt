@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -70,7 +71,8 @@ internal fun AppjamtampRankingScreen(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 14.dp)
+                    .padding(top = 14.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "따끈따끈 합숙미션 구경하기",
@@ -114,7 +116,8 @@ internal fun AppjamtampRankingScreen(
             Spacer(modifier = Modifier.height(height = 40.dp))
 
             Row(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "오늘의 득점 랭킹",

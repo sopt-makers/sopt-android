@@ -92,7 +92,8 @@ internal fun TopRankingTeamMission(
         Spacer(modifier = Modifier.height(height = 4.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Box(
                 modifier = Modifier
@@ -147,7 +148,8 @@ internal fun TodayScoreRaking(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.Start)
+                    .align(Alignment.Start),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_rank_1),
