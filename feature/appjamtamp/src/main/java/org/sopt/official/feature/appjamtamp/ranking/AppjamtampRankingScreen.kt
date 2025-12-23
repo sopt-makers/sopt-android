@@ -36,6 +36,13 @@ import org.sopt.official.feature.appjamtamp.ranking.component.TodayScoreRaking
 import org.sopt.official.feature.appjamtamp.ranking.component.TopRankingTeamMission
 
 @Composable
+internal fun AppjamtampRankingRoute(
+
+) {
+    AppjamtampRankingScreen()
+}
+
+@Composable
 internal fun AppjamtampRankingScreen(
 
 ) {

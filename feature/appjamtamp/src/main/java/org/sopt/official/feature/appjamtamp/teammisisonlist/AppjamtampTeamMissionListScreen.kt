@@ -29,6 +29,11 @@ import org.sopt.official.feature.appjamtamp.missionlist.component.MissionCompone
 import org.sopt.official.feature.appjamtamp.model.Mission
 
 @Composable
+internal fun AppjamtampTeamMissionListRoute() {
+    AppjamtampTeamMissionListScreen()
+}
+
+@Composable
 internal fun AppjamtampTeamMissionListScreen(
     missionList: List<Mission> = emptyList()
 ) {
