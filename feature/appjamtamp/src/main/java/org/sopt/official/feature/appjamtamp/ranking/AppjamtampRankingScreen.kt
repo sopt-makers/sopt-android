@@ -51,7 +51,7 @@ internal fun AppjamtampRankingScreen(
     val density = LocalDensity.current
     val screenWidthPx = LocalWindowInfo.current.containerSize.width
     val screenWidthDp = with(receiver = density) { screenWidthPx.toDp() }
-    val topRankingItemWidth = screenWidthDp * (146f / 375f)
+    val topRankingItemWidth = screenWidthDp * (146f / 360f)
 
     Scaffold(
         modifier = Modifier
