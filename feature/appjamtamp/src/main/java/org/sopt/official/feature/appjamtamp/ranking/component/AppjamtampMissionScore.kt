@@ -32,7 +32,6 @@ import coil.compose.AsyncImage
 import org.sopt.official.designsystem.GrayAlpha100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
