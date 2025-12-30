@@ -148,11 +148,21 @@ internal fun TodayScoreRaking(
                 .align(Alignment.Start),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_rank_1),
-                contentDescription = null,
-                tint = Color.Unspecified
-            )
+            Box(
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_ranking_default),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = "1",
+                    style = SoptTheme.typography.heading16B,
+                    color = SoptTheme.colors.onSurface100,
+                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 9.dp)
+                )
+            }
 
             Text(
                 text = "노바",
