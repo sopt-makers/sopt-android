@@ -136,6 +136,7 @@ dependencies {
     implementation(projects.domain.notification)
     implementation(projects.domain.home)
     implementation(projects.domain.auth)
+    implementation(projects.domain.appjamtamp)
 
     implementation(projects.data.fortune)
     implementation(projects.data.soptamp)
@@ -144,6 +145,7 @@ dependencies {
     implementation(projects.data.notification)
     implementation(projects.data.home)
     implementation(projects.data.auth)
+    implementation(projects.data.appjamtamp)
 
     implementation(projects.feature.soptamp)
     implementation(projects.data.schedule)
@@ -156,6 +158,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.main)
     implementation(projects.feature.schedule)
+    implementation(projects.feature.appjamtamp)
 
     baselineProfile(projects.baselineprofile)
 
