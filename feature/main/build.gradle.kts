@@ -45,4 +45,5 @@ dependencies {
     implementation(projects.feature.soptamp)
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)
+    implementation(projects.feature.appjamtamp)
 }

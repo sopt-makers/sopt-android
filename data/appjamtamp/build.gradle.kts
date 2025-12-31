@@ -8,6 +8,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common)
+    implementation(projects.domain.appjamtamp)
+
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 }
