@@ -47,6 +47,7 @@ internal fun DropDownHeader(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
+            .padding(vertical = 12.dp)
     ) {
         Text(
             text = title,

@@ -23,12 +23,12 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.feature.appjamtamp.component.LevelOfMission
-import org.sopt.official.feature.appjamtamp.model.Mission
+import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
 import org.sopt.official.feature.appjamtamp.model.Stamp
 
 @Composable
 internal fun MissionComponent(
-    mission: Mission,
+    mission: AppjamtampMissionUiModel,
     onClick: () -> Unit = {}
 ) {
     val shape = MissionShape.DEFAULT_WAVE
@@ -84,7 +84,7 @@ private fun TitleOfMission(missionTitle: String) {
 private fun MissionComponentPreview() {
     SoptTheme {
         val previewMission =
-            Mission(
+            AppjamtampMissionUiModel(
                 id = 1,
                 title = "일이삼사오육칠팔구십일일이삼사오육칠팔구십일",
                 level = MissionLevel.of(1),
