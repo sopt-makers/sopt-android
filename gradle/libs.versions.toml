@@ -58,7 +58,7 @@ dotsindicator = "5.1.0"
 deepLinkDispatch = "6.2.3"
 rin = "0.4.0"
 mozilla-component-utils = "146.0"
-balloonCompose = "1.6.13"
+balloonCompose = "1.7.1"
 
 google-services = "4.4.4"
 playServicesAuth = "21.4.0"
