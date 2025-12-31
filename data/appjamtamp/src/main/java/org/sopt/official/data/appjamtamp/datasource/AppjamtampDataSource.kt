@@ -1,13 +1,10 @@
 package org.sopt.official.data.appjamtamp.datasource
 
-import org.sopt.official.data.appjamtamp.service.AppjamtampService
-import javax.inject.Inject
+import org.sopt.official.data.appjamtamp.dto.AppjamtampMissionsResponseDto
 
-class AppjamtampDataSource @Inject constructor(
-    private val appjamtampService: AppjamtampService
-) {
+interface AppjamtampDataSource {
     suspend fun getAppjamtampMissions(
         teamNumber: String,
         isCompleted: Boolean? = null
-    ) = appjamtampService.getAppjamtampMissions(teamNumber, isCompleted)
+    ): AppjamtampMissionsResponseDto
 }

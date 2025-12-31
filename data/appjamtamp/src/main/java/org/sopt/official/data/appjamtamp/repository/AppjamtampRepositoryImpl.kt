@@ -6,7 +6,7 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionEntity
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import javax.inject.Inject
 
-class AppjamtampRepositoryImpl @Inject constructor(
+internal class AppjamtampRepositoryImpl @Inject constructor(
     private val appjamtampDataSource: AppjamtampDataSource
 ) : AppjamtampRepository {
     override suspend fun getAppjamtampMissions(

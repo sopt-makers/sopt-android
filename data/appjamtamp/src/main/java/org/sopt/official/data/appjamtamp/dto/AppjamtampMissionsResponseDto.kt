@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionEntity
 
 @Serializable
-data class AppjamtampMissionsResponse(
+data class AppjamtampMissionsResponseDto(
     @SerialName("teamNumber")
     val teamNumber: String,
     @SerialName("teamName")
