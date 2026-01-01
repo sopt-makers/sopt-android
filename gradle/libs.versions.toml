@@ -148,7 +148,7 @@ junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref
 junit5-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit5-jupiter" }
 junit5-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref = "junit5-jupiter" }
 junit5-android-test-core = { module = "de.mannodermaus.junit5:android-test-core", version = "1.9.0" }
-junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "1.9.0" }
+junit5-android-test-runner = { module = "de.mannodermaus.junit5:android-test-runner", version = "2.0.0" }
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
