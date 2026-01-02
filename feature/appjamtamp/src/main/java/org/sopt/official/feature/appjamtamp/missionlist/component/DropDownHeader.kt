@@ -40,9 +40,9 @@ internal fun DropDownHeader(
     title: String,
     menuTexts: ImmutableList<String>,
     modifier: Modifier = Modifier,
-    onMenuClick: (String) -> Unit = {},
+    onMenuClick: (Boolean?) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onEditMessageButtonClick: () -> Unit = {}
+    onboardingButtonClick: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -57,7 +57,19 @@ internal fun DropDownHeader(
 
         DropDownMenuButton(
             menuTexts = menuTexts,
-            onMenuClick = onMenuClick
+            onMenuClick = { menu ->
+                when (menu) {
+                    "완료 미션" -> {
+                        onMenuClick(true)
+                    }
+                    "미완료 미션" -> {
+                        onMenuClick(false)
+                    }
+                    "앱잼 미션" -> {
+                        onMenuClick(null)
+                    }
+                }
+            }
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -75,12 +87,12 @@ internal fun DropDownHeader(
             )
 
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_edit_message_24),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_onborading),
                 contentDescription = null,
                 tint = SoptTheme.colors.onSurface10,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = onEditMessageButtonClick)
+                    .clickable(onClick = onboardingButtonClick)
             )
         }
     }
@@ -149,7 +161,7 @@ private fun DropDownHeaderPreview() {
     SoptTheme {
         DropDownHeader(
             title = "앱잼 미션",
-            menuTexts = persistentListOf("전체 미션", "완료 미션", "미완료 미션", "앱잼 미션")
+            menuTexts = persistentListOf("앱잼 미션", "완료 미션", "미완료 미션")
         )
     }
 }

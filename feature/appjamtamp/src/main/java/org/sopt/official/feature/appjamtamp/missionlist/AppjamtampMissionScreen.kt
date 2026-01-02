@@ -38,6 +38,7 @@ import org.sopt.official.webview.view.WebViewActivity
 @Composable
 internal fun AppjamtampMissionRoute(
     paddingValues: PaddingValues,
+    navigateToOnboarding: () -> Unit,
     viewModel: AppjamtampMissionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -49,7 +50,7 @@ internal fun AppjamtampMissionRoute(
         viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is AppjamtampSideEffect.NavigateToWebView -> {
+                    AppjamtampSideEffect.NavigateToWebView -> {
                         Intent(context, WebViewActivity::class.java).apply {
                             putExtra(
                                 WebViewActivity.INTENT_URL,
@@ -58,6 +59,10 @@ internal fun AppjamtampMissionRoute(
                             context.startActivity(this)
                         }
                     }
+
+                    AppjamtampSideEffect.NavigateToOnboarding -> {
+                        navigateToOnboarding()
+                    }
                 }
             }
     }
@@ -65,7 +70,9 @@ internal fun AppjamtampMissionRoute(
     AppjamtampMissionScreen(
         paddingValues = paddingValues,
         state = state,
-        onReportButtonClick = viewModel::reportButtonClick
+        onReportButtonClick = viewModel::reportButtonClick,
+        onboardingButtonClick = viewModel::onboardingButtonClick,
+        onMenuClick = viewModel::fetchAppjamMissions,
     )
 }
 
@@ -73,9 +80,9 @@ internal fun AppjamtampMissionRoute(
 private fun AppjamtampMissionScreen(
     paddingValues: PaddingValues,
     state: AppjamtampMissionState,
-    onMenuClick: (String) -> Unit = {},
+    onMenuClick: (Boolean?) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onEditMessageButtonClick: () -> Unit = {}
+    onboardingButtonClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = Modifier
@@ -86,14 +93,10 @@ private fun AppjamtampMissionScreen(
                 title = "앱잼 미션",
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                menuTexts = persistentListOf("완료 미션", "미완료 미션", "앱잼 미션"),
-                onMenuClick = {
-
-                },
+                menuTexts = persistentListOf("앱잼 미션", "완료 미션", "미완료 미션"),
+                onMenuClick = onMenuClick,
                 onReportButtonClick = onReportButtonClick,
-                onEditMessageButtonClick = {
-
-                }
+                onboardingButtonClick = onboardingButtonClick
             )
         },
         floatingActionButton = {
