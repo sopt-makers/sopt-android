@@ -15,6 +15,7 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.appjamtamp.missionlist.model.toUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampMissionState
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampSideEffect
+import org.sopt.official.feature.appjamtamp.model.MissionFilter
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class AppjamtampMissionViewModel @Inject constructor(
         fetchAppjamMissions()
     }
 
-    fun fetchAppjamMissions(isCompleted : Boolean? = null) {
+    fun fetchAppjamMissions(isCompleted: Boolean? = null) {
         viewModelScope.launch {
             appjamtampRepository.getAppjamtampMissions(
                 // Todo : 앱잼정보확인 서버에서 주는 값으로 변경해야함 - appjaminfo
@@ -48,6 +49,20 @@ class AppjamtampMissionViewModel @Inject constructor(
                 }
             }.onFailure(Timber::e)
         }
+    }
+
+    fun updateMissionFilter(menuText: String) {
+        val selectedFilter = MissionFilter.findFilterByText(text = menuText)
+
+        val isCompleted = selectedFilter.isCompleted
+
+        _state.update {
+            it.copy(
+                currentMissionFilter = selectedFilter
+            )
+        }
+
+        fetchAppjamMissions(isCompleted)
     }
 
     private fun getReportUrl() {

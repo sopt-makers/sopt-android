@@ -22,7 +22,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
@@ -72,7 +71,7 @@ internal fun AppjamtampMissionRoute(
         state = state,
         onReportButtonClick = viewModel::reportButtonClick,
         onboardingButtonClick = viewModel::onboardingButtonClick,
-        onMenuClick = viewModel::fetchAppjamMissions,
+        onMenuClick = viewModel::updateMissionFilter,
     )
 }
 
@@ -80,7 +79,7 @@ internal fun AppjamtampMissionRoute(
 private fun AppjamtampMissionScreen(
     paddingValues: PaddingValues,
     state: AppjamtampMissionState,
-    onMenuClick: (Boolean?) -> Unit = {},
+    onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
     onboardingButtonClick: () -> Unit = {}
 ) {
@@ -90,10 +89,9 @@ private fun AppjamtampMissionScreen(
         containerColor = SoptTheme.colors.onSurface950,
         topBar = {
             DropDownHeader(
-                title = "앱잼 미션",
+                title = state.currentMissionFilter.text,
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                menuTexts = persistentListOf("앱잼 미션", "완료 미션", "미완료 미션"),
                 onMenuClick = onMenuClick,
                 onReportButtonClick = onReportButtonClick,
                 onboardingButtonClick = onboardingButtonClick
