@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Gray10
@@ -27,7 +28,7 @@ fun AppjamtampDescription(
                 color = SoptTheme.colors.onSurface800,
                 shape = RoundedCornerShape(9.dp),
             )
-            .padding(horizontal = 18.dp, vertical = 14.dp),
+            .padding(horizontal = 15.dp, vertical = 11.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -36,19 +37,13 @@ fun AppjamtampDescription(
             color = Gray10,
         )
 
-        Spacer(modifier = Modifier.height(3.dp))
-
-        // Todo : 서버에서 주는 값으로 변경가능성있음 체크하기
-        Text(
-            text = "내가 앱잼 미션을 인증하면",
-            style = SoptTheme.typography.body13M,
-            color = Gray200
-        )
+        Spacer(modifier = Modifier.height(1.dp))
 
         Text(
-            text = "우리 앱잼팀의 오늘 쌓은 점수와 총 점수에 더해져요!",
+            text = "내가 앱잼 미션을 인증하면\n우리 앱잼팀의 오늘 쌓은 점수와 총 점수에 더해져요!",
             style = SoptTheme.typography.body13M,
-            color = Gray200
+            color = Gray200,
+            textAlign = TextAlign.Center
         )
     }
 }

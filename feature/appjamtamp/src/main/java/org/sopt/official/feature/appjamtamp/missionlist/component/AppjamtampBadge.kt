@@ -24,7 +24,7 @@ internal fun AppjamtampBadge(
         modifier = modifier
             .clip(RoundedCornerShape(12.dp))
             .background(color = Orange400)
-            .padding(horizontal = 7.dp, vertical = 2.dp),
+            .padding(horizontal = 5.dp, vertical = 2.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
