@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.feature.appjamtamp.component.MissionsGridComponent
@@ -32,12 +33,12 @@ import org.sopt.official.feature.appjamtamp.missionlist.component.DropDownHeader
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampMissionState
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampSideEffect
+import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun AppjamtampMissionRoute(
     paddingValues: PaddingValues,
-    navigateToOnboarding: () -> Unit,
     viewModel: AppjamtampMissionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -59,8 +60,13 @@ internal fun AppjamtampMissionRoute(
                         }
                     }
 
-                    AppjamtampSideEffect.NavigateToOnboarding -> {
-                        navigateToOnboarding()
+                    AppjamtampSideEffect.NavigateToEdit -> {
+                        val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
+                            context = context,
+                            userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                            deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
+                        )
+                        context.startActivity(intent)
                     }
                 }
             }
@@ -70,7 +76,7 @@ internal fun AppjamtampMissionRoute(
         paddingValues = paddingValues,
         state = state,
         onReportButtonClick = viewModel::reportButtonClick,
-        onboardingButtonClick = viewModel::onboardingButtonClick,
+        onEditMessageButtonClick = viewModel::onEditMessageButtonClick,
         onMenuClick = viewModel::updateMissionFilter,
     )
 }
@@ -81,7 +87,7 @@ private fun AppjamtampMissionScreen(
     state: AppjamtampMissionState,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onboardingButtonClick: () -> Unit = {}
+    onEditMessageButtonClick: () -> Unit = {}
 ) {
     Scaffold(
         modifier = Modifier
@@ -94,7 +100,7 @@ private fun AppjamtampMissionScreen(
                     .padding(horizontal = 20.dp),
                 onMenuClick = onMenuClick,
                 onReportButtonClick = onReportButtonClick,
-                onboardingButtonClick = onboardingButtonClick
+                onEditMessageButtonClick = onEditMessageButtonClick
             )
         },
         floatingActionButton = {

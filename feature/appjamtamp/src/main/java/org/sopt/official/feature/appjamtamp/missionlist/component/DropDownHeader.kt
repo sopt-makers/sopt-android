@@ -41,7 +41,7 @@ internal fun DropDownHeader(
     modifier: Modifier = Modifier,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onboardingButtonClick: () -> Unit = {}
+    onEditMessageButtonClick: () -> Unit = {}
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -75,12 +75,12 @@ internal fun DropDownHeader(
             )
 
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_onborading),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_missionlist_edit_message),
                 contentDescription = null,
                 tint = SoptTheme.colors.onSurface10,
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable(onClick = onboardingButtonClick)
+                    .clickable(onClick = onEditMessageButtonClick)
             )
         }
     }
