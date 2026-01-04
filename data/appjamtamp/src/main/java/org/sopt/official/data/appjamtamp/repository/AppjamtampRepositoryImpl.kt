@@ -10,7 +10,7 @@ internal class AppjamtampRepositoryImpl @Inject constructor(
     private val appjamtampDataSource: AppjamtampDataSource
 ) : AppjamtampRepository {
     override suspend fun getAppjamtampMissions(
-        teamNumber: String,
+        teamNumber: String?,
         isCompleted: Boolean?
     ): Result<List<AppjamtampMissionEntity>> = suspendRunCatching {
         appjamtampDataSource.getAppjamtampMissions(teamNumber, isCompleted).missions.map { it.toEntity() }

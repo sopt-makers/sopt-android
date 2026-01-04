@@ -9,7 +9,7 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
     private val appjamtampService: AppjamtampService
 ) : AppjamtampDataSource {
     override suspend fun getAppjamtampMissions(
-        teamNumber: String,
+        teamNumber: String?,
         isCompleted: Boolean?
     ): AppjamtampMissionsResponseDto =
         appjamtampService.getAppjamtampMissions(teamNumber, isCompleted)

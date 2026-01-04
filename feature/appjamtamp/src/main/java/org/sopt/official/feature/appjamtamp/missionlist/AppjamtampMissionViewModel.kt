@@ -38,8 +38,6 @@ class AppjamtampMissionViewModel @Inject constructor(
     fun fetchAppjamMissions(isCompleted: Boolean? = null) {
         viewModelScope.launch {
             appjamtampRepository.getAppjamtampMissions(
-                // Todo : 앱잼정보확인 서버에서 주는 값으로 변경해야함 - appjaminfo
-                teamNumber = "",
                 isCompleted = isCompleted
             ).onSuccess { missions ->
                 _state.update { currentState ->
@@ -85,9 +83,9 @@ class AppjamtampMissionViewModel @Inject constructor(
         }
     }
 
-    fun onboardingButtonClick() {
+    fun onEditMessageButtonClick() {
         viewModelScope.launch {
-            _sideEffect.emit(AppjamtampSideEffect.NavigateToWebView)
+            _sideEffect.emit(AppjamtampSideEffect.NavigateToEdit)
         }
     }
 }

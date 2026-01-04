@@ -13,5 +13,5 @@ data class AppjamtampMissionState(
 
 sealed interface AppjamtampSideEffect {
     data object NavigateToWebView : AppjamtampSideEffect
-    data object NavigateToOnboarding : AppjamtampSideEffect
+    data object NavigateToEdit : AppjamtampSideEffect
 }
