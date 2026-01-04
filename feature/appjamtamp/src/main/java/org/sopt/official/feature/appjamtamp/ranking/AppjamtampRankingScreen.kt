@@ -19,6 +19,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,23 +30,50 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.ranking.component.TodayScoreRaking
-import org.sopt.official.feature.appjamtamp.ranking.component.TopRankingTeamMission
+import org.sopt.official.feature.appjamtamp.ranking.component.Top3RecentRankingMission
+import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
+import org.sopt.official.feature.appjamtamp.ranking.model.Top10MissionScoreListUiModel
+import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingListUiModel
+import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
+import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 
 @Composable
-internal fun AppjamtampRankingRoute(
-
+fun AppjamtampRankingRoute(
+    viewModel:AppjamtampRankingViewModel= hiltViewModel()
 ) {
-    AppjamtampRankingScreen()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.getRankingData()
+    }
+
+    when(state) {
+        is AppjamtampRankingState.Loading -> { LoadingIndicator() }
+        is AppjamtampRankingState.Success -> {
+            val top3RecentRankingListUiModel = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel
+            val top10MissionScoreListUiModel = (state as AppjamtampRankingState.Success).top10MissionScoreListUiModel
+            AppjamtampRankingScreen(
+                top3RecentRankingListUiModel = top3RecentRankingListUiModel,
+                top10MissionScoreListUiModel = top10MissionScoreListUiModel
+            )
+        }
+        is AppjamtampRankingState.Failure -> {}
+    }
 }
 
 @Composable
 internal fun AppjamtampRankingScreen(
-
+    top3RecentRankingListUiModel: Top3RecentRankingListUiModel,
+    top10MissionScoreListUiModel: Top10MissionScoreListUiModel
 ) {
     val scrollState = rememberScrollState()
 
@@ -52,6 +81,9 @@ internal fun AppjamtampRankingScreen(
     val screenWidthPx = LocalWindowInfo.current.containerSize.width
     val screenWidthDp = with(receiver = density) { screenWidthPx.toDp() }
     val topRankingItemWidth = screenWidthDp * (146f / 360f)
+
+    val top3RecentRankings = top3RecentRankingListUiModel.top3RecentRankingList.toImmutableList()
+    val top10MissionScores = top10MissionScoreListUiModel.top10MissionScoreList.toImmutableList()
 
     Scaffold(
         modifier = Modifier
@@ -113,8 +145,9 @@ internal fun AppjamtampRankingScreen(
                     .horizontalScroll(state = rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(space = 10.dp)
             ) {
-                repeat(times = 3) {
-                    TopRankingTeamMission(
+                top3RecentRankings.forEach { top3RecentRanking ->
+                    Top3RecentRankingMission(
+                        top3RecentRanking = top3RecentRanking,
                         modifier = Modifier.width(topRankingItemWidth)
                     )
                 }
@@ -152,20 +185,22 @@ internal fun AppjamtampRankingScreen(
 
             Spacer(modifier = Modifier.height(height = 20.dp))
 
-            val rankingList = List(10) { it } // TODO - 10개 표시하기 위한 임시 리스트
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 56.dp),
                 verticalArrangement = Arrangement.spacedBy(space = 10.dp)
             ) {
-                rankingList.chunked(size = 2).forEach { rowItems ->
+                top10MissionScores.chunked(size = 2).forEach { rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(space = 10.dp)
                     ) {
                         rowItems.forEach { item ->
-                            TodayScoreRaking(modifier = Modifier.weight(weight = 1f))
+                            TodayScoreRaking(
+                                top10MissionScore = item,
+                                modifier = Modifier.weight(weight = 1f)
+                            )
                         }
                     }
                 }
@@ -178,6 +213,57 @@ internal fun AppjamtampRankingScreen(
 @Composable
 private fun AppjamtampRankingScreenPreview() {
     SoptTheme {
-        AppjamtampRankingScreen()
+        val mockTop3RecentRankingListUiModel = Top3RecentRankingListUiModel(
+            top3RecentRankingList = listOf(
+                Top3RecentRankingUiModel(
+                    stampId = 1L,
+                    missionId = 101L,
+                    userId = 1L,
+                    imageUrl = "",
+                    createdAt = "2025-12-31T05:03:49",
+                    userName = "솝트",
+                    userProfileImage = null,
+                    teamName = "보핏",
+                    teamNumber = "FIRST"
+                ),
+                Top3RecentRankingUiModel(
+                    stampId = 2L,
+                    missionId = 102L,
+                    userId = 2L,
+                    imageUrl = "",
+                    createdAt = "2025-12-31T04:50:12",
+                    userName = "안드",
+                    userProfileImage = "",
+                    teamName = "노바",
+                    teamNumber = "SECOND"
+                ),
+                Top3RecentRankingUiModel(
+                    stampId = 3L,
+                    missionId = 103L,
+                    userId = 3L,
+                    imageUrl = "",
+                    createdAt = "2025-12-31T03:20:00",
+                    userName = "안드로이드",
+                    userProfileImage = null,
+                    teamName = "하이링구얼",
+                    teamNumber = "THIRD"
+                )
+            )
+        )
+        val mockTop10MissionScoreListUiModel = Top10MissionScoreListUiModel(
+            top10MissionScoreList = listOf(
+                TopMissionScoreUiModel(rank = 1, teamName = "보핏", todayPoints = 1200, totalPoints = 5000),
+                TopMissionScoreUiModel(rank = 2, teamName = "노바", todayPoints = 1100, totalPoints = 4800),
+                TopMissionScoreUiModel(rank = 3, teamName = "비트", todayPoints = 950, totalPoints = 4200),
+                TopMissionScoreUiModel(rank = 4, teamName = "하이링구얼", todayPoints = 800, totalPoints = 3900),
+                TopMissionScoreUiModel(rank = 5, teamName = "납작마켓", todayPoints = 750, totalPoints = 3500),
+                TopMissionScoreUiModel(rank = 6, teamName = "웹", todayPoints = 600, totalPoints = 3100),
+                TopMissionScoreUiModel(rank = 7, teamName = "안드로이드", todayPoints = 550, totalPoints = 2800),
+                TopMissionScoreUiModel(rank = 8, teamName = "iOS", todayPoints = 400, totalPoints = 2500),
+                TopMissionScoreUiModel(rank = 9, teamName = "디자인", todayPoints = 300, totalPoints = 2000),
+                TopMissionScoreUiModel(rank = 10, teamName = "기획", todayPoints = 100, totalPoints = 1500)
+            )
+        )
+        AppjamtampRankingScreen(mockTop3RecentRankingListUiModel, mockTop10MissionScoreListUiModel)
     }
 }
