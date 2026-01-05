@@ -49,7 +49,7 @@ import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiMod
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 
 @Composable
-fun AppjamtampRankingRoute(
+internal fun AppjamtampRankingRoute(
     viewModel:AppjamtampRankingViewModel= hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

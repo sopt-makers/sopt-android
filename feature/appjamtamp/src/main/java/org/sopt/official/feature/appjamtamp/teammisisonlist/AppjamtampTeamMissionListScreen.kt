@@ -31,7 +31,7 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionU
 import org.sopt.official.feature.appjamtamp.teammisisonlist.model.AppjamtampMissionListState
 
 @Composable
-fun AppjamtampTeamMissionListRoute(
+internal fun AppjamtampTeamMissionListRoute(
     viewModel: AppjamtampTeamMissionListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

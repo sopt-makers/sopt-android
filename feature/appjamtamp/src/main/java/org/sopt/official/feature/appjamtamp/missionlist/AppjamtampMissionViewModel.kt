@@ -20,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class AppjamtampMissionViewModel @Inject constructor(
+internal class AppjamtampMissionViewModel @Inject constructor(
     private val appjamtampRepository: AppjamtampRepository,
     private val stampRepository: StampRepository
 ) : ViewModel() {

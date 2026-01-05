@@ -15,7 +15,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class AppjamtampRankingViewModel @Inject constructor(
+internal class AppjamtampRankingViewModel @Inject constructor(
     private val appjamtampRepository: AppjamtampRepository
 ) : ViewModel() {
 
