@@ -91,7 +91,9 @@ internal fun AppjamtampRankingScreen(
         topBar = {
             BackButtonHeader(
                 title = "앱잼팀 랭킹",
-                onBackButtonClick = {}, // TODO - 뒤로가기
+                onBackButtonClick = {
+                    // TODO - 뒤로가기 (앱잼탬프 홈 - AppjamtampMissionScreen)
+                },
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .padding(start = 16.dp)
@@ -195,7 +197,10 @@ internal fun AppjamtampRankingScreen(
                 top10MissionScores.forEach { item ->
                     TodayScoreRaking(
                         top10MissionScore = item,
-                        modifier = Modifier.weight(1f)
+                        modifier = Modifier.weight(1f),
+                        onTeamRankingClick = {
+                            // Todo : 앱잼 팀 미션 화면으로 이동 (teamNumber 전달)
+                        }
                     )
                 }
             }

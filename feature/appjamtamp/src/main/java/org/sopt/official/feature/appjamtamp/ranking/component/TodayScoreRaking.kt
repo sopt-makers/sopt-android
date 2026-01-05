@@ -24,11 +24,13 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
+import org.sopt.official.feature.appjamtamp.util.noRippleClickable
 
 @Composable
 internal fun TodayScoreRaking(
     top10MissionScore: TopMissionScoreUiModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onTeamRankingClick: (teamNumber: String) -> Unit = {}
 ) {
     val rankIconRes = when (top10MissionScore.rank) {
         1 -> R.drawable.ic_rank_1
@@ -43,6 +45,7 @@ internal fun TodayScoreRaking(
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = SoptTheme.colors.onSurface900)
             .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
+            .noRippleClickable { onTeamRankingClick }
     ) {
         Row(
             modifier = Modifier
