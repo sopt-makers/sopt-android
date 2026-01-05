@@ -162,7 +162,7 @@ private fun MissionDetailScreen(
     val scrollState = rememberScrollState()
 
     var isDatePickerVisible by remember { mutableStateOf(false) }
-    var isEditable by remember { mutableStateOf(viewType == DetailViewType.EDIT) }
+    var isEditable by remember(viewType) { mutableStateOf(viewType == DetailViewType.EDIT) }
 
     Column(
         modifier = Modifier

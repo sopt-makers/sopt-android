@@ -43,7 +43,7 @@ internal fun ProfileTag(
         ) {
             if (profileImage.isNotBlank()) {
                 AsyncImage(
-                    model = "",
+                    model = profileImage,
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     error = painterResource(id = R.drawable.ic_user_profile)
