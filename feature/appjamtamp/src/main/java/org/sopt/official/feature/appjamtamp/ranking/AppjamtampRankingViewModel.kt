@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
 import org.sopt.official.feature.appjamtamp.ranking.model.toUiModel
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,19 +26,21 @@ class AppjamtampRankingViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = AppjamtampRankingState.Loading
 
-            val top10Deferred = async { appjamtampRepository.getAppjamtampMissionRanking(size = 12) }
             val top3Deferred = async { appjamtampRepository.getAppjamtampMissionTop3(size = 3) }
+            val top10Deferred = async { appjamtampRepository.getAppjamtampMissionRanking(size = 12) } // size = 현재 기수 전체 앱잼 팀 수
 
-            val top10Result = top10Deferred.await()
             val top3Result = top3Deferred.await()
+            val top10Result = top10Deferred.await()
 
-            if (top10Result.isSuccess && top3Result.isSuccess) {
+            if (top3Result.isSuccess && top10Result.isSuccess) {
                 _state.value = AppjamtampRankingState.Success(
                     top3RecentRankingListUiModel = top3Result.getOrThrow().toUiModel(),
                     top10MissionScoreListUiModel = top10Result.getOrThrow().toUiModel()
                 )
             } else {
-                _state.value = AppjamtampRankingState.Failure
+                val error = top3Result.exceptionOrNull() ?: top10Result.exceptionOrNull() ?: Exception("Unknown error")
+                Timber.tag("AppjamtampRanking").e(error, "Failed to load ranking data")
+                _state.value = AppjamtampRankingState.Failure(error)
             }
         }
     }
