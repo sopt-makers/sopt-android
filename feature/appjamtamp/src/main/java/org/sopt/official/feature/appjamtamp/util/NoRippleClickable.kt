@@ -22,28 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.feature.appjamtamp.util
 
-android {
-    namespace = "org.sopt.official.feature.main"
-}
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 
-dependencies {
-    implementation(projects.core.model)
-    implementation(projects.core.common)
-    implementation(projects.core.analytics)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.navigation)
-    implementation(projects.core.webview)
-
-    implementation(projects.domain.home)
-
-    implementation(projects.feature.poke)
-    implementation(projects.feature.soptamp)
-    implementation(projects.feature.soptlog)
-    implementation(projects.feature.home)
-    implementation(projects.feature.appjamtamp)
-}
+inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier =
+    composed {
+        then(
+            Modifier.clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+            ) {
+                onClick()
+            },
+        )
+    }
