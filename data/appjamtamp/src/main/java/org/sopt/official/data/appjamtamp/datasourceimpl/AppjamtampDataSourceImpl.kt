@@ -15,13 +15,10 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
         isCompleted: Boolean?
     ): AppjamtampMissionsResponseDto =
         appjamtampService.getAppjamtampMissions(teamNumber, isCompleted)
-}
 
-    override suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse {
-        return appjamtampService.getAppjamtampMissionTop3(size = size)
-    }
+    override suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse =
+        appjamtampService.getAppjamtampMissionTop3(size = size)
 
-    override suspend fun getAppjamtampMissionRanking(size: Int): AppjamtampTop10MissionScoreResponse {
-        return appjamtampService.getAppjamtampMissionRanking(size = size)
-    }
+    override suspend fun getAppjamtampMissionRanking(size: Int): AppjamtampTop10MissionScoreResponse =
+        appjamtampService.getAppjamtampMissionRanking(size = size)
 }
