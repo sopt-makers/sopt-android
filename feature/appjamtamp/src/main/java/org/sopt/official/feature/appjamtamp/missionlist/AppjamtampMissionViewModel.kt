@@ -42,7 +42,8 @@ class AppjamtampMissionViewModel @Inject constructor(
             ).onSuccess { missions ->
                 _state.update { currentState ->
                     currentState.copy(
-                        missionList = missions.map { it.toUiModel() }.toImmutableList()
+                        teamName = missions.teamName,
+                        missionList = missions.toUiModel()
                     )
                 }
             }.onFailure(Timber::e)
