@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -185,24 +186,19 @@ internal fun AppjamtampRankingScreen(
 
             Spacer(modifier = Modifier.height(height = 20.dp))
 
-            Column(
+            FlowRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 56.dp),
-                verticalArrangement = Arrangement.spacedBy(space = 10.dp)
+                horizontalArrangement = Arrangement.spacedBy(space = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(space = 10.dp),
+                maxItemsInEachRow = 2
             ) {
-                top10MissionScores.chunked(size = 2).forEach { rowItems ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(space = 10.dp)
-                    ) {
-                        rowItems.forEach { item ->
-                            TodayScoreRaking(
-                                top10MissionScore = item,
-                                modifier = Modifier.weight(weight = 1f)
-                            )
-                        }
-                    }
+                top10MissionScores.forEach { item ->
+                    TodayScoreRaking(
+                        top10MissionScore = item,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
