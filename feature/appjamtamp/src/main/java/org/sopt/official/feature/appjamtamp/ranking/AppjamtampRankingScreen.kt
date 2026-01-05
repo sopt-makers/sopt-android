@@ -33,7 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
@@ -60,11 +61,11 @@ fun AppjamtampRankingRoute(
     when(state) {
         is AppjamtampRankingState.Loading -> { LoadingIndicator() }
         is AppjamtampRankingState.Success -> {
-            val top3RecentRankingListUiModel = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel
-            val top10MissionScoreListUiModel = (state as AppjamtampRankingState.Success).top10MissionScoreListUiModel
+            val top3RecentRankingList = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel.top3RecentRankingList
+            val top10MissionScoreList = (state as AppjamtampRankingState.Success).top10MissionScoreListUiModel.top10MissionScoreList
             AppjamtampRankingScreen(
-                top3RecentRankingListUiModel = top3RecentRankingListUiModel,
-                top10MissionScoreListUiModel = top10MissionScoreListUiModel
+                top3RecentRankings = top3RecentRankingList,
+                top10MissionScores = top10MissionScoreList
             )
         }
         is AppjamtampRankingState.Failure -> {}
@@ -73,8 +74,8 @@ fun AppjamtampRankingRoute(
 
 @Composable
 internal fun AppjamtampRankingScreen(
-    top3RecentRankingListUiModel: Top3RecentRankingListUiModel,
-    top10MissionScoreListUiModel: Top10MissionScoreListUiModel
+    top3RecentRankings: ImmutableList<Top3RecentRankingUiModel>,
+    top10MissionScores: ImmutableList<TopMissionScoreUiModel>
 ) {
     val scrollState = rememberScrollState()
 
@@ -82,9 +83,6 @@ internal fun AppjamtampRankingScreen(
     val screenWidthPx = LocalWindowInfo.current.containerSize.width
     val screenWidthDp = with(receiver = density) { screenWidthPx.toDp() }
     val topRankingItemWidth = screenWidthDp * (146f / 360f)
-
-    val top3RecentRankings = top3RecentRankingListUiModel.top3RecentRankingList.toImmutableList()
-    val top10MissionScores = top10MissionScoreListUiModel.top10MissionScoreList.toImmutableList()
 
     Scaffold(
         modifier = Modifier
@@ -210,7 +208,7 @@ internal fun AppjamtampRankingScreen(
 private fun AppjamtampRankingScreenPreview() {
     SoptTheme {
         val mockTop3RecentRankingListUiModel = Top3RecentRankingListUiModel(
-            top3RecentRankingList = listOf(
+            top3RecentRankingList = persistentListOf(
                 Top3RecentRankingUiModel(
                     stampId = 1L,
                     missionId = 101L,
@@ -246,8 +244,9 @@ private fun AppjamtampRankingScreenPreview() {
                 )
             )
         )
+
         val mockTop10MissionScoreListUiModel = Top10MissionScoreListUiModel(
-            top10MissionScoreList = listOf(
+            top10MissionScoreList = persistentListOf(
                 TopMissionScoreUiModel(rank = 1, teamName = "보핏", todayPoints = 1200, totalPoints = 5000),
                 TopMissionScoreUiModel(rank = 2, teamName = "노바", todayPoints = 1100, totalPoints = 4800),
                 TopMissionScoreUiModel(rank = 3, teamName = "비트", todayPoints = 950, totalPoints = 4200),
@@ -260,6 +259,10 @@ private fun AppjamtampRankingScreenPreview() {
                 TopMissionScoreUiModel(rank = 10, teamName = "기획", todayPoints = 100, totalPoints = 1500)
             )
         )
-        AppjamtampRankingScreen(mockTop3RecentRankingListUiModel, mockTop10MissionScoreListUiModel)
+
+        AppjamtampRankingScreen(
+            top3RecentRankings = mockTop3RecentRankingListUiModel.top3RecentRankingList,
+            top10MissionScores = mockTop10MissionScoreListUiModel.top10MissionScoreList
+        )
     }
 }

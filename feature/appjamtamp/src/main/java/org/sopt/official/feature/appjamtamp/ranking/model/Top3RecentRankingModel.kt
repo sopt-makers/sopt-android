@@ -1,14 +1,16 @@
 package org.sopt.official.feature.appjamtamp.ranking.model
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 
 data class Top3RecentRankingListUiModel(
-    val top3RecentRankingList: List<Top3RecentRankingUiModel>
+    val top3RecentRankingList: ImmutableList<Top3RecentRankingUiModel>
 )
 
 internal fun List<AppjamtampRecentMission>.toUiModel(): Top3RecentRankingListUiModel =
     Top3RecentRankingListUiModel(
-        top3RecentRankingList = this.map { it.toUiModel() }
+        top3RecentRankingList = this.map { it.toUiModel() }.toImmutableList()
     )
 
 data class Top3RecentRankingUiModel(
