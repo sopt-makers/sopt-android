@@ -144,10 +144,11 @@ dependencies {
     implementation(projects.data.notification)
     implementation(projects.data.home)
     implementation(projects.data.auth)
-
-    implementation(projects.feature.soptamp)
+    implementation(projects.data.appjamtamp)
     implementation(projects.data.schedule)
     implementation(projects.data.soptlog)
+
+    implementation(projects.feature.soptamp)
     implementation(projects.feature.auth)
     implementation(projects.feature.mypage)
     implementation(projects.feature.poke)

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023-2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp"
+    android:height="21dp"
+    android:viewportWidth="18"
+    android:viewportHeight="21">
+    <path
+        android:fillColor="#151617"
+        android:fillType="evenOdd"
+        android:pathData="M5.564,1.333C5.564,0.873 5.948,0.5 6.423,0.5H11.577C12.052,0.5 12.436,0.873 12.436,1.333V2.999H17.141C17.615,2.999 18,3.372 18,3.832C18,4.293 17.615,4.666 17.141,4.666H0.859C0.385,4.666 0,4.293 0,3.832C0,3.372 0.385,2.999 0.859,2.999H5.564V1.333ZM7.282,2.999H10.718V1.895H7.282V2.999Z" />
+    <path
+        android:fillColor="#151617"
+        android:pathData="M7.282,9.337C7.756,9.337 8.141,9.71 8.141,10.17V16.835C8.141,17.295 7.756,17.668 7.282,17.668C6.807,17.668 6.423,17.295 6.423,16.835V10.17C6.423,9.71 6.807,9.337 7.282,9.337Z" />
+    <path
+        android:fillColor="#151617"
+        android:pathData="M11.577,10.17C11.577,9.71 11.193,9.337 10.718,9.337C10.244,9.337 9.859,9.71 9.859,10.17V16.835C9.859,17.295 10.244,17.668 10.718,17.668C11.193,17.668 11.577,17.295 11.577,16.835V10.17Z" />
+    <path
+        android:fillColor="#151617"
+        android:fillType="evenOdd"
+        android:pathData="M1.478,6.292C1.641,6.109 1.878,6.004 2.127,6.004H15.873C16.122,6.004 16.359,6.109 16.522,6.292C16.685,6.474 16.758,6.716 16.723,6.955L14.97,18.854C14.789,20.086 13.701,21 12.419,21H5.581C4.299,21 3.211,20.086 3.03,18.854L1.277,6.955C1.242,6.716 1.315,6.474 1.478,6.292ZM3.118,7.671L4.731,18.619C4.791,19.029 5.154,19.334 5.581,19.334H12.419C12.846,19.334 13.209,19.029 13.269,18.619L14.882,7.671H3.118Z" />
+</vector>
