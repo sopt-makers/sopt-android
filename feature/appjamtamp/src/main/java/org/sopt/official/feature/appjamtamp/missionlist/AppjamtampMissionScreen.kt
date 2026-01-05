@@ -22,7 +22,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
@@ -30,9 +30,11 @@ import org.sopt.official.feature.appjamtamp.component.MissionsGridComponent
 import org.sopt.official.feature.appjamtamp.missionlist.component.AppjamtampDescription
 import org.sopt.official.feature.appjamtamp.missionlist.component.AppjamtampFloatingButton
 import org.sopt.official.feature.appjamtamp.missionlist.component.DropDownHeader
+import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionListUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampMissionState
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampSideEffect
+import org.sopt.official.feature.appjamtamp.model.MissionFilter
 import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 
@@ -122,9 +124,8 @@ private fun AppjamtampMissionScreen(
         ) {
             Spacer(modifier = Modifier.height(4.dp))
 
-            // Todo : 서버에서 주는 팀 네임(state)로 변경하기
             AppjamtampDescription(
-                teamName = "도키",
+                teamName = state.teamName,
                 modifier = Modifier
                     .fillMaxWidth()
             )
@@ -132,7 +133,7 @@ private fun AppjamtampMissionScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             MissionsGridComponent(
-                missionList = state.missionList,
+                missionList = state.missionList.missionList,
                 onMissionItemClick = { item ->
                     // Todo : 미션 상세화면으로 이동
                 }
@@ -141,54 +142,62 @@ private fun AppjamtampMissionScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun AppjamtampMissionScreenPreview() {
     SoptTheme {
-        val missionList = AppjamtampMissionState(
-            missionList =
-                listOf(
-                    AppjamtampMissionUiModel(
-                        id = 1,
-                        title = "세미나 끝나고 뒷풀이 1시까지 달리기",
-                        level = MissionLevel.of(3),
-                        isCompleted = true,
-                    ),
-                    AppjamtampMissionUiModel(
-                        id = 2,
-                        title = "세미나 끝나고 뒷풀이 2시까지 달리기",
-                        level = MissionLevel.of(1),
-                        isCompleted = true,
-                    ),
-                    AppjamtampMissionUiModel(
-                        id = 3,
-                        title = "세미나 끝나고 뒷풀이 3시까지 달리기",
-                        level = MissionLevel.of(2),
-                        isCompleted = true,
-                    ),
-                    AppjamtampMissionUiModel(
-                        id = 4,
-                        title = "세미나 끝나고 뒷풀이 4시까지 달리기",
-                        level = MissionLevel.of(10),
-                        isCompleted = true,
-                    ),
-                    AppjamtampMissionUiModel(
-                        id = 5,
-                        title = "세미나 끝나고 뒷풀이 5시까지 달리기",
-                        level = MissionLevel.of(1),
-                        isCompleted = false,
-                    ),
-                    AppjamtampMissionUiModel(
-                        id = 6,
-                        title = "세미나 끝나고 뒷풀이 6시까지 달리기",
-                        level = MissionLevel.of(2),
-                        isCompleted = false,
-                    ),
-                ).toImmutableList(),
+        val mockMissions = persistentListOf(
+            AppjamtampMissionUiModel(
+                id = 1,
+                title = "세미나 끝나고 뒷풀이 1시까지 달리기",
+                level = MissionLevel.of(3),
+                isCompleted = true,
+            ),
+            AppjamtampMissionUiModel(
+                id = 2,
+                title = "세미나 끝나고 뒷풀이 2시까지 달리기",
+                level = MissionLevel.of(1),
+                isCompleted = true,
+            ),
+            AppjamtampMissionUiModel(
+                id = 3,
+                title = "세미나 끝나고 뒷풀이 3시까지 달리기",
+                level = MissionLevel.of(2),
+                isCompleted = true,
+            ),
+            AppjamtampMissionUiModel(
+                id = 4,
+                title = "세미나 끝나고 뒷풀이 4시까지 달리기",
+                level = MissionLevel.of(10),
+                isCompleted = true,
+            ),
+            AppjamtampMissionUiModel(
+                id = 5,
+                title = "세미나 끝나고 뒷풀이 5시까지 달리기",
+                level = MissionLevel.of(1),
+                isCompleted = false,
+            ),
+            AppjamtampMissionUiModel(
+                id = 6,
+                title = "세미나 끝나고 뒷풀이 6시까지 달리기",
+                level = MissionLevel.of(2),
+                isCompleted = false,
+            ),
         )
+
+        val mockState = AppjamtampMissionState(
+            teamName = "도키",
+            missionList = AppjamtampMissionListUiModel(
+                teamNumber = "1",
+                teamName = "도키",
+                missionList = mockMissions
+            ),
+            currentMissionFilter = MissionFilter.ALL
+        )
+
         AppjamtampMissionScreen(
             paddingValues = PaddingValues(),
-            state = missionList
+            state = mockState
         )
     }
 }

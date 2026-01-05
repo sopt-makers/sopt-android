@@ -13,25 +13,51 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.toImmutableList
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.component.MissionsGridComponent
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
+import org.sopt.official.feature.appjamtamp.teammisisonlist.model.AppjamtampMissionListState
 
 @Composable
-internal fun AppjamtampTeamMissionListRoute() {
-    AppjamtampTeamMissionListScreen()
+internal fun AppjamtampTeamMissionListRoute(
+    viewModel: AppjamtampTeamMissionListViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.fetchAppjamMissions(
+            teamNumber = "FIRST" // TODO - 이전 화면에서 네비게이션으로 teamNumber 전달 받아 넣기
+        )
+    }
+
+    when(state) {
+        is AppjamtampMissionListState.Loading -> {}
+        is AppjamtampMissionListState.Success -> {
+            AppjamtampTeamMissionListScreen(
+                teamName = (state as AppjamtampMissionListState.Success).teamName,
+                teamMissionList = (state as AppjamtampMissionListState.Success).teamMissionList.missionList
+            )
+        }
+        is AppjamtampMissionListState.Failure -> {}
+    }
 }
 
 @Composable
 internal fun AppjamtampTeamMissionListScreen(
-    missionList: List<AppjamtampMissionUiModel> = emptyList()
+    teamName: String,
+    teamMissionList: ImmutableList<AppjamtampMissionUiModel>
 ) {
     Scaffold(
         modifier = Modifier
@@ -39,8 +65,10 @@ internal fun AppjamtampTeamMissionListScreen(
             .navigationBarsPadding(),
         topBar = {
             BackButtonHeader(
-                title = "노바",
-                onBackButtonClick = {},
+                title = teamName,
+                onBackButtonClick = {
+                    // Todo : 앱잼 팀 랭킹 화면으로 이동 (뒤로가기)
+                },
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .padding(start = 16.dp)
@@ -55,14 +83,17 @@ internal fun AppjamtampTeamMissionListScreen(
                 .padding(horizontal = 16.dp)
         ) {
             DescriptionText(
-                description = "노바팀이 다같이 인증한 미션", // TODO - "${}팀이 다같이 인증한 미션"
+                description = "${teamName}팀이 다같이 인증한 미션",
                 modifier = Modifier.padding(top = 12.dp)
             )
 
             Spacer(modifier = Modifier.size(size = 16.dp))
 
             MissionsGridComponent(
-                missionList = missionList.toImmutableList()
+                missionList = teamMissionList,
+                onMissionItemClick = { item ->
+                    // Todo : 미션 상세화면으로 이동
+                }
             )
         }
     }
@@ -91,7 +122,7 @@ private fun DescriptionText(
 @Preview
 @Composable
 private fun AppjamtampTeamMissionListScreenPreview() {
-    val mockMissionList = listOf(
+    val mockMissionList = persistentListOf(
         AppjamtampMissionUiModel(
             id = 1,
             title = "세미나 끝나고 뒷풀이 1시까지 달리기",
@@ -131,6 +162,6 @@ private fun AppjamtampTeamMissionListScreenPreview() {
     )
 
     SoptTheme {
-        AppjamtampTeamMissionListScreen(missionList = mockMissionList)
+        AppjamtampTeamMissionListScreen(teamName = "하이링구얼", teamMissionList = mockMissionList)
     }
 }

@@ -1,13 +1,12 @@
 package org.sopt.official.feature.appjamtamp.missionlist.state
 
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
+import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionListUiModel
 import org.sopt.official.feature.appjamtamp.model.MissionFilter
 
 data class AppjamtampMissionState(
     val reportUrl: String = "",
-    val missionList: ImmutableList<AppjamtampMissionUiModel> = persistentListOf(),
+    val teamName: String = "",
+    val missionList: AppjamtampMissionListUiModel = AppjamtampMissionListUiModel(),
     val currentMissionFilter: MissionFilter = MissionFilter.ALL
 )
 
