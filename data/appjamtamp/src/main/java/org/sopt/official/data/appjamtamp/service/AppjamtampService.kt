@@ -13,13 +13,17 @@ interface AppjamtampService {
         @Query("isCompleted") isCompleted : Boolean? = null
     ) : AppjamtampMissionsResponseDto
 
-    // 앱잼팀 오늘의 득점 랭킹 TOP10 조회하기
+    /**
+     * 앱잼에 참여하는 전체 팀의 득점 랭킹 조회
+     * - 서버 명세에서 API명: 앱잼팀 득점 랭킹 TOP10 조회
+     * - 실제로는 모든 팀의 순위를 조회 해야함. 전체 팀 수(예: 12팀)를 [size]에 전달해야 함
+     * * @param size 조회할 팀의 수 (기본값 10)
+     */
     @GET("appjamrank/today")
     suspend fun getAppjamtampMissionRanking(
         @Query("size") size: Int? = 10
     ): AppjamtampTop10MissionScoreResponse
 
-    // 앱잼팀 랭킹 최근 인증한 미션 TOP3 조회하기
     @GET("appjamrank/recent")
     suspend fun getAppjamtampMissionTop3(
         @Query("size") size: Int? = 3
