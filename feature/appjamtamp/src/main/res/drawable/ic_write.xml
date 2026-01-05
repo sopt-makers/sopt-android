@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    MIT License
+
+    Copyright (c) 2023-2025 SOPT Makers
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="21dp"
+    android:viewportWidth="20"
+    android:viewportHeight="21">
+    <path
+        android:fillColor="#151617"
+        android:fillType="evenOdd"
+        android:pathData="M11.796,0.63C12.492,-0.081 13.613,-0.088 14.3,0.614L16.788,3.157C17.475,3.859 17.468,5.005 16.772,5.716L7.471,15.22C7.276,15.42 7.038,15.571 6.777,15.661L2.515,17.137C2.746,17.4 3.029,17.683 3.359,17.942C4.33,18.705 5.651,19.233 7.331,18.536C9.131,17.788 9.776,16.784 10.292,15.816C10.347,15.713 10.402,15.605 10.459,15.493C10.929,14.574 11.521,13.415 13.018,12.969C14.479,12.533 15.702,12.704 16.804,13.286C17.85,13.838 18.754,14.747 19.637,15.681C19.974,16.038 19.961,16.611 19.608,16.96C19.254,17.31 18.694,17.304 18.356,16.947C17.457,15.995 16.734,15.296 15.976,14.896C15.274,14.525 14.518,14.4 13.494,14.705C12.763,14.923 12.53,15.366 12.016,16.341C11.962,16.444 11.905,16.552 11.844,16.667C11.211,17.854 10.298,19.247 7.98,20.211C5.541,21.224 3.565,20.4 2.269,19.382C1.628,18.879 1.14,18.322 0.813,17.894C0.648,17.679 0.522,17.494 0.435,17.359C0.391,17.292 0.357,17.237 0.334,17.197C0.322,17.177 0.312,17.161 0.305,17.149L0.297,17.134L0.294,17.129L0.293,17.127L0.292,17.126C0.292,17.126 0.292,17.125 0.743,16.857C0.743,16.857 0.743,16.857 0.743,16.857L0.292,17.125C0.091,16.768 0.159,16.326 0.43,16.041C0.425,15.882 0.447,15.717 0.502,15.55L2.064,10.844L2.902,11.125L2.064,10.844C2.152,10.577 2.3,10.334 2.496,10.134L11.796,0.63ZM15.528,4.444L13.04,1.901L11.78,3.189L14.268,5.732L15.528,4.444ZM13.008,7.019L10.52,4.476L3.74,11.405L3.118,10.769L3.74,11.405L2.464,15.252L6.227,13.948L13.008,7.019Z" />
+</vector>

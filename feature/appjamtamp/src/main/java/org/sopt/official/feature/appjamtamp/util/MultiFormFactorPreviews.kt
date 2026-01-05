@@ -22,28 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.feature.appjamtamp.util
 
-android {
-    namespace = "org.sopt.official.feature.main"
-}
+import androidx.compose.ui.tooling.preview.Preview
 
-dependencies {
-    implementation(projects.core.model)
-    implementation(projects.core.common)
-    implementation(projects.core.analytics)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.navigation)
-    implementation(projects.core.webview)
-
-    implementation(projects.domain.home)
-
-    implementation(projects.feature.poke)
-    implementation(projects.feature.soptamp)
-    implementation(projects.feature.soptlog)
-    implementation(projects.feature.home)
-    implementation(projects.feature.appjamtamp)
-}
+@Preview(
+    name = "phone",
+    device = "spec:width=360dp,height=800dp,dpi=480",
+    showBackground = true,
+    showSystemUi = true,
+)
+@Preview(
+    name = "tablet",
+    device = "spec:width=1280dp,height=800dp,dpi=480",
+    showBackground = true,
+    showSystemUi = true,
+)
+annotation class MultiFormFactorPreviews
