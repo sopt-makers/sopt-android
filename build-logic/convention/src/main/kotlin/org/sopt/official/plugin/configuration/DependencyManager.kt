@@ -42,6 +42,7 @@ object DependencyManager {
         dependencies {
             "implementation"(libs.findLibrary("hilt").get())
             "ksp"(libs.findLibrary("hilt.ksp").get())
+            "ksp"(libs.findLibrary("kotlin.metadata.jvm").get())
             "testImplementation"(libs.findLibrary("hilt.testing").get())
             "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
         }
