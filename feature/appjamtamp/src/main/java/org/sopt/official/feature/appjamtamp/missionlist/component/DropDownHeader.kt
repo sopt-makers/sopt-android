@@ -31,14 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
+import org.sopt.official.feature.appjamtamp.model.MissionFilter
 
 @Composable
 internal fun DropDownHeader(
     title: String,
-    menuTexts: ImmutableList<String>,
     modifier: Modifier = Modifier,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
@@ -46,7 +45,9 @@ internal fun DropDownHeader(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp)
     ) {
         Text(
             text = title,
@@ -55,8 +56,8 @@ internal fun DropDownHeader(
         )
 
         DropDownMenuButton(
-            menuTexts = menuTexts,
-            onMenuClick = onMenuClick
+            menuTexts = MissionFilter.getTitleOfMissionsList(),
+            onMenuClick = onMenuClick,
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -74,7 +75,7 @@ internal fun DropDownHeader(
             )
 
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_edit_message_24),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_missionlist_edit_message),
                 contentDescription = null,
                 tint = SoptTheme.colors.onSurface10,
                 modifier = Modifier
@@ -147,8 +148,7 @@ private fun DropDownMenuButton(
 private fun DropDownHeaderPreview() {
     SoptTheme {
         DropDownHeader(
-            title = "앱잼 미션",
-            menuTexts = persistentListOf("전체 미션", "완료 미션", "미완료 미션", "앱잼 미션")
+            title = "앱잼 미션"
         )
     }
 }

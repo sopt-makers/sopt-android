@@ -8,21 +8,30 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 internal fun ClapFeedbackHolder(
     clapCount: Int,
     myClapCount: Int?,
-    isBadgeVisible: Boolean,
     onPressClap: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    var isBadgeVisible by remember { mutableStateOf(false) }
+
     Box(
         modifier = modifier
             .padding(bottom = 30.dp)
@@ -32,7 +41,14 @@ internal fun ClapFeedbackHolder(
         ClapButton(
             clapCount = clapCount,
             myClapCount = myClapCount,
-            onClicked = onPressClap
+            onClicked = {
+                onPressClap()
+                coroutineScope.launch {
+                    isBadgeVisible = true
+                    delay(500L)
+                    isBadgeVisible = false
+                }
+            },
         )
 
         AnimatedVisibility(
@@ -56,7 +72,6 @@ private fun ClapFeedbackHolderPreview() {
         ClapFeedbackHolder(
             clapCount = 10,
             myClapCount = 5,
-            isBadgeVisible = true,
             onPressClap = {}
         )
     }
