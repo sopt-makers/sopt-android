@@ -1,13 +1,15 @@
 package org.sopt.official.data.appjamtamp.repository
 
+import javax.inject.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
 import org.sopt.official.data.appjamtamp.mapper.toDomain
+import org.sopt.official.data.appjamtamp.mapper.toEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionListEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
+import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
-import javax.inject.Inject
 
 internal class AppjamtampRepositoryImpl @Inject constructor(
     private val appjamtampDataSource: AppjamtampDataSource
@@ -17,6 +19,13 @@ internal class AppjamtampRepositoryImpl @Inject constructor(
         isCompleted: Boolean?
     ): Result<AppjamtampMissionListEntity> = suspendRunCatching {
         appjamtampDataSource.getAppjamtampMissions(teamNumber, isCompleted).toEntity()
+    }
+
+    override suspend fun getAppjamtampStamp(
+        missionId: Int,
+        nickname: String
+    ): Result<AppjamtampStampEntity> = suspendRunCatching {
+        appjamtampDataSource.getAppjamtampStamp(missionId, nickname).toEntity()
     }
 
     override suspend fun getAppjamtampMissionRanking(

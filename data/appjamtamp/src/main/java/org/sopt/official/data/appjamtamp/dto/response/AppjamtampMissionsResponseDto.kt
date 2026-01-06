@@ -1,4 +1,4 @@
-package org.sopt.official.data.appjamtamp.dto
+package org.sopt.official.data.appjamtamp.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,7 +1,9 @@
 package org.sopt.official.feature.appjamtamp.missiondetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.FlowPreview
@@ -14,14 +16,23 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.appjamtamp.entity.MissionLevel
+import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
+import org.sopt.official.feature.appjamtamp.missiondetail.navigation.AppjamtampMissionDetail
 import org.sopt.official.feature.appjamtamp.model.ImageModel
+import org.sopt.official.feature.appjamtamp.model.Mission
+import org.sopt.official.feature.appjamtamp.model.User
+import timber.log.Timber
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
 internal class MissionDetailViewModel @Inject constructor(
-
+    savedStateHandle: SavedStateHandle,
+    private val appjamtampRepository: AppjamtampRepository
 ) : ViewModel() {
+    private val route: AppjamtampMissionDetail = savedStateHandle.toRoute<AppjamtampMissionDetail>()
+
     private val _missionDetailState = MutableStateFlow<MissionDetailState>(MissionDetailState())
     val missionDetailState: StateFlow<MissionDetailState>
         get() = _missionDetailState.asStateFlow()
@@ -41,6 +52,58 @@ internal class MissionDetailViewModel @Inject constructor(
                 .collect {
 
                 }
+        }
+
+        initMissionState()
+    }
+
+    private fun initMissionState() {
+        if (route.ownerName == null) {
+            _missionDetailState.update {
+                it.copy(
+                    viewType = DetailViewType.WRITE,
+                    mission = Mission(
+                        id = route.missionId,
+                        title = route.title,
+                        level = MissionLevel.of(route.missionLevel),
+                        isCompleted = false
+                    )
+                )
+            }
+        } else {
+            getMissionContent(missionId = route.missionId, name = route.ownerName)
+        }
+    }
+
+    private fun getMissionContent(missionId: Int, name: String) {
+        viewModelScope.launch {
+            appjamtampRepository.getAppjamtampStamp(missionId = missionId, nickname = name)
+                .onSuccess { stamp ->
+                    val viewType = if (stamp.isMine) DetailViewType.COMPLETE else DetailViewType.READ_ONLY
+                    _missionDetailState.update {
+                        it.copy(
+                            viewType = viewType,
+                            mission = Mission(
+                                id = route.missionId,
+                                title = route.title,
+                                level = MissionLevel.of(route.missionLevel),
+                                isCompleted = true
+                            ),
+                            imageModel = ImageModel.Remote(stamp.images),
+                            date = stamp.activityDate,
+                            content = stamp.contents,
+                            header = if (stamp.isMine) "내 미션" else stamp.teamName,
+                            writer = User(
+                                name = stamp.ownerNickname,
+                                profileImage = stamp.ownerProfileImage.orEmpty()
+                            ),
+                            clapCount = stamp.clapCount,
+                            myClapCount = stamp.myClapCount,
+                            viewCount = stamp.viewCount
+                        )
+                    }
+
+                }.onFailure(Timber::e)
         }
     }
 

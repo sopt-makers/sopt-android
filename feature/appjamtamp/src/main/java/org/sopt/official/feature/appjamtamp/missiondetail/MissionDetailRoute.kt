@@ -53,7 +53,20 @@ internal fun MissionDetailRoute(
     var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
 
-    if (uiState.mission.isCompleted) {
+    if (uiState.viewType == DetailViewType.WRITE) {
+        MyEmptyMissionDetailScreen(
+            uiState = uiState,
+            onBackButtonClick = navigateUp,
+            onChangeImage = viewModel::updateImageModel,
+            onClickZoomIn = { image ->
+                isImageZoomInDialogVisible = true
+                selectedZoomInImage = image
+            },
+            onDateSelected = viewModel::updateDate,
+            onMemoChange = viewModel::updateContent,
+            onCompleteButtonClick = viewModel::onSubmit
+        )
+    } else {
         MissionDetailScreen(
             uiState = uiState,
             onBackButtonClick = navigateUp,
@@ -76,19 +89,6 @@ internal fun MissionDetailRoute(
                     DetailViewType.EDIT -> viewModel.onSubmit()
                 }
             }
-        )
-    } else {
-        MyEmptyMissionDetailScreen(
-            uiState = uiState,
-            onBackButtonClick = navigateUp,
-            onChangeImage = viewModel::updateImageModel,
-            onClickZoomIn = { image ->
-                isImageZoomInDialogVisible = true
-                selectedZoomInImage = image
-            },
-            onDateSelected = viewModel::updateDate,
-            onMemoChange = viewModel::updateContent,
-            onCompleteButtonClick = viewModel::onSubmit
         )
     }
 
@@ -133,14 +133,14 @@ private fun MyEmptyMissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = "미션",
+            title = uiState.header,
             onBackButtonClick = onBackButtonClick
         )
 
         Spacer(modifier = Modifier.height(10.dp))
 
         MissionHeader(
-            title = uiState.title,
+            title = uiState.mission.title,
             stamp = Stamp.findStampByLevel(uiState.mission.level)
         )
 
@@ -214,7 +214,7 @@ private fun MissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = uiState.title,
+            title = uiState.header,
             onBackButtonClick = onBackButtonClick,
             trailingIcon = {
                 uiState.viewType.toolbarIcon?.let {
