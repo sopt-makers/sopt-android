@@ -20,7 +20,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class AppjamtampMissionViewModel @Inject constructor(
+internal class AppjamtampMissionViewModel @Inject constructor(
     private val appjamtampRepository: AppjamtampRepository,
     private val stampRepository: StampRepository
 ) : ViewModel() {
@@ -42,7 +42,8 @@ class AppjamtampMissionViewModel @Inject constructor(
             ).onSuccess { missions ->
                 _state.update { currentState ->
                     currentState.copy(
-                        missionList = missions.map { it.toUiModel() }.toImmutableList()
+                        teamName = missions.teamName,
+                        missionList = missions.toUiModel()
                     )
                 }
             }.onFailure(Timber::e)

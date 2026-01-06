@@ -16,5 +16,4 @@ internal abstract class RepositoryModule {
     abstract fun bindAppjamtampRepository(
         appjamtampRepositoryImpl: AppjamtampRepositoryImpl
     ): AppjamtampRepository
-
 }

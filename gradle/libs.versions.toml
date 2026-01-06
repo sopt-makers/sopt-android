@@ -5,7 +5,7 @@ targetSdk = "35"
 appVersion = "4.2.1"
 versionCode = "40201"
 
-kotlin = "2.2.21"
+kotlin = "2.3.0"
 kotlinx-serialization-json = "1.9.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
@@ -84,6 +84,7 @@ agp = { module = "com.android.tools.build:gradle", version.ref = "gradleplugin" 
 balloon-compose = { module = "com.github.skydoves:balloon-compose", version.ref = "balloonCompose" }
 kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 kotlin-gradleplugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
 kotlin-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 kotlin-coroutines-google-play = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-play-services", version.ref = "kotlinx-coroutines" }
 kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }

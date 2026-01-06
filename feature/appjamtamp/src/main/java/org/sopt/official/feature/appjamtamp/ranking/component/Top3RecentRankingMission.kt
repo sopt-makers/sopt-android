@@ -1,6 +1,5 @@
 package org.sopt.official.feature.appjamtamp.ranking.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -32,14 +30,20 @@ import coil.compose.AsyncImage
 import org.sopt.official.designsystem.GrayAlpha100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.appjamtamp.R
+import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 
 @Composable
-internal fun TopRankingTeamMission(
-    // TODO - 서버 응답 값
+internal fun Top3RecentRankingMission(
+    top3RecentRanking: Top3RecentRankingUiModel,
     modifier: Modifier = Modifier
 ) {
-
     Column(
         modifier = modifier.background(color = SoptTheme.colors.onSurface950)
     ) {
@@ -49,22 +53,15 @@ internal fun TopRankingTeamMission(
                 .aspectRatio(ratio = 146f / 232f)
                 .clip(shape = RoundedCornerShape(size = 12.dp))
         ) {
-//            TODO - 서버 응답 -> UrlImage 사용
-//            UrlImage(
-//                url = "",
-//                contentDescription = null
-//            )
-
-            // TODO 임시 이미지
-            Image(
-                imageVector = ImageVector.vectorResource(id = org.sopt.official.designsystem.R.drawable.img_fake_red),
+            UrlImage(
+                url = top3RecentRanking.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
 
             Text(
-                text = "11분 전",
+                text = top3RecentRanking.createdAt.toRelativeTime(),
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(top = 8.dp, end = 8.dp)
@@ -81,7 +78,7 @@ internal fun TopRankingTeamMission(
         Spacer(modifier = Modifier.height(height = 8.dp))
 
         Text(
-            text = "보이지 않는 손",
+            text = top3RecentRanking.teamName,
             color = White,
             style = SoptTheme.typography.heading16B,
             overflow = TextOverflow.Ellipsis,
@@ -101,14 +98,7 @@ internal fun TopRankingTeamMission(
                     .background(color = SoptTheme.colors.onSurface700),
                 contentAlignment = Alignment.Center
             ) {
-                if (false) { // TODO - 프로필 이미지 존재 여부
-                    AsyncImage(
-                        model = "",
-                        contentDescription = null,
-                        contentScale = ContentScale.Crop,
-                        error = painterResource(id = R.drawable.ic_user_profile)
-                    )
-                } else {
+                if (top3RecentRanking.userProfileImage?.isEmpty() == true) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_user_profile),
                         contentDescription = null,
@@ -116,11 +106,18 @@ internal fun TopRankingTeamMission(
                         modifier = Modifier
                             .padding(all = 4.dp)
                     )
+                } else {
+                    AsyncImage(
+                        model = top3RecentRanking.userProfileImage,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        error = painterResource(id = R.drawable.ic_user_profile)
+                    )
                 }
             }
 
             Text(
-                text = "노바고은비",
+                text = "${top3RecentRanking.teamName}${top3RecentRanking.userName}",
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.label12SB,
                 modifier = Modifier
@@ -131,79 +128,54 @@ internal fun TopRankingTeamMission(
     }
 }
 
-@Composable
-internal fun TodayScoreRaking(
-    // TODO - 서버 응답 값
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .clip(shape = RoundedCornerShape(size = 10.dp))
-            .background(color = SoptTheme.colors.onSurface900)
-            .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_ranking_default),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-                Text(
-                    text = "1",
-                    style = SoptTheme.typography.heading16B,
-                    color = SoptTheme.colors.onSurface100,
-                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 9.dp)
-                )
-            }
+/* 업로드 시간 변경 함수
+서버 응답 형식 : 2025-10-31T00:00:56
+업로드 시간: 상대시간 노출
+10분 미만 => 방금 전
+11분 전 ~ 59분 전 => 그대로 표기
+1시간 ~ 24시간 전 => 그대로 표기
+25시간 이후 => 1일 전, 2일 전 ...
+ */
+private fun String?.toRelativeTime(): String {
+    if (this.isNullOrBlank()) return ""
 
-            Text(
-                text = "노바",
-                color = White,
-                style = SoptTheme.typography.heading16B,
-                modifier = Modifier
-                    .padding(vertical = 2.dp)
-                    .padding(start = 5.dp)
-            )
-        }
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
+    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
 
-        Spacer(modifier = Modifier.height(height = 14.dp))
+    val date = dateFormat .parse(this) ?: return ""
+    val currentDate = Date()
 
-        Text(
-            text = "총 3000점",
-            color = SoptTheme.colors.onSurface300,
-            style = SoptTheme.typography.title14SB,
-            modifier = Modifier.align(Alignment.End)
-        )
+    val diffMillis = currentDate.time - date.time
+    if (diffMillis < 0) return "방금 전"
 
-        Text(
-            text = "+1000점",
-            color = White,
-            style = SoptTheme.typography.heading20B,
-            modifier = Modifier.align(Alignment.End)
-        )
+    val minutes = TimeUnit.MILLISECONDS.toMinutes(diffMillis)
+    val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
+    val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
+
+    return when {
+        minutes < 10 -> "방금 전"
+        minutes in 10..59 -> "${minutes}분 전"
+        hours in 1..23 -> "${hours}시간 전"
+        else -> "${days}일 전"
     }
 }
 
 @Preview
 @Composable
-private fun TopRankingTeamMissionPreview() {
+private fun Top3RecentRankingMissionPreview() {
     SoptTheme {
-        TopRankingTeamMission()
-    }
-}
+        val mockTop3RecentRankingUiModel = Top3RecentRankingUiModel(
+            stampId = 1L,
+            missionId = 44L,
+            userId = 1073L,
+            imageUrl = "",
+            createdAt = "2025-10-31T00:00:56",
+            userName = "노바고은비",
+            userProfileImage = null,
+            teamName = "노바",
+            teamNumber = "FOURTH"
+        )
 
-@Preview
-@Composable
-private fun TodayScoreRakingPreview() {
-    SoptTheme {
-        TodayScoreRaking()
+        Top3RecentRankingMission(top3RecentRanking = mockTop3RecentRankingUiModel)
     }
 }
