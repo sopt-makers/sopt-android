@@ -105,7 +105,7 @@ internal class MissionDetailViewModel @Inject constructor(
                             imageModel = ImageModel.Remote(stamp.images),
                             date = stamp.activityDate,
                             content = stamp.contents,
-                            header = if (stamp.isMine) "내 미션" else stamp.teamName,
+                            teamName = stamp.teamName,
                             stampId = stamp.stampId,
                             writer = User(
                                 name = stamp.ownerNickname,
@@ -192,8 +192,7 @@ internal class MissionDetailViewModel @Inject constructor(
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
-                                viewType = DetailViewType.COMPLETE,
-                                header = "내 미션"
+                                viewType = DetailViewType.COMPLETE
                             )
                         }
                     }.onFailure { e ->
@@ -226,8 +225,7 @@ internal class MissionDetailViewModel @Inject constructor(
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
-                                viewType = DetailViewType.COMPLETE,
-                                header = "내 미션"
+                                viewType = DetailViewType.COMPLETE
                             )
                         }
                     }.onFailure { e ->

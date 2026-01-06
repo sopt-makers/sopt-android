@@ -193,7 +193,7 @@ private fun MyEmptyMissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = uiState.header,
+            title = "미션",
             onBackButtonClick = onBackButtonClick
         )
 
@@ -255,8 +255,6 @@ private fun MissionDetailScreen(
     onActionButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    var isDatePickerVisible by remember { mutableStateOf(false) }
     var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
 
     Column(
@@ -267,7 +265,7 @@ private fun MissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = uiState.header,
+            title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
             onBackButtonClick = onBackButtonClick,
             trailingIcon = {
                 uiState.viewType.toolbarIcon?.let {
