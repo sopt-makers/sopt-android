@@ -8,8 +8,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
@@ -44,6 +47,10 @@ internal class MissionDetailViewModel @Inject constructor(
     private val _missionDetailState = MutableStateFlow<MissionDetailState>(MissionDetailState())
     val missionDetailState: StateFlow<MissionDetailState>
         get() = _missionDetailState.asStateFlow()
+
+    private val _sideEffect = MutableSharedFlow<MissionDetailSideEffect>()
+    val sideEffect: SharedFlow<MissionDetailSideEffect>
+        get() = _sideEffect.asSharedFlow()
 
     private var isClapLoading = false
 
@@ -112,10 +119,7 @@ internal class MissionDetailViewModel @Inject constructor(
 
                 }.onFailure { e ->
                     _missionDetailState.update {
-                        it.copy(
-                            isLoading = false,
-                            isFailed = true
-                        )
+                        it.copy(isLoading = false, isFailed = true)
                     }
                     Timber.e(e)
                 }
@@ -138,10 +142,7 @@ internal class MissionDetailViewModel @Inject constructor(
                     }
                 }.onFailure { e ->
                     _missionDetailState.update {
-                        it.copy(
-                            isLoading = false,
-                            isFailed = true
-                        )
+                        it.copy(isLoading = false, isFailed = true)
                     }
                     Timber.e(e)
                 }
@@ -197,10 +198,7 @@ internal class MissionDetailViewModel @Inject constructor(
                         }
                     }.onFailure { e ->
                         _missionDetailState.update {
-                            it.copy(
-                                isLoading = false,
-                                isFailed = true
-                            )
+                            it.copy(isLoading = false, isFailed = true)
                         }
                         Timber.e(e)
                     }
@@ -234,15 +232,31 @@ internal class MissionDetailViewModel @Inject constructor(
                         }
                     }.onFailure { e ->
                         _missionDetailState.update {
-                            it.copy(
-                                isLoading = false,
-                                isFailed = true
-                            )
+                            it.copy(isLoading = false, isFailed = true)
                         }
                         Timber.e(e)
                     }
                 }
             }
+        }
+    }
+
+    fun deleteMission() {
+        _missionDetailState.update {
+            it.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+            stampRepository.deleteMission(_missionDetailState.value.mission.id)
+                .onSuccess {
+                    _sideEffect.emit(MissionDetailSideEffect.NavigateUp)
+                }
+                .onFailure { e ->
+                    _missionDetailState.update {
+                        it.copy(isLoading = false, isFailed = true)
+                    }
+                    Timber.e(e)
+                }
         }
     }
 
@@ -269,10 +283,7 @@ internal class MissionDetailViewModel @Inject constructor(
 
             }.onFailure {
                 _missionDetailState.update {
-                    it.copy(
-                        isLoading = false,
-                        isFailed = true
-                    )
+                    it.copy(isLoading = false, isFailed = true)
                 }
             }
     }
@@ -298,14 +309,10 @@ internal class MissionDetailViewModel @Inject constructor(
         }
     }
 
-    fun updateViewType() {
+    fun updateViewType(viewType: DetailViewType) {
         _missionDetailState.update {
             it.copy(
-                viewType = when (val viewType = _missionDetailState.value.viewType) {
-                    DetailViewType.COMPLETE -> DetailViewType.EDIT
-                    DetailViewType.EDIT -> DetailViewType.COMPLETE
-                    else -> viewType
-                }
+                viewType = viewType
             )
         }
     }

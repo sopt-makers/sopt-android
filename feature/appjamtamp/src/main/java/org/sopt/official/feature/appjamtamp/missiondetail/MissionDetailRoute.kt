@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,9 +27,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ClapFeedbackHolder
@@ -49,15 +53,27 @@ internal fun MissionDetailRoute(
     navigateUp: () -> Unit,
     viewModel: MissionDetailViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
     val uiState by viewModel.missionDetailState.collectAsStateWithLifecycle()
 
     var isDatePickerVisible by remember { mutableStateOf(false) }
     var isClapBottomSheetVisible by remember { mutableStateOf(false) }
     var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
+    var isDeleteDialogVisible by remember { mutableStateOf(false) }
 
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         viewModel.flushClap()
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MissionDetailSideEffect.NavigateUp -> navigateUp()
+                }
+            }
     }
 
     if (uiState.viewType == DetailViewType.WRITE) {
@@ -77,7 +93,19 @@ internal fun MissionDetailRoute(
         MissionDetailScreen(
             uiState = uiState,
             onBackButtonClick = navigateUp,
-            onToolbarIconClick = viewModel::updateViewType,
+            onToolbarIconClick = {
+                when (uiState.viewType) {
+                    DetailViewType.COMPLETE -> {
+                        viewModel.updateViewType(DetailViewType.EDIT)
+                    }
+
+                    DetailViewType.EDIT -> {
+                        isDeleteDialogVisible = true
+                    }
+
+                    else -> {}
+                }
+            },
             onChangeImage = viewModel::updateImageModel,
             onClickZoomIn = { image ->
                 isImageZoomInDialogVisible = true
@@ -90,6 +118,7 @@ internal fun MissionDetailRoute(
                     DetailViewType.WRITE -> viewModel.handleSubmit()
                     DetailViewType.READ_ONLY -> viewModel.onClap()
                     DetailViewType.COMPLETE -> {
+                        viewModel.getClappersList()
                         isClapBottomSheetVisible = true
                     }
 
@@ -112,7 +141,7 @@ internal fun MissionDetailRoute(
     if (isClapBottomSheetVisible) {
         ClapUserBottomDialog(
             onDismiss = { isClapBottomSheetVisible = false },
-            userList = persistentListOf(),
+            userList = uiState.clappers,
             onClickUser = { _, _ -> /* Nothing to do */ }
         )
     }
@@ -123,8 +152,24 @@ internal fun MissionDetailRoute(
             onDismiss = {
                 isImageZoomInDialogVisible = false
                 selectedZoomInImage = null
-            },
+            }
         )
+    }
+
+    if (isDeleteDialogVisible) {
+        TwoButtonDialog(
+            onDismiss = { isDeleteDialogVisible = false },
+            positiveButtonText = "삭제",
+            negativeButtonText = "취소",
+            onPositiveClick = viewModel::deleteMission,
+            onNegativeClick = { isDeleteDialogVisible = false }
+        ) {
+            Text(
+                text = "달성한 미션을 삭제하시겠습니까?",
+                style = SoptTheme.typography.body16M,
+                color = SoptTheme.colors.primary,
+            )
+        }
     }
 }
 
