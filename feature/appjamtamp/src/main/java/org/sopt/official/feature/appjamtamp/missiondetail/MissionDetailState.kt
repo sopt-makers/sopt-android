@@ -16,6 +16,7 @@ internal data class MissionDetailState(
     val content: String = "",
     val header: String = "미션",
 
+    val stampId: Int = -1,
     val writer: User = User(),
     val clapCount: Int = 0,
     val myClapCount: Int = 0,

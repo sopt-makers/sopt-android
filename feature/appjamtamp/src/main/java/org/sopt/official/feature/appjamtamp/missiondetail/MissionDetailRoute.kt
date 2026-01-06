@@ -23,6 +23,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
@@ -53,6 +55,10 @@ internal fun MissionDetailRoute(
     var isClapBottomSheetVisible by remember { mutableStateOf(false) }
     var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        viewModel.flushClap()
+    }
 
     if (uiState.viewType == DetailViewType.WRITE) {
         MyEmptyMissionDetailScreen(

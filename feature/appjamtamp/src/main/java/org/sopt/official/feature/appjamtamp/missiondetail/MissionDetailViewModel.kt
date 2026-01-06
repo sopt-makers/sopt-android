@@ -18,7 +18,9 @@ import kotlinx.coroutines.launch
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
+import org.sopt.official.domain.soptamp.model.StampClap
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
 import org.sopt.official.feature.appjamtamp.missiondetail.navigation.AppjamtampMissionDetail
 import org.sopt.official.feature.appjamtamp.model.ImageModel
@@ -31,6 +33,7 @@ import timber.log.Timber
 internal class MissionDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val appjamtampRepository: AppjamtampRepository,
+    private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
 ) : ViewModel() {
     private val route: AppjamtampMissionDetail = savedStateHandle.toRoute<AppjamtampMissionDetail>()
@@ -39,6 +42,8 @@ internal class MissionDetailViewModel @Inject constructor(
     val missionDetailState: StateFlow<MissionDetailState>
         get() = _missionDetailState.asStateFlow()
 
+    private var isClapLoading = false
+
     init {
         viewModelScope.launch {
             _missionDetailState
@@ -46,7 +51,7 @@ internal class MissionDetailViewModel @Inject constructor(
                 .filter { it > 0 }
                 .debounce(2_000)
                 .collect {
-
+                    postClap()
                 }
         }
 
@@ -91,6 +96,7 @@ internal class MissionDetailViewModel @Inject constructor(
                             date = stamp.activityDate,
                             content = stamp.contents,
                             header = if (stamp.isMine) "내 미션" else stamp.teamName,
+                            stampId = stamp.stampId,
                             writer = User(
                                 name = stamp.ownerNickname,
                                 profileImage = stamp.ownerProfileImage.orEmpty()
@@ -123,6 +129,10 @@ internal class MissionDetailViewModel @Inject constructor(
                 unSyncedClapCount = it.unSyncedClapCount + 1
             )
         }
+    }
+
+    fun flushClap() {
+        postClap()
     }
 
     fun handleSubmit() {
@@ -203,6 +213,27 @@ internal class MissionDetailViewModel @Inject constructor(
                     )
                 }
             }
+    }
+
+    private fun postClap() {
+        val state = _missionDetailState.value
+        if (isClapLoading || state.unSyncedClapCount <= 0) return
+
+        isClapLoading = true
+
+        viewModelScope.launch {
+            stampRepository.clapStamp(stampId = state.stampId, clap = StampClap(clapCount = state.unSyncedClapCount))
+                .onSuccess { clapResult ->
+                    _missionDetailState.update {
+                        it.copy(
+                            clapCount = clapResult.totalClapCount,
+                            unSyncedClapCount = 0
+                        )
+                    }
+                }.onFailure(Timber::e)
+
+            isClapLoading = false
+        }
     }
 
     fun updateViewType() {
