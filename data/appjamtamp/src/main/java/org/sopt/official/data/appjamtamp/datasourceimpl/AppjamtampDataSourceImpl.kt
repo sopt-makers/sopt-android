@@ -2,7 +2,9 @@ package org.sopt.official.data.appjamtamp.datasourceimpl
 
 import javax.inject.Inject
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
+import org.sopt.official.data.appjamtamp.dto.request.AppjamtampPostStampRequestDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampPostStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
@@ -22,6 +24,19 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
         nickname: String
     ): AppjamtampStampResponseDto = appjamtampService.getAppjamtampStamp(missionId, nickname)
 
+    override suspend fun postAppjamtampStamp(
+        missionId: Int,
+        image: String,
+        contents: String,
+        activityDate: String
+    ): AppjamtampPostStampResponseDto = appjamtampService.postAppjamtampStamp(
+        AppjamtampPostStampRequestDto(
+            missionId = missionId,
+            image = image,
+            contents = contents,
+            activityDate = activityDate
+        )
+    )
 
     override suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse =
         appjamtampService.getAppjamtampMissionTop3(size = size)

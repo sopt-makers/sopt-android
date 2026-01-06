@@ -28,6 +28,20 @@ internal class AppjamtampRepositoryImpl @Inject constructor(
         appjamtampDataSource.getAppjamtampStamp(missionId, nickname).toEntity()
     }
 
+    override suspend fun postAppjamtampStamp(
+        missionId: Int,
+        image: String,
+        contents: String,
+        activityDate: String
+    ): Result<Unit> = suspendRunCatching {
+        appjamtampDataSource.postAppjamtampStamp(
+            missionId = missionId,
+            image = image,
+            contents = contents,
+            activityDate = activityDate
+        )
+    }
+
     override suspend fun getAppjamtampMissionRanking(
         size: Int
     ): Result<List<AppjamtampMissionScore>> = suspendRunCatching {

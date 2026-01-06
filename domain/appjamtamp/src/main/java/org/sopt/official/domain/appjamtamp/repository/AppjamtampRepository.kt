@@ -16,6 +16,13 @@ interface AppjamtampRepository {
         nickname: String
     ): Result<AppjamtampStampEntity>
 
+    suspend fun postAppjamtampStamp(
+        missionId: Int,
+        image: String,
+        contents: String,
+        activityDate: String
+    ): Result<Unit>
+
     suspend fun getAppjamtampMissionRanking(
         size: Int
     ): Result<List<AppjamtampMissionScore>>

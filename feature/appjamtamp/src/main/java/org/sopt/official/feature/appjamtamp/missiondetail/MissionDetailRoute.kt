@@ -49,6 +49,7 @@ internal fun MissionDetailRoute(
 ) {
     val uiState by viewModel.missionDetailState.collectAsStateWithLifecycle()
 
+    var isDatePickerVisible by remember { mutableStateOf(false) }
     var isClapBottomSheetVisible by remember { mutableStateOf(false) }
     var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
@@ -62,9 +63,9 @@ internal fun MissionDetailRoute(
                 isImageZoomInDialogVisible = true
                 selectedZoomInImage = image
             },
-            onDateSelected = viewModel::updateDate,
+            onDatePickerClick = { isDatePickerVisible = true },
             onMemoChange = viewModel::updateContent,
-            onCompleteButtonClick = viewModel::onSubmit
+            onCompleteButtonClick = viewModel::handleSubmit
         )
     } else {
         MissionDetailScreen(
@@ -76,19 +77,29 @@ internal fun MissionDetailRoute(
                 isImageZoomInDialogVisible = true
                 selectedZoomInImage = image
             },
-            onDateSelected = viewModel::updateDate,
+            onDatePickerClick = { isDatePickerVisible = true },
             onMemoChange = viewModel::updateContent,
             onActionButtonClick = {
                 when (uiState.viewType) {
-                    DetailViewType.WRITE -> viewModel.onSubmit()
+                    DetailViewType.WRITE -> viewModel.handleSubmit()
                     DetailViewType.READ_ONLY -> viewModel.onClap()
                     DetailViewType.COMPLETE -> {
                         isClapBottomSheetVisible = true
                     }
 
-                    DetailViewType.EDIT -> viewModel.onSubmit()
+                    DetailViewType.EDIT -> viewModel.handleSubmit()
                 }
             }
+        )
+    }
+
+    if (isDatePickerVisible) {
+        DataPickerBottomSheet(
+            onSelected = {
+                viewModel.updateDate(it)
+                isDatePickerVisible = false
+            },
+            onDismissRequest = { isDatePickerVisible = false }
         )
     }
 
@@ -96,7 +107,7 @@ internal fun MissionDetailRoute(
         ClapUserBottomDialog(
             onDismiss = { isClapBottomSheetVisible = false },
             userList = persistentListOf(),
-            onClickUser = { _, _ -> }
+            onClickUser = { _, _ -> /* Nothing to do */ }
         )
     }
 
@@ -117,13 +128,11 @@ private fun MyEmptyMissionDetailScreen(
     onBackButtonClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
     onClickZoomIn: (String) -> Unit,
-    onDateSelected: (String) -> Unit,
+    onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
     onCompleteButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    var isDatePickerVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -159,7 +168,7 @@ private fun MyEmptyMissionDetailScreen(
             value = uiState.date,
             placeHolder = "날짜를 입력해주세요.",
             isEditable = true,
-            onClicked = { isDatePickerVisible = true }
+            onClicked = onDatePickerClick
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -181,13 +190,6 @@ private fun MyEmptyMissionDetailScreen(
                 .padding(bottom = 20.dp)
         )
     }
-
-    if (isDatePickerVisible) {
-        DataPickerBottomSheet(
-            onSelected = onDateSelected,
-            onDismissRequest = { isDatePickerVisible = false }
-        )
-    }
 }
 
 @Composable
@@ -197,9 +199,9 @@ private fun MissionDetailScreen(
     onToolbarIconClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
     onClickZoomIn: (String) -> Unit,
+    onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
-    onActionButtonClick: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onActionButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -259,7 +261,7 @@ private fun MissionDetailScreen(
                 value = uiState.date,
                 placeHolder = "날짜를 입력해주세요.",
                 isEditable = true,
-                onClicked = { isDatePickerVisible = true }
+                onClicked = onDatePickerClick
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -314,13 +316,6 @@ private fun MissionDetailScreen(
             }
         }
     }
-
-    if (isDatePickerVisible) {
-        DataPickerBottomSheet(
-            onSelected = onDateSelected,
-            onDismissRequest = { isDatePickerVisible = false }
-        )
-    }
 }
 
 @Preview(showBackground = true, backgroundColor = 0x000000)
@@ -332,9 +327,9 @@ private fun MyEmptyMissionDetailScreenPreview() {
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
+            onDatePickerClick = {},
             onMemoChange = {},
-            onCompleteButtonClick = {},
-            onDateSelected = {}
+            onCompleteButtonClick = {}
         )
     }
 }
@@ -348,8 +343,8 @@ private fun MyMissionDetailScreenPreview() {
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
+            onDatePickerClick = {},
             onMemoChange = {},
-            onDateSelected = {},
             onActionButtonClick = {},
             onToolbarIconClick = {}
         )

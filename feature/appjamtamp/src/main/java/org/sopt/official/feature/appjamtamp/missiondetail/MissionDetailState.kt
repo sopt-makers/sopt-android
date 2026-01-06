@@ -6,6 +6,9 @@ import org.sopt.official.feature.appjamtamp.model.Mission
 import org.sopt.official.feature.appjamtamp.model.User
 
 internal data class MissionDetailState(
+    val isLoading: Boolean = true,
+    val isFailed: Boolean = false,
+
     val viewType: DetailViewType = DetailViewType.WRITE,
     val mission: Mission = Mission.DEFAULT,
     val imageModel: ImageModel = ImageModel.Empty,
