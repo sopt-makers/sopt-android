@@ -22,9 +22,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ClapFeedbackHolder
@@ -33,20 +34,63 @@ import org.sopt.official.feature.appjamtamp.missiondetail.component.DataPickerBo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.DatePicker
 import org.sopt.official.feature.appjamtamp.missiondetail.component.DetailInfo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageContent
+import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageModal
 import org.sopt.official.feature.appjamtamp.missiondetail.component.Memo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.MissionHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ProfileTag
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
 import org.sopt.official.feature.appjamtamp.model.ImageModel
-import org.sopt.official.feature.appjamtamp.model.Mission
 import org.sopt.official.feature.appjamtamp.model.Stamp
-import org.sopt.official.feature.appjamtamp.model.User
 
 @Composable
 internal fun MissionDetailRoute(
-
+    navigateUp: () -> Unit,
+    viewModel: MissionDetailViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.missionDetailState.collectAsStateWithLifecycle()
+
     var isClapBottomSheetVisible by remember { mutableStateOf(false) }
+    var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
+    var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
+
+    if (uiState.mission.isCompleted) {
+        MissionDetailScreen(
+            uiState = uiState,
+            onBackButtonClick = navigateUp,
+            onToolbarIconClick = viewModel::updateViewType,
+            onChangeImage = viewModel::updateImageModel,
+            onClickZoomIn = { image ->
+                isImageZoomInDialogVisible = true
+                selectedZoomInImage = image
+            },
+            onDateSelected = viewModel::updateDate,
+            onMemoChange = viewModel::updateContent,
+            onActionButtonClick = {
+                when (uiState.viewType) {
+                    DetailViewType.WRITE -> viewModel.onSubmit()
+                    DetailViewType.READ_ONLY -> viewModel.onClap()
+                    DetailViewType.COMPLETE -> {
+                        isClapBottomSheetVisible = true
+                    }
+
+                    DetailViewType.EDIT -> viewModel.onSubmit()
+                }
+            }
+        )
+    } else {
+        MyEmptyMissionDetailScreen(
+            uiState = uiState,
+            onBackButtonClick = navigateUp,
+            onChangeImage = viewModel::updateImageModel,
+            onClickZoomIn = { image ->
+                isImageZoomInDialogVisible = true
+                selectedZoomInImage = image
+            },
+            onDateSelected = viewModel::updateDate,
+            onMemoChange = viewModel::updateContent,
+            onCompleteButtonClick = viewModel::onSubmit
+        )
+    }
 
     if (isClapBottomSheetVisible) {
         ClapUserBottomDialog(
@@ -55,20 +99,27 @@ internal fun MissionDetailRoute(
             onClickUser = { _, _ -> }
         )
     }
+
+    if (isImageZoomInDialogVisible) {
+        ImageModal(
+            image = selectedZoomInImage.orEmpty(),
+            onDismiss = {
+                isImageZoomInDialogVisible = false
+                selectedZoomInImage = null
+            },
+        )
+    }
 }
 
 @Composable
 private fun MyEmptyMissionDetailScreen(
-    mission: Mission,
-    imageModel: ImageModel,
-    date: String,
-    content: String,
+    uiState: MissionDetailState,
     onBackButtonClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
     onClickZoomIn: (String) -> Unit,
+    onDateSelected: (String) -> Unit,
     onMemoChange: (String) -> Unit,
-    onCompleteButtonClick: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onCompleteButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -89,14 +140,14 @@ private fun MyEmptyMissionDetailScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         MissionHeader(
-            title = mission.title,
-            stamp = Stamp.findStampByLevel(mission.level)
+            title = uiState.title,
+            stamp = Stamp.findStampByLevel(uiState.mission.level)
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         ImageContent(
-            imageModel = imageModel,
+            imageModel = uiState.imageModel,
             onChangeImage = onChangeImage,
             onClickZoomIn = onClickZoomIn,
             isEditable = true
@@ -105,7 +156,7 @@ private fun MyEmptyMissionDetailScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         DatePicker(
-            value = date,
+            value = uiState.date,
             placeHolder = "날짜를 입력해주세요.",
             isEditable = true,
             onClicked = { isDatePickerVisible = true }
@@ -114,7 +165,7 @@ private fun MyEmptyMissionDetailScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         Memo(
-            value = content,
+            value = uiState.content,
             placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
             onValueChange = onMemoChange,
             isEditable = true
@@ -141,16 +192,7 @@ private fun MyEmptyMissionDetailScreen(
 
 @Composable
 private fun MissionDetailScreen(
-    viewType: DetailViewType,
-    title: String,
-    mission: Mission,
-    imageModel: ImageModel,
-    date: String,
-    content: String,
-    writer: User,
-    clapCount: Int,
-    myClapCount: Int,
-    viewCount: Int,
+    uiState: MissionDetailState,
     onBackButtonClick: () -> Unit,
     onToolbarIconClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
@@ -162,7 +204,7 @@ private fun MissionDetailScreen(
     val scrollState = rememberScrollState()
 
     var isDatePickerVisible by remember { mutableStateOf(false) }
-    var isEditable by remember(viewType) { mutableStateOf(viewType == DetailViewType.EDIT) }
+    var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
 
     Column(
         modifier = Modifier
@@ -172,12 +214,12 @@ private fun MissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = title,
+            title = uiState.title,
             onBackButtonClick = onBackButtonClick,
             trailingIcon = {
-                viewType.toolbarIcon?.let {
+                uiState.viewType.toolbarIcon?.let {
                     Icon(
-                        imageVector = ImageVector.vectorResource(viewType.toolbarIcon),
+                        imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
                         contentDescription = null,
                         tint = SoptTheme.colors.onSurface10,
                         modifier = Modifier
@@ -190,14 +232,14 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         MissionHeader(
-            title = mission.title,
-            stamp = Stamp.findStampByLevel(mission.level)
+            title = uiState.mission.title,
+            stamp = Stamp.findStampByLevel(uiState.mission.level)
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         ImageContent(
-            imageModel = imageModel,
+            imageModel = uiState.imageModel,
             onChangeImage = onChangeImage,
             onClickZoomIn = onClickZoomIn,
             isEditable = isEditable
@@ -206,15 +248,15 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         ProfileTag(
-            name = writer.name,
-            profileImage = writer.profileImage
+            name = uiState.writer.name,
+            profileImage = uiState.writer.profileImage
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         if (isEditable) {
             DatePicker(
-                value = date,
+                value = uiState.date,
                 placeHolder = "날짜를 입력해주세요.",
                 isEditable = true,
                 onClicked = { isDatePickerVisible = true }
@@ -224,7 +266,7 @@ private fun MissionDetailScreen(
         }
 
         Memo(
-            value = content,
+            value = uiState.content,
             placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
             onValueChange = onMemoChange,
             isEditable = isEditable
@@ -232,18 +274,18 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         DetailInfo(
-            date = date,
-            clapCount = clapCount,
-            viewCount = viewCount
+            date = uiState.date,
+            clapCount = uiState.clapCount,
+            viewCount = uiState.viewCount
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        when (viewType) {
-            DetailViewType.DEFAULT -> {
+        when (uiState.viewType) {
+            DetailViewType.READ_ONLY -> {
                 ClapFeedbackHolder(
-                    clapCount = clapCount,
-                    myClapCount = myClapCount,
+                    clapCount = uiState.clapCount,
+                    myClapCount = uiState.myClapCount,
                     onPressClap = onActionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -261,7 +303,7 @@ private fun MissionDetailScreen(
                 )
             }
 
-            DetailViewType.EDIT -> {
+            DetailViewType.EDIT, DetailViewType.WRITE -> {
                 AppjamtampButton(
                     text = "미션 완료",
                     onClicked = onActionButtonClick,
@@ -271,7 +313,6 @@ private fun MissionDetailScreen(
                 )
             }
         }
-
     }
 
     if (isDatePickerVisible) {
@@ -287,15 +328,7 @@ private fun MissionDetailScreen(
 private fun MyEmptyMissionDetailScreenPreview() {
     SoptTheme {
         MyEmptyMissionDetailScreen(
-            mission = Mission(
-                id = 1,
-                title = "앱잼 팀원 다 함께 바다 보고 오기",
-                level = MissionLevel.of(1),
-                isCompleted = false
-            ),
-            imageModel = ImageModel.Empty,
-            date = "",
-            content = "",
+            uiState = MissionDetailState(),
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
@@ -311,26 +344,7 @@ private fun MyEmptyMissionDetailScreenPreview() {
 private fun MyMissionDetailScreenPreview() {
     SoptTheme {
         MissionDetailScreen(
-            viewType = DetailViewType.DEFAULT,
-            title = "내 미션",
-            mission = Mission(
-                id = 1,
-                title = "앱잼 팀원 다 함께 바다 보고 오기",
-                level = MissionLevel.of(1),
-                isCompleted = false
-            ),
-            imageModel = ImageModel.Remote(
-                url = listOf("https://avatars.githubusercontent.com/u/98209004?v=4")
-            ),
-            date = "",
-            content = "",
-            writer = User(
-                name = "터닝박효빈",
-                profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4"
-            ),
-            clapCount = 10,
-            myClapCount = 0,
-            viewCount = 100,
+            uiState = MissionDetailState(),
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
