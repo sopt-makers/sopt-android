@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
+import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.model.StampClap
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
@@ -181,7 +182,40 @@ internal class MissionDetailViewModel @Inject constructor(
     }
 
     private fun modifyMission() {
+        viewModelScope.launch {
+            if (_missionDetailState.value.imageModel is ImageModel.Local) {
+                uploadImage()
+            }
 
+            with(_missionDetailState.value) {
+                if (imageModel is ImageModel.Remote) {
+                    stampRepository.modifyMission(
+                        Stamp(
+                            missionId = mission.id,
+                            image = imageModel.url[0],
+                            contents = content,
+                            activityDate = date
+                        )
+                    ).onSuccess {
+                        _missionDetailState.update {
+                            it.copy(
+                                isLoading = false,
+                                viewType = DetailViewType.COMPLETE,
+                                header = "내 미션"
+                            )
+                        }
+                    }.onFailure { e ->
+                        _missionDetailState.update {
+                            it.copy(
+                                isLoading = false,
+                                isFailed = true
+                            )
+                        }
+                        Timber.e(e)
+                    }
+                }
+            }
+        }
     }
 
     private suspend fun uploadImage() {
