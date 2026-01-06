@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,6 +24,7 @@ import org.sopt.official.domain.soptamp.model.StampClap
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
+import org.sopt.official.feature.appjamtamp.missiondetail.model.toUiModel
 import org.sopt.official.feature.appjamtamp.missiondetail.navigation.AppjamtampMissionDetail
 import org.sopt.official.feature.appjamtamp.model.ImageModel
 import org.sopt.official.feature.appjamtamp.model.Mission
@@ -108,6 +110,32 @@ internal class MissionDetailViewModel @Inject constructor(
                         )
                     }
 
+                }.onFailure { e ->
+                    _missionDetailState.update {
+                        it.copy(
+                            isLoading = false,
+                            isFailed = true
+                        )
+                    }
+                    Timber.e(e)
+                }
+        }
+    }
+
+    fun getClappersList() {
+        _missionDetailState.update {
+            it.copy(isLoading = true)
+        }
+
+        viewModelScope.launch {
+            stampRepository.getClappers(_missionDetailState.value.stampId)
+                .onSuccess { clappers ->
+                    _missionDetailState.update {
+                        it.copy(
+                            isLoading = false,
+                            clappers = clappers.clappers.map { it.toUiModel() }.toImmutableList()
+                        )
+                    }
                 }.onFailure { e ->
                     _missionDetailState.update {
                         it.copy(

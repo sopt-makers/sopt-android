@@ -1,6 +1,9 @@
 package org.sopt.official.feature.appjamtamp.missiondetail
 
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
+import org.sopt.official.feature.appjamtamp.missiondetail.model.StampClapUserModel
 import org.sopt.official.feature.appjamtamp.model.ImageModel
 import org.sopt.official.feature.appjamtamp.model.Mission
 import org.sopt.official.feature.appjamtamp.model.User
@@ -21,5 +24,7 @@ internal data class MissionDetailState(
     val clapCount: Int = 0,
     val myClapCount: Int = 0,
     val unSyncedClapCount: Int = 0,
-    val viewCount: Int = 0
+    val viewCount: Int = 0,
+
+    val clappers: ImmutableList<StampClapUserModel> = persistentListOf()
 )
