@@ -85,6 +85,7 @@ import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.appjamtamp.navigation.appjamtampNavGraph
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
@@ -164,13 +165,19 @@ fun MainScreen(
         intent?.hasExtra("friendType") == true
     }
 
-    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList, shouldNavigateToSoptLog) {
+    LaunchedEffect(
+        shouldNavigateToSoptamp,
+        shouldNavigateToPoke,
+        shouldNavigateToPokeNotification,
+        shouldNavigatePokeFriendList,
+        shouldNavigateToSoptLog
+    ) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
         }
 
-        if(shouldNavigateToSoptLog) {
+        if (shouldNavigateToSoptLog) {
             navigator.navigate(MainTab.SoptLog, userStatus)
             activity?.intent?.putExtra("isSoptLogDeepLink", false)
         }
@@ -288,6 +295,11 @@ fun MainScreen(
                         navController = navigator.navController,
                         tracker = tracker,
                         currentIntent = intentState
+                    )
+
+                    appjamtampNavGraph(
+                        paddingValues = innerPadding,
+                        navController = navigator.navController
                     )
 
                     pokeNavGraph(
