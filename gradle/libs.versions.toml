@@ -62,7 +62,7 @@ mozilla-component-utils = "146.0.1"
 balloonCompose = "1.7.3"
 
 google-services = "4.4.4"
-playServicesAuth = "21.4.0"
+playServicesAuth = "21.5.0"
 crashlytics = "3.0.6"
 firebase = "34.7.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
