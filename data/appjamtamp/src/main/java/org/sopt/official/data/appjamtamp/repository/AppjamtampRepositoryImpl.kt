@@ -7,6 +7,7 @@ import org.sopt.official.data.appjamtamp.mapper.toDomain
 import org.sopt.official.data.appjamtamp.mapper.toEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionListEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
+import org.sopt.official.domain.appjamtamp.entity.AppjamtampMyAppjamInfoEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
@@ -40,6 +41,10 @@ internal class AppjamtampRepositoryImpl @Inject constructor(
             contents = contents,
             activityDate = activityDate
         )
+    }
+
+    override suspend fun getMyAppjamInfo(): Result<AppjamtampMyAppjamInfoEntity> = suspendRunCatching {
+        appjamtampDataSource.getMyAppjamInfo().toEntity()
     }
 
     override suspend fun getAppjamtampMissionRanking(

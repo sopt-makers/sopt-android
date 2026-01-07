@@ -2,6 +2,7 @@ package org.sopt.official.data.appjamtamp.service
 
 import org.sopt.official.data.appjamtamp.dto.request.AppjamtampPostStampRequestDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMyAppjamInfoResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampPostStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
@@ -28,6 +29,9 @@ interface AppjamtampService {
     suspend fun postAppjamtampStamp(
         @Body body: AppjamtampPostStampRequestDto
     ): AppjamtampPostStampResponseDto
+
+    @GET("user/appjam-info")
+    suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto
 
     /**
      * 앱잼에 참여하는 전체 팀의 득점 랭킹 조회

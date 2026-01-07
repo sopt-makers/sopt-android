@@ -26,7 +26,7 @@ package org.sopt.official.feature.soptlog.navigation
 
 enum class SoptLogUrl(val url: String) {
     POKE("home/poke"),
-    SOPTAMP("soptamp"),
+    SOPTAMP("appjamtamp"),  // 일반 솝탬프의 경우는 (기존) url = "soptamp" / 앱잼탬프만 appjamtamp 사용 (앱잼탬프 기간만)
     POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
     UNKNOWN("");
 
