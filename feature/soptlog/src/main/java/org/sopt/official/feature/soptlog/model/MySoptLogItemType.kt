@@ -35,7 +35,8 @@ internal enum class MySoptLogItemType(
     val hasArrow: Boolean = true
 ) {
     // 솝탬프 로그
-    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = "soptamp", count = { it.soptampCount ?: 0 }),
+    // 일반 솝탬프의 경우는 (기존) url = "soptamp" / 앱잼탬프만 appjamtamp 사용 (앱잼탬프 기간만)
+    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = "appjamtamp", count = { it.soptampCount ?: 0 }),
     VIEW_COUNT(title = "조회수", category = SoptLogCategory.SOPTAMP, hasHelpIcon = true, hasArrow = false, count = { it.viewCount ?: 0 }),
     RECEIVED_CLAP(title = "받은 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.myClapCount ?: 0 }),
     SENT_CLAP(title = "쳐준 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.clapCount ?: 0 }),

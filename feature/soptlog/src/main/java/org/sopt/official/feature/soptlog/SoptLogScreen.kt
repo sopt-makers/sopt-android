@@ -71,7 +71,7 @@ internal fun SoptLogRoute(
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.getSoptLogInfo()
+        viewModel.getSoptLogInfoData()
     }
 
     LaunchedEffect(Unit) {
@@ -95,18 +95,20 @@ internal fun SoptLogRoute(
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
     val soptLogInfo = soptLogState.soptLogInfo
+    val isAppjamJoined by viewModel.isAppjamJoined.collectAsStateWithLifecycle(false)
     val todayFortuneText by viewModel.todayFortuneText.collectAsStateWithLifecycle("")
     val tracker = LocalTracker.current
 
     when {
         soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
-            SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfo)
+            SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfoData)
         }
 
         else -> {
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
+                    isAppjamJoined = isAppjamJoined,
                     soptLogInfo = soptLogInfo,
                     todayFortuneText = todayFortuneText,
                     onNavigationClick = viewModel::onNavigationClick,
@@ -126,6 +128,7 @@ internal fun SoptLogRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SoptlogScreen(
+    isAppjamJoined: Boolean,
     soptLogInfo: SoptLogInfo,
     todayFortuneText: String,
     onNavigationClick: (url: String) -> Unit,
@@ -164,7 +167,9 @@ private fun SoptlogScreen(
         Spacer(modifier = Modifier.height(36.dp))
 
         SoptlogContents {
-            if (soptLogInfo.isActive) {
+            // 활동 기수 여부에 관계없이 앱잼참여 회원만 보여줌 (앱잼탬프 기간만)
+            // 일반 솝탬프의 경우는 (기존) soptLogInfo.isActive인 경우에만 보여줌 (활동 기수인 경우에만)
+            if (isAppjamJoined) {
                 SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
@@ -243,6 +248,7 @@ private fun PreviewSoptlogScreen() {
         }
 
         SoptlogScreen(
+            isAppjamJoined = false,
             soptLogInfo = soptLogInfo,
             todayFortuneText = "오늘의 운세",
             onNavigationClick = { url ->

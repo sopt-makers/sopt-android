@@ -28,6 +28,7 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
@@ -49,6 +51,7 @@ import timber.log.Timber
 @HiltViewModel
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
+    private val appjamtampRepository: AppjamtampRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
 ) : ViewModel() {
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
@@ -56,6 +59,10 @@ class SoptLogViewModel @Inject constructor(
         get() = _soptLogInfo.asStateFlow()
 
     val todayFortuneText = _soptLogInfo.map { it.soptLogInfo.todayFortuneText }
+
+    private val _isAppjamJoined = MutableStateFlow(false)
+    val isAppjamJoined: StateFlow<Boolean>
+        get() = _isAppjamJoined.asStateFlow()
 
     private val _navigationEvent = Channel<SoptLogNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
@@ -96,6 +103,34 @@ class SoptLogViewModel @Inject constructor(
                 .onFailure(Timber::e)
 
             _soptLogInfo.update { it.copy(isLoading = false) }
+        }
+    }
+
+    // 나의 앱잼 정보도 같이 가져옴 (앱잼탬프 기간만)
+    fun getSoptLogInfoData() {
+        viewModelScope.launch {
+            _soptLogInfo.update { it.copy(isLoading = true) }
+
+            val soptLogDeferred = async { soptLogRepository.getSoptLogInfo() }
+            val appjamInfoDeferred = async { appjamtampRepository.getMyAppjamInfo() }
+
+            val soptLogResult = soptLogDeferred.await()
+            val appjamResult = appjamInfoDeferred.await()
+
+            if (soptLogResult.isSuccess && appjamResult.isSuccess) {
+                _soptLogInfo.update {
+                    it.copy(
+                        soptLogInfo = soptLogResult.getOrThrow(),
+                        isLoading = false,
+                        isError = false
+                    )
+                }
+                _isAppjamJoined.value = true
+            } else {
+                val error = soptLogResult.exceptionOrNull() ?: appjamResult.exceptionOrNull() ?: Exception("Unknown error")
+                Timber.e(error)
+                _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
+            }
         }
     }
 
