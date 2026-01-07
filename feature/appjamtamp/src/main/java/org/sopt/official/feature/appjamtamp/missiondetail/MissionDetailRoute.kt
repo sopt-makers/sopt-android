@@ -287,7 +287,9 @@ private fun MissionDetailScreen(
                                 .clickable(onClick = onToolbarIconClick)
                         )
                     }
-                }
+                },
+                modifier = Modifier
+                    .padding(vertical = 12.dp)
             )
 
             Spacer(modifier = Modifier.height(10.dp))

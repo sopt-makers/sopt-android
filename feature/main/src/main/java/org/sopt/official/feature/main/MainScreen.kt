@@ -142,6 +142,13 @@ fun MainScreen(
         hasSoptampFlag || hasMissionArgs
     }
 
+    val shouldNavigateToAppjamtamp = {
+        val intent = intentState
+        val hasAppjamtampFlag = intent?.getBooleanExtra("isAppjamtampDeepLink", false) == true
+        val hasMissionArgs = intent?.hasExtra("appjamtampArgs") == true
+        hasAppjamtampFlag || hasMissionArgs
+    }
+
     // soptLog 검사 로직
     val shouldNavigateToSoptLog = remember(intentState) {
         val intent = intentState
@@ -167,6 +174,7 @@ fun MainScreen(
 
     LaunchedEffect(
         shouldNavigateToSoptamp,
+        shouldNavigateToAppjamtamp,
         shouldNavigateToPoke,
         shouldNavigateToPokeNotification,
         shouldNavigatePokeFriendList,
@@ -174,6 +182,11 @@ fun MainScreen(
     ) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
+            activity?.intent?.putExtra("isSoptampDeepLink", false)
+        }
+
+        if (shouldNavigateToAppjamtamp()) {
+            navigator.navigateAndClear(MainTab.Appjamtamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
         }
 
@@ -261,6 +274,10 @@ fun MainScreen(
                                 when (deepLinkType) {
                                     DeepLinkType.SOPTAMP -> {
                                         navigator.navigate(MainTab.Soptamp, userStatus)
+                                    }
+
+                                    DeepLinkType.APPJAMTAMP -> {
+                                        navigator.navigate(MainTab.Appjamtamp, userStatus)
                                     }
 
                                     else -> {
