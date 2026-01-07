@@ -2,6 +2,7 @@ package org.sopt.official.domain.appjamtamp.repository
 
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionListEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
+import org.sopt.official.domain.appjamtamp.entity.AppjamtampMyAppjamInfoEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
 
@@ -22,6 +23,8 @@ interface AppjamtampRepository {
         contents: String,
         activityDate: String
     ): Result<Unit>
+
+    suspend fun getMyAppjamInfo(): Result<AppjamtampMyAppjamInfoEntity>
 
     suspend fun getAppjamtampMissionRanking(
         size: Int

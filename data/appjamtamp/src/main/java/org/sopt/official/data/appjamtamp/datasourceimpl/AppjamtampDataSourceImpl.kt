@@ -4,6 +4,7 @@ import javax.inject.Inject
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
 import org.sopt.official.data.appjamtamp.dto.request.AppjamtampPostStampRequestDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMyAppjamInfoResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampPostStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
@@ -37,6 +38,8 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
             activityDate = activityDate
         )
     )
+
+    override suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto = appjamtampService.getMyAppjamInfo()
 
     override suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse =
         appjamtampService.getAppjamtampMissionTop3(size = size)
