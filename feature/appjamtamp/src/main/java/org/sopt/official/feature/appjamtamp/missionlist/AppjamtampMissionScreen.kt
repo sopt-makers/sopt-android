@@ -2,12 +2,12 @@ package org.sopt.official.feature.appjamtamp.missionlist
 
 import android.content.Intent
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -40,7 +40,6 @@ import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun AppjamtampMissionRoute(
-    paddingValues: PaddingValues,
     viewModel: AppjamtampMissionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -75,7 +74,6 @@ internal fun AppjamtampMissionRoute(
     }
 
     AppjamtampMissionScreen(
-        paddingValues = paddingValues,
         state = state,
         onReportButtonClick = viewModel::reportButtonClick,
         onEditMessageButtonClick = viewModel::onEditMessageButtonClick,
@@ -85,7 +83,6 @@ internal fun AppjamtampMissionRoute(
 
 @Composable
 private fun AppjamtampMissionScreen(
-    paddingValues: PaddingValues,
     state: AppjamtampMissionState,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
@@ -93,6 +90,7 @@ private fun AppjamtampMissionScreen(
 ) {
     Scaffold(
         modifier = Modifier
+            .statusBarsPadding()
             .fillMaxSize(),
         containerColor = SoptTheme.colors.onSurface950,
         topBar = {
@@ -117,20 +115,21 @@ private fun AppjamtampMissionScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(innerPadding)
                 .padding(horizontal = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            AppjamtampDescription(
-                teamName = state.teamName,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
+            if (state.teamName.isNotBlank()) {
+                AppjamtampDescription(
+                    teamName = state.teamName,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             MissionsGridComponent(
                 missionList = state.missionList.missionList,
@@ -196,7 +195,6 @@ private fun AppjamtampMissionScreenPreview() {
         )
 
         AppjamtampMissionScreen(
-            paddingValues = PaddingValues(),
             state = mockState
         )
     }
