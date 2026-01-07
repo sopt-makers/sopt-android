@@ -45,7 +45,9 @@ internal fun TodayScoreRaking(
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = SoptTheme.colors.onSurface900)
             .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
-            .noRippleClickable { onTeamRankingClick }
+            .noRippleClickable {
+                onTeamRankingClick("")
+            }
     ) {
         Row(
             modifier = Modifier

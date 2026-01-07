@@ -35,7 +35,7 @@ internal class AppjamtampRankingViewModel @Inject constructor(
             if (top3Result.isSuccess && top10Result.isSuccess) {
                 _state.value = AppjamtampRankingState.Success(
                     top3RecentRankingListUiModel = top3Result.getOrThrow().toUiModel(),
-                    top10MissionScoreListUiModel = top10Result.getOrThrow().toUiModel()
+                    topMissionScoreListUiModel = top10Result.getOrThrow().toUiModel()
                 )
             } else {
                 val error = top3Result.exceptionOrNull() ?: top10Result.exceptionOrNull() ?: Exception("Unknown error")

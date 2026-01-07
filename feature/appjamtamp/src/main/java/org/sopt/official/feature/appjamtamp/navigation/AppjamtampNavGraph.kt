@@ -29,28 +29,32 @@ fun NavGraphBuilder.appjamtampNavGraph(
     ) {
         composable<AppjamtampMissionList> {
             AppjamtampMissionRoute(
-                navigateToMissionDetail = { _, _, _, _ -> },
+                navigateToMissionDetail = navController::navigateToMissionDetail,
                 navigateToRanking = navController::navigateToRanking
             )
         }
 
-        composable<AppjamtampMissionDetail> { backStackEntry ->
-            val args = backStackEntry.toRoute<AppjamtampMissionDetail>()
+        composable<AppjamtampMissionDetail> {
             MissionDetailRoute(
                 navigateUp = navController::navigateUp,
             )
         }
 
-        composable<AppjamtampRanking> { backStackEntry ->
-            val args = backStackEntry.toRoute<AppjamtampRanking>()
+        composable<AppjamtampRanking> {
             AppjamtampRankingRoute(
                 navigateUp = navController::navigateUp,
                 navigateToTeamMissionList = navController::navigateToTeamMissionList
             )
         }
 
-        composable<AppjamtampTeamMissionList> {
-            AppjamtampTeamMissionListRoute()
+        composable<AppjamtampTeamMissionList> { backStackEntry ->
+            val args = backStackEntry.toRoute<AppjamtampTeamMissionList>()
+
+            AppjamtampTeamMissionListRoute(
+                teamNumber = args.teamNumber,
+                navigateUp = navController::navigateUp,
+                navigateToMissionDetail = navController::navigateToMissionDetail
+            )
         }
     }
 }

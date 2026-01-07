@@ -44,9 +44,9 @@ import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.ranking.component.TodayScoreRaking
 import org.sopt.official.feature.appjamtamp.ranking.component.Top3RecentRankingMission
 import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
-import org.sopt.official.feature.appjamtamp.ranking.model.Top10MissionScoreListUiModel
 import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingListUiModel
 import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
+import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreListUiModel
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 
 @Composable
@@ -68,7 +68,7 @@ internal fun AppjamtampRankingRoute(
 
         is AppjamtampRankingState.Success -> {
             val top3RecentRankingList = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel.top3RecentRankingList
-            val top10MissionScoreList = (state as AppjamtampRankingState.Success).top10MissionScoreListUiModel.top10MissionScoreList
+            val top10MissionScoreList = (state as AppjamtampRankingState.Success).topMissionScoreListUiModel.top10MissionScoreList
             AppjamtampRankingScreen(
                 top3RecentRankings = top3RecentRankingList,
                 top10MissionScores = top10MissionScoreList,
@@ -261,7 +261,7 @@ private fun AppjamtampRankingScreenPreview() {
             )
         )
 
-        val mockTop10MissionScoreListUiModel = Top10MissionScoreListUiModel(
+        val mockTopMissionScoreListUiModel = TopMissionScoreListUiModel(
             top10MissionScoreList = persistentListOf(
                 TopMissionScoreUiModel(rank = 1, teamName = "보핏", todayPoints = 1200, totalPoints = 5000),
                 TopMissionScoreUiModel(rank = 2, teamName = "노바", todayPoints = 1100, totalPoints = 4800),
@@ -278,7 +278,7 @@ private fun AppjamtampRankingScreenPreview() {
 
         AppjamtampRankingScreen(
             top3RecentRankings = mockTop3RecentRankingListUiModel.top3RecentRankingList,
-            top10MissionScores = mockTop10MissionScoreListUiModel.top10MissionScoreList,
+            top10MissionScores = mockTopMissionScoreListUiModel.top10MissionScoreList,
             onBackButtonClick = {},
             onTeamRankingClick = { _ -> }
         )

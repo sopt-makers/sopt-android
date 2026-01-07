@@ -15,8 +15,21 @@ internal fun NavController.navigateToMissionList(navOptions: NavOptions? = null)
     navigate(AppjamtampMissionList, navOptions)
 }
 
-internal fun NavController.navigateToMissionDetail(navOptions: NavOptions? = null) {
-    navigate(AppjamtampMissionDetail, navOptions)
+internal fun NavController.navigateToMissionDetail(
+    missionId: Int,
+    missionLevel: Int,
+    title: String,
+    ownerName: String?,
+    navOptions: NavOptions? = null
+) {
+    navigate(
+        AppjamtampMissionDetail(
+            missionId = missionId,
+            missionLevel = missionLevel,
+            title = title,
+            ownerName = ownerName
+        ), navOptions
+    )
 }
 
 internal fun NavController.navigateToRanking(navOptions: NavOptions? = null) {
