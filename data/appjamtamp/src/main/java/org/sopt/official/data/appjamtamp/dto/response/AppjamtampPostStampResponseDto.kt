@@ -13,6 +13,10 @@ data class AppjamtampPostStampResponseDto(
     val images: List<String>,
     @SerialName("activityDate")
     val activityDate: String,
+    @SerialName("ownerNickname")
+    val ownerNickname: String = "",
+    @SerialName("ownerProfileImage")
+    val ownerProfileImage: String? = null,
     @SerialName("createdAt")
     val createdAt: String,
     @SerialName("updatedAt")

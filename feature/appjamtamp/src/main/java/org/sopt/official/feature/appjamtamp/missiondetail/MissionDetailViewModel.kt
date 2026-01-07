@@ -194,12 +194,16 @@ internal class MissionDetailViewModel @Inject constructor(
                         image = imageModel.url[0],
                         contents = content,
                         activityDate = date
-                    ).onSuccess {
+                    ).onSuccess { writer ->
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
                                 viewType = DetailViewType.COMPLETE,
-                                showPostSubmissionBadge = true
+                                showPostSubmissionBadge = true,
+                                writer = User(
+                                    writer.nickname,
+                                    writer.profileImage.orEmpty()
+                                )
                             )
                         }
                     }.onFailure { e ->

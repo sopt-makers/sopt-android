@@ -10,6 +10,7 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMyAppjamInfoEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
+import org.sopt.official.domain.appjamtamp.entity.AppjamtampUser
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 
 internal class AppjamtampRepositoryImpl @Inject constructor(
@@ -34,13 +35,13 @@ internal class AppjamtampRepositoryImpl @Inject constructor(
         image: String,
         contents: String,
         activityDate: String
-    ): Result<Unit> = suspendRunCatching {
+    ): Result<AppjamtampUser> = suspendRunCatching {
         appjamtampDataSource.postAppjamtampStamp(
             missionId = missionId,
             image = image,
             contents = contents,
             activityDate = activityDate
-        )
+        ).toDomain()
     }
 
     override suspend fun getMyAppjamInfo(): Result<AppjamtampMyAppjamInfoEntity> = suspendRunCatching {
