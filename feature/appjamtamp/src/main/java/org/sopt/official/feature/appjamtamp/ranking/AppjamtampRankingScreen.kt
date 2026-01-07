@@ -1,6 +1,7 @@
 package org.sopt.official.feature.appjamtamp.ranking
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +32,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -50,7 +51,9 @@ import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 
 @Composable
 internal fun AppjamtampRankingRoute(
-    viewModel:AppjamtampRankingViewModel= hiltViewModel()
+    navigateUp: () -> Unit,
+    navigateToTeamMissionList: (String) -> Unit,
+    viewModel: AppjamtampRankingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -58,16 +61,22 @@ internal fun AppjamtampRankingRoute(
         viewModel.getRankingData()
     }
 
-    when(state) {
-        is AppjamtampRankingState.Loading -> { LoadingIndicator() }
+    when (state) {
+        is AppjamtampRankingState.Loading -> {
+            LoadingIndicator()
+        }
+
         is AppjamtampRankingState.Success -> {
             val top3RecentRankingList = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel.top3RecentRankingList
             val top10MissionScoreList = (state as AppjamtampRankingState.Success).top10MissionScoreListUiModel.top10MissionScoreList
             AppjamtampRankingScreen(
                 top3RecentRankings = top3RecentRankingList,
-                top10MissionScores = top10MissionScoreList
+                top10MissionScores = top10MissionScoreList,
+                onBackButtonClick = navigateUp,
+                onTeamRankingClick = navigateToTeamMissionList
             )
         }
+
         is AppjamtampRankingState.Failure -> {}
     }
 }
@@ -75,7 +84,9 @@ internal fun AppjamtampRankingRoute(
 @Composable
 internal fun AppjamtampRankingScreen(
     top3RecentRankings: ImmutableList<Top3RecentRankingUiModel>,
-    top10MissionScores: ImmutableList<TopMissionScoreUiModel>
+    top10MissionScores: ImmutableList<TopMissionScoreUiModel>,
+    onBackButtonClick: () -> Unit,
+    onTeamRankingClick: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -91,9 +102,7 @@ internal fun AppjamtampRankingScreen(
         topBar = {
             BackButtonHeader(
                 title = "앱잼팀 랭킹",
-                onBackButtonClick = {
-                    // TODO - 뒤로가기 (앱잼탬프 홈 - AppjamtampMissionScreen)
-                },
+                onBackButtonClick = onBackButtonClick,
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .padding(start = 16.dp)
@@ -149,7 +158,11 @@ internal fun AppjamtampRankingScreen(
                 top3RecentRankings.forEach { top3RecentRanking ->
                     Top3RecentRankingMission(
                         top3RecentRanking = top3RecentRanking,
-                        modifier = Modifier.width(topRankingItemWidth)
+                        modifier = Modifier
+                            .width(topRankingItemWidth)
+                            .clickable {
+                                onTeamRankingClick(top3RecentRanking.teamNumber)
+                            }
                     )
                 }
             }
@@ -198,9 +211,7 @@ internal fun AppjamtampRankingScreen(
                     TodayScoreRaking(
                         top10MissionScore = item,
                         modifier = Modifier.weight(1f),
-                        onTeamRankingClick = {
-                            // Todo : 앱잼 팀 미션 화면으로 이동 (teamNumber 전달)
-                        }
+                        onTeamRankingClick = onTeamRankingClick
                     )
                 }
             }
@@ -267,7 +278,9 @@ private fun AppjamtampRankingScreenPreview() {
 
         AppjamtampRankingScreen(
             top3RecentRankings = mockTop3RecentRankingListUiModel.top3RecentRankingList,
-            top10MissionScores = mockTop10MissionScoreListUiModel.top10MissionScoreList
+            top10MissionScores = mockTop10MissionScoreListUiModel.top10MissionScoreList,
+            onBackButtonClick = {},
+            onTeamRankingClick = { _ -> }
         )
     }
 }

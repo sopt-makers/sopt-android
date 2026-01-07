@@ -3,7 +3,6 @@ package org.sopt.official.feature.appjamtamp.navigation
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.toRoute
@@ -30,7 +29,8 @@ fun NavGraphBuilder.appjamtampNavGraph(
     ) {
         composable<AppjamtampMissionList> {
             AppjamtampMissionRoute(
-                paddingValues = paddingValues
+                navigateToMissionDetail = { _, _, _, _ -> },
+                navigateToRanking = navController::navigateToRanking
             )
         }
 
@@ -43,15 +43,14 @@ fun NavGraphBuilder.appjamtampNavGraph(
 
         composable<AppjamtampRanking> { backStackEntry ->
             val args = backStackEntry.toRoute<AppjamtampRanking>()
-            AppjamtampRankingRoute()
+            AppjamtampRankingRoute(
+                navigateUp = navController::navigateUp,
+                navigateToTeamMissionList = navController::navigateToTeamMissionList
+            )
         }
 
         composable<AppjamtampTeamMissionList> {
             AppjamtampTeamMissionListRoute()
         }
     }
-}
-
-fun NavController.navigateToAppjamtamp(navOptions: NavOptions? = null) {
-    navigate(AppjamtampNavGraph, navOptions)
 }
