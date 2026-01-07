@@ -166,6 +166,12 @@ internal class MissionDetailViewModel @Inject constructor(
     }
 
     fun handleSubmit() {
+        with(_missionDetailState.value) {
+            if (content.isBlank()) return
+            if (imageModel is ImageModel.Empty) return
+            if (date.isBlank()) return
+        }
+
         _missionDetailState.update {
             it.copy(isLoading = true)
         }

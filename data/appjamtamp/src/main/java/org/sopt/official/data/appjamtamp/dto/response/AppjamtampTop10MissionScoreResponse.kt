@@ -13,13 +13,12 @@ data class AppjamtampTop10MissionScoreResponse(
 data class AppjamtampMissionScoreResponse(
     @SerialName("rank")
     val rank: Int,
-
     @SerialName("teamName")
     val teamName: String,
-
+    @SerialName("teamNumber")
+    val teamNumber: String,
     @SerialName("todayPoints")
     val todayPoints: Int,
-
     @SerialName("totalPoints")
     val totalPoints: Int
 )

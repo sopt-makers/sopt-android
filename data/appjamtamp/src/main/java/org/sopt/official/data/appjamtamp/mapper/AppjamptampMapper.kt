@@ -2,8 +2,8 @@ package org.sopt.official.data.appjamtamp.mapper
 
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionScoreResponse
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampRecentMissionResponse
-import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 
@@ -34,6 +34,7 @@ internal fun AppjamtampMissionScoreResponse.toDomain(): AppjamtampMissionScore {
     return AppjamtampMissionScore(
         rank = this.rank,
         teamName = this.teamName,
+        teamNumber = this.teamNumber,
         todayPoints = this.todayPoints,
         totalPoints = this.todayPoints
     )

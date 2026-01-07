@@ -28,17 +28,17 @@ import org.sopt.official.feature.appjamtamp.util.noRippleClickable
 
 @Composable
 internal fun TodayScoreRaking(
-    top10MissionScore: TopMissionScoreUiModel,
+    topMissionScore: TopMissionScoreUiModel,
     modifier: Modifier = Modifier,
     onTeamRankingClick: (teamNumber: String) -> Unit = {}
 ) {
-    val rankIconRes = when (top10MissionScore.rank) {
+    val rankIconRes = when (topMissionScore.rank) {
         1 -> R.drawable.ic_rank_1
         2 -> R.drawable.ic_rank_2
         3 -> R.drawable.ic_rank_3
         else -> R.drawable.ic_ranking_default
     }
-    val rankTextColor = if (top10MissionScore.rank <= 3) Color.White else SoptTheme.colors.onSurface100
+    val rankTextColor = if (topMissionScore.rank <= 3) Color.White else SoptTheme.colors.onSurface100
 
     Column(
         modifier = modifier
@@ -46,7 +46,7 @@ internal fun TodayScoreRaking(
             .background(color = SoptTheme.colors.onSurface900)
             .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
             .noRippleClickable {
-                onTeamRankingClick("")
+                onTeamRankingClick(topMissionScore.teamNumber)
             }
     ) {
         Row(
@@ -64,7 +64,7 @@ internal fun TodayScoreRaking(
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = top10MissionScore.rank.toString(),
+                    text = topMissionScore.rank.toString(),
                     style = SoptTheme.typography.heading16B,
                     color = rankTextColor,
                     modifier = Modifier.padding(vertical = 2.dp, horizontal = 9.dp)
@@ -72,7 +72,7 @@ internal fun TodayScoreRaking(
             }
 
             Text(
-                text = top10MissionScore.teamName,
+                text = topMissionScore.teamName,
                 color = White,
                 style = SoptTheme.typography.heading16B,
                 modifier = Modifier
@@ -84,14 +84,14 @@ internal fun TodayScoreRaking(
         Spacer(modifier = Modifier.height(height = 14.dp))
 
         Text(
-            text = "총 ${top10MissionScore.totalPoints}점",
+            text = "총 ${topMissionScore.totalPoints}점",
             color = SoptTheme.colors.onSurface300,
             style = SoptTheme.typography.title14SB,
             modifier = Modifier.align(Alignment.End)
         )
 
         Text(
-            text = "+${top10MissionScore.todayPoints}점",
+            text = "+${topMissionScore.todayPoints}점",
             color = White,
             style = SoptTheme.typography.heading20B,
             modifier = Modifier.align(Alignment.End)
@@ -106,10 +106,11 @@ private fun TodayScoreRakingPreview() {
         val mockTopMissionScoreUiModel = TopMissionScoreUiModel(
             rank = 2,
             teamName = "노바",
+            teamNumber = "FIRST",
             todayPoints = 1000,
             totalPoints = 3000
         )
 
-        TodayScoreRaking(top10MissionScore = mockTopMissionScoreUiModel)
+        TodayScoreRaking(topMissionScore = mockTopMissionScoreUiModel)
     }
 }

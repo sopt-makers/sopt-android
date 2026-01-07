@@ -209,7 +209,7 @@ internal fun AppjamtampRankingScreen(
             ) {
                 top10MissionScores.forEach { item ->
                     TodayScoreRaking(
-                        top10MissionScore = item,
+                        topMissionScore = item,
                         modifier = Modifier.weight(1f),
                         onTeamRankingClick = onTeamRankingClick
                     )
@@ -263,16 +263,16 @@ private fun AppjamtampRankingScreenPreview() {
 
         val mockTopMissionScoreListUiModel = TopMissionScoreListUiModel(
             top10MissionScoreList = persistentListOf(
-                TopMissionScoreUiModel(rank = 1, teamName = "보핏", todayPoints = 1200, totalPoints = 5000),
-                TopMissionScoreUiModel(rank = 2, teamName = "노바", todayPoints = 1100, totalPoints = 4800),
-                TopMissionScoreUiModel(rank = 3, teamName = "비트", todayPoints = 950, totalPoints = 4200),
-                TopMissionScoreUiModel(rank = 4, teamName = "하이링구얼", todayPoints = 800, totalPoints = 3900),
-                TopMissionScoreUiModel(rank = 5, teamName = "납작마켓", todayPoints = 750, totalPoints = 3500),
-                TopMissionScoreUiModel(rank = 6, teamName = "웹", todayPoints = 600, totalPoints = 3100),
-                TopMissionScoreUiModel(rank = 7, teamName = "안드로이드", todayPoints = 550, totalPoints = 2800),
-                TopMissionScoreUiModel(rank = 8, teamName = "iOS", todayPoints = 400, totalPoints = 2500),
-                TopMissionScoreUiModel(rank = 9, teamName = "디자인", todayPoints = 300, totalPoints = 2000),
-                TopMissionScoreUiModel(rank = 10, teamName = "기획", todayPoints = 100, totalPoints = 1500)
+                TopMissionScoreUiModel(rank = 1, teamName = "보핏", teamNumber = "FIRST", todayPoints = 1200, totalPoints = 5000),
+                TopMissionScoreUiModel(rank = 2, teamName = "노바", teamNumber = "FIRST", todayPoints = 1100, totalPoints = 4800),
+                TopMissionScoreUiModel(rank = 3, teamName = "비트", teamNumber = "FIRST", todayPoints = 950, totalPoints = 4200),
+                TopMissionScoreUiModel(rank = 4, teamName = "하이링구얼", teamNumber = "FIRST", todayPoints = 800, totalPoints = 3900),
+                TopMissionScoreUiModel(rank = 5, teamName = "납작마켓", teamNumber = "FIRST", todayPoints = 750, totalPoints = 3500),
+                TopMissionScoreUiModel(rank = 6, teamName = "웹", teamNumber = "FIRST", todayPoints = 600, totalPoints = 3100),
+                TopMissionScoreUiModel(rank = 7, teamName = "안드로이드", teamNumber = "FIRST", todayPoints = 550, totalPoints = 2800),
+                TopMissionScoreUiModel(rank = 8, teamName = "iOS", teamNumber = "FIRST", todayPoints = 400, totalPoints = 2500),
+                TopMissionScoreUiModel(rank = 9, teamName = "디자인", teamNumber = "FIRST", todayPoints = 300, totalPoints = 2000),
+                TopMissionScoreUiModel(rank = 10, teamName = "기획", teamNumber = "FIRST", todayPoints = 100, totalPoints = 1500)
             )
         )
 

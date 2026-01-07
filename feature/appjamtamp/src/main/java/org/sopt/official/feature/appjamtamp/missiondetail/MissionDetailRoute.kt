@@ -1,6 +1,7 @@
 package org.sopt.official.feature.appjamtamp.missiondetail
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -197,7 +198,9 @@ private fun MyEmptyMissionDetailScreen(
     ) {
         BackButtonHeader(
             title = "미션",
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
+            modifier = Modifier
+                .padding(vertical = 12.dp)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -260,80 +263,85 @@ private fun MissionDetailScreen(
     val scrollState = rememberScrollState()
     var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
-            .padding(horizontal = 16.dp)
-            .verticalScroll(scrollState)
     ) {
-        BackButtonHeader(
-            title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
-            onBackButtonClick = onBackButtonClick,
-            trailingIcon = {
-                uiState.viewType.toolbarIcon?.let {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
-                        contentDescription = null,
-                        tint = SoptTheme.colors.onSurface10,
-                        modifier = Modifier
-                            .clickable(onClick = onToolbarIconClick)
-                    )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .verticalScroll(scrollState)
+        ) {
+            BackButtonHeader(
+                title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
+                onBackButtonClick = onBackButtonClick,
+                trailingIcon = {
+                    uiState.viewType.toolbarIcon?.let {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
+                            contentDescription = null,
+                            tint = SoptTheme.colors.onSurface10,
+                            modifier = Modifier
+                                .clickable(onClick = onToolbarIconClick)
+                        )
+                    }
                 }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        MissionHeader(
-            title = uiState.mission.title,
-            stamp = Stamp.findStampByLevel(uiState.mission.level)
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        ImageContent(
-            imageModel = uiState.imageModel,
-            onChangeImage = onChangeImage,
-            onClickZoomIn = onClickZoomIn,
-            isEditable = isEditable
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        ProfileTag(
-            name = uiState.writer.name,
-            profileImage = uiState.writer.profileImage
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (isEditable) {
-            DatePicker(
-                value = uiState.date,
-                placeHolder = "날짜를 입력해주세요.",
-                isEditable = true,
-                onClicked = onDatePickerClick
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
+            MissionHeader(
+                title = uiState.mission.title,
+                stamp = Stamp.findStampByLevel(uiState.mission.level)
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            ImageContent(
+                imageModel = uiState.imageModel,
+                onChangeImage = onChangeImage,
+                onClickZoomIn = onClickZoomIn,
+                isEditable = isEditable
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ProfileTag(
+                name = uiState.writer.name,
+                profileImage = uiState.writer.profileImage
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (isEditable) {
+                DatePicker(
+                    value = uiState.date,
+                    placeHolder = "날짜를 입력해주세요.",
+                    isEditable = true,
+                    onClicked = onDatePickerClick
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            Memo(
+                value = uiState.content,
+                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                onValueChange = onMemoChange,
+                isEditable = isEditable
+            )
             Spacer(modifier = Modifier.height(8.dp))
+
+            DetailInfo(
+                date = uiState.date,
+                clapCount = uiState.clapCount,
+                viewCount = uiState.viewCount
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
         }
-
-        Memo(
-            value = uiState.content,
-            placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-            onValueChange = onMemoChange,
-            isEditable = isEditable
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        DetailInfo(
-            date = uiState.date,
-            clapCount = uiState.clapCount,
-            viewCount = uiState.viewCount
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
 
         when (uiState.viewType) {
             DetailViewType.READ_ONLY -> {
@@ -343,7 +351,7 @@ private fun MissionDetailScreen(
                     onPressClap = onActionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
+                        .align(Alignment.BottomCenter)
                 )
             }
 
@@ -368,6 +376,7 @@ private fun MissionDetailScreen(
             }
         }
     }
+
 }
 
 @Preview(showBackground = true, backgroundColor = 0x000000)

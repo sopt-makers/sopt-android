@@ -3,6 +3,7 @@ package org.sopt.official.feature.appjamtamp.ranking
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +13,6 @@ import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
 import org.sopt.official.feature.appjamtamp.ranking.model.toUiModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 internal class AppjamtampRankingViewModel @Inject constructor(

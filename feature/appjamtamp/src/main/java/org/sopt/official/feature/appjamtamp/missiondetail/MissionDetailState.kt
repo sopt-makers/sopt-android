@@ -12,7 +12,7 @@ internal data class MissionDetailState(
     val isLoading: Boolean = true,
     val isFailed: Boolean = false,
 
-    val viewType: DetailViewType = DetailViewType.WRITE,
+    val viewType: DetailViewType = DetailViewType.READ_ONLY,
     val mission: Mission = Mission.DEFAULT,
     val imageModel: ImageModel = ImageModel.Empty,
     val date: String = "",

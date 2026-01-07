@@ -16,6 +16,7 @@ internal fun List<AppjamtampMissionScore>.toUiModel(): TopMissionScoreListUiMode
 data class TopMissionScoreUiModel(
     val rank: Int,
     val teamName: String,
+    val teamNumber: String,
     val todayPoints: Int,
     val totalPoints: Int
 )
@@ -24,6 +25,7 @@ internal fun AppjamtampMissionScore.toUiModel(): TopMissionScoreUiModel =
     TopMissionScoreUiModel(
         rank = this.rank,
         teamName = this.teamName,
+        teamNumber = this.teamNumber,
         todayPoints = this.todayPoints,
         totalPoints = this.totalPoints
     )
