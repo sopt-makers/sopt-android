@@ -341,7 +341,7 @@ private fun MissionDetailScreen(
                 viewCount = uiState.viewCount
             )
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(120.dp))
         }
 
         when (uiState.viewType) {
