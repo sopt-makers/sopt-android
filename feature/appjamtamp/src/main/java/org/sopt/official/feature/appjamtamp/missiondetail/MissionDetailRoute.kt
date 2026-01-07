@@ -263,13 +263,15 @@ private fun MissionDetailScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
+            .padding(horizontal = 16.dp)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.BottomCenter
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp)
                 .verticalScroll(scrollState)
+                .align(Alignment.TopCenter)
         ) {
             BackButtonHeader(
                 title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
@@ -350,7 +352,6 @@ private fun MissionDetailScreen(
                     onPressClap = onActionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
                 )
             }
 
