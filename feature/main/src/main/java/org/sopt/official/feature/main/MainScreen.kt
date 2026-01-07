@@ -371,7 +371,7 @@ fun MainScreen(
             }
 
             SlideUpDownWithFadeAnimatedVisibility(
-                visible = navigator.currentTab != MainTab.Soptamp && navigator.currentTab != MainTab.Poke,
+                visible = navigator.currentTab == MainTab.Home || navigator.currentTab == MainTab.SoptLog
             ) {
                 MainFloatingButton(
                     paddingValues = innerPadding
@@ -381,7 +381,7 @@ fun MainScreen(
     )
 
     if (isOpenDialog) {
-        UnauthenticatedDDialog(
+        UnauthenticatedDialog(
             onDismissRequest = { isOpenDialog = false },
             onLogin = {
                 context.startActivity(
@@ -394,7 +394,7 @@ fun MainScreen(
 }
 
 @Composable
-fun UnauthenticatedDDialog(
+fun UnauthenticatedDialog(
     onDismissRequest: () -> Unit,
     onLogin: () -> Unit,
 ) {

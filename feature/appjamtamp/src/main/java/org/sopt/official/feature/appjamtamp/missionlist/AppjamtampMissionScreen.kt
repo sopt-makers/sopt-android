@@ -1,6 +1,7 @@
 package org.sopt.official.feature.appjamtamp.missionlist
 
 import android.content.Intent
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,9 +11,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,6 +30,7 @@ import androidx.lifecycle.flowWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.OneButtonDialog
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.feature.appjamtamp.component.MissionsGridComponent
 import org.sopt.official.feature.appjamtamp.missionlist.component.AppjamtampDescription
@@ -40,6 +46,8 @@ import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun AppjamtampMissionRoute(
+    navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
+    navigateToRanking: () -> Unit,
     viewModel: AppjamtampMissionViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -69,6 +77,17 @@ internal fun AppjamtampMissionRoute(
                         )
                         context.startActivity(intent)
                     }
+
+                    is AppjamtampSideEffect.NavigateToMissionDetail -> {
+                        navigateToMissionDetail(
+                            sideEffect.mission.id,
+                            sideEffect.mission.level.value,
+                            sideEffect.mission.title,
+                            sideEffect.mission.ownerName
+                        )
+                    }
+
+                    AppjamtampSideEffect.NavigateToRanking -> navigateToRanking()
                 }
             }
     }
@@ -78,6 +97,8 @@ internal fun AppjamtampMissionRoute(
         onReportButtonClick = viewModel::reportButtonClick,
         onEditMessageButtonClick = viewModel::onEditMessageButtonClick,
         onMenuClick = viewModel::updateMissionFilter,
+        onMissionClick = viewModel::onMissionItemClick,
+        onFloatingButtonClick = viewModel::onFloatingButtonClick
     )
 }
 
@@ -86,8 +107,12 @@ private fun AppjamtampMissionScreen(
     state: AppjamtampMissionState,
     onMenuClick: (String) -> Unit = {},
     onReportButtonClick: () -> Unit = {},
-    onEditMessageButtonClick: () -> Unit = {}
+    onEditMessageButtonClick: () -> Unit = {},
+    onMissionClick: (mission: AppjamtampMissionUiModel) -> Unit = {},
+    onFloatingButtonClick: () -> Unit = {}
 ) {
+    var isDialogVisible by remember { mutableStateOf(false) }
+
     Scaffold(
         modifier = Modifier
             .statusBarsPadding()
@@ -105,9 +130,7 @@ private fun AppjamtampMissionScreen(
         },
         floatingActionButton = {
             AppjamtampFloatingButton(
-                onClick = {
-                    // Todo : 랭킹화면으로 이동
-                }
+                onClick = onFloatingButtonClick
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -133,10 +156,38 @@ private fun AppjamtampMissionScreen(
 
             MissionsGridComponent(
                 missionList = state.missionList.missionList,
-                onMissionItemClick = { item ->
-                    // Todo : 미션 상세화면으로 이동
+                onMissionItemClick = {
+                    if (state.teamName.isNotBlank()) {
+                        onMissionClick(it)
+                    } else {
+                        isDialogVisible = true
+                    }
                 }
             )
+        }
+    }
+
+    if (isDialogVisible) {
+        OneButtonDialog(
+            onDismiss = { isDialogVisible = false },
+            buttonText = "확인",
+            onButtonClick = { isDialogVisible = false }
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "솝탬프 안내",
+                    style = SoptTheme.typography.title18SB,
+                    color = SoptTheme.colors.onSurface10
+                )
+
+                Text(
+                    text = "각 미션의 인증 내용은 개인, 앱잼팀 랭킹에서 확인해주세요.",
+                    style = SoptTheme.typography.body14R,
+                    color = SoptTheme.colors.onSurface100
+                )
+            }
         }
     }
 }
