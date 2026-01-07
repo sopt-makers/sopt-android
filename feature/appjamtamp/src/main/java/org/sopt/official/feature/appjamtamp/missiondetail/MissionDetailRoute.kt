@@ -29,7 +29,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
@@ -68,15 +68,12 @@ internal fun MissionDetailRoute(
     }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(
-            Lifecycle.State.STARTED
-        ) {
-            viewModel.sideEffect.collect { sideEffect ->
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
                 when (sideEffect) {
                     is MissionDetailSideEffect.NavigateUp -> navigateUp()
                 }
             }
-        }
     }
 
     if (uiState.viewType == DetailViewType.WRITE) {
