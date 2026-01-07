@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.core.analytics)
 
     // domain
+    implementation(projects.domain.appjamtamp)
     implementation(projects.domain.soptlog)
     implementation(projects.domain.poke)
 

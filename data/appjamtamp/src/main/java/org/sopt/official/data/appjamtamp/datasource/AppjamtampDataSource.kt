@@ -1,6 +1,7 @@
 package org.sopt.official.data.appjamtamp.datasource
 
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMyAppjamInfoResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampPostStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
@@ -23,6 +24,8 @@ interface AppjamtampDataSource {
         contents: String,
         activityDate: String
     ): AppjamtampPostStampResponseDto
+
+    suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto
 
     suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse
 
