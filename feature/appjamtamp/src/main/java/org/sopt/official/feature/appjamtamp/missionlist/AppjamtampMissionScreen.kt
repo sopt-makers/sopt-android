@@ -56,6 +56,10 @@ internal fun AppjamtampMissionRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.fetchAppjamMissions(state.currentMissionFilter.isCompleted)
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {

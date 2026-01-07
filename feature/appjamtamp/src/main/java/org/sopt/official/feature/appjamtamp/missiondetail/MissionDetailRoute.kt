@@ -31,8 +31,13 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
+import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ClapFeedbackHolder
@@ -44,6 +49,7 @@ import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageContent
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageModal
 import org.sopt.official.feature.appjamtamp.missiondetail.component.Memo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.MissionHeader
+import org.sopt.official.feature.appjamtamp.missiondetail.component.PostSubmissionBadge
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ProfileTag
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
 import org.sopt.official.feature.appjamtamp.model.ImageModel
@@ -64,6 +70,29 @@ internal fun MissionDetailRoute(
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
     var isDeleteDialogVisible by remember { mutableStateOf(false) }
 
+    var showPostSubmissionBadge by remember(uiState.showPostSubmissionBadge) {
+        mutableStateOf(
+            uiState.showPostSubmissionBadge
+        )
+    }
+
+    val lottieResId = remember(uiState.mission.level) {
+        when (uiState.mission.level.value) {
+            1 -> R.raw.pinkstamps
+            2 -> R.raw.purplestamp
+            3 -> R.raw.greenstamp
+            else -> R.raw.orangestamp
+        }
+    }
+
+    val lottieComposition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(lottieResId),
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        isPlaying = showPostSubmissionBadge,
+    )
+
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         viewModel.flushClap()
     }
@@ -75,6 +104,13 @@ internal fun MissionDetailRoute(
                     is MissionDetailSideEffect.NavigateUp -> navigateUp()
                 }
             }
+    }
+
+    LaunchedEffect(!uiState.isLoading, progress) {
+        if (progress >= 0.99f && !uiState.isLoading) {
+            delay(500L)
+            viewModel.updateShowPostSubmissionBadge()
+        }
     }
 
     if (uiState.viewType == DetailViewType.WRITE) {
@@ -171,6 +207,13 @@ internal fun MissionDetailRoute(
                 color = SoptTheme.colors.primary,
             )
         }
+    }
+
+    if (showPostSubmissionBadge) {
+        PostSubmissionBadge(
+            composition = lottieComposition,
+            progress = progress
+        )
     }
 }
 

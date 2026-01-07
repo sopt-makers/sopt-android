@@ -27,17 +27,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
+import java.util.concurrent.TimeUnit
 import org.sopt.official.designsystem.GrayAlpha100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-import java.util.concurrent.TimeUnit
 
 @Composable
 internal fun Top3RecentRankingMission(
@@ -128,35 +128,29 @@ internal fun Top3RecentRankingMission(
     }
 }
 
-/* 업로드 시간 변경 함수
-서버 응답 형식 : 2025-10-31T00:00:56
-업로드 시간: 상대시간 노출
-10분 미만 => 방금 전
-11분 전 ~ 59분 전 => 그대로 표기
-1시간 ~ 24시간 전 => 그대로 표기
-25시간 이후 => 1일 전, 2일 전 ...
- */
 private fun String?.toRelativeTime(): String {
     if (this.isNullOrBlank()) return ""
 
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
     dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
 
-    val date = dateFormat .parse(this) ?: return ""
+    val date = dateFormat.parse(this) ?: return ""
     val currentDate = Date()
 
     val diffMillis = currentDate.time - date.time
-    if (diffMillis < 0) return "방금 전"
+    if (diffMillis < 0) return "1분 전"
 
     val minutes = TimeUnit.MILLISECONDS.toMinutes(diffMillis)
     val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
-    val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
 
     return when {
-        minutes < 10 -> "방금 전"
-        minutes in 10..59 -> "${minutes}분 전"
-        hours in 1..23 -> "${hours}시간 전"
-        else -> "${days}일 전"
+        minutes == 0L -> "1분 전"
+        minutes in 1..59 -> "${minutes}분 전"
+        hours in 1..24 -> "${hours}시간 전"
+        else -> {
+            val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
+            "${days}일 전"
+        }
     }
 }
 

@@ -8,7 +8,7 @@ data class AppjamtampMissionState(
     val reportUrl: String = "",
     val teamName: String = "",
     val missionList: AppjamtampMissionListUiModel = AppjamtampMissionListUiModel(),
-    val currentMissionFilter: MissionFilter = MissionFilter.ALL
+    val currentMissionFilter: MissionFilter = MissionFilter.APPJAM
 )
 
 sealed interface AppjamtampSideEffect {

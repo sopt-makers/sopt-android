@@ -198,7 +198,8 @@ internal class MissionDetailViewModel @Inject constructor(
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
-                                viewType = DetailViewType.COMPLETE
+                                viewType = DetailViewType.COMPLETE,
+                                showPostSubmissionBadge = true
                             )
                         }
                     }.onFailure { e ->
@@ -336,6 +337,12 @@ internal class MissionDetailViewModel @Inject constructor(
     fun updateContent(value: String) {
         _missionDetailState.update {
             it.copy(content = value)
+        }
+    }
+
+    fun updateShowPostSubmissionBadge() {
+        _missionDetailState.update {
+            it.copy(showPostSubmissionBadge = false)
         }
     }
 }

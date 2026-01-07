@@ -32,7 +32,6 @@ internal class AppjamtampMissionViewModel @Inject constructor(
 
     init {
         getReportUrl()
-        fetchAppjamMissions()
     }
 
     fun fetchAppjamMissions(isCompleted: Boolean? = null) {

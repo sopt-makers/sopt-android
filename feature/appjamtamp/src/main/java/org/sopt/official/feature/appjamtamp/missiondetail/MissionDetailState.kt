@@ -26,5 +26,6 @@ internal data class MissionDetailState(
     val unSyncedClapCount: Int = 0,
     val viewCount: Int = 0,
 
-    val clappers: ImmutableList<StampClapUserModel> = persistentListOf()
+    val clappers: ImmutableList<StampClapUserModel> = persistentListOf(),
+    val showPostSubmissionBadge: Boolean = false
 )
