@@ -125,7 +125,7 @@ class SoptLogViewModel @Inject constructor(
                         isError = false
                     )
                 }
-                _isAppjamJoined.value = true
+                _isAppjamJoined.value = appjamResult.getOrThrow().isAppjamJoined
             } else {
                 val error = soptLogResult.exceptionOrNull() ?: appjamResult.exceptionOrNull() ?: Exception("Unknown error")
                 Timber.e(error)
