@@ -1,6 +1,7 @@
 package org.sopt.official.feature.appjamtamp.missiondetail
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,8 +31,13 @@ import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
+import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ClapFeedbackHolder
@@ -43,6 +49,7 @@ import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageContent
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageModal
 import org.sopt.official.feature.appjamtamp.missiondetail.component.Memo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.MissionHeader
+import org.sopt.official.feature.appjamtamp.missiondetail.component.PostSubmissionBadge
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ProfileTag
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
 import org.sopt.official.feature.appjamtamp.model.ImageModel
@@ -63,6 +70,29 @@ internal fun MissionDetailRoute(
     var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
     var isDeleteDialogVisible by remember { mutableStateOf(false) }
 
+    var showPostSubmissionBadge by remember(uiState.showPostSubmissionBadge) {
+        mutableStateOf(
+            uiState.showPostSubmissionBadge
+        )
+    }
+
+    val lottieResId = remember(uiState.mission.level) {
+        when (uiState.mission.level.value) {
+            1 -> R.raw.pinkstamps
+            2 -> R.raw.purplestamp
+            3 -> R.raw.greenstamp
+            else -> R.raw.orangestamp
+        }
+    }
+
+    val lottieComposition by rememberLottieComposition(
+        spec = LottieCompositionSpec.RawRes(lottieResId),
+    )
+    val progress by animateLottieCompositionAsState(
+        composition = lottieComposition,
+        isPlaying = showPostSubmissionBadge,
+    )
+
     LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
         viewModel.flushClap()
     }
@@ -74,6 +104,13 @@ internal fun MissionDetailRoute(
                     is MissionDetailSideEffect.NavigateUp -> navigateUp()
                 }
             }
+    }
+
+    LaunchedEffect(!uiState.isLoading, progress) {
+        if (progress >= 0.99f && !uiState.isLoading) {
+            delay(500L)
+            viewModel.updateShowPostSubmissionBadge()
+        }
     }
 
     if (uiState.viewType == DetailViewType.WRITE) {
@@ -171,6 +208,13 @@ internal fun MissionDetailRoute(
             )
         }
     }
+
+    if (showPostSubmissionBadge) {
+        PostSubmissionBadge(
+            composition = lottieComposition,
+            progress = progress
+        )
+    }
 }
 
 @Composable
@@ -194,7 +238,9 @@ private fun MyEmptyMissionDetailScreen(
     ) {
         BackButtonHeader(
             title = "미션",
-            onBackButtonClick = onBackButtonClick
+            onBackButtonClick = onBackButtonClick,
+            modifier = Modifier
+                .padding(vertical = 12.dp)
         )
 
         Spacer(modifier = Modifier.height(10.dp))
@@ -257,80 +303,89 @@ private fun MissionDetailScreen(
     val scrollState = rememberScrollState()
     var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
 
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .systemBarsPadding()
             .padding(horizontal = 16.dp)
-            .verticalScroll(scrollState)
+            .systemBarsPadding(),
+        contentAlignment = Alignment.BottomCenter
     ) {
-        BackButtonHeader(
-            title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
-            onBackButtonClick = onBackButtonClick,
-            trailingIcon = {
-                uiState.viewType.toolbarIcon?.let {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
-                        contentDescription = null,
-                        tint = SoptTheme.colors.onSurface10,
-                        modifier = Modifier
-                            .clickable(onClick = onToolbarIconClick)
-                    )
-                }
-            }
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        MissionHeader(
-            title = uiState.mission.title,
-            stamp = Stamp.findStampByLevel(uiState.mission.level)
-        )
-
-        Spacer(modifier = Modifier.height(5.dp))
-
-        ImageContent(
-            imageModel = uiState.imageModel,
-            onChangeImage = onChangeImage,
-            onClickZoomIn = onClickZoomIn,
-            isEditable = isEditable
-        )
-
-        Spacer(modifier = Modifier.height(12.dp))
-
-        ProfileTag(
-            name = uiState.writer.name,
-            profileImage = uiState.writer.profileImage
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        if (isEditable) {
-            DatePicker(
-                value = uiState.date,
-                placeHolder = "날짜를 입력해주세요.",
-                isEditable = true,
-                onClicked = onDatePickerClick
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .align(Alignment.TopCenter)
+        ) {
+            BackButtonHeader(
+                title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
+                onBackButtonClick = onBackButtonClick,
+                trailingIcon = {
+                    uiState.viewType.toolbarIcon?.let {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
+                            contentDescription = null,
+                            tint = SoptTheme.colors.onSurface10,
+                            modifier = Modifier
+                                .clickable(onClick = onToolbarIconClick)
+                        )
+                    }
+                },
+                modifier = Modifier
+                    .padding(vertical = 12.dp)
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
+            MissionHeader(
+                title = uiState.mission.title,
+                stamp = Stamp.findStampByLevel(uiState.mission.level)
+            )
+
+            Spacer(modifier = Modifier.height(5.dp))
+
+            ImageContent(
+                imageModel = uiState.imageModel,
+                onChangeImage = onChangeImage,
+                onClickZoomIn = onClickZoomIn,
+                isEditable = isEditable
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            ProfileTag(
+                name = uiState.writer.name,
+                profileImage = uiState.writer.profileImage
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (isEditable) {
+                DatePicker(
+                    value = uiState.date,
+                    placeHolder = "날짜를 입력해주세요.",
+                    isEditable = true,
+                    onClicked = onDatePickerClick
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            Memo(
+                value = uiState.content,
+                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                onValueChange = onMemoChange,
+                isEditable = isEditable
+            )
             Spacer(modifier = Modifier.height(8.dp))
+
+            DetailInfo(
+                date = uiState.date,
+                clapCount = uiState.clapCount,
+                viewCount = uiState.viewCount
+            )
+
+            Spacer(modifier = Modifier.height(120.dp))
         }
-
-        Memo(
-            value = uiState.content,
-            placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-            onValueChange = onMemoChange,
-            isEditable = isEditable
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        DetailInfo(
-            date = uiState.date,
-            clapCount = uiState.clapCount,
-            viewCount = uiState.viewCount
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
 
         when (uiState.viewType) {
             DetailViewType.READ_ONLY -> {
@@ -340,7 +395,6 @@ private fun MissionDetailScreen(
                     onPressClap = onActionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .align(Alignment.CenterHorizontally)
                 )
             }
 

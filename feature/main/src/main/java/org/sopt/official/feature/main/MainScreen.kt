@@ -85,6 +85,7 @@ import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.appjamtamp.navigation.appjamtampNavGraph
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
@@ -141,6 +142,13 @@ fun MainScreen(
         hasSoptampFlag || hasMissionArgs
     }
 
+    val shouldNavigateToAppjamtamp = {
+        val intent = intentState
+        val hasAppjamtampFlag = intent?.getBooleanExtra("isAppjamtampDeepLink", false) == true
+        val hasMissionArgs = intent?.hasExtra("appjamtampArgs") == true
+        hasAppjamtampFlag || hasMissionArgs
+    }
+
     // soptLog 검사 로직
     val shouldNavigateToSoptLog = remember(intentState) {
         val intent = intentState
@@ -164,13 +172,25 @@ fun MainScreen(
         intent?.hasExtra("friendType") == true
     }
 
-    LaunchedEffect(shouldNavigateToSoptamp, shouldNavigateToPoke, shouldNavigateToPokeNotification, shouldNavigatePokeFriendList, shouldNavigateToSoptLog) {
+    LaunchedEffect(
+        shouldNavigateToSoptamp,
+        shouldNavigateToAppjamtamp,
+        shouldNavigateToPoke,
+        shouldNavigateToPokeNotification,
+        shouldNavigatePokeFriendList,
+        shouldNavigateToSoptLog
+    ) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
             activity?.intent?.putExtra("isSoptampDeepLink", false)
         }
 
-        if(shouldNavigateToSoptLog) {
+        if (shouldNavigateToAppjamtamp()) {
+            navigator.navigateAndClear(MainTab.Appjamtamp, userStatus)
+            activity?.intent?.putExtra("isSoptampDeepLink", false)
+        }
+
+        if (shouldNavigateToSoptLog) {
             navigator.navigate(MainTab.SoptLog, userStatus)
             activity?.intent?.putExtra("isSoptLogDeepLink", false)
         }
@@ -256,6 +276,10 @@ fun MainScreen(
                                         navigator.navigate(MainTab.Soptamp, userStatus)
                                     }
 
+                                    DeepLinkType.APPJAMTAMP -> {
+                                        navigator.navigate(MainTab.Appjamtamp, userStatus)
+                                    }
+
                                     else -> {
                                         context.startActivity(deepLinkType.getIntent(context, userStatus, url))
                                     }
@@ -288,6 +312,11 @@ fun MainScreen(
                         navController = navigator.navController,
                         tracker = tracker,
                         currentIntent = intentState
+                    )
+
+                    appjamtampNavGraph(
+                        paddingValues = innerPadding,
+                        navController = navigator.navController
                     )
 
                     pokeNavGraph(
@@ -359,7 +388,7 @@ fun MainScreen(
             }
 
             SlideUpDownWithFadeAnimatedVisibility(
-                visible = navigator.currentTab != MainTab.Soptamp && navigator.currentTab != MainTab.Poke,
+                visible = navigator.currentTab == MainTab.Home || navigator.currentTab == MainTab.SoptLog
             ) {
                 MainFloatingButton(
                     paddingValues = innerPadding
@@ -369,7 +398,7 @@ fun MainScreen(
     )
 
     if (isOpenDialog) {
-        UnauthenticatedDDialog(
+        UnauthenticatedDialog(
             onDismissRequest = { isOpenDialog = false },
             onLogin = {
                 context.startActivity(
@@ -382,7 +411,7 @@ fun MainScreen(
 }
 
 @Composable
-fun UnauthenticatedDDialog(
+fun UnauthenticatedDialog(
     onDismissRequest: () -> Unit,
     onLogin: () -> Unit,
 ) {

@@ -166,6 +166,12 @@ internal class MissionDetailViewModel @Inject constructor(
     }
 
     fun handleSubmit() {
+        with(_missionDetailState.value) {
+            if (content.isBlank()) return
+            if (imageModel is ImageModel.Empty) return
+            if (date.isBlank()) return
+        }
+
         _missionDetailState.update {
             it.copy(isLoading = true)
         }
@@ -188,11 +194,16 @@ internal class MissionDetailViewModel @Inject constructor(
                         image = imageModel.url[0],
                         contents = content,
                         activityDate = date
-                    ).onSuccess {
+                    ).onSuccess { writer ->
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
-                                viewType = DetailViewType.COMPLETE
+                                viewType = DetailViewType.COMPLETE,
+                                showPostSubmissionBadge = true,
+                                writer = User(
+                                    writer.nickname,
+                                    writer.profileImage.orEmpty()
+                                )
                             )
                         }
                     }.onFailure { e ->
@@ -330,6 +341,12 @@ internal class MissionDetailViewModel @Inject constructor(
     fun updateContent(value: String) {
         _missionDetailState.update {
             it.copy(content = value)
+        }
+    }
+
+    fun updateShowPostSubmissionBadge() {
+        _missionDetailState.update {
+            it.copy(showPostSubmissionBadge = false)
         }
     }
 }

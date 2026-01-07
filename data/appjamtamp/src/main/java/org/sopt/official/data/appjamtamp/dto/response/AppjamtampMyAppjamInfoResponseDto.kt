@@ -7,18 +7,18 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampMyAppjamInfoEntity
 @Serializable
 data class AppjamtampMyAppjamInfoResponseDto(
     @SerialName("teamNumber")
-    val teamNumber: String,
+    val teamNumber: String?,
 
     @SerialName("teamName")
-    val teamName: String,
+    val teamName: String?,
 
     @SerialName("isAppjamJoined")
     val isAppjamJoined: Boolean
 ) {
     fun toEntity(): AppjamtampMyAppjamInfoEntity {
         return AppjamtampMyAppjamInfoEntity(
-            teamNumber = teamNumber,
-            teamName = teamName,
+            teamNumber = teamNumber.orEmpty(),
+            teamName = teamName.orEmpty(),
             isAppjamJoined = isAppjamJoined
         )
     }

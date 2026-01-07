@@ -103,6 +103,11 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getSoptampActivityIntent())
     },
+    APPJAMTAMP("appjamtamp") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
+            userStatus.setIntent(navigator.getAppjamtampActivityIntent())
+    },
+
     // TODO - 콕찌르기 이슈 해결되면 딥링크에서 home 제거해야 함 (서버 변경으로 home 제거)
     POKE_NOTIFICATION_LIST("home/poke/notification-list") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =

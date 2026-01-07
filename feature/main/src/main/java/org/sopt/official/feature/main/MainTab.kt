@@ -52,6 +52,14 @@ enum class MainTab(
         deeplink = "soptamp"
     ),
 
+    Appjamtamp(
+        icon = R.drawable.ic_main_soptamp,
+        contentDescription = "솝탬프",
+        route = org.sopt.official.feature.appjamtamp.navigation.AppjamtampNavGraph,
+        loggingName = null,
+        deeplink = "appjamtamp"
+    ),
+
     Poke(
         icon = R.drawable.ic_main_poke,
         contentDescription = "콕찌르기",

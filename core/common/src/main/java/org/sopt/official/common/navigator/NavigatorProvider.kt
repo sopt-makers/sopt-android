@@ -38,6 +38,7 @@ interface NavigatorProvider {
     fun getAdjustSentenceActivityIntent(): Intent
     fun getAttendanceActivityIntent(): Intent
     fun getSoptampActivityIntent(): Intent
+    fun getAppjamtampActivityIntent(): Intent
     fun getPokeNotificationActivityIntent(name: String): Intent
     fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?): Intent
     fun getPokeActivityIntent(userStatus: UserStatus): Intent

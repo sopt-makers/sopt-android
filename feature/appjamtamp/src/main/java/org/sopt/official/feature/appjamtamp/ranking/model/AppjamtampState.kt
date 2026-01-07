@@ -5,7 +5,7 @@ sealed class AppjamtampRankingState {
 
     data class Success(
         val top3RecentRankingListUiModel: Top3RecentRankingListUiModel,
-        val top10MissionScoreListUiModel: Top10MissionScoreListUiModel
+        val topMissionScoreListUiModel: TopMissionScoreListUiModel
     ) : AppjamtampRankingState()
 
     data class Failure(val error: Throwable) : AppjamtampRankingState()

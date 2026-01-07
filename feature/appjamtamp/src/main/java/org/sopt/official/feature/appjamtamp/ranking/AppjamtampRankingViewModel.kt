@@ -3,6 +3,7 @@ package org.sopt.official.feature.appjamtamp.ranking
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +13,6 @@ import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
 import org.sopt.official.feature.appjamtamp.ranking.model.toUiModel
 import timber.log.Timber
-import javax.inject.Inject
 
 @HiltViewModel
 internal class AppjamtampRankingViewModel @Inject constructor(
@@ -35,7 +35,7 @@ internal class AppjamtampRankingViewModel @Inject constructor(
             if (top3Result.isSuccess && top10Result.isSuccess) {
                 _state.value = AppjamtampRankingState.Success(
                     top3RecentRankingListUiModel = top3Result.getOrThrow().toUiModel(),
-                    top10MissionScoreListUiModel = top10Result.getOrThrow().toUiModel()
+                    topMissionScoreListUiModel = top10Result.getOrThrow().toUiModel()
                 )
             } else {
                 val error = top3Result.exceptionOrNull() ?: top10Result.exceptionOrNull() ?: Exception("Unknown error")

@@ -27,6 +27,7 @@ package org.sopt.official.feature.navigator
 import android.content.Context
 import android.content.Intent
 import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Inject
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -41,7 +42,6 @@ import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.SoptampMissionArgs
-import javax.inject.Inject
 
 class NavigatorProviderIntent @Inject constructor(
     @param:ApplicationContext private val context: Context,
@@ -114,7 +114,14 @@ class NavigatorProviderIntent @Inject constructor(
         }
     }
 
-    override fun getPokeNotificationActivityIntent(name: String) : Intent {
+    override fun getAppjamtampActivityIntent(): Intent {
+        return Intent(context, MainActivity::class.java).apply {
+            putExtra("isAppjamtampDeepLink", true)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        }
+    }
+
+    override fun getPokeNotificationActivityIntent(name: String): Intent {
         return Intent(context, MainActivity::class.java).apply {
             putExtra("userStatus", name)
             putExtra("isPokeNotification", true)
@@ -122,7 +129,7 @@ class NavigatorProviderIntent @Inject constructor(
         }
     }
 
-    override fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?) : Intent {
+    override fun getPokeFriendListSummaryActivityIntent(name: String, friendType: String?): Intent {
         return Intent(context, MainActivity::class.java).apply {
             putExtra("userStatus", name)
             putExtra("friendType", friendType)

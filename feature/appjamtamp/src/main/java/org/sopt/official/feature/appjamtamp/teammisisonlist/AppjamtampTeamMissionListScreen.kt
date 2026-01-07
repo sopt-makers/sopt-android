@@ -32,24 +32,37 @@ import org.sopt.official.feature.appjamtamp.teammisisonlist.model.AppjamtampMiss
 
 @Composable
 internal fun AppjamtampTeamMissionListRoute(
+    teamNumber: String,
+    navigateUp: () -> Unit,
+    navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
     viewModel: AppjamtampTeamMissionListViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.fetchAppjamMissions(
-            teamNumber = "FIRST" // TODO - 이전 화면에서 네비게이션으로 teamNumber 전달 받아 넣기
+            teamNumber = teamNumber
         )
     }
 
-    when(state) {
+    when (state) {
         is AppjamtampMissionListState.Loading -> {}
         is AppjamtampMissionListState.Success -> {
             AppjamtampTeamMissionListScreen(
                 teamName = (state as AppjamtampMissionListState.Success).teamName,
-                teamMissionList = (state as AppjamtampMissionListState.Success).teamMissionList.missionList
+                teamMissionList = (state as AppjamtampMissionListState.Success).teamMissionList.missionList,
+                onBackButtonClick = navigateUp,
+                onMissionItemClick = { mission ->
+                    navigateToMissionDetail(
+                        mission.id,
+                        mission.level.value,
+                        mission.title,
+                        mission.ownerName
+                    )
+                }
             )
         }
+
         is AppjamtampMissionListState.Failure -> {}
     }
 }
@@ -57,7 +70,9 @@ internal fun AppjamtampTeamMissionListRoute(
 @Composable
 internal fun AppjamtampTeamMissionListScreen(
     teamName: String,
-    teamMissionList: ImmutableList<AppjamtampMissionUiModel>
+    teamMissionList: ImmutableList<AppjamtampMissionUiModel>,
+    onBackButtonClick: () -> Unit,
+    onMissionItemClick: (AppjamtampMissionUiModel) -> Unit
 ) {
     Scaffold(
         modifier = Modifier
@@ -66,9 +81,7 @@ internal fun AppjamtampTeamMissionListScreen(
         topBar = {
             BackButtonHeader(
                 title = teamName,
-                onBackButtonClick = {
-                    // Todo : 앱잼 팀 랭킹 화면으로 이동 (뒤로가기)
-                },
+                onBackButtonClick = onBackButtonClick,
                 modifier = Modifier
                     .padding(vertical = 12.dp)
                     .padding(start = 16.dp)
@@ -91,9 +104,7 @@ internal fun AppjamtampTeamMissionListScreen(
 
             MissionsGridComponent(
                 missionList = teamMissionList,
-                onMissionItemClick = { item ->
-                    // Todo : 미션 상세화면으로 이동
-                }
+                onMissionItemClick = onMissionItemClick
             )
         }
     }
@@ -162,6 +173,11 @@ private fun AppjamtampTeamMissionListScreenPreview() {
     )
 
     SoptTheme {
-        AppjamtampTeamMissionListScreen(teamName = "하이링구얼", teamMissionList = mockMissionList)
+        AppjamtampTeamMissionListScreen(
+            teamName = "하이링구얼",
+            teamMissionList = mockMissionList,
+            onBackButtonClick = {},
+            onMissionItemClick = { _ -> }
+        )
     }
 }

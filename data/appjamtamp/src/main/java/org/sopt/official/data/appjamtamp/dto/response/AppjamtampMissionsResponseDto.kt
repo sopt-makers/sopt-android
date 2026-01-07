@@ -8,16 +8,16 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionListEntity
 @Serializable
 data class AppjamtampMissionsResponseDto(
     @SerialName("teamNumber")
-    val teamNumber: String,
+    val teamNumber: String?,
     @SerialName("teamName")
-    val teamName: String,
+    val teamName: String?,
     @SerialName("missions")
     val missions: List<AppjamtampMissionItemDto>
 ) {
     fun toEntity(): AppjamtampMissionListEntity {
         return AppjamtampMissionListEntity(
-            teamNumber = teamNumber,
-            teamName = teamName,
+            teamNumber = teamNumber.orEmpty(),
+            teamName = teamName.orEmpty(),
             missions = missions.map { it.toEntity() }
         )
     }

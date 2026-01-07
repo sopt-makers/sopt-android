@@ -92,7 +92,7 @@ private fun DropDownMenuButton(
     onMenuClick: (String) -> Unit = {},
 ) {
     var isMenuExpanded by remember { mutableStateOf(false) }
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var selectedIndex by remember { mutableIntStateOf(3) }
     Box {
         Icon(
             imageVector = ImageVector.vectorResource(
