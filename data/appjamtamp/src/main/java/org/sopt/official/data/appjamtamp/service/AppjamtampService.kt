@@ -1,17 +1,33 @@
 package org.sopt.official.data.appjamtamp.service
 
-import org.sopt.official.data.appjamtamp.dto.AppjamtampMissionsResponseDto
-import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
+import org.sopt.official.data.appjamtamp.dto.request.AppjamtampPostStampRequestDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampPostStampResponseDto
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScoreResponse
+import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface AppjamtampService {
     @GET("appjamtamp/mission")
     suspend fun getAppjamtampMissions(
         @Query("teamNumber") teamNumber: String? = null,
-        @Query("isCompleted") isCompleted : Boolean? = null
-    ) : AppjamtampMissionsResponseDto
+        @Query("isCompleted") isCompleted: Boolean? = null
+    ): AppjamtampMissionsResponseDto
+
+    @GET("appjamtamp/stamp")
+    suspend fun getAppjamtampStamp(
+        @Query("missionId") missionId: Int,
+        @Query("nickname") nickname: String
+    ): AppjamtampStampResponseDto
+
+    @POST("appjamtamp/stamp")
+    suspend fun postAppjamtampStamp(
+        @Body body: AppjamtampPostStampRequestDto
+    ): AppjamtampPostStampResponseDto
 
     /**
      * 앱잼에 참여하는 전체 팀의 득점 랭킹 조회

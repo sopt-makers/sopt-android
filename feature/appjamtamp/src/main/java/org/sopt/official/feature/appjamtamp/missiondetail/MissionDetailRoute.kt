@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,9 +24,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import kotlinx.collections.immutable.persistentListOf
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.domain.appjamtamp.entity.MissionLevel
+import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 import org.sopt.official.feature.appjamtamp.component.BackButtonHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ClapFeedbackHolder
@@ -33,46 +40,150 @@ import org.sopt.official.feature.appjamtamp.missiondetail.component.DataPickerBo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.DatePicker
 import org.sopt.official.feature.appjamtamp.missiondetail.component.DetailInfo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageContent
+import org.sopt.official.feature.appjamtamp.missiondetail.component.ImageModal
 import org.sopt.official.feature.appjamtamp.missiondetail.component.Memo
 import org.sopt.official.feature.appjamtamp.missiondetail.component.MissionHeader
 import org.sopt.official.feature.appjamtamp.missiondetail.component.ProfileTag
 import org.sopt.official.feature.appjamtamp.missiondetail.model.DetailViewType
 import org.sopt.official.feature.appjamtamp.model.ImageModel
-import org.sopt.official.feature.appjamtamp.model.Mission
 import org.sopt.official.feature.appjamtamp.model.Stamp
-import org.sopt.official.feature.appjamtamp.model.User
 
 @Composable
 internal fun MissionDetailRoute(
-
+    navigateUp: () -> Unit,
+    viewModel: MissionDetailViewModel = hiltViewModel()
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+
+    val uiState by viewModel.missionDetailState.collectAsStateWithLifecycle()
+
+    var isDatePickerVisible by remember { mutableStateOf(false) }
     var isClapBottomSheetVisible by remember { mutableStateOf(false) }
+    var isImageZoomInDialogVisible by remember { mutableStateOf(false) }
+    var selectedZoomInImage by remember { mutableStateOf<String?>(null) }
+    var isDeleteDialogVisible by remember { mutableStateOf(false) }
+
+    LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
+        viewModel.flushClap()
+    }
+
+    LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is MissionDetailSideEffect.NavigateUp -> navigateUp()
+                }
+            }
+    }
+
+    if (uiState.viewType == DetailViewType.WRITE) {
+        MyEmptyMissionDetailScreen(
+            uiState = uiState,
+            onBackButtonClick = navigateUp,
+            onChangeImage = viewModel::updateImageModel,
+            onClickZoomIn = { image ->
+                isImageZoomInDialogVisible = true
+                selectedZoomInImage = image
+            },
+            onDatePickerClick = { isDatePickerVisible = true },
+            onMemoChange = viewModel::updateContent,
+            onCompleteButtonClick = viewModel::handleSubmit
+        )
+    } else {
+        MissionDetailScreen(
+            uiState = uiState,
+            onBackButtonClick = navigateUp,
+            onToolbarIconClick = {
+                when (uiState.viewType) {
+                    DetailViewType.COMPLETE -> {
+                        viewModel.updateViewType(DetailViewType.EDIT)
+                    }
+
+                    DetailViewType.EDIT -> {
+                        isDeleteDialogVisible = true
+                    }
+
+                    else -> {}
+                }
+            },
+            onChangeImage = viewModel::updateImageModel,
+            onClickZoomIn = { image ->
+                isImageZoomInDialogVisible = true
+                selectedZoomInImage = image
+            },
+            onDatePickerClick = { isDatePickerVisible = true },
+            onMemoChange = viewModel::updateContent,
+            onActionButtonClick = {
+                when (uiState.viewType) {
+                    DetailViewType.WRITE -> viewModel.handleSubmit()
+                    DetailViewType.READ_ONLY -> viewModel.onClap()
+                    DetailViewType.COMPLETE -> {
+                        viewModel.getClappersList()
+                        isClapBottomSheetVisible = true
+                    }
+
+                    DetailViewType.EDIT -> viewModel.handleSubmit()
+                }
+            }
+        )
+    }
+
+    if (isDatePickerVisible) {
+        DataPickerBottomSheet(
+            onSelected = {
+                viewModel.updateDate(it)
+                isDatePickerVisible = false
+            },
+            onDismissRequest = { isDatePickerVisible = false }
+        )
+    }
 
     if (isClapBottomSheetVisible) {
         ClapUserBottomDialog(
             onDismiss = { isClapBottomSheetVisible = false },
-            userList = persistentListOf(),
-            onClickUser = { _, _ -> }
+            userList = uiState.clappers,
+            onClickUser = { _, _ -> /* Nothing to do */ }
         )
+    }
+
+    if (isImageZoomInDialogVisible) {
+        ImageModal(
+            image = selectedZoomInImage.orEmpty(),
+            onDismiss = {
+                isImageZoomInDialogVisible = false
+                selectedZoomInImage = null
+            }
+        )
+    }
+
+    if (isDeleteDialogVisible) {
+        TwoButtonDialog(
+            onDismiss = { isDeleteDialogVisible = false },
+            positiveButtonText = "삭제",
+            negativeButtonText = "취소",
+            onPositiveClick = viewModel::deleteMission,
+            onNegativeClick = { isDeleteDialogVisible = false }
+        ) {
+            Text(
+                text = "달성한 미션을 삭제하시겠습니까?",
+                style = SoptTheme.typography.body16M,
+                color = SoptTheme.colors.primary,
+            )
+        }
     }
 }
 
 @Composable
 private fun MyEmptyMissionDetailScreen(
-    mission: Mission,
-    imageModel: ImageModel,
-    date: String,
-    content: String,
+    uiState: MissionDetailState,
     onBackButtonClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
     onClickZoomIn: (String) -> Unit,
+    onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
-    onCompleteButtonClick: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onCompleteButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    var isDatePickerVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -89,14 +200,14 @@ private fun MyEmptyMissionDetailScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         MissionHeader(
-            title = mission.title,
-            stamp = Stamp.findStampByLevel(mission.level)
+            title = uiState.mission.title,
+            stamp = Stamp.findStampByLevel(uiState.mission.level)
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         ImageContent(
-            imageModel = imageModel,
+            imageModel = uiState.imageModel,
             onChangeImage = onChangeImage,
             onClickZoomIn = onClickZoomIn,
             isEditable = true
@@ -105,16 +216,16 @@ private fun MyEmptyMissionDetailScreen(
         Spacer(modifier = Modifier.height(15.dp))
 
         DatePicker(
-            value = date,
+            value = uiState.date,
             placeHolder = "날짜를 입력해주세요.",
             isEditable = true,
-            onClicked = { isDatePickerVisible = true }
+            onClicked = onDatePickerClick
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
         Memo(
-            value = content,
+            value = uiState.content,
             placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
             onValueChange = onMemoChange,
             isEditable = true
@@ -130,39 +241,21 @@ private fun MyEmptyMissionDetailScreen(
                 .padding(bottom = 20.dp)
         )
     }
-
-    if (isDatePickerVisible) {
-        DataPickerBottomSheet(
-            onSelected = onDateSelected,
-            onDismissRequest = { isDatePickerVisible = false }
-        )
-    }
 }
 
 @Composable
 private fun MissionDetailScreen(
-    viewType: DetailViewType,
-    title: String,
-    mission: Mission,
-    imageModel: ImageModel,
-    date: String,
-    content: String,
-    writer: User,
-    clapCount: Int,
-    myClapCount: Int,
-    viewCount: Int,
+    uiState: MissionDetailState,
     onBackButtonClick: () -> Unit,
     onToolbarIconClick: () -> Unit,
     onChangeImage: (ImageModel) -> Unit,
     onClickZoomIn: (String) -> Unit,
+    onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
-    onActionButtonClick: () -> Unit,
-    onDateSelected: (String) -> Unit
+    onActionButtonClick: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    var isDatePickerVisible by remember { mutableStateOf(false) }
-    var isEditable by remember(viewType) { mutableStateOf(viewType == DetailViewType.EDIT) }
+    var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
 
     Column(
         modifier = Modifier
@@ -172,12 +265,12 @@ private fun MissionDetailScreen(
             .verticalScroll(scrollState)
     ) {
         BackButtonHeader(
-            title = title,
+            title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
             onBackButtonClick = onBackButtonClick,
             trailingIcon = {
-                viewType.toolbarIcon?.let {
+                uiState.viewType.toolbarIcon?.let {
                     Icon(
-                        imageVector = ImageVector.vectorResource(viewType.toolbarIcon),
+                        imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
                         contentDescription = null,
                         tint = SoptTheme.colors.onSurface10,
                         modifier = Modifier
@@ -190,14 +283,14 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(10.dp))
 
         MissionHeader(
-            title = mission.title,
-            stamp = Stamp.findStampByLevel(mission.level)
+            title = uiState.mission.title,
+            stamp = Stamp.findStampByLevel(uiState.mission.level)
         )
 
         Spacer(modifier = Modifier.height(5.dp))
 
         ImageContent(
-            imageModel = imageModel,
+            imageModel = uiState.imageModel,
             onChangeImage = onChangeImage,
             onClickZoomIn = onClickZoomIn,
             isEditable = isEditable
@@ -206,25 +299,25 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         ProfileTag(
-            name = writer.name,
-            profileImage = writer.profileImage
+            name = uiState.writer.name,
+            profileImage = uiState.writer.profileImage
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         if (isEditable) {
             DatePicker(
-                value = date,
+                value = uiState.date,
                 placeHolder = "날짜를 입력해주세요.",
                 isEditable = true,
-                onClicked = { isDatePickerVisible = true }
+                onClicked = onDatePickerClick
             )
 
             Spacer(modifier = Modifier.height(8.dp))
         }
 
         Memo(
-            value = content,
+            value = uiState.content,
             placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
             onValueChange = onMemoChange,
             isEditable = isEditable
@@ -232,18 +325,18 @@ private fun MissionDetailScreen(
         Spacer(modifier = Modifier.height(8.dp))
 
         DetailInfo(
-            date = date,
-            clapCount = clapCount,
-            viewCount = viewCount
+            date = uiState.date,
+            clapCount = uiState.clapCount,
+            viewCount = uiState.viewCount
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        when (viewType) {
-            DetailViewType.DEFAULT -> {
+        when (uiState.viewType) {
+            DetailViewType.READ_ONLY -> {
                 ClapFeedbackHolder(
-                    clapCount = clapCount,
-                    myClapCount = myClapCount,
+                    clapCount = uiState.clapCount,
+                    myClapCount = uiState.myClapCount,
                     onPressClap = onActionButtonClick,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -261,7 +354,7 @@ private fun MissionDetailScreen(
                 )
             }
 
-            DetailViewType.EDIT -> {
+            DetailViewType.EDIT, DetailViewType.WRITE -> {
                 AppjamtampButton(
                     text = "미션 완료",
                     onClicked = onActionButtonClick,
@@ -271,14 +364,6 @@ private fun MissionDetailScreen(
                 )
             }
         }
-
-    }
-
-    if (isDatePickerVisible) {
-        DataPickerBottomSheet(
-            onSelected = onDateSelected,
-            onDismissRequest = { isDatePickerVisible = false }
-        )
     }
 }
 
@@ -287,21 +372,13 @@ private fun MissionDetailScreen(
 private fun MyEmptyMissionDetailScreenPreview() {
     SoptTheme {
         MyEmptyMissionDetailScreen(
-            mission = Mission(
-                id = 1,
-                title = "앱잼 팀원 다 함께 바다 보고 오기",
-                level = MissionLevel.of(1),
-                isCompleted = false
-            ),
-            imageModel = ImageModel.Empty,
-            date = "",
-            content = "",
+            uiState = MissionDetailState(),
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
+            onDatePickerClick = {},
             onMemoChange = {},
-            onCompleteButtonClick = {},
-            onDateSelected = {}
+            onCompleteButtonClick = {}
         )
     }
 }
@@ -311,31 +388,12 @@ private fun MyEmptyMissionDetailScreenPreview() {
 private fun MyMissionDetailScreenPreview() {
     SoptTheme {
         MissionDetailScreen(
-            viewType = DetailViewType.DEFAULT,
-            title = "내 미션",
-            mission = Mission(
-                id = 1,
-                title = "앱잼 팀원 다 함께 바다 보고 오기",
-                level = MissionLevel.of(1),
-                isCompleted = false
-            ),
-            imageModel = ImageModel.Remote(
-                url = listOf("https://avatars.githubusercontent.com/u/98209004?v=4")
-            ),
-            date = "",
-            content = "",
-            writer = User(
-                name = "터닝박효빈",
-                profileImage = "https://avatars.githubusercontent.com/u/98209004?v=4"
-            ),
-            clapCount = 10,
-            myClapCount = 0,
-            viewCount = 100,
+            uiState = MissionDetailState(),
             onBackButtonClick = {},
             onChangeImage = {},
             onClickZoomIn = {},
+            onDatePickerClick = {},
             onMemoChange = {},
-            onDateSelected = {},
             onActionButtonClick = {},
             onToolbarIconClick = {}
         )
