@@ -26,16 +26,21 @@ package org.sopt.official.feature.appjamtamp.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
+import androidx.navigation.navOptions
 import org.sopt.official.feature.appjamtamp.missiondetail.navigation.AppjamtampMissionDetail
 import org.sopt.official.feature.appjamtamp.missionlist.navigation.AppjamtampMissionList
 import org.sopt.official.feature.appjamtamp.ranking.navigation.AppjamtampRanking
 import org.sopt.official.feature.appjamtamp.teammisisonlist.navigation.AppjamtampTeamMissionList
 
-fun NavController.navigateToAppjamtamp(navOptions: NavOptions? = null) {
+private val appjamtampNavOption = navOptions {
+    launchSingleTop = true
+}
+
+fun NavController.navigateToAppjamtamp(navOptions: NavOptions? = appjamtampNavOption) {
     navigate(AppjamtampNavGraph, navOptions)
 }
 
-internal fun NavController.navigateToMissionList(navOptions: NavOptions? = null) {
+internal fun NavController.navigateToMissionList(navOptions: NavOptions? = appjamtampNavOption) {
     navigate(AppjamtampMissionList, navOptions)
 }
 
@@ -44,7 +49,7 @@ internal fun NavController.navigateToMissionDetail(
     missionLevel: Int = -1,
     title: String = "",
     ownerName: String?,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = appjamtampNavOption
 ) {
     navigate(
         AppjamtampMissionDetail(
@@ -62,7 +67,7 @@ internal fun NavController.navigateToRanking(navOptions: NavOptions? = null) {
 
 internal fun NavController.navigateToTeamMissionList(
     teamNumber: String,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = appjamtampNavOption
 ) {
     navigate(AppjamtampTeamMissionList(teamNumber), navOptions)
 }

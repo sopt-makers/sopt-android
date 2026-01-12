@@ -77,7 +77,7 @@ import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 internal fun AppjamtampRankingRoute(
     navigateUp: () -> Unit,
     navigateToTeamMissionList: (String) -> Unit,
-    navigateToMissionDetail: (missionId: Int, ownerName: String) -> Unit,
+    navigateToMissionDetail: (missionId: Int, ownerName: String, teamNumber: String) -> Unit,
     viewModel: AppjamtampRankingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -114,7 +114,7 @@ internal fun AppjamtampRankingScreen(
     top3RecentRankings: ImmutableList<Top3RecentRankingUiModel>,
     top10MissionScores: ImmutableList<TopMissionScoreUiModel>,
     onBackButtonClick: () -> Unit,
-    onRecentRankingClick: (Int, String) -> Unit,
+    onRecentRankingClick: (Int, String, String) -> Unit,
     onTeamRankingClick: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -192,7 +192,8 @@ internal fun AppjamtampRankingScreen(
                             .clickable {
                                 onRecentRankingClick(
                                     top3RecentRanking.missionId.toInt(),
-                                    top3RecentRanking.userName
+                                    top3RecentRanking.userName,
+                                    top3RecentRanking.teamNumber
                                 )
                             }
                     )
@@ -372,7 +373,7 @@ private fun AppjamtampRankingScreenPreview() {
             top3RecentRankings = mockTop3RecentRankingListUiModel.top3RecentRankingList,
             top10MissionScores = mockTopMissionScoreListUiModel.top10MissionScoreList,
             onBackButtonClick = {},
-            onRecentRankingClick = { _, _ -> },
+            onRecentRankingClick = { _, _, _ -> },
             onTeamRankingClick = { _ -> }
         )
     }
