@@ -76,7 +76,7 @@ internal class AppjamtampTeamMissionListViewModel @Inject constructor(
         missionList = missions.map {
             AppjamtampMissionUiModel(
                 id = it.id,
-                title = "${it.title} (${it.ownerName}이 작성한 미션)",
+                title = it.title,
                 ownerName = it.ownerName,
                 level = MissionLevel.of(it.level),
                 profileImage = it.profileImage,
