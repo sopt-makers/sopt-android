@@ -530,29 +530,6 @@ fun SoptBottomBar(
                                     )
                                 }
                             }
-//                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty() && showBadgeContent.size >= 2) {
-//                                MainBottomBarAlarmBadge(
-//                                    text = showBadgeContent.first(),
-//                                    modifier = Modifier
-//                                        .align(Alignment.TopEnd)
-//                                )
-//                            }
-//
-//                            if (tab == MainTab.Soptamp && showBadgeContent.isNotEmpty()) {
-//                                MainBottomBarAlarmBadge(
-//                                    text = showBadgeContent.last(),
-//                                    modifier = Modifier
-//                                        .align(Alignment.TopEnd)
-//                                )
-//                            }
-//
-//                            if (tab == MainTab.Appjamtamp && showBadgeContent.isNotEmpty()) {
-//                                MainBottomBarAlarmBadge(
-//                                    text = showBadgeContent.last(),
-//                                    modifier = Modifier
-//                                        .align(Alignment.TopEnd)
-//                                )
-//                            }
                         }
                     ) {
                         Icon(
