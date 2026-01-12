@@ -141,7 +141,7 @@ internal fun Top3RecentRankingMission(
             }
 
             Text(
-                text = "${top3RecentRanking.teamName}${top3RecentRanking.userName}",
+                text = top3RecentRanking.userName,
                 color = SoptTheme.colors.onSurface300,
                 style = SoptTheme.typography.label12SB,
                 modifier = Modifier

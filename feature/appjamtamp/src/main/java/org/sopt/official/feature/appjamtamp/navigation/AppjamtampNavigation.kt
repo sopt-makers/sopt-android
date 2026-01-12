@@ -41,8 +41,8 @@ internal fun NavController.navigateToMissionList(navOptions: NavOptions? = null)
 
 internal fun NavController.navigateToMissionDetail(
     missionId: Int,
-    missionLevel: Int,
-    title: String,
+    missionLevel: Int = -1,
+    title: String = "",
     ownerName: String?,
     navOptions: NavOptions? = null
 ) {

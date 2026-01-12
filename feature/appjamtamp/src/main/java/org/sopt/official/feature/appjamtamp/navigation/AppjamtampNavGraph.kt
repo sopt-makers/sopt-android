@@ -67,6 +67,12 @@ fun NavGraphBuilder.appjamtampNavGraph(
         composable<AppjamtampRanking> {
             AppjamtampRankingRoute(
                 navigateUp = navController::navigateUp,
+                navigateToMissionDetail = { missionId, ownerName ->
+                    navController.navigateToMissionDetail(
+                        missionId = missionId,
+                        ownerName = ownerName
+                    )
+                },
                 navigateToTeamMissionList = navController::navigateToTeamMissionList
             )
         }

@@ -26,6 +26,7 @@ package org.sopt.official.data.appjamtamp.mapper
 
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
+import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 
 internal fun AppjamtampStampResponseDto.toEntity(): AppjamtampStampEntity =
     AppjamtampStampEntity(
@@ -36,6 +37,8 @@ internal fun AppjamtampStampResponseDto.toEntity(): AppjamtampStampEntity =
         createdAt = this.createdAt,
         updatedAt = this.updatedAt,
         missionId = this.missionId,
+        missionTitle = this.missionTitle,
+        missionLevel = MissionLevel.of(this.missionLevel),
         teamNumber = this.teamNumber,
         teamName = this.teamName,
         ownerNickname = this.ownerNickname,

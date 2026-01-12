@@ -121,9 +121,9 @@ internal class MissionDetailViewModel @Inject constructor(
                             isLoading = false,
                             viewType = viewType,
                             mission = Mission(
-                                id = route.missionId,
-                                title = route.title,
-                                level = MissionLevel.of(route.missionLevel),
+                                id = stamp.missionId,
+                                title = stamp.missionTitle,
+                                level = stamp.missionLevel,
                                 isCompleted = true
                             ),
                             imageModel = ImageModel.Remote(stamp.images),
