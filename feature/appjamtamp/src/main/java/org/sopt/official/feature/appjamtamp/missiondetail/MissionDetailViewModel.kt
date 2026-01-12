@@ -280,7 +280,7 @@ internal class MissionDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            stampRepository.deleteMission(_missionDetailState.value.mission.id)
+            stampRepository.deleteMission(_missionDetailState.value.stampId)
                 .onSuccess {
                     _sideEffect.emit(MissionDetailSideEffect.NavigateUp)
                 }
