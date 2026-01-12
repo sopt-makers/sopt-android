@@ -57,8 +57,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
@@ -103,7 +101,7 @@ internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
-    onUpdateBottomBadge: (ImmutableList<String>) -> Unit,
+    onUpdateBottomBadge: (Map<String, String>) -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
@@ -116,10 +114,10 @@ internal fun HomeRoute(
             is Member -> {
                 state.homeServices
                     .filter { it.isShowAlarmBadge }
-                    .map { it.alarmBadgeContent }.toImmutableList()
+                    .associate { it.deepLink to it.alarmBadgeContent }
             }
 
-            else -> persistentListOf()
+            else -> emptyMap()
         }
     }
 

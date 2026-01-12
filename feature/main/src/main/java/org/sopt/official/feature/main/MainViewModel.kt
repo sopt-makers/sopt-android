@@ -33,6 +33,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 
 @HiltViewModel
@@ -43,22 +44,38 @@ class MainViewModel @Inject constructor(
     val mainTabs: StateFlow<List<MainTab>>
         get() = _mainTabs.asStateFlow()
 
+    private val _badgeMap = MutableStateFlow<Map<MainTab, String?>>(emptyMap())
+    val badgeMap: StateFlow<Map<MainTab, String?>>
+        get() = _badgeMap.asStateFlow()
+
     init {
         fetchMainTabs()
+    }
+
+    fun updateBadge(badges: Map<String, String?>) {
+        _badgeMap.update {
+            _mainTabs.value.associateWith { tab ->
+                tab.deeplink?.let { badges[it] }
+            }
+        }
     }
 
     private fun fetchMainTabs() {
         viewModelScope.launch {
             getAppServiceUseCase()
                 .onSuccess { appServices ->
-                    updateMainTabs(appServices.map { it.deepLink })
+                    updateMainTabs(appServices)
                 }
         }
     }
 
-    private fun updateMainTabs(tabs: List<String>) {
+    private fun updateMainTabs(services: List<AppService>) {
+        val badgeByDeeplink = services.associate { it.deepLink to it.alarmBadge }
+
         _mainTabs.update {
-            MainTab.getActiveTabs(tabs)
+            MainTab.getActiveTabs(services.map { it.deepLink })
         }
+
+        updateBadge(badgeByDeeplink)
     }
 }

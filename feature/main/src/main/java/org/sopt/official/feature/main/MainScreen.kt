@@ -76,7 +76,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.analytics.EventType
@@ -119,9 +118,9 @@ fun MainScreen(
     val activity = LocalActivity.current
     val tracker = LocalTracker.current
     var isOpenDialog by remember { mutableStateOf(false) }
-    var badgeList by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
 
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
+    val badgeList by viewModel.badgeMap.collectAsStateWithLifecycle()
 
     var backPressedTime = 0L
 
@@ -231,9 +230,7 @@ fun MainScreen(
                     homeNavGraph(
                         userStatus = userStatus,
                         paddingValues = innerPadding,
-                        onUpdateBottomBadge = { badges ->
-                            badgeList = badges
-                        },
+                        onUpdateBottomBadge = viewModel::updateBadge,
                         homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                             private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                 putExtra(INTENT_URL, url)
@@ -501,7 +498,7 @@ fun SoptButton(
 fun SoptBottomBar(
     visible: Boolean,
     tabs: ImmutableList<MainTab>,
-    showBadgeContent: ImmutableList<String>,
+    showBadgeContent: Map<MainTab, String?>,
     currentTab: MainTab?,
     onTabSelected: (MainTab) -> Unit,
     modifier: Modifier = Modifier,
@@ -524,22 +521,38 @@ fun SoptBottomBar(
                 ) {
                     BadgedBox(
                         badge = {
-                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty() && showBadgeContent.size >= 2) {
-                                MainBottomBarAlarmBadge(
-                                    text = showBadgeContent.first(),
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                )
+                            showBadgeContent.forEach { badge ->
+                                if (tab == badge.key && !badge.value.isNullOrBlank()) {
+                                    MainBottomBarAlarmBadge(
+                                        text = badge.value!!,
+                                        modifier = Modifier
+                                            .align(Alignment.TopEnd)
+                                    )
+                                }
                             }
-
-                            // Todo : 서버 응답에 따라 동적으로 변경될 수 있음 체크하기
-                            if (tab == MainTab.Soptamp && showBadgeContent.isNotEmpty()) {
-                                MainBottomBarAlarmBadge(
-                                    text = showBadgeContent.last(),
-                                    modifier = Modifier
-                                        .align(Alignment.TopEnd)
-                                )
-                            }
+//                            if (tab == MainTab.Poke && showBadgeContent.isNotEmpty() && showBadgeContent.size >= 2) {
+//                                MainBottomBarAlarmBadge(
+//                                    text = showBadgeContent.first(),
+//                                    modifier = Modifier
+//                                        .align(Alignment.TopEnd)
+//                                )
+//                            }
+//
+//                            if (tab == MainTab.Soptamp && showBadgeContent.isNotEmpty()) {
+//                                MainBottomBarAlarmBadge(
+//                                    text = showBadgeContent.last(),
+//                                    modifier = Modifier
+//                                        .align(Alignment.TopEnd)
+//                                )
+//                            }
+//
+//                            if (tab == MainTab.Appjamtamp && showBadgeContent.isNotEmpty()) {
+//                                MainBottomBarAlarmBadge(
+//                                    text = showBadgeContent.last(),
+//                                    modifier = Modifier
+//                                        .align(Alignment.TopEnd)
+//                                )
+//                            }
                         }
                     ) {
                         Icon(
@@ -594,7 +607,7 @@ fun MainScreenPreview() {
             tabs = MainTab.entries.toPersistentList(),
             currentTab = Home,
             onTabSelected = {},
-            showBadgeContent = persistentListOf()
+            showBadgeContent = emptyMap()
         )
     }
 }

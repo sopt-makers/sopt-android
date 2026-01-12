@@ -29,11 +29,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.serialization.Serializable
-import org.sopt.official.model.UserStatus
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.feature.home.HomeRoute
+import org.sopt.official.model.UserStatus
 
 @Serializable
 data object Home : MainTabRoute
@@ -48,7 +47,7 @@ fun NavGraphBuilder.homeNavGraph(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     paddingValues: PaddingValues,
-    onUpdateBottomBadge: (ImmutableList<String>) -> Unit
+    onUpdateBottomBadge: (Map<String, String>) -> Unit
 ) {
     composable<Home> {
         HomeRoute(
