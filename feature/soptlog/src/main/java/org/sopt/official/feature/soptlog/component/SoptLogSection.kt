@@ -29,7 +29,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -46,7 +45,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -137,7 +135,7 @@ internal fun SoptLogSection(
                     HorizontalDivider(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal =16.dp),
+                            .padding(horizontal = 16.dp),
                         thickness = 1.dp,
                         color = SoptTheme.colors.onSurface800
                     )
@@ -176,12 +174,12 @@ private fun MySoptLogRowItem(
                 Balloon(
                     builder = balloonBuilder,
                     balloonContent = {
-                        SoptLogBalloon(modifier = Modifier.width(IntrinsicSize.Max))
+                        SoptLogBalloon()
                     }
                 ) { balloon ->
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_helper),
-                        contentDescription = "조회수 설명 툴팁",
+                        contentDescription = null,
                         tint = SoptTheme.colors.onSurface100,
                         modifier = Modifier
                             .padding(top = 2.dp, bottom = 2.dp, start = 2.dp)
@@ -255,8 +253,7 @@ private fun SoptLogBalloon(
         Text(
             text = "솝트 전체 회원들이 내 솝탬프 미션을\n조회한 횟수를 의미해요.",
             style = SoptTheme.typography.body13M,
-            color = SoptTheme.colors.onSurface50,
-            modifier = Modifier.padding(end = 34.dp)
+            color = SoptTheme.colors.onSurface50
         )
     }
 }
