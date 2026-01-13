@@ -60,6 +60,6 @@ internal fun AppjamtampMissionScoreResponse.toDomain(): AppjamtampMissionScore {
         teamName = this.teamName,
         teamNumber = this.teamNumber,
         todayPoints = this.todayPoints,
-        totalPoints = this.todayPoints
+        totalPoints = this.totalPoints
     )
 }

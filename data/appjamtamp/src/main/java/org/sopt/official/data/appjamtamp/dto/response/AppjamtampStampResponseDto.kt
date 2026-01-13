@@ -43,6 +43,10 @@ data class AppjamtampStampResponseDto(
     val updatedAt: String,
     @SerialName("missionId")
     val missionId: Int,
+    @SerialName("missionTitle")
+    val missionTitle: String,
+    @SerialName("missionLevel")
+    val missionLevel: Int,
     @SerialName("teamNumber")
     val teamNumber: String,
     @SerialName("teamName")

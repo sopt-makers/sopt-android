@@ -42,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
@@ -99,6 +100,8 @@ internal fun TodayScoreRaking(
                 text = topMissionScore.teamName,
                 color = White,
                 style = SoptTheme.typography.heading16B,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
                 modifier = Modifier
                     .padding(vertical = 2.dp)
                     .padding(start = 5.dp)

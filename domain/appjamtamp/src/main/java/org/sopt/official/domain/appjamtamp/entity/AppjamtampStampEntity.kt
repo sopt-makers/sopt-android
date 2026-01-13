@@ -32,6 +32,8 @@ data class AppjamtampStampEntity(
     val createdAt: String,
     val updatedAt: String,
     val missionId: Int,
+    val missionTitle: String,
+    val missionLevel: MissionLevel,
     val teamNumber: String,
     val teamName: String,
     val ownerNickname: String,

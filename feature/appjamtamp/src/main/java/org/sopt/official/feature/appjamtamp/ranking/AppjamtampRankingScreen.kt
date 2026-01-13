@@ -77,6 +77,7 @@ import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 internal fun AppjamtampRankingRoute(
     navigateUp: () -> Unit,
     navigateToTeamMissionList: (String) -> Unit,
+    navigateToMissionDetail: (missionId: Int, ownerName: String, teamNumber: String) -> Unit,
     viewModel: AppjamtampRankingViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -91,12 +92,15 @@ internal fun AppjamtampRankingRoute(
         }
 
         is AppjamtampRankingState.Success -> {
-            val top3RecentRankingList = (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel.top3RecentRankingList
-            val top10MissionScoreList = (state as AppjamtampRankingState.Success).topMissionScoreListUiModel.top10MissionScoreList
+            val top3RecentRankingList =
+                (state as AppjamtampRankingState.Success).top3RecentRankingListUiModel.top3RecentRankingList
+            val top10MissionScoreList =
+                (state as AppjamtampRankingState.Success).topMissionScoreListUiModel.top10MissionScoreList
             AppjamtampRankingScreen(
                 top3RecentRankings = top3RecentRankingList,
                 top10MissionScores = top10MissionScoreList,
                 onBackButtonClick = navigateUp,
+                onRecentRankingClick = navigateToMissionDetail,
                 onTeamRankingClick = navigateToTeamMissionList
             )
         }
@@ -110,6 +114,7 @@ internal fun AppjamtampRankingScreen(
     top3RecentRankings: ImmutableList<Top3RecentRankingUiModel>,
     top10MissionScores: ImmutableList<TopMissionScoreUiModel>,
     onBackButtonClick: () -> Unit,
+    onRecentRankingClick: (Int, String, String) -> Unit,
     onTeamRankingClick: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -185,7 +190,11 @@ internal fun AppjamtampRankingScreen(
                         modifier = Modifier
                             .width(topRankingItemWidth)
                             .clickable {
-                                onTeamRankingClick(top3RecentRanking.teamNumber)
+                                onRecentRankingClick(
+                                    top3RecentRanking.missionId.toInt(),
+                                    top3RecentRanking.userName,
+                                    top3RecentRanking.teamNumber
+                                )
                             }
                     )
                 }
@@ -287,16 +296,76 @@ private fun AppjamtampRankingScreenPreview() {
 
         val mockTopMissionScoreListUiModel = TopMissionScoreListUiModel(
             top10MissionScoreList = persistentListOf(
-                TopMissionScoreUiModel(rank = 1, teamName = "보핏", teamNumber = "FIRST", todayPoints = 1200, totalPoints = 5000),
-                TopMissionScoreUiModel(rank = 2, teamName = "노바", teamNumber = "FIRST", todayPoints = 1100, totalPoints = 4800),
-                TopMissionScoreUiModel(rank = 3, teamName = "비트", teamNumber = "FIRST", todayPoints = 950, totalPoints = 4200),
-                TopMissionScoreUiModel(rank = 4, teamName = "하이링구얼", teamNumber = "FIRST", todayPoints = 800, totalPoints = 3900),
-                TopMissionScoreUiModel(rank = 5, teamName = "납작마켓", teamNumber = "FIRST", todayPoints = 750, totalPoints = 3500),
-                TopMissionScoreUiModel(rank = 6, teamName = "웹", teamNumber = "FIRST", todayPoints = 600, totalPoints = 3100),
-                TopMissionScoreUiModel(rank = 7, teamName = "안드로이드", teamNumber = "FIRST", todayPoints = 550, totalPoints = 2800),
-                TopMissionScoreUiModel(rank = 8, teamName = "iOS", teamNumber = "FIRST", todayPoints = 400, totalPoints = 2500),
-                TopMissionScoreUiModel(rank = 9, teamName = "디자인", teamNumber = "FIRST", todayPoints = 300, totalPoints = 2000),
-                TopMissionScoreUiModel(rank = 10, teamName = "기획", teamNumber = "FIRST", todayPoints = 100, totalPoints = 1500)
+                TopMissionScoreUiModel(
+                    rank = 1,
+                    teamName = "보핏",
+                    teamNumber = "FIRST",
+                    todayPoints = 1200,
+                    totalPoints = 5000
+                ),
+                TopMissionScoreUiModel(
+                    rank = 2,
+                    teamName = "노바",
+                    teamNumber = "FIRST",
+                    todayPoints = 1100,
+                    totalPoints = 4800
+                ),
+                TopMissionScoreUiModel(
+                    rank = 3,
+                    teamName = "비트",
+                    teamNumber = "FIRST",
+                    todayPoints = 950,
+                    totalPoints = 4200
+                ),
+                TopMissionScoreUiModel(
+                    rank = 4,
+                    teamName = "하이링구얼",
+                    teamNumber = "FIRST",
+                    todayPoints = 800,
+                    totalPoints = 3900
+                ),
+                TopMissionScoreUiModel(
+                    rank = 5,
+                    teamName = "납작마켓",
+                    teamNumber = "FIRST",
+                    todayPoints = 750,
+                    totalPoints = 3500
+                ),
+                TopMissionScoreUiModel(
+                    rank = 6,
+                    teamName = "웹",
+                    teamNumber = "FIRST",
+                    todayPoints = 600,
+                    totalPoints = 3100
+                ),
+                TopMissionScoreUiModel(
+                    rank = 7,
+                    teamName = "안드로이드",
+                    teamNumber = "FIRST",
+                    todayPoints = 550,
+                    totalPoints = 2800
+                ),
+                TopMissionScoreUiModel(
+                    rank = 8,
+                    teamName = "iOS",
+                    teamNumber = "FIRST",
+                    todayPoints = 400,
+                    totalPoints = 2500
+                ),
+                TopMissionScoreUiModel(
+                    rank = 9,
+                    teamName = "디자인",
+                    teamNumber = "FIRST",
+                    todayPoints = 300,
+                    totalPoints = 2000
+                ),
+                TopMissionScoreUiModel(
+                    rank = 10,
+                    teamName = "기획",
+                    teamNumber = "FIRST",
+                    todayPoints = 100,
+                    totalPoints = 1500
+                )
             )
         )
 
@@ -304,6 +373,7 @@ private fun AppjamtampRankingScreenPreview() {
             top3RecentRankings = mockTop3RecentRankingListUiModel.top3RecentRankingList,
             top10MissionScores = mockTopMissionScoreListUiModel.top10MissionScoreList,
             onBackButtonClick = {},
+            onRecentRankingClick = { _, _, _ -> },
             onTeamRankingClick = { _ -> }
         )
     }

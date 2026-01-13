@@ -37,28 +37,20 @@ data class AppjamtampTop3RecentMissionResponse(
 data class AppjamtampRecentMissionResponse(
     @SerialName("stampId")
     val stampId: Long,
-
     @SerialName("missionId")
     val missionId: Long,
-
     @SerialName("userId")
     val userId: Long,
-
     @SerialName("imageUrl")
     val imageUrl: String,
-
     @SerialName("createdAt")
     val createdAt: String?,
-
-    @SerialName("userName")
+    @SerialName("ownerNickname")
     val userName: String,
-
     @SerialName("userProfileImage")
     val userProfileImage: String?,
-
     @SerialName("teamName")
     val teamName: String,
-
     @SerialName("teamNumber")
     val teamNumber: String
 )
