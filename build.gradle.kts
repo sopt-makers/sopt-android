@@ -20,6 +20,12 @@ plugins {
     alias(libs.plugins.androidx.baselineprofile) apply false
 }
 
+buildscript {
+    dependencies {
+        classpath(libs.junit5.android)
+    }
+}
+
 subprojects {
     apply(plugin = rootProject.libs.plugins.spotless.get().pluginId)
 
