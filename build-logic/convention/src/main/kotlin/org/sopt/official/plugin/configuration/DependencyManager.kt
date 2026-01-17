@@ -39,7 +39,6 @@ object DependencyManager {
 
     fun Project.addMetroDependencies(libs: VersionCatalog) {
         dependencies {
-            "implementation"(libs.findLibrary("metro-runtime").get())
             "implementation"(libs.findLibrary("javax-inject").get())
         }
     }

@@ -171,7 +171,6 @@ retrofit-response-type-keeper = { module = "com.squareup.retrofit2:response-type
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-metro-runtime = { module = "dev.zacsweers.metro:metro-runtime", version.ref = "metro" }
 metro-plugin = { module = "dev.zacsweers.metro:dev.zacsweers.metro.gradle.plugin", version.ref = "metro" }
 metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
 metrox-viewmodel = { module = "dev.zacsweers.metro:metrox-viewmodel", version.ref = "metro" }
