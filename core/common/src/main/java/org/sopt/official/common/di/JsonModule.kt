@@ -24,21 +24,22 @@
  */
 package org.sopt.official.common.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
 
-@Module
-@InstallIn(SingletonComponent::class)
-object JsonModule {
-    @Provides
-    @Singleton
-    fun provideJson(): Json = Json {
-        ignoreUnknownKeys = true
-        isLenient = true
-        prettyPrint = true
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface JsonModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        fun provideJson(): Json = Json {
+            ignoreUnknownKeys = true
+            isLenient = true
+            prettyPrint = true
+        }
     }
 }

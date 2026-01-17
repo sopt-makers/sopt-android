@@ -24,12 +24,11 @@
  */
 package org.sopt.official.auth.impl.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.local.DefaultLocalAuthDataSource
 import org.sopt.official.auth.impl.remote.DefaultRemoteAuthDataSource
@@ -40,34 +39,33 @@ import org.sopt.official.auth.impl.source.RemoteAuthDataSource
 import org.sopt.official.auth.repository.AuthRepository
 import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.Auth
 import retrofit2.Retrofit
 
-@InstallIn(SingletonComponent::class)
-@Module
-object AuthModule {
-    @Provides
-    @Singleton
-    @Auth
-    fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
-
-    @Module
-    @InstallIn(SingletonComponent::class)
-    interface Binder {
-        @Binds
-        @Singleton
-        fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
-
-        @Binds
-        @Singleton
-        fun bindCentralizeAuthRepository(repository: DefaultCentralizeAuthRepository): CentralizeAuthRepository
-
-        @Binds
-        @Singleton
-        fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource
-
-        @Binds
-        @Singleton
-        fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface AuthModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        @Auth
+        fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
     }
+
+    @Binds
+    @SingleIn(AppScope::class)
+    fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @SingleIn(AppScope::class)
+    fun bindCentralizeAuthRepository(repository: DefaultCentralizeAuthRepository): CentralizeAuthRepository
+
+    @Binds
+    @SingleIn(AppScope::class)
+    fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource
+
+    @Binds
+    @SingleIn(AppScope::class)
+    fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
 }

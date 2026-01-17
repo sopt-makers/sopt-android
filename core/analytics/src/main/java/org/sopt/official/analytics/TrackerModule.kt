@@ -24,17 +24,17 @@
  */
 package org.sopt.official.analytics
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
 import org.sopt.official.analytics.impl.AmplitudeTracker
-import javax.inject.Singleton
+import org.sopt.official.common.di.AppScope
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 interface TrackerModule {
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     fun bindAmplitudeTracker(amplitudeTracker: AmplitudeTracker): Tracker
 }

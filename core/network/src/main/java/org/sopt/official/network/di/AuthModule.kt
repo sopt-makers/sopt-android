@@ -24,39 +24,36 @@
  */
 package org.sopt.official.network.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.Auth
 import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.network.interceptor.AuthInterceptor
 import org.sopt.official.network.service.RefreshApi
 import org.sopt.official.network.service.RefreshService
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
-@InstallIn(SingletonComponent::class)
-@Module
-object AuthModule {
-    @Provides
-    @Singleton
-    fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface AuthModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
 
-
-    @Provides
-    @Singleton
-    fun provideRefreshApi(@AuthRetrofit retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
-
-    @Module
-    @InstallIn(SingletonComponent::class)
-    interface Binder {
-        @Binds
-        @Singleton
-        @Auth
-        fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
+        @Provides
+        @SingleIn(AppScope::class)
+        fun provideRefreshApi(@AuthRetrofit retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
     }
+
+    @Binds
+    @SingleIn(AppScope::class)
+    @Auth
+    fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
 }

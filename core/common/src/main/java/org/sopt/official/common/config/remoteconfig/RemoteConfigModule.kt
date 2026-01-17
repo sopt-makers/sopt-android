@@ -28,35 +28,33 @@ import com.google.firebase.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.remoteConfig
 import com.google.firebase.remoteconfig.remoteConfigSettings
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 
 internal const val UPDATE_CONFIG = "android_update_notice"
 
-@Module
-@InstallIn(SingletonComponent::class)
-object RemoteConfigProvidesModule {
-    @Provides
-    @Singleton
-    fun provideRemoteConfig(): FirebaseRemoteConfig {
-        val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3600
-        }
-        return Firebase.remoteConfig.apply {
-            setConfigSettingsAsync(configSettings)
-            setDefaultsAsync(mapOf(UPDATE_CONFIG to ""))
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface RemoteConfigModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        fun provideRemoteConfig(): FirebaseRemoteConfig {
+            val configSettings = remoteConfigSettings {
+                minimumFetchIntervalInSeconds = 3600
+            }
+            return Firebase.remoteConfig.apply {
+                setConfigSettingsAsync(configSettings)
+                setDefaultsAsync(mapOf(UPDATE_CONFIG to ""))
+            }
         }
     }
-}
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RemoteConfigBindsModule {
     @Binds
-    @Singleton
-    abstract fun bindRemoteConfig(remoteConfigImpl: SoptRemoteConfigImpl): SoptRemoteConfig
+    @SingleIn(AppScope::class)
+    fun bindRemoteConfig(remoteConfigImpl: SoptRemoteConfigImpl): SoptRemoteConfig
 }
