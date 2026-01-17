@@ -60,27 +60,27 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
-import org.sopt.official.common.context.appContext
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.navigator.SOPTLOG_FORTUNE
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
 import java.time.LocalDate
 
-private val navigator by lazy {
-    EntryPointAccessors.fromApplication(
-        appContext,
-        NavigatorEntryPoint::class.java
-    ).navigatorProvider()
-}
+@Inject
+class NotificationDetailActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val navigatorProvider: NavigatorProvider
+) : AppCompatActivity() {
+    
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
 
-@AndroidEntryPoint
-class NotificationDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationDetailViewModel>()
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -179,7 +179,7 @@ class NotificationDetailActivity : AppCompatActivity() {
 
                                             else -> {
                                                 context.startActivity(
-                                                    navigator.getSchemeActivityIntent(
+                                                    navigatorProvider.getSchemeActivityIntent(
                                                         notificationId = notification?.notificationId.orEmpty(),
                                                         link = link.orEmpty()
                                                     )

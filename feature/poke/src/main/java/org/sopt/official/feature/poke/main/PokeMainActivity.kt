@@ -32,12 +32,12 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -48,6 +48,7 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -63,8 +64,15 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("PokeScreen으로 대체")
-@AndroidEntryPoint
-class PokeMainActivity : AppCompatActivity() {
+@Inject
+class PokeMainActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private val binding by viewBinding(ActivityPokeMainBinding::inflate)
     private val viewModel by viewModels<PokeMainViewModel>()
 
@@ -74,9 +82,6 @@ class PokeMainActivity : AppCompatActivity() {
 
     private val pokeMainListAdapter
         get() = binding.recyclerViewPokeMain.adapter as PokeMainListAdapter?
-
-    @Inject
-    lateinit var tracker: Tracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -385,22 +390,25 @@ class PokeMainActivity : AppCompatActivity() {
     }
 
     private fun showMessageListBottomSheet(userId: Int, pokeMessageType: PokeMessageType, isFirstMeet: Boolean = false) {
-        messageListBottomSheet =
-            MessageListBottomSheetFragment.Builder()
-                .setMessageListType(pokeMessageType)
-                .onClickMessageListItem { message, isAnonymous ->
-                    viewModel.pokeUser(
-                        userId = userId,
-                        isAnonymous = isAnonymous,
-                        message = message,
-                        isFirstMeet = isFirstMeet
-                    )
-                }
-                .create()
+        val bottomSheet = supportFragmentManager.fragmentFactory.instantiate(
+            MessageListBottomSheetFragment::class.java.classLoader!!,
+            MessageListBottomSheetFragment::class.java.name
+        ) as MessageListBottomSheetFragment
 
-        messageListBottomSheet?.let {
-            it.show(supportFragmentManager, it.tag)
+        bottomSheet.arguments = android.os.Bundle().apply {
+            putSerializable("pokeMessageType", pokeMessageType)
         }
+
+        bottomSheet.onClickMessageListItem = { message, isAnonymous ->
+            viewModel.pokeUser(
+                userId = userId,
+                isAnonymous = isAnonymous,
+                message = message,
+                isFirstMeet = isFirstMeet
+            )
+        }
+
+        bottomSheet.show(supportFragmentManager, bottomSheet.tag)
     }
 
     private fun initLottieView() {
@@ -434,22 +442,25 @@ class PokeMainActivity : AppCompatActivity() {
                         ),
                 )
 
-                messageListBottomSheet =
-                    MessageListBottomSheetFragment.Builder()
-                        .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                        .onClickMessageListItem { message, isAnonymous ->
-                            viewModel.pokeUser(
-                                userId = user.userId,
-                                isAnonymous = isAnonymous,
-                                message = message,
-                                isFirstMeet = false,
-                            )
-                        }
-                        .create()
+                val bottomSheet = supportFragmentManager.fragmentFactory.instantiate(
+                    MessageListBottomSheetFragment::class.java.classLoader!!,
+                    MessageListBottomSheetFragment::class.java.name
+                ) as MessageListBottomSheetFragment
 
-                messageListBottomSheet?.let {
-                    it.show(supportFragmentManager, it.tag)
+                bottomSheet.arguments = android.os.Bundle().apply {
+                    putSerializable("pokeMessageType", PokeMessageType.POKE_SOMEONE)
                 }
+
+                bottomSheet.onClickMessageListItem = { message, isAnonymous ->
+                    viewModel.pokeUser(
+                        userId = user.userId,
+                        isAnonymous = isAnonymous,
+                        message = message,
+                        isFirstMeet = false,
+                    )
+                }
+
+                bottomSheet.show(supportFragmentManager, bottomSheet.tag)
             }
         }
 

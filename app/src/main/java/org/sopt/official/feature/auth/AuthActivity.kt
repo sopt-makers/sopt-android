@@ -40,28 +40,33 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.R
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
+import org.sopt.official.model.UserStatus
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
-@AndroidEntryPoint
-class AuthActivity : AppCompatActivity() {
-    private val viewModel by viewModels<AuthViewModel>()
+@Inject
+class AuthActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val dataStore: SoptDataStore
+) : AppCompatActivity() {
 
-    @Inject
-    lateinit var dataStore: SoptDataStore
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
+    private val viewModel by viewModels<AuthViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

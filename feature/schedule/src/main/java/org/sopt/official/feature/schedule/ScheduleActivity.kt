@@ -60,28 +60,28 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.deeplinkdispatch.DeepLink
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import kotlinx.coroutines.delay
-import org.sopt.official.common.context.appContext
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
-private val applicationNavigator by lazy {
-    EntryPointAccessors.fromApplication(
-        appContext,
-        NavigatorEntryPoint::class.java
-    ).navigatorProvider()
-}
-
-@AndroidEntryPoint
+@Inject
 @DeepLink("sopt://schedule")
-class ScheduleActivity : AppCompatActivity() {
+class ScheduleActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val navigatorProvider: NavigatorProvider
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,7 +90,7 @@ class ScheduleActivity : AppCompatActivity() {
                 ScheduleScreen(
                     navigateUp = ::finish,
                     navigateAttendance = {
-                        startActivity(applicationNavigator.getAttendanceActivityIntent())
+                        startActivity(navigatorProvider.getAttendanceActivityIntent())
                     }
                 )
             }

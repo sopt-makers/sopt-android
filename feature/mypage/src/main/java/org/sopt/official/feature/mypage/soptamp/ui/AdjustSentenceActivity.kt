@@ -42,18 +42,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
-import org.sopt.official.feature.mypage.di.userRepository
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
 
-@AndroidEntryPoint
-class AdjustSentenceActivity : AppCompatActivity() {
+@Inject
+class AdjustSentenceActivity(
+    private val userRepository: UserRepository
+) : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

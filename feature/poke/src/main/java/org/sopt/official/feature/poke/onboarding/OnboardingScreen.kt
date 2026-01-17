@@ -42,6 +42,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
+import dev.zacsweers.metro.viewmodel.compose.LocalMetroViewModelFactory
 import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -49,6 +50,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.context.findActivity
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.component.PokeErrorDialog
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
@@ -67,6 +69,7 @@ fun OnboardingScreen(
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
+    val metroFactory = LocalMetroViewModelFactory.current as SoptViewModelFactory
 
     var binding by remember {
         mutableStateOf<ActivityOnboardingBinding?>(null)
@@ -116,6 +119,8 @@ fun OnboardingScreen(
                 if (fragmentActivity != null && currentBinding.viewpager.adapter == null) {
                     currentBinding.viewpager.adapter = OnboardingViewPagerAdapter(
                         fragmentActivity = fragmentActivity,
+                        viewModelFactory = metroFactory,
+                        tracker = tracker,
                         profiles = profiles,
                         args = args,
                     )
@@ -184,9 +189,12 @@ private fun showOnboardingBottomSheet(
     val tag = "OnboardingBottomSheet"
     if (activity.supportFragmentManager.findFragmentByTag(tag) != null) return
 
-    val sheet = OnboardingBottomSheetFragment.Builder()
-        .setOnDismissEvent { viewModel.updateNewInPokeOnboarding() }
-        .create()
+    val sheet = activity.supportFragmentManager.fragmentFactory.instantiate(
+        OnboardingBottomSheetFragment::class.java.classLoader!!,
+        OnboardingBottomSheetFragment::class.java.name
+    ) as OnboardingBottomSheetFragment
+
+    sheet.onDismissEvent = { viewModel.updateNewInPokeOnboarding() }
 
     sheet.show(activity.supportFragmentManager, tag)
 }

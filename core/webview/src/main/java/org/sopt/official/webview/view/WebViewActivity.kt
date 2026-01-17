@@ -43,14 +43,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.airbnb.deeplinkdispatch.DeepLink
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import java.net.URLDecoder
 import mozilla.components.support.utils.DownloadUtils
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
 
-@AndroidEntryPoint
+@Inject
 @DeepLink("sopt://web")
 class WebViewActivity : AppCompatActivity() {
     private val binding by viewBinding(ActivityWebViewBinding::inflate)

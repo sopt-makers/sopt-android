@@ -32,23 +32,19 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.RemoteMessage
 import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessagingService
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.model.UserStatus
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
-
-  @Inject
-  lateinit var dataStore: SoptDataStore
-
-  @Inject
-  lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
+@Inject
+class SoptFirebaseMessagingService(
+    private val dataStore: SoptDataStore,
+    private val registerPushTokenUseCase: RegisterPushTokenUseCase
+) : LifecycleAwareFirebaseMessagingService() {
 
   override fun onNewToken(token: String) {
     if (dataStore.userStatus == UserStatus.UNAUTHENTICATED.name) return

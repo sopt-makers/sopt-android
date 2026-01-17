@@ -36,14 +36,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.stamp.feature.navigation.MissionDetail
 import org.sopt.official.stamp.feature.navigation.MissionList
 import org.sopt.official.stamp.feature.navigation.PartRanking
@@ -52,13 +54,16 @@ import org.sopt.official.stamp.feature.navigation.SoptampRoute
 import org.sopt.official.stamp.feature.navigation.UserMissionList
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import java.io.Serializable
-import javax.inject.Inject
 
 @Deprecated("SoptampEntryRoute로 대체")
-@AndroidEntryPoint
-class SoptampActivity : AppCompatActivity() {
-    @Inject
-    lateinit var tracker: Tracker
+@Inject
+class SoptampActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
 
     data class SoptampMissionArgs(
         val id: Int,

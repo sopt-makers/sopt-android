@@ -32,12 +32,12 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,6 +50,7 @@ import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -69,16 +70,20 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("FriendListSummaryScreen으로 대체")
-@AndroidEntryPoint
-class FriendListSummaryActivity : AppCompatActivity() {
+@Inject
+class FriendListSummaryActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private val binding by viewBinding(ActivityFriendListSummaryBinding::inflate)
     private val viewModel by viewModels<FriendListSummaryViewModel>()
 
     private val args by serializableExtra(StartArgs(""))
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
-
-    @Inject
-    lateinit var tracker: Tracker
 
     private val newFriendListAdapter
         get() = binding.includeFriendListBlockNewFriend.recyclerView.adapter as PokeUserListAdapter?
@@ -204,11 +209,17 @@ class FriendListSummaryActivity : AppCompatActivity() {
     }
 
     private fun showFriendListDetailBottomSheet(pokeFriendType: PokeFriendType) {
-        FriendListDetailBottomSheetFragment.Builder()
-            .setUserStatus(args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
-            .setPokeFriendType(pokeFriendType)
-            .create()
-            .let { it.show(supportFragmentManager, it.tag) }
+        val fragment = supportFragmentManager.fragmentFactory.instantiate(
+            FriendListDetailBottomSheetFragment::class.java.classLoader!!,
+            FriendListDetailBottomSheetFragment::class.java.name
+        ) as FriendListDetailBottomSheetFragment
+
+        fragment.arguments = android.os.Bundle().apply {
+            putString("userStatus", args?.userStatus ?: UserStatus.UNAUTHENTICATED.name)
+            putSerializable("pokeFriendType", pokeFriendType)
+        }
+
+        fragment.show(supportFragmentManager, fragment.tag)
     }
 
     private fun launchFriendListSummaryUiStateFlow() {
@@ -302,21 +313,25 @@ class FriendListSummaryActivity : AppCompatActivity() {
                             "view_profile" to user.userId,
                         ),
                 )
-                messageListBottomSheet =
-                    MessageListBottomSheetFragment.Builder()
-                        .setMessageListType(PokeMessageType.POKE_FRIEND)
-                        .onClickMessageListItem { message, isAnonymous ->
-                            viewModel.pokeUser(
-                                userId = user.userId,
-                                isAnonymous = isAnonymous,
-                                message = message
-                            )
-                        }
-                        .create()
+                
+                val bottomSheet = supportFragmentManager.fragmentFactory.instantiate(
+                    MessageListBottomSheetFragment::class.java.classLoader!!,
+                    MessageListBottomSheetFragment::class.java.name
+                ) as MessageListBottomSheetFragment
 
-                messageListBottomSheet?.let {
-                    it.show(supportFragmentManager, it.tag)
+                bottomSheet.arguments = android.os.Bundle().apply {
+                    putSerializable("pokeMessageType", PokeMessageType.POKE_FRIEND)
                 }
+
+                bottomSheet.onClickMessageListItem = { message, isAnonymous ->
+                    viewModel.pokeUser(
+                        userId = user.userId,
+                        isAnonymous = isAnonymous,
+                        message = message
+                    )
+                }
+
+                bottomSheet.show(supportFragmentManager, bottomSheet.tag)
             }
         }
 

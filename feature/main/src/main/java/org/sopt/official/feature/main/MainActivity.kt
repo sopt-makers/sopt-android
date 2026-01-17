@@ -33,31 +33,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
+import androidx.lifecycle.ViewModelProvider
+import dev.zacsweers.metro.Inject
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
-import org.sopt.official.common.context.appContext
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.model.UserStatus
 import java.io.Serializable
-import javax.inject.Inject
 
-private val applicationNavigator by lazy {
-    EntryPointAccessors.fromApplication(
-        appContext,
-        NavigatorEntryPoint::class.java
-    ).navigatorProvider()
-}
+@Inject
+class MainActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker,
+    private val navigatorProvider: NavigatorProvider
+) : AppCompatActivity() {
 
-
-@AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    @Inject
-    lateinit var tracker: Tracker
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
 
     private var intentState by mutableStateOf<Intent?>(null)
 
@@ -73,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     MainScreen(
                         userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
                         intentState = intentState,
-                        applicationNavigator = applicationNavigator
+                        applicationNavigator = navigatorProvider
                     )
                 }
             }

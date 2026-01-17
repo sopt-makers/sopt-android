@@ -32,14 +32,17 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
+import java.io.Serializable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
@@ -47,21 +50,23 @@ import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.showPokeToast
-import java.io.Serializable
-import javax.inject.Inject
 
 @Deprecated("OnboardingScreen으로 대체")
-@AndroidEntryPoint
-class OnboardingActivity : AppCompatActivity() {
+@Inject
+class OnboardingActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private val binding by viewBinding(ActivityOnboardingBinding::inflate)
     private val viewModel by viewModels<OnboardingViewModel>()
 
     private val args by serializableExtra(StartArgs(0, ""))
 
     private var onboardingBottomSheet: OnboardingBottomSheetFragment? = null
-
-    @Inject
-    lateinit var tracker: Tracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -32,14 +32,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.BundleCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableArgs
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -54,20 +55,19 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class OnboardingPokeUserFragment : Fragment() {
+@Inject
+class OnboardingPokeUserFragment(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : Fragment() {
     private var _binding: FragmentOnboardingFriendsBinding? = null
     private val binding
         get() = requireNotNull(_binding) { "ERROR" }
 
-    private val viewModel: OnboardingPokeUserViewModel by viewModels()
+    private lateinit var viewModel: OnboardingPokeUserViewModel
 
     private val args by serializableArgs<OnboardingActivity.StartArgs>()
-
-    @Inject
-    lateinit var tracker: Tracker
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
     private val pokeUserListAdapter
@@ -75,6 +75,7 @@ class OnboardingPokeUserFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentOnboardingFriendsBinding.inflate(inflater, container, false)
+        viewModel = ViewModelProvider(this, viewModelFactory)[OnboardingPokeUserViewModel::class.java]
         return binding.root
     }
 
@@ -190,21 +191,24 @@ class OnboardingPokeUserFragment : Fragment() {
                     ),
                 )
 
-                messageListBottomSheet =
-                    MessageListBottomSheetFragment.Builder()
-                        .setMessageListType(PokeMessageType.POKE_SOMEONE)
-                        .onClickMessageListItem { message, isAnonymous ->
-                            viewModel.pokeUser(
-                                userId = user.userId,
-                                isAnonymous = isAnonymous,
-                                message = message
-                            )
-                        }
-                        .create()
+                val bottomSheet = requireActivity().supportFragmentManager.fragmentFactory.instantiate(
+                    MessageListBottomSheetFragment::class.java.classLoader!!,
+                    MessageListBottomSheetFragment::class.java.name
+                ) as MessageListBottomSheetFragment
 
-                messageListBottomSheet?.let {
-                    it.show(requireActivity().supportFragmentManager, it.tag)
+                bottomSheet.arguments = android.os.Bundle().apply {
+                    putSerializable("pokeMessageType", PokeMessageType.POKE_SOMEONE)
                 }
+
+                bottomSheet.onClickMessageListItem = { message, isAnonymous ->
+                    viewModel.pokeUser(
+                        userId = user.userId,
+                        isAnonymous = isAnonymous,
+                        message = message
+                    )
+                }
+
+                bottomSheet.show(requireActivity().supportFragmentManager, bottomSheet.tag)
             }
         }
 
@@ -218,12 +222,16 @@ class OnboardingPokeUserFragment : Fragment() {
         private const val ARG_ARGS = "args"
 
         @JvmStatic
-        fun newInstance(pokeUsers: PokeRandomUserList.PokeRandomUsers, args: StartArgs?) =
-            OnboardingPokeUserFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(ARG_PROFILES, pokeUsers.toSerializable())
-                    putSerializable(ARG_ARGS, args)
-                }
+        fun newInstance(
+            viewModelFactory: SoptViewModelFactory,
+            tracker: Tracker,
+            pokeUsers: PokeRandomUserList.PokeRandomUsers,
+            args: StartArgs?
+        ) = OnboardingPokeUserFragment(viewModelFactory, tracker).apply {
+            arguments = Bundle().apply {
+                putSerializable(ARG_PROFILES, pokeUsers.toSerializable())
+                putSerializable(ARG_ARGS, args)
             }
+        }
     }
 }

@@ -45,17 +45,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.domain.auth.repository.AuthRepository
+import org.sopt.official.domain.notification.repository.NotificationRepository
+import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
-import org.sopt.official.feature.mypage.di.authRepository
-import org.sopt.official.feature.mypage.di.notificationRepository
-import org.sopt.official.feature.mypage.di.stampRepository
 import org.sopt.official.feature.mypage.model.MyPageUiModel
 import org.sopt.official.feature.mypage.mypage.state.ClearSoptamp
 import org.sopt.official.feature.mypage.mypage.state.CloseDialog
@@ -69,14 +69,15 @@ import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.model.UserStatus
 import java.io.Serializable
-import javax.inject.Inject
 
-@AndroidEntryPoint
-class MyPageActivity : AppCompatActivity() {
+@Inject
+class MyPageActivity(
+    private val authRepository: AuthRepository,
+    private val stampRepository: StampRepository,
+    private val notificationRepository: NotificationRepository,
+    private val navigatorProvider: NavigatorProvider
+) : AppCompatActivity() {
     private val args by serializableExtra(Argument(UserStatus.UNAUTHENTICATED))
-
-    @Inject
-    lateinit var navigatorProvider: NavigatorProvider
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

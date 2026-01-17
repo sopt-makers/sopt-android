@@ -55,20 +55,28 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import dev.zacsweers.metro.Inject
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
 
-@AndroidEntryPoint
-class NotificationActivity : AppCompatActivity() {
+@Inject
+class NotificationActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val navigatorProvider: NavigatorProvider
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private val viewModel by viewModels<NotificationViewModel>()
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -77,12 +85,7 @@ class NotificationActivity : AppCompatActivity() {
         setContent {
             val notifications = viewModel.notifications.collectAsLazyPagingItems()
             val context = LocalContext.current
-            val navigator = remember {
-                EntryPointAccessors.fromApplication(
-                    context,
-                    NavigatorEntryPoint::class.java
-                ).navigatorProvider()
-            }
+            val navigator = remember { navigatorProvider }
             SoptTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
 

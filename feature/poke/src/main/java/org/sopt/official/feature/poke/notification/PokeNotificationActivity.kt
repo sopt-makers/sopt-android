@@ -32,15 +32,15 @@ import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.CircleCropTransformation
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import java.io.Serializable
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -49,6 +49,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
@@ -62,15 +63,20 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("PokeNotificationScreen으로 대체")
-@AndroidEntryPoint
-class PokeNotificationActivity : AppCompatActivity() {
+@Inject
+class PokeNotificationActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private val binding by viewBinding(ActivityPokeNotificationBinding::inflate)
     private val viewModel by viewModels<PokeNotificationViewModel>()
 
     private val args by serializableExtra(Argument(""))
 
-    @Inject
-    lateinit var tracker: Tracker
     private val pokeNotificationAdapter
         get() = binding.recyclerviewPokeNotification.adapter as PokeNotificationAdapter
 
@@ -165,16 +171,24 @@ class PokeNotificationActivity : AppCompatActivity() {
                 true -> PokeMessageType.POKE_SOMEONE
                 false -> PokeMessageType.POKE_FRIEND
             }
-            messageListBottomSheet =
-                MessageListBottomSheetFragment.Builder().setMessageListType(messageType).onClickMessageListItem { message, isAnonymous ->
-                    viewModel.pokeUser(
-                        userId = user.userId, isAnonymous = isAnonymous, message = message, isFirstMeet = user.isFirstMeet
-                    )
-                }.create()
+            
+            val bottomSheet = supportFragmentManager.fragmentFactory.instantiate(
+                MessageListBottomSheetFragment::class.java.classLoader!!,
+                MessageListBottomSheetFragment::class.java.name
+            ) as MessageListBottomSheetFragment
 
-            messageListBottomSheet?.let {
-                it.show(supportFragmentManager, it.tag)
+            bottomSheet.arguments = android.os.Bundle().apply {
+                putSerializable("pokeMessageType", messageType)
             }
+
+            bottomSheet.onClickMessageListItem = { message, isAnonymous ->
+                viewModel.pokeUser(
+                    userId = user.userId, isAnonymous = isAnonymous, message = message, isFirstMeet = user.isFirstMeet
+                )
+            }
+
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+            
             tracker.track(
                 type = EventType.CLICK,
                 name = "poke_icon",

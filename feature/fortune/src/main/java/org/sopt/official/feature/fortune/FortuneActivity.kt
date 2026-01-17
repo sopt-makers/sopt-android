@@ -30,29 +30,25 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.airbnb.deeplinkdispatch.DeepLink
-import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.EntryPointAccessors
+import dev.zacsweers.metro.Inject
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.impl.AmplitudeTracker
-import org.sopt.official.common.context.appContext
-import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import javax.inject.Inject
+import org.sopt.official.di.SoptViewModelFactory
 
-private val navigator by lazy {
-    EntryPointAccessors.fromApplication(
-        appContext,
-        NavigatorEntryPoint::class.java
-    ).navigatorProvider()
-}
-
-@AndroidEntryPoint
+@Inject
 @DeepLink("sopt://fortune")
-class FortuneActivity : AppCompatActivity() {
+class FortuneActivity(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val navigatorProvider: NavigatorProvider,
+    private val amplitudeTracker: AmplitudeTracker
+) : AppCompatActivity() {
 
-    @Inject
-    lateinit var amplitudeTracker: AmplitudeTracker
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +58,7 @@ class FortuneActivity : AppCompatActivity() {
                 ProvideTracker(amplitudeTracker) {
                     FoundationScreen(
                         navigateToSoptLog = {
-                            startActivity(navigator.getSoptLogIntent())
+                            startActivity(navigatorProvider.getSoptLogIntent())
                         }
                     )
                 }

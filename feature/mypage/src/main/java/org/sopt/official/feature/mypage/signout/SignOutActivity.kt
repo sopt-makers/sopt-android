@@ -43,18 +43,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jakewharton.processphoenix.ProcessPhoenix
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
-import org.sopt.official.feature.mypage.di.authRepository
 
-@AndroidEntryPoint
-class SignOutActivity : AppCompatActivity() {
+@Inject
+class SignOutActivity(
+    private val authRepository: AuthRepository
+) : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

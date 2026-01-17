@@ -39,8 +39,7 @@ import coil.transform.CircleCropTransformation
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -51,6 +50,7 @@ import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -67,13 +67,13 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
-@AndroidEntryPoint
-class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
+@Inject
+class FriendListDetailBottomSheetFragment(
+    private val viewModelFactory: SoptViewModelFactory,
+    private val tracker: Tracker
+) : BottomSheetDialogFragment() {
     private val binding by viewBinding(FragmentFriendListDetailBottomSheetBinding::bind)
     private lateinit var viewModel: FriendListDetailViewModel
-
-    @Inject
-    lateinit var tracker: Tracker
 
     private var messageListBottomSheet: MessageListBottomSheetFragment? = null
 
@@ -93,12 +93,15 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     var pokeFriendType: PokeFriendType? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewModel = ViewModelProvider(this)[FriendListDetailViewModel::class.java]
+        viewModel = ViewModelProvider(this, viewModelFactory)[FriendListDetailViewModel::class.java]
         return FragmentFriendListDetailBottomSheetBinding.inflate(inflater, container, false).root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        userStatus = arguments?.getString("userStatus")
+        pokeFriendType = arguments?.getSerializable("pokeFriendType") as? PokeFriendType
 
         pokeFriendType?.let {
             viewModel.getFriendListDetail(it)
@@ -350,21 +353,5 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onResume() {
         super.onResume()
         initLottieView()
-    }
-
-    class Builder {
-        private val bottomSheet = FriendListDetailBottomSheetFragment()
-
-        fun create(): FriendListDetailBottomSheetFragment = bottomSheet
-
-        fun setUserStatus(userStatus: String): Builder {
-            bottomSheet.userStatus = userStatus
-            return this
-        }
-
-        fun setPokeFriendType(pokeFriendType: PokeFriendType): Builder {
-            bottomSheet.pokeFriendType = pokeFriendType
-            return this
-        }
     }
 }

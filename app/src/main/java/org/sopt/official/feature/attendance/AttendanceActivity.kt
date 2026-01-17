@@ -46,11 +46,12 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.deeplinkdispatch.DeepLink
-import dagger.hilt.android.AndroidEntryPoint
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
@@ -59,6 +60,7 @@ import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
+import org.sopt.official.di.SoptViewModelFactory
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
 import org.sopt.official.domain.entity.attendance.AttendanceSummary
@@ -69,9 +71,15 @@ import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
 import org.sopt.official.type.SoptColors
 
-@AndroidEntryPoint
+@Inject
 @DeepLink("sopt://attendance")
-class AttendanceActivity : AppCompatActivity() {
+class AttendanceActivity(
+    private val viewModelFactory: SoptViewModelFactory
+) : AppCompatActivity() {
+
+    override val defaultViewModelProviderFactory: ViewModelProvider.Factory
+        get() = viewModelFactory
+
     private lateinit var binding: ActivityAttendanceBinding
     private val viewModel by viewModels<AttendanceViewModel>()
     private lateinit var attendanceAdapter: AttendanceAdapter
