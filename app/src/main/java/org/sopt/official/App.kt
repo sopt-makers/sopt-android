@@ -39,7 +39,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
 import org.sopt.official.di.AppGraph
-// import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
 class App : Application(), MetroApplication {
@@ -48,27 +48,24 @@ class App : Application(), MetroApplication {
     override val appComponentProviders: MetroAppComponentProviders
         get() = appGraph
 
-    // TODO: Migrate SoptDataStore binding and re-enable this
-    // @Inject
-    // lateinit var dataStore: SoptDataStore
+    private val dataStore: SoptDataStore get() = appGraph.dataStore
+
     private val lifecycleOwner: LifecycleOwner
         get() = ProcessLifecycleOwner.get()
 
     override fun onCreate() {
-        super.onCreate()
+        super.onCreate(savedInstanceState)
         appContext = this.applicationContext
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        /*
         lifecycleOwner.lifecycleScope.launch {
             lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 runCatching {
                     FirebaseMessaging.getInstance().token.await()
                 }.onSuccess {
-                    // dataStore.pushToken = it
+                    dataStore.pushToken = it
                 }.onFailure(Timber::e)
             }
         }
-        */
     }
 }
