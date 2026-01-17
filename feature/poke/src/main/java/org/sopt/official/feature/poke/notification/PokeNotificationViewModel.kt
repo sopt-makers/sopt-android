@@ -26,12 +26,14 @@ package org.sopt.official.feature.poke.notification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
@@ -40,7 +42,9 @@ import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 
-@HiltViewModel
+@Inject
+@ViewModelKey(PokeNotificationViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class PokeNotificationViewModel @Inject constructor(
     private val getPokeNotificationListUseCase: GetPokeNotificationListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,

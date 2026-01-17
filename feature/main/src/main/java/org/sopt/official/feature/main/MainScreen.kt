@@ -72,7 +72,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
@@ -112,7 +112,7 @@ fun MainScreen(
     applicationNavigator: NavigatorProvider,
     intentState: Intent?,
     navigator: MainNavigator = rememberMainNavigator(),
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: MainViewModel = metroViewModel()
 ) {
     val context = LocalContext.current
     val activity = LocalActivity.current

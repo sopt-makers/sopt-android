@@ -42,7 +42,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,7 +74,7 @@ import org.sopt.official.model.UserStatus
 fun PokeNotificationScreen(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
-    viewModel: PokeNotificationViewModel = hiltViewModel()
+    viewModel: PokeNotificationViewModel = metroViewModel()
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current

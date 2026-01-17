@@ -28,10 +28,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
@@ -41,9 +44,10 @@ import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.navigation.PokeOnboarding
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(OnboardingViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class OnboardingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,

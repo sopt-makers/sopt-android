@@ -47,7 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -72,7 +72,7 @@ import org.sopt.official.webview.view.WebViewActivity
 internal fun AppjamtampMissionRoute(
     navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
     navigateToRanking: () -> Unit,
-    viewModel: AppjamtampMissionViewModel = hiltViewModel()
+    viewModel: AppjamtampMissionViewModel = metroViewModel()
 ) {
     val context = LocalContext.current
     val lifeCycleOwner = LocalLifecycleOwner.current

@@ -28,7 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.sopt.official.common.navigator.DeepLinkType
@@ -54,7 +54,7 @@ import org.sopt.official.stamp.feature.ranking.rank.RankingViewModel
 
 @Composable
 fun MissionListScreenRoute(navController: NavController) {
-    val missionsViewModel: MissionsViewModel = hiltViewModel()
+    val missionsViewModel: MissionsViewModel = metroViewModel()
     val resultFlow = navController.getMissionDetailResult()
     val result by resultFlow.collectAsStateWithLifecycle()
 
@@ -79,7 +79,7 @@ fun MissionDetailScreenRoute(
     args: MissionDetail,
     navController: NavController,
 ) {
-    val viewModel: MissionDetailViewModel = hiltViewModel()
+    val viewModel: MissionDetailViewModel = metroViewModel()
 
     // Call the MissionDetailScreen with AndroidX Navigation
     MissionDetailScreen(
@@ -102,7 +102,7 @@ fun RankingScreenRoute(
     args: Ranking,
     navController: NavController,
 ) {
-    val rankingViewModel: RankingViewModel = hiltViewModel()
+    val rankingViewModel: RankingViewModel = metroViewModel()
     val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
 
@@ -151,7 +151,7 @@ fun RankingScreenRoute(
 @Composable
 fun PartRankingScreenRoute(navController: NavController) {
     val context = LocalContext.current
-    val partRankingViewModel: PartRankingViewModel = hiltViewModel()
+    val partRankingViewModel: PartRankingViewModel = metroViewModel()
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
     val partRankingEntrySource = "partRanking"
 
@@ -194,7 +194,7 @@ fun UserMissionListScreenRoute(
     args: UserMissionList,
     navController: NavController,
 ) {
-    val missionsViewModel: MissionsViewModel = hiltViewModel()
+    val missionsViewModel: MissionsViewModel = metroViewModel()
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val myNickname by missionsViewModel.nickname.collectAsStateWithLifecycle()
     val description by missionsViewModel.description.collectAsStateWithLifecycle()

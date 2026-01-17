@@ -60,7 +60,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
@@ -109,7 +109,7 @@ class ScheduleActivity : AppCompatActivity() {
 fun ScheduleScreen(
     navigateUp: () -> Unit = {},
     navigateAttendance: () -> Unit = {},
-    viewModel: ScheduleViewModel = hiltViewModel(),
+    viewModel: ScheduleViewModel = metroViewModel(),
 ) {
     val lazyListState = rememberLazyListState()
     val state by viewModel.schedule.collectAsStateWithLifecycle()

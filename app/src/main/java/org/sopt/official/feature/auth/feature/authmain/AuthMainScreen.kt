@@ -61,7 +61,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.EntryPointAccessors
@@ -87,7 +87,7 @@ internal fun AuthMainRoute(
     navigateToCertification: (AuthStatus) -> Unit,
     navigateToAuthError: () -> Unit,
     onContactChannelClick: () -> Unit,
-    viewModel: AuthMainViewModel = hiltViewModel()
+    viewModel: AuthMainViewModel = metroViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current

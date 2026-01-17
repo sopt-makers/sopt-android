@@ -26,11 +26,14 @@ package org.sopt.official.stamp.feature.mission
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
@@ -40,9 +43,10 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(MissionsViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class MissionsViewModel @Inject constructor(
     private val missionsRepository: MissionsRepository,
     private val rankingRepository: RankingRepository,

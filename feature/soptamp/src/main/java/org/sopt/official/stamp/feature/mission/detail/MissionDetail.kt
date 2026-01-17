@@ -50,7 +50,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -94,7 +94,7 @@ import org.sopt.official.stamp.util.DefaultPreview
 fun MissionDetailScreen(
     args: MissionNavArgs,
     navController: NavController,
-    viewModel: MissionDetailViewModel = hiltViewModel(),
+    viewModel: MissionDetailViewModel = metroViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
     val content by viewModel.content.collectAsStateWithLifecycle("")

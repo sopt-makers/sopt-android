@@ -36,7 +36,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.sopt.official.feature.poke.main.PokeScreen
@@ -49,7 +49,7 @@ fun PokeEntryRoute(
     paddingValues: PaddingValues,
     navController: NavController,
     userStatus: UserStatus,
-    viewModel: PokeEntryViewModel = hiltViewModel()
+    viewModel: PokeEntryViewModel = metroViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     LaunchedEffect(uiState.isError) {

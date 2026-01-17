@@ -40,7 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType.CLICK
@@ -59,7 +59,7 @@ internal fun FortuneDetailRoute(
     isBottomSheetVisible: (isVisible: Boolean) -> Unit,
     snackBarHostState: SnackbarHostState,
     showSnackBar: (case: SnackBarUiState) -> Unit,
-    viewModel: FortuneDetailViewModel = hiltViewModel(),
+    viewModel: FortuneDetailViewModel = metroViewModel(),
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

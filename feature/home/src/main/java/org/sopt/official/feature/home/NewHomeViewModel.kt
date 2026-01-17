@@ -27,7 +27,9 @@ package org.sopt.official.feature.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -40,6 +42,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.util.successOr
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
@@ -51,6 +54,7 @@ import org.sopt.official.domain.home.model.UserStatus.ACTIVE
 import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
+import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
@@ -69,10 +73,10 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
-import javax.inject.Inject
-import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 
-@HiltViewModel
+@Inject
+@ViewModelKey(NewHomeViewModel::class)
+@ContributesIntoMap(AppScope::class)
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,

@@ -43,7 +43,7 @@ import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.load
@@ -82,7 +82,7 @@ import org.sopt.official.model.UserStatus
 fun FriendListSummaryScreen(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
-    viewModel: FriendListSummaryViewModel = hiltViewModel()
+    viewModel: FriendListSummaryViewModel = metroViewModel()
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current

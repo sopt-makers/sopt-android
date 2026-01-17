@@ -29,12 +29,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.entity.attendance.AttendanceHistory
 import org.sopt.official.domain.entity.attendance.AttendanceRound
 import org.sopt.official.domain.entity.attendance.SoptEvent
@@ -63,7 +65,9 @@ data class AttendanceButtonState(
     val isAttendanceButtonVisibility: Boolean = false
 )
 
-@HiltViewModel
+@Inject
+@ViewModelKey(AttendanceViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class AttendanceViewModel @Inject constructor(
     private val attendanceRepository: AttendanceRepository
 ) : ViewModel() {

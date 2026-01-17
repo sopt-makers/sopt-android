@@ -56,7 +56,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -78,7 +78,7 @@ internal fun AppjamtampRankingRoute(
     navigateUp: () -> Unit,
     navigateToTeamMissionList: (String) -> Unit,
     navigateToMissionDetail: (missionId: Int, ownerName: String, teamNumber: String) -> Unit,
-    viewModel: AppjamtampRankingViewModel = hiltViewModel()
+    viewModel: AppjamtampRankingViewModel = metroViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

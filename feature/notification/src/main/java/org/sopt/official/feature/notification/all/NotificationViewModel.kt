@@ -29,18 +29,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import timber.log.Timber
 
-@HiltViewModel
+@Inject
+@ViewModelKey(NotificationViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class NotificationViewModel @Inject constructor(
     private val repository: NotificationRepository,
 ) : ViewModel() {

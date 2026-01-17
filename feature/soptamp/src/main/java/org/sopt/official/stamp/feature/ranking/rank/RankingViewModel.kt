@@ -29,19 +29,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.mypage.user.GetNicknameUseCase
 import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(RankingViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class RankingViewModel
 @Inject
 constructor(

@@ -26,17 +26,21 @@ package org.sopt.official.feature.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import jakarta.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 
-@HiltViewModel
+@Inject
+@ViewModelKey(MainViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class MainViewModel @Inject constructor(
     private val getAppServiceUseCase: GetAppServiceUseCase
 ) : ViewModel() {

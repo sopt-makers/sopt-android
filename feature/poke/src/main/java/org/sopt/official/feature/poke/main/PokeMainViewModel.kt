@@ -26,10 +26,13 @@ package org.sopt.official.feature.poke.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
@@ -41,9 +44,10 @@ import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(PokeMainViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class PokeMainViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
     private val getPokeFriendUseCase: GetPokeFriendUseCase,

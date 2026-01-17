@@ -66,7 +66,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import kotlinx.collections.immutable.ImmutableList
@@ -411,7 +411,7 @@ fun PreviewMissionListScreen() {
 @Composable
 fun MissionListScreenNew(
     navController: NavController,
-    missionsViewModel: MissionsViewModel = hiltViewModel(),
+    missionsViewModel: MissionsViewModel = metroViewModel(),
 ) {
     val state by missionsViewModel.state.collectAsStateWithLifecycle()
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()

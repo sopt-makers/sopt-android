@@ -28,8 +28,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -44,6 +45,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.common.coroutines.suspendRunCatching
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.domain.soptamp.model.Stamp
@@ -59,7 +61,9 @@ import org.sopt.official.feature.appjamtamp.model.User
 import timber.log.Timber
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
+@Inject
+@ViewModelKey(MissionDetailViewModel::class)
+@ContributesIntoMap(AppScope::class)
 internal class MissionDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val appjamtampRepository: AppjamtampRepository,

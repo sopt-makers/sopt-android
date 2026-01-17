@@ -28,10 +28,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
@@ -41,9 +44,10 @@ import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.navigation.PokeFriendList
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(FriendListSummaryViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class FriendListSummaryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,

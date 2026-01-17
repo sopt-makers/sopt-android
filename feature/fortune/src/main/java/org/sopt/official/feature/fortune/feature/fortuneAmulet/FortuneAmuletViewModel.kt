@@ -27,18 +27,22 @@ package org.sopt.official.feature.fortune.feature.fortuneAmulet
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.fortune.usecase.GetTodayFortuneCardUseCase
-import javax.inject.Inject
 
 typealias GraphicColor = android.graphics.Color
 
-@HiltViewModel
+@Inject
+@ViewModelKey(FortuneAmuletViewModel::class)
+@ContributesIntoMap(AppScope::class)
 internal class FortuneAmuletViewModel @Inject constructor(
     getTodayFortuneCardUseCase: GetTodayFortuneCardUseCase,
 ) : ViewModel() {

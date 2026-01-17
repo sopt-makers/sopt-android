@@ -26,7 +26,9 @@ package org.sopt.official.feature.auth.feature.socialaccount
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,14 +37,16 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(SocialAccountViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class SocialAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {

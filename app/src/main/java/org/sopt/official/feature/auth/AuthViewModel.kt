@@ -26,8 +26,9 @@ package org.sopt.official.feature.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -36,10 +37,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.CentralizeToken
-import org.sopt.official.model.UserStatus
 import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.model.UserStatus
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
@@ -57,7 +59,9 @@ sealed interface UpdateState {
     data class UpdateRequired(val message: String) : UpdateState
 }
 
-@HiltViewModel
+@Inject
+@ViewModelKey(AuthViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class AuthViewModel @Inject constructor(
     private val remoteConfig: SoptRemoteConfig,
     private val authRepository: CentralizeAuthRepository,

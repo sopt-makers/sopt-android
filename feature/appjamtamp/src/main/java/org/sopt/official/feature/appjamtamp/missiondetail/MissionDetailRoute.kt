@@ -49,7 +49,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -82,7 +82,7 @@ import org.sopt.official.feature.appjamtamp.model.Stamp
 @Composable
 internal fun MissionDetailRoute(
     navigateUp: () -> Unit,
-    viewModel: MissionDetailViewModel = hiltViewModel()
+    viewModel: MissionDetailViewModel = metroViewModel()
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
 

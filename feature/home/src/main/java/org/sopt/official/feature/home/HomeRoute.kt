@@ -51,7 +51,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -102,7 +102,7 @@ internal fun HomeRoute(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     onUpdateBottomBadge: (Map<String, String>) -> Unit,
-    newHomeViewModel: NewHomeViewModel = hiltViewModel(),
+    newHomeViewModel: NewHomeViewModel = metroViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current

@@ -26,7 +26,9 @@ package org.sopt.official.feature.schedule
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -35,12 +37,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.schedule.model.Schedule
 import org.sopt.official.domain.schedule.repository.ScheduleRepository
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(ScheduleViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class ScheduleViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
 ) : ViewModel() {

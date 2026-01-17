@@ -43,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -59,7 +59,7 @@ internal fun AppjamtampTeamMissionListRoute(
     teamNumber: String,
     navigateUp: () -> Unit,
     navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
-    viewModel: AppjamtampTeamMissionListViewModel = hiltViewModel()
+    viewModel: AppjamtampTeamMissionListViewModel = metroViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 

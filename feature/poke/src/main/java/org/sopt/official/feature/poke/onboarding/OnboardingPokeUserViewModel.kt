@@ -26,10 +26,13 @@ package org.sopt.official.feature.poke.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
@@ -38,9 +41,10 @@ import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(OnboardingPokeUserViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class OnboardingPokeUserViewModel @Inject constructor(
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,

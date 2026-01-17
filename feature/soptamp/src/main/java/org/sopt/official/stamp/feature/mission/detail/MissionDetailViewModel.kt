@@ -26,7 +26,9 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -42,6 +44,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
@@ -54,7 +57,6 @@ import org.sopt.official.stamp.feature.mission.detail.model.StampClapUserUiModel
 import org.sopt.official.stamp.feature.mission.detail.model.toUiModel
 import retrofit2.HttpException
 import timber.log.Timber
-import javax.inject.Inject
 
 data class PostUiState(
     val id: Int = -1,
@@ -95,7 +97,9 @@ data class PostUiState(
 }
 
 @OptIn(FlowPreview::class)
-@HiltViewModel
+@Inject
+@ViewModelKey(MissionDetailViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class MissionDetailViewModel
 @Inject
 constructor(

@@ -26,13 +26,15 @@ package org.sopt.official.feature.appjamtamp.teammisisonlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionListEntity
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
@@ -41,7 +43,9 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionU
 import org.sopt.official.feature.appjamtamp.teammisisonlist.model.AppjamtampMissionListState
 import timber.log.Timber
 
-@HiltViewModel
+@Inject
+@ViewModelKey(AppjamtampTeamMissionListViewModel::class)
+@ContributesIntoMap(AppScope::class)
 internal class AppjamtampTeamMissionListViewModel @Inject constructor(
     private val appjamtampRepository: AppjamtampRepository,
 ) : ViewModel() {

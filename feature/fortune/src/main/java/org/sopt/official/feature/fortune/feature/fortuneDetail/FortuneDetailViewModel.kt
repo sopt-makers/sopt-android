@@ -26,7 +26,9 @@ package org.sopt.official.feature.fortune.feature.fortuneDetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.fortune.usecase.GetTodayFortuneUseCase
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
@@ -43,9 +46,10 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(FortuneDetailViewModel::class)
+@ContributesIntoMap(AppScope::class)
 internal class FortuneDetailViewModel @Inject constructor(
     private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,

@@ -42,7 +42,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.analytics.EventType
@@ -63,7 +63,7 @@ fun OnboardingScreen(
     userStatus: UserStatus,
     navigateToPokeMain: () -> Unit,
     navigateUp: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = metroViewModel()
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current

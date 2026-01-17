@@ -27,18 +27,22 @@ package org.sopt.official.feature.notification.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.notification.entity.Notification
 import org.sopt.official.domain.notification.usecase.GetNotificationDetailUseCase
 import org.sopt.official.domain.notification.usecase.UpdateNotificationReadingStateUseCase
 import timber.log.Timber
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(NotificationDetailViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class NotificationDetailViewModel @Inject constructor(
     private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
     private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,

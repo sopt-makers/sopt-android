@@ -27,10 +27,11 @@ package org.sopt.official.feature.soptlog
 import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,17 +39,20 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
-import org.sopt.official.feature.soptlog.state.SoptLogState
 import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
+import org.sopt.official.feature.soptlog.state.SoptLogState
 import timber.log.Timber
 
-@HiltViewModel
+@Inject
+@ViewModelKey(SoptLogViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
     private val appjamtampRepository: AppjamtampRepository,

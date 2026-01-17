@@ -27,7 +27,9 @@ package org.sopt.official.feature.auth.feature.certificate
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -40,13 +42,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.feature.certificate.model.ErrorResponse
 import org.sopt.official.feature.auth.model.AuthStatus
 import org.sopt.official.network.persistence.SoptDataStore
 import retrofit2.HttpException
-import javax.inject.Inject
 
 enum class ErrorType {
     NONE,
@@ -86,7 +88,9 @@ internal enum class CertificationButtonText(val message: String) {
     CHANGE_CODE("재전송하기")
 }
 
-@HiltViewModel
+@Inject
+@ViewModelKey(CertificationViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository,
     private val dataStore: SoptDataStore,

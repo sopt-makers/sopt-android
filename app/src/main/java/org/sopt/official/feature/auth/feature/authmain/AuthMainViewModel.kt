@@ -26,16 +26,20 @@ package org.sopt.official.feature.auth.feature.authmain
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
-import javax.inject.Inject
 
-@HiltViewModel
+@Inject
+@ViewModelKey(AuthMainViewModel::class)
+@ContributesIntoMap(AppScope::class)
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
