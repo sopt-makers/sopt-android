@@ -24,8 +24,11 @@
  */
 package org.sopt.official.network.persistence
 
-import android.content.Context
+import android.app.Application
 import androidx.core.content.edit
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.common.util.decryptInReleaseMode
@@ -35,15 +38,13 @@ import org.sopt.official.network.BuildConfig.PLAYGROUND_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.PUSH_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.USER_STATUS_KEY_ALIAS
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@SingleIn(AppScope::class)
 class SoptDataStore @Inject constructor(
-    @ApplicationContext private val context: Context,
+    private val application: Application,
     @LocalStore private val fileName: String
 ) {
-    private val store = createSharedPreference(fileName, context)
+    private val store = createSharedPreference(fileName, application.applicationContext)
 
     fun clear() {
         store.edit(true) {
@@ -87,10 +88,4 @@ class SoptDataStore @Inject constructor(
         private const val DEFAULT_VALUE = ""
         private const val PLATFORM = "platform"
     }
-}
-
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface SoptDataStoreEntryPoint {
-    fun soptDataStore(): SoptDataStore
 }

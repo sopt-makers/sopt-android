@@ -30,22 +30,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dev.zacsweers.metro.Inject
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.model.UserStatus
-import org.sopt.official.network.persistence.SoptDataStoreEntryPoint
+import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import java.io.Serializable
 
-class SchemeActivity : AppCompatActivity() {
-    private val dataStore by lazy {
-        EntryPointAccessors
-            .fromApplication<SoptDataStoreEntryPoint>(applicationContext)
-            .soptDataStore()
-    }
+@Inject
+class SchemeActivity(
+    private val dataStore: SoptDataStore
+) : AppCompatActivity() {
     private val args by serializableExtra(Argument("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {

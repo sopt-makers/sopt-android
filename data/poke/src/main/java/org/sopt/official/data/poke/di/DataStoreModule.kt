@@ -24,19 +24,25 @@
  */
 package org.sopt.official.data.poke.di
 
-import android.content.Context
+import android.app.Application
 import android.content.SharedPreferences
-import javax.inject.Singleton
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.file.createSharedPreference
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DataStoreModule {
-    @Provides
-    @Singleton
-    @Poke
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context,
-        @Strings(Constant.POKE_DATA_STORE) fileName: String
-    ): SharedPreferences = createSharedPreference(fileName, context)
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface DataStoreModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        @Poke
+        fun provideSharedPreferences(
+            application: Application,
+            @Strings(Constant.POKE_DATA_STORE) fileName: String
+        ): SharedPreferences = createSharedPreference(fileName, application.applicationContext)
+    }
 }

@@ -24,18 +24,18 @@
  */
 package org.sopt.official.analytics.impl
 
-import android.content.Context
+import android.app.Application
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.amplitude.android.events.Identify
+import dev.zacsweers.metro.Inject
 import org.sopt.official.analytics.BuildConfig
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import timber.log.Timber
-import javax.inject.Inject
 
 class AmplitudeTracker @Inject constructor(
-    @ApplicationContext private val context: Context
+    private val application: Application
 ) : Tracker {
     private val amplitude = Amplitude(
         Configuration(
@@ -44,7 +44,7 @@ class AmplitudeTracker @Inject constructor(
             } else {
                 BuildConfig.AMPLITUDE_KEY
             },
-            context = context
+            context = application.applicationContext
         )
     )
 

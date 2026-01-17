@@ -24,22 +24,28 @@
  */
 package org.sopt.official.data.soptamp.di
 
-import android.content.Context
+import android.app.Application
 import android.content.SharedPreferences
-import javax.inject.Singleton
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.domain.soptamp.constant.Constant
 import org.sopt.official.domain.soptamp.constant.Soptamp
 import org.sopt.official.domain.soptamp.constant.Strings
 
-@Module
-@InstallIn(SingletonComponent::class)
-object ConfigModule {
-    @Provides
-    @Singleton
-    @Soptamp
-    fun provideSharedPreferences(
-        @ApplicationContext context: Context,
-        @Strings(Constant.SOPTAMP_DATA_STORE) fileName: String
-    ): SharedPreferences = createSharedPreference(fileName, context)
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface ConfigModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        @Soptamp
+        fun provideSharedPreferences(
+            application: Application,
+            @Strings(Constant.SOPTAMP_DATA_STORE) fileName: String
+        ): SharedPreferences = createSharedPreference(fileName, application.applicationContext)
+    }
 }

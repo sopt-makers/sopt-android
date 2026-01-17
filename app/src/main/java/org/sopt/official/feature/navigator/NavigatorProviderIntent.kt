@@ -24,9 +24,9 @@
  */
 package org.sopt.official.feature.navigator
 
-import android.content.Context
+import android.app.Application
 import android.content.Intent
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -43,8 +43,10 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.SoptampMissionArgs
 
 class NavigatorProviderIntent @Inject constructor(
-    @param:ApplicationContext private val context: Context,
+    private val application: Application,
 ) : NavigatorProvider {
+    private val context get() = application.applicationContext
+
     override fun getAuthActivityIntent(): Intent = AuthActivity.newInstance(context)
     override fun getNotificationActivityIntent() = NotificationActivity.newInstance(context)
     override fun getNotificationDetailActivityIntent(notificationId: String) = NotificationDetailActivity.getIntent(

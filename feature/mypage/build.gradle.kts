@@ -54,7 +54,5 @@ dependencies {
     testImplementation(libs.bundles.compose.test)
 
     androidTestImplementation(libs.mockk.android)
-    androidTestImplementation(libs.hilt.testing)
-    kspAndroidTest(libs.hilt.testing.compiler)
     androidTestImplementation(libs.bundles.compose.android.test)
 }

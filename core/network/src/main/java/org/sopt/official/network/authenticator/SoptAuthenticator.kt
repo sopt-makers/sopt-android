@@ -24,27 +24,28 @@
  */
 package org.sopt.official.network.authenticator
 
-import android.content.Context
+import android.app.Application
 import com.jakewharton.processphoenix.ProcessPhoenix
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshService
 import timber.log.Timber
-import javax.inject.Inject
-import javax.inject.Singleton
 
 @Deprecated("이거 말고 CentralizeAuthenticator 사용하세요.")
-@Singleton
+@SingleIn(AppScope::class)
 class SoptAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     private val refreshService: RefreshService,
-    @ApplicationContext private val context: Context,
+    private val application: Application,
     private val navigatorProvider: NavigatorProvider
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
@@ -62,7 +63,7 @@ class SoptAuthenticator @Inject constructor(
             }.onFailure {
                 dataStore.clear()
                 Timber.e(it)
-                ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+                ProcessPhoenix.triggerRebirth(application.applicationContext, navigatorProvider.getAuthActivityIntent())
             }.getOrThrow()
 
             return response.request.newBuilder()

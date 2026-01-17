@@ -24,10 +24,10 @@
  */
 package org.sopt.official.network.authenticator
 
-import android.content.Context
+import android.app.Application
 import com.jakewharton.processphoenix.ProcessPhoenix
-import javax.inject.Inject
-import javax.inject.Singleton
+import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -35,17 +35,18 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.network.model.request.ExpiredTokenRequest
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshApi
 import timber.log.Timber
 
-@Singleton
+@SingleIn(AppScope::class)
 class CentralizeAuthenticator @Inject constructor(
     private val dataStore: SoptDataStore,
     private val refreshApi: RefreshApi,
-    @ApplicationContext private val context: Context,
+    private val application: Application,
     private val navigatorProvider: NavigatorProvider
 ) : Authenticator {
     private val mutex = Mutex()
@@ -71,7 +72,7 @@ class CentralizeAuthenticator @Inject constructor(
 
         if (refreshToken.isBlank()) {
             Timber.d("리프레시 토큰 없어 재로그인 필요 -> 앱 재시작")
-            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+            ProcessPhoenix.triggerRebirth(application.applicationContext, navigatorProvider.getAuthActivityIntent())
             return@withLock null
         }
 
@@ -90,7 +91,7 @@ class CentralizeAuthenticator @Inject constructor(
         }.onFailure {
             Timber.e(it, "토큰 재발급 실패. 토큰 삭제 및 앱 재시작.")
             dataStore.clear()
-            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+            ProcessPhoenix.triggerRebirth(application.applicationContext, navigatorProvider.getAuthActivityIntent())
         }.getOrThrow()
 
         return buildRequestWithToken(response.request, newTokens.data?.accessToken.orEmpty())
