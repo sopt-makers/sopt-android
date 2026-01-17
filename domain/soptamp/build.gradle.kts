@@ -22,9 +22,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
 plugins {
     sopt("kotlin.jvm")
+    alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -32,6 +32,7 @@ kotlin {
 }
 
 dependencies {
-    implementation(libs.javax.inject)
     implementation(projects.domain.mypage)
+    implementation(libs.javax.inject)
+    implementation(libs.metro.runtime)
 }

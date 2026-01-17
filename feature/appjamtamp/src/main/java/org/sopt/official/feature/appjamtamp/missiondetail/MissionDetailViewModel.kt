@@ -26,11 +26,16 @@ package org.sopt.official.feature.appjamtamp.missiondetail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.toRoute
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -61,16 +66,24 @@ import org.sopt.official.feature.appjamtamp.model.User
 import timber.log.Timber
 
 @OptIn(FlowPreview::class)
-@Inject
-@ViewModelKey(MissionDetailViewModel::class)
-@ContributesIntoMap(AppScope::class)
-internal class MissionDetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class MissionDetailViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
     private val appjamtampRepository: AppjamtampRepository,
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
 ) : ViewModel() {
     private val route: AppjamtampMissionDetail = savedStateHandle.toRoute<AppjamtampMissionDetail>()
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(MissionDetailViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): MissionDetailViewModel {
+            return create(extras.createSavedStateHandle())
+        }
+
+        fun create(@Assisted savedStateHandle: SavedStateHandle): MissionDetailViewModel
+    }
 
     private val _missionDetailState = MutableStateFlow<MissionDetailState>(MissionDetailState())
     val missionDetailState: StateFlow<MissionDetailState>

@@ -28,7 +28,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import org.sopt.official.analytics.Tracker
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.feature.poke.onboarding.model.StartArgs
 

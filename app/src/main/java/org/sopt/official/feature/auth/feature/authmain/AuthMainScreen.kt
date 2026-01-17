@@ -61,7 +61,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.delay
@@ -76,7 +76,7 @@ import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.LoginErrorDialog
 import org.sopt.official.feature.auth.model.AuthStatus
-import org.sopt.official.feature.auth.utils.di.GoogleLoginManagerEntryPoint
+import org.sopt.official.feature.auth.utils.di.GoogleGraph
 
 @Composable
 internal fun AuthMainRoute(
@@ -93,10 +93,7 @@ internal fun AuthMainRoute(
     val scope = rememberCoroutineScope()
 
     val googleLoginManager = remember(context) {
-        EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            GoogleLoginManagerEntryPoint::class.java
-        ).googleLoginManager()
+        (context.applicationContext as GoogleGraph).googleLoginManager
     }
 
     var loginDialogVisibility by remember { mutableStateOf(false) }

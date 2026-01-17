@@ -64,15 +64,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.deeplinkdispatch.DeepLink
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.delay
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
-@Inject
 @DeepLink("sopt://schedule")
 class ScheduleActivity(
     private val viewModelFactory: SoptViewModelFactory,

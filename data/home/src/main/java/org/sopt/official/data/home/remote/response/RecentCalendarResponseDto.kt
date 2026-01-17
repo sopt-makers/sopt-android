@@ -28,7 +28,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class RecentCalendarResponseDto(
+data class RecentCalendarResponseDto(
     @SerialName("date")
     val date: String,
     @SerialName("type")

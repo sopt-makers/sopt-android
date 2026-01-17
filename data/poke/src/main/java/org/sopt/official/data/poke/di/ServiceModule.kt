@@ -24,15 +24,16 @@
  */
 package org.sopt.official.data.poke.di
 
-import javax.inject.Singleton
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.poke.service.PokeService
-import retrofit2.Retrofit
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ServiceModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object ServiceModule {
     @Provides
-    @Singleton
-    fun providePokeService(@AppRetrofit(true) retrofit: Retrofit,): PokeService = retrofit.create(PokeService::class.java)
+    fun providePokeService(retrofitInstance: AppRetrofitInstance): PokeService = retrofitInstance.retrofit.create(PokeService::class.java)
 }

@@ -34,8 +34,7 @@ import org.sopt.official.domain.mypage.repository.UserRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface DataModule {
+interface DataModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindUserRepository(repository: UserRepositoryImpl): UserRepository
 }

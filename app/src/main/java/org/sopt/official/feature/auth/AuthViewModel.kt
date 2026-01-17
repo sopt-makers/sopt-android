@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -59,10 +59,10 @@ sealed interface UpdateState {
     data class UpdateRequired(val message: String) : UpdateState
 }
 
-@Inject
 @ViewModelKey(AuthViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class AuthViewModel @Inject constructor(
+@Inject
+class AuthViewModel(
     private val remoteConfig: SoptRemoteConfig,
     private val authRepository: CentralizeAuthRepository,
     private val dataStore: SoptDataStore

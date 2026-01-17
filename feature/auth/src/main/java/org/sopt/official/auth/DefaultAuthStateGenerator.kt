@@ -26,6 +26,6 @@ package org.sopt.official.auth
 
 import java.util.UUID
 
-internal class DefaultAuthStateGenerator : AuthStateGenerator {
+class DefaultAuthStateGenerator : AuthStateGenerator {
     override fun generate() = UUID.randomUUID().toString()
 }

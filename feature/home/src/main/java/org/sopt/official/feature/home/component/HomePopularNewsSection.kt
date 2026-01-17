@@ -56,7 +56,7 @@ import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 private const val POPULAR_NEWS_LIST_SIZE = 3
 
 @Composable
-internal fun HomePopularNewsSection(
+fun HomePopularNewsSection(
     postList: ImmutableList<HomePlaygroundPostModel>,
     navigateToWebLink: (String) -> Unit,
     navigateToMemberProfile: (Int) -> Unit,

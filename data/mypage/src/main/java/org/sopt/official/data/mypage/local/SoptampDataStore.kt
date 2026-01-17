@@ -24,14 +24,20 @@
  */
 package org.sopt.official.data.mypage.local
 
+import android.app.Application
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import org.sopt.official.domain.soptamp.constant.Soptamp
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
+import org.sopt.official.common.di.SoptampStoreKey
+import org.sopt.official.common.file.createSharedPreference
 
-class SoptampDataStore @Inject constructor(
-    @Soptamp private val dataStore: SharedPreferences,
+@Inject
+class SoptampDataStore(
+    private val application: Application,
+    private val soptampStoreKey: SoptampStoreKey,
 ) {
+    private val dataStore = createSharedPreference(soptampStoreKey.value, application.applicationContext)
+
     var userId: Int
         get() = dataStore.getInt("user_id", -1)
         set(value) = dataStore.edit { putInt("user_id", value) }

@@ -27,19 +27,22 @@ package org.sopt.official.network.di
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.common.BuildConfig
-import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppRetrofitInstance
 import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.di.AuthRetrofit
+import org.sopt.official.common.di.AuthOkHttpClient
+import org.sopt.official.common.di.AuthRetrofitInstance
 import org.sopt.official.common.di.Logging
-import org.sopt.official.common.di.OperationRetrofit
+import org.sopt.official.common.di.LoggingInterceptor
+import org.sopt.official.common.di.NonAuthOkHttpClient
+import org.sopt.official.common.di.NoneAuthRetrofitInstance
+import org.sopt.official.common.di.OperationRetrofitInstance
 import org.sopt.official.network.authenticator.CentralizeAuthenticator
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
@@ -52,68 +55,69 @@ interface NetModule {
     companion object {
         @Logging
         @Provides
-        @SingleIn(AppScope::class)
-        fun providerLoggingInterceptor(): Interceptor = HttpLoggingInterceptor().apply {
-            level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
-        }
+        fun providerLoggingInterceptor(): LoggingInterceptor = LoggingInterceptor(
+            HttpLoggingInterceptor().apply {
+                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY else HttpLoggingInterceptor.Level.NONE
+            }
+        )
 
         @Provides
-        @SingleIn(AppScope::class)
-        @Auth
         fun provideOkHttpClient(
-            @Logging loggingInterceptor: Interceptor,
+            @Logging loggingInterceptor: LoggingInterceptor,
             @Auth authInterceptor: Interceptor,
             authenticator: CentralizeAuthenticator
-        ): OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor)
-            .authenticator(authenticator)
-            .build()
+        ): AuthOkHttpClient = AuthOkHttpClient(
+            OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor.interceptor)
+                .addInterceptor(authInterceptor)
+                .authenticator(authenticator)
+                .build()
+        )
 
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideNonAuthOkHttpClient(@Logging loggingInterceptor: Interceptor): OkHttpClient = OkHttpClient.Builder()
-            .addInterceptor(loggingInterceptor)
-            .build()
+        fun provideNonAuthOkHttpClient(@Logging loggingInterceptor: LoggingInterceptor): NonAuthOkHttpClient = NonAuthOkHttpClient(
+            OkHttpClient.Builder()
+                .addInterceptor(loggingInterceptor.interceptor)
+                .build()
+        )
 
         @Provides
-        @SingleIn(AppScope::class)
         fun provideKotlinSerializationConverter(json: Json): Factory = json.asConverterFactory("application/json".toMediaType())
 
-        @AppRetrofit
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideAppRetrofit(@Auth client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-            .client(client)
-            .addConverterFactory(converter)
-            .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
-            .build()
+        fun provideAppRetrofit(client: AuthOkHttpClient, converter: Factory): AppRetrofitInstance = AppRetrofitInstance(
+            Retrofit.Builder()
+                .client(client.client)
+                .addConverterFactory(converter)
+                .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
+                .build()
+        )
 
-        @AppRetrofit(false)
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideNoneAuthAppRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-            .client(client)
-            .addConverterFactory(converter)
-            .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
-            .build()
+        fun provideNoneAuthAppRetrofit(client: NonAuthOkHttpClient, converter: Factory): NoneAuthRetrofitInstance = NoneAuthRetrofitInstance(
+            Retrofit.Builder()
+                .client(client.client)
+                .addConverterFactory(converter)
+                .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
+                .build()
+        )
 
-        @OperationRetrofit
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideOperationRetrofit(@Auth client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-            .client(client)
-            .addConverterFactory(converter)
-            .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_OPERATION_BASE_URL else BuildConfig.SOPT_OPERATION_BASE_URL)
-            .build()
+        fun provideOperationRetrofit(client: AuthOkHttpClient, converter: Factory): OperationRetrofitInstance = OperationRetrofitInstance(
+            Retrofit.Builder()
+                .client(client.client)
+                .addConverterFactory(converter)
+                .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_OPERATION_BASE_URL else BuildConfig.SOPT_OPERATION_BASE_URL)
+                .build()
+        )
 
-        @AuthRetrofit
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideAuthRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-            .client(client)
-            .addConverterFactory(converter)
-            .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_AUTH_API else BuildConfig.PROD_AUTH_API)
-            .build()
+        fun provideAuthRetrofit(client: AuthOkHttpClient, converter: Factory): AuthRetrofitInstance = AuthRetrofitInstance(
+            Retrofit.Builder()
+                .client(client.client)
+                .addConverterFactory(converter)
+                .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_AUTH_API else BuildConfig.PROD_AUTH_API)
+                .build()
+        )
     }
 }

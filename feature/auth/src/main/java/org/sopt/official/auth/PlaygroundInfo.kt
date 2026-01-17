@@ -24,7 +24,7 @@
  */
 package org.sopt.official.auth
 
-internal object PlaygroundInfo {
+object PlaygroundInfo {
     const val DEBUG_HOST: String = "sopt-internal-dev.pages.dev"
     const val HOST: String = "playground.sopt.org"
     const val AUTH_PATH: String = "auth/oauth"

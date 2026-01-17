@@ -24,6 +24,7 @@
  */
 plugins {
     sopt("kotlin.jvm")
+    alias(libs.plugins.metro)
 }
 
 kotlin {
@@ -32,4 +33,5 @@ kotlin {
 
 dependencies {
     implementation(libs.javax.inject)
+    implementation(libs.metro.runtime)
 }

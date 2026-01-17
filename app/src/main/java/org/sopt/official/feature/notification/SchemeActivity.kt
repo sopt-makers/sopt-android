@@ -41,7 +41,6 @@ import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import java.io.Serializable
 
-@Inject
 class SchemeActivity(
     private val dataStore: SoptDataStore
 ) : AppCompatActivity() {

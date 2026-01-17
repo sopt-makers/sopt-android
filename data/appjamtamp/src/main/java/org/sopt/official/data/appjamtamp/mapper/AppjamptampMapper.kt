@@ -32,11 +32,11 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampMissionScore
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampRecentMission
 
 
-internal fun AppjamtampTop3RecentMissionResponse.toDomain(): List<AppjamtampRecentMission> {
+fun AppjamtampTop3RecentMissionResponse.toDomain(): List<AppjamtampRecentMission> {
     return this.ranks.map { it.toDomain() }
 }
 
-internal fun AppjamtampRecentMissionResponse.toDomain(): AppjamtampRecentMission {
+fun AppjamtampRecentMissionResponse.toDomain(): AppjamtampRecentMission {
     return AppjamtampRecentMission(
         stampId = this.stampId,
         missionId = this.missionId,
@@ -50,11 +50,11 @@ internal fun AppjamtampRecentMissionResponse.toDomain(): AppjamtampRecentMission
     )
 }
 
-internal fun AppjamtampTop10MissionScoreResponse.toDomain(): List<AppjamtampMissionScore> {
+fun AppjamtampTop10MissionScoreResponse.toDomain(): List<AppjamtampMissionScore> {
     return this.ranks.map { it.toDomain() }
 }
 
-internal fun AppjamtampMissionScoreResponse.toDomain(): AppjamtampMissionScore {
+fun AppjamtampMissionScoreResponse.toDomain(): AppjamtampMissionScore {
     return AppjamtampMissionScore(
         rank = this.rank,
         teamName = this.teamName,

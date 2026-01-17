@@ -26,11 +26,16 @@ package org.sopt.official.feature.poke.friend.summary
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.toRoute
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -45,15 +50,24 @@ import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.navigation.PokeFriendList
 
-@Inject
-@ViewModelKey(FriendListSummaryViewModel::class)
-@ContributesIntoMap(AppScope::class)
-class FriendListSummaryViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class FriendListSummaryViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
     val friendType = savedStateHandle.toRoute<PokeFriendList>()
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(FriendListSummaryViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): FriendListSummaryViewModel {
+            return create(extras.createSavedStateHandle())
+        }
+
+        fun create(@Assisted savedStateHandle: SavedStateHandle): FriendListSummaryViewModel
+    }
+
     private val _friendListSummaryUiState = MutableStateFlow<UiState<FriendListSummary>>(UiState.Loading)
     val friendListSummaryUiState: StateFlow<UiState<FriendListSummary>> get() = _friendListSummaryUiState
 

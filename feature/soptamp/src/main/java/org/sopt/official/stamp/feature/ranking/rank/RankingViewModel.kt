@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -43,12 +43,10 @@ import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
 
-@Inject
 @ViewModelKey(RankingViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class RankingViewModel
 @Inject
-constructor(
+class RankingViewModel(
     private val rankingRepository: RankingRepository,
     private val getNicknameUseCase: GetNicknameUseCase,
 ) : ViewModel() {

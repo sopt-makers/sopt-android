@@ -29,9 +29,10 @@ import org.sopt.official.data.soptamp.mapper.toDomain
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 import org.sopt.official.domain.soptamp.model.Mission
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-internal class RemoteMissionsRepository @Inject constructor(
+@Inject
+class RemoteMissionsRepository(
     private val remote: MissionsDataSource,
 ) : MissionsRepository {
     override suspend fun getAllMissions(): Result<List<Mission>> {

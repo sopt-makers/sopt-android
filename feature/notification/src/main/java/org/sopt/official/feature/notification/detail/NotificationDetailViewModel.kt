@@ -26,10 +26,15 @@ package org.sopt.official.feature.notification.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,14 +45,22 @@ import org.sopt.official.domain.notification.usecase.GetNotificationDetailUseCas
 import org.sopt.official.domain.notification.usecase.UpdateNotificationReadingStateUseCase
 import timber.log.Timber
 
-@Inject
-@ViewModelKey(NotificationDetailViewModel::class)
-@ContributesIntoMap(AppScope::class)
-class NotificationDetailViewModel @Inject constructor(
+class NotificationDetailViewModel @AssistedInject constructor(
     private val getNotificationDetailUseCase: GetNotificationDetailUseCase,
     private val updateNotificationReadingStateUseCase: UpdateNotificationReadingStateUseCase,
-    savedStateHandle: SavedStateHandle,
+    @Assisted private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(NotificationDetailViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): NotificationDetailViewModel {
+            return create(extras.createSavedStateHandle())
+        }
+
+        fun create(@Assisted savedStateHandle: SavedStateHandle): NotificationDetailViewModel
+    }
+
     private val notificationId = savedStateHandle.get<String>("notificationId").orEmpty()
     private val _notificationDetail = MutableStateFlow<Notification?>(null)
     val notificationDetail: StateFlow<Notification?> = _notificationDetail.asStateFlow()

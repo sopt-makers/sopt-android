@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -37,10 +37,10 @@ import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
 
-@Inject
 @ViewModelKey(AuthMainViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class AuthMainViewModel @Inject constructor(
+@Inject
+class AuthMainViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()

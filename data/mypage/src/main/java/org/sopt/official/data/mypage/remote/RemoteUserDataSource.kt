@@ -30,9 +30,10 @@ import org.sopt.official.data.mypage.model.response.UserGenerationResponse
 import org.sopt.official.data.mypage.model.response.UserResponse
 import org.sopt.official.data.mypage.remote.api.SoptampUserService
 import org.sopt.official.data.mypage.source.UserDataSource
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-internal class RemoteUserDataSource @Inject constructor(
+@Inject
+class RemoteUserDataSource(
     private val soptampUserService: SoptampUserService,
 ) : UserDataSource {
 

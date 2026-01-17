@@ -28,32 +28,27 @@ import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
 import okhttp3.Interceptor
-import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.di.AuthRetrofit
+import org.sopt.official.common.di.AuthRetrofitInstance
+import org.sopt.official.common.di.NoneAuthRetrofitInstance
 import org.sopt.official.network.interceptor.AuthInterceptor
 import org.sopt.official.network.service.RefreshApi
 import org.sopt.official.network.service.RefreshService
-import retrofit2.Retrofit
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface AuthModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideNoneAuthService(@AppRetrofit(false) retrofit: Retrofit): RefreshService = retrofit.create(RefreshService::class.java)
+        fun provideNoneAuthService(retrofitInstance: NoneAuthRetrofitInstance): RefreshService = retrofitInstance.retrofit.create(RefreshService::class.java)
 
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideRefreshApi(@AuthRetrofit retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
+        fun provideRefreshApi(retrofitInstance: NoneAuthRetrofitInstance): RefreshApi = retrofitInstance.retrofit.create(RefreshApi::class.java)
     }
 
     @Binds
-    @SingleIn(AppScope::class)
     @Auth
     fun bindAuthInterceptor(interceptor: AuthInterceptor): Interceptor
 }

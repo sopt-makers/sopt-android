@@ -47,7 +47,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun ClapFeedbackHolder(
+fun ClapFeedbackHolder(
     clapCount: Int,
     myClapCount: Int?,
     onPressClap: () -> Unit,

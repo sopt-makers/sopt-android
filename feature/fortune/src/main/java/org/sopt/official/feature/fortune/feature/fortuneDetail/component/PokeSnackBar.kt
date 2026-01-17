@@ -48,7 +48,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.ic_alert
 
 @Composable
-internal fun PokeSnackBar(
+fun PokeSnackBar(
     @DrawableRes icon: Int,
     title: String,
     modifier: Modifier = Modifier,

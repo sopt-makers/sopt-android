@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 package org.sopt.official.auth.data
-
+import dev.zacsweers.metro.Inject
 import okhttp3.OkHttpClient
 import org.sopt.official.auth.Constants
 import org.sopt.official.auth.PlaygroundInfo
@@ -31,7 +31,8 @@ import org.sopt.official.auth.data.remote.AuthService
 import org.sopt.official.auth.data.remote.ServiceFactory
 import retrofit2.Retrofit
 
-internal class PlaygroundApiManager private constructor(
+@Inject
+class PlaygroundApiManager private constructor(
     private val retrofit: Retrofit,
 ) {
     fun provideAuthService(): AuthService = retrofit.create(AuthService::class.java)

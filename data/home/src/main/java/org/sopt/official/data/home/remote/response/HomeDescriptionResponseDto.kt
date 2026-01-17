@@ -28,7 +28,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class HomeDescriptionResponseDto(
+data class HomeDescriptionResponseDto(
     @SerialName("activityDescription")
     val activityDescription: String,
 )

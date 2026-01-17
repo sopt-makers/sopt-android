@@ -40,7 +40,7 @@ import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableArgs
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -56,7 +56,6 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.showPokeToast
 
-@Inject
 class OnboardingPokeUserFragment(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker

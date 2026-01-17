@@ -27,7 +27,7 @@ package org.sopt.official.data.soptamp.remote.mapper
 import org.sopt.official.data.soptamp.remote.model.MissionData
 import org.sopt.official.data.soptamp.remote.model.response.MissionResponse
 
-internal fun MissionResponse.toData(): MissionData = MissionData(
+fun MissionResponse.toData(): MissionData = MissionData(
     id = this.id,
     title = this.title,
     level = this.level,
@@ -35,4 +35,4 @@ internal fun MissionResponse.toData(): MissionData = MissionData(
     isCompleted = this.isCompleted
 )
 
-internal fun List<MissionResponse>.toData(): List<MissionData> = this.map { it.toData() }
+fun List<MissionResponse>.toData(): List<MissionData> = this.map { it.toData() }

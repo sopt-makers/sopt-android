@@ -24,7 +24,7 @@
  */
 package org.sopt.official.auth
 
-internal object Constants {
+object Constants {
     const val NOT_SECURE_SCHEME: String = "http"
     const val SCHEME: String = "https"
     const val REDIRECT_URI: String = "redirect_uri"

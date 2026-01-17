@@ -51,7 +51,7 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionU
 import org.sopt.official.feature.appjamtamp.model.Stamp
 
 @Composable
-internal fun MissionComponent(
+fun MissionComponent(
     mission: AppjamtampMissionUiModel,
     onClick: () -> Unit = {}
 ) {

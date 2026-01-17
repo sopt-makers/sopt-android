@@ -28,7 +28,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class HomeAppServiceResponseDto(
+data class HomeAppServiceResponseDto(
     @SerialName("serviceName")
     val serviceName: String,
     @SerialName("displayAlarmBadge")

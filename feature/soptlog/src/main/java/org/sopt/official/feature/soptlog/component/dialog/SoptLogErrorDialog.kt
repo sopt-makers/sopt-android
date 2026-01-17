@@ -50,7 +50,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
-internal fun SoptLogErrorDialog(
+fun SoptLogErrorDialog(
     onCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = "네트워크가 원활하지 않습니다.",

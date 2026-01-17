@@ -24,7 +24,7 @@
  */
 package org.sopt.official.feature.soptlog.model
 
-internal enum class SoptLogCategory {
+enum class SoptLogCategory {
     SOPTAMP,
     POKE;
 }

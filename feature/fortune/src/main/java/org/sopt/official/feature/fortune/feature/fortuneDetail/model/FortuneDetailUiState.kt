@@ -28,7 +28,7 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 
 @Stable
-internal sealed interface FortuneDetailUiState {
+sealed interface FortuneDetailUiState {
 
     @Immutable
     data class Success(

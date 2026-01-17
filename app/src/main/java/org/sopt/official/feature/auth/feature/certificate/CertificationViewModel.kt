@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.delay
@@ -83,15 +83,15 @@ enum class ErrorCase(
     }
 }
 
-internal enum class CertificationButtonText(val message: String) {
+enum class CertificationButtonText(val message: String) {
     GET_CODE("전송하기"),
     CHANGE_CODE("재전송하기")
 }
 
-@Inject
 @ViewModelKey(CertificationViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class CertificationViewModel @Inject constructor(
+@Inject
+class CertificationViewModel(
     private val repository: AuthRepository,
     private val dataStore: SoptDataStore,
 ) : ViewModel() {

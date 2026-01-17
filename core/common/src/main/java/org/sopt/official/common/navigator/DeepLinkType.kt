@@ -26,13 +26,14 @@ package org.sopt.official.common.navigator
 
 import android.content.Context
 import android.content.Intent
+import dev.zacsweers.metrox.android.MetroApplication
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.model.UserStatus
 import timber.log.Timber
 
-internal val navigator by lazy {
-    EntryPointAccessors.fromApplication(appContext, NavigatorEntryPoint::class.java).navigatorProvider()
+val navigator by lazy {
+    ((appContext as MetroApplication).appComponentProviders as NavigatorGraph).navigatorProvider
 }
 
 enum class DeepLinkType(

@@ -34,7 +34,8 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import timber.log.Timber
 
-class AmplitudeTracker @Inject constructor(
+@Inject
+class AmplitudeTracker(
     private val application: Application
 ) : Tracker {
     private val amplitude = Amplitude(

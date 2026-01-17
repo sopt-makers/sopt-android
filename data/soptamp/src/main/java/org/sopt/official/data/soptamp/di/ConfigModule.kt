@@ -41,7 +41,6 @@ import org.sopt.official.domain.soptamp.constant.Strings
 interface ConfigModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         @Soptamp
         fun provideSharedPreferences(
             application: Application,

@@ -63,12 +63,11 @@ import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
 
-@Inject
 class NotificationActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val navigatorProvider: NavigatorProvider

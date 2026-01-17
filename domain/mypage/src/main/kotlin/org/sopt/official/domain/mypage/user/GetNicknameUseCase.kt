@@ -24,10 +24,11 @@
  */
 package org.sopt.official.domain.mypage.user
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.domain.mypage.repository.UserRepository
 
-class GetNicknameUseCase @Inject constructor(
+@Inject
+class GetNicknameUseCase(
     private val repository: UserRepository
 ) {
     operator fun invoke() = repository.nickname

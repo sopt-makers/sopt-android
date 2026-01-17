@@ -27,7 +27,7 @@ package org.sopt.official.data.soptlog.mapper
 import org.sopt.official.data.soptlog.dto.SoptLogInfoResponse
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
-internal fun SoptLogInfoResponse.toDomain() = SoptLogInfo(
+fun SoptLogInfoResponse.toDomain() = SoptLogInfo(
     isActive = this.isActive,
     isFortuneChecked = this.isFortuneChecked,
     todayFortuneText = this.todayFortuneText,

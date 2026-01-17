@@ -38,7 +38,6 @@ import org.sopt.official.common.file.createSharedPreference
 interface DataStoreModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         @Poke
         fun provideSharedPreferences(
             application: Application,

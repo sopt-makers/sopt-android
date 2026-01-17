@@ -24,16 +24,17 @@
  */
 package org.sopt.official.data.schedule.di
 
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.schedule.api.ScheduleApi
-import retrofit2.Retrofit
 import retrofit2.create
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 object ApiModule {
     @Provides
-    @Singleton
-    internal fun provideScheduleApi(@AppRetrofit(true) retrofit: Retrofit): ScheduleApi = retrofit.create()
+    fun provideScheduleApi(retrofitInstance: AppRetrofitInstance): ScheduleApi = retrofitInstance.retrofit.create()
 }

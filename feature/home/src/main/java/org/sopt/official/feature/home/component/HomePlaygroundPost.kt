@@ -58,7 +58,7 @@ import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.R
 
 @Composable
-internal fun HomePlaygroundPost(
+fun HomePlaygroundPost(
     profileImage: String,
     userName: String,
     userPart: String?,

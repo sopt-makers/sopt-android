@@ -49,7 +49,7 @@ import org.sopt.official.feature.home.R.drawable.ic_setting
 import org.sopt.official.feature.home.R.drawable.img_logo
 
 @Composable
-internal fun HomeTopBarForMember(
+fun HomeTopBarForMember(
     hasNotification: Boolean,
     onNotificationClick: () -> Unit,
     onSettingClick: () -> Unit,
@@ -86,7 +86,7 @@ private fun HomeTopBarForMemberPreview() {
 }
 
 @Composable
-internal fun HomeTopBarForVisitor(
+fun HomeTopBarForVisitor(
     onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

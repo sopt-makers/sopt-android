@@ -53,7 +53,7 @@ import org.sopt.official.designsystem.SuitSemiBold
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
-internal fun HomeGenerationChips(
+fun HomeGenerationChips(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     modifier: Modifier = Modifier,
 ) {
@@ -72,7 +72,7 @@ internal fun HomeGenerationChips(
 }
 
 @Composable
-internal fun RecentGenerationChip(
+fun RecentGenerationChip(
     @ColorRes chipColor: Color,
     @ColorRes textColor: Color,
     text: String,

@@ -28,7 +28,7 @@ import org.sopt.official.data.appjamtamp.dto.response.AppjamtampStampResponseDto
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
 import org.sopt.official.domain.appjamtamp.entity.MissionLevel
 
-internal fun AppjamtampStampResponseDto.toEntity(): AppjamtampStampEntity =
+fun AppjamtampStampResponseDto.toEntity(): AppjamtampStampEntity =
     AppjamtampStampEntity(
         stampId = this.id,
         contents = this.contents,

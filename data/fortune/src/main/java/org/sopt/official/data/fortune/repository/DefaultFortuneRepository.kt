@@ -29,9 +29,10 @@ import org.sopt.official.data.fortune.remote.api.FortuneApi
 import org.sopt.official.domain.fortune.model.TodayFortuneCard
 import org.sopt.official.domain.fortune.model.TodayFortuneWord
 import org.sopt.official.domain.fortune.repository.FortuneRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-internal class DefaultFortuneRepository @Inject constructor(
+@Inject
+class DefaultFortuneRepository(
     private val fortuneApi: FortuneApi,
 ) : FortuneRepository {
 

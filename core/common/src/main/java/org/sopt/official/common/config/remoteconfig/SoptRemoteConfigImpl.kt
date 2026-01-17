@@ -25,11 +25,12 @@
 package org.sopt.official.common.config.remoteconfig
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.tasks.await
 import kotlinx.serialization.json.Json
 
-class SoptRemoteConfigImpl @Inject constructor(
+@Inject
+class SoptRemoteConfigImpl(
     private val json: Json,
     private val remoteConfig: FirebaseRemoteConfig
 ) : SoptRemoteConfig {

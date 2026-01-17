@@ -26,8 +26,8 @@ package org.sopt.official.network.authenticator
 
 import android.app.Application
 import com.jakewharton.processphoenix.ProcessPhoenix
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -43,7 +43,8 @@ import org.sopt.official.network.service.RefreshApi
 import timber.log.Timber
 
 @SingleIn(AppScope::class)
-class CentralizeAuthenticator @Inject constructor(
+@Inject
+class CentralizeAuthenticator(
     private val dataStore: SoptDataStore,
     private val refreshApi: RefreshApi,
     private val application: Application,

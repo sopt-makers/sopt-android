@@ -34,8 +34,7 @@ import org.sopt.official.data.schedule.repository.DefaultScheduleRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindDefaultScheduleRepositoryRepository(defaultScheduleRepository: DefaultScheduleRepository): ScheduleRepository
 }

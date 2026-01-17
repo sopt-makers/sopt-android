@@ -26,7 +26,7 @@ package org.sopt.official.feature.soptlog.model
 
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
-internal enum class MySoptLogItemType(
+enum class MySoptLogItemType(
     val title: String,
     val category: SoptLogCategory,
     val count: (SoptLogInfo) -> Int,

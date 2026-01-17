@@ -54,7 +54,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import timber.log.Timber
 
 @Composable
-internal fun FortuneDetailScreen(
+fun FortuneDetailScreen(
     date: String,
     isEnabled: Boolean,
     onFortuneAmuletClick: () -> Unit,

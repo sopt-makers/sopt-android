@@ -35,7 +35,4 @@ import org.sopt.official.feature.navigator.NavigatorProviderIntent
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface NavigationModule {
-  @Binds
-  @SingleIn(AppScope::class)
-  fun bindNavigatorIntent(navigatorProviderIntent: NavigatorProviderIntent): NavigatorProvider
 }

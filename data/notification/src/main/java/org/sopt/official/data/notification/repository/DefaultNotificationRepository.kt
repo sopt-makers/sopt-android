@@ -24,14 +24,15 @@
  */
 package org.sopt.official.data.notification.repository
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.data.notification.model.request.UpdatePushTokenRequest
 import org.sopt.official.data.notification.service.NotificationService
 import org.sopt.official.domain.notification.entity.Notification
 import org.sopt.official.domain.notification.entity.NotificationItem
 import org.sopt.official.domain.notification.repository.NotificationRepository
 
-class DefaultNotificationRepository @Inject constructor(
+@Inject
+class DefaultNotificationRepository(
   private val service: NotificationService
 ) : NotificationRepository {
   override suspend fun registerToken(pushToken: String) {

@@ -43,7 +43,7 @@ import org.sopt.official.designsystem.PretendardRegular
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun Memo(
+fun Memo(
     value: String,
     placeHolder: String,
     onValueChange: (String) -> Unit,

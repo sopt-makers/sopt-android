@@ -32,7 +32,7 @@ data class Top3RecentRankingListUiModel(
     val top3RecentRankingList: ImmutableList<Top3RecentRankingUiModel>
 )
 
-internal fun List<AppjamtampRecentMission>.toUiModel(): Top3RecentRankingListUiModel =
+fun List<AppjamtampRecentMission>.toUiModel(): Top3RecentRankingListUiModel =
     Top3RecentRankingListUiModel(
         top3RecentRankingList = this.map { it.toUiModel() }.toImmutableList()
     )
@@ -49,7 +49,7 @@ data class Top3RecentRankingUiModel(
     val teamNumber: String
 )
 
-internal fun AppjamtampRecentMission.toUiModel(): Top3RecentRankingUiModel =
+fun AppjamtampRecentMission.toUiModel(): Top3RecentRankingUiModel =
     Top3RecentRankingUiModel(
         stampId = this.stampId,
         missionId = this.missionId,

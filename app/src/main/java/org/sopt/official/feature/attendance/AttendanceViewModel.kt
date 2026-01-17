@@ -31,7 +31,7 @@ import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,10 +65,10 @@ data class AttendanceButtonState(
     val isAttendanceButtonVisibility: Boolean = false
 )
 
-@Inject
 @ViewModelKey(AttendanceViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class AttendanceViewModel @Inject constructor(
+@Inject
+class AttendanceViewModel(
     private val attendanceRepository: AttendanceRepository
 ) : ViewModel() {
     private var eventId: Int = 0

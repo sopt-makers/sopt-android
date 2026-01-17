@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,10 +50,10 @@ import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 import org.sopt.official.feature.soptlog.state.SoptLogState
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(SoptLogViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class SoptLogViewModel @Inject constructor(
+@Inject
+class SoptLogViewModel(
     private val soptLogRepository: SoptLogRepository,
     private val appjamtampRepository: AppjamtampRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,

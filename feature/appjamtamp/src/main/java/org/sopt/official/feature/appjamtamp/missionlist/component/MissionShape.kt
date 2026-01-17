@@ -50,7 +50,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.missionlist.model.MissionPattern
 
-internal class MissionShape(
+class MissionShape(
     private val patternCount: Int,
 ) : Shape {
     override fun createOutline(

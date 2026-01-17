@@ -29,9 +29,9 @@ package org.sopt.official.data.soptamp.mapper
 import org.sopt.official.data.soptamp.remote.model.MissionData
 import org.sopt.official.domain.soptamp.model.Mission
 
-internal fun List<MissionData>.toDomain(): List<Mission> = this.map { it.toDomain() }
+fun List<MissionData>.toDomain(): List<Mission> = this.map { it.toDomain() }
 
-internal fun MissionData.toDomain(): Mission = Mission(
+fun MissionData.toDomain(): Mission = Mission(
     id = this.id,
     title = this.title,
     level = this.level,

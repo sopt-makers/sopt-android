@@ -48,24 +48,19 @@ import retrofit2.Retrofit
 interface AuthModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         @Auth
         fun provideAuthService(@AppRetrofit retrofit: Retrofit): AuthService = retrofit.create(AuthService::class.java)
     }
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindAuthRepository(repository: AuthRepositoryImpl): AuthRepository
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindCentralizeAuthRepository(repository: DefaultCentralizeAuthRepository): CentralizeAuthRepository
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindRemoteAuthDataSource(dataSource: DefaultRemoteAuthDataSource): RemoteAuthDataSource
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindLocalAuthDataSource(dataSource: DefaultLocalAuthDataSource): LocalAuthDataSource
 }

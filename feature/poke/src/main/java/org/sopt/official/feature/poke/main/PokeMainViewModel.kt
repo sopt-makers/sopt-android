@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -45,10 +45,10 @@ import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(PokeMainViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class PokeMainViewModel @Inject constructor(
+@Inject
+class PokeMainViewModel(
     private val getPokeMeUseCase: GetPokeMeUseCase,
     private val getPokeFriendUseCase: GetPokeFriendUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,

@@ -43,7 +43,7 @@ import org.sopt.official.feature.appjamtamp.component.LevelOfMission
 import org.sopt.official.feature.appjamtamp.model.Stamp
 
 @Composable
-internal fun MissionHeader(
+fun MissionHeader(
     title: String,
     stamp: Stamp
 ) {

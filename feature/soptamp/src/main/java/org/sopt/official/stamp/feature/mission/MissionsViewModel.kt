@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -44,10 +44,10 @@ import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(MissionsViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class MissionsViewModel @Inject constructor(
+@Inject
+class MissionsViewModel(
     private val missionsRepository: MissionsRepository,
     private val rankingRepository: RankingRepository,
     private val userRepository: UserRepository,

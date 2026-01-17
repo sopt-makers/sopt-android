@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.appjamtamp.datasourceimpl
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
 import org.sopt.official.data.appjamtamp.dto.request.AppjamtampPostStampRequestDto
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampMissionsResponseDto
@@ -35,7 +35,8 @@ import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop10MissionScor
 import org.sopt.official.data.appjamtamp.dto.response.AppjamtampTop3RecentMissionResponse
 import org.sopt.official.data.appjamtamp.service.AppjamtampService
 
-internal class AppjamtampDataSourceImpl @Inject constructor(
+@Inject
+class AppjamtampDataSourceImpl(
     private val appjamtampService: AppjamtampService
 ) : AppjamtampDataSource {
     override suspend fun getAppjamtampMissions(

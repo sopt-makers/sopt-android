@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.repository.attendance
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonObject
@@ -40,7 +40,8 @@ import org.sopt.official.domain.entity.attendance.SoptEvent
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import retrofit2.HttpException
 
-class AttendanceRepositoryImpl @Inject constructor(
+@Inject
+class AttendanceRepositoryImpl(
     private val attendanceService: AttendanceService,
     private val json: Json
 ) : AttendanceRepository {

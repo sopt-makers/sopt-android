@@ -36,12 +36,10 @@ import org.sopt.official.data.soptamp.source.RankingDataSource
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal abstract class DataSourceModule {
+abstract class DataSourceModule {
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindRemoteMissionsDataSource(source: RemoteMissionsDataSource): MissionsDataSource
 
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindRemoteRankDataSource(source: RemoteRankingDataSource): RankingDataSource
 }

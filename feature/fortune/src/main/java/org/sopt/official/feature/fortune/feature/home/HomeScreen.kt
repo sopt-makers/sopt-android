@@ -51,7 +51,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Composable
-internal fun HomeRoute(
+fun HomeRoute(
     onFortuneDetailClick: (String) -> Unit,
 ) {
     val date = rememberSaveable { getToday() }

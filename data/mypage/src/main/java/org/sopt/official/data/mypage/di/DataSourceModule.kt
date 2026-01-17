@@ -34,8 +34,7 @@ import org.sopt.official.data.mypage.source.UserDataSource
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface DataSourceModule {
+interface DataSourceModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindRemoteUserDataSource(source: RemoteUserDataSource): UserDataSource
 }

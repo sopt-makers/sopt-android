@@ -40,7 +40,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
-internal fun PokeMessageItem(
+fun PokeMessageItem(
     message: String,
     isSelected: Boolean,
     onItemClick: () -> Unit,

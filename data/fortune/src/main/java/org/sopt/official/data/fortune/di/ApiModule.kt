@@ -24,17 +24,18 @@
  */
 package org.sopt.official.data.fortune.di
 
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.fortune.remote.api.FortuneApi
-import retrofit2.Retrofit
 import retrofit2.create
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ApiModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object ApiModule {
 
     @Provides
-    @Singleton
-    internal fun provideFortuneApi(@AppRetrofit(true) retrofit: Retrofit): FortuneApi = retrofit.create()
+    fun provideFortuneApi(retrofitInstance: AppRetrofitInstance): FortuneApi = retrofitInstance.retrofit.create()
 }

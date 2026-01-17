@@ -72,7 +72,7 @@ import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.state.SoptLogState
 
 @Composable
-internal fun SoptLogEmptySection(
+fun SoptLogEmptySection(
     content: String
 ) {
     Column(
@@ -101,7 +101,7 @@ internal fun SoptLogEmptySection(
 }
 
 @Composable
-internal fun SoptLogSection(
+fun SoptLogSection(
     title: String,
     items: ImmutableList<MySoptLogItemType>,
     soptLogInfo: SoptLogInfo,

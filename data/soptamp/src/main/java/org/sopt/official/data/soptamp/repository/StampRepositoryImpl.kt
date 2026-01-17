@@ -33,9 +33,10 @@ import org.sopt.official.domain.soptamp.model.StampClap
 import org.sopt.official.domain.soptamp.model.StampClapResult
 import org.sopt.official.domain.soptamp.model.StampClappers
 import org.sopt.official.domain.soptamp.repository.StampRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class StampRepositoryImpl @Inject constructor(
+@Inject
+class StampRepositoryImpl(
     private val service: StampService,
 ) : StampRepository {
 

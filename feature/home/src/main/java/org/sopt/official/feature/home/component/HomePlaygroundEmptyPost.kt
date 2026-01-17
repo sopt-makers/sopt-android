@@ -51,7 +51,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
 
 @Composable
-internal fun HomePlaygroundEmptyPost(
+fun HomePlaygroundEmptyPost(
     category: String,
     description: String,
     iconUrl: String,

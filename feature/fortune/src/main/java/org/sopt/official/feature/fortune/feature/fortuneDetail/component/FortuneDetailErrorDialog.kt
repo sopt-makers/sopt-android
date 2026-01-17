@@ -48,7 +48,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
-internal fun FortuneDetailErrorDialog(
+fun FortuneDetailErrorDialog(
     onCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

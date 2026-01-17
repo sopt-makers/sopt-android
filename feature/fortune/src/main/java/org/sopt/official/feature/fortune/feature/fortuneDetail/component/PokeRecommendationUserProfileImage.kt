@@ -36,7 +36,7 @@ import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.fortune.R.drawable.ic_empty_profile
 
 @Composable
-internal fun PokeRecommendationUserProfileImage(
+fun PokeRecommendationUserProfileImage(
     profile: String,
     modifier: Modifier = Modifier,
 ) {

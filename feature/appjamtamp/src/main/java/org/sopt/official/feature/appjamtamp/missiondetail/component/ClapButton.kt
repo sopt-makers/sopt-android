@@ -50,7 +50,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
-internal fun ClapButton(
+fun ClapButton(
     clapCount: Int,
     myClapCount: Int?,
     onClicked: () -> Unit,

@@ -29,7 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,10 +40,10 @@ import org.sopt.official.domain.fortune.usecase.GetTodayFortuneCardUseCase
 
 typealias GraphicColor = android.graphics.Color
 
-@Inject
 @ViewModelKey(FortuneAmuletViewModel::class)
 @ContributesIntoMap(AppScope::class)
-internal class FortuneAmuletViewModel @Inject constructor(
+@Inject
+class FortuneAmuletViewModel(
     getTodayFortuneCardUseCase: GetTodayFortuneCardUseCase,
 ) : ViewModel() {
     private val _state: MutableStateFlow<FortuneAmuletState> = MutableStateFlow(FortuneAmuletState())

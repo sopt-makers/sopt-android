@@ -61,7 +61,7 @@ import org.sopt.official.feature.home.model.Schedule.EVENT
 import org.sopt.official.feature.home.model.Schedule.SEMINAR
 
 @Composable
-internal fun HomeSoptScheduleDashboard(
+fun HomeSoptScheduleDashboard(
     homeSoptScheduleModel: HomeSoptScheduleModel,
     isActivatedGeneration: Boolean,
     onScheduleClick: () -> Unit,

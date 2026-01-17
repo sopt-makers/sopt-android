@@ -26,11 +26,16 @@ package org.sopt.official.feature.poke.onboarding
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.createSavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.CreationExtras
 import androidx.navigation.toRoute
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesIntoMap
-import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelAssistedFactoryKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -45,16 +50,24 @@ import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.navigation.PokeOnboarding
 
-@Inject
-@ViewModelKey(OnboardingViewModel::class)
-@ContributesIntoMap(AppScope::class)
-class OnboardingViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+class OnboardingViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle,
     private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,
     private val updateNewInPokeOnboardingUseCase: UpdateNewInPokeOnboardingUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
 ) : ViewModel() {
     val args = savedStateHandle.toRoute<PokeOnboarding>()
+
+    @AssistedFactory
+    @ViewModelAssistedFactoryKey(OnboardingViewModel::class)
+    @ContributesIntoMap(AppScope::class)
+    fun interface Factory : ViewModelAssistedFactory {
+        override fun create(extras: CreationExtras): OnboardingViewModel {
+            return create(extras.createSavedStateHandle())
+        }
+
+        fun create(@Assisted savedStateHandle: SavedStateHandle): OnboardingViewModel
+    }
 
     private val _checkNewInPokeOnboardingState = MutableStateFlow<Boolean?>(null)
     val checkNewInPokeOnboardingState: StateFlow<Boolean?> get() = _checkNewInPokeOnboardingState

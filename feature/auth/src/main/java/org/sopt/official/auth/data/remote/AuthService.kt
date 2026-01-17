@@ -29,7 +29,7 @@ import org.sopt.official.network.model.response.OAuthToken
 import retrofit2.http.Body
 import retrofit2.http.POST
 
-internal interface AuthService {
+interface AuthService {
     @POST("auth/playground")
     suspend fun oauth(@Body request: RequestToken): OAuthToken
 }

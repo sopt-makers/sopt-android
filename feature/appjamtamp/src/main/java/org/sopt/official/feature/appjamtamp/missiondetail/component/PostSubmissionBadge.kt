@@ -35,7 +35,7 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.compose.LottieAnimation
 
 @Composable
-internal fun PostSubmissionBadge(
+fun PostSubmissionBadge(
     composition: LottieComposition?,
     progress: Float,
 ) {

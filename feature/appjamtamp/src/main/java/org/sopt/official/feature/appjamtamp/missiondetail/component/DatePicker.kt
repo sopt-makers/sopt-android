@@ -75,7 +75,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.component.AppjamtampButton
 
 @Composable
-internal fun DatePicker(
+fun DatePicker(
     value: String,
     placeHolder: String,
     isEditable: Boolean,
@@ -132,7 +132,7 @@ internal fun DatePicker(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun DataPickerBottomSheet(
+fun DataPickerBottomSheet(
     onSelected: (String) -> Unit,
     onDismissRequest: () -> Unit
 ) {

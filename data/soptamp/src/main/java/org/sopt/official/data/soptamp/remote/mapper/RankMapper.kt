@@ -28,18 +28,18 @@ import org.sopt.official.data.soptamp.remote.model.RankData
 import org.sopt.official.data.soptamp.remote.model.response.RankResponse
 import org.sopt.official.domain.soptamp.model.Rank
 
-internal fun List<RankResponse>.toData(): List<RankData> = this.map {
+fun List<RankResponse>.toData(): List<RankData> = this.map {
     it.toData()
 }
 
-internal fun RankResponse.toData(): RankData = RankData(
+fun RankResponse.toData(): RankData = RankData(
     rank,
     nickname,
     point,
     profileMessage
 )
 
-internal fun RankResponse.toDomain(): Rank = Rank(
+fun RankResponse.toDomain(): Rank = Rank(
     rank,
     nickname,
     point,

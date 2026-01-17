@@ -47,7 +47,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -61,7 +61,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.model.AuthStatus
-import org.sopt.official.feature.auth.utils.di.GoogleLoginManagerEntryPoint
+import org.sopt.official.feature.auth.utils.di.GoogleGraph
 
 @Composable
 internal fun SocialAccountRoute(
@@ -77,10 +77,7 @@ internal fun SocialAccountRoute(
     val scope = rememberCoroutineScope()
 
     val googleLoginManager = remember(context) {
-        EntryPointAccessors.fromApplication(
-            context.applicationContext,
-            GoogleLoginManagerEntryPoint::class.java
-        ).googleLoginManager()
+        (context.applicationContext as GoogleGraph).googleLoginManager
     }
 
     LaunchedEffect(Unit) {

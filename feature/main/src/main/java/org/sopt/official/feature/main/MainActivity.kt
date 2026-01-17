@@ -40,11 +40,10 @@ import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.model.UserStatus
 import java.io.Serializable
 
-@Inject
 class MainActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker,

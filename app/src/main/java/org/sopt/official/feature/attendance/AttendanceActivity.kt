@@ -60,7 +60,7 @@ import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
 import org.sopt.official.domain.entity.attendance.AttendanceSummary
@@ -71,7 +71,6 @@ import org.sopt.official.feature.attendance.adapter.AttendanceAdapter
 import org.sopt.official.feature.attendance.model.AttendanceState
 import org.sopt.official.type.SoptColors
 
-@Inject
 @DeepLink("sopt://attendance")
 class AttendanceActivity(
     private val viewModelFactory: SoptViewModelFactory

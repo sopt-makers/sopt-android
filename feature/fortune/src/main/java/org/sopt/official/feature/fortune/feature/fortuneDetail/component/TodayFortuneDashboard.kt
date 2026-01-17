@@ -42,7 +42,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.img_fortune_title_small
 
 @Composable
-internal fun TodayFortuneDashboard(
+fun TodayFortuneDashboard(
     date: String,
     todaySentence: String,
     name: String,

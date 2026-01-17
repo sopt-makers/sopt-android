@@ -24,10 +24,11 @@
  */
 package org.sopt.official.domain.mypage.user
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.domain.mypage.repository.UserRepository
 
-class UpdateProfileUseCase @Inject constructor(
+@Inject
+class UpdateProfileUseCase(
     private val repository: UserRepository
 ) {
     suspend operator fun invoke(introduction: String): Result<Unit> = runCatching {

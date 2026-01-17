@@ -40,21 +40,17 @@ import org.sopt.official.domain.soptamp.repository.StampRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal abstract class DataModule {
+abstract class DataModule {
 
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindMissionsRepository(repository: RemoteMissionsRepository): MissionsRepository
 
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindRankRepository(repository: RemoteRankingRepository): RankingRepository
 
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindStampRepository(repository: StampRepositoryImpl): StampRepository
 
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindImageUploaderRepository(repository: ImageUploaderRepositoryImpl): ImageUploaderRepository
 }

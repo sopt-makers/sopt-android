@@ -24,15 +24,16 @@
  */
 package org.sopt.official.data.mypage.di
 
-import javax.inject.Singleton
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.mypage.remote.api.SoptampUserService
-import retrofit2.Retrofit
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object RemoteModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object RemoteModule {
     @Provides
-    @Singleton
-    fun provideUserService(@AppRetrofit(true) retrofit: Retrofit): SoptampUserService = retrofit.create(SoptampUserService::class.java)
+    fun provideUserService(retrofitInstance: AppRetrofitInstance): SoptampUserService = retrofitInstance.retrofit.create(SoptampUserService::class.java)
 }

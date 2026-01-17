@@ -65,8 +65,6 @@ interface NavigatorProvider {
     ): Intent
 }
 
-@InstallIn(SingletonComponent::class)
-@EntryPoint
-interface NavigatorEntryPoint {
-    fun navigatorProvider(): NavigatorProvider
+interface NavigatorGraph {
+    val navigatorProvider: NavigatorProvider
 }

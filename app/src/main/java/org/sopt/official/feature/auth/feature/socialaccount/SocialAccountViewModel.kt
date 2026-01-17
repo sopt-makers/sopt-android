@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -44,10 +44,10 @@ import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(SocialAccountViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class SocialAccountViewModel @Inject constructor(
+@Inject
+class SocialAccountViewModel(
     private val authRepository: AuthRepository,
 ) : ViewModel() {
 

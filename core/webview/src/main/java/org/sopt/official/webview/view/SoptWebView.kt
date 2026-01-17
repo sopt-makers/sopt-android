@@ -23,15 +23,16 @@
  * SOFTWARE.
  */
 package org.sopt.official.webview.view
-
+import dev.zacsweers.metro.Inject
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
+import dev.zacsweers.metrox.android.MetroApplication
 import org.sopt.official.network.BuildConfig
-import org.sopt.official.webview.di.SoptWebViewEntryPoint
+import org.sopt.official.webview.di.WebViewGraph
 
 @SuppressLint("SetJavaScriptEnabled")
 open class SoptWebView : WebView {
@@ -56,10 +57,7 @@ open class SoptWebView : WebView {
     )
 
     private val dataStore by lazy {
-        EntryPointAccessors.fromApplication(
-            context,
-            SoptWebViewEntryPoint::class.java
-        ).dataStore()
+        ((context.applicationContext as MetroApplication).appComponentProviders as WebViewGraph).dataStore
     }
 
     init {

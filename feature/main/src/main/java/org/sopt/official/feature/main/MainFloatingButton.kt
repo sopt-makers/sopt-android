@@ -92,7 +92,7 @@ private val menuList = listOf(
 ).toImmutableList()
 
 @Composable
-internal fun MainFloatingButton(
+fun MainFloatingButton(
     paddingValues: PaddingValues
 ) {
     var isFloatingButtonClicked by remember { mutableStateOf(false) }

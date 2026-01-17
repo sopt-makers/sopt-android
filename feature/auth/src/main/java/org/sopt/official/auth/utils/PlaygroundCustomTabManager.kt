@@ -41,7 +41,7 @@ import org.sopt.official.auth.PlaygroundError
 
 object PlaygroundCustomTabManager {
 
-    internal fun open(context: Context, uri: Uri): Result<Unit> {
+    fun open(context: Context, uri: Uri): Result<Unit> {
         val urlOpenResult = kotlin.runCatching { buildCustomTabIntent().launchUrl(context, uri) }
         return when (val exception = urlOpenResult.exceptionOrNull()) {
             null -> urlOpenResult
@@ -53,7 +53,7 @@ object PlaygroundCustomTabManager {
         }
     }
 
-    internal fun openWithDefaultBrowser(context: Context, uri: Uri): Result<ServiceConnection> {
+    fun openWithDefaultBrowser(context: Context, uri: Uri): Result<ServiceConnection> {
         val packageName = resolveCustomTabPackage(context, uri)
             ?: return Result.failure(PlaygroundError.NotSupported("기기에서 설치된 Browser를 찾을 수 없습니다."))
         if (!packageName.isChromePackageName()) {
@@ -136,7 +136,7 @@ object PlaygroundCustomTabManager {
     }
 }
 
-internal fun PackageManager.resolveActivityInfo(intent: Intent): ResolveInfo? {
+fun PackageManager.resolveActivityInfo(intent: Intent): ResolveInfo? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         resolveActivity(
             intent,
@@ -147,7 +147,7 @@ internal fun PackageManager.resolveActivityInfo(intent: Intent): ResolveInfo? {
     }
 }
 
-internal fun PackageManager.queryServicesInfo(intent: Intent): List<ResolveInfo> {
+fun PackageManager.queryServicesInfo(intent: Intent): List<ResolveInfo> {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         queryIntentServices(
             intent,

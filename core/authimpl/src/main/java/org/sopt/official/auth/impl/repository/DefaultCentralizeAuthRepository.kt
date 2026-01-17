@@ -24,7 +24,7 @@
  */
 package org.sopt.official.auth.impl.repository
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.auth.impl.mapper.toDomain
 import org.sopt.official.auth.impl.mapper.toRequest
 import org.sopt.official.auth.model.CentralizeToken
@@ -33,7 +33,8 @@ import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshApi
 
-class DefaultCentralizeAuthRepository @Inject constructor(
+@Inject
+class DefaultCentralizeAuthRepository(
     private val refreshApi: RefreshApi,
     private val dataStore: SoptDataStore
 ) : CentralizeAuthRepository {

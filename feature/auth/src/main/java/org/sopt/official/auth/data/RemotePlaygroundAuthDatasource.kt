@@ -31,7 +31,7 @@ import org.sopt.official.common.di.Auth
 import org.sopt.official.network.model.response.OAuthToken
 import java.net.UnknownHostException
 
-internal class RemotePlaygroundAuthDatasource(
+class RemotePlaygroundAuthDatasource(
     @Auth private val authService: AuthService,
 ) : PlaygroundAuthDatasource {
 

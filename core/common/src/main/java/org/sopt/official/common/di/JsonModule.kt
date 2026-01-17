@@ -35,7 +35,6 @@ import kotlinx.serialization.json.Json
 interface JsonModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         fun provideJson(): Json = Json {
             ignoreUnknownKeys = true
             isLenient = true

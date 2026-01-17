@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
-internal fun TodayFortuneText(
+fun TodayFortuneText(
     todaySentence: String,
     name: String,
     modifier: Modifier = Modifier,

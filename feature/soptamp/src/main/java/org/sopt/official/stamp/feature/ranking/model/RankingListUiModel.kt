@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 package org.sopt.official.stamp.feature.ranking.model
-
+import dev.zacsweers.metro.Inject
 class RankingListUiModel private constructor(
     val topRankingList: RankersUiModel,
     val otherRankingList: List<RankerUiModel>,

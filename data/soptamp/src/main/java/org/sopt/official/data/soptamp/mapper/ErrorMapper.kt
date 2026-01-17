@@ -29,6 +29,6 @@ package org.sopt.official.data.soptamp.mapper
 import org.sopt.official.data.soptamp.error.ErrorData
 import org.sopt.official.domain.soptamp.error.Error
 
-internal fun ErrorData.toDomain(): Error = when (this) {
+fun ErrorData.toDomain(): Error = when (this) {
     ErrorData.NetworkUnavailable -> Error.NetworkUnavailable
 }

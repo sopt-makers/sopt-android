@@ -43,9 +43,10 @@ import org.sopt.official.domain.poke.entity.PokeUserResponse
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PokeRepositoryImpl @Inject constructor(
+@Inject
+class PokeRepositoryImpl(
     private val localDataSource: PokeLocalDataSource,
     private val remoteDataSource: PokeRemoteDataSource,
 ) : PokeRepository {

@@ -24,7 +24,7 @@
  */
 package org.sopt.official.auth.impl.remote
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.auth.impl.api.AuthService
 import org.sopt.official.auth.impl.model.response.LogOutRequest
 import org.sopt.official.auth.impl.source.RemoteAuthDataSource
@@ -33,7 +33,8 @@ import org.sopt.official.network.model.request.RefreshRequest
 import org.sopt.official.network.model.response.AuthResponse
 import org.sopt.official.network.service.RefreshService
 
-class DefaultRemoteAuthDataSource @Inject constructor(
+@Inject
+class DefaultRemoteAuthDataSource(
     @Auth private val authService: AuthService,
     private val refreshService: RefreshService,
 ) : RemoteAuthDataSource {

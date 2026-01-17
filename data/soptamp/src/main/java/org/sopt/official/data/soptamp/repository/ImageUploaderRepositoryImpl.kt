@@ -33,7 +33,8 @@ import org.sopt.official.data.soptamp.remote.api.StampService
 import org.sopt.official.domain.soptamp.model.ImageUploadUrl
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 
-class ImageUploaderRepositoryImpl @Inject constructor(
+@Inject
+class ImageUploaderRepositoryImpl(
     private val application: Application,
     private val s3Service: S3Service,
     private val stampService: StampService

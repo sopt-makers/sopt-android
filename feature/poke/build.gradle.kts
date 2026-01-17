@@ -55,4 +55,5 @@ dependencies {
     implementation(libs.dotsindicator)
     implementation(libs.compose.navigation)
     implementation(libs.compose.ui.viewbinding)
+    implementation(libs.metrox.android)
 }

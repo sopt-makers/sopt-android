@@ -47,7 +47,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R
 
 @Composable
-internal fun HomeSurveySection(
+fun HomeSurveySection(
     surveyTitle: String,
     surveyDescription: String,
     buttonText: String,

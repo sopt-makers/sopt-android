@@ -196,6 +196,10 @@ dependencies {
     implementation(libs.semver)
 
     implementation(libs.code.gson)
+
+    implementation(libs.metrox.android)
+    implementation(libs.metrox.viewmodel)
+    implementation(libs.metrox.viewmodel.compose)
 }
 
 secrets {

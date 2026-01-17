@@ -30,11 +30,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import dev.zacsweers.metro.Inject
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.feature.poke.databinding.FragmentOnboardingBottomSheetBinding
 
-@Inject
 class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
     private val binding by viewBinding(FragmentOnboardingBottomSheetBinding::bind)
 
@@ -56,5 +54,20 @@ class OnboardingBottomSheetFragment : BottomSheetDialogFragment() {
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         onDismissEvent?.let { it() }
+    }
+
+    class Builder {
+        private var onDismissEvent: (() -> Unit)? = null
+
+        fun setOnDismissEvent(event: () -> Unit): Builder {
+            this.onDismissEvent = event
+            return this
+        }
+
+        fun create(): OnboardingBottomSheetFragment {
+            val fragment = OnboardingBottomSheetFragment()
+            fragment.onDismissEvent = onDismissEvent
+            return fragment
+        }
     }
 }

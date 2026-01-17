@@ -40,7 +40,7 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
 
-internal interface AuthApi {
+interface AuthApi {
     @POST("/api/v1/auth/phone")
     suspend fun createCode(
         @Body request: CreateCodeRequest,

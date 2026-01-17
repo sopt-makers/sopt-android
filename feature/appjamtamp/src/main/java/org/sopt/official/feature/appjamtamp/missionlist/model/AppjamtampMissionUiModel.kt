@@ -37,7 +37,7 @@ data class AppjamtampMissionListUiModel(
     val missionList: ImmutableList<AppjamtampMissionUiModel> = persistentListOf(),
 )
 
-internal fun AppjamtampMissionListEntity.toUiModel() = AppjamtampMissionListUiModel(
+fun AppjamtampMissionListEntity.toUiModel() = AppjamtampMissionListUiModel(
     teamNumber = teamNumber,
     teamName = teamName,
     missionList = missions.map { it.toUiModel() }.toImmutableList()
@@ -52,7 +52,7 @@ data class AppjamtampMissionUiModel(
     val isCompleted: Boolean = false,
 )
 
-internal fun AppjamtampMissionEntity.toUiModel() = AppjamtampMissionUiModel(
+fun AppjamtampMissionEntity.toUiModel() = AppjamtampMissionUiModel(
     id = id,
     title = title,
     ownerName = ownerName,

@@ -45,7 +45,7 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.stamp.feature.navigation.MissionDetail
 import org.sopt.official.stamp.feature.navigation.MissionList
 import org.sopt.official.stamp.feature.navigation.PartRanking
@@ -56,7 +56,6 @@ import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import java.io.Serializable
 
 @Deprecated("SoptampEntryRoute로 대체")
-@Inject
 class SoptampActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker

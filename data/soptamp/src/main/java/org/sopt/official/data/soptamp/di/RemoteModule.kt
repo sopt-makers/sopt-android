@@ -24,30 +24,29 @@
  */
 package org.sopt.official.data.soptamp.di
 
-import javax.inject.Singleton
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.NoneAuthRetrofitInstance
 import org.sopt.official.data.soptamp.remote.api.RankService
 import org.sopt.official.data.soptamp.remote.api.S3Service
 import org.sopt.official.data.soptamp.remote.api.SoptampService
 import org.sopt.official.data.soptamp.remote.api.StampService
-import retrofit2.Retrofit
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object RemoteModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object RemoteModule {
     @Provides
-    @Singleton
-    fun provideStampService(@AppRetrofit retrofit: Retrofit): StampService = retrofit.create(StampService::class.java)
+    fun provideStampService(retrofitInstance: AppRetrofitInstance): StampService = retrofitInstance.retrofit.create(StampService::class.java)
 
     @Provides
-    @Singleton
-    fun provideSoptampService(@AppRetrofit retrofit: Retrofit): SoptampService = retrofit.create(SoptampService::class.java)
+    fun provideSoptampService(retrofitInstance: AppRetrofitInstance): SoptampService = retrofitInstance.retrofit.create(SoptampService::class.java)
 
     @Provides
-    @Singleton
-    fun provideRankingService(@AppRetrofit retrofit: Retrofit): RankService = retrofit.create(RankService::class.java)
+    fun provideRankingService(retrofitInstance: AppRetrofitInstance): RankService = retrofitInstance.retrofit.create(RankService::class.java)
 
     @Provides
-    @Singleton
-    fun provideS3Service(@AppRetrofit(false) retrofit: Retrofit): S3Service = retrofit.create(S3Service::class.java)
+    fun provideS3Service(retrofitInstance: NoneAuthRetrofitInstance): S3Service = retrofitInstance.retrofit.create(S3Service::class.java)
 }

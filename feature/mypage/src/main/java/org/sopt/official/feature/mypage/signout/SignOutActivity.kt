@@ -53,7 +53,6 @@ import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 
-@Inject
 class SignOutActivity(
     private val authRepository: AuthRepository
 ) : AppCompatActivity() {

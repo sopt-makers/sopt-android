@@ -27,6 +27,6 @@ package org.sopt.official.auth.utils
 import android.os.Bundle
 import androidx.core.os.BundleCompat
 
-internal inline fun <reified T> Bundle.getParcelableAs(key: String): T? {
+inline fun <reified T> Bundle.getParcelableAs(key: String): T? {
     return BundleCompat.getParcelable(this, key, T::class.java)
 }

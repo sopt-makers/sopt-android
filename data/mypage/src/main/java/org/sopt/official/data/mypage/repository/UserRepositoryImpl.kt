@@ -28,9 +28,10 @@ import org.sopt.official.data.mypage.local.SoptampDataStore
 import org.sopt.official.data.mypage.source.UserDataSource
 import org.sopt.official.data.poke.source.local.PokeLocalDataSource
 import org.sopt.official.domain.mypage.repository.UserRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class UserRepositoryImpl @Inject constructor(
+@Inject
+class UserRepositoryImpl(
     private val remote: UserDataSource,
     private val soptampLocal: SoptampDataStore,
     private val pokeLocal: PokeLocalDataSource,

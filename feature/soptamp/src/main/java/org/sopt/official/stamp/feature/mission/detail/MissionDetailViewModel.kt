@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -97,12 +97,10 @@ data class PostUiState(
 }
 
 @OptIn(FlowPreview::class)
-@Inject
 @ViewModelKey(MissionDetailViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class MissionDetailViewModel
 @Inject
-constructor(
+class MissionDetailViewModel(
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
     private val userRepository: UserRepository,

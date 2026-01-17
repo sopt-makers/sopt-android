@@ -28,9 +28,10 @@ import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class GetOnboardingPokeUserListUseCase @Inject constructor(
+@Inject
+class GetOnboardingPokeUserListUseCase(
     private val repository: PokeRepository,
 ) {
     suspend operator fun invoke(randomType: String = "ALL", size: Int): ApiResult<PokeRandomUserList> {

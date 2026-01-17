@@ -28,7 +28,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class TodayFortuneCardResponse(
+data class TodayFortuneCardResponse(
     @SerialName("description")
     val description: String,
     @SerialName("imageColorCode")

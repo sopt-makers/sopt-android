@@ -26,8 +26,6 @@ package org.sopt.official.webview.di
 
 import org.sopt.official.network.persistence.SoptDataStore
 
-@InstallIn(SingletonComponent::class)
-@EntryPoint
-interface SoptWebViewEntryPoint {
-    fun dataStore(): SoptDataStore
+interface WebViewGraph {
+    val dataStore: SoptDataStore
 }

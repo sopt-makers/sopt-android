@@ -32,7 +32,7 @@ import android.os.ResultReceiver
 import android.provider.Browser
 import androidx.browser.customtabs.CustomTabsIntent
 
-internal object AuthIntentFactory {
+object AuthIntentFactory {
     fun authIntentWithAuthTab(context: Context, uri: Uri, state: String, resultReceiver: ResultReceiver): Intent {
         val bundle = Bundle().apply {
             putParcelable(Constants.AUTH_URI_KEY, uri)

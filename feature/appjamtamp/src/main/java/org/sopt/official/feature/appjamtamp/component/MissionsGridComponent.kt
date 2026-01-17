@@ -38,7 +38,7 @@ import org.sopt.official.feature.appjamtamp.missionlist.component.MissionCompone
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
 
 @Composable
-internal fun MissionsGridComponent(
+fun MissionsGridComponent(
     missionList: ImmutableList<AppjamtampMissionUiModel>,
     modifier: Modifier = Modifier,
     onMissionItemClick: (item: AppjamtampMissionUiModel) -> Unit = {}

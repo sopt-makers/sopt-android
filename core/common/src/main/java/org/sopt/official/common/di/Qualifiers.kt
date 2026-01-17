@@ -53,3 +53,16 @@ annotation class S3
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class AuthRetrofit
+
+data class LocalStoreName(val value: String)
+data class AppRetrofitInstance(val retrofit: retrofit2.Retrofit)
+data class AuthRetrofitInstance(val retrofit: retrofit2.Retrofit)
+data class OperationRetrofitInstance(val retrofit: retrofit2.Retrofit)
+data class NoneAuthRetrofitInstance(val retrofit: retrofit2.Retrofit)
+data class SoptampStoreKey(val value: String)
+data class PokeStoreKey(val value: String)
+
+data class AuthOkHttpClient(val client: okhttp3.OkHttpClient)
+data class NonAuthOkHttpClient(val client: okhttp3.OkHttpClient)
+data class LoggingInterceptor(val interceptor: okhttp3.Interceptor)
+data class AuthInterceptorWrapper(val interceptor: okhttp3.Interceptor)

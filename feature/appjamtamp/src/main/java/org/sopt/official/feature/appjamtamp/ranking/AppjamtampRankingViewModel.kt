@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -40,10 +40,10 @@ import org.sopt.official.feature.appjamtamp.ranking.model.AppjamtampRankingState
 import org.sopt.official.feature.appjamtamp.ranking.model.toUiModel
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(AppjamtampRankingViewModel::class)
 @ContributesIntoMap(AppScope::class)
-internal class AppjamtampRankingViewModel @Inject constructor(
+@Inject
+class AppjamtampRankingViewModel(
     private val appjamtampRepository: AppjamtampRepository
 ) : ViewModel() {
 

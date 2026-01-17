@@ -24,17 +24,16 @@
  */
 package org.sopt.official.analytics
 
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.SingleIn
 import org.sopt.official.analytics.impl.AmplitudeTracker
-import org.sopt.official.common.di.AppScope
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface TrackerModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindAmplitudeTracker(amplitudeTracker: AmplitudeTracker): Tracker
 }

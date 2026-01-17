@@ -56,7 +56,7 @@ import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -74,7 +74,7 @@ import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreListUiM
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 
 @Composable
-internal fun AppjamtampRankingRoute(
+fun AppjamtampRankingRoute(
     navigateUp: () -> Unit,
     navigateToTeamMissionList: (String) -> Unit,
     navigateToMissionDetail: (missionId: Int, ownerName: String, teamNumber: String) -> Unit,
@@ -110,7 +110,7 @@ internal fun AppjamtampRankingRoute(
 }
 
 @Composable
-internal fun AppjamtampRankingScreen(
+fun AppjamtampRankingScreen(
     top3RecentRankings: ImmutableList<Top3RecentRankingUiModel>,
     top10MissionScores: ImmutableList<TopMissionScoreUiModel>,
     onBackButtonClick: () -> Unit,

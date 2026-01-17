@@ -71,7 +71,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.missiondetail.model.StampClapUserModel
 
 @Composable
-internal fun ClapUserBottomDialog(
+fun ClapUserBottomDialog(
     userList: ImmutableList<StampClapUserModel>,
     onDismiss: () -> Unit,
     onClickUser: (String?, String?) -> Unit,

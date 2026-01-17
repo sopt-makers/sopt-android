@@ -31,7 +31,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-internal interface RankService {
+interface RankService {
 
     @GET("rank")
     suspend fun getRanking(): List<RankResponse>

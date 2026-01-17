@@ -26,8 +26,6 @@ package org.sopt.official.feature.auth.utils.di
 
 import org.sopt.official.feature.auth.utils.GoogleLoginManager
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface GoogleLoginManagerEntryPoint {
-    fun googleLoginManager(): GoogleLoginManager
+interface GoogleGraph {
+    val googleLoginManager: GoogleLoginManager
 }

@@ -29,11 +29,11 @@ package org.sopt.official.data.soptamp.mapper
 import org.sopt.official.data.soptamp.remote.model.RankData
 import org.sopt.official.domain.soptamp.model.Rank
 
-internal fun List<RankData>.toDomain(): List<Rank> = this.map {
+fun List<RankData>.toDomain(): List<Rank> = this.map {
     it.toDomain()
 }
 
-internal fun RankData.toDomain(): Rank = Rank(
+fun RankData.toDomain(): Rank = Rank(
     rank,
     nickname,
     point,

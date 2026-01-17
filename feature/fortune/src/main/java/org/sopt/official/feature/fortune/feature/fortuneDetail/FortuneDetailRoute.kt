@@ -40,7 +40,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType.CLICK
@@ -50,10 +50,10 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.SnackBarUiState
 
-internal const val DEFAULT_ID = -1
+const val DEFAULT_ID = -1
 
 @Composable
-internal fun FortuneDetailRoute(
+fun FortuneDetailRoute(
     date: String,
     onFortuneAmuletClick: () -> Unit,
     isBottomSheetVisible: (isVisible: Boolean) -> Unit,

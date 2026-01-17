@@ -52,7 +52,6 @@ import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
 
-@Inject
 class AdjustSentenceActivity(
     private val userRepository: UserRepository
 ) : AppCompatActivity() {

@@ -34,9 +34,8 @@ import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindDefaultSoptLogRepository(defaultSoptLogRepository: DefaultSoptLogRepository): SoptLogRepository
 }

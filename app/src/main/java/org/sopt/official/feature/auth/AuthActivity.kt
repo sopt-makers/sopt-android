@@ -49,7 +49,7 @@ import org.sopt.official.R
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -57,7 +57,6 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
-@Inject
 class AuthActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val dataStore: SoptDataStore

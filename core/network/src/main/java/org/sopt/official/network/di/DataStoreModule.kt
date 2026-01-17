@@ -30,14 +30,14 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.LocalStore
+import org.sopt.official.common.di.LocalStoreName
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface DataStoreModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         @LocalStore
-        fun provideSoptDataStoreName(): String = "sampleKey"
+        fun provideSoptDataStoreName(): LocalStoreName = LocalStoreName("sampleKey")
     }
 }

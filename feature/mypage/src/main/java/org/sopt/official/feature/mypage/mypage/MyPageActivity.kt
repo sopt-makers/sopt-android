@@ -70,7 +70,6 @@ import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.model.UserStatus
 import java.io.Serializable
 
-@Inject
 class MyPageActivity(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,

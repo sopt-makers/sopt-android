@@ -26,9 +26,10 @@ package org.sopt.official.domain.fortune.usecase
 
 import org.sopt.official.domain.fortune.model.TodayFortuneWord
 import org.sopt.official.domain.fortune.repository.FortuneRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class GetTodayFortuneUseCase @Inject constructor(
+@Inject
+class GetTodayFortuneUseCase(
     private val fortuneRepository: FortuneRepository,
     private val getTodayDateUseCase: GetTodayDateUseCase,
 ) {

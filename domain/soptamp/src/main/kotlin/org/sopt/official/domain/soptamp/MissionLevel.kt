@@ -23,7 +23,7 @@
  * SOFTWARE.
  */
 package org.sopt.official.domain.soptamp
-
+import dev.zacsweers.metro.Inject
 class MissionLevel private constructor(
     val value: Int
 ) {

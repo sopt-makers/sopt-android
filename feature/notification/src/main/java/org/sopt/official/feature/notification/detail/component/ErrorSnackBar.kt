@@ -47,7 +47,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.notification.R
 
 @Composable
-internal fun ErrorSnackBar(
+fun ErrorSnackBar(
     message: String,
     modifier: Modifier = Modifier,
 ) {

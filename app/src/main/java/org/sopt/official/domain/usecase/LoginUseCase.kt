@@ -24,11 +24,12 @@
  */
 package org.sopt.official.domain.usecase
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.auth.model.Auth
 import org.sopt.official.auth.repository.AuthRepository
 
-class LoginUseCase @Inject constructor(
+@Inject
+class LoginUseCase(
     private val authRepository: AuthRepository
 ) {
     operator fun invoke(auth: Auth) {

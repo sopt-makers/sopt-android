@@ -43,7 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -55,7 +55,7 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionU
 import org.sopt.official.feature.appjamtamp.teammisisonlist.model.AppjamtampMissionListState
 
 @Composable
-internal fun AppjamtampTeamMissionListRoute(
+fun AppjamtampTeamMissionListRoute(
     teamNumber: String,
     navigateUp: () -> Unit,
     navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
@@ -92,7 +92,7 @@ internal fun AppjamtampTeamMissionListRoute(
 }
 
 @Composable
-internal fun AppjamtampTeamMissionListScreen(
+fun AppjamtampTeamMissionListScreen(
     teamName: String,
     teamMissionList: ImmutableList<AppjamtampMissionUiModel>,
     onBackButtonClick: () -> Unit,

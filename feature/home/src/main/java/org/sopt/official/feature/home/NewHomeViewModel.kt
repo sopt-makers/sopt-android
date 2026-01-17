@@ -29,7 +29,7 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.messaging.FirebaseMessaging
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -74,10 +74,10 @@ import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(NewHomeViewModel::class)
 @ContributesIntoMap(AppScope::class)
-internal class NewHomeViewModel @Inject constructor(
+@Inject
+class NewHomeViewModel(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,

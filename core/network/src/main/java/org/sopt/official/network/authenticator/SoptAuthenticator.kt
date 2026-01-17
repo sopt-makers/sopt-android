@@ -42,7 +42,8 @@ import timber.log.Timber
 
 @Deprecated("이거 말고 CentralizeAuthenticator 사용하세요.")
 @SingleIn(AppScope::class)
-class SoptAuthenticator @Inject constructor(
+@Inject
+class SoptAuthenticator(
     private val dataStore: SoptDataStore,
     private val refreshService: RefreshService,
     private val application: Application,

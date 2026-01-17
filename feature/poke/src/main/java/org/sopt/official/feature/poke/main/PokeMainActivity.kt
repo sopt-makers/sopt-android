@@ -48,7 +48,7 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -64,7 +64,6 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("PokeScreen으로 대체")
-@Inject
 class PokeMainActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker

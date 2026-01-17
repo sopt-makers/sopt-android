@@ -47,7 +47,7 @@ import org.sopt.official.designsystem.White
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
-internal fun AppjamtampFloatingButton(
+fun AppjamtampFloatingButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit = {}
 ) {

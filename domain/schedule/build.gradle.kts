@@ -24,8 +24,14 @@
  */
 plugins {
     sopt("kotlin.jvm")
+    alias(libs.plugins.metro)
 }
 
 kotlin {
     jvmToolchain(17)
+}
+
+dependencies {
+    implementation(libs.javax.inject)
+    implementation(libs.metro.runtime)
 }

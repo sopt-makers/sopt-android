@@ -64,7 +64,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
 
 @Composable
-internal fun Top3RecentRankingMission(
+fun Top3RecentRankingMission(
     top3RecentRanking: Top3RecentRankingUiModel,
     modifier: Modifier = Modifier
 ) {

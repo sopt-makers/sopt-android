@@ -39,7 +39,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.White
 
 @Composable
-internal fun HomeBox(
+fun HomeBox(
     content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     contentAlignment: Alignment = CenterStart,

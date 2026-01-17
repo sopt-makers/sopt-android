@@ -42,7 +42,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
-internal fun BackButtonHeader(
+fun BackButtonHeader(
     title: String,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,

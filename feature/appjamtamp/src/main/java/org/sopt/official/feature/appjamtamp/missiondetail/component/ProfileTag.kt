@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
-internal fun ProfileTag(
+fun ProfileTag(
     name: String,
     profileImage: String,
     modifier: Modifier = Modifier

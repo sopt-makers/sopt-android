@@ -34,8 +34,7 @@ import org.sopt.official.data.appjamtamp.datasourceimpl.AppjamtampDataSourceImpl
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface DataSourceModule {
+interface DataSourceModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindAppjamtampDataSource(appjamtampDataSourceImpl: AppjamtampDataSourceImpl): AppjamtampDataSource
 }

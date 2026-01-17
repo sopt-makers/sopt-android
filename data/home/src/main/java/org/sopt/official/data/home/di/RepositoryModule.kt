@@ -34,9 +34,8 @@ import org.sopt.official.domain.home.repository.HomeRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindDefaultHomeRepository(defaultHomeRepository: DefaultHomeRepository): HomeRepository
 }

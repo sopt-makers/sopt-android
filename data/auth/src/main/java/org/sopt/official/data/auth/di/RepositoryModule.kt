@@ -34,9 +34,8 @@ import org.sopt.official.domain.auth.repository.AuthRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindDefaultAuthRepository(defaultAuthRepository: DefaultAuthRepository): AuthRepository
 }

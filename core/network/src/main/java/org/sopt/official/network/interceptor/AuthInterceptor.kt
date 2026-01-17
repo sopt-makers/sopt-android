@@ -28,9 +28,10 @@ import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
 import org.sopt.official.network.persistence.SoptDataStore
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class AuthInterceptor @Inject constructor(
+@Inject
+class AuthInterceptor(
     private val dataStore: SoptDataStore
 ) : Interceptor {
     // TODO By Nunu 401 Refresh Logic 추가

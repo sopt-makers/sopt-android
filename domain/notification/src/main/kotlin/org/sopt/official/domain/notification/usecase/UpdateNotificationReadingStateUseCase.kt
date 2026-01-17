@@ -25,9 +25,10 @@
 package org.sopt.official.domain.notification.usecase
 
 import org.sopt.official.domain.notification.repository.NotificationRepository
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class UpdateNotificationReadingStateUseCase @Inject constructor(
+@Inject
+class UpdateNotificationReadingStateUseCase(
   private val notificationRepository: NotificationRepository
 ) {
   suspend operator fun invoke(notificationId: String) {

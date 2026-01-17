@@ -31,7 +31,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,10 +43,10 @@ import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.toData
 
-@Inject
 @ViewModelKey(PartRankingViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class PartRankingViewModel @Inject constructor(
+@Inject
+class PartRankingViewModel(
     private val rankingRepository: RankingRepository,
 ) : ViewModel() {
     private val _state: MutableStateFlow<PartRankingState> = MutableStateFlow(PartRankingState.Loading)

@@ -36,6 +36,5 @@ import org.sopt.official.domain.poke.repository.PokeRepository
 @BindingContainer
 abstract class RepositoryModule {
     @Binds
-    @SingleIn(AppScope::class)
     abstract fun bindPokeRepository(impl: PokeRepositoryImpl): PokeRepository
 }

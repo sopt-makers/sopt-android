@@ -34,9 +34,8 @@ import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindAppjamtampRepository(
         appjamtampRepositoryImpl: AppjamtampRepositoryImpl
     ): AppjamtampRepository

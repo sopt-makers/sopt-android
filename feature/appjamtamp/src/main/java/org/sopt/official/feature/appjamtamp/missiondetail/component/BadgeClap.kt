@@ -38,7 +38,7 @@ import org.sopt.official.designsystem.OrangeAlpha900
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun BadgeClap(
+fun BadgeClap(
     myClapCount: Int,
     modifier: Modifier = Modifier
 ) {

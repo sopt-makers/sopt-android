@@ -60,7 +60,7 @@ import org.sopt.official.feature.home.R.drawable.ic_moim
 import org.sopt.official.feature.home.R.drawable.is_playground
 
 @Composable
-internal fun HomeShortcutButtonsForMember(
+fun HomeShortcutButtonsForMember(
     onPlaygroundClick: () -> Unit,
     onStudyClick: () -> Unit,
     onMemberClick: () -> Unit,
@@ -108,7 +108,7 @@ private fun HomeShortcutButtonsForMemberPreview() {
 }
 
 @Composable
-internal fun HomeShortcutButtonsForVisitor(
+fun HomeShortcutButtonsForVisitor(
     onHomePageClick: () -> Unit,
     onPlaygroundClick: () -> Unit,
     onProjectClick: () -> Unit,

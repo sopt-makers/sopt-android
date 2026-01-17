@@ -36,7 +36,7 @@ import org.sopt.official.feature.home.R.drawable.img_soptmadi
 import org.sopt.official.feature.home.model.Schedule.EVENT
 
 @Stable
-internal sealed interface HomeUiState {
+sealed interface HomeUiState {
     val isLoading: Boolean
     val isError: Boolean
     val homeServices: ImmutableList<HomeAppService>
@@ -91,7 +91,7 @@ internal sealed interface HomeUiState {
 }
 
 @Immutable
-internal data class HomeSurveyData(
+data class HomeSurveyData(
     val title: String = "솝커톤 어땠나요?",
     val description: String = "여러분의 솝커톤 이야기를 들려주세요!",
     val buttonText: String = "지금 솝커톤 후기 쓰러가기",
@@ -100,7 +100,7 @@ internal data class HomeSurveyData(
 )
 
 @Immutable
-internal data class HomeFloatingToastData(
+data class HomeFloatingToastData(
     val imageUrl: String = "",
     val title: String = "점수 2배! 깜짝 미션 오픈",
     val toastDescription: String = "지금 바로 미션에 도전해보세요",
@@ -126,7 +126,7 @@ data class HomePlaygroundPostModel(
 )
 
 @Immutable
-internal data class HomeSoptScheduleModel(
+data class HomeSoptScheduleModel(
     val type: Schedule = EVENT,
     val date: String = "",
     val title: String = "",
@@ -135,7 +135,7 @@ internal data class HomeSoptScheduleModel(
 }
 
 @Immutable
-internal data class HomeUserSoptLogDashboardModel(
+data class HomeUserSoptLogDashboardModel(
     val userProfile: String = "",
     val activityDescription: String = "",
     val generations: ImmutableList<Long> = persistentListOf(),
@@ -154,7 +154,7 @@ internal data class HomeUserSoptLogDashboardModel(
 }
 
 @Immutable
-internal data class HomeAppService(
+data class HomeAppService(
     val serviceName: String = "",
     val isShowAlarmBadge: Boolean = false,
     val alarmBadgeContent: String = "",
@@ -163,7 +163,7 @@ internal data class HomeAppService(
     @DrawableRes val defaultIcon: Int? = null,
 )
 
-internal val defaultAppServices: ImmutableList<HomeAppService> = persistentListOf(
+val defaultAppServices: ImmutableList<HomeAppService> = persistentListOf(
     HomeAppService(
         serviceName = "콕찌르기",
         defaultIcon = img_poke,

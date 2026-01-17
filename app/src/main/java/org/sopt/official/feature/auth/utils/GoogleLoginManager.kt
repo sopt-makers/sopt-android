@@ -33,11 +33,12 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.coroutines.suspendRunCatching
 import timber.log.Timber
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import javax.inject.Singleton
 
 @Singleton
-class GoogleLoginManager @Inject constructor() {
+@Inject
+class GoogleLoginManager() {
     suspend fun getGoogleIdToken(context: Context): String {
         var idToken = ""
         val clientId = if (BuildConfig.DEBUG) BuildConfig.DEV_SERVER_CLIENT_ID else BuildConfig.PROD_SERVER_CLIENT_ID

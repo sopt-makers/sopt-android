@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.auth.repository
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.auth.mapper.toAuthDomain
 import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
@@ -39,7 +39,8 @@ import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.network.persistence.SoptDataStore
 
-internal class DefaultAuthRepository @Inject constructor(
+@Inject
+class DefaultAuthRepository(
     private val authApi: AuthApi,
     private val soptDataStore: SoptDataStore,
 ) : AuthRepository {

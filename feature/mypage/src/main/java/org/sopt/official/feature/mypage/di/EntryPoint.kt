@@ -30,35 +30,25 @@ import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-internal interface AuthEntryPoint {
-    fun authRepository(): AuthRepository
-    fun userRepository(): UserRepository
-    fun stampRepository(): StampRepository
-    fun notificationRepository(): NotificationRepository
+interface AuthGraph {
+    val authRepository: AuthRepository
+    val userRepository: UserRepository
+    val stampRepository: StampRepository
+    val notificationRepository: NotificationRepository
 }
 
-internal val authRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .authRepository()
+val authRepository by lazy {
+    (appContext as AuthGraph).authRepository
 }
 
-internal val userRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .userRepository()
+val userRepository by lazy {
+    (appContext as AuthGraph).userRepository
 }
 
-internal val stampRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .stampRepository()
+val stampRepository by lazy {
+    (appContext as AuthGraph).stampRepository
 }
 
-internal val notificationRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .notificationRepository()
+val notificationRepository by lazy {
+    (appContext as AuthGraph).notificationRepository
 }

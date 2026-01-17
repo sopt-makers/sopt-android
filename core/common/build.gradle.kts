@@ -40,4 +40,5 @@ dependencies {
     implementation(libs.exifinterface)
     implementation(platform(libs.firebase))
     implementation(libs.firebase.config)
+    implementation(libs.metrox.android)
 }

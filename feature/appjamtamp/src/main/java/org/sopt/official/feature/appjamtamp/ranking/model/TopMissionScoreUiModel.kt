@@ -32,7 +32,7 @@ data class TopMissionScoreListUiModel(
     val top10MissionScoreList: ImmutableList<TopMissionScoreUiModel>
 )
 
-internal fun List<AppjamtampMissionScore>.toUiModel(): TopMissionScoreListUiModel =
+fun List<AppjamtampMissionScore>.toUiModel(): TopMissionScoreListUiModel =
     TopMissionScoreListUiModel(
         top10MissionScoreList = this.map { it.toUiModel() }.toImmutableList()
     )
@@ -45,7 +45,7 @@ data class TopMissionScoreUiModel(
     val totalPoints: Int
 )
 
-internal fun AppjamtampMissionScore.toUiModel(): TopMissionScoreUiModel =
+fun AppjamtampMissionScore.toUiModel(): TopMissionScoreUiModel =
     TopMissionScoreUiModel(
         rank = this.rank,
         teamName = this.teamName,

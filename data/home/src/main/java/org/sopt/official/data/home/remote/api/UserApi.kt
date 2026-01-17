@@ -27,7 +27,7 @@ package org.sopt.official.data.home.remote.api
 import org.sopt.official.data.home.remote.response.UserMainResponseDto
 import retrofit2.http.GET
 
-internal interface UserApi {
+interface UserApi {
 
     @GET("user/main")
     suspend fun getUserMain(): UserMainResponseDto

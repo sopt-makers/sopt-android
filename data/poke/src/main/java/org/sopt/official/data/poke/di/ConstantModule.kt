@@ -24,14 +24,17 @@
  */
 package org.sopt.official.data.poke.di
 
-import javax.inject.Singleton
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.poke.BuildConfig
 
-@Module
-@InstallIn(SingletonComponent::class)
+data class PokeStoreKey(val value: String)
+
+@ContributesTo(AppScope::class)
+@BindingContainer
 object ConstantModule {
     @Provides
-    @Singleton
-    @Strings(Constant.POKE_DATA_STORE)
-    fun providePokeDataStoreKey(): String = BuildConfig.POKE_DATA_STORE_KEY
+    fun providePokeDataStoreKey(): PokeStoreKey = PokeStoreKey(BuildConfig.POKE_DATA_STORE_KEY)
 }

@@ -48,7 +48,7 @@ import kotlinx.coroutines.delay
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun HomePageIndicator(
+fun HomePageIndicator(
     numberOfPages: Int,
     modifier: Modifier = Modifier,
     selectedPage: Int = 0,

@@ -49,7 +49,7 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
@@ -63,7 +63,6 @@ import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("PokeNotificationScreen으로 대체")
-@Inject
 class PokeNotificationActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker

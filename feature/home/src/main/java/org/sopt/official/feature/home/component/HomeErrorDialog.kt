@@ -50,7 +50,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
 @Composable
-internal fun HomeErrorDialog(
+fun HomeErrorDialog(
     onCheckClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

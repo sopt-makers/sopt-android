@@ -56,7 +56,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
 
 @Composable
-internal fun ImageModal(
+fun ImageModal(
     image: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier

@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -42,10 +42,10 @@ import org.sopt.official.domain.schedule.model.Schedule
 import org.sopt.official.domain.schedule.repository.ScheduleRepository
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(ScheduleViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class ScheduleViewModel @Inject constructor(
+@Inject
+class ScheduleViewModel(
     private val scheduleRepository: ScheduleRepository,
 ) : ViewModel() {
     private val _schedule = MutableStateFlow(ScheduleState())

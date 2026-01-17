@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun AppjamtampButton(
+fun AppjamtampButton(
     text: String,
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,

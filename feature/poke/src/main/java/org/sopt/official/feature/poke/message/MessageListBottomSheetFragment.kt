@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.poke.message
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,27 +33,33 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dev.zacsweers.metrox.android.MetroApplication
 import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeMessageList
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheetBinding
+import org.sopt.official.feature.poke.di.PokeGraph
 import org.sopt.official.feature.poke.util.showPokeToast
 
-@Inject
-class MessageListBottomSheetFragment(
-    private val viewModelFactory: SoptViewModelFactory
-) : BottomSheetDialogFragment() {
+class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
+    @Inject lateinit var viewModelFactory: SoptViewModelFactory
+
     private val binding by viewBinding(FragmentMessageListBottomSheetBinding::bind)
     private lateinit var viewModel: MessageListBottomSheetViewModel
 
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        ((requireActivity().application as MetroApplication).appComponentProviders as PokeGraph).inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this, viewModelFactory)[MessageListBottomSheetViewModel::class.java]
@@ -62,16 +69,14 @@ class MessageListBottomSheetFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Arguments에서 읽어오기
         val type = arguments?.getSerializable("pokeMessageType") as? PokeMessageType
-        type?.let { 
+        type?.let {
             pokeMessageType = it
-            viewModel.getPokeMessageList(it) 
+            viewModel.getPokeMessageList(it)
         } ?: run {
-            // 기존 방식 호환 (프로퍼티 직접 설정된 경우)
             pokeMessageType?.let { viewModel.getPokeMessageList(it) }
         }
-        
+
         launchPokeMessageListUiStateFlow()
         initCheckbox()
     }
@@ -114,4 +119,26 @@ class MessageListBottomSheetFragment(
         MessageItemClickListener { message ->
             onClickMessageListItem?.let { it(message, viewModel.pokeAnonymousCheckboxChecked.value) }
         }
+
+    class Builder {
+        private var pokeMessageType: PokeMessageType? = null
+        private var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
+
+        fun setMessageListType(type: PokeMessageType): Builder {
+            this.pokeMessageType = type
+            return this
+        }
+
+        fun onClickMessageListItem(listener: (message: String, isAnonymous: Boolean) -> Unit): Builder {
+            this.onClickMessageListItem = listener
+            return this
+        }
+
+        fun create(): MessageListBottomSheetFragment {
+            val fragment = MessageListBottomSheetFragment()
+            fragment.pokeMessageType = pokeMessageType
+            fragment.onClickMessageListItem = onClickMessageListItem
+            return fragment
+        }
+    }
 }

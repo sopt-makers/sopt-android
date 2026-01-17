@@ -24,27 +24,26 @@
  */
 package org.sopt.official.data.home.di
 
-import org.sopt.official.common.di.AppRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppRetrofitInstance
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi
 import org.sopt.official.data.home.remote.api.UserApi
-import retrofit2.Retrofit
 import retrofit2.create
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ApiModule {
-
-    @Provides
-    @Singleton
-    internal fun provideUserApi(@AppRetrofit(true) retrofit: Retrofit): UserApi = retrofit.create()
+@ContributesTo(AppScope::class)
+@BindingContainer
+object ApiModule {
 
     @Provides
-    @Singleton
-    internal fun provideCalendarApi(@AppRetrofit(true) retrofit: Retrofit): CalendarApi = retrofit.create()
+    fun provideUserApi(retrofitInstance: AppRetrofitInstance): UserApi = retrofitInstance.retrofit.create()
 
     @Provides
-    @Singleton
-    internal fun provideHomeApi(@AppRetrofit(true) retrofit: Retrofit): HomeApi = retrofit.create()
+    fun provideCalendarApi(retrofitInstance: AppRetrofitInstance): CalendarApi = retrofitInstance.retrofit.create()
+
+    @Provides
+    fun provideHomeApi(retrofitInstance: AppRetrofitInstance): HomeApi = retrofitInstance.retrofit.create()
 }

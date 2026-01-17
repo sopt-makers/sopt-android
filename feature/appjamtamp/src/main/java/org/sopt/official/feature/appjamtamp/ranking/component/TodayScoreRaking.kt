@@ -52,7 +52,7 @@ import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
 import org.sopt.official.feature.appjamtamp.util.noRippleClickable
 
 @Composable
-internal fun TodayScoreRaking(
+fun TodayScoreRaking(
     topMissionScore: TopMissionScoreUiModel,
     modifier: Modifier = Modifier,
     onTeamRankingClick: (teamNumber: String) -> Unit = {}

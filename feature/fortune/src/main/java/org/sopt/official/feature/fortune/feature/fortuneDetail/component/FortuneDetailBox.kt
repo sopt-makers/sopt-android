@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme.colors
 
 @Composable
-internal fun TodayFortuneBox(
+fun TodayFortuneBox(
     content: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {

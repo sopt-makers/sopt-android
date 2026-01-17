@@ -37,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun NotificationCategoryChip(
+fun NotificationCategoryChip(
     category: String,
     isSelected: Boolean,
     onClick: () -> Unit,

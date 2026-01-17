@@ -32,7 +32,7 @@ import org.sopt.official.data.home.remote.response.HomePopularPostsResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import retrofit2.http.GET
 
-internal interface HomeApi {
+interface HomeApi {
 
     @GET("home/description")
     suspend fun getHomeDescription(): HomeDescriptionResponseDto

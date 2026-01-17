@@ -31,7 +31,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,10 +42,10 @@ import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import timber.log.Timber
 
-@Inject
 @ViewModelKey(NotificationViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class NotificationViewModel @Inject constructor(
+@Inject
+class NotificationViewModel(
     private val repository: NotificationRepository,
 ) : ViewModel() {
     private val _state: MutableStateFlow<NotificationState> = MutableStateFlow(NotificationState())

@@ -37,7 +37,6 @@ import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.webview.deeplink.WebDeeplinkModule
 import org.sopt.official.webview.deeplink.WebDeeplinkModuleRegistry
 
-@Inject
 @DeepLinkHandler(value = [AppDeeplinkModule::class, FortuneDeeplinkModule::class, WebDeeplinkModule::class])
 class DeepLinkSchemeActivity(
     private val dataStore: SoptDataStore,

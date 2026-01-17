@@ -26,7 +26,10 @@ package org.sopt.official.feature.navigator
 
 import android.app.Application
 import android.content.Intent
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
@@ -42,7 +45,10 @@ import org.sopt.official.feature.schedule.ScheduleActivity
 import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.SoptampMissionArgs
 
-class NavigatorProviderIntent @Inject constructor(
+@SingleIn(AppScope::class)
+@ContributesBinding(AppScope::class)
+@Inject
+class NavigatorProviderIntent(
     private val application: Application,
 ) : NavigatorProvider {
     private val context get() = application.applicationContext

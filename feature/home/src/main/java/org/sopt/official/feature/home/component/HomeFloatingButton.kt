@@ -50,7 +50,7 @@ import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.R
 
 @Composable
-internal fun HomeFloatingButton(
+fun HomeFloatingButton(
     imageUrl: String,
     shortTitle: String,
     buttonText: String,

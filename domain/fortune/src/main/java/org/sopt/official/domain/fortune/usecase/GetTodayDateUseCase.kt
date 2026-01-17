@@ -26,9 +26,10 @@ package org.sopt.official.domain.fortune.usecase
 
 import java.text.SimpleDateFormat
 import java.util.Locale
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class GetTodayDateUseCase @Inject constructor() {
+@Inject
+class GetTodayDateUseCase() {
 
     operator fun invoke(): String {
         val currentDate = System.currentTimeMillis()

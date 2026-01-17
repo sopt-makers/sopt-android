@@ -40,9 +40,10 @@ import org.sopt.official.domain.poke.entity.GetPokeMeResponse
 import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
-class PokeRemoteDataSource @Inject constructor(
+@Inject
+class PokeRemoteDataSource(
     private val service: PokeService,
 ) {
     suspend fun checkNewInPoke(): CheckNewInPokeResponse {

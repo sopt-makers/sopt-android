@@ -58,7 +58,7 @@ private const val AUTO_SCROLL_DELAY = 3000L
 private const val AUTO_SCROLL_ANIMATION_DELAY = 450
 
 @Composable
-internal fun HomeLatestNewsSection(
+fun HomeLatestNewsSection(
     feedList: ImmutableList<HomePlaygroundPostModel>,
     navigateToPlayground: () -> Unit,
     navigateToWebLink: (String) -> Unit,

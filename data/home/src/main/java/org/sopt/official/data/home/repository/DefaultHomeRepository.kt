@@ -25,7 +25,7 @@
 package org.sopt.official.data.home.repository
 
 import org.sopt.official.common.coroutines.suspendRunCatching
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.data.home.mapper.toDomain
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi
@@ -40,7 +40,8 @@ import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
 
-internal class DefaultHomeRepository @Inject constructor(
+@Inject
+class DefaultHomeRepository(
     private val userApi: UserApi,
     private val homeApi: HomeApi,
     private val calendarApi: CalendarApi,

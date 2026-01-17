@@ -54,7 +54,7 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.feature.fortune.R.drawable.ic_poke
 
 @Composable
-internal fun PokeRecommendationDashboard(
+fun PokeRecommendationDashboard(
     profile: String,
     name: String,
     userDescription: String,

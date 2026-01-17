@@ -28,7 +28,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data class UserMainResponseDto(
+data class UserMainResponseDto(
     @SerialName("user")
     val user: UserResponseDto,
     @SerialName("operation")

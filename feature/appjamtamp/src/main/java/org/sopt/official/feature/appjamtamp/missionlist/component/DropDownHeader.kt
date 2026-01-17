@@ -60,7 +60,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.model.MissionFilter
 
 @Composable
-internal fun DropDownHeader(
+fun DropDownHeader(
     title: String,
     modifier: Modifier = Modifier,
     onMenuClick: (String) -> Unit = {},

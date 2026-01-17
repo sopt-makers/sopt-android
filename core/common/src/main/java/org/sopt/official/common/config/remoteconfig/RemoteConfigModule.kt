@@ -35,14 +35,13 @@ import dev.zacsweers.metro.Provides
 import dev.zacsweers.metro.SingleIn
 import org.sopt.official.common.di.AppScope
 
-internal const val UPDATE_CONFIG = "android_update_notice"
+const val UPDATE_CONFIG = "android_update_notice"
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface RemoteConfigModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
         fun provideRemoteConfig(): FirebaseRemoteConfig {
             val configSettings = remoteConfigSettings {
                 minimumFetchIntervalInSeconds = 3600
@@ -55,6 +54,5 @@ interface RemoteConfigModule {
     }
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindRemoteConfig(remoteConfigImpl: SoptRemoteConfigImpl): SoptRemoteConfig
 }

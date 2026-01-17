@@ -32,7 +32,7 @@ import org.sopt.official.feature.home.model.HomeFloatingToastData
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 import org.sopt.official.feature.home.model.HomeSurveyData
 
-internal fun ReviewForm.toModel(): HomeSurveyData = HomeSurveyData(
+fun ReviewForm.toModel(): HomeSurveyData = HomeSurveyData(
     title = title,
     description = subTitle,
     buttonText = actionButtonName,
@@ -40,7 +40,7 @@ internal fun ReviewForm.toModel(): HomeSurveyData = HomeSurveyData(
     isActive = isActive
 )
 
-internal fun FloatingToast.toModel(): HomeFloatingToastData = HomeFloatingToastData(
+fun FloatingToast.toModel(): HomeFloatingToastData = HomeFloatingToastData(
     imageUrl = imageUrl,
     title = title,
     toastDescription = expandedSubTitle,
@@ -50,7 +50,7 @@ internal fun FloatingToast.toModel(): HomeFloatingToastData = HomeFloatingToastD
     active = active
 )
 
-internal fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
+fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
     userId = this.userId,
     postId = this.id,
     title = this.title,
@@ -63,7 +63,7 @@ internal fun PopularPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPost
     webLink = this.webLink
 )
 
-internal fun LatestPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
+fun LatestPost.toModel(): HomePlaygroundPostModel = HomePlaygroundPostModel(
     userId = this.userId,
     postId = this.id,
     title = this.title,

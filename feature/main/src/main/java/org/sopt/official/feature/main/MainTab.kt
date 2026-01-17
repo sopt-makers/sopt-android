@@ -31,7 +31,7 @@ import org.sopt.official.core.navigation.Route
 
 enum class MainTab(
     @param:DrawableRes val icon: Int,
-    internal val contentDescription: String,
+    val contentDescription: String,
     val route: MainTabRoute,
     val loggingName: String? = null,
     val deeplink: String? = null

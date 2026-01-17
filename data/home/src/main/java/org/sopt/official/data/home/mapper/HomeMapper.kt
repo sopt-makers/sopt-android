@@ -42,29 +42,29 @@ import org.sopt.official.domain.home.model.UserInfo
 import org.sopt.official.domain.home.model.UserInfo.User
 import org.sopt.official.domain.home.model.UserInfo.UserDescription
 
-internal fun UserMainResponseDto.toDomain(): UserInfo = UserInfo(
+fun UserMainResponseDto.toDomain(): UserInfo = UserInfo(
     user = user.toDomain(),
     isAllConfirm = isAllConfirm,
 )
 
-internal fun UserMainResponseDto.UserResponseDto.toDomain(): User = User(
+fun UserMainResponseDto.UserResponseDto.toDomain(): User = User(
     status = status,
     name = name.orEmpty(),
     profileImage = profileImage.orEmpty(),
     generationList = generationList ?: emptyList()
 )
 
-internal fun RecentCalendarResponseDto.toDomain(): RecentCalendar = RecentCalendar(
+fun RecentCalendarResponseDto.toDomain(): RecentCalendar = RecentCalendar(
     date = date,
     type = type,
     title = title,
 )
 
-internal fun HomeDescriptionResponseDto.toDomain(): UserDescription = UserDescription(
+fun HomeDescriptionResponseDto.toDomain(): UserDescription = UserDescription(
     activityDescription = activityDescription,
 )
 
-internal fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
+fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
     serviceName = serviceName,
     displayAlarmBadge = displayAlarmBadge,
     alarmBadge = alarmBadge,
@@ -72,7 +72,7 @@ internal fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
     deepLink = deepLink,
 )
 
-internal fun HomeReviewFormResponseDto.toDomain(): ReviewForm = ReviewForm(
+fun HomeReviewFormResponseDto.toDomain(): ReviewForm = ReviewForm(
     title = this.title,
     subTitle = this.subTitle,
     actionButtonName = this.actionButtonName,
@@ -80,7 +80,7 @@ internal fun HomeReviewFormResponseDto.toDomain(): ReviewForm = ReviewForm(
     isActive = this.isActive
 )
 
-internal fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
+fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
     imageUrl = this.imageUrl,
     title = this.title,
     expandedSubTitle = this.expandedSubTitle,
@@ -90,7 +90,7 @@ internal fun HomeFloatingToastDto.toDomain(): FloatingToast = FloatingToast(
     active = this.isActive
 )
 
-internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
+fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
     userId = this.userId,
     profileImage = this.profileImage.orEmpty(),
     name = this.name,
@@ -103,7 +103,7 @@ internal fun HomePopularPostResponseDto.toDomain(): PopularPost = PopularPost(
     id = this.id
 )
 
-internal fun HomeLatestPostResponseDto.toDomain(): LatestPost = LatestPost(
+fun HomeLatestPostResponseDto.toDomain(): LatestPost = LatestPost(
     userId = this.userId,
     profileImage = this.profileImage ?: "",
     name = this.name ?: "",

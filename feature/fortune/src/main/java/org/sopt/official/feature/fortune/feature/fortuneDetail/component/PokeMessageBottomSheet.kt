@@ -53,7 +53,7 @@ import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_off
 import org.sopt.official.feature.fortune.R.drawable.ic_checkbox_on
 
 @Composable
-internal fun PokeMessageBottomSheetScreen(
+fun PokeMessageBottomSheetScreen(
     isAnonymous: Boolean,
     selectedIndex: Int,
     onItemClick: (selectedIndex: Int, message: String) -> Unit,

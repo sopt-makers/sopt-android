@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,10 +42,10 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.domain.poke.usecase.GetPokeMessageListUseCase
 import org.sopt.official.feature.poke.UiState
 
-@Inject
 @ViewModelKey(MessageListBottomSheetViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class MessageListBottomSheetViewModel @Inject constructor(
+@Inject
+class MessageListBottomSheetViewModel(
     private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
 ) : ViewModel() {
     private val _pokeMessageListUiState = MutableStateFlow<UiState<PokeMessageList>>(UiState.Loading)

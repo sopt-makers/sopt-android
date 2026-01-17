@@ -43,7 +43,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
@@ -52,7 +52,7 @@ import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.fortune.component.CircleShapeBorderButton
 
 @Composable
-internal fun FortuneAmuletRoute(
+fun FortuneAmuletRoute(
     navigateToSoptLog: () -> Unit,
     viewModel: FortuneAmuletViewModel = metroViewModel(),
 ) {

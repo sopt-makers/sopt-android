@@ -28,7 +28,7 @@ import org.sopt.official.data.soptamp.remote.model.response.MissionResponse
 import org.sopt.official.data.soptamp.remote.model.response.MissionStatusResponse
 import retrofit2.http.GET
 
-internal interface SoptampService {
+interface SoptampService {
     @GET("mission/all")
     suspend fun getAllMissions(): List<MissionResponse>
 

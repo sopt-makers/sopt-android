@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -38,10 +38,10 @@ import org.sopt.official.common.di.AppScope
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 
-@Inject
 @ViewModelKey(MainViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class MainViewModel @Inject constructor(
+@Inject
+class MainViewModel(
     private val getAppServiceUseCase: GetAppServiceUseCase
 ) : ViewModel() {
     private val _mainTabs = MutableStateFlow(MainTab.getActiveTabs(emptyList()))

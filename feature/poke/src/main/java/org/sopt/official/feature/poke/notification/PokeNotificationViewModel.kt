@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -42,10 +42,10 @@ import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
 
-@Inject
 @ViewModelKey(PokeNotificationViewModel::class)
 @ContributesIntoMap(AppScope::class)
-class PokeNotificationViewModel @Inject constructor(
+@Inject
+class PokeNotificationViewModel(
     private val getPokeNotificationListUseCase: GetPokeNotificationListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {

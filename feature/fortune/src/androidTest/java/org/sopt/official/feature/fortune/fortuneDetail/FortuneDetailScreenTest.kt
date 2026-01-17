@@ -38,7 +38,7 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
 
-internal class FortuneDetailScreenTest {
+class FortuneDetailScreenTest {
 
     @get:Rule
     val composeRule = createComposeRule()

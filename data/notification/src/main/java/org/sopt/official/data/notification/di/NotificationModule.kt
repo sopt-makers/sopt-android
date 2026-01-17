@@ -28,22 +28,19 @@ import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import dev.zacsweers.metro.SingleIn
-import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppRetrofitInstance
 import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.notification.repository.DefaultNotificationRepository
 import org.sopt.official.data.notification.service.NotificationService
 import org.sopt.official.domain.notification.repository.NotificationRepository
-import retrofit2.Retrofit
 
 @ContributesTo(AppScope::class)
 @BindingContainer
 interface NotificationModule {
     companion object {
         @Provides
-        @SingleIn(AppScope::class)
-        fun provideFcmService(@AppRetrofit retrofit: Retrofit): NotificationService {
-            return retrofit.create(NotificationService::class.java)
+        fun provideFcmService(retrofitInstance: AppRetrofitInstance): NotificationService {
+            return retrofitInstance.retrofit.create(NotificationService::class.java)
         }
     }
 

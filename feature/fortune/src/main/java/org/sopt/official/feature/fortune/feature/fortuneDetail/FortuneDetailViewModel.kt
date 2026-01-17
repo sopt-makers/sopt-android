@@ -28,7 +28,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import dev.zacsweers.metro.ViewModelKey
+import dev.zacsweers.metrox.viewmodel.ViewModelKey
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -47,10 +47,10 @@ import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDeta
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.TodaySentence
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Success.UserInfo
 
-@Inject
 @ViewModelKey(FortuneDetailViewModel::class)
 @ContributesIntoMap(AppScope::class)
-internal class FortuneDetailViewModel @Inject constructor(
+@Inject
+class FortuneDetailViewModel(
     private val getTodayFortuneUseCase: GetTodayFortuneUseCase,
     private val pokeRepository: PokeRepository,
 ) : ViewModel() {

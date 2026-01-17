@@ -48,7 +48,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.model.Stamp
 
 @Composable
-internal fun LevelOfMission(
+fun LevelOfMission(
     stamp: Stamp,
     spaceSize: Dp
 ) {

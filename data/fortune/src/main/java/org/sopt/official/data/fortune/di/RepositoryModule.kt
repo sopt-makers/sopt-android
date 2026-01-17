@@ -34,9 +34,8 @@ import org.sopt.official.domain.fortune.repository.FortuneRepository
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-internal interface RepositoryModule {
+interface RepositoryModule {
 
     @Binds
-    @SingleIn(AppScope::class)
     fun bindDefaultFortuneRepository(defaultFortuneRepository: DefaultFortuneRepository): FortuneRepository
 }

@@ -29,7 +29,7 @@ import org.sopt.official.data.fortune.remote.response.TodayFortuneWordResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-internal interface FortuneApi {
+interface FortuneApi {
 
     @GET("fortune/word")
     suspend fun getTodayFortuneWord(

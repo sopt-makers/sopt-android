@@ -24,7 +24,7 @@
  */
 package org.sopt.official.feature.appjamtamp.model
 
-internal sealed interface ImageModel {
+sealed interface ImageModel {
     data class Remote(val url: List<String>) : ImageModel {
         override fun isEmpty() = url.isEmpty()
         override val size = url.size

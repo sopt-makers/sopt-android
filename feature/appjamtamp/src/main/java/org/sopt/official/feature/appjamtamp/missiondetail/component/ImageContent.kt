@@ -59,7 +59,7 @@ import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.model.ImageModel
 
 @Composable
-internal fun ImageContent(
+fun ImageContent(
     imageModel: ImageModel,
     onChangeImage: (images: ImageModel) -> Unit,
     onClickZoomIn: (url: String) -> Unit,

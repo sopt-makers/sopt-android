@@ -24,16 +24,18 @@
  */
 package org.sopt.official.data.appjamtamp.di
 
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
 import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.appjamtamp.service.AppjamtampService
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ServiceModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object ServiceModule {
     @Provides
-    @Singleton
     fun provideAppjamtampService(@AppRetrofit(true) retrofit: Retrofit): AppjamtampService =
         retrofit.create(AppjamtampService::class.java)
 }

@@ -65,7 +65,7 @@ import org.sopt.official.feature.home.R.drawable.ic_edit_profile_pencil
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 
 @Composable
-internal fun HomeUserSoptLogDashboardForVisitor(
+fun HomeUserSoptLogDashboardForVisitor(
     onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -104,7 +104,7 @@ private fun HomeUserSoptLogDashboardForVisitorPreview() {
 }
 
 @Composable
-internal fun HomeUserSoptLogDashboardForMember(
+fun HomeUserSoptLogDashboardForMember(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier,

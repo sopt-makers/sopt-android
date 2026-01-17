@@ -32,7 +32,7 @@ data class PartRankModel(
     val point: Int,
 )
 
-internal fun List<PartRank>.toData(): List<PartRankModel> =
+fun List<PartRank>.toData(): List<PartRankModel> =
     this.map {
         PartRankModel(
             rank = it.rank,

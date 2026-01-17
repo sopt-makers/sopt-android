@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.soptlog.R
 
 @Composable
-internal fun TodayFortuneBanner(
+fun TodayFortuneBanner(
     title: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,

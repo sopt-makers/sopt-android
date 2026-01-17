@@ -54,7 +54,7 @@ private val officialChannelList = persistentListOf(
 )
 
 @Composable
-internal fun HomeOfficialChannelButton(
+fun HomeOfficialChannelButton(
     navigateToWebUrl: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {

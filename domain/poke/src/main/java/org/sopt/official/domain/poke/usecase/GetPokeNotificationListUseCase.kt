@@ -24,13 +24,14 @@
  */
 package org.sopt.official.domain.poke.usecase
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeNotificationList
 import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 
-class GetPokeNotificationListUseCase @Inject constructor(
+@Inject
+class GetPokeNotificationListUseCase(
     private val repository: PokeRepository
 ) {
     suspend operator fun invoke(page: Int): ApiResult<PokeNotificationList> {

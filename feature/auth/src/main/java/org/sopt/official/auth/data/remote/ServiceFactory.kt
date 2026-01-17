@@ -32,7 +32,7 @@ import org.sopt.official.auth.utils.PlaygroundHttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
-internal object ServiceFactory {
+object ServiceFactory {
     fun withClient(url: String, client: OkHttpClient): Retrofit = Retrofit.Builder()
         .baseUrl(url)
         .client(client)

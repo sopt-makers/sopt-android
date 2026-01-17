@@ -67,12 +67,11 @@ import kotlinx.coroutines.launch
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.navigator.SOPTLOG_FORTUNE
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
 import java.time.LocalDate
 
-@Inject
 class NotificationDetailActivity(
     private val viewModelFactory: SoptViewModelFactory,
     private val navigatorProvider: NavigatorProvider

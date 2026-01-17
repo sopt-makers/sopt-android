@@ -24,14 +24,20 @@
  */
 package org.sopt.official.data.poke.source.local
 
+import android.app.Application
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import javax.inject.Inject
-import org.sopt.official.data.poke.di.Poke
+import dev.zacsweers.metro.Inject
+import org.sopt.official.common.file.createSharedPreference
+import org.sopt.official.data.poke.di.PokeStoreKey
 
-class PokeLocalDataSource @Inject constructor(
-    @Poke private val dataStore: SharedPreferences,
+@Inject
+class PokeLocalDataSource(
+    private val application: Application,
+    private val pokeStoreKey: PokeStoreKey,
 ) {
+    private val dataStore = createSharedPreference(pokeStoreKey.value, application.applicationContext)
+
     var isAnonymousInPokeOnboarding: Boolean
         get() = dataStore.getBoolean(IS_ANONYMOUS_IN_POKE_ONBOARDING, true)
         set(value) = dataStore.edit { putBoolean(IS_ANONYMOUS_IN_POKE_ONBOARDING, value) }

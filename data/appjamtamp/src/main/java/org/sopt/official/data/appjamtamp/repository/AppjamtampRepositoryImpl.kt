@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.appjamtamp.repository
 
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
 import org.sopt.official.data.appjamtamp.mapper.toDomain
@@ -37,7 +37,8 @@ import org.sopt.official.domain.appjamtamp.entity.AppjamtampStampEntity
 import org.sopt.official.domain.appjamtamp.entity.AppjamtampUser
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 
-internal class AppjamtampRepositoryImpl @Inject constructor(
+@Inject
+class AppjamtampRepositoryImpl(
     private val appjamtampDataSource: AppjamtampDataSource
 ) : AppjamtampRepository {
     override suspend fun getAppjamtampMissions(

@@ -59,7 +59,7 @@ import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.model.HomeAppService
 
 @Composable
-internal fun HomeEnjoySoptServicesBlock(
+fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
     onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     modifier: Modifier = Modifier

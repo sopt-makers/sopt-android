@@ -40,11 +40,12 @@ import org.sopt.official.network.BuildConfig.REFRESH_TOKEN_KEY_ALIAS
 import org.sopt.official.network.BuildConfig.USER_STATUS_KEY_ALIAS
 
 @SingleIn(AppScope::class)
-class SoptDataStore @Inject constructor(
+@Inject
+class SoptDataStore(
     private val application: Application,
-    @LocalStore private val fileName: String
+    @LocalStore private val localStoreName: org.sopt.official.common.di.LocalStoreName
 ) {
-    private val store = createSharedPreference(fileName, application.applicationContext)
+    private val store = createSharedPreference(localStoreName.value, application.applicationContext)
 
     fun clear() {
         store.edit(true) {

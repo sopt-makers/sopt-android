@@ -37,9 +37,8 @@ import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.impl.AmplitudeTracker
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.di.SoptViewModelFactory
+import org.sopt.official.common.di.SoptViewModelFactory
 
-@Inject
 @DeepLink("sopt://fortune")
 class FortuneActivity(
     private val viewModelFactory: SoptViewModelFactory,

@@ -24,16 +24,16 @@
  */
 package org.sopt.official.data.soptamp.di
 
-import javax.inject.Singleton
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptampStoreKey
 import org.sopt.official.data.soptamp.BuildConfig
-import org.sopt.official.domain.soptamp.constant.Constant
-import org.sopt.official.domain.soptamp.constant.Strings
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 object ConstantModule {
     @Provides
-    @Singleton
-    @Strings(Constant.SOPTAMP_DATA_STORE)
-    fun provideSoptampDataStoreKey(): String = BuildConfig.SOPTAMP_DATA_STORE_KEY
+    fun provideSoptampDataStoreKey(): SoptampStoreKey = SoptampStoreKey(BuildConfig.SOPTAMP_DATA_STORE_KEY)
 }

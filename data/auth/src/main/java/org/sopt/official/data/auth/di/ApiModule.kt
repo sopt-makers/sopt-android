@@ -24,16 +24,17 @@
  */
 package org.sopt.official.data.auth.di
 
-import org.sopt.official.common.di.AuthRetrofit
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.AuthRetrofitInstance
 import org.sopt.official.data.auth.remote.api.AuthApi
-import retrofit2.Retrofit
 import retrofit2.create
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object ApiModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+object ApiModule {
     @Provides
-    @Singleton
-    internal fun provideAuthApi(@AuthRetrofit retrofit: Retrofit): AuthApi = retrofit.create()
+    fun provideAuthApi(retrofitInstance: AuthRetrofitInstance): AuthApi = retrofitInstance.retrofit.create()
 }

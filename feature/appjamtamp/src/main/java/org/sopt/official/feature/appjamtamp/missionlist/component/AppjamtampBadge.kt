@@ -40,7 +40,7 @@ import org.sopt.official.designsystem.Orange900
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
-internal fun AppjamtampBadge(
+fun AppjamtampBadge(
     text: String,
     modifier: Modifier = Modifier
 ) {

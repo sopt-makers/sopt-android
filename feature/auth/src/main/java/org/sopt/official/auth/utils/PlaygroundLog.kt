@@ -23,11 +23,12 @@
  * SOFTWARE.
  */
 package org.sopt.official.auth.utils
-
+import dev.zacsweers.metro.Inject
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import timber.log.Timber
 
+@Inject
 class PlaygroundLog private constructor(val isDebug: Boolean) {
 
     companion object {

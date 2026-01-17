@@ -32,21 +32,27 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
-import dev.zacsweers.metro.MetroApplication
-import dev.zacsweers.metro.MetroAppComponentProviders
-import dev.zacsweers.metro.createGraph
+import dev.zacsweers.metro.createGraphFactory
+import dev.zacsweers.metrox.android.MetroApplication
+import dev.zacsweers.metrox.android.MetroAppComponentProviders
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.di.AppGraph
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
 class App : Application(), MetroApplication {
-    val appGraph by lazy { createGraph<AppGraph>() }
+    val appGraph by lazy {
+        createGraphFactory<AppGraph.Factory>().create(this)
+    }
 
     override val appComponentProviders: MetroAppComponentProviders
         get() = appGraph
+
+    val navigatorProvider: NavigatorProvider
+        get() = appGraph.navigatorProvider
 
     private val dataStore: SoptDataStore get() = appGraph.dataStore
 
@@ -54,7 +60,7 @@ class App : Application(), MetroApplication {
         get() = ProcessLifecycleOwner.get()
 
     override fun onCreate() {
-        super.onCreate(savedInstanceState)
+        super.onCreate()
         appContext = this.applicationContext
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)

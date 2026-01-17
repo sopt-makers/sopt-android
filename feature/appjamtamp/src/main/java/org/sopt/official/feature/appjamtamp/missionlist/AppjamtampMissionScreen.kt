@@ -47,7 +47,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import dev.zacsweers.metro.viewmodel.compose.metroViewModel
+import dev.zacsweers.metrox.viewmodel.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
@@ -69,7 +69,7 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
-internal fun AppjamtampMissionRoute(
+fun AppjamtampMissionRoute(
     navigateToMissionDetail: (missionId: Int, missionLevel: Int, title: String, ownerName: String?) -> Unit,
     navigateToRanking: () -> Unit,
     viewModel: AppjamtampMissionViewModel = metroViewModel()
