@@ -24,11 +24,11 @@
  */
 package org.sopt.official.data.soptamp.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.soptamp.repository.ImageUploaderRepositoryImpl
 import org.sopt.official.data.soptamp.repository.RemoteMissionsRepository
 import org.sopt.official.data.soptamp.repository.RemoteRankingRepository
@@ -38,23 +38,23 @@ import org.sopt.official.domain.soptamp.repository.MissionsRepository
 import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal abstract class DataModule {
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindMissionsRepository(repository: RemoteMissionsRepository): MissionsRepository
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindRankRepository(repository: RemoteRankingRepository): RankingRepository
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindStampRepository(repository: StampRepositoryImpl): StampRepository
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindImageUploaderRepository(repository: ImageUploaderRepositoryImpl): ImageUploaderRepository
 }

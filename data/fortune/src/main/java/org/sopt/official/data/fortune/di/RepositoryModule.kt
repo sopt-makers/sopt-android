@@ -24,19 +24,19 @@
  */
 package org.sopt.official.data.fortune.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.fortune.repository.DefaultFortuneRepository
 import org.sopt.official.domain.fortune.repository.FortuneRepository
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal interface RepositoryModule {
 
     @Binds
-    @Singleton
-    abstract fun bindDefaultFortuneRepository(defaultFortuneRepository: DefaultFortuneRepository): FortuneRepository
+    @SingleIn(AppScope::class)
+    fun bindDefaultFortuneRepository(defaultFortuneRepository: DefaultFortuneRepository): FortuneRepository
 }

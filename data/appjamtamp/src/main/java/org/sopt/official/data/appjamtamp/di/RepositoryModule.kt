@@ -24,20 +24,20 @@
  */
 package org.sopt.official.data.appjamtamp.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.appjamtamp.repository.AppjamtampRepositoryImpl
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class RepositoryModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+internal interface RepositoryModule {
     @Binds
-    @Singleton
-    abstract fun bindAppjamtampRepository(
+    @SingleIn(AppScope::class)
+    fun bindAppjamtampRepository(
         appjamtampRepositoryImpl: AppjamtampRepositoryImpl
     ): AppjamtampRepository
 }

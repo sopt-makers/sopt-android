@@ -24,18 +24,18 @@
  */
 package org.sopt.official.data.mypage.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.mypage.remote.RemoteUserDataSource
 import org.sopt.official.data.mypage.source.UserDataSource
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+internal interface DataSourceModule {
     @Binds
-    @Singleton
-    abstract fun bindRemoteUserDataSource(source: RemoteUserDataSource): UserDataSource
+    @SingleIn(AppScope::class)
+    fun bindRemoteUserDataSource(source: RemoteUserDataSource): UserDataSource
 }

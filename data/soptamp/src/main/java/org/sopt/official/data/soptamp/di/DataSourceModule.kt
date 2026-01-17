@@ -24,24 +24,24 @@
  */
 package org.sopt.official.data.soptamp.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.soptamp.remote.source.RemoteMissionsDataSource
 import org.sopt.official.data.soptamp.remote.source.RemoteRankingDataSource
 import org.sopt.official.data.soptamp.source.MissionsDataSource
 import org.sopt.official.data.soptamp.source.RankingDataSource
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal abstract class DataSourceModule {
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindRemoteMissionsDataSource(source: RemoteMissionsDataSource): MissionsDataSource
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindRemoteRankDataSource(source: RemoteRankingDataSource): RankingDataSource
 }

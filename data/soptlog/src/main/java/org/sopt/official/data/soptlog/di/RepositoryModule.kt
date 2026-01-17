@@ -24,19 +24,19 @@
  */
 package org.sopt.official.data.soptlog.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.soptlog.repository.DefaultSoptLogRepository
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal interface RepositoryModule {
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     fun bindDefaultSoptLogRepository(defaultSoptLogRepository: DefaultSoptLogRepository): SoptLogRepository
 }

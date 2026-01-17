@@ -24,19 +24,19 @@
  */
 package org.sopt.official.data.home.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.home.repository.DefaultHomeRepository
 import org.sopt.official.domain.home.repository.HomeRepository
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal interface RepositoryModule {
 
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     fun bindDefaultHomeRepository(defaultHomeRepository: DefaultHomeRepository): HomeRepository
 }

@@ -24,33 +24,31 @@
  */
 package org.sopt.official.data.notification.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
 import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.notification.repository.DefaultNotificationRepository
 import org.sopt.official.data.notification.service.NotificationService
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import retrofit2.Retrofit
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-object NotificationModule {
-  @Provides
-  @Singleton
-  fun provideFcmService(@AppRetrofit retrofit: Retrofit): NotificationService {
-    return retrofit.create(NotificationService::class.java)
-  }
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface NotificationModule {
+    companion object {
+        @Provides
+        @SingleIn(AppScope::class)
+        fun provideFcmService(@AppRetrofit retrofit: Retrofit): NotificationService {
+            return retrofit.create(NotificationService::class.java)
+        }
+    }
 
-  @Module
-  @InstallIn(SingletonComponent::class)
-  interface Binder {
     @Binds
     fun bindNotificationRepository(
-      defaultNotificationRepository: DefaultNotificationRepository
+        defaultNotificationRepository: DefaultNotificationRepository
     ): NotificationRepository
-  }
 }

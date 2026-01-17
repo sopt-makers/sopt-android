@@ -24,18 +24,18 @@
  */
 package org.sopt.official.data.poke.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.poke.implementation.PokeRepositoryImpl
 import org.sopt.official.domain.poke.repository.PokeRepository
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 abstract class RepositoryModule {
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     abstract fun bindPokeRepository(impl: PokeRepositoryImpl): PokeRepository
 }

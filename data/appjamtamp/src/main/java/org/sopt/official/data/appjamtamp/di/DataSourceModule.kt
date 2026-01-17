@@ -24,18 +24,18 @@
  */
 package org.sopt.official.data.appjamtamp.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.appjamtamp.datasource.AppjamtampDataSource
 import org.sopt.official.data.appjamtamp.datasourceimpl.AppjamtampDataSourceImpl
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataSourceModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+internal interface DataSourceModule {
     @Binds
-    @Singleton
-    abstract fun bindAppjamtampDataSource(appjamtampDataSourceImpl: AppjamtampDataSourceImpl): AppjamtampDataSource
+    @SingleIn(AppScope::class)
+    fun bindAppjamtampDataSource(appjamtampDataSourceImpl: AppjamtampDataSourceImpl): AppjamtampDataSource
 }

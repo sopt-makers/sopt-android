@@ -24,29 +24,29 @@
  */
 package org.sopt.official.di.attendance
 
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.Provides
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.di.OperationRetrofit
 import org.sopt.official.data.repository.attendance.AttendanceRepositoryImpl
 import org.sopt.official.data.service.attendance.AttendanceService
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
 import retrofit2.Retrofit
 
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class AttendanceBindsModule {
-    @Binds
-    @Singleton
-    abstract fun bindAttendanceRepository(attendanceRepositoryImpl: AttendanceRepositoryImpl): AttendanceRepository
-
+@ContributesTo(AppScope::class)
+@BindingContainer
+interface AttendanceBindsModule {
     companion object {
         @Provides
-        @Singleton
+        @SingleIn(AppScope::class)
         fun provideAttendanceService(@OperationRetrofit retrofit: Retrofit): AttendanceService =
             retrofit.create(AttendanceService::class.java)
     }
+
+    @Binds
+    @SingleIn(AppScope::class)
+    fun bindAttendanceRepository(attendanceRepositoryImpl: AttendanceRepositoryImpl): AttendanceRepository
 }

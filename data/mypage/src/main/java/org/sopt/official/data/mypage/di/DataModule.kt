@@ -24,18 +24,18 @@
  */
 package org.sopt.official.data.mypage.di
 
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.mypage.repository.UserRepositoryImpl
 import org.sopt.official.domain.mypage.repository.UserRepository
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal abstract class DataModule {
+@ContributesTo(AppScope::class)
+@BindingContainer
+internal interface DataModule {
     @Binds
-    @Singleton
-    abstract fun bindUserRepository(repository: UserRepositoryImpl): UserRepository
+    @SingleIn(AppScope::class)
+    fun bindUserRepository(repository: UserRepositoryImpl): UserRepository
 }

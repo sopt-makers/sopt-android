@@ -25,17 +25,17 @@
 package org.sopt.official.data.schedule.di
 
 import org.sopt.official.domain.schedule.repository.ScheduleRepository
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
+import dev.zacsweers.metro.Binds
+import dev.zacsweers.metro.BindingContainer
+import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.SingleIn
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.data.schedule.repository.DefaultScheduleRepository
-import javax.inject.Singleton
 
-@Module
-@InstallIn(SingletonComponent::class)
+@ContributesTo(AppScope::class)
+@BindingContainer
 internal interface RepositoryModule {
     @Binds
-    @Singleton
+    @SingleIn(AppScope::class)
     fun bindDefaultScheduleRepositoryRepository(defaultScheduleRepository: DefaultScheduleRepository): ScheduleRepository
 }
