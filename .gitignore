@@ -192,3 +192,5 @@ fabric.properties
 
 .DS_Store
 .kotlin/
+
+conductor/
