@@ -26,7 +26,6 @@ package org.sopt.official.feature.navigator
 
 import android.content.Context
 import android.content.Intent
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider

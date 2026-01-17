@@ -26,11 +26,6 @@ package org.sopt.official.data.soptamp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.domain.soptamp.constant.Constant

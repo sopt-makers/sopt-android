@@ -49,8 +49,6 @@ gradleplugin = "8.13.2"
 kspplugin = "2.3.4"
 
 metro = "0.9.4"
-dagger-hilt = "2.58"
-dagger-hilt-navigation-compose = "1.3.0"
 okhttp = "5.3.2"
 retrofit = "3.0.0"
 timber = "5.0.1"
@@ -132,7 +130,6 @@ compose-navigation = { module = "androidx.navigation:navigation-compose", versio
 compose-junit = { module = "androidx.compose.ui:ui-test-junit4" }
 compose-ui-test = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-hilt-navigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "dagger-hilt-navigation-compose" }
 compose-lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 compose-paging = { module = "androidx.paging:paging-compose", version.ref = "androidx-paging" }
 # For accesss of ComposeCompilerGradlePluginExtension
@@ -180,12 +177,6 @@ metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = 
 metrox-viewmodel = { module = "dev.zacsweers.metro:metrox-viewmodel", version.ref = "metro" }
 metrox-viewmodel-compose = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
 
-hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
-hilt-ksp = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
-hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
-hilt-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "dagger-hilt" }
-hilt-testing-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "dagger-hilt" }
-
 google-services = { module = "com.google.gms:google-services", version.ref = "google-services" }
 crashlytics-plugin = { module = "com.google.firebase:firebase-crashlytics-gradle", version.ref = "crashlytics" }
 firebase = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
@@ -227,7 +218,6 @@ compose = [
     "compose-material-icons",
     "compose-runtime",
     "compose-ui-tooling-preview",
-    "compose-hilt-navigation",
     "compose-lottie",
 ]
 compose-test = ["compose-junit"]
@@ -243,7 +233,6 @@ android-application = { id = "com.android.application", version.ref = "gradleplu
 android-library = { id = "com.android.library", version.ref = "gradleplugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }

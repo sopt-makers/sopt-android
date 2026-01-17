@@ -26,10 +26,6 @@ package org.sopt.official.network.persistence
 
 import android.content.Context
 import androidx.core.content.edit
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.LocalStore
 import org.sopt.official.common.file.createSharedPreference
 import org.sopt.official.common.util.decryptInReleaseMode

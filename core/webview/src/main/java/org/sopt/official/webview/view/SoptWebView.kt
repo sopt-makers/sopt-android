@@ -30,7 +30,6 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
-import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.network.BuildConfig
 import org.sopt.official.webview.di.SoptWebViewEntryPoint
 

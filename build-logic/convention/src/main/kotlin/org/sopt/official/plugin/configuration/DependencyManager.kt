@@ -37,16 +37,6 @@ object DependencyManager {
         }
     }
 
-    fun Project.addHiltDependencies(libs: VersionCatalog) {
-        dependencies {
-            "implementation"(libs.findLibrary("hilt").get())
-            "ksp"(libs.findLibrary("hilt.ksp").get())
-            "ksp"(libs.findLibrary("kotlin.metadata.jvm").get())
-            "testImplementation"(libs.findLibrary("hilt.testing").get())
-            "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
-        }
-    }
-
     fun Project.addMetroDependencies(libs: VersionCatalog) {
         dependencies {
             "implementation"(libs.findLibrary("metro-runtime").get())

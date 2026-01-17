@@ -24,10 +24,6 @@
  */
 package org.sopt.official.data.appjamtamp.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.appjamtamp.service.AppjamtampService
 import retrofit2.Retrofit

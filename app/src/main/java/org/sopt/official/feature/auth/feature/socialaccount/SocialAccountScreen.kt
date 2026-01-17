@@ -51,7 +51,6 @@ import dev.zacsweers.metro.viewmodel.compose.metroViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second

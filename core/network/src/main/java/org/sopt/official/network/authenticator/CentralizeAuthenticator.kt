@@ -26,7 +26,6 @@ package org.sopt.official.network.authenticator
 
 import android.content.Context
 import com.jakewharton.processphoenix.ProcessPhoenix
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.runBlocking

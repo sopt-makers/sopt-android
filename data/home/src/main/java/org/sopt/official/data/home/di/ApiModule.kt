@@ -24,10 +24,6 @@
  */
 package org.sopt.official.data.home.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi

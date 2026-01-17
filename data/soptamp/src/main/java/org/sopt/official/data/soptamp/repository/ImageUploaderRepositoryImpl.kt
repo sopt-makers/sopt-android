@@ -26,7 +26,6 @@ package org.sopt.official.data.soptamp.repository
 
 import android.content.Context
 import androidx.core.net.toUri
-import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import org.sopt.official.common.util.ContentUriRequestBody
 import org.sopt.official.data.soptamp.remote.api.S3Service

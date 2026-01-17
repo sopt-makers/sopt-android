@@ -28,7 +28,6 @@ import android.content.Context
 import com.amplitude.android.Amplitude
 import com.amplitude.android.Configuration
 import com.amplitude.android.events.Identify
-import dagger.hilt.android.qualifiers.ApplicationContext
 import org.sopt.official.analytics.BuildConfig
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker

@@ -24,10 +24,6 @@
  */
 package org.sopt.official.feature.mypage.di
 
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.EntryPointAccessors
-import dagger.hilt.components.SingletonComponent
 import org.sopt.official.common.context.appContext
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.mypage.repository.UserRepository

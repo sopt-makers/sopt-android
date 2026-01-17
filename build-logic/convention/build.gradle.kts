@@ -35,10 +35,6 @@ gradlePlugin {
             id = "org.sopt.official.kotlin.android"
             implementationClass = "org.sopt.official.plugin.AndroidKotlinPlugin"
         }
-        create("android-hilt") {
-            id = "org.sopt.official.hilt"
-            implementationClass = "org.sopt.official.plugin.AndroidHiltPlugin"
-        }
         create("android-metro") {
             id = "org.sopt.official.metro"
             implementationClass = "org.sopt.official.plugin.AndroidMetroPlugin"
