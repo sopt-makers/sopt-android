@@ -48,6 +48,7 @@ mockk = "1.14.7"
 gradleplugin = "8.13.2"
 kspplugin = "2.3.4"
 
+metro = "0.9.4"
 dagger-hilt = "2.58"
 dagger-hilt-navigation-compose = "1.3.0"
 okhttp = "5.3.2"
@@ -173,6 +174,12 @@ retrofit-response-type-keeper = { module = "com.squareup.retrofit2:response-type
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+metro-runtime = { module = "dev.zacsweers.metro:metro-runtime", version.ref = "metro" }
+metro-plugin = { module = "dev.zacsweers.metro:dev.zacsweers.metro.gradle.plugin", version.ref = "metro" }
+metrox-android = { module = "dev.zacsweers.metro:metrox-android", version.ref = "metro" }
+metrox-viewmodel = { module = "dev.zacsweers.metro:metrox-viewmodel", version.ref = "metro" }
+metrox-viewmodel-compose = { module = "dev.zacsweers.metro:metrox-viewmodel-compose", version.ref = "metro" }
+
 hilt = { module = "com.google.dagger:hilt-android", version.ref = "dagger-hilt" }
 hilt-ksp = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger-hilt" }
 hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger-hilt" }
@@ -235,6 +242,7 @@ androidx-android-test = ["androidx-test-runner", "androidx-test-rules", "android
 android-application = { id = "com.android.application", version.ref = "gradleplugin" }
 android-library = { id = "com.android.library", version.ref = "gradleplugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlytics" }

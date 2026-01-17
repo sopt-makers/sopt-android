@@ -8,6 +8,8 @@ import org.sopt.official.plugin.base.AndroidBasePlugin
 import org.sopt.official.plugin.configuration.ConfigurationManager
 import org.sopt.official.plugin.configuration.ConfigurationManager.configureBuildConfigFields
 import org.sopt.official.plugin.configuration.DependencyManager.addCoreAndroidDependencies
+import org.sopt.official.plugin.configuration.DependencyManager.addMetroAndroidDependencies
+import org.sopt.official.plugin.configuration.DependencyManager.addMetroViewModelDependencies
 
 class AndroidApplicationPlugin : AndroidBasePlugin() {
     override fun apply(target: Project) = with(target) {
@@ -18,7 +20,9 @@ class AndroidApplicationPlugin : AndroidBasePlugin() {
         apply<KotlinSerializationPlugin>()
         apply<RetrofitPlugin>()
 
-        apply<AndroidHiltPlugin>()
+        apply<AndroidMetroPlugin>()
+        addMetroAndroidDependencies(libs)
+        addMetroViewModelDependencies(libs)
 
         configureAndroidBase()
 

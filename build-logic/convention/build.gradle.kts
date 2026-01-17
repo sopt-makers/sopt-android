@@ -18,6 +18,7 @@ dependencies {
     compileOnly(libs.agp)
     compileOnly(libs.kotlin.gradleplugin)
     compileOnly(libs.compose.compiler.extension)
+    implementation(libs.metro.plugin)
 }
 
 gradlePlugin {
@@ -37,6 +38,10 @@ gradlePlugin {
         create("android-hilt") {
             id = "org.sopt.official.hilt"
             implementationClass = "org.sopt.official.plugin.AndroidHiltPlugin"
+        }
+        create("android-metro") {
+            id = "org.sopt.official.metro"
+            implementationClass = "org.sopt.official.plugin.AndroidMetroPlugin"
         }
         create("android-compose") {
             id = "org.sopt.official.compose"

@@ -34,7 +34,6 @@ object DependencyManager {
             "implementation"(libs.findLibrary("coil-compose").get())
             "implementation"(libs.findLibrary("kotlin-collections-immutable").get())
             "implementation"(libs.findLibrary("compose-navigation").get())
-            "implementation"(libs.findLibrary("compose-hilt-navigation").get())
         }
     }
 
@@ -45,6 +44,26 @@ object DependencyManager {
             "ksp"(libs.findLibrary("kotlin.metadata.jvm").get())
             "testImplementation"(libs.findLibrary("hilt.testing").get())
             "kspTest"(libs.findLibrary("hilt.testing.compiler").get())
+        }
+    }
+
+    fun Project.addMetroDependencies(libs: VersionCatalog) {
+        dependencies {
+            "implementation"(libs.findLibrary("metro-runtime").get())
+            "implementation"(libs.findLibrary("javax-inject").get())
+        }
+    }
+
+    fun Project.addMetroAndroidDependencies(libs: VersionCatalog) {
+        dependencies {
+            "implementation"(libs.findLibrary("metrox-android").get())
+        }
+    }
+
+    fun Project.addMetroViewModelDependencies(libs: VersionCatalog) {
+        dependencies {
+            "implementation"(libs.findLibrary("metrox-viewmodel").get())
+            "implementation"(libs.findLibrary("metrox-viewmodel-compose").get())
         }
     }
 
