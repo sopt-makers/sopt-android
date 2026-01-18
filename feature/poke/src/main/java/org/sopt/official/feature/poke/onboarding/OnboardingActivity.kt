@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.poke.onboarding
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -34,15 +35,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import java.io.Serializable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
@@ -52,7 +57,9 @@ import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.showPokeToast
 
 @Deprecated("OnboardingScreen으로 대체")
-class OnboardingActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(OnboardingActivity::class)
+class OnboardingActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker
 ) : AppCompatActivity() {

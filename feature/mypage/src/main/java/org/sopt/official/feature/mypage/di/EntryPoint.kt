@@ -29,12 +29,19 @@ import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.feature.mypage.mypage.MyPageActivity
+import org.sopt.official.feature.mypage.signout.SignOutActivity
+import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 
 interface AuthGraph {
     val authRepository: AuthRepository
     val userRepository: UserRepository
     val stampRepository: StampRepository
     val notificationRepository: NotificationRepository
+
+    fun myPageActivity(): MyPageActivity
+    fun signOutActivity(): SignOutActivity
+    fun adjustSentenceActivity(): AdjustSentenceActivity
 }
 
 val authRepository by lazy {

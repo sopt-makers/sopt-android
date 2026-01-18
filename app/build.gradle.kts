@@ -30,6 +30,7 @@ plugins {
     sopt("test")
     sopt("compose")
     sopt("deeplink")
+    sopt("metro")
     alias(libs.plugins.google.services)
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.ktlint)

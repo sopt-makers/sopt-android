@@ -37,6 +37,7 @@
     </queries>
     <application
         android:name=".App"
+        android:appComponentFactory="dev.zacsweers.metrox.android.MetroAppComponentFactory"
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

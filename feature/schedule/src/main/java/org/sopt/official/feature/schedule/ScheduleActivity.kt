@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.schedule
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -51,6 +52,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -63,17 +65,24 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.airbnb.deeplinkdispatch.DeepLink
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import dev.zacsweers.metrox.viewmodel.metroViewModel
 import kotlinx.coroutines.delay
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
 
 @DeepLink("sopt://schedule")
-class ScheduleActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(ScheduleActivity::class)
+class ScheduleActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val navigatorProvider: NavigatorProvider
 ) : AppCompatActivity() {
@@ -85,13 +94,15 @@ class ScheduleActivity(
         super.onCreate(savedInstanceState)
 
         setContent {
-            SoptTheme {
-                ScheduleScreen(
-                    navigateUp = ::finish,
-                    navigateAttendance = {
-                        startActivity(navigatorProvider.getAttendanceActivityIntent())
-                    }
-                )
+            CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) {
+                SoptTheme {
+                    ScheduleScreen(
+                        navigateUp = ::finish,
+                        navigateAttendance = {
+                            startActivity(navigatorProvider.getAttendanceActivityIntent())
+                        }
+                    )
+                }
             }
         }
     }

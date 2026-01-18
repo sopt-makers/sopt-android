@@ -43,15 +43,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import com.airbnb.deeplinkdispatch.DeepLink
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import java.net.URLDecoder
 import mozilla.components.support.utils.DownloadUtils
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
 
 @DeepLink("sopt://web")
-class WebViewActivity : AppCompatActivity() {
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(WebViewActivity::class)
+class WebViewActivity @Inject constructor() : AppCompatActivity() {
     private val binding by viewBinding(ActivityWebViewBinding::inflate)
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private val imageResult = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->

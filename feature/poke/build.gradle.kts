@@ -25,6 +25,7 @@
 
 plugins {
     sopt("feature")
+    sopt("metro")
     sopt("compose")
 }
 

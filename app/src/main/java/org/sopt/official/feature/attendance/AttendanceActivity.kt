@@ -25,6 +25,7 @@
 package org.sopt.official.feature.attendance
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Rect
@@ -51,16 +52,20 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.deeplinkdispatch.DeepLink
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.sopt.official.R
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.stringOf
 import org.sopt.official.common.view.toast
 import org.sopt.official.databinding.ActivityAttendanceBinding
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.entity.attendance.AttendanceLog
 import org.sopt.official.domain.entity.attendance.AttendanceStatus
 import org.sopt.official.domain.entity.attendance.AttendanceSummary
@@ -72,7 +77,9 @@ import org.sopt.official.feature.attendance.model.AttendanceState
 import org.sopt.official.type.SoptColors
 
 @DeepLink("sopt://attendance")
-class AttendanceActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(AttendanceActivity::class)
+class AttendanceActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory
 ) : AppCompatActivity() {
 

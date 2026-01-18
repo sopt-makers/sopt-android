@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.mypage.mypage
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -45,8 +46,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
@@ -70,7 +75,9 @@ import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.model.UserStatus
 import java.io.Serializable
 
-class MyPageActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(MyPageActivity::class)
+class MyPageActivity @Inject constructor(
     private val authRepository: AuthRepository,
     private val stampRepository: StampRepository,
     private val notificationRepository: NotificationRepository,
@@ -228,7 +235,7 @@ class MyPageActivity(
         }
     }
 
-    data class Argument(
+    data class Argument (
         val userActiveState: UserStatus,
     ) : Serializable
 

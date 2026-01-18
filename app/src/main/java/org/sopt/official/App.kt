@@ -35,15 +35,29 @@ import com.google.firebase.messaging.FirebaseMessaging
 import dev.zacsweers.metro.createGraphFactory
 import dev.zacsweers.metrox.android.MetroApplication
 import dev.zacsweers.metrox.android.MetroAppComponentProviders
+import dev.zacsweers.metrox.viewmodel.MetroViewModelFactory
+import dev.zacsweers.metrox.viewmodel.ViewModelGraph
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
+import org.sopt.official.common.navigator.NavigatorGraph
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.di.AppGraph
+import org.sopt.official.feature.auth.utils.di.GoogleGraph
+import org.sopt.official.feature.fortune.di.FortuneGraph
+import org.sopt.official.feature.mypage.di.AuthGraph
+import org.sopt.official.feature.notification.di.NotificationGraph
+import org.sopt.official.feature.poke.di.PokeGraph
+import org.sopt.official.feature.schedule.di.ScheduleGraph
 import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.stamp.di.SoptampGraph
+import org.sopt.official.webview.di.WebViewGraph
 import timber.log.Timber
 
-class App : Application(), MetroApplication {
+class App : Application(), MetroApplication,
+    MetroAppComponentProviders, ViewModelGraph,
+    NavigatorGraph, AuthGraph, WebViewGraph, PokeGraph, GoogleGraph, NotificationGraph,
+    SoptampGraph, FortuneGraph, ScheduleGraph {
     val appGraph by lazy {
         createGraphFactory<AppGraph.Factory>().create(this)
     }
@@ -51,10 +65,56 @@ class App : Application(), MetroApplication {
     override val appComponentProviders: MetroAppComponentProviders
         get() = appGraph
 
-    val navigatorProvider: NavigatorProvider
-        get() = appGraph.navigatorProvider
+    // Delegate implementations to appGraph
+    override val dataStore: SoptDataStore get() = appGraph.dataStore
+    override val navigatorProvider: NavigatorProvider get() = appGraph.navigatorProvider
 
-    private val dataStore: SoptDataStore get() = appGraph.dataStore
+    // AuthGraph delegation
+    override val authRepository get() = appGraph.authRepository
+    override val userRepository get() = appGraph.userRepository
+    override val stampRepository get() = appGraph.stampRepository
+    override val notificationRepository get() = appGraph.notificationRepository
+    override fun myPageActivity() = appGraph.myPageActivity()
+    override fun signOutActivity() = appGraph.signOutActivity()
+    override fun adjustSentenceActivity() = appGraph.adjustSentenceActivity()
+
+    // WebViewGraph delegation
+    override fun webViewActivity() = appGraph.webViewActivity()
+
+    // PokeGraph delegation
+    override fun inject(fragment: org.sopt.official.feature.poke.message.MessageListBottomSheetFragment) = appGraph.inject(fragment)
+    override fun pokeMainActivity() = appGraph.pokeMainActivity()
+    override fun pokeNotificationActivity() = appGraph.pokeNotificationActivity()
+    override fun friendListSummaryActivity() = appGraph.friendListSummaryActivity()
+    override fun onboardingActivity() = appGraph.onboardingActivity()
+
+    // GoogleGraph delegation
+    override val googleLoginManager get() = appGraph.googleLoginManager
+
+    // NotificationGraph delegation
+    override fun notificationActivity() = appGraph.notificationActivity()
+    override fun notificationDetailActivity() = appGraph.notificationDetailActivity()
+
+    // SoptampGraph delegation
+    override fun soptampActivity() = appGraph.soptampActivity()
+
+    // FortuneGraph delegation
+    override fun fortuneActivity() = appGraph.fortuneActivity()
+
+    // ScheduleGraph delegation
+    override fun scheduleActivity() = appGraph.scheduleActivity()
+
+    // MetroAppComponentProviders delegation
+    override val activityProviders get() = appGraph.activityProviders
+    override val providerProviders get() = appGraph.providerProviders
+    override val receiverProviders get() = appGraph.receiverProviders
+    override val serviceProviders get() = appGraph.serviceProviders
+
+    // ViewModelGraph delegation
+    override val viewModelProviders get() = appGraph.viewModelProviders
+    override val assistedFactoryProviders get() = appGraph.assistedFactoryProviders
+    override val manualAssistedFactoryProviders get() = appGraph.manualAssistedFactoryProviders
+    override val metroViewModelFactory: MetroViewModelFactory get() = appGraph.metroViewModelFactory
 
     private val lifecycleOwner: LifecycleOwner
         get() = ProcessLifecycleOwner.get()

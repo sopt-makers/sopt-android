@@ -24,13 +24,18 @@
  */
 package org.sopt.official.feature.notification
 
+import android.app.Activity
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
@@ -41,7 +46,9 @@ import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 import java.io.Serializable
 
-class SchemeActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(SchemeActivity::class)
+class SchemeActivity @Inject constructor(
     private val dataStore: SoptDataStore
 ) : AppCompatActivity() {
     private val args by serializableExtra(Argument("", ""))

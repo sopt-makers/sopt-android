@@ -23,7 +23,11 @@
  * SOFTWARE.
  */
 package org.sopt.official.feature.deeplink
-
+import android.app.Activity
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import org.sopt.official.common.di.AppScope
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.deeplinkdispatch.DeepLinkHandler
@@ -38,7 +42,9 @@ import org.sopt.official.webview.deeplink.WebDeeplinkModule
 import org.sopt.official.webview.deeplink.WebDeeplinkModuleRegistry
 
 @DeepLinkHandler(value = [AppDeeplinkModule::class, FortuneDeeplinkModule::class, WebDeeplinkModule::class])
-class DeepLinkSchemeActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(DeepLinkSchemeActivity::class)
+class DeepLinkSchemeActivity @Inject constructor(
     private val dataStore: SoptDataStore,
     private val navigator: NavigatorProvider
 ) : AppCompatActivity() {

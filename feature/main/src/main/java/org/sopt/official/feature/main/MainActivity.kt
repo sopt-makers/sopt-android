@@ -24,27 +24,36 @@
  */
 package org.sopt.official.feature.main
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.model.UserStatus
 import java.io.Serializable
 
-class MainActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(MainActivity::class)
+class MainActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker,
     private val navigatorProvider: NavigatorProvider
@@ -62,13 +71,15 @@ class MainActivity(
 
         enableEdgeToEdge()
         setContent {
-            SoptTheme {
-                ProvideTracker(tracker) {
-                    MainScreen(
-                        userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
-                        intentState = intentState,
-                        applicationNavigator = navigatorProvider
-                    )
+            CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) {
+                SoptTheme {
+                    ProvideTracker(tracker) {
+                        MainScreen(
+                            userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                            intentState = intentState,
+                            applicationNavigator = navigatorProvider
+                        )
+                    }
                 }
             }
         }

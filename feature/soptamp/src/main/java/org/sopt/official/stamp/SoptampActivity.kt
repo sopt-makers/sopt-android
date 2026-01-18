@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -31,6 +32,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,10 +41,15 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import kotlinx.coroutines.flow.firstOrNull
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.common.di.SoptViewModelFactory
@@ -56,7 +63,9 @@ import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import java.io.Serializable
 
 @Deprecated("SoptampEntryRoute로 대체")
-class SoptampActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(SoptampActivity::class)
+class SoptampActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker
 ) : AppCompatActivity() {
@@ -104,14 +113,16 @@ class SoptampActivity(
         }
 
         setContent {
-            SoptTheme {
-                /*ProvideTracker(tracker) {
-                    SoptampNavHost(
-                        startDestination = MissionList,
-                        deepLinkDestination = deepLinkDestination,
-                        args = args
-                    )
-                }*/
+            CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) {
+                SoptTheme {
+                    /*ProvideTracker(tracker) {
+                        SoptampNavHost(
+                            startDestination = MissionList,
+                            deepLinkDestination = deepLinkDestination,
+                            args = args
+                        )
+                    }*/
+                }
             }
         }
     }

@@ -26,6 +26,7 @@
 plugins {
     sopt("feature")
     sopt("deeplink")
+    sopt("metro")
 }
 
 android {

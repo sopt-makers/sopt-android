@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.poke.friend.summary
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -36,21 +37,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import coil.load
 import coil.transform.CircleCropTransformation
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
-import java.io.Serializable
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
-import org.sopt.official.model.UserStatus
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -68,9 +71,13 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.model.UserStatus
+import java.io.Serializable
 
 @Deprecated("FriendListSummaryScreen으로 대체")
-class FriendListSummaryActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(FriendListSummaryActivity::class)
+class FriendListSummaryActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val tracker: Tracker
 ) : AppCompatActivity() {

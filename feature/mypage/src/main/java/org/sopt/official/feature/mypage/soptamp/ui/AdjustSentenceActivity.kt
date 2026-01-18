@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.mypage.soptamp.ui
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -42,7 +43,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import org.sopt.official.common.di.AppScope
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.mypage.repository.UserRepository
@@ -52,7 +57,9 @@ import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
 
-class AdjustSentenceActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(AdjustSentenceActivity::class)
+class AdjustSentenceActivity @Inject constructor(
     private val userRepository: UserRepository
 ) : AppCompatActivity() {
 

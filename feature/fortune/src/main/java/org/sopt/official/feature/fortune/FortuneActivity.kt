@@ -24,23 +24,32 @@
  */
 package org.sopt.official.feature.fortune
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.lifecycle.ViewModelProvider
 import com.airbnb.deeplinkdispatch.DeepLink
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.impl.AmplitudeTracker
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.common.di.SoptViewModelFactory
 
 @DeepLink("sopt://fortune")
-class FortuneActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(FortuneActivity::class)
+class FortuneActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val navigatorProvider: NavigatorProvider,
     private val amplitudeTracker: AmplitudeTracker
@@ -53,13 +62,15 @@ class FortuneActivity(
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SoptTheme {
-                ProvideTracker(amplitudeTracker) {
-                    FoundationScreen(
-                        navigateToSoptLog = {
-                            startActivity(navigatorProvider.getSoptLogIntent())
-                        }
-                    )
+            CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) {
+                SoptTheme {
+                    ProvideTracker(amplitudeTracker) {
+                        FoundationScreen(
+                            navigateToSoptLog = {
+                                startActivity(navigatorProvider.getSoptLogIntent())
+                            }
+                        )
+                    }
                 }
             }
         }

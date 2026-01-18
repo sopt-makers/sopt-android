@@ -24,7 +24,7 @@
  */
 plugins {
     sopt("kotlin.jvm")
-    alias(libs.plugins.metro)
+    sopt("metro")
 }
 
 kotlin {
@@ -34,5 +34,4 @@ kotlin {
 dependencies {
     implementation(projects.domain.mypage)
     implementation(libs.javax.inject)
-    implementation(libs.metro.runtime)
 }

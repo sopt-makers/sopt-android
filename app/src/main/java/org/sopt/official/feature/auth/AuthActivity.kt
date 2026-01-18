@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.auth
 
+import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -33,6 +34,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +46,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.binding
+import dev.zacsweers.metrox.android.ActivityKey
+import dev.zacsweers.metrox.viewmodel.LocalMetroViewModelFactory
 import org.sopt.official.R
+import org.sopt.official.common.di.AppScope
+import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.common.di.SoptViewModelFactory
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -57,7 +64,9 @@ import org.sopt.official.model.UserStatus
 import org.sopt.official.network.persistence.SoptDataStore
 import timber.log.Timber
 
-class AuthActivity(
+@ContributesIntoMap(AppScope::class, binding<Activity>())
+@ActivityKey(AuthActivity::class)
+class AuthActivity @Inject constructor(
     private val viewModelFactory: SoptViewModelFactory,
     private val dataStore: SoptDataStore
 ) : AppCompatActivity() {
@@ -71,105 +80,129 @@ class AuthActivity(
         super.onCreate(savedInstanceState)
 
         setContent {
-            SoptTheme {
-                val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
+            CompositionLocalProvider(LocalMetroViewModelFactory provides viewModelFactory) {
+                SoptTheme {
+                    val context = LocalContext.current
+                    val lifecycleOwner = LocalLifecycleOwner.current
 
-                val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+                    val updateState by viewModel.updateState.collectAsStateWithLifecycle()
 
-                LaunchedEffect(Unit) {
-                    viewModel.getUpdateConfig(context.getVersionName())
-                }
+                    LaunchedEffect(Unit) {
+                        viewModel.getUpdateConfig(context.getVersionName())
+                    }
 
-                when (val state = updateState) {
-                    is UpdateState.Default -> {}
-                    is UpdateState.PatchUpdateAvailable -> {
-                        var dialogVisibility by rememberSaveable { mutableStateOf(true) }
+                    when (val state = updateState) {
+                        is UpdateState.Default -> {}
+                        is UpdateState.PatchUpdateAvailable -> {
+                            var dialogVisibility by rememberSaveable { mutableStateOf(true) }
 
-                        if (dialogVisibility) {
+                            if (dialogVisibility) {
+                                UpdateDialog(
+                                    description = state.message,
+                                    onDismiss = {
+                                        dialogVisibility = false
+                                        navigateToMainActivity()
+                                    },
+                                    onPositiveClick = this@AuthActivity::launchPlayStore,
+                                    onNegativeClick = {
+                                        dialogVisibility = false
+                                        navigateToMainActivity()
+                                    }
+                                )
+                            }
+                        }
+
+                        is UpdateState.UpdateRequired -> {
                             UpdateDialog(
                                 description = state.message,
-                                onDismiss = {
-                                    dialogVisibility = false
-                                    navigateToMainActivity()
-                                },
+                                onDismiss = this@AuthActivity::finishAffinity,
                                 onPositiveClick = this@AuthActivity::launchPlayStore,
-                                onNegativeClick = {
-                                    dialogVisibility = false
-                                    navigateToMainActivity()
-                                }
+                                onNegativeClick = this@AuthActivity::finishAffinity,
+                            )
+                        }
+
+                        else -> navigateToMainActivity()
+                    }
+
+                    LaunchedEffect(true) {
+                        NotificationChannel(
+                            getString(R.string.toolbar_notification),
+                            getString(R.string.toolbar_notification),
+                            NotificationManager.IMPORTANCE_HIGH
+                        ).apply {
+                            setSound(null, null)
+                            enableLights(false)
+                            enableVibration(false)
+                            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+                            (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(
+                                this
                             )
                         }
                     }
 
-                    is UpdateState.UpdateRequired -> {
-                        UpdateDialog(
-                            description = state.message,
-                            onDismiss = this@AuthActivity::finishAffinity,
-                            onPositiveClick = this@AuthActivity::launchPlayStore,
-                            onNegativeClick = this@AuthActivity::finishAffinity,
-                        )
-                    }
-
-                    else -> navigateToMainActivity()
-                }
-
-                LaunchedEffect(true) {
-                    NotificationChannel(
-                        getString(R.string.toolbar_notification),
-                        getString(R.string.toolbar_notification),
-                        NotificationManager.IMPORTANCE_HIGH
-                    ).apply {
-                        setSound(null, null)
-                        enableLights(false)
-                        enableVibration(false)
-                        lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
-                    }
-                }
-
-                LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
-                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { event ->
-                            when (event) {
-                                is AuthUiEvent.Success -> startActivity(
-                                    MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
-                                )
-
-                                is AuthUiEvent.Failure -> startActivity(
-                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
-                                )
-                            }
-                        }
-                }
-
-                AuthScreen(
-                    navigateToHome = {
-                        try {
-                            if (dataStore.accessToken.isNotEmpty()) {
-                                startActivity(
-                                    MainActivity.getIntent(
-                                        context = context,
-                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                    LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
+                        viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                            .collect { event ->
+                                when (event) {
+                                    is AuthUiEvent.Success -> startActivity(
+                                        MainActivity.getIntent(
+                                            context,
+                                            MainActivity.StartArgs(event.userStatus)
+                                        )
                                     )
-                                )
+
+                                    is AuthUiEvent.Failure -> startActivity(
+                                        MainActivity.getIntent(
+                                            context,
+                                            MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                                        )
+                                    )
+                                }
                             }
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                        }
-                    },
-                    navigateToUnAuthenticatedHome = {
-                        startActivity(
-                            MainActivity.getIntent(
-                                context = this,
-                                args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                    }
+
+                    AuthScreen(
+                        navigateToHome = {
+                            try {
+                                if (dataStore.accessToken.isNotEmpty()) {
+                                    startActivity(
+                                        MainActivity.getIntent(
+                                            context = context,
+                                            args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                        )
+                                    )
+                                }
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                            }
+                        },
+                        navigateToUnAuthenticatedHome = {
+                            startActivity(
+                                MainActivity.getIntent(
+                                    context = this,
+                                    args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                                )
                             )
-                        )
-                    },
-                    onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
-                    onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
-                    platform = dataStore.platform
-                )
+                        },
+                        onContactChannelClick = {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)
+                                )
+                            )
+                        },
+                        onGoogleFormClick = {
+                            startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM)
+                                )
+                            )
+                        },
+                        platform = dataStore.platform
+                    )
+                }
             }
         }
     }

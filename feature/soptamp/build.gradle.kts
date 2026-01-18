@@ -24,6 +24,7 @@
  */
 plugins {
     sopt("feature")
+    sopt("metro")
     sopt("compose")
     alias(libs.plugins.ksp)
     alias(libs.plugins.ktlint)

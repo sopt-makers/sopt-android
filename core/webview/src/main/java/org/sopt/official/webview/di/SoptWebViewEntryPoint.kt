@@ -25,7 +25,10 @@
 package org.sopt.official.webview.di
 
 import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.webview.view.WebViewActivity
 
 interface WebViewGraph {
     val dataStore: SoptDataStore
+
+    fun webViewActivity(): WebViewActivity
 }
