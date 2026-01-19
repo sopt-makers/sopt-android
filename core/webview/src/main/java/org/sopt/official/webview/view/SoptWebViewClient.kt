@@ -47,107 +47,89 @@ class SoptWebViewClient(
         val url = request?.url.toString().toUri()
 
         Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
-        return if (super.shouldOverrideUrlLoading(view, request)) {
-            true
-        } else {
-            handleMarketScheme(view, url)
-                || handleKakaoLinkScheme(view, url)
-                || handleTelScheme(view, url)
-                || handleMailScheme(view, url)
-                || handleIntentScheme(view, url)
-                || handleNotionScheme(view, url)
+
+        if (super.shouldOverrideUrlLoading(view, request)) return true
+
+        return when {
+            url.toString().startsWith("intent:kakaolink://") -> handleKakaoLinkScheme(view, url)
+            url.scheme?.startsWith("tel") == true -> navigateToExternal(view, url)
+
+            url.scheme == "mailto" -> navigateToExternal(view, url)
+            url.scheme == "market" -> navigateToExternal(view, url)
+            url.scheme == "notion" -> handleNotionScheme(view, url)
+            url.scheme == "nmap" -> handleNMapScheme(view, url)
+            url.scheme == "intent" -> handleIntentScheme(view, url)
+
+            else -> false
         }
     }
 
-    /**
-     * Comment by HyunWoo Lee
-     * 저사양기기/낮은 API 기기들은 위의 함수가 아닌 해당 함수를 실행할 수 있어
-     * 추가 대응을 위해 구현을 해놓습니다.
-     */
-    @Deprecated("Deprecated in Java")
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
-        return if (super.shouldOverrideUrlLoading(view, url)) {
-            true
-        } else {
-            val uri = url?.toUri() ?: return true
-            handleMarketScheme(view, uri)
-                || handleKakaoLinkScheme(view, uri)
-                || handleTelScheme(view, uri)
-                || handleMailScheme(view, uri)
-                || handleIntentScheme(view, uri)
-                || handleNotionScheme(view, uri)
-        }
-    }
-
-    private fun handleMailScheme(view: WebView?, url: Uri): Boolean {
-        if (url.scheme == "mailto") {
-            view?.context?.navigateTo(url)
-            return true
-        }
-        return false
-    }
-
-    private fun handleIntentScheme(view: WebView?, url: Uri): Boolean {
-        try {
-            if (url.scheme == "intent") {
-                val urlString = url.toString()
-                val intent = Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
-                    addCategory(Intent.CATEGORY_BROWSABLE)
-                    component = null
-                    selector = null
-                }
-                try {
-                    view?.context?.startActivity(intent)
-                    return true
-                } catch (e: ActivityNotFoundException) {
-                    val packageName = intent.`package`
-                    if (packageName != null) {
-                        view?.context?.navigateTo("market://details?id=${packageName}".toUri())
-                        return true
-                    }
-                }
-                return true
-            }
-        } catch (e: Exception) {
-            Timber.e("SoptWebViewClient#handleIntentScheme failed $e")
-        }
-        return false
-    }
-
-    private fun handleTelScheme(view: WebView?, url: Uri): Boolean {
-        if (url.scheme?.startsWith("tel") == true) {
-            view?.context?.navigateTo(url)
-            return true
-        }
-        return false
+    private fun navigateToExternal(view: WebView?, url: Uri): Boolean {
+        view?.context?.navigateTo(url)
+        return true
     }
 
     private fun handleKakaoLinkScheme(view: WebView?, url: Uri): Boolean {
-        if (url.scheme?.startsWith("intent:kakaolink://") == true) {
-            val kakaoLinkScheme = url.toString().replace("intent:", "").toUri()
-            view?.context?.navigateTo(kakaoLinkScheme)
-            return true
-        }
-        return false
+        val kakaoLinkScheme = url.toString().replace("intent:", "").toUri()
+        view?.context?.navigateTo(kakaoLinkScheme)
+        return true
     }
 
-    private fun handleMarketScheme(view: WebView?, url: Uri): Boolean {
-        if (url.scheme == "market") {
-            view?.context?.navigateTo(url)
-            return true
-        }
-        return false
-    }
-
-    private fun handleNotionScheme(view: WebView?, url: Uri?): Boolean {
-        if (url?.scheme?.startsWith("notion") == true) {
+    private fun handleNotionScheme(view: WebView?, url: Uri): Boolean {
+        try {
             Intent(Intent.ACTION_VIEW, url).apply {
                 view?.context?.startActivity(this)
             }
+        } catch (e: ActivityNotFoundException) {
+            val webUrl = url.toString()
+                .replaceFirst("notion://", "https://")
+
+            view?.context?.navigateTo(webUrl.toUri())
+        } catch (e: Exception) {
+            Timber.e(e)
+            return false
+        }
+
+        return true
+    }
+
+    private fun handleNMapScheme(view: WebView?, url: Uri): Boolean {
+        try {
+            Intent(Intent.ACTION_VIEW, url).apply {
+                view?.context?.startActivity(this)
+            }
+        } catch (e: ActivityNotFoundException) {
+            view?.context?.navigateTo("market://details?id=com.nhn.android.nmap".toUri())
+        } catch (e: Exception) {
+            Timber.e(e)
+            return false
+        }
+
+        return true
+    }
+
+    private fun handleIntentScheme(view: WebView?, url: Uri): Boolean {
+        val intent = runCatching {
+            val urlString = url.toString()
+            Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                component = null
+                selector = null
+            }
+        }.getOrElse { e ->
+            Timber.e("SoptWebViewClient#handleIntentScheme failed $e")
             return true
         }
-        return false
+
+        try {
+            view?.context?.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            val packageName = intent.`package`
+            if (packageName != null) {
+                view?.context?.navigateTo("market://details?id=${packageName}".toUri())
+            }
+        }
+        return true
     }
 
     private fun Context.navigateTo(to: Uri) {
