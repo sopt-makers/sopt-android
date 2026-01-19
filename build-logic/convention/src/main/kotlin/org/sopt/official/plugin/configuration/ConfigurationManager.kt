@@ -1,6 +1,6 @@
 package org.sopt.official.plugin.configuration
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import java.util.Properties
 
@@ -16,8 +16,8 @@ object ConfigurationManager {
         }
     }
 
-    fun BaseExtension.configureBuildConfigFields(properties: Properties) {
-        defaultConfig {
+    fun CommonExtension.configureBuildConfigFields(properties: Properties) {
+        defaultConfig.apply {
             // API Keys and URLs
             buildConfigField("String", "SOPTAMP_API_KEY", properties.getQuotedProperty("apiKey"))
             buildConfigField("String", "SOPTAMP_DATA_STORE_KEY", properties.getQuotedProperty("dataStoreKey"))
@@ -48,14 +48,14 @@ object ConfigurationManager {
             buildConfigField("String", "PROD_SERVER_CLIENT_ID", properties.getQuotedProperty("prodServerClientId"))
         }
 
-        buildTypes {
-            getByName("debug") {
+        buildTypes.apply {
+            getByName("debug").apply {
                 buildConfigField(
                     "String", "PLAYGROUND_API",
                     properties.getQuotedProperty("debugPlaygroundApi")
                 )
             }
-            getByName("release") {
+            getByName("release").apply {
                 buildConfigField(
                     "String", "PLAYGROUND_API",
                     properties.getQuotedProperty("releasePlaygroundApi")

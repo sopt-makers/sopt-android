@@ -1,6 +1,6 @@
 package org.sopt.official.plugin
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
@@ -12,7 +12,7 @@ class AndroidComposePlugin : BasePlugin() {
     override fun apply(target: Project): Unit = with(target) {
         applyPlugin("org.jetbrains.kotlin.plugin.compose")
 
-        extensions.getByType<BaseExtension>().apply {
+        extensions.getByType<CommonExtension>().apply {
             buildFeatures.apply {
                 compose = true
             }

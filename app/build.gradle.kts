@@ -101,16 +101,6 @@ android {
             isDebuggable = false
         }
     }
-    applicationVariants.all {
-        val variant = this
-        kotlin {
-            sourceSets {
-                getByName(variant.name) {
-                    kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
-                }
-            }
-        }
-    }
 }
 
 ksp {

@@ -1,6 +1,6 @@
 package org.sopt.official.plugin
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
@@ -11,22 +11,18 @@ class AndroidTestPlugin : BasePlugin() {
     override fun apply(target: Project): Unit = with(target) {
         apply<JUnit5Plugin>()
 
-        extensions.getByType<BaseExtension>().apply {
-            defaultConfig {
+        extensions.getByType<CommonExtension>().apply {
+            defaultConfig.apply {
                 testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 testInstrumentationRunnerArguments["runnerBuilder"] =
                     "de.mannodermaus.junit5.AndroidJUnit5Builder"
             }
 
-            testOptions {
-                unitTests {
-                    isIncludeAndroidResources = true
-                }
+            testOptions.unitTests.apply {
+                isIncludeAndroidResources = true
             }
 
-            packagingOptions {
-                resources.excludes.add("META-INF/LICENSE*")
-            }
+            packaging.resources.excludes.add("META-INF/LICENSE*")
         }
 
         addTestDependencies(libs)
