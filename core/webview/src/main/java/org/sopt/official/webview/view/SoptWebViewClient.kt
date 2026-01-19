@@ -48,9 +48,7 @@ class SoptWebViewClient(
 
         Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
 
-        if (super.shouldOverrideUrlLoading(view, request)) {
-            return true
-        }
+        if (super.shouldOverrideUrlLoading(view, request)) return true
 
         return when {
             url.toString().startsWith("intent:kakaolink://") -> handleKakaoLinkScheme(view, url)
@@ -63,33 +61,6 @@ class SoptWebViewClient(
             url.scheme == "intent" -> handleIntentScheme(view, url)
 
             else -> false
-        }
-    }
-
-    /**
-     * Comment by HyunWoo Lee
-     * 저사양기기/낮은 API 기기들은 위의 함수가 아닌 해당 함수를 실행할 수 있어
-     * 추가 대응을 위해 구현을 해놓습니다.
-     */
-    @Deprecated("Deprecated in Java")
-    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-        Timber.d("SoptWebViewClient#shouldOverrideUrlLoading url: $url")
-        return if (super.shouldOverrideUrlLoading(view, url)) {
-            true
-        } else {
-            val uri = url?.toUri() ?: return true
-            return when {
-                uri.scheme?.startsWith("intent:kakaolink://") == true -> handleKakaoLinkScheme(view, uri)
-                uri.scheme?.startsWith("tel") == true -> navigateToExternal(view, uri)
-
-                uri.scheme == "mailto" -> navigateToExternal(view, uri)
-                uri.scheme == "market" -> navigateToExternal(view, uri)
-                uri.scheme == "notion" -> handleNotionScheme(view, uri)
-                uri.scheme == "nmap" -> handleNMapScheme(view, uri)
-                uri.scheme == "intent" -> handleIntentScheme(view, uri)
-
-                else -> false
-            }
         }
     }
 
@@ -138,23 +109,25 @@ class SoptWebViewClient(
     }
 
     private fun handleIntentScheme(view: WebView?, url: Uri): Boolean {
-        try {
+        val intent = runCatching {
             val urlString = url.toString()
-            val intent = Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
+            Intent.parseUri(urlString, Intent.URI_INTENT_SCHEME).apply {
                 addCategory(Intent.CATEGORY_BROWSABLE)
                 component = null
                 selector = null
             }
-            try {
-                view?.context?.startActivity(intent)
-            } catch (e: ActivityNotFoundException) {
-                val packageName = intent.`package`
-                if (packageName != null) {
-                    view?.context?.navigateTo("market://details?id=${packageName}".toUri())
-                }
-            }
-        } catch (e: Exception) {
+        }.getOrElse { e ->
             Timber.e("SoptWebViewClient#handleIntentScheme failed $e")
+            return true
+        }
+
+        try {
+            view?.context?.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            val packageName = intent.`package`
+            if (packageName != null) {
+                view?.context?.navigateTo("market://details?id=${packageName}".toUri())
+            }
         }
         return true
     }
