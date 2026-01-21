@@ -50,6 +50,7 @@ jobs:
                     DEV_SERVER_CLIENT_ID: ${{secrets.DEV_SERVER_CLIENT_ID}}
                     PROD_SERVER_CLIENT_ID: ${{secrets.PROD_SERVER_CLIENT_ID}}
                     PLATFORM: ${{secrets.PLATFORM}}
+                    PLAYGROUND_HOST: ${{secrets.PLAYGROUND_HOST}}
                 run: |
                     echo apiKey=\"$API_KEY\" >> ./local.properties
                     echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
@@ -79,6 +80,8 @@ jobs:
                     echo devServerClientId=\"DEV_SERVER_CLIENT_ID\" >> ./local.properties
                     echo prodServerClientId=\"PROD_SERVER_CLIENT_ID\" >> ./local.properties
                     echo platform=\"PLATFORM\" >> ./local.properties
+                    echo dev_playground_host=$PLAYGROUND_HOST >> ./local.properties
+                    echo prod_playground_host=$PLAYGROUND_HOST >> ./local.properties
 
             -   name: Access Firebase Service
                 run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
