@@ -54,12 +54,16 @@ object ConfigurationManager {
                     "String", "PLAYGROUND_API",
                     properties.getQuotedProperty("debugPlaygroundApi")
                 )
+
+                manifestPlaceholders["PLAYGROUND_HOST"] = properties.getProperty("dev_playground_host")
             }
             getByName("release") {
                 buildConfigField(
                     "String", "PLAYGROUND_API",
                     properties.getQuotedProperty("releasePlaygroundApi")
                 )
+
+                manifestPlaceholders["PLAYGROUND_HOST"] = properties.getProperty("prod_playground_host")
             }
         }
     }

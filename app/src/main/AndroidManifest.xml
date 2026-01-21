@@ -82,6 +82,17 @@
 
                 <data android:scheme="sopt" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="https"
+                    android:host="${PLAYGROUND_HOST}" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".feature.attendance.AttendanceActivity"
@@ -140,7 +151,7 @@
         <activity
             android:name=".feature.notification.SchemeActivity"
             android:exported="true"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"/>
         <activity
             android:name=".feature.fortune.FortuneActivity"
             android:exported="true"
