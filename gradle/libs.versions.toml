@@ -6,7 +6,7 @@ appVersion = "4.3.3"
 versionCode = "40303"
 
 kotlin = "2.3.0"
-kotlinx-serialization-json = "1.9.0"
+kotlinx-serialization-json = "1.10.0"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1-0.6.x-compat"
 kotlinx-collections-immutable = "0.4.0"
