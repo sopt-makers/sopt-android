@@ -29,7 +29,7 @@ androidx-credential = "1.5.0"
 material = "1.13.0"
 in-app-update = "2.1.0"
 secret-gradle-plugin = "2.0.1"
-google-id = "1.1.1"
+google-id = "1.2.0"
 
 junit = "4.13.2"
 androidx-test-junit = "1.3.0"
