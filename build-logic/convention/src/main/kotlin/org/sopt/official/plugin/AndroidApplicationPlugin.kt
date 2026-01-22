@@ -1,6 +1,6 @@
 package org.sopt.official.plugin
 
-import com.android.build.gradle.BaseExtension
+import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.getByType
@@ -23,7 +23,7 @@ class AndroidApplicationPlugin : AndroidBasePlugin() {
         configureAndroidBase()
 
         val properties = ConfigurationManager.loadProperties(this)
-        extensions.getByType<BaseExtension>().apply {
+        extensions.getByType<CommonExtension>().apply {
             configureBuildConfigFields(properties)
         }
 

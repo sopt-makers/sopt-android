@@ -51,11 +51,11 @@ fun String.getEncryptedDataOrDefault(keyAlias: String) = CryptoManager.encrypt(
     bytes = this.toByteArray(Charsets.UTF_8)
 ).mapCatching { encryptedContent ->
     encryptedContent.concatenate().toBase64()
-}.getOrDefault(this).toString()
+}.getOrDefault(this)
 
 fun String.getDecryptedDataOrDefault(keyAlias: String, initializationVectorSize: Int = 12) = CryptoManager.decrypt(
     keyAlias = keyAlias,
     encryptedContent = this.toByteArray().toEncryptedContent(initializationVectorSize = initializationVectorSize)
 ).mapCatching { decryptedContent ->
     decryptedContent.toString(Charsets.UTF_8)
-}.getOrDefault(this).toString()
+}.getOrDefault(this)

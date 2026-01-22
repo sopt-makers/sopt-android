@@ -36,13 +36,6 @@ android {
             useSupportLibrary = true
         }
     }
-    libraryVariants.all {
-        sourceSets {
-            getByName(name) {
-                java.srcDir("build/generated/ksp/$name/kotlin")
-            }
-        }
-    }
     namespace = "org.sopt.official.stamp"
 }
 
