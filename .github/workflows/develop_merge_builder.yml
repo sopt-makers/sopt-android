@@ -1,87 +1,90 @@
 name: Makers Builder
 
 on:
-  push:
-    branches: [ develop, master ]
+    push:
+        branches: [ develop, master ]
 
 defaults:
-  run:
-    shell: bash
-    working-directory: .
+    run:
+        shell: bash
+        working-directory: .
 
 jobs:
-  build:
-    name: Generate APK
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+    build:
+        name: Generate APK
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v6
 
-      - name: set up JDK 17
-        uses: actions/setup-java@v5
-        with:
-          distribution: 'zulu'
-          java-version: 17
+            -   name: set up JDK 17
+                uses: actions/setup-java@v5
+                with:
+                    distribution: 'zulu'
+                    java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v5
+            -   name: Setup Gradle
+                uses: gradle/actions/setup-gradle@v5
 
-      - name: Add Local Properties
-        env:
-          API_KEY: ${{ secrets.SENTRY_DSN }}
-          DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
-          DEV_API: ${{ secrets.SENTRY_DSN }}
-          NEW_API: ${{ secrets.SENTRY_DSN }}
-          SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
-          SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
-          KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          KEY_PASSWORD: ${{ secrets.SENTRY_DSN }}
-          STORE_PASSWORD: ${{ secrets.SENTRY_DSN }}
-          DEV_AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
-          AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
-          POKE_DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
-          ACCESS_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          REFRESH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          PLAYGROUND_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          USER_STATUS_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          PUSH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
-          DEV_AUTH_API: ${{secrets.DEV_AUTH_API}}
-          PROD_AUTH_API: ${{secrets.PROD_AUTH_API}}
-          DEV_SERVER_CLIENT_ID: ${{secrets.DEV_SERVER_CLIENT_ID}}
-          PROD_SERVER_CLIENT_ID: ${{secrets.PROD_SERVER_CLIENT_ID}}
-          PLATFORM: ${{secrets.PLATFORM}}
-        run: |
-          echo apiKey=\"$API_KEY\" >> ./local.properties
-          echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
-          echo devOperationApi=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
-          echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
-          echo devApi=\"$DEV_API\" >> ./local.properties
-          echo newApi=\"$NEW_API\" >> ./local.properties
-          echo keyAlias=\"KEY_ALIAS\" >> ./local.properties
-          echo keyPassword=\"KEY_PASSWORD\" >> ./local.properties
-          echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
-          echo devAmplitudeKey=\"$DEV_AMPLITUDE_KEY\" >> ./local.properties
-          echo amplitudeKey=\"$AMPLITUDE_KEY\" >> ./local.properties
-          echo pokeDataStoreKey=\"$POKE_DATA_STORE_KEY\" >> ./local.properties
-          echo accessTokenKeyAlias=\"ACCESS_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo refreshTokenKeyAlias=\"REFRESH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo playgroundTokenKeyAlias=\"PLAYGROUND_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo userStatusKeyAlias=\"USER_STATUS_KEY_ALIAS\" >> ./local.properties
-          echo pushTokenKeyAlias=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo mockAuthApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo serverClientId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo devAppId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo appId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo debugPlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo releasePlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
-          echo devAuthApi=\"DEV_AUTH_API\" >> ./local.properties
-          echo prodAuthApi=\"PROD_AUTH_API\" >> ./local.properties
-          echo devServerClientId=\"DEV_SERVER_CLIENT_ID\" >> ./local.properties
-          echo prodServerClientId=\"PROD_SERVER_CLIENT_ID\" >> ./local.properties
-          echo platform=\"PLATFORM\" >> ./local.properties
+            -   name: Add Local Properties
+                env:
+                    API_KEY: ${{ secrets.SENTRY_DSN }}
+                    DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+                    DEV_API: ${{ secrets.SENTRY_DSN }}
+                    NEW_API: ${{ secrets.SENTRY_DSN }}
+                    SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
+                    SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
+                    KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    KEY_PASSWORD: ${{ secrets.SENTRY_DSN }}
+                    STORE_PASSWORD: ${{ secrets.SENTRY_DSN }}
+                    DEV_AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
+                    AMPLITUDE_KEY: ${{ secrets.SENTRY_DSN }}
+                    POKE_DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
+                    ACCESS_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    REFRESH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    PLAYGROUND_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    USER_STATUS_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    PUSH_TOKEN_KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
+                    DEV_AUTH_API: ${{secrets.DEV_AUTH_API}}
+                    PROD_AUTH_API: ${{secrets.PROD_AUTH_API}}
+                    DEV_SERVER_CLIENT_ID: ${{secrets.DEV_SERVER_CLIENT_ID}}
+                    PROD_SERVER_CLIENT_ID: ${{secrets.PROD_SERVER_CLIENT_ID}}
+                    PLATFORM: ${{secrets.PLATFORM}}
+                    PLAYGROUND_HOST: ${{secrets.PLAYGROUND_HOST}}
+                run: |
+                    echo apiKey=\"$API_KEY\" >> ./local.properties
+                    echo dataStoreKey=\"$DATA_STORE_KEY\" >> ./local.properties
+                    echo devOperationApi=\"$SOPT_DEV_OPERATION_BASE_URL\" >> ./local.properties
+                    echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
+                    echo devApi=\"$DEV_API\" >> ./local.properties
+                    echo newApi=\"$NEW_API\" >> ./local.properties
+                    echo keyAlias=\"KEY_ALIAS\" >> ./local.properties
+                    echo keyPassword=\"KEY_PASSWORD\" >> ./local.properties
+                    echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
+                    echo devAmplitudeKey=\"$DEV_AMPLITUDE_KEY\" >> ./local.properties
+                    echo amplitudeKey=\"$AMPLITUDE_KEY\" >> ./local.properties
+                    echo pokeDataStoreKey=\"$POKE_DATA_STORE_KEY\" >> ./local.properties
+                    echo accessTokenKeyAlias=\"ACCESS_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo refreshTokenKeyAlias=\"REFRESH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo playgroundTokenKeyAlias=\"PLAYGROUND_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo userStatusKeyAlias=\"USER_STATUS_KEY_ALIAS\" >> ./local.properties
+                    echo pushTokenKeyAlias=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo mockAuthApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo serverClientId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo devAppId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo appId=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo debugPlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo releasePlaygroundApi=\"PUSH_TOKEN_KEY_ALIAS\" >> ./local.properties
+                    echo devAuthApi=\"DEV_AUTH_API\" >> ./local.properties
+                    echo prodAuthApi=\"PROD_AUTH_API\" >> ./local.properties
+                    echo devServerClientId=\"DEV_SERVER_CLIENT_ID\" >> ./local.properties
+                    echo prodServerClientId=\"PROD_SERVER_CLIENT_ID\" >> ./local.properties
+                    echo platform=\"PLATFORM\" >> ./local.properties
+                    echo dev_playground_host=$PLAYGROUND_HOST >> ./local.properties
+                    echo prod_playground_host=$PLAYGROUND_HOST >> ./local.properties
 
-      - name: Access Firebase Service
-        run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
+            -   name: Access Firebase Service
+                run: echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > ./app/google-services.json
 
-      - name: Build debug APK
-        run: ./gradlew :app:assembleDebug --stacktrace
+            -   name: Build debug APK
+                run: ./gradlew :app:assembleDebug --stacktrace
