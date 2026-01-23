@@ -24,10 +24,12 @@
  */
 package org.sopt.official.feature.deeplink
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.deeplinkdispatch.DeepLinkHandler
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.deeplink.AppDeeplinkModule
 import org.sopt.official.deeplink.AppDeeplinkModuleRegistry
@@ -36,7 +38,8 @@ import org.sopt.official.feature.fortune.deeplink.FortuneDeeplinkModuleRegistry
 import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.webview.deeplink.WebDeeplinkModule
 import org.sopt.official.webview.deeplink.WebDeeplinkModuleRegistry
-import javax.inject.Inject
+import org.sopt.official.webview.view.WebViewActivity
+import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 
 @AndroidEntryPoint
 @DeepLinkHandler(value = [AppDeeplinkModule::class, FortuneDeeplinkModule::class, WebDeeplinkModule::class])
@@ -53,6 +56,16 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
 
         if (dataStore.accessToken.isEmpty()) {
             startActivity(navigator.getAuthActivityIntent())
+            finish()
+            return
+        }
+
+        if (intent?.data?.scheme == "https") {
+            Intent(this, WebViewActivity::class.java).apply {
+                putExtra(INTENT_URL, intent?.dataString)
+            }.apply {
+                this@DeepLinkSchemeActivity.startActivity(this)
+            }
             finish()
             return
         }
