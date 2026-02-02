@@ -43,7 +43,7 @@ robolectric = "4.16.1"
 androidx-uiautomator = "2.3.0"
 androidx-test = "1.7.0"
 androidx-test-rules = "1.7.0"
-mockk = "1.14.7"
+mockk = "1.14.9"
 
 gradleplugin = "9.0.0"
 kspplugin = "2.3.4"
