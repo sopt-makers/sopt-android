@@ -42,8 +42,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.feature.fortune.component.FortuneButton
-import org.sopt.official.feature.fortune.feature.fortuneDetail.component.FortuneDetailErrorDialog
 import org.sopt.official.feature.fortune.feature.fortuneDetail.component.TodayFortuneDashboard
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState
 import org.sopt.official.feature.fortune.feature.fortuneDetail.model.FortuneDetailUiState.Error
@@ -101,8 +101,8 @@ internal fun FortuneDetailScreen(
                     .background(color = colors.background.copy(alpha = 0.55f)),
             ) {
                 when (uiState) {
-                    is Error -> FortuneDetailErrorDialog(
-                        onCheckClick = {
+                    is Error -> NetworkErrorDialog(
+                        onConfirm = {
                             onErrorDialogCheckClick()
                             Timber.e(uiState.errorMessage)
                         }
