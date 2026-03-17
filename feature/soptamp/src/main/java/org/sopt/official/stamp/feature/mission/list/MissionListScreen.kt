@@ -76,13 +76,13 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
-import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.designsystem.component.mission.MissionComponent
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
@@ -431,7 +431,7 @@ fun MissionListScreenNew(
             when ((state as MissionsState.Failure).error) {
                 Error.NetworkUnavailable ->
                     NetworkErrorDialog(
-                        onRetry = missionsViewModel::fetchMissions,
+                        onConfirm = missionsViewModel::fetchMissions,
                     )
             }
         }

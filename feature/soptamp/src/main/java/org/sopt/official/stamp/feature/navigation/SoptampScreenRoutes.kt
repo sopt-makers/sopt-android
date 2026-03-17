@@ -32,10 +32,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.sopt.official.common.navigator.DeepLinkType
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.model.UserStatus
-import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -114,9 +114,9 @@ fun RankingScreenRoute(
     when (state) {
         RankingState.Loading -> LoadingScreen()
         RankingState.Failure ->
-            NetworkErrorDialog {
-                navController.popBackStack()
-            }
+            NetworkErrorDialog(
+                onConfirm = navController::popBackStack,
+            )
 
         is RankingState.Success -> {
             val successState = state as RankingState.Success
@@ -162,9 +162,9 @@ fun PartRankingScreenRoute(navController: NavController) {
     when (state) {
         PartRankingState.Loading -> LoadingScreen()
         PartRankingState.Failure ->
-            NetworkErrorDialog {
-                partRankingViewModel.fetchRanking()
-            }
+            NetworkErrorDialog(
+                onConfirm = partRankingViewModel::fetchRanking,
+            )
 
         is PartRankingState.Success -> {
             val successState = state as PartRankingState.Success
@@ -210,10 +210,9 @@ fun UserMissionListScreenRoute(
         MissionsState.Loading -> LoadingScreen()
         is MissionsState.Failure -> {
             when ((state as MissionsState.Failure).error) {
-                Error.NetworkUnavailable ->
-                    NetworkErrorDialog(
-                        onRetry = missionsViewModel::fetchMissions,
-                    )
+                Error.NetworkUnavailable -> NetworkErrorDialog(
+                    onConfirm = missionsViewModel::fetchMissions,
+                )
             }
         }
 
