@@ -53,12 +53,12 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.component.SoptLogEmptySection
 import org.sopt.official.feature.soptlog.component.SoptLogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
-import org.sopt.official.feature.soptlog.component.dialog.SoptLogErrorDialog
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
@@ -102,7 +102,7 @@ internal fun SoptLogRoute(
     when {
         soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
-            SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfoData)
+            NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfoData)
         }
 
         else -> {
