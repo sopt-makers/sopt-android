@@ -49,6 +49,22 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 
+/**
+ * 네트워크 연결 불안정 상황에서 사용하는 공통 에러 다이얼로그
+ *
+ * 기본적으로 네트워크 장애 안내 문구와 단일 확인 버튼을 제공
+ *
+ * 동작 규칙:
+ * - 다이얼로그 바깥 영역 탭 또는 뒤로가기 dismiss 시 [onConfirm]이 호출됩니다.
+ * - 확인 버튼 클릭 시에도 [onConfirm]이 호출됩니다.
+ *
+ * @param onConfirm 확인 버튼 클릭 또는 dismiss 시 실행할 콜백
+ * @param modifier 다이얼로그 컨테이너에 적용할 [Modifier]
+ * @param title 다이얼로그 제목 (기본값: 네트워크 오류 안내)
+ * @param content 다이얼로그 본문 설명 문구
+ * @param buttonText 단일 버튼 텍스트 (기본값: 확인)
+ */
+
 @Composable
 fun NetworkErrorDialog(
     onConfirm: () -> Unit,
