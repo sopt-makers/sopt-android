@@ -48,6 +48,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Blue400
 import org.sopt.official.designsystem.BlueAlpha200
+import org.sopt.official.designsystem.Green400
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.OrangeAlpha200
 import org.sopt.official.designsystem.SoptTheme
@@ -59,6 +60,7 @@ import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.Schedule.EVENT
 import org.sopt.official.feature.home.model.Schedule.SEMINAR
+import org.sopt.official.feature.home.model.Schedule.BREAK
 
 @Composable
 internal fun HomeSoptScheduleDashboard(
@@ -117,6 +119,7 @@ private fun HomeScheduleTypeChip(
             color = when (schedule) {
                 EVENT -> BlueAlpha200
                 SEMINAR -> OrangeAlpha200
+                BREAK -> Green400.copy(0.2f)
             },
             shape = RoundedCornerShape(size = 4.dp),
         )
@@ -127,6 +130,7 @@ private fun HomeScheduleTypeChip(
             color = when (schedule) {
                 EVENT -> Blue400
                 SEMINAR -> Orange400
+                BREAK -> Green400
             },
             modifier = Modifier.padding(
                 horizontal = 6.dp,
