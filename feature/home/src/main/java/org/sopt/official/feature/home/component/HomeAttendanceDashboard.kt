@@ -60,6 +60,7 @@ import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.Schedule.EVENT
 import org.sopt.official.feature.home.model.Schedule.SEMINAR
+import org.sopt.official.feature.home.model.Schedule.JOINT_SEMINAR
 import org.sopt.official.feature.home.model.Schedule.BREAK
 
 @Composable
@@ -119,6 +120,7 @@ private fun HomeScheduleTypeChip(
             color = when (schedule) {
                 EVENT -> BlueAlpha200
                 SEMINAR -> OrangeAlpha200
+                JOINT_SEMINAR -> Orange400.copy(0.2f)
                 BREAK -> Green400.copy(0.2f)
             },
             shape = RoundedCornerShape(size = 4.dp),
@@ -130,6 +132,7 @@ private fun HomeScheduleTypeChip(
             color = when (schedule) {
                 EVENT -> Blue400
                 SEMINAR -> Orange400
+                JOINT_SEMINAR -> Orange400
                 BREAK -> Green400
             },
             modifier = Modifier.padding(
