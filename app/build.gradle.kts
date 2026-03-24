@@ -186,6 +186,7 @@ dependencies {
     implementation(libs.semver)
 
     implementation(libs.code.gson)
+    implementation(libs.lifecycle.livedata.ktx)
 }
 
 secrets {
