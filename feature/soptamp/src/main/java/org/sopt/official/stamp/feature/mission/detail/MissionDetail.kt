@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -64,6 +64,7 @@ import kotlinx.coroutines.delay
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
@@ -72,7 +73,6 @@ import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
-import org.sopt.official.stamp.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.component.ClapFeedbackHolder
@@ -339,9 +339,9 @@ fun MissionDetailScreen(
         )
     }
     if (isError) {
-        NetworkErrorDialog {
-            viewModel.onPressNetworkErrorDialog()
-        }
+        NetworkErrorDialog(
+            onConfirm = viewModel::onPressNetworkErrorDialog,
+        )
     }
     if (isBottomSheetOpened) {
         DataPickerBottomSheet(
