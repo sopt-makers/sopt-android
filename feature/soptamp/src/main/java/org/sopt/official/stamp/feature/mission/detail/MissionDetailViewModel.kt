@@ -114,8 +114,13 @@ constructor(
     val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
     val isSubmitEnabled =
-        combine(content, imageModel, isMe) { content, image, isMe ->
-            content.isNotEmpty() && !image.isEmpty() && isMe
+        combine(
+            content,
+            imageModel,
+            isMe,
+            uiState.map { it.isLoading },
+            uiState.map { it.isSuccess }) { content, image, isMe, isLoading, isSuccess ->
+            content.isNotEmpty() && !image.isEmpty() && isMe && !isLoading && !isSuccess
         }
     val toolbarIconType = uiState.map { it.toolbarIconType }
     val isEditable =
@@ -140,15 +145,8 @@ constructor(
     private val _myNickname = MutableStateFlow("")
     val myNickname = _myNickname.asStateFlow()
 
-    private val submitEvent = MutableSharedFlow<Unit>()
-
     init {
         observeDebouncedClaps()
-        viewModelScope.launch {
-            submitEvent.debounce(500).collect {
-                handleSubmit()
-            }
-        }
     }
 
     // 딥링크로 미션 상세 뷰에 접속한 경우 "나"의 닉네임을 얻음 (앰플리튜드 삽입 목적)
@@ -182,15 +180,7 @@ constructor(
             if (isCompleted) {
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
-                        val option = if (!isMe) {
-                            ToolbarIconType.NONE
-                        } else {
-                            if (isCompleted) {
-                                ToolbarIconType.WRITE
-                            } else {
-                                ToolbarIconType.NONE
-                            }
-                        }
+                        val option = if (!isMe) ToolbarIconType.NONE else ToolbarIconType.WRITE
                         val result = PostUiState.from(it).copy(
                             stampId = it.id,
                             imageUri = ImageModel.Remote(url = it.images),
@@ -214,6 +204,14 @@ constructor(
                             }
                         }
                     }
+            } else {
+                uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        isCompleted = false,
+                        toolbarIconType = ToolbarIconType.NONE
+                    )
+                }
             }
         }
     }
@@ -269,8 +267,9 @@ constructor(
     }
 
     fun onSubmit() {
+        if (uiState.value.isLoading || uiState.value.isSuccess) return
         viewModelScope.launch {
-            submitEvent.emit(Unit)
+            handleSubmit()
         }
     }
 
