@@ -114,7 +114,12 @@ constructor(
     val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
     val isSubmitEnabled =
-        combine(content, imageModel, isMe, uiState.map { it.isLoading }, uiState.map { it.isSuccess }) { content, image, isMe, isLoading, isSuccess ->
+        combine(
+            content,
+            imageModel,
+            isMe,
+            uiState.map { it.isLoading },
+            uiState.map { it.isSuccess }) { content, image, isMe, isLoading, isSuccess ->
             content.isNotEmpty() && !image.isEmpty() && isMe && !isLoading && !isSuccess
         }
     val toolbarIconType = uiState.map { it.toolbarIconType }
@@ -175,15 +180,7 @@ constructor(
             if (isCompleted) {
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
-                        val option = if (!isMe) {
-                            ToolbarIconType.NONE
-                        } else {
-                            if (isCompleted) {
-                                ToolbarIconType.WRITE
-                            } else {
-                                ToolbarIconType.NONE
-                            }
-                        }
+                        val option = if (!isMe) ToolbarIconType.NONE else ToolbarIconType.WRITE
                         val result = PostUiState.from(it).copy(
                             stampId = it.id,
                             imageUri = ImageModel.Remote(url = it.images),
