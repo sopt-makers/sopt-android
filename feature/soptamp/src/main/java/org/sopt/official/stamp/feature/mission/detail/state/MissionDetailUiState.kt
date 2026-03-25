@@ -23,6 +23,7 @@ internal data class MissionDetailUiState(
     val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
     val isDeleteSuccess: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
+    val isShowEditSnackBar: Boolean = false,
     val isMe: Boolean = true,
     val isBottomSheetOpened: Boolean = false,
     val appliedCount: Int = 0, // 앰플(이번 요청으로 실제 반영된 증가량)

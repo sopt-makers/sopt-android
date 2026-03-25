@@ -312,7 +312,19 @@ internal class MissionDetailViewModel @Inject constructor(
             ),
         ).onSuccess {
             uiState.update {
-                it.copy(isLoading = false, isSuccess = true)
+                it.copy(
+                    isLoading = false,
+                    isSuccess = false,
+                    mode = MissionDetailModeType.READ_ONLY,
+                    toolbarIconType = ToolbarIconType.WRITE,
+                    isShowEditSnackBar = true,
+                    imageUri = ImageModel.Remote(url = listOf(image)),
+                    content = content,
+                    date = date,
+                    initSnapshotImageUri = ImageModel.Remote(url = listOf(image)),
+                    initSnapshotContent = content,
+                    initSnapshotDate = date,
+                )
             }
         }.onFailure { error ->
             Timber.e(error)
@@ -369,6 +381,12 @@ internal class MissionDetailViewModel @Inject constructor(
     fun onPressNetworkErrorDialog() {
         uiState.update {
             it.copy(isError = false, error = null)
+        }
+    }
+
+    fun onHideEditSnackBar() {
+        uiState.update {
+            it.copy(isShowEditSnackBar = false)
         }
     }
 
