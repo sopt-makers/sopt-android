@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -36,101 +34,53 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
-import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.model.StampClapUiModel
-import org.sopt.official.stamp.feature.mission.detail.model.StampClapUserUiModel
 import org.sopt.official.stamp.feature.mission.detail.model.toUiModel
+import org.sopt.official.stamp.feature.mission.detail.state.MissionDetailUiState
+import org.sopt.official.stamp.feature.mission.detail.type.MissionDetailModeType
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
-data class PostUiState(
-    val id: Int = -1,
-    val imageUri: ImageModel = ImageModel.Empty,
-    val content: String = "",
-    val date: String = "",
-    val stampId: Int = -1,
-    val isSuccess: Boolean = false,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val error: Throwable? = null,
-    val isCompleted: Boolean = false,
-    val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
-    val isDeleteSuccess: Boolean = false,
-    val isDeleteDialogVisible: Boolean = false,
-    val isMe: Boolean = true,
-    val isBottomSheetOpened: Boolean = false,
-    val appliedCount: Int = 0, // 앰플(이번 요청으로 실제 반영된 증가량)
-    val totalClapCount: Int = 0,
-    val viewCount: Int = 0,
-    val myClapCount: Int? = 0, // UI 표시용
-    val unSyncedClapCount: Int = 0, // 서버 전송용
-    val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf(),
-    val isBadgeVisible: Boolean = false
-) {
-    companion object {
-        fun from(data: Archive) =
-            PostUiState(
-                id = data.missionId,
-                imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
-                content = data.contents,
-                date = data.activityDate,
-                totalClapCount = data.clapCount,
-                viewCount = data.viewCount,
-                myClapCount = data.myClapCount
-            )
-    }
-}
-
 @OptIn(FlowPreview::class)
 @HiltViewModel
-class MissionDetailViewModel
-@Inject
-constructor(
+internal class MissionDetailViewModel @Inject constructor(
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val uiState = MutableStateFlow(PostUiState())
+    private val uiState = MutableStateFlow(MissionDetailUiState())
+    val missionDetailUiState = uiState.asStateFlow()
     private val clapEvent = MutableSharedFlow<Unit>()
     private var debounceJob: Job? = null
     private var isPosting = false
 
-    private val isMe = uiState.map { it.isMe }
-    val isSuccess = uiState.map { it.isSuccess }
-    val content = uiState.map { it.content }
-    val date = uiState.map { it.date }
-    val imageModel = uiState.map { it.imageUri }
-    val isSubmitEnabled =
-        combine(
-            content,
-            imageModel,
-            isMe,
-            uiState.map { it.isLoading },
-            uiState.map { it.isSuccess }) { content, image, isMe, isLoading, isSuccess ->
-            content.isNotEmpty() && !image.isEmpty() && isMe && !isLoading && !isSuccess
+    val isSubmitEnabled = uiState.map { state ->
+        val commonGuard =
+            state.isMe &&
+                !state.isLoading &&
+                !state.isSuccess &&
+                isFilledRequiredFields(state)
+
+        if (!commonGuard) return@map false
+
+        when (state.mode) {
+            MissionDetailModeType.WRITE -> true
+            MissionDetailModeType.EDIT -> isRequiredFieldsChanged(state)
+            MissionDetailModeType.READ_ONLY -> false
         }
-    val toolbarIconType = uiState.map { it.toolbarIconType }
-    val isEditable =
-        toolbarIconType.map {
-            it != ToolbarIconType.WRITE
-        }
-    val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
-    val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
-    val isError = uiState.map { it.isError }
-    val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
+    }
     val isBadgeVisible = uiState.map { it.isBadgeVisible }
 
     val appliedCount = uiState.map { it.appliedCount } // 앰플(이번 요청으로 실제 반영된 증가량)
@@ -139,8 +89,6 @@ constructor(
     val viewCount = uiState.map { it.viewCount }
     val myClapCount = uiState.map { it.myClapCount }
     val clappers = uiState.map { it.clappers }
-
-    val stampId = uiState.map { it.stampId }
 
     private val _myNickname = MutableStateFlow("")
     val myNickname = _myNickname.asStateFlow()
@@ -180,16 +128,23 @@ constructor(
             if (isCompleted) {
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
-                        val option = if (!isMe) ToolbarIconType.NONE else ToolbarIconType.WRITE
-                        val result = PostUiState.from(it).copy(
+                        val mine = it.mine ?: isMe
+                        val initialMode = MissionDetailModeType.READ_ONLY
+                        val option = if (!mine) ToolbarIconType.NONE else ToolbarIconType.WRITE
+                        val remoteImage = ImageModel.Remote(url = it.images)
+                        val result = MissionDetailUiState.from(it).copy(
                             stampId = it.id,
-                            imageUri = ImageModel.Remote(url = it.images),
-                            isCompleted = isCompleted,
+                            imageUri = remoteImage,
+                            isCompleted = true,
+                            mode = initialMode,
                             toolbarIconType = option,
                             totalClapCount = it.clapCount,
                             viewCount = it.viewCount,
                             myClapCount = it.myClapCount,
-                            isMe = it.mine ?: isMe
+                            isMe = mine,
+                            initSnapshotImageUri = remoteImage,
+                            initSnapshotContent = it.contents,
+                            initSnapshotDate = it.activityDate,
                         )
                         uiState.update { result }
                     }.onFailure { error ->
@@ -207,9 +162,16 @@ constructor(
             } else {
                 uiState.update {
                     it.copy(
+                        imageUri = ImageModel.Empty,
+                        content = "",
+                        date = "",
                         isLoading = false,
                         isCompleted = false,
-                        toolbarIconType = ToolbarIconType.NONE
+                        mode = MissionDetailModeType.WRITE,
+                        toolbarIconType = ToolbarIconType.NONE,
+                        initSnapshotImageUri = ImageModel.Empty,
+                        initSnapshotContent = "",
+                        initSnapshotDate = "",
                     )
                 }
             }
@@ -222,23 +184,25 @@ constructor(
         }
     }
 
-    private fun onChangeToolbarState(toolbarIconType: ToolbarIconType) {
-        uiState.update {
-            it.copy(toolbarIconType = toolbarIconType)
-        }
-    }
-
     fun onPressToolbarIcon() {
-        when (uiState.value.toolbarIconType) {
-            ToolbarIconType.WRITE -> {
-                onChangeToolbarState(ToolbarIconType.DELETE)
+        val state = uiState.value
+        if (!state.isMe) return
+
+        when (state.mode) {
+            MissionDetailModeType.READ_ONLY -> {
+                uiState.update {
+                    it.copy(
+                        mode = MissionDetailModeType.EDIT,
+                        toolbarIconType = ToolbarIconType.DELETE,
+                    )
+                }
             }
 
-            ToolbarIconType.DELETE -> {
+            MissionDetailModeType.EDIT -> {
                 onChangeDeleteDialogVisibility(true)
             }
 
-            ToolbarIconType.NONE -> {}
+            MissionDetailModeType.WRITE -> Unit
         }
     }
 
@@ -267,7 +231,11 @@ constructor(
     }
 
     fun onSubmit() {
-        if (uiState.value.isLoading || uiState.value.isSuccess) return
+        val state = uiState.value
+        if (state.isLoading || state.isSuccess) return
+        if (!isFilledRequiredFields(state)) return
+        if (state.mode == MissionDetailModeType.READ_ONLY) return
+
         viewModelScope.launch {
             handleSubmit()
         }
@@ -275,6 +243,10 @@ constructor(
 
     private suspend fun handleSubmit() {
         val currentState = uiState.value
+        if (currentState.isLoading || currentState.isSuccess) return
+        if (!isFilledRequiredFields(currentState)) return
+        if (currentState.mode == MissionDetailModeType.READ_ONLY) return
+
         val (id, imageUri, content, date) = currentState
         uiState.update {
             it.copy(isError = false, error = null, isLoading = true)
@@ -311,10 +283,10 @@ constructor(
                     Timber.e(it.toString())
                 }
 
-                if (uiState.value.isCompleted) {
-                    modifyMission(id, imageURL, content, date)
-                } else {
-                    completeMission(id, imageURL, content, date)
+                when (uiState.value.mode) {
+                    MissionDetailModeType.WRITE -> completeMission(id, imageURL, content, date)
+                    MissionDetailModeType.EDIT -> modifyMission(id, imageURL, content, date)
+                    MissionDetailModeType.READ_ONLY -> Unit
                 }
             }.onFailure { error ->
                 Timber.e(error)
@@ -340,7 +312,19 @@ constructor(
             ),
         ).onSuccess {
             uiState.update {
-                it.copy(isLoading = false, isSuccess = true)
+                it.copy(
+                    isLoading = false,
+                    isSuccess = false,
+                    mode = MissionDetailModeType.READ_ONLY,
+                    toolbarIconType = ToolbarIconType.WRITE,
+                    isShowEditSnackBar = true,
+                    imageUri = ImageModel.Remote(url = listOf(image)),
+                    content = content,
+                    date = date,
+                    initSnapshotImageUri = ImageModel.Remote(url = listOf(image)),
+                    initSnapshotContent = content,
+                    initSnapshotDate = date,
+                )
             }
         }.onFailure { error ->
             Timber.e(error)
@@ -397,6 +381,12 @@ constructor(
     fun onPressNetworkErrorDialog() {
         uiState.update {
             it.copy(isError = false, error = null)
+        }
+    }
+
+    fun onHideEditSnackBar() {
+        uiState.update {
+            it.copy(isShowEditSnackBar = false)
         }
     }
 
@@ -493,4 +483,17 @@ constructor(
                 .onFailure(Timber::e)
         }
     }
+
+    private fun isFilledRequiredFields(state: MissionDetailUiState): Boolean {
+        return state.content.isNotBlank() &&
+            state.date.isNotBlank() &&
+            !state.imageUri.isEmpty()
+    }
+
+    private fun isRequiredFieldsChanged(state: MissionDetailUiState): Boolean {
+        return state.content != state.initSnapshotContent ||
+            state.date != state.initSnapshotDate ||
+            state.imageUri != state.initSnapshotImageUri
+    }
+
 }
