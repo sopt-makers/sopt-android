@@ -27,8 +27,6 @@ package org.sopt.official.stamp.feature.mission.detail
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
@@ -42,66 +40,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
-import org.sopt.official.domain.soptamp.model.Archive
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.domain.soptamp.model.Stamp
 import org.sopt.official.domain.soptamp.repository.ImageUploaderRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
 import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.model.StampClapUiModel
-import org.sopt.official.stamp.feature.mission.detail.model.StampClapUserUiModel
 import org.sopt.official.stamp.feature.mission.detail.model.toUiModel
+import org.sopt.official.stamp.feature.mission.detail.state.MissionDetailUiState
+import org.sopt.official.stamp.feature.mission.detail.type.MissionDetailModeType
 import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
-
-enum class MissionDetailMode {
-    WRITE,
-    READ_ONLY,
-    EDIT,
-}
-
-data class MissionDetailUiState(
-    val id: Int = -1,
-    val imageUri: ImageModel = ImageModel.Empty,
-    val content: String = "",
-    val date: String = "",
-    val stampId: Int = -1,
-    val isSuccess: Boolean = false,
-    val isLoading: Boolean = false,
-    val isError: Boolean = false,
-    val error: Throwable? = null,
-    val isCompleted: Boolean = false,
-    val mode: MissionDetailMode = MissionDetailMode.READ_ONLY,
-    val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
-    val isDeleteSuccess: Boolean = false,
-    val isDeleteDialogVisible: Boolean = false,
-    val isMe: Boolean = true,
-    val isBottomSheetOpened: Boolean = false,
-    val appliedCount: Int = 0, // 앰플(이번 요청으로 실제 반영된 증가량)
-    val totalClapCount: Int = 0,
-    val viewCount: Int = 0,
-    val myClapCount: Int? = 0, // UI 표시용
-    val unSyncedClapCount: Int = 0, // 서버 전송용
-    val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf(),
-    val isBadgeVisible: Boolean = false,
-    val initSnapshotImageUri: ImageModel = ImageModel.Empty,
-    val initSnapshotContent: String = "",
-    val initSnapshotDate: String = "",
-) {
-    companion object {
-        fun from(data: Archive) =
-            MissionDetailUiState(
-                id = data.missionId,
-                imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
-                content = data.contents,
-                date = data.activityDate,
-                totalClapCount = data.clapCount,
-                viewCount = data.viewCount,
-                myClapCount = data.myClapCount
-            )
-    }
-}
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
@@ -128,9 +78,9 @@ constructor(
         if (!commonGuard) return@map false
 
         when (state.mode) {
-            MissionDetailMode.WRITE -> true
-            MissionDetailMode.EDIT -> isRequiredFieldsChanged(state)
-            MissionDetailMode.READ_ONLY -> false
+            MissionDetailModeType.WRITE -> true
+            MissionDetailModeType.EDIT -> isRequiredFieldsChanged(state)
+            MissionDetailModeType.READ_ONLY -> false
         }
     }
     val isBadgeVisible = uiState.map { it.isBadgeVisible }
@@ -181,7 +131,7 @@ constructor(
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
                         val mine = it.mine ?: isMe
-                        val initialMode = MissionDetailMode.READ_ONLY
+                        val initialMode = MissionDetailModeType.READ_ONLY
                         val option = if (!mine) ToolbarIconType.NONE else ToolbarIconType.WRITE
                         val remoteImage = ImageModel.Remote(url = it.images)
                         val result = MissionDetailUiState.from(it).copy(
@@ -219,7 +169,7 @@ constructor(
                         date = "",
                         isLoading = false,
                         isCompleted = false,
-                        mode = MissionDetailMode.WRITE,
+                        mode = MissionDetailModeType.WRITE,
                         toolbarIconType = ToolbarIconType.NONE,
                         initSnapshotImageUri = ImageModel.Empty,
                         initSnapshotContent = "",
@@ -241,20 +191,20 @@ constructor(
         if (!state.isMe) return
 
         when (state.mode) {
-            MissionDetailMode.READ_ONLY -> {
+            MissionDetailModeType.READ_ONLY -> {
                 uiState.update {
                     it.copy(
-                        mode = MissionDetailMode.EDIT,
+                        mode = MissionDetailModeType.EDIT,
                         toolbarIconType = ToolbarIconType.DELETE,
                     )
                 }
             }
 
-            MissionDetailMode.EDIT -> {
+            MissionDetailModeType.EDIT -> {
                 onChangeDeleteDialogVisibility(true)
             }
 
-            MissionDetailMode.WRITE -> Unit
+            MissionDetailModeType.WRITE -> Unit
         }
     }
 
@@ -286,7 +236,7 @@ constructor(
         val state = uiState.value
         if (state.isLoading || state.isSuccess) return
         if (!isFilledRequiredFields(state)) return
-        if (state.mode == MissionDetailMode.READ_ONLY) return
+        if (state.mode == MissionDetailModeType.READ_ONLY) return
 
         viewModelScope.launch {
             handleSubmit()
@@ -297,7 +247,7 @@ constructor(
         val currentState = uiState.value
         if (currentState.isLoading || currentState.isSuccess) return
         if (!isFilledRequiredFields(currentState)) return
-        if (currentState.mode == MissionDetailMode.READ_ONLY) return
+        if (currentState.mode == MissionDetailModeType.READ_ONLY) return
 
         val (id, imageUri, content, date) = currentState
         uiState.update {
@@ -336,9 +286,9 @@ constructor(
                 }
 
                 when (uiState.value.mode) {
-                    MissionDetailMode.WRITE -> completeMission(id, imageURL, content, date)
-                    MissionDetailMode.EDIT -> modifyMission(id, imageURL, content, date)
-                    MissionDetailMode.READ_ONLY -> Unit
+                    MissionDetailModeType.WRITE -> completeMission(id, imageURL, content, date)
+                    MissionDetailModeType.EDIT -> modifyMission(id, imageURL, content, date)
+                    MissionDetailModeType.READ_ONLY -> Unit
                 }
             }.onFailure { error ->
                 Timber.e(error)

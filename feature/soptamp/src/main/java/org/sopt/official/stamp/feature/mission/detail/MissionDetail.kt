@@ -69,12 +69,10 @@ import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.fake.FakeUserRepository
-import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.component.ClapFeedbackHolder
 import org.sopt.official.stamp.feature.mission.detail.component.ClapUserBottomDialog
 import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
@@ -85,6 +83,7 @@ import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.ImageModal
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
+import org.sopt.official.stamp.feature.mission.detail.type.MissionDetailModeType
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.navigation.navigateToUserMissionList
 import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
@@ -99,7 +98,7 @@ fun MissionDetailScreen(
     val (id, title, level, isCompleted, isMe, nickname) = args
     val uiState by viewModel.missionDetailUiState.collectAsStateWithLifecycle()
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
-    val isEditable = uiState.mode == MissionDetailMode.WRITE || uiState.mode == MissionDetailMode.EDIT
+    val isEditable = uiState.mode == MissionDetailModeType.WRITE || uiState.mode == MissionDetailModeType.EDIT
     val lottieResId =
         remember(level) {
             when (level.value) {
@@ -266,7 +265,7 @@ fun MissionDetailScreen(
 
         if (isEditable && isMe) {
             SoptampButton(
-                text = if (uiState.mode == MissionDetailMode.EDIT) "수정 완료" else "미션 완료",
+                text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
                 onClicked = viewModel::onSubmit,
                 isEnabled = isSubmitEnabled,
                 modifier = Modifier
