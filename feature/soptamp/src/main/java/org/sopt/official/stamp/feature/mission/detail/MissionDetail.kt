@@ -103,6 +103,7 @@ fun MissionDetailScreen(
     val imageModel by viewModel.imageModel.collectAsStateWithLifecycle(ImageModel.Empty)
     val isSuccess by viewModel.isSuccess.collectAsStateWithLifecycle(false)
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
+    val mode by viewModel.mode.collectAsStateWithLifecycle(MissionDetailMode.READ_ONLY)
     val toolbarIconType by viewModel.toolbarIconType.collectAsStateWithLifecycle(ToolbarIconType.NONE)
     val isEditable by viewModel.isEditable.collectAsStateWithLifecycle(true)
     val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsStateWithLifecycle(false)
@@ -275,7 +276,7 @@ fun MissionDetailScreen(
 
         if (isEditable && isMe) {
             SoptampButton(
-                text = if (isCompleted) "수정 완료" else "미션 완료",
+                text = if (mode == MissionDetailMode.EDIT) "수정 완료" else "미션 완료",
                 onClicked = viewModel::onSubmit,
                 isEnabled = isSubmitEnabled,
                 modifier = Modifier

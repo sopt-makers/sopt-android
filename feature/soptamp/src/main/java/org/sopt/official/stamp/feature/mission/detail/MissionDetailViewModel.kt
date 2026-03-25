@@ -55,6 +55,12 @@ import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
+enum class MissionDetailMode {
+    WRITE,
+    READ_ONLY,
+    EDIT,
+}
+
 data class PostUiState(
     val id: Int = -1,
     val imageUri: ImageModel = ImageModel.Empty,
@@ -66,6 +72,7 @@ data class PostUiState(
     val isError: Boolean = false,
     val error: Throwable? = null,
     val isCompleted: Boolean = false,
+    val mode: MissionDetailMode = MissionDetailMode.READ_ONLY,
     val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
     val isDeleteSuccess: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
@@ -110,11 +117,11 @@ constructor(
     private var debounceJob: Job? = null
     private var isPosting = false
 
-    private val isMe = uiState.map { it.isMe }
     val isSuccess = uiState.map { it.isSuccess }
     val content = uiState.map { it.content }
     val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
+    val mode = uiState.map { it.mode }
     val isSubmitEnabled = uiState.map { state ->
         val commonGuard =
             state.isMe &&
@@ -123,13 +130,17 @@ constructor(
                 isFilledRequiredFields(state)
 
         if (!commonGuard) return@map false
-        if (!state.isCompleted) return@map true // 작성하기 초기값 검증 x
-        isRequiredFieldsChanged(state)   //  수정하기 초기값 검증
+
+        when (state.mode) {
+            MissionDetailMode.WRITE -> true
+            MissionDetailMode.EDIT -> isRequiredFieldsChanged(state)
+            MissionDetailMode.READ_ONLY -> false
+        }
     }
     val toolbarIconType = uiState.map { it.toolbarIconType }
     val isEditable =
-        toolbarIconType.map {
-            it != ToolbarIconType.WRITE
+        mode.map {
+            it == MissionDetailMode.WRITE || it == MissionDetailMode.EDIT
         }
     val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
     val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
@@ -184,17 +195,20 @@ constructor(
             if (isCompleted) {
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
-                        val option = if (!isMe) ToolbarIconType.NONE else ToolbarIconType.WRITE
+                        val mine = it.mine ?: isMe
+                        val initialMode = MissionDetailMode.READ_ONLY
+                        val option = if (!mine) ToolbarIconType.NONE else ToolbarIconType.WRITE
                         val remoteImage = ImageModel.Remote(url = it.images)
                         val result = PostUiState.from(it).copy(
                             stampId = it.id,
                             imageUri = remoteImage,
-                            isCompleted = isCompleted,
+                            isCompleted = true,
+                            mode = initialMode,
                             toolbarIconType = option,
                             totalClapCount = it.clapCount,
                             viewCount = it.viewCount,
                             myClapCount = it.myClapCount,
-                            isMe = it.mine ?: isMe,
+                            isMe = mine,
                             initSnapshotImageUri = remoteImage,
                             initSnapshotContent = it.contents,
                             initSnapshotDate = it.activityDate,
@@ -215,8 +229,16 @@ constructor(
             } else {
                 uiState.update {
                     it.copy(
+                        imageUri = ImageModel.Empty,
+                        content = "",
+                        date = "",
                         isLoading = false,
                         isCompleted = false,
+                        mode = MissionDetailMode.WRITE,
+                        toolbarIconType = ToolbarIconType.NONE,
+                        initSnapshotImageUri = ImageModel.Empty,
+                        initSnapshotContent = "",
+                        initSnapshotDate = "",
                     )
                 }
             }
@@ -229,23 +251,25 @@ constructor(
         }
     }
 
-    private fun onChangeToolbarState(toolbarIconType: ToolbarIconType) {
-        uiState.update {
-            it.copy(toolbarIconType = toolbarIconType)
-        }
-    }
-
     fun onPressToolbarIcon() {
-        when (uiState.value.toolbarIconType) {
-            ToolbarIconType.WRITE -> {
-                onChangeToolbarState(ToolbarIconType.DELETE)
+        val state = uiState.value
+        if (!state.isMe) return
+
+        when (state.mode) {
+            MissionDetailMode.READ_ONLY -> {
+                uiState.update {
+                    it.copy(
+                        mode = MissionDetailMode.EDIT,
+                        toolbarIconType = ToolbarIconType.DELETE,
+                    )
+                }
             }
 
-            ToolbarIconType.DELETE -> {
+            MissionDetailMode.EDIT -> {
                 onChangeDeleteDialogVisibility(true)
             }
 
-            ToolbarIconType.NONE -> {}
+            MissionDetailMode.WRITE -> Unit
         }
     }
 
@@ -274,7 +298,11 @@ constructor(
     }
 
     fun onSubmit() {
-        if (uiState.value.isLoading || uiState.value.isSuccess) return
+        val state = uiState.value
+        if (state.isLoading || state.isSuccess) return
+        if (!isFilledRequiredFields(state)) return
+        if (state.mode == MissionDetailMode.READ_ONLY) return
+
         viewModelScope.launch {
             handleSubmit()
         }
@@ -282,6 +310,10 @@ constructor(
 
     private suspend fun handleSubmit() {
         val currentState = uiState.value
+        if (currentState.isLoading || currentState.isSuccess) return
+        if (!isFilledRequiredFields(currentState)) return
+        if (currentState.mode == MissionDetailMode.READ_ONLY) return
+
         val (id, imageUri, content, date) = currentState
         uiState.update {
             it.copy(isError = false, error = null, isLoading = true)
@@ -318,10 +350,10 @@ constructor(
                     Timber.e(it.toString())
                 }
 
-                if (uiState.value.isCompleted) {
-                    modifyMission(id, imageURL, content, date)
-                } else {
-                    completeMission(id, imageURL, content, date)
+                when (uiState.value.mode) {
+                    MissionDetailMode.WRITE -> completeMission(id, imageURL, content, date)
+                    MissionDetailMode.EDIT -> modifyMission(id, imageURL, content, date)
+                    MissionDetailMode.READ_ONLY -> Unit
                 }
             }.onFailure { error ->
                 Timber.e(error)
