@@ -36,7 +36,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -78,7 +77,10 @@ data class PostUiState(
     val myClapCount: Int? = 0, // UI 표시용
     val unSyncedClapCount: Int = 0, // 서버 전송용
     val clappers: ImmutableList<StampClapUserUiModel> = persistentListOf(),
-    val isBadgeVisible: Boolean = false
+    val isBadgeVisible: Boolean = false,
+    val initSnapshotImageUri: ImageModel = ImageModel.Empty,
+    val initSnapshotContent: String = "",
+    val initSnapshotDate: String = "",
 ) {
     companion object {
         fun from(data: Archive) =
@@ -113,15 +115,17 @@ constructor(
     val content = uiState.map { it.content }
     val date = uiState.map { it.date }
     val imageModel = uiState.map { it.imageUri }
-    val isSubmitEnabled =
-        combine(
-            content,
-            imageModel,
-            isMe,
-            uiState.map { it.isLoading },
-            uiState.map { it.isSuccess }) { content, image, isMe, isLoading, isSuccess ->
-            content.isNotEmpty() && !image.isEmpty() && isMe && !isLoading && !isSuccess
-        }
+    val isSubmitEnabled = uiState.map { state ->
+        val commonGuard =
+            state.isMe &&
+                !state.isLoading &&
+                !state.isSuccess &&
+                isFilledRequiredFields(state)
+
+        if (!commonGuard) return@map false
+        if (!state.isCompleted) return@map true // 작성하기 초기값 검증 x
+        isRequiredFieldsChanged(state)   //  수정하기 초기값 검증
+    }
     val toolbarIconType = uiState.map { it.toolbarIconType }
     val isEditable =
         toolbarIconType.map {
@@ -181,15 +185,19 @@ constructor(
                 stampRepository.getMissionContent(id, nickname)
                     .onSuccess {
                         val option = if (!isMe) ToolbarIconType.NONE else ToolbarIconType.WRITE
+                        val remoteImage = ImageModel.Remote(url = it.images)
                         val result = PostUiState.from(it).copy(
                             stampId = it.id,
-                            imageUri = ImageModel.Remote(url = it.images),
+                            imageUri = remoteImage,
                             isCompleted = isCompleted,
                             toolbarIconType = option,
                             totalClapCount = it.clapCount,
                             viewCount = it.viewCount,
                             myClapCount = it.myClapCount,
-                            isMe = it.mine ?: isMe
+                            isMe = it.mine ?: isMe,
+                            initSnapshotImageUri = remoteImage,
+                            initSnapshotContent = it.contents,
+                            initSnapshotDate = it.activityDate,
                         )
                         uiState.update { result }
                     }.onFailure { error ->
@@ -209,7 +217,6 @@ constructor(
                     it.copy(
                         isLoading = false,
                         isCompleted = false,
-                        toolbarIconType = ToolbarIconType.NONE
                     )
                 }
             }
@@ -493,4 +500,17 @@ constructor(
                 .onFailure(Timber::e)
         }
     }
+
+    private fun isFilledRequiredFields(state: PostUiState): Boolean {
+        return state.content.isNotBlank() &&
+            state.date.isNotBlank() &&
+            !state.imageUri.isEmpty()
+    }
+
+    private fun isRequiredFieldsChanged(state: PostUiState): Boolean {
+        return state.content != state.initSnapshotContent ||
+            state.date != state.initSnapshotDate ||
+            state.imageUri != state.initSnapshotImageUri
+    }
+
 }

@@ -276,7 +276,8 @@ fun MissionDetailScreen(
         if (isEditable && isMe) {
             SoptampButton(
                 text = if (isCompleted) "수정 완료" else "미션 완료",
-                onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
+                onClicked = viewModel::onSubmit,
+                isEnabled = isSubmitEnabled,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 20.dp),

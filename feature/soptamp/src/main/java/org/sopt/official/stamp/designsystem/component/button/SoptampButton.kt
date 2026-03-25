@@ -37,21 +37,30 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
 
+/**
+ * SOPTAMP에서 사용하는 기본 액션 버튼
+ *
+ * @param text 버튼에 표시할 텍스트
+ * @param onClicked 버튼 클릭 시 실행할 콜백
+ * @param modifier 버튼에 적용할 [Modifier]
+ * @param isEnabled 버튼 활성화 여부 (false 시 버튼 색상 dim 처리)
+ */
 @Composable
 fun SoptampButton(
     text: String,
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     Box(
         modifier =
             modifier
                 .fillMaxWidth()
                 .background(
-                    color = SoptTheme.colors.primary,
+                    color = if (isEnabled) SoptTheme.colors.primary else SoptTheme.colors.onSurface300,
                     shape = RoundedCornerShape(9.dp),
                 )
-                .noRippleClickable(onClick = onClicked),
+                .noRippleClickable(onClick = { if (isEnabled) onClicked() }),
         contentAlignment = Alignment.Center,
     ) {
         Text(
