@@ -61,7 +61,7 @@ enum class MissionDetailMode {
     EDIT,
 }
 
-data class PostUiState(
+data class MissionDetailUiState(
     val id: Int = -1,
     val imageUri: ImageModel = ImageModel.Empty,
     val content: String = "",
@@ -91,7 +91,7 @@ data class PostUiState(
 ) {
     companion object {
         fun from(data: Archive) =
-            PostUiState(
+            MissionDetailUiState(
                 id = data.missionId,
                 imageUri = if (data.images.isEmpty()) ImageModel.Empty else ImageModel.Remote(data.images),
                 content = data.contents,
@@ -112,16 +112,12 @@ constructor(
     private val imageUploaderRepository: ImageUploaderRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val uiState = MutableStateFlow(PostUiState())
+    private val uiState = MutableStateFlow(MissionDetailUiState())
+    val missionDetailUiState = uiState.asStateFlow()
     private val clapEvent = MutableSharedFlow<Unit>()
     private var debounceJob: Job? = null
     private var isPosting = false
 
-    val isSuccess = uiState.map { it.isSuccess }
-    val content = uiState.map { it.content }
-    val date = uiState.map { it.date }
-    val imageModel = uiState.map { it.imageUri }
-    val mode = uiState.map { it.mode }
     val isSubmitEnabled = uiState.map { state ->
         val commonGuard =
             state.isMe &&
@@ -137,15 +133,6 @@ constructor(
             MissionDetailMode.READ_ONLY -> false
         }
     }
-    val toolbarIconType = uiState.map { it.toolbarIconType }
-    val isEditable =
-        mode.map {
-            it == MissionDetailMode.WRITE || it == MissionDetailMode.EDIT
-        }
-    val isDeleteSuccess = uiState.map { it.isDeleteSuccess }
-    val isDeleteDialogVisible = uiState.map { it.isDeleteDialogVisible }
-    val isError = uiState.map { it.isError }
-    val isBottomSheetOpened = uiState.map { it.isBottomSheetOpened }
     val isBadgeVisible = uiState.map { it.isBadgeVisible }
 
     val appliedCount = uiState.map { it.appliedCount } // 앰플(이번 요청으로 실제 반영된 증가량)
@@ -154,8 +141,6 @@ constructor(
     val viewCount = uiState.map { it.viewCount }
     val myClapCount = uiState.map { it.myClapCount }
     val clappers = uiState.map { it.clappers }
-
-    val stampId = uiState.map { it.stampId }
 
     private val _myNickname = MutableStateFlow("")
     val myNickname = _myNickname.asStateFlow()
@@ -199,7 +184,7 @@ constructor(
                         val initialMode = MissionDetailMode.READ_ONLY
                         val option = if (!mine) ToolbarIconType.NONE else ToolbarIconType.WRITE
                         val remoteImage = ImageModel.Remote(url = it.images)
-                        val result = PostUiState.from(it).copy(
+                        val result = MissionDetailUiState.from(it).copy(
                             stampId = it.id,
                             imageUri = remoteImage,
                             isCompleted = true,
@@ -533,13 +518,13 @@ constructor(
         }
     }
 
-    private fun isFilledRequiredFields(state: PostUiState): Boolean {
+    private fun isFilledRequiredFields(state: MissionDetailUiState): Boolean {
         return state.content.isNotBlank() &&
             state.date.isNotBlank() &&
             !state.imageUri.isEmpty()
     }
 
-    private fun isRequiredFieldsChanged(state: PostUiState): Boolean {
+    private fun isRequiredFieldsChanged(state: MissionDetailUiState): Boolean {
         return state.content != state.initSnapshotContent ||
             state.date != state.initSnapshotDate ||
             state.imageUri != state.initSnapshotImageUri

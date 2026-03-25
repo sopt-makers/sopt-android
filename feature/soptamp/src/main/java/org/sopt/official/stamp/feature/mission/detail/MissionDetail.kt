@@ -97,19 +97,9 @@ fun MissionDetailScreen(
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
-    val content by viewModel.content.collectAsStateWithLifecycle("")
-    val stampId by viewModel.stampId.collectAsStateWithLifecycle(initialValue = -1)
-    val date by viewModel.date.collectAsStateWithLifecycle("")
-    val imageModel by viewModel.imageModel.collectAsStateWithLifecycle(ImageModel.Empty)
-    val isSuccess by viewModel.isSuccess.collectAsStateWithLifecycle(false)
+    val uiState by viewModel.missionDetailUiState.collectAsStateWithLifecycle()
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
-    val mode by viewModel.mode.collectAsStateWithLifecycle(MissionDetailMode.READ_ONLY)
-    val toolbarIconType by viewModel.toolbarIconType.collectAsStateWithLifecycle(ToolbarIconType.NONE)
-    val isEditable by viewModel.isEditable.collectAsStateWithLifecycle(true)
-    val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsStateWithLifecycle(false)
-    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsStateWithLifecycle(false)
-    val isError by viewModel.isError.collectAsStateWithLifecycle(false)
-    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsStateWithLifecycle(false)
+    val isEditable = uiState.mode == MissionDetailMode.WRITE || uiState.mode == MissionDetailMode.EDIT
     val lottieResId =
         remember(level) {
             when (level.value) {
@@ -140,7 +130,7 @@ fun MissionDetailScreen(
     )
     val progress by animateLottieCompositionAsState(
         composition = lottieComposition,
-        isPlaying = isSuccess,
+        isPlaying = uiState.isSuccess,
     )
     val scrollState = rememberScrollState()
 
@@ -153,15 +143,15 @@ fun MissionDetailScreen(
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
     }
-    LaunchedEffect(isSuccess, progress) {
-        if (progress >= 0.99f && isSuccess) {
+    LaunchedEffect(uiState.isSuccess, progress) {
+        if (progress >= 0.99f && uiState.isSuccess) {
             delay(500L)
             navController.setMissionDetailResult(true)
             navController.popBackStack()
         }
     }
-    LaunchedEffect(isDeleteSuccess) {
-        if (isDeleteSuccess) {
+    LaunchedEffect(uiState.isDeleteSuccess) {
+        if (uiState.isDeleteSuccess) {
             navController.setMissionDetailResult(true)
             navController.popBackStack()
         }
@@ -206,7 +196,7 @@ fun MissionDetailScreen(
                         color = SoptTheme.colors.onSurface10,
                     )
                 },
-                iconOption = toolbarIconType,
+                iconOption = uiState.toolbarIconType,
                 onBack = { navController.popBackStack() },
                 onPressIcon = viewModel::onPressToolbarIcon,
             )
@@ -218,13 +208,13 @@ fun MissionDetailScreen(
                 Header(
                     title = title,
                     stars = level.value,
-                    toolbarIconType = toolbarIconType,
+                    toolbarIconType = uiState.toolbarIconType,
                     isMe = isMe,
                     isCompleted = isCompleted,
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 ImageContent(
-                    imageModel = imageModel,
+                    imageModel = uiState.imageUri,
                     onChangeImage = viewModel::onChangeImage,
                     isEditable = isEditable && isMe,
                     onClickZoomIn = { url ->
@@ -235,7 +225,7 @@ fun MissionDetailScreen(
                             name = "get_image_zoom",
                             properties = mapOf(
                                 "image" to url,
-                                "stampId" to stampId,
+                                "stampId" to uiState.stampId,
                                 "missionId" to id,
                                 "nickname" to myNickname
                             )
@@ -245,26 +235,26 @@ fun MissionDetailScreen(
                 Spacer(modifier = Modifier.height(8.dp))
                 if (isEditable && isMe) {
                     DatePicker(
-                        value = date,
+                        value = uiState.date,
                         placeHolder = "날짜를 입력해 주세요.",
                         onClicked = {
                             viewModel.onChangeDatePickerBottomSheetOpened(true)
                         },
-                        isEditable = isEditable && isMe && !isSuccess,
+                        isEditable = isEditable && isMe && !uiState.isSuccess,
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Memo(
-                    value = content,
+                    value = uiState.content,
                     placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                     onValueChange = viewModel::onChangeContent,
                     borderColor = SoptTheme.colors.onSurface600,
-                    isEditable = isEditable && isMe && !isSuccess,
+                    isEditable = isEditable && isMe && !uiState.isSuccess,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 if (isCompleted) {
                     DetailInfo(
-                        date = date,
+                        date = uiState.date,
                         clapCount = totalClapCount,
                         viewCount = viewCount,
                     )
@@ -276,7 +266,7 @@ fun MissionDetailScreen(
 
         if (isEditable && isMe) {
             SoptampButton(
-                text = if (mode == MissionDetailMode.EDIT) "수정 완료" else "미션 완료",
+                text = if (uiState.mode == MissionDetailMode.EDIT) "수정 완료" else "미션 완료",
                 onClicked = viewModel::onSubmit,
                 isEnabled = isSubmitEnabled,
                 modifier = Modifier
@@ -290,7 +280,7 @@ fun MissionDetailScreen(
                 text = "누가 박수쳤을까요?",
                 onClicked = {
                     isClapUserListOpen = true
-                    viewModel.getStampClappers(stampId = stampId)
+                    viewModel.getStampClappers(stampId = uiState.stampId)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -308,7 +298,7 @@ fun MissionDetailScreen(
                         type = EventType.CLICK,
                         name = "update_clap",
                         properties = mapOf(
-                            "stampId" to stampId,
+                            "stampId" to uiState.stampId,
                             "missionId" to id,
                             "appliedCount" to appliedCount,
                             "totalClapCount" to totalClapCount,
@@ -323,13 +313,13 @@ fun MissionDetailScreen(
     }
 
 
-    if (isSuccess) {
+    if (uiState.isSuccess) {
         PostSubmissionBadge(
             composition = lottieComposition,
             progress = progress,
         )
     }
-    if (isDeleteDialogVisible) {
+    if (uiState.isDeleteDialogVisible) {
         DoubleOptionDialog(
             title = "달성한 미션을 삭제하시겠습니까?",
             onCancel = {
@@ -340,12 +330,12 @@ fun MissionDetailScreen(
             },
         )
     }
-    if (isError) {
+    if (uiState.isError) {
         NetworkErrorDialog(
             onConfirm = viewModel::onPressNetworkErrorDialog,
         )
     }
-    if (isBottomSheetOpened) {
+    if (uiState.isBottomSheetOpened) {
         DataPickerBottomSheet(
             onSelected = { date ->
                 viewModel.onChangeDate(date)
