@@ -90,7 +90,7 @@ import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun MissionDetailScreen(
+internal fun MissionDetailScreen(
     args: MissionNavArgs,
     navController: NavController,
     viewModel: MissionDetailViewModel = hiltViewModel(),

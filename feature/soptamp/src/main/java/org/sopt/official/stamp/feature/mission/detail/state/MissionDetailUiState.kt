@@ -8,7 +8,7 @@ import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.model.StampClapUserUiModel
 import org.sopt.official.stamp.feature.mission.detail.type.MissionDetailModeType
 
-data class MissionDetailUiState(
+internal data class MissionDetailUiState(
     val id: Int = -1,
     val imageUri: ImageModel = ImageModel.Empty,
     val content: String = "",

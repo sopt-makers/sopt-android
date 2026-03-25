@@ -55,9 +55,7 @@ import javax.inject.Inject
 
 @OptIn(FlowPreview::class)
 @HiltViewModel
-class MissionDetailViewModel
-@Inject
-constructor(
+internal class MissionDetailViewModel @Inject constructor(
     private val stampRepository: StampRepository,
     private val imageUploaderRepository: ImageUploaderRepository,
     private val userRepository: UserRepository,
