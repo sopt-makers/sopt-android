@@ -44,24 +44,27 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import org.sopt.official.R
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.TokenStorage
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
     private val viewModel by viewModels<AuthViewModel>()
 
     @Inject
-    lateinit var dataStore: SoptDataStore
+    lateinit var userStorage: UserStorage
+    @Inject
+    lateinit var tokenStorage: TokenStorage
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +74,8 @@ class AuthActivity : AppCompatActivity() {
                 val context = LocalContext.current
                 val lifecycleOwner = LocalLifecycleOwner.current
 
+                val accessToken by tokenStorage.accessToken.collectAsStateWithLifecycle(initialValue = "")
+                val platform by userStorage.platform.collectAsStateWithLifecycle(initialValue = "")
                 val updateState by viewModel.updateState.collectAsStateWithLifecycle()
 
                 LaunchedEffect(Unit) {
@@ -87,12 +92,12 @@ class AuthActivity : AppCompatActivity() {
                                 description = state.message,
                                 onDismiss = {
                                     dialogVisibility = false
-                                    navigateToMainActivity()
+                                    navigateToMainActivity(accessToken)
                                 },
                                 onPositiveClick = this@AuthActivity::launchPlayStore,
                                 onNegativeClick = {
                                     dialogVisibility = false
-                                    navigateToMainActivity()
+                                    navigateToMainActivity(accessToken)
                                 }
                             )
                         }
@@ -107,7 +112,7 @@ class AuthActivity : AppCompatActivity() {
                         )
                     }
 
-                    else -> navigateToMainActivity()
+                    else -> navigateToMainActivity(accessToken)
                 }
 
                 LaunchedEffect(true) {
@@ -142,7 +147,7 @@ class AuthActivity : AppCompatActivity() {
                 AuthScreen(
                     navigateToHome = {
                         try {
-                            if (dataStore.accessToken.isNotEmpty()) {
+                            if (accessToken.isNotEmpty()) {
                                 startActivity(
                                     MainActivity.getIntent(
                                         context = context,
@@ -164,15 +169,15 @@ class AuthActivity : AppCompatActivity() {
                     },
                     onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
                     onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
-                    platform = dataStore.platform
+                    platform = platform
                 )
             }
         }
     }
 
-    private fun navigateToMainActivity() {
+    private fun navigateToMainActivity(accessToken : String) {
         try {
-            if (dataStore.accessToken.isNotEmpty()) {
+            if (accessToken.isNotEmpty()) {
                 startActivity(
                     MainActivity.getIntent(
                         context = this,
