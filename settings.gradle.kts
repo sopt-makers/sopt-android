@@ -32,6 +32,7 @@ include(
     ":core:webview",
     ":core:navigation",
     ":core:model",
+    ":core:localstorage",
 
     ":data:auth",
     ":data:fortune",
