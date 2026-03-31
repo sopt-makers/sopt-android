@@ -33,17 +33,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.HiltAndroidApp
-import javax.inject.Inject
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltAndroidApp
 class App : Application() {
     @Inject
-    lateinit var dataStore: SoptDataStore
+    lateinit var userStorage: UserStorage
     private val lifecycleOwner: LifecycleOwner
         get() = ProcessLifecycleOwner.get()
 
@@ -56,8 +56,8 @@ class App : Application() {
             lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 runCatching {
                     FirebaseMessaging.getInstance().token.await()
-                }.onSuccess {
-                    dataStore.pushToken = it
+                }.onSuccess { pushToken ->
+                    userStorage.savePushToken(pushToken)
                 }.onFailure(Timber::e)
             }
         }
