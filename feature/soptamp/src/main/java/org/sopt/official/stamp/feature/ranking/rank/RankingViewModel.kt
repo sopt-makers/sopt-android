@@ -31,12 +31,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.user.GetNicknameUseCase
 import org.sopt.official.domain.soptamp.model.RankFetchType
 import org.sopt.official.domain.soptamp.repository.RankingRepository
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.ranking.model.RankingListUiModel
 import org.sopt.official.stamp.feature.ranking.model.toUiModel
 import javax.inject.Inject
@@ -47,11 +51,19 @@ class RankingViewModel
 constructor(
     private val rankingRepository: RankingRepository,
     private val getNicknameUseCase: GetNicknameUseCase,
+    userStorage: UserStorage,
 ) : ViewModel() {
     private val _state: MutableStateFlow<RankingState> = MutableStateFlow(RankingState.Loading)
     val state: StateFlow<RankingState> = _state.asStateFlow()
     var isRefreshing by mutableStateOf(false)
     val nickname = getNicknameUseCase()
+
+    val userStatus: StateFlow<UserStatus> = userStorage.userStatus
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserStatus.UNAUTHENTICATED
+        )
 
     fun onRefresh(
         isCurrent: Boolean,
