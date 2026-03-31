@@ -32,6 +32,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
@@ -41,15 +43,25 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.toUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampMissionState
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampSideEffect
 import org.sopt.official.feature.appjamtamp.model.MissionFilter
+import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 
 @HiltViewModel
 internal class AppjamtampMissionViewModel @Inject constructor(
     private val appjamtampRepository: AppjamtampRepository,
-    private val stampRepository: StampRepository
+    private val stampRepository: StampRepository,
+    userStorage: UserStorage,
 ) : ViewModel() {
     private val _state = MutableStateFlow(AppjamtampMissionState())
     val state = _state.asStateFlow()
+        .combine(flow = userStorage.userStatus) { state, userStatus ->
+            state.copy(userStatus = userStatus)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
+            initialValue = AppjamtampMissionState()
+        )
 
     private val _sideEffect = MutableSharedFlow<AppjamtampSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()

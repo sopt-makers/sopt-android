@@ -65,7 +65,6 @@ import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionU
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampMissionState
 import org.sopt.official.feature.appjamtamp.missionlist.state.AppjamtampSideEffect
 import org.sopt.official.feature.appjamtamp.model.MissionFilter
-import org.sopt.official.model.UserStatus
 import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
@@ -100,7 +99,7 @@ internal fun AppjamtampMissionRoute(
                     AppjamtampSideEffect.NavigateToEdit -> {
                         val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                             context = context,
-                            userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                            userStatus = state.userStatus,
                             deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                         )
                         context.startActivity(intent)
