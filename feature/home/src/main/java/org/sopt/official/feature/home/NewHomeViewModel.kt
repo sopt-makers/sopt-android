@@ -71,13 +71,15 @@ import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
 import javax.inject.Inject
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
+import org.sopt.official.localstorage.source.UserStorage
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,
-    private val getAppServiceUseCase: GetAppServiceUseCase
+    private val getAppServiceUseCase: GetAppServiceUseCase,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
         MutableStateFlow(HomeViewModelState())
@@ -119,6 +121,8 @@ internal class NewHomeViewModel @Inject constructor(
             } else {
                 Timber.d("사용자 상태가 인증되지 않음: UNAUTHENTICATED, FCM 토큰 등록 건너뜀")
             }
+
+            userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
 
             viewModelState.update {
                 it.copy(
