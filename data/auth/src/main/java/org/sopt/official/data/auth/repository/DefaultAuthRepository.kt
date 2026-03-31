@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.auth.repository
 
-import javax.inject.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.auth.mapper.toAuthDomain
 import org.sopt.official.data.auth.mapper.toCertificateCodeRequest
@@ -37,11 +36,12 @@ import org.sopt.official.data.auth.remote.api.AuthApi
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.TokenStorage
+import javax.inject.Inject
 
 internal class DefaultAuthRepository @Inject constructor(
     private val authApi: AuthApi,
-    private val soptDataStore: SoptDataStore,
+    private val tokenStorage: TokenStorage,
 ) : AuthRepository {
     override suspend fun createCode(request: User): Result<Unit> = suspendRunCatching {
         authApi.createCode(request.toCreateCodeRequest())
@@ -93,11 +93,13 @@ internal class DefaultAuthRepository @Inject constructor(
         accessToken: String,
         refreshToken: String
     ) {
-        soptDataStore.accessToken = accessToken
-        soptDataStore.refreshToken = refreshToken
+        tokenStorage.saveTokens(
+            accessToken = accessToken,
+            refreshToken = refreshToken
+        )
     }
 
     override suspend fun clearUserToken() {
-        soptDataStore.clear()
+        tokenStorage.clearTokens()
     }
 }
