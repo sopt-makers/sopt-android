@@ -31,22 +31,28 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
-import org.sopt.official.model.UserStatus
-import org.sopt.official.network.persistence.SoptDataStoreEntryPoint
+import org.sopt.official.localstorage.di.StorageEntryPoint
 import timber.log.Timber
 import java.io.Serializable
 
 class SchemeActivity : AppCompatActivity() {
-    private val dataStore by lazy {
+    private val userStorage by lazy {
         EntryPointAccessors
-            .fromApplication<SoptDataStoreEntryPoint>(applicationContext)
-            .soptDataStore()
+            .fromApplication<StorageEntryPoint>(applicationContext)
+            .userStorage()
     }
+
+    private val userStatus by lazy {
+        runBlocking { userStorage.userStatus.first() }
+    }
+
     private val args by serializableExtra(Argument("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,7 +76,7 @@ class SchemeActivity : AppCompatActivity() {
             false -> TaskStackBuilder.create(this).apply {
                 if (!isIntentToHome()) {
                     addNextIntentWithParentStack(
-                        DeepLinkType.getIntent(UserStatus.of(dataStore.userStatus))
+                        DeepLinkType.getIntent(userStatus)
                     )
                 }
                 addNextIntent(linkIntent)
@@ -84,7 +90,7 @@ class SchemeActivity : AppCompatActivity() {
             val expiredAt = link.extractQueryParameter("expiredAt")
             when (expiredAt.isExpiredDate()) {
                 true -> DeepLinkType.getIntent(
-                    UserStatus.of(dataStore.userStatus),
+                    userStatus,
                     DeepLinkType.EXPIRED
                 )
 
@@ -96,7 +102,7 @@ class SchemeActivity : AppCompatActivity() {
 
                     false -> DeepLinkType.of(link).getIntent(
                         this,
-                        UserStatus.of(dataStore.userStatus),
+                        userStatus,
                         link
                     )
                 }
@@ -104,7 +110,7 @@ class SchemeActivity : AppCompatActivity() {
         } catch (exception: Exception) {
             Timber.e(exception)
             DeepLinkType.getIntent(
-                UserStatus.of(dataStore.userStatus),
+                userStatus,
                 DeepLinkType.UNKNOWN
             )
         }
