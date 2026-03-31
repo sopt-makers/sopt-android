@@ -35,11 +35,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import org.sopt.official.network.persistence.SoptDataStore
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
+import org.sopt.official.localstorage.source.TokenStorage
 import timber.log.Timber
 
 class SoptWebViewClient(
-    private val dataStore: SoptDataStore
+    private val tokenStorage: TokenStorage
 ) : WebViewClient() {
     val cookieManager: CookieManager = CookieManager.getInstance()
 
@@ -145,12 +147,20 @@ class SoptWebViewClient(
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
-        cookieManager.setCookie(COOKIE_DOMAIN, "Refresh-Token=${dataStore.refreshToken}") {
-            cookieManager.flush()
+        val (accessToken, refreshToken) = runBlocking {
+            val access = tokenStorage.accessToken.first()
+            val refresh = tokenStorage.refreshToken.first()
+            access to refresh
+        }
+
+        if (refreshToken.isNotEmpty()) {
+            cookieManager.setCookie(COOKIE_DOMAIN, "Refresh-Token=$refreshToken") {
+                cookieManager.flush()
+            }
         }
 
         val script = """
-            window.localStorage.setItem('serviceAccessToken', '${dataStore.accessToken}');
+            window.localStorage.setItem('serviceAccessToken', '${accessToken}');
         """.trimIndent()
         view?.evaluateJavascript(script) {}
     }

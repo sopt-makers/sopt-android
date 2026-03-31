@@ -31,7 +31,7 @@ import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
 import dagger.hilt.android.EntryPointAccessors
-import org.sopt.official.network.BuildConfig
+import org.sopt.official.webview.BuildConfig
 import org.sopt.official.webview.di.SoptWebViewEntryPoint
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -56,11 +56,11 @@ open class SoptWebView : WebView {
         defStyleRes
     )
 
-    private val dataStore by lazy {
+    private val tokenStorage by lazy {
         EntryPointAccessors.fromApplication(
             context,
             SoptWebViewEntryPoint::class.java
-        ).dataStore()
+        ).tokenStorage()
     }
 
     init {
@@ -76,7 +76,7 @@ open class SoptWebView : WebView {
             displayZoomControls = false
             javaScriptCanOpenWindowsAutomatically = true
             setSupportZoom(false)
-            webViewClient = SoptWebViewClient(dataStore)
+            webViewClient = SoptWebViewClient(tokenStorage)
             userAgentString = "Chrome/130.0.0.0 Mobile"
         }
         initWebView()
