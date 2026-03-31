@@ -24,30 +24,32 @@
  */
 package org.sopt.official.auth.impl.local
 
-import javax.inject.Inject
 import org.sopt.official.auth.impl.source.LocalAuthDataSource
 import org.sopt.official.auth.model.Token
+import org.sopt.official.localstorage.source.GlobalStorage
+import org.sopt.official.localstorage.source.TokenStorage
+import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.model.UserStatus
-import org.sopt.official.network.persistence.SoptDataStore
+import javax.inject.Inject
 
 class DefaultLocalAuthDataSource @Inject constructor(
-    private val dataStore: SoptDataStore
+    private val tokenStorage: TokenStorage,
+    private val userStorage: UserStorage,
+    private val globalStorage: GlobalStorage
 ) : LocalAuthDataSource {
-    override fun save(token: Token) {
-        dataStore.apply {
-            accessToken = token.accessToken
+    override suspend fun save(token: Token) {
+        tokenStorage.saveTokens(
+            accessToken = token.accessToken,
             refreshToken = token.refreshToken
-            playgroundToken = token.playgroundToken
-        }
+        )
+        tokenStorage.savePlaygroundToken(token.playgroundToken)
     }
 
-    override fun save(status: UserStatus) {
-        dataStore.apply {
-            userStatus = status.value
-        }
+    override suspend fun save(status: UserStatus) {
+        userStorage.saveUserStatus(status)
     }
 
-    override fun clear() {
-        dataStore.clear()
+    override suspend fun clear() {
+        globalStorage.clearAll()
     }
 }
