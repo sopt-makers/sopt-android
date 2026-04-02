@@ -105,7 +105,8 @@ internal class NewHomeViewModel @Inject constructor(
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
             val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
 
-            val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
+            val userInfoResult = userInfoDeferred.await()
+
             val userDescription =
                 userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
@@ -115,14 +116,19 @@ internal class NewHomeViewModel @Inject constructor(
             val popularPostsData = popularPostsDeferred.await().successOr(emptyList())
             val latestPostData = latestPostsDeferred.await().successOr(emptyList())
 
+            val userInfo = userInfoResult.successOr(UserInfo(UserInfo.User()))
+
+            if (userInfoResult.isSuccess) {
+                Timber.d("사용자 상태 업데이트: ${userInfo.user.userStatus}")
+                userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
+            }
+
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
                 registerFcmToken()
             } else {
                 Timber.d("사용자 상태가 인증되지 않음: UNAUTHENTICATED, FCM 토큰 등록 건너뜀")
             }
-
-            userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
 
             viewModelState.update {
                 it.copy(
@@ -187,6 +193,10 @@ internal class NewHomeViewModel @Inject constructor(
         viewModelScope.launch {
             val result = homeRepository.getUserInfo()
             val userInfo = result.successOr(UserInfo(UserInfo.User()))
+            Timber.d("refreshNotificationStatus: $userInfo")
+            if (result.isSuccess) {
+                userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
+            }
             viewModelState.update { state ->
                 state.copy(
                     userInfo = userInfo
