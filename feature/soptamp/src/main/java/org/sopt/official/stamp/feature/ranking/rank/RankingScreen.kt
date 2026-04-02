@@ -35,6 +35,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -58,6 +59,7 @@ import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
+import org.sopt.official.stamp.designsystem.component.util.throttledNoRippleClickable
 import org.sopt.official.stamp.feature.ranking.RankListItem
 import org.sopt.official.stamp.feature.ranking.TopRankerList
 import org.sopt.official.stamp.feature.ranking.model.RankerNavArg
@@ -186,10 +188,11 @@ fun RankingHeader(
             )
         },
         navigationIcon = {
-            SoptampIconButton(
+            Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.arrow_left),
                 tint = SoptTheme.colors.onSurface10,
-                onClick = onClickBack,
+                contentDescription = null,
+                modifier = Modifier.throttledNoRippleClickable(onClick = onClickBack),
             )
         },
         actions = {

@@ -29,12 +29,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,8 +48,8 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
+import org.sopt.official.stamp.designsystem.component.util.throttledNoRippleClickable
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.mission.model.MissionUiModel
@@ -137,10 +137,11 @@ fun UserMissionListHeader(
     SoptTopAppBar(
         title = { MissionListHeaderTitle(title = title) },
         navigationIcon = {
-            SoptampIconButton(
+            Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.arrow_left),
                 tint = SoptTheme.colors.onSurface10,
-                onClick = onClickBack,
+                contentDescription = null,
+                modifier = Modifier.throttledNoRippleClickable(onClick = onClickBack),
             )
         },
     )

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.stamp.designsystem.component.util.throttledNoRippleClickable
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 enum class ToolbarIconType(
@@ -90,7 +91,7 @@ fun Toolbar(
                     tint = SoptTheme.colors.onSurface10,
                     modifier =
                         Modifier
-                            .noRippleClickable(onClick = onBack)
+                            .throttledNoRippleClickable(onClick = onBack)
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                 )
