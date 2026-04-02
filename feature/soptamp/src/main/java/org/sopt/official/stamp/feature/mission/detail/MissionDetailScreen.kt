@@ -26,7 +26,6 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -38,6 +37,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -47,6 +50,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -69,46 +73,38 @@ import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.fake.FakeUserRepository
-import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
-import org.sopt.official.stamp.designsystem.component.toolbar.ToolbarIconType
 import org.sopt.official.stamp.feature.mission.detail.component.ClapFeedbackHolder
 import org.sopt.official.stamp.feature.mission.detail.component.ClapUserBottomDialog
 import org.sopt.official.stamp.feature.mission.detail.component.DataPickerBottomSheet
 import org.sopt.official.stamp.feature.mission.detail.component.DatePicker
 import org.sopt.official.stamp.feature.mission.detail.component.DetailInfo
+import org.sopt.official.stamp.feature.mission.detail.component.DetailSnackBar
 import org.sopt.official.stamp.feature.mission.detail.component.Header
 import org.sopt.official.stamp.feature.mission.detail.component.ImageContent
 import org.sopt.official.stamp.feature.mission.detail.component.ImageModal
 import org.sopt.official.stamp.feature.mission.detail.component.Memo
 import org.sopt.official.stamp.feature.mission.detail.component.PostSubmissionBadge
+import org.sopt.official.stamp.feature.mission.detail.type.MissionDetailModeType
 import org.sopt.official.stamp.feature.mission.model.MissionNavArgs
 import org.sopt.official.stamp.feature.navigation.navigateToUserMissionList
 import org.sopt.official.stamp.feature.navigation.setMissionDetailResult
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
-fun MissionDetailScreen(
+internal fun MissionDetailScreen(
     args: MissionNavArgs,
     navController: NavController,
+    modifier: Modifier = Modifier,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
     val (id, title, level, isCompleted, isMe, nickname) = args
-    val content by viewModel.content.collectAsStateWithLifecycle("")
-    val stampId by viewModel.stampId.collectAsStateWithLifecycle(initialValue = -1)
-    val date by viewModel.date.collectAsStateWithLifecycle("")
-    val imageModel by viewModel.imageModel.collectAsStateWithLifecycle(ImageModel.Empty)
-    val isSuccess by viewModel.isSuccess.collectAsStateWithLifecycle(false)
+    val uiState by viewModel.missionDetailUiState.collectAsStateWithLifecycle()
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
-    val toolbarIconType by viewModel.toolbarIconType.collectAsStateWithLifecycle(ToolbarIconType.NONE)
-    val isEditable by viewModel.isEditable.collectAsStateWithLifecycle(true)
-    val isDeleteSuccess by viewModel.isDeleteSuccess.collectAsStateWithLifecycle(false)
-    val isDeleteDialogVisible by viewModel.isDeleteDialogVisible.collectAsStateWithLifecycle(false)
-    val isError by viewModel.isError.collectAsStateWithLifecycle(false)
-    val isBottomSheetOpened by viewModel.isBottomSheetOpened.collectAsStateWithLifecycle(false)
+    val isEditable = uiState.mode == MissionDetailModeType.WRITE || uiState.mode == MissionDetailModeType.EDIT
     val lottieResId =
         remember(level) {
             when (level.value) {
@@ -139,11 +135,12 @@ fun MissionDetailScreen(
     )
     val progress by animateLottieCompositionAsState(
         composition = lottieComposition,
-        isPlaying = isSuccess,
+        isPlaying = uiState.isSuccess,
     )
     val scrollState = rememberScrollState()
 
     val tracker = LocalTracker.current
+    val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         viewModel.getMyName()
@@ -152,17 +149,27 @@ fun MissionDetailScreen(
     LaunchedEffect(id, isCompleted, isMe, nickname) {
         viewModel.initMissionState(id, isCompleted, isMe, nickname)
     }
-    LaunchedEffect(isSuccess, progress) {
-        if (progress >= 0.99f && isSuccess) {
+    LaunchedEffect(uiState.isSuccess, progress) {
+        if (progress >= 0.99f && uiState.isSuccess) {
             delay(500L)
             navController.setMissionDetailResult(true)
             navController.popBackStack()
         }
     }
-    LaunchedEffect(isDeleteSuccess) {
-        if (isDeleteSuccess) {
+    LaunchedEffect(uiState.isDeleteSuccess) {
+        if (uiState.isDeleteSuccess) {
             navController.setMissionDetailResult(true)
             navController.popBackStack()
+        }
+    }
+
+    LaunchedEffect(uiState.isShowEditSnackBar) {
+        if (uiState.isShowEditSnackBar) {
+            snackBarHostState.showSnackbar(
+                message = "수정 완료되었습니다.",
+                duration = SnackbarDuration.Short,
+            )
+            viewModel.onHideEditSnackBar()
         }
     }
 
@@ -180,154 +187,175 @@ fun MissionDetailScreen(
         }
     }
 
-    Box(
-        modifier =
-            Modifier
-                .fillMaxSize()
-                .background(SoptTheme.colors.onSurface950)
-                .statusBarsPadding()
-                .navigationBarsPadding()
-                .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.TopStart)
-        ) {
-            Toolbar(
-                modifier = Modifier.padding(bottom = 10.dp),
-                title = {
-                    Text(
-                        text = if (isMe) "미션" else nickname,
-                        style = SoptTheme.typography.heading18B,
-                        modifier = Modifier.padding(start = 2.dp),
-                        color = SoptTheme.colors.onSurface10,
-                    )
-                },
-                iconOption = toolbarIconType,
-                onBack = { navController.popBackStack() },
-                onPressIcon = viewModel::onPressToolbarIcon,
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(scrollState),
-            ) {
-                Header(
-                    title = title,
-                    stars = level.value,
-                    toolbarIconType = toolbarIconType,
-                    isMe = isMe,
-                    isCompleted = isCompleted,
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                ImageContent(
-                    imageModel = imageModel,
-                    onChangeImage = viewModel::onChangeImage,
-                    isEditable = isEditable && isMe,
-                    onClickZoomIn = { url ->
-                        isZoomInDialogOpen = true
-                        selectedZoomInImage = url
-                        tracker.track(
-                            type = EventType.CLICK,
-                            name = "get_image_zoom",
-                            properties = mapOf(
-                                "image" to url,
-                                "stampId" to stampId,
-                                "missionId" to id,
-                                "nickname" to myNickname
-                            )
+    Scaffold(
+        snackbarHost = {
+            Box(modifier = Modifier.fillMaxSize()) {
+                SnackbarHost(
+                    hostState = snackBarHostState,
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .align(alignment = TopCenter),
+                    snackbar = { data ->
+                        DetailSnackBar(
+                            icon = R.drawable.ic_check,
+                            title = data.visuals.message,
                         )
                     },
                 )
-                Spacer(modifier = Modifier.height(8.dp))
-                if (isEditable && isMe) {
-                    DatePicker(
-                        value = date,
-                        placeHolder = "날짜를 입력해 주세요.",
-                        onClicked = {
-                            viewModel.onChangeDatePickerBottomSheetOpened(true)
-                        },
-                        isEditable = isEditable && isMe && !isSuccess,
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Memo(
-                    value = content,
-                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-                    onValueChange = viewModel::onChangeContent,
-                    borderColor = SoptTheme.colors.onSurface600,
-                    isEditable = isEditable && isMe && !isSuccess,
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                if (isCompleted) {
-                    DetailInfo(
-                        date = date,
-                        clapCount = totalClapCount,
-                        viewCount = viewCount,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(120.dp))
             }
-        }
-
-        if (isEditable && isMe) {
-            SoptampButton(
-                text = "미션 완료",
-                onClicked = { if (isSubmitEnabled) viewModel.onSubmit() },
+        },
+        containerColor = SoptTheme.colors.onSurface950,
+        modifier = modifier
+            .fillMaxSize()
+            .statusBarsPadding()
+            .navigationBarsPadding(),
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = 16.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-            )
-        }
-
-        if (!isEditable && isMe) {
-            SoptampButton(
-                text = "누가 박수쳤을까요?",
-                onClicked = {
-                    isClapUserListOpen = true
-                    viewModel.getStampClappers(stampId = stampId)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-            )
-        }
-
-        if (!isMe) {
-            ClapFeedbackHolder(
-                clapCount = totalClapCount,
-                myClapCount = myClapCount,
-                isBadgeVisible = isBadgeVisible,
-                onPressClap = {
-                    tracker.track(
-                        type = EventType.CLICK,
-                        name = "update_clap",
-                        properties = mapOf(
-                            "stampId" to stampId,
-                            "missionId" to id,
-                            "appliedCount" to appliedCount,
-                            "totalClapCount" to totalClapCount,
-                            "clappersNick" to myNickname,
-                            "receiverNick" to nickname
+                    .fillMaxSize()
+                    .align(Alignment.TopStart)
+            ) {
+                Toolbar(
+                    modifier = Modifier.padding(bottom = 10.dp),
+                    title = {
+                        Text(
+                            text = if (isMe) "미션" else nickname,
+                            style = SoptTheme.typography.heading18B,
+                            modifier = Modifier.padding(start = 2.dp),
+                            color = SoptTheme.colors.onSurface10,
                         )
+                    },
+                    iconOption = uiState.toolbarIconType,
+                    onBack = { navController.popBackStack() },
+                    onPressIcon = viewModel::onPressToolbarIcon,
+                )
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .verticalScroll(scrollState),
+                ) {
+                    Header(
+                        title = title,
+                        stars = level.value,
+                        toolbarIconType = uiState.toolbarIconType,
+                        isMe = isMe,
+                        isCompleted = isCompleted,
                     )
-                    viewModel.onPressClap()
-                },
-            )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    ImageContent(
+                        imageModel = uiState.imageUri,
+                        onChangeImage = viewModel::onChangeImage,
+                        isEditable = isEditable && isMe,
+                        onClickZoomIn = { url ->
+                            isZoomInDialogOpen = true
+                            selectedZoomInImage = url
+                            tracker.track(
+                                type = EventType.CLICK,
+                                name = "get_image_zoom",
+                                properties = mapOf(
+                                    "image" to url,
+                                    "stampId" to uiState.stampId,
+                                    "missionId" to id,
+                                    "nickname" to myNickname
+                                )
+                            )
+                        },
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (isEditable && isMe) {
+                        DatePicker(
+                            value = uiState.date,
+                            placeHolder = "날짜를 입력해 주세요.",
+                            onClicked = {
+                                viewModel.onChangeDatePickerBottomSheetOpened(true)
+                            },
+                            isEditable = isEditable && isMe && !uiState.isSuccess,
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Memo(
+                        value = uiState.content,
+                        placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                        onValueChange = viewModel::onChangeContent,
+                        borderColor = SoptTheme.colors.onSurface600,
+                        isEditable = isEditable && isMe && !uiState.isSuccess,
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    if (isCompleted) {
+                        DetailInfo(
+                            date = uiState.date,
+                            clapCount = totalClapCount,
+                            viewCount = viewCount,
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(120.dp))
+                }
+            }
+
+            if (isEditable && isMe) {
+                SoptampButton(
+                    text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
+                    onClicked = viewModel::onSubmit,
+                    isEnabled = isSubmitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                )
+            }
+
+            if (!isEditable && isMe) {
+                SoptampButton(
+                    text = "누가 박수쳤을까요?",
+                    onClicked = {
+                        isClapUserListOpen = true
+                        viewModel.getStampClappers(stampId = uiState.stampId)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                )
+            }
+
+            if (!isMe) {
+                ClapFeedbackHolder(
+                    clapCount = totalClapCount,
+                    myClapCount = myClapCount,
+                    isBadgeVisible = isBadgeVisible,
+                    onPressClap = {
+                        tracker.track(
+                            type = EventType.CLICK,
+                            name = "update_clap",
+                            properties = mapOf(
+                                "stampId" to uiState.stampId,
+                                "missionId" to id,
+                                "appliedCount" to appliedCount,
+                                "totalClapCount" to totalClapCount,
+                                "clappersNick" to myNickname,
+                                "receiverNick" to nickname
+                            )
+                        )
+                        viewModel.onPressClap()
+                    },
+                )
+            }
         }
     }
 
-
-    if (isSuccess) {
+    if (uiState.isSuccess) {
         PostSubmissionBadge(
             composition = lottieComposition,
             progress = progress,
         )
     }
-    if (isDeleteDialogVisible) {
+    if (uiState.isDeleteDialogVisible) {
         DoubleOptionDialog(
             title = "달성한 미션을 삭제하시겠습니까?",
             onCancel = {
@@ -338,12 +366,12 @@ fun MissionDetailScreen(
             },
         )
     }
-    if (isError) {
+    if (uiState.isError) {
         NetworkErrorDialog(
             onConfirm = viewModel::onPressNetworkErrorDialog,
         )
     }
-    if (isBottomSheetOpened) {
+    if (uiState.isBottomSheetOpened) {
         DataPickerBottomSheet(
             onSelected = { date ->
                 viewModel.onChangeDate(date)
