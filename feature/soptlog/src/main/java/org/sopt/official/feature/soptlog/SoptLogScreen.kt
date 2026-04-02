@@ -53,12 +53,12 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.feature.soptlog.component.SoptLogEmptySection
 import org.sopt.official.feature.soptlog.component.SoptLogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
-import org.sopt.official.feature.soptlog.component.dialog.SoptLogErrorDialog
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
@@ -71,7 +71,7 @@ internal fun SoptLogRoute(
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.getSoptLogInfoData()
+        viewModel.getSoptLogInfo()
     }
 
     LaunchedEffect(Unit) {
@@ -102,7 +102,7 @@ internal fun SoptLogRoute(
     when {
         soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
-            SoptLogErrorDialog(onCheckClick = viewModel::getSoptLogInfoData)
+            NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfo)
         }
 
         else -> {
@@ -168,8 +168,9 @@ private fun SoptlogScreen(
 
         SoptlogContents {
             // 활동 기수 여부에 관계없이 앱잼참여 회원만 보여줌 (앱잼탬프 기간만)
+            // 앱잼 기간 솝탬프의 경우는 isAppjamJoined 가 true인 경우에만 보여줌 (앱잼 참여인 경우에만)
             // 일반 솝탬프의 경우는 (기존) soptLogInfo.isActive인 경우에만 보여줌 (활동 기수인 경우에만)
-            if (isAppjamJoined) {
+            if (soptLogInfo.isActive) {
                 SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),

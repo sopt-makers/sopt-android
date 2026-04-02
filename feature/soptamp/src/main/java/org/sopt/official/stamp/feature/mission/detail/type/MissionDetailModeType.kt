@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.stamp.designsystem.component.dialog
+package org.sopt.official.stamp.feature.mission.detail.type
 
-import androidx.compose.runtime.Composable
-
-@Composable
-fun NetworkErrorDialog(onRetry: () -> Unit = {}) {
-    ErrorDialog(
-        title = "네트워크가 원활하지 않습니다.",
-        content = "인터넷 연결을 확인하고 다시 시도해 주세요.",
-        onRetry = onRetry,
-    )
+internal enum class MissionDetailModeType {
+    WRITE,
+    READ_ONLY,
+    EDIT,
 }

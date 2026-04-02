@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2025 SOPT - Shout Our Passion Together
+ * Copyright 2025-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,8 +49,8 @@ import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.context.findActivity
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.feature.poke.UiState
-import org.sopt.official.feature.poke.component.PokeErrorDialog
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.onboarding.model.StartArgs
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
@@ -126,12 +126,13 @@ fun OnboardingScreen(
                 currentBinding.viewpager.visibility = View.VISIBLE
                 currentBinding.dotsIndicator.visibility = View.VISIBLE
             }
+
             is UiState.Loading -> {}
             else -> {}
         }
     }
 
-    Column (
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues),
@@ -168,8 +169,8 @@ fun OnboardingScreen(
     }
 
     if (showErrorDialog) {
-        PokeErrorDialog(
-            onCheckClick = {
+        NetworkErrorDialog(
+            onConfirm = {
                 showErrorDialog = false
                 navigateUp()
             }

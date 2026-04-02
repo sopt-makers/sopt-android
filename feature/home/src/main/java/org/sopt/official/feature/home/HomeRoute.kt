@@ -65,9 +65,9 @@ import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
-import org.sopt.official.feature.home.component.HomeErrorDialog
 import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
@@ -207,7 +207,7 @@ internal fun HomeRoute(
     }
 
     if (uiState.isLoading) LoadingIndicator()
-    if (uiState.isError) HomeErrorDialog(onCheckClick = { newHomeViewModel.refreshAll() })
+    if (uiState.isError) NetworkErrorDialog(onConfirm = newHomeViewModel::refreshAll)
 }
 
 @Composable
