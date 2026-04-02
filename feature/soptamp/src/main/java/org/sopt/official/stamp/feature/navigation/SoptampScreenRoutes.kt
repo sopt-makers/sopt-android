@@ -173,7 +173,9 @@ fun PartRankingScreenRoute(navController: NavController) {
                 partRankList = successState.partRankList,
                 refreshing = partRankingViewModel.isRefreshing,
                 onRefresh = partRankingViewModel::onRefresh,
-                onClickBack = { navController.popBackStack() },
+                onClickBack = { if (navController.previousBackStackEntry != null) {
+                    navController.popBackStack()
+                }},
                 onClickPart = { partName ->
                     navController.navigateToRanking(partName, partRankingEntrySource)
                 },
