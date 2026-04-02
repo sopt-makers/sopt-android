@@ -119,7 +119,7 @@ internal class NewHomeViewModel @Inject constructor(
             val userInfo = userInfoResult.successOr(UserInfo(UserInfo.User()))
 
             if (userInfoResult.isSuccess) {
-                Timber.d("사용자 상태 업데이트: ${userInfo.user.userStatus}")
+                Timber.e("사용자 상태 업데이트: ${userInfo.user.userStatus}")
                 userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
             }
 
