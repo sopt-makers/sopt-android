@@ -30,15 +30,17 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.localstorage.di.StorageEntryPoint
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
 import java.io.Serializable
 
@@ -49,18 +51,17 @@ class SchemeActivity : AppCompatActivity() {
             .userStorage()
     }
 
-    private val userStatus by lazy {
-        runBlocking { userStorage.userStatus.first() }
-    }
-
     private val args by serializableExtra(Argument("", ""))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        handleDeepLink()
+        lifecycleScope.launch {
+            val userStatus = userStorage.userStatus.first()
+            handleDeepLink(userStatus)
+        }
     }
 
-    private fun handleDeepLink() {
+    private fun handleDeepLink(userStatus: UserStatus) {
         val link = args?.link
         val linkIntent = if (link.isNullOrBlank()) {
             NotificationDetailActivity.getIntent(
@@ -68,7 +69,7 @@ class SchemeActivity : AppCompatActivity() {
                 args?.notificationId.orEmpty()
             )
         } else {
-            checkLinkExpiration(link)
+            checkLinkExpiration(link, userStatus)
         }
 
         when (!isTaskRoot) {
@@ -85,7 +86,10 @@ class SchemeActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun checkLinkExpiration(link: String): Intent {
+    private fun checkLinkExpiration(
+        link: String,
+        userStatus: UserStatus,
+    ): Intent {
         return try {
             val expiredAt = link.extractQueryParameter("expiredAt")
             when (expiredAt.isExpiredDate()) {

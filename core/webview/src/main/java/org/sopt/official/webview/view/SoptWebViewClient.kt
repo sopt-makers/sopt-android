@@ -148,8 +148,8 @@ class SoptWebViewClient(
         super.onPageStarted(view, url, favicon)
 
         val (accessToken, refreshToken) = runBlocking {
-            val access = tokenStorage.accessToken.first()
-            val refresh = tokenStorage.refreshToken.first()
+            val access = tokenStorage.accessToken.first() // 로컬 스토리지로
+            val refresh = tokenStorage.refreshToken.first() // 쿠키로
             access to refresh
         }
 
