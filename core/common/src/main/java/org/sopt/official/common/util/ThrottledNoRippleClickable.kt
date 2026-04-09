@@ -1,4 +1,4 @@
-package org.sopt.official.stamp.designsystem.component.util
+package org.sopt.official.common.util
 
 import android.os.SystemClock
 import androidx.compose.ui.Modifier
