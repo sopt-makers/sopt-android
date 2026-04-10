@@ -45,6 +45,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -55,9 +56,9 @@ import com.skydoves.balloon.ArrowPositionRules
 import com.skydoves.balloon.Balloon
 import com.skydoves.balloon.BalloonAnimation
 import com.skydoves.balloon.BalloonHighlightAnimation
-import com.skydoves.balloon.BalloonSizeSpec
-import com.skydoves.balloon.compose.Balloon
+import com.skydoves.balloon.compose.balloon
 import com.skydoves.balloon.compose.rememberBalloonBuilder
+import com.skydoves.balloon.compose.rememberBalloonState
 import com.skydoves.balloon.compose.setBackgroundColor
 import com.skydoves.balloon.compose.setOverlayColor
 import kotlinx.collections.immutable.ImmutableList
@@ -153,6 +154,7 @@ private fun MySoptLogRowItem(
 ) {
     val count = mySoptLogItemType.count(soptLogInfo)
     val balloonBuilder = rememberCustomBalloonBuilder()
+    val balloonState = rememberBalloonState(balloonBuilder)
 
     Row(
         modifier = Modifier
@@ -171,21 +173,17 @@ private fun MySoptLogRowItem(
                 style = SoptTheme.typography.title14SB
             )
             if (mySoptLogItemType.hasHelpIcon) {
-                Balloon(
-                    builder = balloonBuilder,
-                    balloonContent = {
-                        SoptLogBalloon()
-                    }
-                ) { balloon ->
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_helper),
-                        contentDescription = null,
-                        tint = SoptTheme.colors.onSurface100,
-                        modifier = Modifier
-                            .padding(top = 2.dp, bottom = 2.dp, start = 2.dp)
-                            .clickable { balloon.showAlignTop() }
-                    )
-                }
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_helper),
+                    contentDescription = null,
+                    tint = SoptTheme.colors.onSurface100,
+                    modifier = Modifier
+                        .padding(top = 2.dp, bottom = 2.dp, start = 2.dp)
+                        .clickable { balloonState.showAlignTop() }
+                        .balloon(state = balloonState) {
+                            SoptLogBalloon()
+                        }
+                )
             }
         }
 
@@ -220,35 +218,29 @@ private fun SoptLogBalloon(
     modifier: Modifier = Modifier
 ) {
     Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier
-            .padding(horizontal = 18.dp, vertical = 16.dp)
+            .padding(start = 60.dp, end = 40.dp)
+            .clip(RoundedCornerShape(12.dp))
             .background(color = SoptTheme.colors.onSurface600)
+            .padding(horizontal = 18.dp, vertical = 16.dp)
     ) {
         Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_helper),
-                    contentDescription = null,
-                    tint = SoptTheme.colors.primary
-                )
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_helper),
+                contentDescription = null,
+                tint = SoptTheme.colors.primary
+            )
 
-                Spacer(modifier = Modifier.width(4.dp))
-
-                Text(
-                    text = "조회수",
-                    style = SoptTheme.typography.title14SB,
-                    color = SoptTheme.colors.primary
-                )
-            }
+            Text(
+                text = "조회수",
+                style = SoptTheme.typography.title14SB,
+                color = SoptTheme.colors.primary
+            )
         }
-
-        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
             text = "솝트 전체 회원들이 내 솝탬프 미션을\n조회한 횟수를 의미해요.",
@@ -267,12 +259,9 @@ private fun rememberCustomBalloonBuilder(): Balloon.Builder {
         setArrowOrientation(ArrowOrientation.TOP)
         setBalloonAnimation(BalloonAnimation.OVERSHOOT)
         setBalloonHighlightAnimation(BalloonHighlightAnimation.SHAKE)
-        setBackgroundColor(color.onSurface600)
         setCornerRadius(12f)
-        setMarginLeft(60)
-        setMarginRight(40)
-        setHeight(BalloonSizeSpec.WRAP)
-        setWidth(BalloonSizeSpec.WRAP)
+        setBackgroundColor(Color.Transparent)
+        setWidthRatio(1f)
         setIsVisibleOverlay(true)
         setOverlayColor(color.onSurface.copy(alpha = 0.5f))
         setDismissWhenOverlayClicked(true)
