@@ -74,6 +74,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -93,6 +94,7 @@ import org.sopt.official.feature.main.MainTab.Home
 import org.sopt.official.feature.main.component.MainBottomBarAlarmBadge
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.feature.main.model.SoptWebLink
+import org.sopt.official.feature.poke.navigation.PokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
@@ -200,7 +202,14 @@ fun MainScreen(
         }
 
         if (shouldNavigateToPokeNotification) {
-            navigator.navController.navigateToPokeNotification(userStatus.name, null)
+            val isAlreadyOnPokeNotification =
+                navigator.navController.currentBackStackEntry
+                    ?.destination
+                    ?.hasRoute<PokeNotification>() == true
+
+            if (!isAlreadyOnPokeNotification) {
+                navigator.navController.navigateToPokeNotification(userStatus.name, null)
+            }
             activity?.intent?.putExtra("isPokeNotification", false)
         }
 
