@@ -71,13 +71,15 @@ import org.sopt.official.feature.home.model.defaultAppServices
 import timber.log.Timber
 import javax.inject.Inject
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
+import org.sopt.official.localstorage.source.UserStorage
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val registerPushTokenUseCase: RegisterPushTokenUseCase,
-    private val getAppServiceUseCase: GetAppServiceUseCase
+    private val getAppServiceUseCase: GetAppServiceUseCase,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
         MutableStateFlow(HomeViewModelState())
@@ -103,7 +105,8 @@ internal class NewHomeViewModel @Inject constructor(
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
             val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
 
-            val userInfo = userInfoDeferred.await().successOr(UserInfo(UserInfo.User()))
+            val userInfoResult = userInfoDeferred.await()
+
             val userDescription =
                 userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
@@ -112,6 +115,13 @@ internal class NewHomeViewModel @Inject constructor(
             val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
             val popularPostsData = popularPostsDeferred.await().successOr(emptyList())
             val latestPostData = latestPostsDeferred.await().successOr(emptyList())
+
+            val userInfo = userInfoResult.successOr(UserInfo(UserInfo.User()))
+
+            if (userInfoResult.isSuccess) {
+                Timber.e("사용자 상태 업데이트: ${userInfo.user.userStatus}")
+                userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
+            }
 
             if (userInfo.user.userStatus != UNAUTHENTICATED) {
                 Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
@@ -183,6 +193,10 @@ internal class NewHomeViewModel @Inject constructor(
         viewModelScope.launch {
             val result = homeRepository.getUserInfo()
             val userInfo = result.successOr(UserInfo(UserInfo.User()))
+            Timber.d("refreshNotificationStatus: $userInfo")
+            if (result.isSuccess) {
+                userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
+            }
             viewModelState.update { state ->
                 state.copy(
                     userInfo = userInfo

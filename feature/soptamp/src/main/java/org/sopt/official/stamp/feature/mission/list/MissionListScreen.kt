@@ -79,7 +79,6 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
-import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
@@ -417,6 +416,7 @@ fun MissionListScreenNew(
     val generation by missionsViewModel.generation.collectAsStateWithLifecycle()
     val nickname by missionsViewModel.nickname.collectAsStateWithLifecycle() // 나의 닉네임
     val reportUrl by missionsViewModel.reportUrl.collectAsStateWithLifecycle()
+    val userStatus by missionsViewModel.userStatus.collectAsStateWithLifecycle()
     val personalRankingEntrySource = "personalRanking"
 
     val context = LocalContext.current
@@ -465,7 +465,7 @@ fun MissionListScreenNew(
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                        userStatus = userStatus,
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)

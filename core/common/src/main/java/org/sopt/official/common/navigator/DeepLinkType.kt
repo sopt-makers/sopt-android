@@ -143,11 +143,10 @@ enum class DeepLinkType(
 
     companion object {
         private fun UserStatus.setIntent(intent: Intent): Intent {
-            /*return when (this == UserStatus.UNAUTHENTICATED) {
+            return when (this == UserStatus.UNAUTHENTICATED) {
                 true -> navigator.getAuthActivityIntent()
                 false -> intent
-            }*/
-            return intent
+            }
         }
 
         fun getIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent =

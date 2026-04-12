@@ -27,12 +27,14 @@ package org.sopt.official.feature.appjamtamp.missionlist.state
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionListUiModel
 import org.sopt.official.feature.appjamtamp.missionlist.model.AppjamtampMissionUiModel
 import org.sopt.official.feature.appjamtamp.model.MissionFilter
+import org.sopt.official.model.UserStatus
 
 data class AppjamtampMissionState(
     val reportUrl: String = "",
     val teamName: String = "",
     val missionList: AppjamtampMissionListUiModel = AppjamtampMissionListUiModel(),
-    val currentMissionFilter: MissionFilter = MissionFilter.APPJAM
+    val currentMissionFilter: MissionFilter = MissionFilter.APPJAM,
+    val userStatus: UserStatus = UserStatus.UNAUTHENTICATED
 )
 
 sealed interface AppjamtampSideEffect {

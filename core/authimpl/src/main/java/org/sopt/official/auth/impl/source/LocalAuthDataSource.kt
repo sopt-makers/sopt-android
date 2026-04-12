@@ -28,7 +28,7 @@ import org.sopt.official.auth.model.Token
 import org.sopt.official.model.UserStatus
 
 interface LocalAuthDataSource {
-    fun save(token: Token)
-    fun save(status: UserStatus)
-    fun clear()
+    suspend fun save(token: Token)
+    suspend fun save(status: UserStatus)
+    suspend fun clear()
 }

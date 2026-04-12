@@ -24,23 +24,36 @@
  */
 package org.sopt.official.network.interceptor
 
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.TokenStorage
 import javax.inject.Inject
 
 class AuthInterceptor @Inject constructor(
-    private val dataStore: SoptDataStore
+    private val tokenStorage: TokenStorage
 ) : Interceptor {
     // TODO By Nunu 401 Refresh Logic 추가
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val authRequest = if (isAccessTokenUsed(originalRequest)) {
-            originalRequest.newBuilder().addHeader(AUTHORIZATION, "$BEARER ${dataStore.accessToken}").build()
-        } else {
-            originalRequest
+        if (!isAccessTokenUsed(originalRequest)) {
+            return chain.proceed(originalRequest)
         }
+
+        val authRequest = runBlocking {
+            tokenStorage.accessToken.first()
+        }.let { token ->
+            if (token.isNotEmpty()) {
+                originalRequest.newBuilder()
+                    .addHeader(AUTHORIZATION, "$BEARER $token")
+                    .build()
+            } else {
+                originalRequest
+            }
+        }
+
         return chain.proceed(authRequest)
     }
 

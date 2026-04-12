@@ -31,7 +31,7 @@ import org.sopt.official.auth.repository.AuthRepository
 class LoginUseCase @Inject constructor(
     private val authRepository: AuthRepository
 ) {
-    operator fun invoke(auth: Auth) {
+    suspend operator fun invoke(auth: Auth) {
         authRepository.save(auth.token)
         authRepository.save(auth.status)
     }

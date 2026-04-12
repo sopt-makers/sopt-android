@@ -27,8 +27,7 @@ package org.sopt.official.network.authenticator
 import android.content.Context
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -37,14 +36,18 @@ import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.sopt.official.common.navigator.NavigatorProvider
+import org.sopt.official.localstorage.source.GlobalStorage
+import org.sopt.official.localstorage.source.TokenStorage
 import org.sopt.official.network.model.request.ExpiredTokenRequest
-import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshApi
 import timber.log.Timber
+import javax.inject.Inject
+import javax.inject.Singleton
 
 @Singleton
 class CentralizeAuthenticator @Inject constructor(
-    private val dataStore: SoptDataStore,
+    private val tokenStorage: TokenStorage,
+    private val globalStorage: GlobalStorage,
     private val refreshApi: RefreshApi,
     @ApplicationContext private val context: Context,
     private val navigatorProvider: NavigatorProvider
@@ -61,14 +64,14 @@ class CentralizeAuthenticator @Inject constructor(
         val requestToken = getRequestToken(response.request)
 
         // 다른 스레드에서 이미 토큰이 갱신된 경우 -> 갱신된 토큰으로 재요청
-        val currentAccessToken = dataStore.accessToken
+        val currentAccessToken = tokenStorage.accessToken.first()
         if (isTokenRefreshed(currentAccessToken, requestToken)) {
             Timber.d("토큰 이미 갱신 완료. 새 토큰으로 재시도: $BEARER $currentAccessToken")
             return@withLock buildRequestWithToken(response.request, currentAccessToken)
         }
 
         // refreshToken이 없는 경우
-        val refreshToken = dataStore.refreshToken
+        val refreshToken = tokenStorage.refreshToken.first()
 
         if (refreshToken.isBlank()) {
             Timber.d("리프레시 토큰 없어 재로그인 필요 -> 앱 재시작")
@@ -86,11 +89,13 @@ class CentralizeAuthenticator @Inject constructor(
             )
         }.onSuccess {
             Timber.d("토큰 재발급 성공. 요청 재시도.")
-            dataStore.accessToken = it.data?.accessToken.orEmpty()
-            dataStore.refreshToken = it.data?.refreshToken.orEmpty()
+            tokenStorage.saveTokens(
+                accessToken = it.data?.accessToken.orEmpty(),
+                refreshToken = it.data?.refreshToken.orEmpty()
+            )
         }.onFailure {
             Timber.e(it, "토큰 재발급 실패. 토큰 삭제 및 앱 재시작.")
-            dataStore.clear()
+            globalStorage.clearAll()
             ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
         }.getOrThrow()
 

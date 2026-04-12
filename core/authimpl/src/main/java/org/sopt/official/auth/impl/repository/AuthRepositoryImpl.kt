@@ -43,11 +43,11 @@ class AuthRepositoryImpl @Inject constructor(
         AuthMapper().toEntity(remoteAuthDataSource.refresh(RefreshRequest(token)))
     }
 
-    override fun save(token: Token) {
+    override suspend fun save(token: Token) {
         localAuthDataSource.save(token)
     }
 
-    override fun save(status: UserStatus) {
+    override suspend fun save(status: UserStatus) {
         localAuthDataSource.save(status)
     }
 

@@ -27,10 +27,10 @@ package org.sopt.official.webview.di
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.TokenStorage
 
 @InstallIn(SingletonComponent::class)
 @EntryPoint
 interface SoptWebViewEntryPoint {
-    fun dataStore(): SoptDataStore
+    fun tokenStorage(): TokenStorage
 }

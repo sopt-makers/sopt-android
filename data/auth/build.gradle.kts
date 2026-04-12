@@ -31,9 +31,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.domain.auth)
-    implementation(projects.core.network)
     implementation(projects.core.common)
+    implementation(projects.core.localstorage)
+
+    implementation(projects.domain.auth)
+
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 }

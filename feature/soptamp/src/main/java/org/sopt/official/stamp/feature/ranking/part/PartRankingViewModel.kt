@@ -33,10 +33,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.soptamp.repository.RankingRepository
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.toData
 import javax.inject.Inject
@@ -44,10 +48,18 @@ import javax.inject.Inject
 @HiltViewModel
 class PartRankingViewModel @Inject constructor(
     private val rankingRepository: RankingRepository,
+    userStorage: UserStorage,
 ) : ViewModel() {
     private val _state: MutableStateFlow<PartRankingState> = MutableStateFlow(PartRankingState.Loading)
     val state: StateFlow<PartRankingState> = _state.asStateFlow()
     var isRefreshing by mutableStateOf(false)
+
+    val userStatus = userStorage.userStatus
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserStatus.UNAUTHENTICATED
+        )
 
     fun onRefresh() {
         viewModelScope.launch {

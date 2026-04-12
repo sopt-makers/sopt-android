@@ -31,8 +31,8 @@ import org.sopt.official.model.UserStatus
 @Deprecated("이거 말고 :domain:auth 의 AuthRepository 와 :core:auth 의 CentralizeAuthRepository 를 쓰세요")
 interface AuthRepository {
     suspend fun refresh(token: String): Result<Auth>
-    fun save(token: Token)
-    fun save(status: UserStatus)
+    suspend fun save(token: Token)
+    suspend fun save(status: UserStatus)
     suspend fun withdraw(): Result<Unit>
     suspend fun logout(pushToken: String): Result<Unit>
     suspend fun clearLocalData()
