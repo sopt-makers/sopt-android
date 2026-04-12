@@ -71,8 +71,8 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         val notificationId = receivedData["id"] ?: ""
         val title = receivedData["title"] ?: ""
         val body = receivedData["content"] ?: ""
-        val webLink = receivedData["webLink"] ?: ""
-        val deepLink = receivedData["deepLink"] ?: ""
+        val webLink = receivedData["webLink"]?.takeIf { it != "null" } ?: ""
+        val deepLink = receivedData["deepLink"]?.takeIf { it != "null" } ?: ""
 
         val notifyId = System.currentTimeMillis().toInt()
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
