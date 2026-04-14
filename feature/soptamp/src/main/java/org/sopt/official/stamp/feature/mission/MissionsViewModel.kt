@@ -28,8 +28,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.soptamp.error.Error
@@ -37,6 +39,8 @@ import org.sopt.official.domain.soptamp.model.MissionsFilter
 import org.sopt.official.domain.soptamp.repository.MissionsRepository
 import org.sopt.official.domain.soptamp.repository.RankingRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
 import org.sopt.official.stamp.feature.mission.model.toUiModel
 import timber.log.Timber
@@ -48,6 +52,7 @@ class MissionsViewModel @Inject constructor(
     private val rankingRepository: RankingRepository,
     private val userRepository: UserRepository,
     private val stampRepository: StampRepository,
+    userStorage: UserStorage,
 ) : ViewModel() {
     private val _state: MutableStateFlow<MissionsState> = MutableStateFlow(MissionsState.Loading)
     val state: StateFlow<MissionsState> = _state.asStateFlow()
@@ -60,6 +65,13 @@ class MissionsViewModel @Inject constructor(
     private val _generation = MutableStateFlow(-1)
     val generation = _generation.asStateFlow()
     val reportUrl = MutableStateFlow("")
+
+    val userStatus = userStorage.userStatus
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserStatus.UNAUTHENTICATED
+        )
 
     init {
         initUser()

@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.core.analytics)
     implementation(projects.core.navigation)
     implementation(projects.core.model)
+    implementation(projects.core.localstorage)
 
     // domain
     implementation(projects.domain.home)

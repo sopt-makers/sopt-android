@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.network.di
+package org.sopt.official.stamp.feature.mission.detail.type
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
-import org.sopt.official.common.di.LocalStore
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataStoreModule {
-    @Provides
-    @Singleton
-    @LocalStore
-    fun provideSoptDataStoreName(): String = "sampleKey"
+internal enum class MissionDetailModeType {
+    WRITE,
+    READ_ONLY,
+    EDIT,
 }

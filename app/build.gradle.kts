@@ -118,6 +118,7 @@ dependencies {
     implementation(projects.core.security)
     implementation(projects.core.webview)
     implementation(projects.core.model)
+    implementation(projects.core.localstorage)
 
     implementation(projects.domain.soptamp)
     implementation(projects.domain.mypage)

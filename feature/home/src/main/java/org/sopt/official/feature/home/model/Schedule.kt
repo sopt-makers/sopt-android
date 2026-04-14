@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,10 @@ package org.sopt.official.feature.home.model
 import org.sopt.official.domain.home.model.ScheduleType
 
 internal enum class Schedule(val titleKR: String) {
-    EVENT("행사"), SEMINAR("세미나")
+    EVENT("행사"),
+    SEMINAR("세미나"),
+    JOINT_SEMINAR("합동 세미나"),
+    BREAK("휴식")
     ;
 
     companion object {

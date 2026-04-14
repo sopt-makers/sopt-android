@@ -27,49 +27,50 @@ package org.sopt.official.network.authenticator
 import android.content.Context
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
 import org.sopt.official.common.navigator.NavigatorProvider
+import org.sopt.official.localstorage.source.TokenStorage
 import org.sopt.official.network.model.request.RefreshRequest
-import org.sopt.official.network.persistence.SoptDataStore
 import org.sopt.official.network.service.RefreshService
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Deprecated("이거 말고 CentralizeAuthenticator 사용하세요.")
 @Singleton
 class SoptAuthenticator @Inject constructor(
-    private val dataStore: SoptDataStore,
+    private val tokenStorage: TokenStorage,
     private val refreshService: RefreshService,
     @ApplicationContext private val context: Context,
     private val navigatorProvider: NavigatorProvider
 ) : Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
-        if (response.code == 401) {
-            val refreshToken = dataStore.refreshToken
-            if (refreshToken.isEmpty()) return null
-            val newTokens = runCatching {
-                runBlocking {
-                    refreshService.refresh(RefreshRequest(refreshToken))
-                }
-            }.onSuccess {
-                dataStore.refreshToken = it.refreshToken
-                dataStore.accessToken = it.accessToken
-                dataStore.playgroundToken = it.playgroundToken
-            }.onFailure {
-                dataStore.clear()
-                Timber.e(it)
-                ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
-            }.getOrThrow()
+        if (response.code != 401) return null
 
-            return response.request.newBuilder()
-                .header("Authorization", newTokens.accessToken)
+        val refreshToken = runBlocking { tokenStorage.refreshToken.first() }
+        if (refreshToken.isEmpty()) return null
+
+        return runCatching {
+            runBlocking {
+                refreshService.refresh(RefreshRequest(refreshToken))
+            }
+        }.getOrNull()?.also { tokens ->
+            runBlocking {
+                tokenStorage.saveTokens(tokens.accessToken, tokens.refreshToken)
+                tokenStorage.savePlaygroundToken(tokens.playgroundToken)
+            }
+        }?.let { tokens ->
+            response.request.newBuilder()
+                .header("Authorization", tokens.accessToken)
                 .build()
+        } ?: run {
+            runBlocking { tokenStorage.clearTokens() }
+            ProcessPhoenix.triggerRebirth(context, navigatorProvider.getAuthActivityIntent())
+            null
         }
-        return null
     }
 }

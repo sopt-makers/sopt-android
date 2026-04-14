@@ -27,21 +27,23 @@ package org.sopt.official.feature.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import net.swiftzer.semver.SemVer
 import org.sopt.official.auth.model.CentralizeToken
-import org.sopt.official.model.UserStatus
 import org.sopt.official.auth.repository.CentralizeAuthRepository
 import org.sopt.official.common.config.remoteconfig.SoptRemoteConfig
 import org.sopt.official.common.config.remoteconfig.UpdateConfigModel
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.GlobalStorage
+import org.sopt.official.localstorage.source.TokenStorage
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
+import javax.inject.Inject
 
 private const val DEFAULT_VERSION = "9.9.9"
 
@@ -61,7 +63,8 @@ sealed interface UpdateState {
 class AuthViewModel @Inject constructor(
     private val remoteConfig: SoptRemoteConfig,
     private val authRepository: CentralizeAuthRepository,
-    private val dataStore: SoptDataStore
+    private val tokenStorage: TokenStorage,
+    private val globalStorage: GlobalStorage
 ) : ViewModel() {
     // TODO: 삭제 예정
     private val _uiEvent = MutableSharedFlow<AuthUiEvent>()
@@ -71,16 +74,23 @@ class AuthViewModel @Inject constructor(
     val updateState get() = _updateState.asStateFlow()
 
     init {
-        if (dataStore.accessToken.isNotEmpty() && dataStore.refreshToken.isNotEmpty()) {
-            viewModelScope.launch {
+        checkAndRefreshTokens()
+    }
+
+    private fun checkAndRefreshTokens() {
+        viewModelScope.launch {
+            val accessToken = tokenStorage.accessToken.first()
+            val refreshToken = tokenStorage.refreshToken.first()
+
+            if (accessToken.isNotEmpty() && refreshToken.isNotEmpty()) {
                 authRepository.refreshToken(
                     CentralizeToken(
-                        accessToken = dataStore.accessToken,
-                        refreshToken = dataStore.refreshToken
+                        accessToken = accessToken,
+                        refreshToken = refreshToken
                     )
-                ).onFailure {
-                    Timber.e(it)
-                    dataStore.clear()
+                ).onFailure { error ->
+                    Timber.e(error)
+                    globalStorage.clearAll()
                 }
             }
         }

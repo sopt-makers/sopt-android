@@ -35,7 +35,6 @@ import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
-import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -105,6 +104,7 @@ fun RankingScreenRoute(
     val rankingViewModel: RankingViewModel = hiltViewModel()
     val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
+    val userStatus by rankingViewModel.userStatus.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         val isCurrent = args.type.first().isDigit()
@@ -138,7 +138,7 @@ fun RankingScreenRoute(
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                        userStatus = userStatus,
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)
@@ -153,6 +153,7 @@ fun PartRankingScreenRoute(navController: NavController) {
     val context = LocalContext.current
     val partRankingViewModel: PartRankingViewModel = hiltViewModel()
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
+    val userStatus by partRankingViewModel.userStatus.collectAsStateWithLifecycle()
     val partRankingEntrySource = "partRanking"
 
     LaunchedEffect(true) {
@@ -179,7 +180,7 @@ fun PartRankingScreenRoute(navController: NavController) {
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
-                        userStatus = UserStatus.UNAUTHENTICATED, // Todo : 유저 상태에 맞게 변경하기
+                        userStatus = userStatus,
                         deepLink = DeepLinkType.MY_PAGE_SOPTAMP.link
                     )
                     context.startActivity(intent)

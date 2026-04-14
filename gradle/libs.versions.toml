@@ -2,8 +2,8 @@
 compileSdk = "36"
 minSdk = "30"
 targetSdk = "35"
-appVersion = "4.3.4"
-versionCode = "40304"
+appVersion = "4.3.5"
+versionCode = "40305"
 
 kotlin = "2.3.10"
 kotlinx-serialization-json = "1.10.0"
@@ -25,6 +25,7 @@ compose-bom = "2026.03.00"
 androidx-paging = "3.4.2"
 desugarJdk = "2.1.5"
 androidx-credential = "1.5.0"
+datastore = "1.2.1"
 
 material = "1.13.0"
 in-app-update = "2.1.0"
@@ -58,7 +59,7 @@ lottie = "6.7.1"
 dotsindicator = "5.1.0"
 deepLinkDispatch = "7.2.2"
 rin = "0.4.0"
-mozilla-component-utils = "147.0.3"
+mozilla-component-utils = "146.0.1"
 balloonCompose = "1.7.3"
 
 google-services = "4.4.4"
@@ -107,6 +108,7 @@ customtab = { module = "androidx.browser:browser", version.ref = "customtab" }
 androidx-credential = { module = "androidx.credentials:credentials", version.ref = "androidx-credential" }
 androidx-credential-play-service = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "androidx-credential" }
 lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 
 material = { module = "com.google.android.material:material", version.ref = "material" }
 inappupdate = { module = "com.google.android.play:app-update-ktx", version.ref = "in-app-update" }

@@ -108,19 +108,18 @@ enum class DeepLinkType(
             userStatus.setIntent(navigator.getAppjamtampActivityIntent())
     },
 
-    // TODO - 콕찌르기 이슈 해결되면 딥링크에서 home 제거해야 함 (서버 변경으로 home 제거)
-    POKE_NOTIFICATION_LIST("home/poke/notification-list") {
+    POKE_NOTIFICATION_LIST("poke/notification-list") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeNotificationActivityIntent(userStatus.name))
     },
-    POKE_FRIEND_LIST_SUMMARY("home/poke/friend-list-summary") {
+    POKE_FRIEND_LIST_SUMMARY("poke/friend-list-summary") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
             val friendType = deepLink.extractQueryParameter("type")
             val intent = navigator.getPokeFriendListSummaryActivityIntent(userStatus.name, friendType)
             return userStatus.setIntent(intent)
         }
     },
-    POKE("home/poke") {
+    POKE("poke") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeActivityIntent(userStatus))
     },
@@ -143,11 +142,10 @@ enum class DeepLinkType(
 
     companion object {
         private fun UserStatus.setIntent(intent: Intent): Intent {
-            /*return when (this == UserStatus.UNAUTHENTICATED) {
+            return when (this == UserStatus.UNAUTHENTICATED) {
                 true -> navigator.getAuthActivityIntent()
                 false -> intent
-            }*/
-            return intent
+            }
         }
 
         fun getIntent(userStatus: UserStatus, deepLinkType: DeepLinkType? = null): Intent =
@@ -167,3 +165,4 @@ enum class DeepLinkType(
 }
 
 const val SOPTLOG_FORTUNE = "soptlog/fortune"
+

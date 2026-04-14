@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
@@ -90,7 +91,7 @@ fun Toolbar(
                     tint = SoptTheme.colors.onSurface10,
                     modifier =
                         Modifier
-                            .noRippleClickable(onClick = onBack)
+                            .throttledNoRippleClickable(onClick = onBack)
                             .align(Alignment.CenterVertically)
                             .padding(8.dp),
                 )

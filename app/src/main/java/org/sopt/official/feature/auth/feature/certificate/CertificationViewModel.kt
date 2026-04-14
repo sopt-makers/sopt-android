@@ -44,7 +44,7 @@ import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.feature.certificate.model.ErrorResponse
 import org.sopt.official.feature.auth.model.AuthStatus
-import org.sopt.official.network.persistence.SoptDataStore
+import org.sopt.official.localstorage.source.UserStorage
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -89,7 +89,7 @@ internal enum class CertificationButtonText(val message: String) {
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val dataStore: SoptDataStore,
+    private val userStorage: UserStorage
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CertificationState> =
@@ -196,7 +196,7 @@ class CertificationViewModel @Inject constructor(
                 phone = state.value.phone,
             ).onSuccess { response ->
                 _sideEffect.emit(CertificationSideEffect.NavigateToAuthMain(response.authPlatform))
-                dataStore.platform = response.authPlatform
+                userStorage.savePlatform(response.authPlatform)
             }.onFailure {
                 _sideEffect.emit(CertificationSideEffect.ShowToast("실패"))
             }

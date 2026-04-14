@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.webview)
     implementation(projects.core.navigation)
+    implementation(projects.core.localstorage)
 
     implementation(projects.domain.appjamtamp)
     implementation(projects.domain.soptamp)

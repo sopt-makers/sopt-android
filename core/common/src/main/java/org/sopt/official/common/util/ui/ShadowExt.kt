@@ -25,7 +25,6 @@
 package org.sopt.official.common.util.ui
 
 import android.graphics.BlurMaskFilter
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed

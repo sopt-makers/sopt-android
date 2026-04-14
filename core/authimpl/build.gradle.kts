@@ -35,6 +35,8 @@ dependencies {
     implementation(projects.domain.mypage)
     implementation(projects.core.network)
     implementation(projects.core.common)
+    implementation(projects.core.localstorage)
+
     implementation(projects.core.auth)
     implementation(projects.core.model)
     implementation(platform(libs.okhttp.bom))
