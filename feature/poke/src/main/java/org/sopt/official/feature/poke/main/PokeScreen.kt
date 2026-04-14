@@ -205,7 +205,6 @@ fun PokeScreen(
         binding?.let { currentBinding ->
             when (val state = pokeUserUiState) {
                 is UiState.Success -> {
-                    dismissBottomSheet(fragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
                     viewModel.updatePokeUserState(state.data.userId)
                     val user = state.data
 
@@ -244,17 +243,17 @@ fun PokeScreen(
                 }
 
                 is UiState.ApiError -> {
-                    dismissBottomSheet(fragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
                     activity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
                 }
 
                 is UiState.Failure -> {
-                    dismissBottomSheet(fragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
                     activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
                 }
 
                 else -> {}
             }
+            dismissBottomSheet(fragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
+            viewModel.resetPokeUserUiState()
         }
     }
 

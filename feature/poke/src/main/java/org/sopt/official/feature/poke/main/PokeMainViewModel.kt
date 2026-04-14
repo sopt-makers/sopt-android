@@ -176,6 +176,10 @@ class PokeMainViewModel @Inject constructor(
         }
     }
 
+    fun resetPokeUserUiState() {
+        _pokeUserUiState.value = UiState.Loading
+    }
+
     fun setAnonymousFriend(pokeUser: PokeUser?) {
         _anonymousFriend.value = pokeUser
     }
