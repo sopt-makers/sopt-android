@@ -335,9 +335,7 @@ private fun initPokeMeView(
         }
 
         if (pokeMeItem.isAnonymous) {
-            pokeMeItem.anonymousImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            imgUserProfileSomeonePokeMe.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
             tvFriendsStatusSomeonePokeMe.visibility = View.GONE
             tvUserGenerationSomeonePokeMe.visibility = View.GONE
@@ -414,7 +412,7 @@ private fun initPokeFriendView(
         }
 
         if (pokeFriendItem.isAnonymous) {
-            imgUserProfilePokeMyFriend.load(pokeFriendItem.anonymousImage) { transformations(CircleCropTransformation()) }
+            imgUserProfilePokeMyFriend.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
         } else {
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {

@@ -88,9 +88,7 @@ class PokeNotificationAdapter(
         fun onBind(item: PokeUser) {
             with(viewBinding) {
                 if (item.isAnonymous) {
-                    item.anonymousImage.takeIf { it.isNotEmpty() }?.let {
-                        imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
-                    } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
+                    imgUserProfile.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
                     tvUserName.text = item.anonymousName
                     tvUserGeneration.visibility = View.GONE
                     tvUserFriendsStatus.visibility = View.GONE
