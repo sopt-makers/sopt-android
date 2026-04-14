@@ -163,11 +163,15 @@ class PokeMainViewModel @Inject constructor(
             }
             if (_pokeSimilarFriendUiState.value is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>) {
                 val oldData = (_pokeSimilarFriendUiState.value as UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>).data
-                for (friend in oldData) {
-                    friend.userInfoList.find { it.userId == userId }?.isAlreadyPoke = true
+                val updatedSimilarFriends = oldData.map { randomUsers ->
+                    randomUsers.copy(
+                        userInfoList = randomUsers.userInfoList.map { pokeUser ->
+                            pokeUser.copy(isAlreadyPoke = pokeUser.isAlreadyPoke || pokeUser.userId == userId)
+                        }
+                    )
                 }
                 _pokeSimilarFriendUiState.emit(UiState.Loading)
-                _pokeSimilarFriendUiState.emit(UiState.Success(oldData))
+                _pokeSimilarFriendUiState.emit(UiState.Success(updatedSimilarFriends))
             }
         }
     }
