@@ -261,7 +261,7 @@ class PokeMainActivity : AppCompatActivity() {
 
                     is UiState.ApiError -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.poke_user_alert_exceeded))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
 
                     is UiState.Failure -> {

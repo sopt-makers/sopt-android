@@ -243,7 +243,7 @@ fun PokeScreen(
                 }
 
                 is UiState.ApiError -> {
-                    activity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 is UiState.Failure -> {
