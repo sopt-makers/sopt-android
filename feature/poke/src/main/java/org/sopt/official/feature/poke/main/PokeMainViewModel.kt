@@ -166,7 +166,8 @@ class PokeMainViewModel @Inject constructor(
                 val updatedSimilarFriends = oldData.map { randomUsers ->
                     randomUsers.copy(
                         userInfoList = randomUsers.userInfoList.map { pokeUser ->
-                            pokeUser.copy(isAlreadyPoke = pokeUser.isAlreadyPoke || pokeUser.userId == userId)
+                            if (pokeUser.userId == userId) pokeUser.copy(isAlreadyPoke = true)
+                            else pokeUser
                         }
                     )
                 }
