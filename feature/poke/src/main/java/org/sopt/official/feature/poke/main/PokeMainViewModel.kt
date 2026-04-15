@@ -43,6 +43,8 @@ import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
 import javax.inject.Inject
 
+internal const val POKE_FRIEND_EMPTY_STATUS_CODE = "EMPTY_POKE_FRIEND"
+
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
@@ -87,8 +89,10 @@ class PokeMainViewModel @Inject constructor(
         viewModelScope.launch {
             _pokeFriendUiState.emit(UiState.Loading)
             getPokeFriendUseCase.invoke()
-                .onSuccess {
-                    _pokeFriendUiState.emit(UiState.Success(it[0]))
+                .onSuccess { friendList ->
+                    friendList.firstOrNull()?.let {
+                        _pokeFriendUiState.emit(UiState.Success(it))
+                    } ?: _pokeFriendUiState.emit(UiState.ApiError(POKE_FRIEND_EMPTY_STATUS_CODE, ""))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _pokeFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))

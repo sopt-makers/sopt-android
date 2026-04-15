@@ -193,9 +193,22 @@ class PokeMainActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> {}
-                    is UiState.Success<PokeUser> -> initPokeFriendView(it.data)
-                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    is UiState.Success<PokeUser> -> {
+                        binding.layoutPokeMyFriend.setVisible(true)
+                        initPokeFriendView(it.data)
+                    }
+
+                    is UiState.ApiError -> {
+                        binding.layoutPokeMyFriend.setVisible(false)
+                        if (it.statusCode != POKE_FRIEND_EMPTY_STATUS_CODE) {
+                            showPokeToast(getString(R.string.toast_poke_error))
+                        }
+                    }
+
+                    is UiState.Failure -> {
+                        binding.layoutPokeMyFriend.setVisible(false)
+                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    }
                 }
             }
             .launchIn(lifecycleScope)
