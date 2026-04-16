@@ -38,7 +38,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -221,9 +220,6 @@ private fun HomeScreenForMember(
 ) {
     Box {
         val scrollState = rememberScrollState()
-        val isScrolledBeyondThreshold by remember {
-            derivedStateOf { scrollState.value > 130 || scrollState.isScrollInProgress }
-        }
         val shadowModifier = Modifier.dropShadow(
             shape = CircleShape,
             color = GrayAlpha700,
