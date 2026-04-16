@@ -61,7 +61,6 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
-import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
@@ -302,7 +301,9 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            if (homeAppServices.isNotEmpty()) {
+            // 솝트 더 재밌게 즐기기 영역 숨김 - 솝마디, 콕찌르기는 GNB에서만 표시
+            // TODO: SP2 솝레터 구현이 완료되면 SOPT 더 재밌게 즐기기에 솝레터 추가하여 오픈 예정
+            /* if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
@@ -311,10 +312,10 @@ private fun HomeScreenForMember(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                 )
-            }
+            } */
 
             if (popularPosts.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(height = 56.dp))
+                Spacer(modifier = Modifier.height(height = 36.dp))
 
                 HomePopularNewsSection(
                     postList = popularPosts,
@@ -416,10 +417,15 @@ private fun HomeScreenForVisitor(
             onProjectClick = homeShortcutNavigation::navigateToSoptProject,
             onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
         )
-        Spacer(modifier = Modifier.height(height = 40.dp))
+
+        // 솝트 더 재밌게 즐기기 영역 숨김 - 솝마디, 콕찌르기는 GNB에서만 표시
+        // TODO: SP2 솝레터 구현이 완료되면 SOPT 더 재밌게 즐기기에 솝레터 추가하여 오픈 예정
+        /* Spacer(modifier = Modifier.height(height = 40.dp))
         HomeEnjoySoptServicesBlock(
             appServices = homeAppServices,
-            onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
-        )
+            onAppServiceClick = onAppServiceClick,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+        ) */
     }
 }
