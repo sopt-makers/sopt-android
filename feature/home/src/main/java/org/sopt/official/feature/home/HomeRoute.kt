@@ -24,12 +24,6 @@
  */
 package org.sopt.official.feature.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -68,7 +62,6 @@ import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
-import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
@@ -370,12 +363,11 @@ private fun HomeScreenForMember(
         }
 
         if (toastData.active) {
-            AnimatedHomeButton(
-                visible = !isScrolledBeyondThreshold,
+            Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 82.dp)
+                    .padding(bottom = 20.dp)
             ) {
                 HomeToastButton(
                     imageUrl = toastData.imageUrl,
@@ -385,25 +377,6 @@ private fun HomeScreenForMember(
                     onClick = {
                         homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
                         trackClickEvent(tracker, "at36_toast_button")
-                    },
-                    modifier = shadowModifier
-                )
-            }
-
-            AnimatedHomeButton(
-                visible = isScrolledBeyondThreshold,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 82.dp)
-            ) {
-                HomeFloatingButton(
-                    imageUrl = toastData.imageUrl,
-                    shortTitle = toastData.buttonDescription,
-                    buttonText = toastData.buttonText,
-                    onClick = {
-                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                        trackClickEvent(tracker, "at36_floating_button")
                     },
                     modifier = shadowModifier
                 )
@@ -448,30 +421,5 @@ private fun HomeScreenForVisitor(
             appServices = homeAppServices,
             onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
         )
-    }
-}
-
-@Composable
-private fun AnimatedHomeButton(
-    visible: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically(
-            initialOffsetY = { it },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessMedium
-            )
-        ),
-        exit = slideOutVertically(
-            targetOffsetY = { it * 3 },
-            animationSpec = tween(durationMillis = 100)
-        ),
-        modifier = modifier
-    ) {
-        content()
     }
 }
