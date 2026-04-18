@@ -224,7 +224,7 @@ fun FriendListSummaryScreen(
 
                 is UiState.ApiError -> {
                     dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 is UiState.Failure -> {

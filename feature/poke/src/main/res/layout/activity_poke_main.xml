@@ -361,6 +361,7 @@
 
                 <!-- 내 친구를 찔러보세요 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_poke_my_friend"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"

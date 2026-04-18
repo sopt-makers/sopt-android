@@ -87,6 +87,7 @@ fun NavGraphBuilder.pokeNavGraph(
             PokeNotificationScreen(
                 paddingValues = paddingValues,
                 userStatus = userStatus,
+                navigateUp = navController::navigateUp,
             )
         }
 
