@@ -189,7 +189,7 @@ class NotificationActivity : AppCompatActivity() {
                         ) {
                             when (refreshLoadState) {
                                 is LoadState.Loading -> {
-                                    if (notifications.itemCount == 0) {
+                                    if (notifications.itemCount == 0 && !isPullRefreshing) {
                                         LoadingIndicator()
                                     }
                                 }
