@@ -84,6 +84,7 @@ fun OnboardingScreen(
     val onboardingUiState by viewModel.onboardingPokeUserListUiState.collectAsStateWithLifecycle()
     val checkNewInPokeState by viewModel.checkNewInPokeOnboardingState.collectAsStateWithLifecycle()
     var showErrorDialog by remember { mutableStateOf(false) }
+    var isInitialRoutingDone by remember { mutableStateOf(false) }
 
     LifecycleResumeEffect(Unit) {
         tracker.track(
@@ -91,11 +92,17 @@ fun OnboardingScreen(
             name = "poke_onboarding",
             properties = mapOf("view_type" to args.userStatus)
         )
+        viewModel.checkNewInPokeOnboarding()
         onPauseOrDispose {}
     }
 
     LaunchedEffect(checkNewInPokeState) {
-        if (checkNewInPokeState == true && fragmentActivity != null) {
+        if (checkNewInPokeState == null || isInitialRoutingDone) return@LaunchedEffect
+        isInitialRoutingDone = true
+
+        if (checkNewInPokeState == false) {
+            navigateToPokeMain()
+        } else if (checkNewInPokeState == true && fragmentActivity != null) {
             showOnboardingBottomSheet(fragmentActivity, viewModel)
         }
     }
