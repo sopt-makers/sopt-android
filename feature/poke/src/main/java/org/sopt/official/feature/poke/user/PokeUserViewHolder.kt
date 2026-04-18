@@ -47,7 +47,7 @@ sealed class PokeUserViewHolder(
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
                 if (pokeUser.isAnonymous) {
-                    imageViewProfile.load(pokeUser.anonymousImage) {
+                    imageViewProfile.load(R.drawable.image_anonymous_profile) {
                         crossfade(true)
                         transformations(CircleCropTransformation())
                     }
@@ -74,20 +74,27 @@ sealed class PokeUserViewHolder(
     ) : PokeUserViewHolder(binding) {
         override fun onBind(pokeUser: PokeUser) {
             binding.apply {
-                when (pokeUser.profileImage.isBlank()) {
-                    true ->
+                when {
+                    pokeUser.isAnonymous ->
+                        imageViewProfile.load(R.drawable.image_anonymous_profile) {
+                            crossfade(true)
+                            transformations(CircleCropTransformation())
+                        }
+
+                    pokeUser.profileImage.isBlank() ->
                         imageViewProfile.load(null) {
                             crossfade(true)
                             transformations(CircleCropTransformation())
                         }
 
-                    false ->
+                    else ->
                         imageViewProfile.load(pokeUser.profileImage) {
                             crossfade(true)
                             transformations(CircleCropTransformation())
                         }
                 }
-                textViewUserName.text = pokeUser.name
+                textViewUserName.text = if (pokeUser.isAnonymous) pokeUser.anonymousName else pokeUser.name
+                textViewUserInfo.isVisible = !pokeUser.isAnonymous
                 textViewUserInfo.text = binding.root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
                 imageButtonPoke.isEnabled = !pokeUser.isAlreadyPoke
             }

@@ -43,6 +43,8 @@ import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
 import javax.inject.Inject
 
+internal const val POKE_FRIEND_EMPTY_STATUS_CODE = "EMPTY_POKE_FRIEND"
+
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
@@ -87,8 +89,10 @@ class PokeMainViewModel @Inject constructor(
         viewModelScope.launch {
             _pokeFriendUiState.emit(UiState.Loading)
             getPokeFriendUseCase.invoke()
-                .onSuccess {
-                    _pokeFriendUiState.emit(UiState.Success(it[0]))
+                .onSuccess { friendList ->
+                    friendList.firstOrNull()?.let {
+                        _pokeFriendUiState.emit(UiState.Success(it))
+                    } ?: _pokeFriendUiState.emit(UiState.ApiError(POKE_FRIEND_EMPTY_STATUS_CODE, ""))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _pokeFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
@@ -163,13 +167,22 @@ class PokeMainViewModel @Inject constructor(
             }
             if (_pokeSimilarFriendUiState.value is UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>) {
                 val oldData = (_pokeSimilarFriendUiState.value as UiState.Success<List<PokeRandomUserList.PokeRandomUsers>>).data
-                for (friend in oldData) {
-                    friend.userInfoList.find { it.userId == userId }?.isAlreadyPoke = true
+                val updatedSimilarFriends = oldData.map { randomUsers ->
+                    randomUsers.copy(
+                        userInfoList = randomUsers.userInfoList.map { pokeUser ->
+                            if (pokeUser.userId == userId) pokeUser.copy(isAlreadyPoke = true)
+                            else pokeUser
+                        }
+                    )
                 }
                 _pokeSimilarFriendUiState.emit(UiState.Loading)
-                _pokeSimilarFriendUiState.emit(UiState.Success(oldData))
+                _pokeSimilarFriendUiState.emit(UiState.Success(updatedSimilarFriends))
             }
         }
+    }
+
+    fun resetPokeUserUiState() {
+        _pokeUserUiState.value = UiState.Loading
     }
 
     fun setAnonymousFriend(pokeUser: PokeUser?) {
