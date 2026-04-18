@@ -56,8 +56,7 @@ import org.sopt.official.designsystem.GrayAlpha300
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.model.ImageModel
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
-
+import org.sopt.official.common.util.noRippleClickable
 @Composable
 fun ImageContent(
     imageModel: ImageModel,

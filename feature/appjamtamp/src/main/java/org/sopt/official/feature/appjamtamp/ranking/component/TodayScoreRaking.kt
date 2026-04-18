@@ -49,7 +49,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
-import org.sopt.official.feature.appjamtamp.util.noRippleClickable
+import org.sopt.official.common.util.noRippleClickable
 
 @Composable
 internal fun TodayScoreRaking(

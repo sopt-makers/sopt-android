@@ -69,7 +69,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.stamp.util.DefaultPreview
 import java.text.SimpleDateFormat
 import java.util.Calendar
