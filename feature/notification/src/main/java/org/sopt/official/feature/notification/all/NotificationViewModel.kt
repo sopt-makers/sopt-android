@@ -56,10 +56,12 @@ class NotificationViewModel @Inject constructor(
         }.flow
     }.cachedIn(viewModelScope)
 
-    fun updateEntireNotificationReadingState() {
+    fun updateEntireNotificationReadingState(onSuccess: () -> Unit) {
         viewModelScope.launch {
             runCatching {
                 repository.updateEntireNotificationReadingState()
+            }.onSuccess {
+                onSuccess()
             }.onFailure {
                 Timber.e(it)
             }
