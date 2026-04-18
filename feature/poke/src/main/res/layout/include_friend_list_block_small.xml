@@ -70,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/icon_chevron"
+        android:background="@drawable/icon_close"
         android:backgroundTint="@color/mds_gray_30"
         android:rotation="180"
         app:layout_constraintBottom_toBottomOf="@id/textView_friendListTitle"
