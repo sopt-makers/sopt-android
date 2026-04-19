@@ -57,7 +57,13 @@ class OnboardingPokeUserViewModel @Inject constructor(
             _onboardingPokeUserListUiState.emit(UiState.Loading)
             getOnboardingPokeUserListUseCase.invoke(randomType = randomType.value, size = 6)
                 .onSuccess { response ->
-                    _onboardingPokeUserListUiState.emit(UiState.Success(response.randomInfoList[0]))
+                    val nextRandomUsers = response.randomInfoList.firstOrNull()
+                        ?: PokeRandomUserList.PokeRandomUsers(
+                            randomType = randomType.value,
+                            randomTitle = "",
+                            userInfoList = emptyList(),
+                        )
+                    _onboardingPokeUserListUiState.emit(UiState.Success(nextRandomUsers))
                 }
                 .onApiError { statusCode, responseMessage ->
                     _onboardingPokeUserListUiState.emit(UiState.ApiError(statusCode, responseMessage))
