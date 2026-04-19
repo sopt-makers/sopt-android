@@ -360,24 +360,20 @@ private fun HomeScreenForMember(
         }
 
         if (toastData.active) {
-            Box(
-                modifier = Modifier
+            HomeToastButton(
+                imageUrl = toastData.imageUrl,
+                longTitle = toastData.title,
+                missionDescription = toastData.toastDescription,
+                buttonText = toastData.buttonText,
+                onClick = {
+                    homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                    trackClickEvent(tracker, "at36_toast_button")
+                },
+                modifier = shadowModifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 20.dp)
-            ) {
-                HomeToastButton(
-                    imageUrl = toastData.imageUrl,
-                    longTitle = toastData.title,
-                    missionDescription = toastData.toastDescription,
-                    buttonText = toastData.buttonText,
-                    onClick = {
-                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                        trackClickEvent(tracker, "at36_toast_button")
-                    },
-                    modifier = shadowModifier
-                )
-            }
+            )
         }
     }
 }
