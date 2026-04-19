@@ -71,6 +71,7 @@ import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.schedule.component.ScheduleItem
 import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
+import org.sopt.official.model.UserStatus
 
 private val applicationNavigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -106,13 +107,14 @@ class ScheduleActivity : AppCompatActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ScheduleScreen(
+private fun ScheduleScreen(
     navigateUp: () -> Unit = {},
     navigateAttendance: () -> Unit = {},
     viewModel: ScheduleViewModel = hiltViewModel(),
 ) {
     val lazyListState = rememberLazyListState()
     val state by viewModel.schedule.collectAsStateWithLifecycle()
+    val userStatus by viewModel.userStatus.collectAsStateWithLifecycle()
 
     LaunchedEffect(state) {
         if (state.scheduleList.isNotEmpty()) {
@@ -150,9 +152,9 @@ fun ScheduleScreen(
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(paddingValues = innerPadding)
                 .fillMaxSize()
-                .background(SoptTheme.colors.background)
+                .background(color = SoptTheme.colors.background)
                 .padding(bottom = 34.dp)
         ) {
             LazyColumn(
@@ -167,7 +169,7 @@ fun ScheduleScreen(
                         date = item.date,
                         title = item.title,
                         type = item.type,
-                        isRecentSchedule = item.isRecentSchedule,
+                        isRecentSchedule = item.isRecentSchedule
                     )
                 }
 
@@ -188,30 +190,32 @@ fun ScheduleScreen(
                         .height(200.dp)
                         .background(
                             brush = Brush.verticalGradient(
-                                listOf(
+                                colors = listOf(
                                     Color(0x000F1010),
-                                    Color(0xFF0F1010),
-                                ),
+                                    Color(0xFF0F1010)
+                                )
                             )
                         )
                 )
 
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .clip(RoundedCornerShape(12.dp))
-                        .background(SoptTheme.colors.primary)
-                        .clickable(onClick = navigateAttendance),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "출석하러 가기",
-                        style = SoptTheme.typography.label18SB,
-                        color = SoptTheme.colors.onPrimary,
-                        modifier = Modifier.padding(horizontal = 26.dp, vertical = 16.dp)
-                    )
+                if(userStatus == UserStatus.ACTIVE) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .clip(shape = RoundedCornerShape(12.dp))
+                            .background(color = SoptTheme.colors.primary)
+                            .clickable(onClick = navigateAttendance),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = "출석하러 가기",
+                            style = SoptTheme.typography.label18SB,
+                            color = SoptTheme.colors.onPrimary,
+                            modifier = Modifier.padding(horizontal = 26.dp, vertical = 16.dp)
+                        )
+                    }
                 }
             }
         }
