@@ -65,7 +65,7 @@ class OnboardingViewModel @Inject constructor(
 
     fun checkNewInPokeOnboarding() {
         viewModelScope.launch {
-            val isNew = checkNewInPokeOnboardingUseCase.invoke()
+            val isNew = checkNewInPokeOnboardingUseCase()
             _checkNewInPokeOnboardingState.value = isNew
 
             if (isNew) {
