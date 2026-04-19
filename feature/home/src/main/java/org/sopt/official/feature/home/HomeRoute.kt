@@ -409,15 +409,5 @@ private fun HomeScreenForVisitor(
             onProjectClick = homeShortcutNavigation::navigateToSoptProject,
             onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
         )
-
-        // 솝트 더 재밌게 즐기기 영역 숨김 - 솝마디, 콕찌르기는 GNB에서만 표시
-        // TODO: SP2 솝레터 구현이 완료되면 SOPT 더 재밌게 즐기기에 솝레터 추가하여 오픈 예정
-        /* Spacer(modifier = Modifier.height(height = 40.dp))
-        HomeEnjoySoptServicesBlock(
-            appServices = homeAppServices,
-            onAppServiceClick = onAppServiceClick,
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-        ) */
     }
 }
