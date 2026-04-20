@@ -52,14 +52,12 @@ import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
  * @param partItem 파트별 랭킹 아이템
  * @param rankerItem 개인별 랭킹 아이템
  * @param isMyRanking 사용자 본인의 랭킹 여부
- * @param isPartRanking 파트 랭킹 여부
  * */
 @Composable
 fun RankListItem(
     partItem: PartRankModel? = null,
     rankerItem: RankerUiModel? = null,
     isMyRanking: Boolean = false,
-    isPartRanking: Boolean = false,
     onClickPart: (PartRankModel) -> Unit = {},
     onClickUser: (RankerUiModel) -> Unit = {},
 ) {

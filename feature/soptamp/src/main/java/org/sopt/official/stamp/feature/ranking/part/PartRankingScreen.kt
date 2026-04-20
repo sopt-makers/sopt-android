@@ -118,7 +118,6 @@ fun PartRankingScreen(
                         onClickPart = {
                             onClickPart(item.part)
                         },
-                        isPartRanking = true,
                     )
                 }
             }
