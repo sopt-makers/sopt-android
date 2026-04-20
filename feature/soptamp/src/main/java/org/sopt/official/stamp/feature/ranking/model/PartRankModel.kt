@@ -30,6 +30,7 @@ data class PartRankModel(
     val rank: Int,
     val part: String,
     val point: Int,
+    val pointDecimal: Double,
 )
 
 internal fun List<PartRank>.toData(): List<PartRankModel> =
@@ -38,5 +39,6 @@ internal fun List<PartRank>.toData(): List<PartRankModel> =
             rank = it.rank,
             part = it.part,
             point = it.points,
+            pointDecimal = it.pointsDecimal
         )
     }

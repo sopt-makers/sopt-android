@@ -28,4 +28,5 @@ data class PartRank(
     val part: String,
     val rank: Int,
     val points: Int,
+    val pointsDecimal: Double
 )

@@ -36,10 +36,13 @@ data class PartRankResponse(
     val rank: Int,
     @SerialName("points")
     val points: Int,
+    @SerialName("pointsDecimal")
+    val pointsDecimal: Double
 ) {
     fun toDomain() = PartRank(
         part = part,
         rank = rank,
-        points = points
+        points = points,
+        pointsDecimal = pointsDecimal
     )
 }
