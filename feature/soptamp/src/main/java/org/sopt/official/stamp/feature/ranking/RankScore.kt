@@ -24,6 +24,7 @@
  */
 package org.sopt.official.stamp.feature.ranking
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,11 +36,30 @@ import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.style.MontserratRegular
 import org.sopt.official.stamp.designsystem.style.PretendardMedium
+import java.util.Locale
 
 @Composable
 fun RankScore(
     modifier: Modifier = Modifier,
     score: Int,
+) {
+    RankScoreText(modifier = modifier, scoreText = score.toString())
+}
+
+@Composable
+fun RankScore(
+    modifier: Modifier = Modifier,
+    score: Double,
+) {
+    val formattedScore = String.format(Locale.getDefault(),"%.2f", score)
+
+    RankScoreText(modifier = modifier, scoreText = formattedScore)
+}
+
+@Composable
+private fun RankScoreText(
+    modifier: Modifier = Modifier,
+    scoreText: String,
 ) {
     val textColor = SoptTheme.colors.primary
 
@@ -48,7 +68,7 @@ fun RankScore(
         verticalAlignment = Alignment.Bottom,
     ) {
         Text(
-            text = "$score",
+            text = scoreText,
             fontFamily = MontserratRegular,
             fontSize = 30.sp,
             fontWeight = FontWeight.W400,
@@ -66,8 +86,11 @@ fun RankScore(
 
 @Preview
 @Composable
-fun PreviewRankScore() {
+private fun PreviewRankScore() {
     SoptTheme {
-        RankScore(score = 1000)
+        Column {
+            RankScore(score = 1000)
+            RankScore(score = 350.12)
+        }
     }
 }
