@@ -374,13 +374,11 @@ fun MainScreen(
                         )
                     }
 
-                    if (navigator.currentTab == Home || navigator.currentTab == MainTab.SoptLog) {
-                        MainFloatingMenuOverlay(
-                            isOpen = isFloatingMenuOpen,
-                            onClose = { isFloatingMenuOpen = false },
-                            paddingValues = innerPadding
-                        )
-                    }
+                    MainFloatingMenuOverlay(
+                        isOpen = isFloatingMenuOpen,
+                        onClose = { isFloatingMenuOpen = false },
+                        paddingValues = innerPadding
+                    )
                 }
 
                 SoptBottomBar(
