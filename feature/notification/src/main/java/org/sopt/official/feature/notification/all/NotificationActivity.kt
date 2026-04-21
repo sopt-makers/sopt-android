@@ -56,6 +56,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,6 +69,7 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.launch
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Orange400
@@ -97,6 +99,8 @@ class NotificationActivity : AppCompatActivity() {
                     notifications.refresh()
                 }
             )
+
+            val coroutineScope = rememberCoroutineScope()
 
             val context = LocalContext.current
             val navigator = remember {
@@ -144,9 +148,11 @@ class NotificationActivity : AppCompatActivity() {
                                         modifier = Modifier
                                             .padding(end = 20.dp)
                                             .clickable{
-                                                viewModel.updateEntireNotificationReadingState(
-                                                    onSuccess = { notifications.refresh() }
-                                                )
+                                                coroutineScope.launch {
+                                                    viewModel.updateEntireNotificationReadingState().onSuccess {
+                                                        notifications.refresh()
+                                                    }
+                                                }
                                             }
                                             .padding(vertical = 8.dp, horizontal = 4.dp)
                                     )
