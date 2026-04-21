@@ -67,6 +67,7 @@ import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.feature.poke.util.toSafeAnonymousImageUrl
 import org.sopt.official.model.UserStatus
 
 @Composable
@@ -335,13 +336,23 @@ private fun initPokeMeView(
         }
 
         if (pokeMeItem.isAnonymous) {
-            pokeMeItem.anonymousImage.takeIf { it.isNotEmpty() }?.let {
-                imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
-            } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            val anonymousImageUrl = pokeMeItem.anonymousImage.toSafeAnonymousImageUrl()
+
+            if (anonymousImageUrl != null) {
+                imgUserProfileSomeonePokeMe.load(anonymousImageUrl) {
+                    placeholder(R.drawable.ic_empty_profile)
+                    error(R.drawable.ic_empty_profile)
+                    fallback(R.drawable.ic_empty_profile)
+                    transformations(CircleCropTransformation())
+                }
+            } else {
+                imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+            }
+
             tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
             tvFriendsStatusSomeonePokeMe.visibility = View.GONE
             tvUserGenerationSomeonePokeMe.visibility = View.GONE
-        } else {
+        }else {
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
@@ -414,9 +425,21 @@ private fun initPokeFriendView(
         }
 
         if (pokeFriendItem.isAnonymous) {
-            imgUserProfilePokeMyFriend.load(pokeFriendItem.anonymousImage) { transformations(CircleCropTransformation()) }
+            val anonymousImageUrl = pokeFriendItem.anonymousImage.toSafeAnonymousImageUrl()
+
+            if (anonymousImageUrl != null) {
+                imgUserProfilePokeMyFriend.load(anonymousImageUrl) {
+                    placeholder(R.drawable.ic_empty_profile)
+                    error(R.drawable.ic_empty_profile)
+                    fallback(R.drawable.ic_empty_profile)
+                    transformations(CircleCropTransformation())
+                }
+            } else {
+                imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
+            }
+
             tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
-        } else {
+        }else {
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
