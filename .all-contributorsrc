@@ -224,6 +224,16 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "vvan2",
+      "name": "Son Juwan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/113279387?v=4",
+      "profile": "https://github.com/vvan2",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
