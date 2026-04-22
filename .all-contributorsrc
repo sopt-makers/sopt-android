@@ -214,6 +214,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "seungjunGong",
+      "name": "Seungjun Gong",
+      "avatar_url": "https://avatars.githubusercontent.com/u/76648361?v=4",
+      "profile": "https://github.com/seungjunGong",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
