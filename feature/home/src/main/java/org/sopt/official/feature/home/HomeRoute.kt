@@ -24,12 +24,6 @@
  */
 package org.sopt.official.feature.home
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -44,7 +38,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -67,8 +60,6 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
-import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
-import org.sopt.official.feature.home.component.HomeFloatingButton
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
@@ -229,9 +220,6 @@ private fun HomeScreenForMember(
 ) {
     Box {
         val scrollState = rememberScrollState()
-        val isScrolledBeyondThreshold by remember {
-            derivedStateOf { scrollState.value > 130 || scrollState.isScrollInProgress }
-        }
         val shadowModifier = Modifier.dropShadow(
             shape = CircleShape,
             color = GrayAlpha700,
@@ -309,7 +297,9 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            if (homeAppServices.isNotEmpty()) {
+            // 솝트 더 재밌게 즐기기 영역 숨김 - 솝마디, 콕찌르기는 GNB에서만 표시
+            // TODO: SP2 솝레터 구현이 완료되면 SOPT 더 재밌게 즐기기에 솝레터 추가하여 오픈 예정
+            /* if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
@@ -318,10 +308,10 @@ private fun HomeScreenForMember(
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                 )
-            }
+            } */
 
             if (popularPosts.isNotEmpty()) {
-                Spacer(modifier = Modifier.height(height = 56.dp))
+                Spacer(modifier = Modifier.height(height = 36.dp))
 
                 HomePopularNewsSection(
                     postList = popularPosts,
@@ -370,44 +360,20 @@ private fun HomeScreenForMember(
         }
 
         if (toastData.active) {
-            AnimatedHomeButton(
-                visible = !isScrolledBeyondThreshold,
-                modifier = Modifier
+            HomeToastButton(
+                imageUrl = toastData.imageUrl,
+                longTitle = toastData.title,
+                missionDescription = toastData.toastDescription,
+                buttonText = toastData.buttonText,
+                onClick = {
+                    homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
+                    trackClickEvent(tracker, "at36_toast_button")
+                },
+                modifier = shadowModifier
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 82.dp)
-            ) {
-                HomeToastButton(
-                    imageUrl = toastData.imageUrl,
-                    longTitle = toastData.title,
-                    missionDescription = toastData.toastDescription,
-                    buttonText = toastData.buttonText,
-                    onClick = {
-                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                        trackClickEvent(tracker, "at36_toast_button")
-                    },
-                    modifier = shadowModifier
-                )
-            }
-
-            AnimatedHomeButton(
-                visible = isScrolledBeyondThreshold,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(horizontal = 20.dp)
-                    .padding(bottom = 82.dp)
-            ) {
-                HomeFloatingButton(
-                    imageUrl = toastData.imageUrl,
-                    shortTitle = toastData.buttonDescription,
-                    buttonText = toastData.buttonText,
-                    onClick = {
-                        homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                        trackClickEvent(tracker, "at36_floating_button")
-                    },
-                    modifier = shadowModifier
-                )
-            }
+                    .padding(bottom = 20.dp)
+            )
         }
     }
 }
@@ -443,35 +409,5 @@ private fun HomeScreenForVisitor(
             onProjectClick = homeShortcutNavigation::navigateToSoptProject,
             onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
         )
-        Spacer(modifier = Modifier.height(height = 40.dp))
-        HomeEnjoySoptServicesBlock(
-            appServices = homeAppServices,
-            onAppServiceClick = { url, _ -> homeAppServicesNavigation.navigateToDeepLink(url) },
-        )
-    }
-}
-
-@Composable
-private fun AnimatedHomeButton(
-    visible: Boolean,
-    modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
-) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = slideInVertically(
-            initialOffsetY = { it },
-            animationSpec = spring(
-                dampingRatio = Spring.DampingRatioMediumBouncy,
-                stiffness = Spring.StiffnessMedium
-            )
-        ),
-        exit = slideOutVertically(
-            targetOffsetY = { it * 3 },
-            animationSpec = tween(durationMillis = 100)
-        ),
-        modifier = modifier
-    ) {
-        content()
     }
 }
