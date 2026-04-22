@@ -26,8 +26,8 @@
     <!-- 온보딩 -->
     <string name="poke_title">콕 찌르기</string>
 
-    <string name="onboarding_bottom_sheet_title">익명 콕 찌르기 기능이 추가되었어요!</string>
-    <string name="onboarding_bottom_sheet_content">친구 단계가 올라가면 익명 친구에 대한 힌트를 알 수 있어요.\n친구와 천생연분 단계가 되면 어떤 일이 일어날까요?\n더욱 재밌어진 콕찌르기를 만나보세요!</string>
+    <string name="onboarding_bottom_sheet_title">관심있는 SOPT 회원을 콕! 찔러보세요</string>
+    <string name="onboarding_bottom_sheet_content">익명으로도 마음을 전할 수 있고,\n여러 번 찌를수록 친구가 되어 더욱 가까워질 수 있어요.</string>
     <string name="onboarding_bottom_sheet_confirm">확인</string>
 
     <string name="onboarding_title">아는 사람을 콕 찔러서 친구를 맺어보세요</string>

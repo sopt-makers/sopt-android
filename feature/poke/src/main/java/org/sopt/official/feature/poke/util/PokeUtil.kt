@@ -121,3 +121,15 @@ fun dismissBottomSheet(
         (fragment as? DialogFragment)?.dismissAllowingStateLoss()
     }
 }
+
+fun String?.toSafeAnonymousImageUrl(): String? {
+    val value = this?.trim().orEmpty()
+
+    return when {
+        value.isBlank() -> null
+        value.equals("null", ignoreCase = true) -> null
+        value.equals("nullanonymous.png", ignoreCase = true) -> null
+        value.contains("nullanonymous", ignoreCase = true) -> null
+        else -> value
+    }
+}
