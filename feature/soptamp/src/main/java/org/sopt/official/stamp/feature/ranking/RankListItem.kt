@@ -47,6 +47,12 @@ import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
+/**
+ * 랭킹 UI 레이아웃
+ * @param partItem 파트별 랭킹 아이템
+ * @param rankerItem 개인별 랭킹 아이템
+ * @param isMyRanking 사용자 본인의 랭킹 여부
+ * */
 @Composable
 fun RankListItem(
     partItem: PartRankModel? = null,
@@ -76,6 +82,7 @@ fun RankListItem(
     var name = ""
     var description: String? = ""
     var scorePoint: Int = -1
+    var scorePartRankPoint = 0.0
 
     if (partItem != null) {
         with(partItem) {
@@ -83,7 +90,7 @@ fun RankListItem(
             newRank = -1
             name = part
             description = null
-            scorePoint = point
+            scorePartRankPoint = pointDecimal
         }
     } else if (rankerItem != null) {
         with(rankerItem) {
@@ -131,12 +138,21 @@ fun RankListItem(
         }
         Spacer(modifier = Modifier.weight(0.04f))
         Box(
-            modifier = Modifier.weight(0.4f),
+            modifier = Modifier.weight(0.5f),
         ) {
-            RankScore(
-                modifier = Modifier.align(Alignment.CenterEnd),
-                score = scorePoint,
-            )
+            if (isPartRankItem) {
+                // 파트 랭킹
+                RankScore(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    score = scorePartRankPoint,
+                )
+            } else {
+                // 개인 랭킹
+                RankScore(
+                    modifier = Modifier.align(Alignment.CenterEnd),
+                    score = scorePoint,
+                )
+            }
         }
     }
 }

@@ -149,7 +149,7 @@ fun PartRankingBar(
     modifier: Modifier = Modifier,
 ) {
     val newRank =
-        if (part.point != 0) {
+        if (part.pointDecimal != 0.0) {
             part.rank
         } else {
             0
@@ -160,7 +160,7 @@ fun PartRankingBar(
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (part.rank < 4 && part.point != 0) {
+        if (part.rank < 4 && part.pointDecimal != 0.0) {
             TopRankBarOfRankText(rank = part.rank)
         }
         RankingBar(
@@ -195,32 +195,32 @@ fun PartRankingPreview() {
             PartRankModel(
                 3,
                 "기획",
-                500,
+                350.12
             ),
             PartRankModel(
                 4,
                 "디자인",
-                400,
+                350.12
             ),
             PartRankModel(
                 6,
                 "웹",
-                100,
+                350.12
             ),
             PartRankModel(
                 2,
                 "아요",
-                1000,
+                350.12
             ),
             PartRankModel(
                 1,
                 "안드",
-                8000,
+                350.12
             ),
             PartRankModel(
                 5,
                 "서버",
-                200,
+                350.12
             ),
         )
     SoptTheme {

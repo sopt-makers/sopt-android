@@ -29,7 +29,7 @@ import org.sopt.official.domain.soptamp.model.PartRank
 data class PartRankModel(
     val rank: Int,
     val part: String,
-    val point: Int,
+    val pointDecimal: Double,
 )
 
 internal fun List<PartRank>.toData(): List<PartRankModel> =
@@ -37,6 +37,6 @@ internal fun List<PartRank>.toData(): List<PartRankModel> =
         PartRankModel(
             rank = it.rank,
             part = it.part,
-            point = it.points,
+            pointDecimal = it.pointsDecimal
         )
     }
