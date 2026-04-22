@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.context.findActivity
+import org.sopt.official.common.util.setOnSingleClickListener
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
@@ -74,6 +75,7 @@ import org.sopt.official.model.UserStatus
 fun PokeNotificationScreen(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
+    navigateUp: () -> Unit,
     viewModel: PokeNotificationViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -189,14 +191,17 @@ fun PokeNotificationScreen(
                             if (!currentBinding.animationFriendViewLottie.isAnimating) {
                                 if (isBestFriend) {
                                     currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                                    currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
-                                    currentBinding.tvFreindLottieHint.text = context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
+                                    currentBinding.tvFreindLottie.text =
+                                        context.getString(R.string.anonymous_to_friend, user.anonymousName, "단짝친구가")
+                                    currentBinding.tvFreindLottieHint.text =
+                                        context.getString(R.string.anonymous_user_info_part, user.generation, user.part)
                                     currentBinding.animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
                                     currentBinding.animationFriendViewLottie.playAnimation()
                                 } else if (isSoulMate) {
                                     viewModel.setAnonymousFriend(user)
                                     currentBinding.layoutAnonymousFriendLottie.visibility = View.VISIBLE
-                                    currentBinding.tvFreindLottie.text = context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
+                                    currentBinding.tvFreindLottie.text =
+                                        context.getString(R.string.anonymous_to_friend, user.anonymousName, "천생연분이")
                                     currentBinding.animationFriendViewLottie.setAnimation(R.raw.bestfriendtosoulmate)
                                     currentBinding.animationFriendViewLottie.playAnimation()
                                 }
@@ -207,7 +212,7 @@ fun PokeNotificationScreen(
 
                 is UiState.ApiError -> {
                     dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
+                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 is UiState.Failure -> {
@@ -225,7 +230,7 @@ fun PokeNotificationScreen(
             properties = mapOf("view_type" to userStatus.name),
         )
 
-        onPauseOrDispose {  }
+        onPauseOrDispose { }
     }
 
     AndroidViewBinding(
@@ -237,6 +242,7 @@ fun PokeNotificationScreen(
         binding = this
         if (recyclerviewPokeNotification.adapter == null) {
             includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
+            includeAppBar.toolbar.setOnSingleClickListener { navigateUp() }
 
             recyclerviewPokeNotification.adapter = adapter
 

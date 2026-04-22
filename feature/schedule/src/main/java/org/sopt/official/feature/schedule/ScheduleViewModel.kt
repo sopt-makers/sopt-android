@@ -31,22 +31,34 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.schedule.model.Schedule
 import org.sopt.official.domain.schedule.repository.ScheduleRepository
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class ScheduleViewModel @Inject constructor(
     private val scheduleRepository: ScheduleRepository,
+    userStorage: UserStorage
 ) : ViewModel() {
     private val _schedule = MutableStateFlow(ScheduleState())
     val schedule: StateFlow<ScheduleState>
         get() = _schedule.asStateFlow()
+
+    val userStatus = userStorage.userStatus
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UserStatus.UNAUTHENTICATED
+        )
 
     init {
         getScheduleList()

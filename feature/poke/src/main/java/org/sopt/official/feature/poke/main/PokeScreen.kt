@@ -63,12 +63,15 @@ import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
+import org.sopt.official.feature.poke.util.dismissBottomSheet
 import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.feature.poke.util.toSafeAnonymousImageUrl
 import org.sopt.official.model.UserStatus
+
+private const val MESSAGE_LIST_BOTTOM_SHEET_TAG = "MessageListBottomSheet"
 
 @Composable
 fun PokeScreen(
@@ -88,6 +91,8 @@ fun PokeScreen(
     val fragmentActivity = remember {
         context.findActivity<FragmentActivity>()
     }
+
+    val fragmentManager = fragmentActivity?.supportFragmentManager
 
     val pokeMeUiState by viewModel.pokeMeUiState.collectAsStateWithLifecycle()
     val pokeFriendUiState by viewModel.pokeFriendUiState.collectAsStateWithLifecycle()
@@ -152,10 +157,12 @@ fun PokeScreen(
                     pokeMainListAdapter.submitList(state.data)
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
+
                 is UiState.ApiError, is UiState.Failure -> {
                     activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
+
                 is UiState.Loading -> {}
             }
         }
@@ -169,9 +176,11 @@ fun PokeScreen(
                         initPokeMeView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
                     }
                 }
+
                 is UiState.ApiError, is UiState.Failure -> {
                     currentBinding.layoutSomeonePokeMe.setVisible(false)
                 }
+
                 else -> {}
             }
         }
@@ -181,12 +190,23 @@ fun PokeScreen(
         binding?.let { currentBinding ->
             when (val state = pokeFriendUiState) {
                 is UiState.Success -> {
+                    currentBinding.layoutPokeMyFriend.setVisible(true)
                     if (activity is FragmentActivity) {
                         initPokeFriendView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
                     }
                 }
-                is UiState.ApiError -> activity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                is UiState.Failure -> activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+
+                is UiState.ApiError -> {
+                    currentBinding.layoutPokeMyFriend.setVisible(false)
+                    if (state.statusCode != POKE_FRIEND_EMPTY_STATUS_CODE) {
+                        activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                    }
+                }
+
+                is UiState.Failure -> {
+                    currentBinding.layoutPokeMyFriend.setVisible(false)
+                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                }
                 else -> {}
             }
         }
@@ -232,10 +252,19 @@ fun PokeScreen(
                         }
                     }
                 }
-                is UiState.ApiError -> activity?.showPokeToast(context.getString(R.string.poke_user_alert_exceeded))
-                is UiState.Failure -> activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+
+                is UiState.ApiError -> {
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                }
+
+                is UiState.Failure -> {
+                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                }
+
                 else -> {}
             }
+            dismissBottomSheet(fragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
+            viewModel.resetPokeUserUiState()
         }
     }
 
@@ -336,23 +365,11 @@ private fun initPokeMeView(
         }
 
         if (pokeMeItem.isAnonymous) {
-            val anonymousImageUrl = pokeMeItem.anonymousImage.toSafeAnonymousImageUrl()
-
-            if (anonymousImageUrl != null) {
-                imgUserProfileSomeonePokeMe.load(anonymousImageUrl) {
-                    placeholder(R.drawable.ic_empty_profile)
-                    error(R.drawable.ic_empty_profile)
-                    fallback(R.drawable.ic_empty_profile)
-                    transformations(CircleCropTransformation())
-                }
-            } else {
-                imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
-            }
-
+            imgUserProfileSomeonePokeMe.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
             tvFriendsStatusSomeonePokeMe.visibility = View.GONE
             tvUserGenerationSomeonePokeMe.visibility = View.GONE
-        }else {
+        } else {
             pokeMeItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
@@ -425,21 +442,9 @@ private fun initPokeFriendView(
         }
 
         if (pokeFriendItem.isAnonymous) {
-            val anonymousImageUrl = pokeFriendItem.anonymousImage.toSafeAnonymousImageUrl()
-
-            if (anonymousImageUrl != null) {
-                imgUserProfilePokeMyFriend.load(anonymousImageUrl) {
-                    placeholder(R.drawable.ic_empty_profile)
-                    error(R.drawable.ic_empty_profile)
-                    fallback(R.drawable.ic_empty_profile)
-                    transformations(CircleCropTransformation())
-                }
-            } else {
-                imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
-            }
-
+            imgUserProfilePokeMyFriend.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
-        }else {
+        } else {
             pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
                 imgUserProfilePokeMyFriend.load(it) { transformations(CircleCropTransformation()) }
             } ?: imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
@@ -470,7 +475,7 @@ private fun showMessageListBottomSheet(
     viewModel: PokeMainViewModel,
     userId: Int,
     pokeMessageType: PokeMessageType,
-    isFirstMeet: Boolean = false
+    isFirstMeet: Boolean = false,
 ) {
     val messageListBottomSheet =
         MessageListBottomSheetFragment.Builder()
@@ -485,5 +490,5 @@ private fun showMessageListBottomSheet(
             }
             .create()
 
-    messageListBottomSheet.show(activity.supportFragmentManager, messageListBottomSheet.tag)
+    messageListBottomSheet.show(activity.supportFragmentManager, MESSAGE_LIST_BOTTOM_SHEET_TAG)
 }

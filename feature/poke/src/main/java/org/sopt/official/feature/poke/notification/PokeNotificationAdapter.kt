@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.sopt.official.feature.poke.notification
 
 import android.view.LayoutInflater
@@ -24,7 +48,7 @@ class PokeNotificationAdapter(
     ),
 ) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationListViewHolder {
-        return NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return NotificationListViewHolder(ItemPokeNotificationBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
@@ -64,41 +88,14 @@ class PokeNotificationAdapter(
         fun onBind(item: PokeUser) {
             with(viewBinding) {
                 if (item.isAnonymous) {
-                    val anonymousImage = item.anonymousImage.trim()
-                    val hasValidAnonymousImage =
-                        anonymousImage.isNotBlank() &&
-                            !anonymousImage.equals("null", ignoreCase = true) &&
-                            !anonymousImage.equals("nullanonymous.png", ignoreCase = true) &&
-                            !anonymousImage.contains("nullanonymous", ignoreCase = true)
-
-                    if (hasValidAnonymousImage) {
-                        imgUserProfile.load(anonymousImage) {
-                            placeholder(R.drawable.ic_empty_profile)
-                            error(R.drawable.ic_empty_profile)
-                            fallback(R.drawable.ic_empty_profile)
-                            transformations(CircleCropTransformation())
-                        }
-                    } else {
-                        imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
-                    }
-
+                    imgUserProfile.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
                     tvUserName.text = item.anonymousName
                     tvUserGeneration.visibility = View.GONE
                     tvUserFriendsStatus.visibility = View.GONE
                 } else {
-                    val profileImage = item.profileImage.trim()
-
-                    if (profileImage.isNotBlank()) {
-                        imgUserProfile.load(profileImage) {
-                            placeholder(R.drawable.ic_empty_profile)
-                            error(R.drawable.ic_empty_profile)
-                            fallback(R.drawable.ic_empty_profile)
-                            transformations(CircleCropTransformation())
-                        }
-                    } else {
-                        imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
-                    }
-
+                    item.profileImage.takeIf { it.isNotEmpty() }?.let {
+                        imgUserProfile.load(it) { transformations(CircleCropTransformation()) }
+                    } ?: imgUserProfile.setImageResource(R.drawable.ic_empty_profile)
                     tvUserName.text = item.name
                     tvUserGeneration.text = root.context.getString(R.string.poke_user_info, item.generation, item.part)
                     tvUserFriendsStatus.text =
