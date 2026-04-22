@@ -165,4 +165,3 @@ enum class DeepLinkType(
 }
 
 const val SOPTLOG_FORTUNE = "soptlog/fortune"
-
