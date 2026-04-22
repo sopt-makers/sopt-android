@@ -356,7 +356,7 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.height(height = 58.dp))
+            Spacer(modifier = Modifier.height(height = 118.dp))
         }
 
         if (toastData.active) {

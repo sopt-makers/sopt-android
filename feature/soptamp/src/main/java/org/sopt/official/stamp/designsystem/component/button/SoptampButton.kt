@@ -35,7 +35,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.common.util.noRippleClickable
 
 /**
  * SOPTAMP에서 사용하는 기본 액션 버튼

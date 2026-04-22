@@ -30,15 +30,14 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import timber.log.Timber
+import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
@@ -56,15 +55,12 @@ class NotificationViewModel @Inject constructor(
         }.flow
     }.cachedIn(viewModelScope)
 
-    fun updateEntireNotificationReadingState() {
-        viewModelScope.launch {
-            runCatching {
-                repository.updateEntireNotificationReadingState()
-            }.onFailure {
-                Timber.e(it)
-            }
+    suspend fun updateEntireNotificationReadingState(): Result<Unit> =
+        runCatching {
+            repository.updateEntireNotificationReadingState()
+        }.onFailure {
+            Timber.e(it)
         }
-    }
 
     fun updateNotificationCategory(category: NotificationCategory) {
         _state.update {

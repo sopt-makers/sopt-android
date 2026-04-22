@@ -43,7 +43,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.stamp.feature.ranking.model.PartRankModel
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 

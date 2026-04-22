@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.poke.implementation
 
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
@@ -51,7 +52,11 @@ class PokeRepositoryImpl @Inject constructor(
 ) : PokeRepository {
 
     override suspend fun checkNewInPokeOnboarding(): Boolean {
-        return localDataSource.isAnonymousInPokeOnboarding
+        if (!localDataSource.isAnonymousInPokeOnboarding) return false
+
+        return suspendRunCatching {
+            remoteDataSource.checkNewInPoke().data?.isNew == true
+        }.getOrDefault(false)
     }
 
     override suspend fun updateNewInPokeOnboarding() {
@@ -81,9 +86,9 @@ class PokeRepositoryImpl @Inject constructor(
     override suspend fun getPokeNotificationList(page: Int): GetPokeNotificationListResponse {
         return remoteDataSource.getPokeNotificationList(
             getPokeNotificationListRequest =
-            GetPokeNotificationListRequest(
-                page = page,
-            ),
+                GetPokeNotificationListRequest(
+                    page = page,
+                ),
         )
     }
 
@@ -94,30 +99,30 @@ class PokeRepositoryImpl @Inject constructor(
     override suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse {
         return remoteDataSource.getFriendListDetail(
             getFriendListDetailRequest =
-            GetFriendListDetailRequest(
-                type = type,
-                page = page,
-            ),
+                GetFriendListDetailRequest(
+                    type = type,
+                    page = page,
+                ),
         )
     }
 
     override suspend fun getPokeMessageList(messageType: PokeMessageType): GetPokeMessageListResponse {
         return remoteDataSource.getPokeMessageList(
             getPokeMessageListRequest =
-            GetPokeMessageListRequest(
-                messageType = messageType,
-            ),
+                GetPokeMessageListRequest(
+                    messageType = messageType,
+                ),
         )
     }
 
     override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): PokeUserResponse {
         return remoteDataSource.pokeUser(
             pokeUserRequest =
-            PokeUserRequest(
-                userId = userId,
-                isAnonymous = isAnonymous,
-                message = message,
-            ),
+                PokeUserRequest(
+                    userId = userId,
+                    isAnonymous = isAnonymous,
+                    message = message,
+                ),
         )
     }
 }
