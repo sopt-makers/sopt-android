@@ -68,6 +68,7 @@ import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.feature.poke.util.toSafeAnonymousImageUrl
 import org.sopt.official.model.UserStatus
 
 private const val MESSAGE_LIST_BOTTOM_SHEET_TAG = "MessageListBottomSheet"
