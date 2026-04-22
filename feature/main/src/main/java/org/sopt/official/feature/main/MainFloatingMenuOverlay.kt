@@ -45,20 +45,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -66,6 +61,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.model.PlaygroundWebLink
 import org.sopt.official.webview.view.WebViewActivity
@@ -92,78 +88,58 @@ private val menuList = listOf(
 ).toImmutableList()
 
 @Composable
-internal fun MainFloatingButton(
+internal fun MainFloatingMenuOverlay(
+    isOpen: Boolean,
+    onClose: () -> Unit,
     paddingValues: PaddingValues
 ) {
-    var isFloatingButtonClicked by remember { mutableStateOf(false) }
-
-    val rotation by animateFloatAsState(
-        targetValue = if (isFloatingButtonClicked) 0f else 45f,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION, easing = FastOutSlowInEasing)
-    )
-
     val backgroundAlpha by animateFloatAsState(
-        targetValue = if (isFloatingButtonClicked) 0.65f else 0f,
+        targetValue = if (isOpen) 0.65f else 0f,
         animationSpec = tween(durationMillis = ANIMATION_DURATION, easing = FastOutSlowInEasing)
     )
 
-    Box(
-        contentAlignment = Alignment.BottomEnd,
-        modifier = Modifier
-            .fillMaxSize()
+    AnimatedVisibility(
+        visible = isOpen,
+        modifier = Modifier.fillMaxSize()
     ) {
-        if (isFloatingButtonClicked) {
+        Box(
+            contentAlignment = Alignment.BottomEnd,
+            modifier = Modifier.fillMaxSize()
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(SoptTheme.colors.onSurface.copy(alpha = backgroundAlpha))
-                    .clickable {
-                        isFloatingButtonClicked = false
-                    }
+                    .noRippleClickable(onClose)
             )
-        }
 
-        AnimatedVisibility(
-            visible = isFloatingButtonClicked,
-            enter = slideInVertically(
-                initialOffsetY = { it * 2 },
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessLow
-                )
-            ),
-            exit = slideOutVertically(
-                targetOffsetY = { it * 2 },
-                animationSpec = tween(durationMillis = ANIMATION_DURATION)
-            ),
-            modifier = Modifier
-                .padding(bottom = 146.dp, end = 20.dp)
-        ) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalAlignment = Alignment.End
+            Box(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .padding(bottom = 20.dp, end = 20.dp)
+                    .animateEnterExit(
+                        enter = slideInVertically(
+                            initialOffsetY = { it * 2 },
+                            animationSpec = spring(
+                                dampingRatio = Spring.DampingRatioLowBouncy,
+                                stiffness = Spring.StiffnessLow
+                            )
+                        ),
+                        exit = slideOutVertically(
+                            targetOffsetY = { it * 2 },
+                            animationSpec = tween(durationMillis = ANIMATION_DURATION)
+                        )
+                    )
             ) {
-                menuList.forEach { (title, menu) ->
-                    FloatingMenuItem(title = title, menuList = menu)
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                    horizontalAlignment = Alignment.End
+                ) {
+                    menuList.forEach { (title, menu) ->
+                        FloatingMenuItem(title = title, menuList = menu)
+                    }
                 }
             }
-        }
-
-        FloatingActionButton(
-            onClick = { isFloatingButtonClicked = !isFloatingButtonClicked },
-            shape = RoundedCornerShape(18.dp),
-            containerColor = SoptTheme.colors.primary,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(paddingValues)
-                .padding(bottom = 84.dp, end = 20.dp)
-                .size(48.dp)
-        ) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_close_28),
-                contentDescription = null,
-                modifier = Modifier.rotate(rotation)
-            )
         }
     }
 }

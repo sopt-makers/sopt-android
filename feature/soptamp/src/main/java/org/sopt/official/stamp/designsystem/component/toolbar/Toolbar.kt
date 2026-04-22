@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
-import org.sopt.official.stamp.designsystem.component.util.noRippleClickable
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.stamp.util.MultiFormFactorPreviews
 
 enum class ToolbarIconType(
