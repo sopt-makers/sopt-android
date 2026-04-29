@@ -47,7 +47,6 @@ data class PokeOnboardingUiState(
         var isAlreadyPoke: Boolean,
         val isAnonymous: Boolean,
         val anonymousName: String,
-        val anonymousImage: String,
     ) : Serializable {
         fun toEntity() = PokeUser(
             userId = userId,
@@ -63,7 +62,6 @@ data class PokeOnboardingUiState(
             isAlreadyPoke = isAlreadyPoke,
             isAnonymous = isAnonymous,
             anonymousName = anonymousName,
-            anonymousImage = anonymousImage,
         )
     }
 }
@@ -88,5 +86,4 @@ fun PokeUser.toSerializable() = PokeOnboardingUiState.PokeUsers(
     isAlreadyPoke = isAlreadyPoke,
     isAnonymous = isAnonymous,
     anonymousName = anonymousName,
-    anonymousImage = anonymousImage,
 )

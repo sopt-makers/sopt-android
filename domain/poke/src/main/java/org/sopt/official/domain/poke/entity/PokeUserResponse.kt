@@ -40,5 +40,4 @@ data class PokeUser(
     var isAlreadyPoke: Boolean,
     val isAnonymous: Boolean,
     val anonymousName: String,
-    val anonymousImage: String,
 )
