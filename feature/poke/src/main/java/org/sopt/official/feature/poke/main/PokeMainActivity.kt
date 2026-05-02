@@ -305,9 +305,7 @@ class PokeMainActivity : AppCompatActivity() {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, pokeMeItem.userId))))
             }
             if (pokeMeItem.isAnonymous) {
-                pokeMeItem.anonymousImage.takeIf { it.isNotEmpty() }?.let {
-                    imgUserProfileSomeonePokeMe.load(it) { transformations(CircleCropTransformation()) }
-                } ?: imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
+                imgUserProfileSomeonePokeMe.setImageResource(R.drawable.ic_empty_profile)
                 tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
                 tvFriendsStatusSomeonePokeMe.visibility = View.GONE
                 tvUserGenerationSomeonePokeMe.visibility = View.GONE
@@ -369,7 +367,7 @@ class PokeMainActivity : AppCompatActivity() {
             }
 
             if (pokeFriendItem.isAnonymous) {
-                imgUserProfilePokeMyFriend.load(pokeFriendItem.anonymousImage) { transformations(CircleCropTransformation()) }
+                imgUserProfilePokeMyFriend.setImageResource(R.drawable.ic_empty_profile)
                 tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
             } else {
                 pokeFriendItem.profileImage.takeIf { it.isNotEmpty() }?.let {
