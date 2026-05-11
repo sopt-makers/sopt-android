@@ -44,6 +44,7 @@ include(
     ":data:soptamp",
     ":data:soptlog",
     ":data:appjamtamp",
+    ":data:sopletter",
 
     ":domain:auth",
     ":domain:fortune",
@@ -55,6 +56,7 @@ include(
     ":domain:soptamp",
     ":domain:soptlog",
     ":domain:appjamtamp",
+    ":domain:sopletter",
 
     ":feature:auth",
     ":feature:fortune",
@@ -66,5 +68,6 @@ include(
     ":feature:soptamp",
     ":feature:soptlog",
     ":feature:main",
-    ":feature:appjamtamp"
+    ":feature:appjamtamp",
+    ":feature:sopletter"
 )
