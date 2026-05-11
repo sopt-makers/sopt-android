@@ -200,7 +200,7 @@ fun FriendListSummaryScreen(
 
                     val user = state.data
                     val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-                    val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+                    val isSoulMate = isSoulMate(user.pokeNum)
 
                     if (!isBestFriend && !isSoulMate) {
                         fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))

@@ -181,7 +181,7 @@ fun PokeNotificationScreen(
                         }
                     } else {
                         val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-                        val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+                        val isSoulMate = isSoulMate(user.pokeNum)
 
                         if (!isBestFriend && !isSoulMate) {
                             if (!state.isFirstMeet) {

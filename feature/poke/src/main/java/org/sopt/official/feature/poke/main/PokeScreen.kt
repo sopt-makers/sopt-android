@@ -68,7 +68,6 @@ import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import org.sopt.official.feature.poke.util.toSafeAnonymousImageUrl
 import org.sopt.official.model.UserStatus
 
 private const val MESSAGE_LIST_BOTTOM_SHEET_TAG = "MessageListBottomSheet"
@@ -207,6 +206,7 @@ fun PokeScreen(
                     currentBinding.layoutPokeMyFriend.setVisible(false)
                     activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
                 }
+
                 else -> {}
             }
         }
@@ -239,7 +239,7 @@ fun PokeScreen(
                                 animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
                                 animationFriendViewLottie.playAnimation()
                             }
-                        } else if (isSoulMate(user.pokeNum, user.isAnonymous)) {
+                        } else if (isSoulMate(user.pokeNum)) {
                             viewModel.setAnonymousFriend(user)
                             with(currentBinding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
