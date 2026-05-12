@@ -111,6 +111,8 @@ private const val soulMateMinPokeCount = 10
 
 fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
 fun isSoulMate(pokeNum: Int) = pokeNum in soulMateRange
+fun isAnonymousVisible(isAnonymous: Boolean, relationName: String): Boolean =
+    isAnonymous && relationName != PokeFriendType.SOULMATE.readableName
 fun isAnonymousCheckboxVisible(pokeNum: Int): Boolean = pokeNum < soulMateMinPokeCount
 
 fun dismissBottomSheet(

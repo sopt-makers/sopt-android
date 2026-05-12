@@ -64,6 +64,7 @@ import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
+import org.sopt.official.feature.poke.util.isAnonymousVisible
 import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
@@ -349,10 +350,11 @@ private fun initPokeMeView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val isAnonymousVisible = isAnonymousVisible(pokeMeItem.isAnonymous, pokeMeItem.relationName)
     with(binding) {
         layoutSomeonePokeMe.setVisible(true)
         imgUserProfileSomeonePokeMe.setOnClickListener {
-            if (pokeMeItem.isAnonymous) return@setOnClickListener
+            if (isAnonymousVisible) return@setOnClickListener
             tracker.track(
                 type = EventType.CLICK,
                 name = "memberprofile",
@@ -365,7 +367,7 @@ private fun initPokeMeView(
             context.startActivity(Intent(Intent.ACTION_VIEW, context.getString(R.string.poke_user_profile_url, pokeMeItem.userId).toUri()))
         }
 
-        if (pokeMeItem.isAnonymous) {
+        if (isAnonymousVisible) {
             imgUserProfileSomeonePokeMe.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
             tvFriendsStatusSomeonePokeMe.visibility = View.GONE
@@ -421,9 +423,10 @@ private fun initPokeFriendView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val isAnonymousVisible = isAnonymousVisible(pokeFriendItem.isAnonymous, pokeFriendItem.relationName)
     with(binding) {
         imgUserProfilePokeMyFriend.setOnClickListener {
-            if (pokeFriendItem.isAnonymous) return@setOnClickListener
+            if (isAnonymousVisible) return@setOnClickListener
 
             tracker.track(
                 type = EventType.CLICK,
@@ -443,7 +446,7 @@ private fun initPokeFriendView(
             )
         }
 
-        if (pokeFriendItem.isAnonymous) {
+        if (isAnonymousVisible) {
             imgUserProfilePokeMyFriend.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
         } else {

@@ -34,6 +34,7 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeUserLargeBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeUserSmallBinding
+import org.sopt.official.feature.poke.util.isAnonymousVisible
 
 class PokeUserListAdapter(
     private val pokeUserListItemViewType: PokeUserListItemViewType,
@@ -63,15 +64,17 @@ class PokeUserListAdapter(
     }
 
     override fun onBindViewHolder(holder: PokeUserViewHolder, position: Int) {
+        val user = currentList[position]
+        val isAnonymousVisible = isAnonymousVisible(user.isAnonymous, user.relationName)
         holder.apply {
-            onBind(currentList[position])
+            onBind(user)
             itemView.findViewById<ImageView>(R.id.imageView_profile).setOnClickListener {
-                if (currentList[position].isAnonymous) return@setOnClickListener
-                clickListener.onClickProfileImage(currentList[position].userId)
+                if (isAnonymousVisible) return@setOnClickListener
+                clickListener.onClickProfileImage(user.userId)
             }
             itemView.findViewById<ImageButton>(R.id.imageButton_poke).setOnClickListener {
-                if (currentList[position].isAlreadyPoke) return@setOnClickListener
-                clickListener.onClickPokeButton(currentList[position])
+                if (user.isAlreadyPoke) return@setOnClickListener
+                clickListener.onClickPokeButton(user)
             }
         }
     }

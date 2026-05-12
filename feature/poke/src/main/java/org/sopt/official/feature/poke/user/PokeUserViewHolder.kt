@@ -33,6 +33,7 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeUserLargeBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeUserSmallBinding
+import org.sopt.official.feature.poke.util.isAnonymousVisible
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 sealed class PokeUserViewHolder(
@@ -44,9 +45,10 @@ sealed class PokeUserViewHolder(
         private val binding: ItemPokeUserSmallBinding,
     ) : PokeUserViewHolder(binding) {
         override fun onBind(pokeUser: PokeUser) {
+            val isAnonymousVisible = isAnonymousVisible(pokeUser.isAnonymous, pokeUser.relationName)
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
-                if (pokeUser.isAnonymous) {
+                if (isAnonymousVisible) {
                     imageViewProfile.load(R.drawable.image_anonymous_profile) {
                         crossfade(true)
                         transformations(CircleCropTransformation())
@@ -73,9 +75,10 @@ sealed class PokeUserViewHolder(
         private val binding: ItemPokeUserLargeBinding,
     ) : PokeUserViewHolder(binding) {
         override fun onBind(pokeUser: PokeUser) {
+            val isAnonymousVisible = isAnonymousVisible(pokeUser.isAnonymous, pokeUser.relationName)
             binding.apply {
                 when {
-                    pokeUser.isAnonymous ->
+                    isAnonymousVisible ->
                         imageViewProfile.load(R.drawable.image_anonymous_profile) {
                             crossfade(true)
                             transformations(CircleCropTransformation())
@@ -93,8 +96,8 @@ sealed class PokeUserViewHolder(
                             transformations(CircleCropTransformation())
                         }
                 }
-                textViewUserName.text = if (pokeUser.isAnonymous) pokeUser.anonymousName else pokeUser.name
-                textViewUserInfo.isVisible = !pokeUser.isAnonymous
+                textViewUserName.text = if (isAnonymousVisible) pokeUser.anonymousName else pokeUser.name
+                textViewUserInfo.isVisible = !isAnonymousVisible
                 textViewUserInfo.text = binding.root.context.getString(R.string.poke_user_info, pokeUser.generation, pokeUser.part)
                 imageButtonPoke.isEnabled = !pokeUser.isAlreadyPoke
             }
