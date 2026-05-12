@@ -107,9 +107,11 @@ fun Fragment.showPokeToast(message: String) {
 
 private val bestFriendRange = 5..6
 private val soulMateRange = 11..12
+private const val soulMateMinPokeCount = 10
 
 fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
 fun isSoulMate(pokeNum: Int) = pokeNum in soulMateRange
+fun isAnonymousCheckboxVisible(pokeNum: Int): Boolean = pokeNum < soulMateMinPokeCount
 
 fun dismissBottomSheet(
     fragmentManager: FragmentManager?,

@@ -76,6 +76,7 @@ import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxVisible
 import org.sopt.official.model.UserStatus
 
 @Composable
@@ -142,6 +143,7 @@ fun FriendListSummaryScreen(
                 if (fragmentManager != null) {
                     val bottomSheet = MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
+                        .setAnonymousCheckboxVisible(isVisible = isAnonymousCheckboxVisible(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,

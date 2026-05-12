@@ -67,6 +67,7 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxVisible
 
 @Deprecated("FriendListSummaryScreen으로 대체")
 @AndroidEntryPoint
@@ -305,6 +306,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
+                        .setAnonymousCheckboxVisible(isVisible = isAnonymousCheckboxVisible(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
