@@ -37,7 +37,6 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeNotificationBinding
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
-import org.sopt.official.feature.poke.util.isAnonymousVisible
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 class PokeNotificationAdapter(
@@ -58,7 +57,7 @@ class PokeNotificationAdapter(
             val user = currentList[position]
 
             itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
-                if (isAnonymousVisible(user.isAnonymous, user.relationName)) return@setOnClickListener
+                if (user.isAnonymous) return@setOnClickListener
                 clickListener.onClickProfileImage(user.userId)
             }
 
@@ -89,7 +88,7 @@ class PokeNotificationAdapter(
     ) : RecyclerView.ViewHolder(viewBinding.root) {
         fun onBind(item: PokeUser) {
             with(viewBinding) {
-                if (isAnonymousVisible(item.isAnonymous, item.relationName)) {
+                if (item.isAnonymous) {
                     imgUserProfile.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
                     tvUserName.text = item.anonymousName
                     tvUserGeneration.visibility = View.GONE

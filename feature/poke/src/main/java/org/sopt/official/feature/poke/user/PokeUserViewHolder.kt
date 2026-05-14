@@ -33,7 +33,6 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.databinding.ItemPokeUserLargeBinding
 import org.sopt.official.feature.poke.databinding.ItemPokeUserSmallBinding
-import org.sopt.official.feature.poke.util.isAnonymousVisible
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 
 sealed class PokeUserViewHolder(
@@ -45,10 +44,9 @@ sealed class PokeUserViewHolder(
         private val binding: ItemPokeUserSmallBinding,
     ) : PokeUserViewHolder(binding) {
         override fun onBind(pokeUser: PokeUser) {
-            val isAnonymousVisible = isAnonymousVisible(pokeUser.isAnonymous, pokeUser.relationName)
             binding.apply {
                 imageViewFriendRelationOutline.setRelationStrokeColor(pokeUser.relationName)
-                if (isAnonymousVisible) {
+                if (pokeUser.isAnonymous) {
                     imageViewProfile.load(R.drawable.image_anonymous_profile) {
                         crossfade(true)
                         transformations(CircleCropTransformation())
@@ -75,7 +73,7 @@ sealed class PokeUserViewHolder(
         private val binding: ItemPokeUserLargeBinding,
     ) : PokeUserViewHolder(binding) {
         override fun onBind(pokeUser: PokeUser) {
-            val isAnonymousVisible = isAnonymousVisible(pokeUser.isAnonymous, pokeUser.relationName)
+            val isAnonymousVisible = pokeUser.isAnonymous
             binding.apply {
                 when {
                     isAnonymousVisible ->

@@ -64,7 +64,6 @@ import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
-import org.sopt.official.feature.poke.util.isAnonymousVisible
 import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
@@ -349,7 +348,7 @@ private fun initPokeMeView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
-    val isAnonymousVisible = isAnonymousVisible(pokeMeItem.isAnonymous, pokeMeItem.relationName)
+    val isAnonymousVisible = pokeMeItem.isAnonymous
     with(binding) {
         layoutSomeonePokeMe.setVisible(true)
         imgUserProfileSomeonePokeMe.setOnClickListener {
@@ -421,7 +420,7 @@ private fun initPokeFriendView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
-    val isAnonymousVisible = isAnonymousVisible(pokeFriendItem.isAnonymous, pokeFriendItem.relationName)
+    val isAnonymousVisible = pokeFriendItem.isAnonymous
     with(binding) {
         imgUserProfilePokeMyFriend.setOnClickListener {
             if (isAnonymousVisible) return@setOnClickListener

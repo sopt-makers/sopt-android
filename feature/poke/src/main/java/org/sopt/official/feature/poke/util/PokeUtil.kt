@@ -109,8 +109,6 @@ private val bestFriendRange = 5..6
 private val soulMateRange = 11..12
 fun isBestFriend(pokeNum: Int, isAnonymous: Boolean) = pokeNum in bestFriendRange && isAnonymous
 fun isSoulMate(pokeNum: Int) = pokeNum in soulMateRange
-fun isAnonymousVisible(isAnonymous: Boolean, relationName: String): Boolean =
-    isAnonymous && relationName != PokeFriendType.SOULMATE.readableName
 
 fun dismissBottomSheet(
     fragmentManager: FragmentManager?,
