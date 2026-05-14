@@ -35,7 +35,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeMessageList
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -51,7 +50,6 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
-    var isAnonymousCheckboxVisible: Boolean = true
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[MessageListBottomSheetViewModel::class.java]
@@ -87,9 +85,6 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initCheckbox() {
-        binding.checkBoxAnonymous.setVisible(isAnonymousCheckboxVisible)
-        binding.textViewAnonymous.setVisible(isAnonymousCheckboxVisible)
-
         binding.checkBoxAnonymous.setOnClickListener {
             viewModel.setPokeAnonymousCheckboxClicked()
         }
@@ -105,7 +100,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val messageListItemClickListener =
         MessageItemClickListener { message ->
-            val isAnonymous = if (isAnonymousCheckboxVisible) viewModel.pokeAnonymousCheckboxChecked.value else false
+            val isAnonymous = viewModel.pokeAnonymousCheckboxChecked.value
             onClickMessageListItem?.let { it(message, isAnonymous) }
         }
 
@@ -121,11 +116,6 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
         fun onClickMessageListItem(event: (message: String, isAnonymous: Boolean) -> Unit): Builder {
             bottomSheet.onClickMessageListItem = event
-            return this
-        }
-
-        fun setAnonymousCheckboxVisible(isVisible: Boolean): Builder {
-            bottomSheet.isAnonymousCheckboxVisible = isVisible
             return this
         }
     }
