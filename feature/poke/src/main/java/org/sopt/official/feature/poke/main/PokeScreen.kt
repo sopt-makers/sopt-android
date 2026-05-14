@@ -65,6 +65,7 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
 import org.sopt.official.feature.poke.util.isBestFriend
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
@@ -406,6 +407,7 @@ private fun initPokeMeView(
                     false -> PokeMessageType.POKE_FRIEND
                 },
                 pokeMeItem.isFirstMeet,
+                isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeMeItem.pokeNum),
             )
         }
     }
@@ -472,6 +474,7 @@ private fun initPokeFriendView(
                 viewModel = viewModel,
                 userId = pokeFriendItem.userId,
                 pokeMessageType = PokeMessageType.POKE_FRIEND,
+                isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeFriendItem.pokeNum),
             )
         }
     }
@@ -483,10 +486,12 @@ private fun showMessageListBottomSheet(
     userId: Int,
     pokeMessageType: PokeMessageType,
     isFirstMeet: Boolean = false,
+    isAnonymousCheckboxLocked: Boolean = false,
 ) {
     val messageListBottomSheet =
         MessageListBottomSheetFragment.Builder()
             .setMessageListType(pokeMessageType)
+            .setAnonymousCheckboxLocked(isAnonymousCheckboxLocked)
             .onClickMessageListItem { message, isAnonymous ->
                 viewModel.pokeUser(
                     userId = userId,

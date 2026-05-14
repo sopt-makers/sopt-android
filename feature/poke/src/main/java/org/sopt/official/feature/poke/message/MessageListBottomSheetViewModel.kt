@@ -79,4 +79,8 @@ class MessageListBottomSheetViewModel @Inject constructor(
             }
         }
     }
+
+    fun setPokeAnonymousCheckboxChecked(isChecked: Boolean) {
+        _pokeAnonymousCheckboxChecked.value = isChecked
+    }
 }

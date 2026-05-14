@@ -64,6 +64,7 @@ import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
 import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
@@ -119,6 +120,7 @@ fun PokeNotificationScreen(
                 if (fragmentActivity != null && fragmentManager != null) {
                     val bottomSheet = MessageListBottomSheetFragment.Builder()
                         .setMessageListType(messageType)
+                        .setAnonymousCheckboxLocked(isLocked = isAnonymousCheckboxLocked(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
