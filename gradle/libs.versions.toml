@@ -2,8 +2,8 @@
 compileSdk = "36"
 minSdk = "30"
 targetSdk = "35"
-appVersion = "4.5.0"
-versionCode = "40500"
+appVersion = "4.5.1"
+versionCode = "40501"
 
 kotlin = "2.3.10"
 kotlinx-serialization-json = "1.10.0"
