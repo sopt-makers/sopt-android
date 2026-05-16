@@ -54,15 +54,16 @@ class PokeNotificationAdapter(
     override fun onBindViewHolder(holder: NotificationListViewHolder, position: Int) {
         holder.apply {
             onBind(currentList[position])
+            val user = currentList[position]
 
             itemView.findViewById<ImageView>(R.id.img_user_profile).setOnClickListener {
-                if (currentList[position].isAnonymous) return@setOnClickListener
-                clickListener.onClickProfileImage(currentList[position].userId)
+                if (user.isAnonymous) return@setOnClickListener
+                clickListener.onClickProfileImage(user.userId)
             }
 
             itemView.findViewById<ImageView>(R.id.img_poke).setOnClickListener {
-                if (currentList[position].isAlreadyPoke) return@setOnClickListener
-                clickListener.onClickPokeButton(currentList[position])
+                if (user.isAlreadyPoke) return@setOnClickListener
+                clickListener.onClickPokeButton(user)
             }
         }
     }

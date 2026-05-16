@@ -50,6 +50,7 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
+    var isAnonymousCheckboxLocked: Boolean = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[MessageListBottomSheetViewModel::class.java]
@@ -85,8 +86,15 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     }
 
     private fun initCheckbox() {
+        viewModel.setPokeAnonymousCheckboxChecked(!isAnonymousCheckboxLocked)
+
         binding.checkBoxAnonymous.setOnClickListener {
-            viewModel.setPokeAnonymousCheckboxClicked()
+            if (isAnonymousCheckboxLocked) {
+                binding.checkBoxAnonymous.isChecked = false
+                showPokeToast(getString(R.string.toast_poke_soulmate_realname_only))
+            } else {
+                viewModel.setPokeAnonymousCheckboxClicked()
+            }
         }
 
         viewModel.pokeAnonymousCheckboxChecked.flowWithLifecycle(lifecycle).onEach { isChecked ->
@@ -100,7 +108,8 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
     private val messageListItemClickListener =
         MessageItemClickListener { message ->
-            onClickMessageListItem?.let { it(message, viewModel.pokeAnonymousCheckboxChecked.value) }
+            val isAnonymous = if (isAnonymousCheckboxLocked) false else viewModel.pokeAnonymousCheckboxChecked.value
+            onClickMessageListItem?.let { it(message, isAnonymous) }
         }
 
     class Builder {
@@ -115,6 +124,11 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
 
         fun onClickMessageListItem(event: (message: String, isAnonymous: Boolean) -> Unit): Builder {
             bottomSheet.onClickMessageListItem = event
+            return this
+        }
+
+        fun setAnonymousCheckboxLocked(isLocked: Boolean): Builder {
+            bottomSheet.isAnonymousCheckboxLocked = isLocked
             return this
         }
     }

@@ -73,6 +73,7 @@ import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
 import org.sopt.official.feature.poke.util.isBestFriend
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
@@ -142,6 +143,7 @@ fun FriendListSummaryScreen(
                 if (fragmentManager != null) {
                     val bottomSheet = MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
+                        .setAnonymousCheckboxLocked(isLocked = isAnonymousCheckboxLocked(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
@@ -200,7 +202,7 @@ fun FriendListSummaryScreen(
 
                     val user = state.data
                     val isBestFriend = isBestFriend(user.pokeNum, user.isAnonymous)
-                    val isSoulMate = isSoulMate(user.pokeNum, user.isAnonymous)
+                    val isSoulMate = isSoulMate(user.pokeNum)
 
                     if (!isBestFriend && !isSoulMate) {
                         fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_user_success))

@@ -65,6 +65,7 @@ import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 
@@ -305,6 +306,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
+                        .setAnonymousCheckboxLocked(isAnonymousCheckboxLocked(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,

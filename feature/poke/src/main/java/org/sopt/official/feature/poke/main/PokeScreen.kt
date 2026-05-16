@@ -65,10 +65,10 @@ import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.feature.poke.util.dismissBottomSheet
 import org.sopt.official.feature.poke.util.isBestFriend
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
-import org.sopt.official.feature.poke.util.toSafeAnonymousImageUrl
 import org.sopt.official.model.UserStatus
 
 private const val MESSAGE_LIST_BOTTOM_SHEET_TAG = "MessageListBottomSheet"
@@ -207,6 +207,7 @@ fun PokeScreen(
                     currentBinding.layoutPokeMyFriend.setVisible(false)
                     activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
                 }
+
                 else -> {}
             }
         }
@@ -239,7 +240,7 @@ fun PokeScreen(
                                 animationFriendViewLottie.setAnimation(R.raw.friendtobestfriend)
                                 animationFriendViewLottie.playAnimation()
                             }
-                        } else if (isSoulMate(user.pokeNum, user.isAnonymous)) {
+                        } else if (isSoulMate(user.pokeNum)) {
                             viewModel.setAnonymousFriend(user)
                             with(currentBinding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
@@ -348,10 +349,11 @@ private fun initPokeMeView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val isAnonymousVisible = pokeMeItem.isAnonymous
     with(binding) {
         layoutSomeonePokeMe.setVisible(true)
         imgUserProfileSomeonePokeMe.setOnClickListener {
-            if (pokeMeItem.isAnonymous) return@setOnClickListener
+            if (isAnonymousVisible) return@setOnClickListener
             tracker.track(
                 type = EventType.CLICK,
                 name = "memberprofile",
@@ -364,7 +366,7 @@ private fun initPokeMeView(
             context.startActivity(Intent(Intent.ACTION_VIEW, context.getString(R.string.poke_user_profile_url, pokeMeItem.userId).toUri()))
         }
 
-        if (pokeMeItem.isAnonymous) {
+        if (isAnonymousVisible) {
             imgUserProfileSomeonePokeMe.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNameSomeonePokeMe.text = pokeMeItem.anonymousName
             tvFriendsStatusSomeonePokeMe.visibility = View.GONE
@@ -405,6 +407,7 @@ private fun initPokeMeView(
                     false -> PokeMessageType.POKE_FRIEND
                 },
                 pokeMeItem.isFirstMeet,
+                isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeMeItem.pokeNum),
             )
         }
     }
@@ -419,9 +422,10 @@ private fun initPokeFriendView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val isAnonymousVisible = pokeFriendItem.isAnonymous
     with(binding) {
         imgUserProfilePokeMyFriend.setOnClickListener {
-            if (pokeFriendItem.isAnonymous) return@setOnClickListener
+            if (isAnonymousVisible) return@setOnClickListener
 
             tracker.track(
                 type = EventType.CLICK,
@@ -441,7 +445,7 @@ private fun initPokeFriendView(
             )
         }
 
-        if (pokeFriendItem.isAnonymous) {
+        if (isAnonymousVisible) {
             imgUserProfilePokeMyFriend.load(R.drawable.image_anonymous_profile) { transformations(CircleCropTransformation()) }
             tvUserNamePokeMyFriend.text = pokeFriendItem.anonymousName
         } else {
@@ -465,7 +469,13 @@ private fun initPokeFriendView(
                         "view_profile" to pokeFriendItem.userId,
                     ),
             )
-            showMessageListBottomSheet(activity, viewModel, pokeFriendItem.userId, PokeMessageType.POKE_FRIEND)
+            showMessageListBottomSheet(
+                activity = activity,
+                viewModel = viewModel,
+                userId = pokeFriendItem.userId,
+                pokeMessageType = PokeMessageType.POKE_FRIEND,
+                isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeFriendItem.pokeNum),
+            )
         }
     }
 }
@@ -476,10 +486,12 @@ private fun showMessageListBottomSheet(
     userId: Int,
     pokeMessageType: PokeMessageType,
     isFirstMeet: Boolean = false,
+    isAnonymousCheckboxLocked: Boolean = false,
 ) {
     val messageListBottomSheet =
         MessageListBottomSheetFragment.Builder()
             .setMessageListType(pokeMessageType)
+            .setAnonymousCheckboxLocked(isAnonymousCheckboxLocked)
             .onClickMessageListItem { message, isAnonymous ->
                 viewModel.pokeUser(
                     userId = userId,

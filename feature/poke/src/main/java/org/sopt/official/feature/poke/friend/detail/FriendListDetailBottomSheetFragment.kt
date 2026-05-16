@@ -40,7 +40,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -57,15 +56,18 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
-import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.user.PokeUserListItemViewType
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
+import org.sopt.official.feature.poke.util.isAnonymousCheckboxLocked
+import org.sopt.official.feature.poke.util.isBestFriend
+import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
@@ -240,6 +242,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
+                        .setAnonymousCheckboxLocked(isLocked = isAnonymousCheckboxLocked(user.pokeNum))
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
@@ -293,7 +296,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                     is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> {
                         messageListBottomSheet?.dismiss()
-                        if (PokeMainActivity.isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
+                        if (isBestFriend(it.data.pokeNum, it.data.isAnonymous)) {
                             with(binding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
                                 tvFreindLottie.text = getString(R.string.anonymous_to_friend, it.data.anonymousName, "단짝친구가")
@@ -303,7 +306,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                                     setAnimation(R.raw.friendtobestfriend)
                                 }.playAnimation()
                             }
-                        } else if (PokeMainActivity.isSoulMate(it.data.pokeNum, it.data.isAnonymous)) {
+                        } else if (isSoulMate(it.data.pokeNum)) {
                             viewModel.setAnonymousFriend(it.data)
                             with(binding) {
                                 layoutAnonymousFriendLottie.visibility = View.VISIBLE
