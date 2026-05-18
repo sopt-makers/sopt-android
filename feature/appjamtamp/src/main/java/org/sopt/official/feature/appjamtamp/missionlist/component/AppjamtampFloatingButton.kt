@@ -40,7 +40,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
