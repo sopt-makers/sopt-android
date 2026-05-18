@@ -85,7 +85,7 @@ private fun AppjamtampFloatingBody() {
         )
 
         Text(
-            text = "앱잼팀 랭킹",
+            text = "앱잼팀 현황",
             style = SoptTheme.typography.heading18B,
             color = Gray950
         )

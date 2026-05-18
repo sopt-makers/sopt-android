@@ -25,7 +25,6 @@
 package org.sopt.official.feature.appjamtamp.ranking.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,23 +32,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.TopMissionScoreUiModel
-import org.sopt.official.common.util.noRippleClickable
 
 @Composable
 internal fun TodayScoreRaking(
@@ -57,19 +51,11 @@ internal fun TodayScoreRaking(
     modifier: Modifier = Modifier,
     onTeamRankingClick: (teamNumber: String) -> Unit = {}
 ) {
-    val rankIconRes = when (topMissionScore.rank) {
-        1 -> R.drawable.ic_rank_1
-        2 -> R.drawable.ic_rank_2
-        3 -> R.drawable.ic_rank_3
-        else -> R.drawable.ic_ranking_default
-    }
-    val rankTextColor = if (topMissionScore.rank <= 3) Color.White else SoptTheme.colors.onSurface100
-
     Column(
         modifier = modifier
             .clip(shape = RoundedCornerShape(size = 10.dp))
             .background(color = SoptTheme.colors.onSurface900)
-            .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 8.dp)
+            .padding(start = 12.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
             .noRippleClickable {
                 onTeamRankingClick(topMissionScore.teamNumber)
             }
@@ -80,31 +66,12 @@ internal fun TodayScoreRaking(
                 .align(Alignment.Start),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Box(
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = rankIconRes),
-                    contentDescription = null,
-                    tint = Color.Unspecified
-                )
-                Text(
-                    text = topMissionScore.rank.toString(),
-                    style = SoptTheme.typography.heading16B,
-                    color = rankTextColor,
-                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 9.dp)
-                )
-            }
-
             Text(
                 text = topMissionScore.teamName,
                 color = White,
                 style = SoptTheme.typography.heading16B,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
-                modifier = Modifier
-                    .padding(vertical = 2.dp)
-                    .padding(start = 5.dp)
             )
         }
 
@@ -132,7 +99,7 @@ private fun TodayScoreRakingPreview() {
     SoptTheme {
         val mockTopMissionScoreUiModel = TopMissionScoreUiModel(
             rank = 2,
-            teamName = "노바",
+            teamName = "키어로",
             teamNumber = "FIRST",
             todayPoints = 1000,
             totalPoints = 3000
