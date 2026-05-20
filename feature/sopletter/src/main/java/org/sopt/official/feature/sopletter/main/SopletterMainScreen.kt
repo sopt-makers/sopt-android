@@ -12,10 +12,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -109,30 +111,64 @@ private fun SopletterMainScreen(
         }
 
         if (uiState.memoList.isEmpty()) {
-            Spacer(modifier = Modifier.weight(160f))
+            Column(modifier = Modifier.fillMaxSize()) {
+                Spacer(modifier = Modifier.weight(160f))
 
-            EmptySopletterContent(modifier = Modifier.weight(187f))
+                EmptySopletterContent(modifier = Modifier.weight(187f))
 
-            Spacer(modifier = Modifier.weight(343f))
+                Spacer(modifier = Modifier.weight(343f))
+            }
         } else {
-            LazyVerticalStaggeredGrid(
-                modifier = Modifier.fillMaxSize(),
-                columns = StaggeredGridCells.Fixed(2),
-                verticalItemSpacing = (-10).dp,
+            Box(
+                modifier = Modifier
+                    .fillMaxSize(),
             ) {
-                itemsIndexed(
-                    items = uiState.memoList,
-                    key = { _, item -> item.id },
-                ) { index, item ->
-                    SopletterMemoCard(
-                        memo = item,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
-                    )
+                LazyVerticalStaggeredGrid(
+                    modifier = Modifier.fillMaxSize(),
+                    columns = StaggeredGridCells.Fixed(2),
+                    verticalItemSpacing = (-10).dp,
+                ) {
+                    itemsIndexed(
+                        items = uiState.memoList,
+                        key = { _, item -> item.id },
+                    ) { index, item ->
+                        SopletterMemoCard(
+                            memo = item,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
+                        )
+                    }
                 }
+
+                EditSopletterFloatingButton(
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 20.dp, bottom = 66.dp),
+                )
             }
         }
+    }
+}
+
+@Composable
+private fun EditSopletterFloatingButton(
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .size(64.dp)
+            .background(
+                color = Color.White,
+                shape = RoundedCornerShape(24.dp),
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_edit_28),
+            contentDescription = null,
+            tint = Color.Unspecified,
+        )
     }
 }
 
