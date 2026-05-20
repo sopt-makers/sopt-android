@@ -1,43 +1,30 @@
 package org.sopt.official.feature.sopletter.main
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
+import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
+import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
+import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoColor
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoRotationType
@@ -52,12 +39,20 @@ fun SopletterMainRoute(
 
     SopletterMainScreen(
         uiState = uiState,
+        onCloseClick = { /* TODO close click */ },
+        onDownloadClick = { /* TODO download click */ },
+        onReportClick = { /* TODO report click */ },
+        onEditFABClick = { /* TODO edit FAB click */ },
     )
 }
 
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
+    onCloseClick: () -> Unit,
+    onDownloadClick: () -> Unit,
+    onReportClick: () -> Unit,
+    onEditFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -65,50 +60,13 @@ private fun SopletterMainScreen(
             .fillMaxSize()
             .background(color = SoptTheme.colors.background),
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    horizontal = 20.dp,
-                    vertical = 12.dp,
-                ),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-
-                Text(
-                    text = "${uiState.generation}기 솝레터",
-                    style = SoptTheme.typography.heading18B,
-                    color = SoptTheme.colors.onSurface10,
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_download_32),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_alert_32),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-            }
-        }
+        SopletterMainTopBar(
+            generation = uiState.generation,
+            isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
+            onCloseClick = onCloseClick,
+            onDownloadClick = onDownloadClick,
+            onReportClick = onReportClick,
+        )
 
         if (uiState.memoList.isEmpty()) {
             Column(modifier = Modifier.fillMaxSize()) {
@@ -141,86 +99,14 @@ private fun SopletterMainScreen(
                     }
                 }
 
-                EditSopletterFloatingButton(
+                EditSopletterFloatingActionButton(
+                    onEditFABClick = onEditFABClick,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 20.dp, bottom = 66.dp),
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun EditSopletterFloatingButton(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .size(64.dp)
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(24.dp),
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_edit_28),
-            contentDescription = null,
-            tint = Color.Unspecified,
-        )
-    }
-}
-
-@Composable
-private fun EmptySopletterContent(
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(17.dp),
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.img_sopletter_empty),
-            contentDescription = null,
-        )
-
-        Text(
-            text = "작성된 솝레터가 없어요.\n우리 기수 첫 번쨰 솝레터의 주인공은?",
-            style = SoptTheme.typography.body18M,
-            color = SoptTheme.colors.onSurface200,
-            textAlign = TextAlign.Center,
-        )
-    }
-}
-
-@Composable
-private fun SopletterMemoCard(
-    memo: SopletterMemoUiModel,
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier
-            .rotate(memo.rotation.degree),
-        contentAlignment = Alignment.Center,
-    ) {
-        Image(
-            imageVector = ImageVector.vectorResource(memo.shapeImageRes),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(memo.memoColor.color),
-        )
-
-        Text(
-            text = memo.message,
-            modifier = Modifier
-                .width(111.dp)
-                .height(110.dp),
-            style = SoptTheme.typography.body14M,
-            color = SoptTheme.colors.onSurface800,
-            textAlign = TextAlign.Center,
-            overflow = TextOverflow.Ellipsis,
-        )
     }
 }
 
@@ -263,7 +149,11 @@ private fun SopletterMainScreenPreview() {
             uiState = SopletterMainUiState(
                 generation = 38,
                 memoList = memoList,
-            )
+            ),
+            onCloseClick = { /* TODO close click */ },
+            onDownloadClick = { /* TODO download click */ },
+            onReportClick = { /* TODO report click */ },
+            onEditFABClick = { /* TODO edit FAB click */ },
         )
     }
 }
