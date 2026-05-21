@@ -1,13 +1,12 @@
 package org.sopt.official.feature.sopletter.main.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -39,101 +38,92 @@ internal fun SopletterMemoDetailDialog(
         Column(
             modifier = modifier
                 .padding(20.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .background(
+                    color = state.memoColor.color,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = state.memoColor.color,
-                        shape = RoundedCornerShape(10.dp),
-                    )
-                    .padding(all = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Text(
-                        text = state.writerName,
-                        style = SoptTheme.typography.title16SB,
-                        color = SoptTheme.colors.onSurface600,
-                        modifier = Modifier
-                            .padding(
-                                top = 8.dp,
-                                bottom = 4.dp,
-                            ),
-                    )
-
-                    when (state.isMine) {
-                        true -> {
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
-                                    contentDescription = null,
-                                    tint = SoptTheme.colors.onSurface800,
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .noRippleClickable(state.event.onEditClick),
-                                )
-
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
-                                    contentDescription = null,
-                                    tint = SoptTheme.colors.onSurface800,
-                                    modifier = Modifier
-                                        .size(20.dp)
-                                        .noRippleClickable(state.event.onDeleteClick),
-                                )
-                            }
-                        }
-
-                        false -> Unit
-                    }
-                }
-
                 Text(
-                    text = state.content,
-                    style = SoptTheme.typography.body16R,
+                    text = state.writerName,
+                    style = SoptTheme.typography.title16SB,
                     color = SoptTheme.colors.onSurface600,
+                    modifier = Modifier
+                        .padding(
+                            top = 8.dp,
+                            bottom = 4.dp,
+                        ),
+                )
+
+                when (state.isMine) {
+                    true -> {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
+                                contentDescription = null,
+                                tint = SoptTheme.colors.onSurface800,
+                                modifier = Modifier
+                                    .noRippleClickable(state.event.onEditClick),
+                            )
+
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
+                                contentDescription = null,
+                                tint = SoptTheme.colors.onSurface800,
+                                modifier = Modifier
+                                    .noRippleClickable(state.event.onDeleteClick),
+                            )
+                        }
+                    }
+
+                    false -> Unit
+                }
+            }
+
+            Text(
+                text = state.content,
+                style = SoptTheme.typography.body16R,
+                color = SoptTheme.colors.onSurface600,
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = state.date,
+                    style = SoptTheme.typography.body16R,
+                    color = SoptTheme.colors.onSurface300,
                 )
 
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.noRippleClickable(state.event.onLikeClick),
                 ) {
-                    Text(
-                        text = state.date,
-                        style = SoptTheme.typography.body16R,
-                        color = SoptTheme.colors.onSurface300,
+                    Icon(
+                        imageVector = ImageVector.vectorResource(
+                            if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
+                        ),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
                     )
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        modifier = Modifier.noRippleClickable(state.event.onLikeClick),
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(
-                                if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
-                            ),
-                            contentDescription = null,
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(16.dp),
-                        )
-                        Text(
-                            text = "${state.likeCount}",
-                            style = SoptTheme.typography.body16R,
-                            color = SoptTheme.colors.onSurface600,
-                        )
-                    }
+                    Text(
+                        text = "${state.likeCount}",
+                        style = SoptTheme.typography.body16R,
+                        color = SoptTheme.colors.onSurface600,
+                    )
                 }
             }
 
