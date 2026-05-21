@@ -15,6 +15,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.sopletter.R
@@ -22,10 +23,13 @@ import org.sopt.official.sopletter.R
 @Composable
 internal fun SopletterMemoCard(
     memo: SopletterMemoUiModel,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.rotate(memo.rotation.degree),
+        modifier = modifier
+            .rotate(memo.rotation.degree)
+            .noRippleClickable(onClick),
         contentAlignment = Alignment.Center,
     ) {
         Image(

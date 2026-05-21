@@ -13,23 +13,27 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
+import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
+import org.sopt.official.feature.sopletter.main.mapper.toDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoColor
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoRotationType
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
-import org.sopt.official.sopletter.R
+import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
+import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
 
 @Composable
 fun SopletterMainRoute(
@@ -39,6 +43,13 @@ fun SopletterMainRoute(
 
     SopletterMainScreen(
         uiState = uiState,
+        onMemoClick = { viewModel.updateSelectMemoDetail(it.toDetailDialogState()) },
+        detailDialogEvent = SopletterMemoDetailDialogState.Event(
+            onLikeClick = { /* TODO like click */ },
+            onEditClick = { /* TODO edit click */ },
+            onDeleteClick = { /* TODO delete click */ },
+            onDismissClick = viewModel::clearSelectedMemo,
+        ),
         onCloseClick = { /* TODO close click */ },
         onDownloadClick = { /* TODO download click */ },
         onReportClick = { /* TODO report click */ },
@@ -49,6 +60,8 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
+    onMemoClick: (SopletterMemoUiModel) -> Unit,
+    detailDialogEvent: SopletterMemoDetailDialogState.Event,
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
@@ -92,6 +105,7 @@ private fun SopletterMainScreen(
                     ) { index, item ->
                         SopletterMemoCard(
                             memo = item,
+                            onClick = { onMemoClick(item) },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
@@ -108,47 +122,34 @@ private fun SopletterMainScreen(
             }
         }
     }
+
+    uiState.selectedMemoDetail?.let { memo ->
+        SopletterMemoDetailDialog(
+            state = memo.copy(event = detailDialogEvent),
+        )
+    }
 }
 
 @Preview
 @Composable
-private fun SopletterMainScreenPreview() {
+private fun SopletterMainScreenPreview(
+    @PreviewParameter(SopletterMainPreviewParameterProvider::class) initialState: SopletterMainUiState,
+) {
     SoptTheme {
-        val memoList = persistentListOf(
-            SopletterMemoUiModel(
-                id = 1L,
-                message = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하세",
-                shapeImageRes = R.drawable.ic_sopletter_memo_cloud,
-                rotation = SopletterMemoRotationType.LEFT,
-                memoColor = SopletterMemoColor.BLUE,
-            ),
-            SopletterMemoUiModel(
-                id = 2L,
-                message = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하세",
-                shapeImageRes = R.drawable.ic_sopletter_memo_sharp,
-                rotation = SopletterMemoRotationType.RIGHT,
-                memoColor = SopletterMemoColor.MINT,
-            ),
-            SopletterMemoUiModel(
-                id = 3L,
-                message = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하세",
-                shapeImageRes = R.drawable.ic_sopletter_memo_smooth,
-                rotation = SopletterMemoRotationType.CENTER,
-                memoColor = SopletterMemoColor.PINK,
-            ),
-            SopletterMemoUiModel(
-                id = 4L,
-                message = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하세",
-                shapeImageRes = R.drawable.ic_sopletter_memo_point,
-                rotation = SopletterMemoRotationType.LEFT,
-                memoColor = SopletterMemoColor.YELLOW,
-            ),
-        )
+        var previewState by remember { mutableStateOf(initialState) }
 
         SopletterMainScreen(
-            uiState = SopletterMainUiState(
-                generation = 38,
-                memoList = memoList,
+            uiState = previewState,
+            onMemoClick = { memo ->
+                previewState = previewState.copy(selectedMemoDetail = memo.toDetailDialogState())
+            },
+            detailDialogEvent = SopletterMemoDetailDialogState.Event(
+                onLikeClick = { },
+                onEditClick = { /* TODO edit click */ },
+                onDeleteClick = { /* TODO delete click */ },
+                onDismissClick = {
+                    previewState = previewState.copy(selectedMemoDetail = null)
+                },
             ),
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
