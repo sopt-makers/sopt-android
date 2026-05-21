@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.sopletter.R
 
@@ -40,13 +40,13 @@ internal fun SopletterMainTopBar(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            IconButton(onClick = onCloseClick) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                )
-            }
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .noRippleClickable(onClick = onCloseClick),
+            )
 
             Text(
                 text = "${generation}기 솝레터",
@@ -60,22 +60,22 @@ internal fun SopletterMainTopBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             if (isDownloadBtnVisible) {
-                IconButton(onClick = onDownloadClick) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_download_32),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
-                }
-            }
-
-            IconButton(onClick = onReportClick) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_alert_32),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_download_32),
                     contentDescription = null,
                     tint = Color.Unspecified,
+                    modifier = Modifier
+                        .noRippleClickable(onClick = onDownloadClick),
                 )
             }
+
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_alert_32),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .noRippleClickable(onClick = onReportClick),
+            )
         }
     }
 }
