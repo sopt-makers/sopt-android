@@ -25,7 +25,7 @@
 package org.sopt.official.domain.soptlog.model
 
 data class SoptLogInfo(
-    val isActive: Boolean,
+    val isActive: Boolean = false,
     val isFortuneChecked: Boolean,
     val todayFortuneText: String,
     val soptampCount: Int? = null,
