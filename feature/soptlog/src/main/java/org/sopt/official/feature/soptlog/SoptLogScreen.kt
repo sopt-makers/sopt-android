@@ -169,7 +169,8 @@ private fun SoptlogScreen(
             // 활동 기수 여부에 관계없이 앱잼참여 회원만 보여줌 (앱잼탬프 기간만)
             // 앱잼 기간 솝탬프의 경우는 isAppjamJoined 가 true인 경우에만 보여줌 (앱잼 참여인 경우에만)
             // 일반 솝탬프의 경우는 (기존) soptLogInfo.isActive인 경우에만 보여줌 (활동 기수인 경우에만)
-            if (soptLogInfo.isActive) {
+            // 2026-05-21 기획 상으로 앱잼 기간에는 임시 숨김 처리 개편예정
+            /*if (soptLogInfo.isActive) {
                 SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
@@ -181,7 +182,7 @@ private fun SoptlogScreen(
                     }
                 )
                 Spacer(modifier = Modifier.height(28.dp))
-            }
+            }*/
 
             // 각 섹션 엠티뷰 표시 시
             /*SoptLogEmptySection(
