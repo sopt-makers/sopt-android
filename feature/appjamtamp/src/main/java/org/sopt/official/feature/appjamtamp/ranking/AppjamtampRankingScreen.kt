@@ -130,7 +130,7 @@ internal fun AppjamtampRankingScreen(
             .navigationBarsPadding(),
         topBar = {
             BackButtonHeader(
-                title = "앱잼팀 랭킹",
+                title = "앱잼팀 현황",
                 onBackButtonClick = onBackButtonClick,
                 modifier = Modifier
                     .padding(vertical = 12.dp)
@@ -153,7 +153,7 @@ internal fun AppjamtampRankingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "따끈따끈 합숙미션 구경하기",
+                    text = "따끈따끈 지금 앱잼팀은?",
                     color = White,
                     style = SoptTheme.typography.heading20B
                 )
@@ -207,7 +207,7 @@ internal fun AppjamtampRankingScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "오늘의 득점 랭킹",
+                    text = "오늘의 미션 달성 보드",
                     color = White,
                     style = SoptTheme.typography.heading20B
                 )
@@ -225,7 +225,7 @@ internal fun AppjamtampRankingScreen(
             Spacer(modifier = Modifier.height(height = 8.dp))
 
             Text(
-                text = "미션을 인증해 오늘의 순위를 뒤집어보세요!",
+                text = "오늘 미션 인증하고 추가 점수를 획득해보세요!",
                 color = SoptTheme.colors.onSurface200,
                 style = SoptTheme.typography.body13M
             )
@@ -312,7 +312,7 @@ private fun AppjamtampRankingScreenPreview() {
                 ),
                 TopMissionScoreUiModel(
                     rank = 3,
-                    teamName = "비트",
+                    teamName = "키어로",
                     teamNumber = "FIRST",
                     todayPoints = 950,
                     totalPoints = 4200
