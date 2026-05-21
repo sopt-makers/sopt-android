@@ -56,7 +56,6 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
-import org.sopt.official.feature.soptlog.component.SoptLogEmptySection
 import org.sopt.official.feature.soptlog.component.SoptLogSection
 import org.sopt.official.feature.soptlog.component.TodayFortuneBanner
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
