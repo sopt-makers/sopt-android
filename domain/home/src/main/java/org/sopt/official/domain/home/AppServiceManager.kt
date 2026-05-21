@@ -23,8 +23,5 @@ class AppServiceManager @Inject constructor(
         
         getAppServiceUseCase()
             .onSuccess { _appServices.value = it }
-            .onFailure {
-                _appServices.value = emptyList()
-            }
     }
 }
