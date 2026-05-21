@@ -29,7 +29,7 @@ internal fun EmptySopletterContent(
         )
 
         Text(
-            text = "작성된 솝레터가 없어요.\n우리 기수 첫 번쨰 솝레터의 주인공은?",
+            text = "작성된 솝레터가 없어요.\n우리 기수 첫 번째 솝레터의 주인공은?",
             style = SoptTheme.typography.body18M,
             color = SoptTheme.colors.onSurface200,
             textAlign = TextAlign.Center,
