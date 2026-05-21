@@ -117,7 +117,7 @@ private fun SopletterMainScreen(
                     onEditFABClick = onEditFABClick,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 20.dp, bottom = 66.dp),
+                        .padding(end = 20.dp, bottom = 24.dp),
                 )
             }
         }
