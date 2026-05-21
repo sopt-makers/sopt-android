@@ -22,6 +22,25 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
+    fun onLikeClick() {
+        val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
+
+        // TODO : 상단 스낵바 로직 추가 예정
+
+        _uiState.update { state ->
+            state.copy(
+                selectedMemoDetail = selectedMemoDetail.copy(
+                    isLiked = !selectedMemoDetail.isLiked,
+                    likeCount = if (selectedMemoDetail.isLiked) {
+                        selectedMemoDetail.likeCount - 1
+                    } else {
+                        selectedMemoDetail.likeCount + 1
+                    },
+                ),
+            )
+        }
+    }
+
     fun clearSelectedMemo() {
         _uiState.update { state ->
             state.copy(selectedMemoDetail = null)

@@ -31,9 +31,9 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
 import org.sopt.official.feature.sopletter.main.mapper.toDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
+import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
 
 @Composable
 fun SopletterMainRoute(
@@ -45,7 +45,7 @@ fun SopletterMainRoute(
         uiState = uiState,
         onMemoClick = { viewModel.updateSelectMemoDetail(it.toDetailDialogState()) },
         detailDialogEvent = SopletterMemoDetailDialogState.Event(
-            onLikeClick = { /* TODO like click */ },
+            onLikeClick = viewModel::onLikeClick,
             onEditClick = { /* TODO edit click */ },
             onDeleteClick = { /* TODO delete click */ },
             onDismissClick = viewModel::clearSelectedMemo,

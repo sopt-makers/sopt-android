@@ -20,6 +20,7 @@ enum class SopletterMemoColor(
     YELLOW(Color(0xFFFFF4D4)),
 }
 
+// TODO 서버 스펙에 맞게 추후 수정 예정
 data class SopletterMemoUiModel(
     val id: Long,
     val message: String,
