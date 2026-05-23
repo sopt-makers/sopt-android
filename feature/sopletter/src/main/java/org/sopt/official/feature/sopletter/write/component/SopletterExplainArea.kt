@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,13 +28,14 @@ fun SopletterExplainArea (
             .fillMaxWidth()
             .background(color = SoptTheme.colors.background),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(14.dp)
     ){
         Image(
             painter = painterResource(id = R.drawable.img_sopletter_logo),
             contentDescription = null,
             contentScale = ContentScale.None,
         )
+
+        Spacer(modifier = Modifier.width(14.dp))
 
         Text(
             text = stringResource(id = R.string.sopletter_write_explain),
