@@ -71,7 +71,7 @@ internal fun SopletterMemoDetailDialog(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
                                 contentDescription = null,
-                                tint = SoptTheme.colors.onSurface800,
+                                tint = Color.Unspecified,
                                 modifier = Modifier
                                     .noRippleClickable(state.event.onEditClick),
                             )
@@ -79,7 +79,7 @@ internal fun SopletterMemoDetailDialog(
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
                                 contentDescription = null,
-                                tint = SoptTheme.colors.onSurface800,
+                                tint = Color.Unspecified,
                                 modifier = Modifier
                                     .noRippleClickable(state.event.onDeleteClick),
                             )
@@ -140,7 +140,7 @@ internal fun SopletterMemoDetailDialog(
                 Text(
                     text = "확인",
                     style = SoptTheme.typography.title16SB,
-                    color = White,
+                    color = SoptTheme.colors.primary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.padding(14.dp),
                 )
