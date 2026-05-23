@@ -55,26 +55,27 @@ import org.sopt.official.feature.home.R.drawable.ic_file_text_filled
 import org.sopt.official.feature.home.R.drawable.ic_folder
 import org.sopt.official.feature.home.R.drawable.ic_homepage
 import org.sopt.official.feature.home.R.drawable.ic_instagram_40
-import org.sopt.official.feature.home.R.drawable.ic_member
+import org.sopt.official.feature.home.R.drawable.ic_coffeechat
 import org.sopt.official.feature.home.R.drawable.ic_moim
 import org.sopt.official.feature.home.R.drawable.is_playground
+import org.sopt.official.feature.home.R.drawable.ic_member
 
 @Composable
 internal fun HomeShortcutButtonsForMember(
-    onPlaygroundClick: () -> Unit,
-    onStudyClick: () -> Unit,
     onMemberClick: () -> Unit,
+    onStudyClick: () -> Unit,
     onProjectClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    onCoffeeChat: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Row(
         horizontalArrangement = SpaceBetween,
         modifier = modifier.fillMaxWidth(),
     ) {
         HomeShortcutButton(
-            icon = is_playground,
-            text = "Playground",
-            onClick = onPlaygroundClick,
+            icon = ic_member,
+            text = "멤버",
+            onClick = onMemberClick,
         )
         HomeShortcutButton(
             icon = ic_moim,
@@ -82,14 +83,14 @@ internal fun HomeShortcutButtonsForMember(
             onClick = onStudyClick,
         )
         HomeShortcutButton(
-            icon = ic_member,
-            text = "멤버",
-            onClick = onMemberClick,
-        )
-        HomeShortcutButton(
             icon = ic_file_text_filled,
             text = "프로젝트",
             onClick = onProjectClick,
+        )
+        HomeShortcutButton(
+            icon = ic_coffeechat,
+            text = "커피솝",
+            onClick = onCoffeeChat,
         )
     }
 }
@@ -99,10 +100,10 @@ internal fun HomeShortcutButtonsForMember(
 private fun HomeShortcutButtonsForMemberPreview() {
     SoptTheme {
         HomeShortcutButtonsForMember(
-            onPlaygroundClick = { },
-            onStudyClick = { },
             onMemberClick = { },
+            onStudyClick = { },
             onProjectClick = { },
+            onCoffeeChat = { }
         )
     }
 }
