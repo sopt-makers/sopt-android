@@ -190,14 +190,13 @@ class AuthActivity : AppCompatActivity() {
                     }.onFailure {
                         Timber.e(it, "자동 로그인 후 FCM 토큰 서버 등록 실패")
                     }
-                }
-
-                startActivity(
-                    MainActivity.getIntent(
-                        context = this,
-                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                    startActivity(
+                        MainActivity.getIntent(
+                            context = this@AuthActivity,
+                            args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
             Timber.e(e)
