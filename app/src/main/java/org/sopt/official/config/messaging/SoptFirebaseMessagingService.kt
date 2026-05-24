@@ -32,34 +32,29 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.RemoteMessage
 import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessagingService
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.official.R
-import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
+import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.feature.notification.SchemeActivity
-import org.sopt.official.localstorage.source.UserStorage
-import org.sopt.official.model.UserStatus
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
     @Inject
-    lateinit var userStorage: UserStorage
+    lateinit var fcmPushTokenManager: FcmPushTokenManager
 
-    @Inject
-    lateinit var registerPushTokenUseCase: RegisterPushTokenUseCase
-
+    // 토큰이 갱신되는 시점에만 재등록
     override fun onNewToken(token: String) {
         lifecycleScope.launch {
-            val currentStatus = userStorage.userStatus.first()
-
-            if (currentStatus == UserStatus.UNAUTHENTICATED) {
-                return@launch
+            runCatching {
+                fcmPushTokenManager.registerPushTokenIfAuthenticated(token)
+            }.onSuccess {
+                Timber.d("갱신된 FCM 토큰 서버 등록 성공")
+            }.onFailure {
+                Timber.e(it, "갱신된 FCM 토큰 서버 등록 실패")
             }
-
-            userStorage.savePushToken(token)
-            registerPushTokenUseCase(token)
         }
     }
 

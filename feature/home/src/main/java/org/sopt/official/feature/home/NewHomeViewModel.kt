@@ -26,7 +26,6 @@ package org.sopt.official.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -40,7 +39,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.util.successOr
 import org.sopt.official.domain.home.AppServiceManager
 import org.sopt.official.domain.home.model.AppService
@@ -53,7 +51,6 @@ import org.sopt.official.domain.home.model.UserStatus.ACTIVE
 import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
-import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
@@ -78,7 +75,6 @@ import javax.inject.Inject
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
-    private val registerPushTokenUseCase: RegisterPushTokenUseCase,
     private val appServiceManager: AppServiceManager,
     private val userStorage: UserStorage,
 ) : ViewModel() {
@@ -141,13 +137,6 @@ internal class NewHomeViewModel @Inject constructor(
                 userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
             }
 
-            if (userInfo.user.userStatus != UNAUTHENTICATED) {
-                Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
-                registerFcmToken()
-            } else {
-                Timber.d("사용자 상태가 인증되지 않음: UNAUTHENTICATED, FCM 토큰 등록 건너뜀")
-            }
-
             viewModelState.update {
                 it.copy(
                     isError = userInfo.user.name.isBlank() || userDescription.activityDescription.isBlank(), // 반복 에러 대응 필요
@@ -161,26 +150,6 @@ internal class NewHomeViewModel @Inject constructor(
                     popularPostData = popularPostsData.map { post -> post.toModel() }.toImmutableList(),
                     latestPostData = latestPostData.map { post -> post.toModel() }.toImmutableList()
                 )
-            }
-        }
-    }
-
-    private fun registerFcmToken() {
-        viewModelScope.launch {
-            Timber.d("FCM 토큰 가져오기 시작")
-            runCatching {
-                FirebaseMessaging.getInstance().token.await()
-            }.onSuccess { token ->
-                Timber.d("FCM 토큰 가져오기 성공: $token")
-                runCatching {
-                    registerPushTokenUseCase(token)
-                }.onSuccess {
-                    Timber.d("FCM 토큰 서버 등록 성공: $token")
-                }.onFailure { error ->
-                    Timber.e(error, "FCM 토큰 서버 등록 실패: $token")
-                }
-            }.onFailure { error ->
-                Timber.e(error, "FCM 토큰 가져오기 실패")
             }
         }
     }

@@ -31,13 +31,16 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.repository.AuthRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthMainViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val fcmPushTokenManager: FcmPushTokenManager
 ) : ViewModel() {
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
@@ -54,6 +57,13 @@ class AuthMainViewModel @Inject constructor(
                     accessToken = response.token,
                     refreshToken = response.refreshToken,
                 )
+
+                runCatching {
+                    fcmPushTokenManager.registerCurrentToken()
+                }.onFailure {
+                    Timber.e(it, "FCM 토큰 서버 등록 실패")
+                }
+
                 _sideEffect.emit(AuthMainSideEffect.NavigateToHome)
             }.onFailure {
                 _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)

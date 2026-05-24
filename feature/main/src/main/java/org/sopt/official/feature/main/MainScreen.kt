@@ -257,6 +257,7 @@ fun MainScreen(
                                 override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
                                 override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
                                 override fun navigateToPlaygroundProject() = context.startActivity(getIntent(PlaygroundWebLink.PROJECT))
+                                override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getIntent(PlaygroundWebLink.COFFEE_CHAT))
                                 override fun navigateToSoptHomepage() = context.startActivity(getIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
                                 override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
                                 override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))

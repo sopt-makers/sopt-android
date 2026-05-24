@@ -35,6 +35,7 @@ sealed interface HomeNavigation {
         fun navigateToPlaygroundGroup()
         fun navigateToPlaygroundMember()
         fun navigateToPlaygroundProject()
+        fun navigateToPlaygroundCoffeeChat()
         fun navigateToSoptHomepage()
         fun navigateToSoptReview()
         fun navigateToSoptProject()

@@ -43,10 +43,13 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
+import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
@@ -65,6 +68,9 @@ class AuthActivity : AppCompatActivity() {
     lateinit var userStorage: UserStorage
     @Inject
     lateinit var tokenStorage: TokenStorage
+
+    @Inject
+    lateinit var fcmPushTokenManager: FcmPushTokenManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,12 +184,19 @@ class AuthActivity : AppCompatActivity() {
     private fun navigateToMainActivity(accessToken : String) {
         try {
             if (accessToken.isNotEmpty()) {
-                startActivity(
-                    MainActivity.getIntent(
-                        context = this,
-                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                lifecycleScope.launch {
+                    runCatching {
+                        fcmPushTokenManager.registerCurrentToken()
+                    }.onFailure {
+                        Timber.e(it, "자동 로그인 후 FCM 토큰 서버 등록 실패")
+                    }
+                    startActivity(
+                        MainActivity.getIntent(
+                            context = this@AuthActivity,
+                            args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                        )
                     )
-                )
+                }
             }
         } catch (e: Exception) {
             Timber.e(e)
