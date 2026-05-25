@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
@@ -40,16 +44,29 @@ fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    SopletterMainScreen(
-        uiState = uiState,
-        onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
-        dialogActions = viewModel,
-        onCloseClick = { /* TODO close click */ },
-        onDownloadClick = { /* TODO download click */ },
-        onReportClick = { /* TODO report click */ },
-        onEditFABClick = { /* TODO edit FAB click */ },
-    )
+    LaunchedEffect(Unit) {
+        viewModel.snackbarMessage.collect { message ->
+            snackBarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short,
+            )
+        }
+    }
+
+    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
+        SopletterMainScreen(
+            uiState = uiState,
+            onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
+            dialogActions = viewModel,
+            onCloseClick = { /* TODO close click */ },
+            onDownloadClick = { /* TODO download click */ },
+            onReportClick = { /* TODO report click */ },
+            onEditFABClick = { /* TODO edit FAB click */ },
+            modifier = Modifier.padding(paddingValues),
+        )
+    }
 }
 
 @Composable
