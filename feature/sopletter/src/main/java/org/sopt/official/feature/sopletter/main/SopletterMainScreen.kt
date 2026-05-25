@@ -50,6 +50,7 @@ fun SopletterMainRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
+    val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
 
     LaunchedEffect(Unit) {
         viewModel.snackbarMessage.collect { message ->
@@ -65,7 +66,7 @@ fun SopletterMainRoute(
             uiState = uiState,
             onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
             onRefresh = viewModel::refreshMemoList,
-            dialogActions = viewModel,
+            dialogActions = dialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
             onReportClick = { /* TODO report click */ },
