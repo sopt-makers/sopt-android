@@ -6,23 +6,23 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterMainViewModel @Inject constructor(
-) : ViewModel() {
+) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
 
-    fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogState) {
+    fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogContract.State) {
         _uiState.update { state ->
             state.copy(selectedMemoDetail = memo)
         }
     }
 
-    fun onLikeClick() {
+    override fun onLikeClick() {
         val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
 
         // TODO : 상단 스낵바 로직 추가 예정
@@ -41,7 +41,11 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    fun clearSelectedMemo() {
+    override fun onEditClick() = Unit
+
+    override fun onDeleteClick() = Unit
+
+    override fun onDismissClick() {
         _uiState.update { state ->
             state.copy(selectedMemoDetail = null)
         }

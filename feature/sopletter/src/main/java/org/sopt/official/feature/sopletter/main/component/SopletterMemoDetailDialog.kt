@@ -23,16 +23,17 @@ import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
+import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.sopletter.R
 
 @Composable
 internal fun SopletterMemoDetailDialog(
-    state: SopletterMemoDetailDialogState,
+    state: SopletterMemoDetailDialogContract.State,
+    actions: SopletterMemoDetailDialogContract.Actions,
     modifier: Modifier = Modifier,
 ) {
     Dialog(
-        onDismissRequest = state.event.onDismissClick,
+        onDismissRequest = actions::onDismissClick,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         Column(
@@ -73,7 +74,7 @@ internal fun SopletterMemoDetailDialog(
                                 contentDescription = null,
                                 tint = Color.Unspecified,
                                 modifier = Modifier
-                                    .noRippleClickable(state.event.onEditClick),
+                                    .noRippleClickable(actions::onEditClick),
                             )
 
                             Icon(
@@ -81,7 +82,7 @@ internal fun SopletterMemoDetailDialog(
                                 contentDescription = null,
                                 tint = Color.Unspecified,
                                 modifier = Modifier
-                                    .noRippleClickable(state.event.onDeleteClick),
+                                    .noRippleClickable(actions::onDeleteClick),
                             )
                         }
                     }
@@ -110,7 +111,7 @@ internal fun SopletterMemoDetailDialog(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(2.dp),
-                    modifier = Modifier.noRippleClickable(state.event.onLikeClick),
+                    modifier = Modifier.noRippleClickable(actions::onLikeClick),
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(
@@ -134,7 +135,7 @@ internal fun SopletterMemoDetailDialog(
                         color = SoptTheme.colors.onSurface800,
                         shape = RoundedCornerShape(10.dp),
                     )
-                    .noRippleClickable(state.event.onDismissClick),
+                    .noRippleClickable(actions::onDismissClick),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(

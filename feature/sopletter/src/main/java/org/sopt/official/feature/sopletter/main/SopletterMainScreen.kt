@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
@@ -31,7 +32,6 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
 import org.sopt.official.feature.sopletter.main.mapper.toDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 
@@ -44,12 +44,7 @@ fun SopletterMainRoute(
     SopletterMainScreen(
         uiState = uiState,
         onMemoClick = { viewModel.updateSelectMemoDetail(it.toDetailDialogState()) },
-        detailDialogEvent = SopletterMemoDetailDialogState.Event(
-            onLikeClick = viewModel::onLikeClick,
-            onEditClick = { /* TODO edit click */ },
-            onDeleteClick = { /* TODO delete click */ },
-            onDismissClick = viewModel::clearSelectedMemo,
-        ),
+        dialogActions = viewModel,
         onCloseClick = { /* TODO close click */ },
         onDownloadClick = { /* TODO download click */ },
         onReportClick = { /* TODO report click */ },
@@ -61,7 +56,7 @@ fun SopletterMainRoute(
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
     onMemoClick: (SopletterMemoUiModel) -> Unit,
-    detailDialogEvent: SopletterMemoDetailDialogState.Event,
+    dialogActions: SopletterMemoDetailDialogContract.Actions,
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
@@ -125,7 +120,8 @@ private fun SopletterMainScreen(
 
     uiState.selectedMemoDetail?.let { memo ->
         SopletterMemoDetailDialog(
-            state = memo.copy(event = detailDialogEvent),
+            state = memo,
+            actions = dialogActions,
         )
     }
 }
@@ -137,20 +133,26 @@ private fun SopletterMainScreenPreview(
 ) {
     SoptTheme {
         var previewState by remember { mutableStateOf(initialState) }
+        val previewDialogActions = remember {
+            object : SopletterMemoDetailDialogContract.Actions {
+                override fun onLikeClick() = Unit
+
+                override fun onEditClick() = Unit
+
+                override fun onDeleteClick() = Unit
+
+                override fun onDismissClick() {
+                    previewState = previewState.copy(selectedMemoDetail = null)
+                }
+            }
+        }
 
         SopletterMainScreen(
             uiState = previewState,
             onMemoClick = { memo ->
                 previewState = previewState.copy(selectedMemoDetail = memo.toDetailDialogState())
             },
-            detailDialogEvent = SopletterMemoDetailDialogState.Event(
-                onLikeClick = { },
-                onEditClick = { /* TODO edit click */ },
-                onDeleteClick = { /* TODO delete click */ },
-                onDismissClick = {
-                    previewState = previewState.copy(selectedMemoDetail = null)
-                },
-            ),
+            dialogActions = previewDialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
             onReportClick = { /* TODO report click */ },
