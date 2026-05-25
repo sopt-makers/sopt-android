@@ -24,13 +24,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
-import org.sopt.official.feature.sopletter.main.mapper.toDetailDialogState
+import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
@@ -43,7 +43,7 @@ fun SopletterMainRoute(
 
     SopletterMainScreen(
         uiState = uiState,
-        onMemoClick = { viewModel.updateSelectMemoDetail(it.toDetailDialogState()) },
+        onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
         dialogActions = viewModel,
         onCloseClick = { /* TODO close click */ },
         onDownloadClick = { /* TODO download click */ },
@@ -150,7 +150,7 @@ private fun SopletterMainScreenPreview(
         SopletterMainScreen(
             uiState = previewState,
             onMemoClick = { memo ->
-                previewState = previewState.copy(selectedMemoDetail = memo.toDetailDialogState())
+                previewState = previewState.copy(selectedMemoDetail = memo.toMemoDetailDialogState())
             },
             dialogActions = previewDialogActions,
             onCloseClick = { /* TODO close click */ },

@@ -2,7 +2,7 @@ package org.sopt.official.feature.sopletter.main.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.feature.sopletter.main.mapper.toDetailDialogState
+import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoColor
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoRotationType
@@ -52,7 +52,7 @@ class SopletterMainPreviewParameterProvider : PreviewParameterProvider<Sopletter
         SopletterMainUiState(
             generation = 38,
             memoList = memoList,
-            selectedMemoDetail = memoList.first().toDetailDialogState().copy(
+            selectedMemoDetail = memoList.first().toMemoDetailDialogState().copy(
                 memoColor = memoList[1].memoColor,
                 isMine = true,
                 isLiked = true,
