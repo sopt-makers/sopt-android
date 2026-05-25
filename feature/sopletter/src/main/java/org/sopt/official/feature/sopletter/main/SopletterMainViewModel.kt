@@ -1,14 +1,16 @@
 package org.sopt.official.feature.sopletter.main
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.launch
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
@@ -56,6 +58,20 @@ class SopletterMainViewModel @Inject constructor(
     override fun onDismissClick() {
         _uiState.update { state ->
             state.copy(selectedMemoDetail = null)
+        }
+    }
+
+    fun refreshMemoList() {
+        viewModelScope.launch {
+            _uiState.update { state ->
+                state.copy(isLoading = true)
+            }
+
+            // TODO Refresh 로직
+
+            _uiState.update { state ->
+                state.copy(isLoading = false)
+            }
         }
     }
 }

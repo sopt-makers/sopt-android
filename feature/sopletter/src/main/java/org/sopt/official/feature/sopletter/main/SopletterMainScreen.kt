@@ -11,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -39,6 +43,7 @@ import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
@@ -59,6 +64,7 @@ fun SopletterMainRoute(
         SopletterMainScreen(
             uiState = uiState,
             onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
+            onRefresh = viewModel::refreshMemoList,
             dialogActions = viewModel,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
@@ -69,10 +75,12 @@ fun SopletterMainRoute(
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
     onMemoClick: (SopletterMemoUiModel) -> Unit,
+    onRefresh: () -> Unit,
     dialogActions: SopletterMemoDetailDialogContract.Actions,
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
@@ -80,6 +88,11 @@ private fun SopletterMainScreen(
     onEditFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val refreshState = rememberPullRefreshState(
+        refreshing = uiState.isLoading,
+        onRefresh = onRefresh,
+    )
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -94,17 +107,30 @@ private fun SopletterMainScreen(
         )
 
         if (uiState.memoList.isEmpty()) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Spacer(modifier = Modifier.weight(160f))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pullRefresh(refreshState),
+            ) {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    Spacer(modifier = Modifier.weight(160f))
 
-                EmptySopletterContent(modifier = Modifier.weight(187f))
+                    EmptySopletterContent(modifier = Modifier.weight(187f))
 
-                Spacer(modifier = Modifier.weight(343f))
+                    Spacer(modifier = Modifier.weight(343f))
+                }
+
+                PullRefreshIndicator(
+                    refreshing = uiState.isLoading,
+                    state = refreshState,
+                    modifier = Modifier.align(Alignment.TopCenter),
+                )
             }
         } else {
             Box(
                 modifier = Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .pullRefresh(refreshState),
             ) {
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier.fillMaxSize(),
@@ -130,6 +156,12 @@ private fun SopletterMainScreen(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(end = 20.dp, bottom = 24.dp),
+                )
+
+                PullRefreshIndicator(
+                    refreshing = uiState.isLoading,
+                    state = refreshState,
+                    modifier = Modifier.align(Alignment.TopCenter),
                 )
             }
         }
@@ -166,14 +198,13 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
-            onMemoClick = { memo ->
-                previewState = previewState.copy(selectedMemoDetail = memo.toMemoDetailDialogState())
-            },
+            onMemoClick = { _ -> },
+            onRefresh = {},
             dialogActions = previewDialogActions,
-            onCloseClick = { /* TODO close click */ },
-            onDownloadClick = { /* TODO download click */ },
-            onReportClick = { /* TODO report click */ },
-            onEditFABClick = { /* TODO edit FAB click */ },
+            onCloseClick = {},
+            onDownloadClick = {},
+            onReportClick = {},
+            onEditFABClick = {},
         )
     }
 }
