@@ -17,7 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
-
+import org.sopt.official.sopletter.R
 @Composable
 fun SopletterTopbar(
     onBackClick : () -> Unit ,
@@ -27,12 +27,12 @@ fun SopletterTopbar(
         modifier = modifier
             .fillMaxWidth()
             .background(color = SoptTheme.colors.background)
-            .padding(vertical = 17.dp),
+            .padding(vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = org.sopt.official.sopletter.R.drawable.icon_chevron_left),
+            imageVector = ImageVector.vectorResource(id = R.drawable.icon_chevron_left),
             contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier.noRippleClickable (onClick = onBackClick)

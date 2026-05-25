@@ -48,5 +48,7 @@ fun SopletterExplainArea (
 @Preview(showBackground = true)
 @Composable
 private fun SopletterExplainAreaPreview() {
-    SopletterExplainArea()
+    SoptTheme {
+        SopletterExplainArea()
+    }
 }

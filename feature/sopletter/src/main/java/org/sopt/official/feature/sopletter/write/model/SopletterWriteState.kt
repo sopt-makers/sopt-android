@@ -1,5 +1,8 @@
 package org.sopt.official.feature.sopletter.write.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class SopletterWriteUiState(
     val writerName: String = "",
 

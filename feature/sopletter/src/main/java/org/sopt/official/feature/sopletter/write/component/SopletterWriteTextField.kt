@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.maxLength
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -89,7 +90,7 @@ fun SopletterWriteTextBox(
 @Preview(showBackground = true)
 @Composable
 private fun SopletterWriteTextBoxPreview() {
-    val state = remember { TextFieldState() }
+    val state = rememberTextFieldState()
     SoptTheme {
         SopletterWriteTextBox(
             userName = "익명의 무무",
