@@ -31,7 +31,7 @@ sealed interface HomeNavigation {
 
     @Stable
     interface HomeShortcutNavigation : HomeNavigation {
-        fun navigateToPlayground()
+        fun navigateToPlaygroundCommunity()
         fun navigateToPlaygroundGroup()
         fun navigateToPlaygroundMember()
         fun navigateToPlaygroundProject()

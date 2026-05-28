@@ -70,7 +70,7 @@ internal fun HomePopularNewsSection(
     postList: ImmutableList<HomePlaygroundPostModel>,
     navigateToWebLink: (String) -> Unit,
     navigateToMemberProfile: (Int) -> Unit,
-    navigateToPlayground: () -> Unit,
+    navigateToPlaygroundCommunity: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var highlightedIndex by remember { mutableIntStateOf(0) }
@@ -106,7 +106,7 @@ internal fun HomePopularNewsSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.noRippleClickable {
-                    navigateToPlayground()
+                    navigateToPlaygroundCommunity()
                 }
             ) {
                 Text(
@@ -194,7 +194,7 @@ private fun HomePlaygroundSectionPreview() {
             ),
             navigateToWebLink = {},
             navigateToMemberProfile = {},
-            navigateToPlayground = {}
+            navigateToPlaygroundCommunity = {}
         )
     }
 }
