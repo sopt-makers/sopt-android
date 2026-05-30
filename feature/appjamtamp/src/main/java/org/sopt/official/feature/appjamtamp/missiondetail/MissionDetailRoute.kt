@@ -130,10 +130,11 @@ internal fun MissionDetailRoute(
             }
     }
 
-    LaunchedEffect(!uiState.isLoading, progress) {
-        if (progress >= 0.99f && !uiState.isLoading) {
+    LaunchedEffect(showPostSubmissionBadge, !uiState.isLoading, progress) {
+        if (showPostSubmissionBadge && progress >= 0.99f && !uiState.isLoading) {
             delay(500L)
             viewModel.updateShowPostSubmissionBadge()
+            navigateUp()
         }
     }
 
