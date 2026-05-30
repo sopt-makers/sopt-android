@@ -149,7 +149,8 @@ internal fun MissionDetailRoute(
             },
             onDatePickerClick = { isDatePickerVisible = true },
             onMemoChange = viewModel::updateContent,
-            onCompleteButtonClick = viewModel::handleSubmit
+            onCompleteButtonClick = viewModel::handleSubmit,
+            isSubmitEnabled = uiState.isSubmitEnabled,
         )
     } else {
         MissionDetailScreen(
@@ -186,7 +187,8 @@ internal fun MissionDetailRoute(
 
                     DetailViewType.EDIT -> viewModel.handleSubmit()
                 }
-            }
+            },
+            isSubmitEnabled = uiState.isSubmitEnabled,
         )
     }
 
@@ -250,7 +252,8 @@ private fun MyEmptyMissionDetailScreen(
     onClickZoomIn: (String) -> Unit,
     onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
-    onCompleteButtonClick: () -> Unit
+    onCompleteButtonClick: () -> Unit,
+    isSubmitEnabled: Boolean,
 ) {
     val scrollState = rememberScrollState()
 
@@ -307,6 +310,7 @@ private fun MyEmptyMissionDetailScreen(
         AppjamtampButton(
             text = "미션 완료",
             onClicked = onCompleteButtonClick,
+            isEnabled = isSubmitEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 20.dp)
@@ -323,7 +327,8 @@ private fun MissionDetailScreen(
     onClickZoomIn: (String) -> Unit,
     onDatePickerClick: () -> Unit,
     onMemoChange: (String) -> Unit,
-    onActionButtonClick: () -> Unit
+    onActionButtonClick: () -> Unit,
+    isSubmitEnabled: Boolean,
 ) {
     val scrollState = rememberScrollState()
     var isEditable by remember(uiState.viewType) { mutableStateOf(uiState.viewType == DetailViewType.EDIT) }
@@ -437,6 +442,7 @@ private fun MissionDetailScreen(
                 AppjamtampButton(
                     text = "미션 완료",
                     onClicked = onActionButtonClick,
+                    isEnabled = isSubmitEnabled,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 20.dp)
@@ -457,7 +463,8 @@ private fun MyEmptyMissionDetailScreenPreview() {
             onClickZoomIn = {},
             onDatePickerClick = {},
             onMemoChange = {},
-            onCompleteButtonClick = {}
+            onCompleteButtonClick = {},
+            isSubmitEnabled = true,
         )
     }
 }
@@ -474,7 +481,8 @@ private fun MyMissionDetailScreenPreview() {
             onDatePickerClick = {},
             onMemoChange = {},
             onActionButtonClick = {},
-            onToolbarIconClick = {}
+            onToolbarIconClick = {},
+            isSubmitEnabled = true,
         )
     }
 }

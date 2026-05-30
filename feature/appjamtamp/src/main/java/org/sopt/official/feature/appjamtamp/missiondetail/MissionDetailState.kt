@@ -51,5 +51,22 @@ internal data class MissionDetailState(
     val viewCount: Int = 0,
 
     val clappers: ImmutableList<StampClapUserModel> = persistentListOf(),
-    val showPostSubmissionBadge: Boolean = false
-)
+    val showPostSubmissionBadge: Boolean = false,
+
+    val initSnapshotImageModel: ImageModel = ImageModel.Empty,
+    val initSnapshotDate: String = "",
+    val initSnapshotContent: String = "",
+) {
+    val isSubmitEnabled: Boolean
+        get() {
+            val commonGuard = !isLoading && content.isNotBlank() && date.isNotBlank() && !imageModel.isEmpty()
+
+            if (!commonGuard) return false
+
+            return when (viewType) {
+                DetailViewType.WRITE -> true
+                DetailViewType.EDIT -> content != initSnapshotContent || date != initSnapshotDate || imageModel != initSnapshotImageModel
+                DetailViewType.READ_ONLY, DetailViewType.COMPLETE -> false
+            }
+        }
+}
