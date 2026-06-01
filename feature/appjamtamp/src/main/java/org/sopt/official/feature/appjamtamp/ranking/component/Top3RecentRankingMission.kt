@@ -51,17 +51,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
-import java.util.concurrent.TimeUnit
 import org.sopt.official.designsystem.GrayAlpha100
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.appjamtamp.R
 import org.sopt.official.feature.appjamtamp.ranking.model.Top3RecentRankingUiModel
+import org.sopt.official.feature.appjamtamp.util.toRelativeTime
 
 @Composable
 internal fun Top3RecentRankingMission(
@@ -149,35 +145,6 @@ internal fun Top3RecentRankingMission(
                     .padding(start = 4.dp)
             )
         }
-    }
-}
-
-private fun String?.toRelativeTime(): String {
-    if (this.isNullOrBlank()) return ""
-
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA)
-    dateFormat.timeZone = TimeZone.getTimeZone("Asia/Seoul")
-    val monthDayFormat = SimpleDateFormat("M월d일", Locale.KOREA).apply {
-        timeZone = TimeZone.getTimeZone("Asia/Seoul")
-    }
-
-    val date = runCatching { dateFormat.parse(this) }.getOrNull() ?: return ""
-    val currentDate = Date()
-
-    val diffMillis = currentDate.time - date.time
-    if (diffMillis < 0) return "방금 전"
-
-    val minutes = TimeUnit.MILLISECONDS.toMinutes(diffMillis)
-    val hours = TimeUnit.MILLISECONDS.toHours(diffMillis)
-    val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
-
-    return when {
-        minutes < 10L -> "방금 전"
-        minutes < 60L -> "${minutes}분 전"
-        hours < 25L -> "${hours}시간 전"
-        days < 7L -> "${days}일 전"
-        days < 35L -> "${days / 7}주 전"
-        else -> monthDayFormat.format(date)
     }
 }
 
