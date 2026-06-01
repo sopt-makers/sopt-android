@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -276,22 +277,33 @@ private fun HomeScreenForMember(
 
             Spacer(modifier = Modifier.height(height = 12.dp))
 
+            Text(
+                text = "SOPT Playground",
+                style = typography.title14SB,
+                color = colors.onSurface400,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+            )
+
+            Spacer(modifier = Modifier.height(height = 12.dp))
+
             HomeShortcutButtonsForMember(
-                onPlaygroundClick = {
-                    homeShortcutNavigation.navigateToPlayground()
-                    trackClickEvent(tracker, "at36_playground_community")
+                onMemberClick = {
+                    homeShortcutNavigation.navigateToPlaygroundMember()
+                    trackClickEvent(tracker, "at36_member")
                 },
                 onStudyClick = {
                     homeShortcutNavigation.navigateToPlaygroundGroup()
                     trackClickEvent(tracker, "at36_moim")
                 },
-                onMemberClick = {
-                    homeShortcutNavigation.navigateToPlaygroundMember()
-                    trackClickEvent(tracker, "at36_member")
-                },
                 onProjectClick = {
                     homeShortcutNavigation.navigateToPlaygroundProject()
                     trackClickEvent(tracker, "at36_project")
+                },
+                onCoffeeChat = {
+                    homeShortcutNavigation.navigateToPlaygroundCoffeeChat()
+                    trackClickEvent(tracker, "at38_playground_coffee_chat")
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -317,6 +329,7 @@ private fun HomeScreenForMember(
                     postList = popularPosts,
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
+                    navigateToPlaygroundCommunity = homeShortcutNavigation::navigateToPlaygroundCommunity,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
@@ -326,7 +339,7 @@ private fun HomeScreenForMember(
 
                 HomeLatestNewsSection(
                     feedList = latestPosts,
-                    navigateToPlayground = homeShortcutNavigation::navigateToPlayground,
+                    navigateToPlayground = homeShortcutNavigation::navigateToPlaygroundCommunity,
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile
                 )

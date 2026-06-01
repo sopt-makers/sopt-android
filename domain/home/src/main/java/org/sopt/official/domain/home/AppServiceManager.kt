@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2026 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("kotlin.jvm")
-}
+package org.sopt.official.domain.home
 
-kotlin {
-    jvmToolchain(17)
-}
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
+import javax.inject.Inject
+import javax.inject.Singleton
 
-dependencies {
-    implementation(libs.javax.inject)
-    implementation(libs.kotlin.coroutines)
+/**
+ * AppServiceManager: app-service 관리 클래스
+ * */
+@Singleton
+class AppServiceManager @Inject constructor(
+    private val getAppServiceUseCase: GetAppServiceUseCase
+) {
+    private val _appServices = MutableStateFlow<List<AppService>?>(null)
+    val appServices: StateFlow<List<AppService>?> = _appServices.asStateFlow()
+
+    suspend fun fetchAppServices(forceUpdate: Boolean = false) {
+        if (!forceUpdate && _appServices.value != null) return
+
+        getAppServiceUseCase()
+            .onSuccess { _appServices.value = it }
+    }
 }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2025 SOPT - Shout Our Passion Together
+ * Copyright 2025-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,12 +27,17 @@ package org.sopt.official.feature.home.component
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,17 +45,22 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.Orange200
 import org.sopt.official.designsystem.Orange300
 import org.sopt.official.designsystem.Orange500
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.home.R
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 
 private const val POPULAR_NEWS_LIST_SIZE = 3
@@ -60,6 +70,7 @@ internal fun HomePopularNewsSection(
     postList: ImmutableList<HomePlaygroundPostModel>,
     navigateToWebLink: (String) -> Unit,
     navigateToMemberProfile: (Int) -> Unit,
+    navigateToPlaygroundCommunity: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var highlightedIndex by remember { mutableIntStateOf(0) }
@@ -74,11 +85,44 @@ internal fun HomePopularNewsSection(
     Column(
         modifier = modifier
     ) {
-        Text(
-            text = "실시간 인기글 🔥",
-            style = SoptTheme.typography.heading20B,
-            color = SoptTheme.colors.primary
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(3.dp),
+        ) {
+            Text(
+                text = "지금 인기 소식",
+                style = SoptTheme.typography.heading20B,
+                color = SoptTheme.colors.primary
+            )
+
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fire) ,
+                contentDescription = null,
+                modifier = Modifier.padding(vertical = 5.dp)
+            )
+
+            Spacer(Modifier.weight(1f))
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.noRippleClickable {
+                    navigateToPlaygroundCommunity()
+                }
+            ) {
+                Text(
+                    text = "전체보기",
+                    style = SoptTheme.typography.label12SB,
+                    color = SoptTheme.colors.onSurface300
+                )
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
+                    contentDescription = "전체보기",
+                    tint = SoptTheme.colors.onSurface300,
+                    modifier = Modifier.size(size = 16.dp)
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -149,7 +193,8 @@ private fun HomePlaygroundSectionPreview() {
                 )
             ),
             navigateToWebLink = {},
-            navigateToMemberProfile = {}
+            navigateToMemberProfile = {},
+            navigateToPlaygroundCommunity = {}
         )
     }
 }

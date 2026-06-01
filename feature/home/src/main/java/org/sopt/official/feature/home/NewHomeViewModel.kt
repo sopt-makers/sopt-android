@@ -26,7 +26,6 @@ package org.sopt.official.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -35,12 +34,13 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.util.successOr
+import org.sopt.official.domain.home.AppServiceManager
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
@@ -51,7 +51,6 @@ import org.sopt.official.domain.home.model.UserStatus.ACTIVE
 import org.sopt.official.domain.home.model.UserStatus.INACTIVE
 import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
 import org.sopt.official.domain.home.repository.HomeRepository
-import org.sopt.official.domain.notification.usecase.RegisterPushTokenUseCase
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
@@ -68,17 +67,15 @@ import org.sopt.official.feature.home.model.HomeUiState.Unauthenticated
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
+import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 import javax.inject.Inject
-import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
-import org.sopt.official.localstorage.source.UserStorage
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
-    private val registerPushTokenUseCase: RegisterPushTokenUseCase,
-    private val getAppServiceUseCase: GetAppServiceUseCase,
+    private val appServiceManager: AppServiceManager,
     private val userStorage: UserStorage,
 ) : ViewModel() {
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
@@ -92,6 +89,20 @@ internal class NewHomeViewModel @Inject constructor(
             initialValue = viewModelState.value.toUiState(),
         )
 
+    init {
+        observeAppServices()
+    }
+
+    private fun observeAppServices() {
+        viewModelScope.launch {
+            appServiceManager.appServices
+                .filterNotNull()
+                .collect { appServices ->
+                    viewModelState.update { it.copy(appServices = appServices) }
+                }
+        }
+    }
+
     fun refreshAll() {
         viewModelState.update { it.copy(isLoading = true) }
 
@@ -99,18 +110,21 @@ internal class NewHomeViewModel @Inject constructor(
             val userInfoDeferred = async { homeRepository.getUserInfo() }
             val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
-            val appServiceDeferred = async { getAppServiceUseCase() }
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
             val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
             val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
+            val appServiceDeferred = async {
+                appServiceManager.fetchAppServices(forceUpdate = true)
+            }
+
+            appServiceDeferred.await()
 
             val userInfoResult = userInfoDeferred.await()
 
             val userDescription =
                 userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
-            val appService = appServiceDeferred.await().successOr(emptyList())
             val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
             val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
             val popularPostsData = popularPostsDeferred.await().successOr(emptyList())
@@ -123,13 +137,6 @@ internal class NewHomeViewModel @Inject constructor(
                 userStorage.saveUserStatus(org.sopt.official.model.UserStatus.of(userInfo.user.userStatus.name))
             }
 
-            if (userInfo.user.userStatus != UNAUTHENTICATED) {
-                Timber.d("사용자 상태가 인증됨: ${userInfo.user.userStatus}, FCM 토큰 등록 시작")
-                registerFcmToken()
-            } else {
-                Timber.d("사용자 상태가 인증되지 않음: UNAUTHENTICATED, FCM 토큰 등록 건너뜀")
-            }
-
             viewModelState.update {
                 it.copy(
                     isError = userInfo.user.name.isBlank() || userDescription.activityDescription.isBlank(), // 반복 에러 대응 필요
@@ -138,32 +145,11 @@ internal class NewHomeViewModel @Inject constructor(
                     userInfo = userInfo,
                     userDescription = userDescription,
                     recentCalendar = recentCalendar,
-                    appServices = appService,
                     surveyData = surveyData.toModel(),
                     toastData = toastData.toModel(),
                     popularPostData = popularPostsData.map { post -> post.toModel() }.toImmutableList(),
                     latestPostData = latestPostData.map { post -> post.toModel() }.toImmutableList()
                 )
-            }
-        }
-    }
-
-    private fun registerFcmToken() {
-        viewModelScope.launch {
-            Timber.d("FCM 토큰 가져오기 시작")
-            runCatching {
-                FirebaseMessaging.getInstance().token.await()
-            }.onSuccess { token ->
-                Timber.d("FCM 토큰 가져오기 성공: $token")
-                runCatching {
-                    registerPushTokenUseCase(token)
-                }.onSuccess {
-                    Timber.d("FCM 토큰 서버 등록 성공: $token")
-                }.onFailure { error ->
-                    Timber.e(error, "FCM 토큰 서버 등록 실패: $token")
-                }
-            }.onFailure { error ->
-                Timber.e(error, "FCM 토큰 가져오기 실패")
             }
         }
     }
