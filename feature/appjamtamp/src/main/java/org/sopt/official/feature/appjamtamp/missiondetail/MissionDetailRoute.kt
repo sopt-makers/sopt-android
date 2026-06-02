@@ -43,6 +43,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -59,6 +60,7 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.TwoButtonDialog
 import org.sopt.official.feature.appjamtamp.R
@@ -130,8 +132,9 @@ internal fun MissionDetailRoute(
             }
     }
 
-    LaunchedEffect(showPostSubmissionBadge, !uiState.isLoading, progress) {
-        if (showPostSubmissionBadge && progress >= 0.99f && !uiState.isLoading) {
+    LaunchedEffect(showPostSubmissionBadge) {
+        if (showPostSubmissionBadge) {
+            snapshotFlow { progress >= 0.99f && !uiState.isLoading }.first { it }
             delay(500L)
             viewModel.updateShowPostSubmissionBadge()
             navigateUp()
