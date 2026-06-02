@@ -25,6 +25,7 @@
 package org.sopt.official.feature.appjamtamp.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,7 +35,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 
 @Composable
@@ -51,7 +51,7 @@ internal fun AppjamtampButton(
                 color = if (isEnabled) SoptTheme.colors.primary else SoptTheme.colors.onSurface300,
                 shape = RoundedCornerShape(9.dp),
             )
-            .noRippleClickable(onClick = { if (isEnabled) onClicked() }),
+            .clickable(onClick = { if (isEnabled) onClicked() }),
         contentAlignment = Alignment.Center,
     ) {
         Text(
