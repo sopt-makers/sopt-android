@@ -33,7 +33,7 @@ import java.util.concurrent.TimeUnit
 
 private val seoulZoneId: ZoneId = ZoneId.of("Asia/Seoul")
 private val monthDayFormatter: DateTimeFormatter =
-    DateTimeFormatter.ofPattern("M월d일", Locale.KOREA)
+    DateTimeFormatter.ofPattern("M월 d일", Locale.KOREA)
 
 fun String?.toRelativeTime(): String {
     if (this.isNullOrBlank()) return ""
@@ -56,7 +56,7 @@ fun String?.toRelativeTime(): String {
         minutes < 60L -> "${minutes}분 전"
         hours < 25L -> "${hours}시간 전"
         days < 7L -> "${days}일 전"
-        days < 35L -> "${days / 7}주 전"
+        days < 28L -> "${days / 7}주 전"
         else -> dateTime.format(monthDayFormatter)
     }
 }
