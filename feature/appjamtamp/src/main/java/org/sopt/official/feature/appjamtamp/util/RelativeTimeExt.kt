@@ -35,14 +35,15 @@ private val seoulZoneId: ZoneId = ZoneId.of("Asia/Seoul")
 private val monthDayFormatter: DateTimeFormatter =
     DateTimeFormatter.ofPattern("M월 d일", Locale.KOREA)
 
-fun String?.toRelativeTime(): String {
+fun String?.toRelativeTime(
+    currentDateTime: ZonedDateTime = ZonedDateTime.now(seoulZoneId)
+): String {
     if (this.isNullOrBlank()) return ""
 
     val dateTime = runCatching {
         LocalDateTime.parse(this).atZone(seoulZoneId)
     }.getOrNull() ?: return ""
 
-    val currentDateTime = ZonedDateTime.now(seoulZoneId)
     val diffMillis = currentDateTime.toInstant().toEpochMilli() - dateTime.toInstant().toEpochMilli()
 
     if (diffMillis < 0) return "방금 전"
@@ -52,11 +53,11 @@ fun String?.toRelativeTime(): String {
     val days = TimeUnit.MILLISECONDS.toDays(diffMillis)
 
     return when {
-        minutes < 10L -> "방금 전"
-        minutes < 60L -> "${minutes}분 전"
-        hours < 25L -> "${hours}시간 전"
-        days < 7L -> "${days}일 전"
-        days < 28L -> "${days / 7}주 전"
+        diffMillis < TimeUnit.MINUTES.toMillis(10) -> "방금 전"
+        diffMillis < TimeUnit.HOURS.toMillis(1) -> "${minutes}분 전"
+        diffMillis < TimeUnit.DAYS.toMillis(1) -> "${hours}시간 전"
+        diffMillis < TimeUnit.DAYS.toMillis(7) -> "${days}일 전"
+        diffMillis < TimeUnit.DAYS.toMillis(28) -> "${days / 7}주 전"
         else -> dateTime.format(monthDayFormatter)
     }
 }
