@@ -42,15 +42,16 @@ internal fun AppjamtampButton(
     text: String,
     onClicked: () -> Unit,
     modifier: Modifier = Modifier,
+    isEnabled: Boolean = true,
 ) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.primary,
+                color = if (isEnabled) SoptTheme.colors.primary else SoptTheme.colors.onSurface300,
                 shape = RoundedCornerShape(9.dp),
             )
-            .clickable(onClick = onClicked),
+            .clickable(onClick = { if (isEnabled) onClicked() }),
         contentAlignment = Alignment.Center,
     ) {
         Text(

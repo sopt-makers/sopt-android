@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.R
 
@@ -57,7 +58,7 @@ internal fun BackButtonHeader(
             imageVector = ImageVector.vectorResource(R.drawable.ic_back_32),
             contentDescription = null,
             tint = SoptTheme.colors.onSurface10,
-            modifier = Modifier.clickable(onClick = onBackButtonClick)
+            modifier = Modifier.throttledNoRippleClickable(onClick = onBackButtonClick),
         )
 
         Text(

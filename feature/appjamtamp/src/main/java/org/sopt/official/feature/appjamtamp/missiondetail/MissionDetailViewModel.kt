@@ -129,6 +129,9 @@ internal class MissionDetailViewModel @Inject constructor(
                             imageModel = ImageModel.Remote(stamp.images),
                             date = stamp.activityDate,
                             content = stamp.contents,
+                            initSnapshotImageModel = ImageModel.Remote(stamp.images),
+                            initSnapshotDate = stamp.activityDate,
+                            initSnapshotContent = stamp.contents,
                             teamName = stamp.teamName,
                             stampId = stamp.stampId,
                             writer = User(
@@ -260,7 +263,10 @@ internal class MissionDetailViewModel @Inject constructor(
                         _missionDetailState.update {
                             it.copy(
                                 isLoading = false,
-                                viewType = DetailViewType.COMPLETE
+                                viewType = DetailViewType.COMPLETE,
+                                initSnapshotImageModel = ImageModel.Remote(imageModel.url),
+                                initSnapshotDate = date,
+                                initSnapshotContent = content,
                             )
                         }
                     }.onFailure { e ->
