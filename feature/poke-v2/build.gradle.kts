@@ -65,6 +65,7 @@ dependencies {
     implementation(libs.bundles.firebase)
 
     // etc
+    implementation(libs.kotlin.collections.immutable)
     implementation(libs.swipe.refresh.layout)
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
