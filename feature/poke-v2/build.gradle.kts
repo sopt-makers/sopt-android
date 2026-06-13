@@ -37,7 +37,6 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
-    implementation(projects.core.analytics)
     implementation(projects.core.navigation)
     implementation(projects.core.analytics)
 
