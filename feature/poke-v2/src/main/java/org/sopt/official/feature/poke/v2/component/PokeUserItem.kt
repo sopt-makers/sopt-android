@@ -46,8 +46,7 @@ import org.sopt.official.feature.poke.v2.R
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeViewType
 
-private val PokeUserUiState.relationStrokeColor: Color
-    @Composable get() = when (relationName) {
+private val PokeUserUiState.relationStrokeColor: Color get() = when (relationName) {
         PokeFriendType.NEW.readableName -> Blue400
         PokeFriendType.BEST_FRIEND.readableName -> Green400
         PokeFriendType.SOULMATE.readableName -> Orange400
@@ -260,7 +259,7 @@ private fun PokeButton(
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-fun PokeUserSmallItemPreview(
+private fun PokeUserSmallItemPreview(
     @PreviewParameter(PokeUserSmallPreviewParameterProvider::class) user: PokeUserUiState
 ) {
     SoptTheme {
