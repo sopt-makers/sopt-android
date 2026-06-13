@@ -25,6 +25,8 @@
 package org.sopt.official.feature.poke.v2.main.model
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * 친구 목록 섹션 하나의 UI 상태를 표현하는 데이터 클래스
@@ -35,7 +37,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class FriendListUiState(
     val friendCount: Int,
-    val items: List<PokeUserUiState> = emptyList()
+    val items: ImmutableList<PokeUserUiState> = persistentListOf()
 ) {
     val isEmpty: Boolean get() = items.isEmpty()
 }

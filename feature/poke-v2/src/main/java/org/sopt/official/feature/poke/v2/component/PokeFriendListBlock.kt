@@ -19,6 +19,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -148,7 +149,7 @@ private fun PokeFriendListHeader(
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
-fun PokeFriendListBlockPreview(
+private fun PokeFriendListBlockPreview(
     @PreviewParameter(PokeFriendListBlockPreviewParameterProvider::class) summaryState: FriendListSummaryUiState,
 ) {
     SoptTheme {
@@ -166,7 +167,7 @@ private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProv
         FriendListSummaryUiState(
             newFriend = FriendListUiState(
                 friendCount = 2,
-                items = listOf(
+                items = persistentListOf(
                     PokeUserUiState(
                         userId = 1,
                         userName = "김솝트",
@@ -193,7 +194,7 @@ private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProv
             ),
             bestFriend = FriendListUiState(
                 friendCount = 1,
-                items = listOf(
+                items = persistentListOf(
                     PokeUserUiState(
                         userId = 2,
                         userName = "박메이커",
@@ -210,14 +211,14 @@ private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProv
             ),
             soulmate = FriendListUiState(
                 friendCount = 0,
-                items = emptyList()
+                items = persistentListOf()
             )
         ),
 
         FriendListSummaryUiState(
-            newFriend = FriendListUiState(friendCount = 0, items = emptyList()),
-            bestFriend = FriendListUiState(friendCount = 0, items = emptyList()),
-            soulmate = FriendListUiState(friendCount = 0, items = emptyList())
+            newFriend = FriendListUiState(friendCount = 0, items = persistentListOf()),
+            bestFriend = FriendListUiState(friendCount = 0, items = persistentListOf()),
+            soulmate = FriendListUiState(friendCount = 0, items = persistentListOf())
         )
     )
 }
