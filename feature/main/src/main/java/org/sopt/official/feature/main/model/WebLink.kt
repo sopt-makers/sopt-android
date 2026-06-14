@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ internal object SoptWebLink {
 
 internal object PlaygroundWebLink {
     const val OFFICIAL_HOMEPAGE = BuildConfig.PLAYGROUND_API
+    const val COMMUNITY = OFFICIAL_HOMEPAGE + "feed"
     const val MEMBER = OFFICIAL_HOMEPAGE + "members"
     const val EDIT_PROFILE = OFFICIAL_HOMEPAGE + "members/edit"
     const val PROJECT = OFFICIAL_HOMEPAGE + "projects"

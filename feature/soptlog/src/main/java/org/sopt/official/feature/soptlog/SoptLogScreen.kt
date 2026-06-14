@@ -52,6 +52,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.common.BuildConfig
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
@@ -70,7 +71,11 @@ internal fun SoptLogRoute(
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        viewModel.getSoptLogInfoData()
+        if (BuildConfig.DEBUG) { // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
+            viewModel.getSoptLogInfoData()
+        } else {
+            viewModel.getSoptLogInfo()
+        }
     }
 
     LaunchedEffect(Unit) {
@@ -101,7 +106,11 @@ internal fun SoptLogRoute(
     when {
         soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
-            NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfoData)
+            if (BuildConfig.DEBUG) { // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
+                NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfoData)
+            } else {
+                NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfo)
+            }
         }
 
         else -> {
