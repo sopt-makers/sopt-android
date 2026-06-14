@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2026 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.type
+package org.sopt.official.feature.poke.v2.main.model
 
-enum class PokeFriendType(
-    val typeName: String,
-    val readableName: String,
-    val title: String,
-    val description: String
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.domain.poke.type.PokeFriendType
+
+/**
+ * 친구 목록 섹션 하나의 UI 상태를 표현하는 데이터 클래스
+ *
+ * @property friendCount    현재 섹션에 속한 유저 수
+ * @property items          섹션에 표시할 [PokeUserUiState] 목록
+ */
+@Immutable
+data class FriendListUiState(
+    val friendCount: Int,
+    val items: ImmutableList<PokeUserUiState> = persistentListOf()
 ) {
-    NEW(
-        typeName = "new",
-        readableName = "친한친구",
-        title = "나랑 친한 친구",
-        description = "2번 이상 찌르면 될 수 있어요"
-    ),
-    BEST_FRIEND(
-        typeName = "bestfriend",
-        readableName = "단짝친구",
-        title = "나랑 단짝친구",
-        description = "5번 이상 찌르면 될 수 있어요"
-    ),
-    SOULMATE(
-        typeName = "soulmate",
-        readableName = "천생연분",
-        title = "나랑 천생연분",
-        description = "11번 이상 찌르면 될 수 있어요"
-    )
+    val isEmpty: Boolean get() = items.isEmpty()
 }
+
+typealias PokeFriendListSections = ImmutableList<Pair<PokeFriendType, FriendListUiState>>
+
+internal fun emptyPokeFriendListSections(): PokeFriendListSections = persistentListOf(
+    PokeFriendType.NEW to FriendListUiState(friendCount = 0),
+    PokeFriendType.BEST_FRIEND to FriendListUiState(friendCount = 0),
+    PokeFriendType.SOULMATE to FriendListUiState(friendCount = 0),
+)

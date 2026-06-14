@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2026 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.type
+package org.sopt.official.feature.poke.v2
 
-enum class PokeFriendType(
-    val typeName: String,
-    val readableName: String,
-    val title: String,
-    val description: String
-) {
-    NEW(
-        typeName = "new",
-        readableName = "친한친구",
-        title = "나랑 친한 친구",
-        description = "2번 이상 찌르면 될 수 있어요"
-    ),
-    BEST_FRIEND(
-        typeName = "bestfriend",
-        readableName = "단짝친구",
-        title = "나랑 단짝친구",
-        description = "5번 이상 찌르면 될 수 있어요"
-    ),
-    SOULMATE(
-        typeName = "soulmate",
-        readableName = "천생연분",
-        title = "나랑 천생연분",
-        description = "11번 이상 찌르면 될 수 있어요"
-    )
+import org.junit.Test
+import org.junit.Assert.*
+
+/**
+ * Example local unit test, which will execute on the development machine (host).
+ *
+ * See [testing documentation](http://d.android.com/tools/testing).
+ */
+class ExampleUnitTest {
+    @Test
+    fun addition_isCorrect() {
+        assertEquals(4, 2 + 2)
+    }
 }

@@ -71,3 +71,4 @@ include(
     ":feature:appjamtamp",
     ":feature:sopletter"
 )
+include(":feature:poke-v2")
