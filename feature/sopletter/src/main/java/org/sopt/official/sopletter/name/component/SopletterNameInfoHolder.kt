@@ -23,7 +23,7 @@ import org.sopt.official.sopletter.R
 import org.sopt.official.sopletter.name.NameState
 
 @Composable
-internal fun NameInfoHolder(
+internal fun SopletterNameInfoHolder(
     info: NameState,
     modifier: Modifier = Modifier
 ) {
@@ -86,7 +86,7 @@ internal fun NameInfoHolder(
 @Composable
 private fun NameInfoHolderPreview() {
     SoptTheme {
-        NameInfoHolder(
+        SopletterNameInfoHolder(
             info = NameState(
                 name = "익명의 김솝트",
                 generation = 37

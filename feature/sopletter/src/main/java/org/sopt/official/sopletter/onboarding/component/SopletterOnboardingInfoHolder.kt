@@ -18,7 +18,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.sopletter.R
 
 @Composable
-internal fun OnboardingInfoHolder(
+internal fun SopletterOnboardingInfoHolder(
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -54,8 +54,8 @@ internal fun OnboardingInfoHolder(
 
 @Preview
 @Composable
-private fun OnboardingInfoHolderPreview() {
+private fun SopletterOnboardingInfoHolderPreview() {
     SoptTheme {
-        OnboardingInfoHolder()
+        SopletterOnboardingInfoHolder()
     }
 }

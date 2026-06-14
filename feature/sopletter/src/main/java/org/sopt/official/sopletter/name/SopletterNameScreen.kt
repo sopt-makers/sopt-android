@@ -18,10 +18,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.sopletter.component.SopletterButton
-import org.sopt.official.sopletter.name.component.NameInfoHolder
+import org.sopt.official.sopletter.name.component.SopletterNameInfoHolder
 
 @Composable
-fun NameRoute(
+fun SopletterNameRoute(
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -38,13 +38,13 @@ fun NameRoute(
     }
 
 
-    NameScreen(
+    SopletterNameScreen(
         state = state
     )
 }
 
 @Composable
-private fun NameScreen(
+private fun SopletterNameScreen(
     state: NameState,
     navigateToSopletterMain: () -> Unit= {}
 ) {
@@ -55,7 +55,7 @@ private fun NameScreen(
     ) {
         Spacer(modifier = Modifier.weight(20f))
 
-        NameInfoHolder(
+        SopletterNameInfoHolder(
             info = state,
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,7 +65,7 @@ private fun NameScreen(
         Spacer(modifier = Modifier.weight(228f))
 
         SopletterButton(
-            buttonText = "${state.generation}기 솝레터 바로가가",
+            buttonText = "${state.generation}기 솝레터 바로가기",
             onClick = navigateToSopletterMain,
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,9 +79,9 @@ private fun NameScreen(
 
 @Preview
 @Composable
-private fun NameScreenPreview() {
+private fun SopletterNameScreenPreview() {
     SoptTheme {
-        NameScreen(
+        SopletterNameScreen(
             state = NameState(
                 name = "익명의 김솝트",
                 generation = 38

@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.sopletter.component.SopletterButton
-import org.sopt.official.sopletter.onboarding.component.OnboardingInfoHolder
+import org.sopt.official.sopletter.onboarding.component.SopletterOnboardingInfoHolder
 
 @Composable
 fun SopletterOnboardingRoute(
@@ -41,7 +41,7 @@ private fun SopletterOnboardingScreen(
 
         Spacer(modifier = Modifier.weight(58f))
 
-        OnboardingInfoHolder(
+        SopletterOnboardingInfoHolder(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 25.dp)
