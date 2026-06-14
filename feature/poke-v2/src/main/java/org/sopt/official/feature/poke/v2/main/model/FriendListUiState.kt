@@ -27,6 +27,7 @@ package org.sopt.official.feature.poke.v2.main.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.domain.poke.type.PokeFriendType
 
 /**
  * 친구 목록 섹션 하나의 UI 상태를 표현하는 데이터 클래스
@@ -41,3 +42,11 @@ data class FriendListUiState(
 ) {
     val isEmpty: Boolean get() = items.isEmpty()
 }
+
+typealias PokeFriendListSections = ImmutableList<Pair<PokeFriendType, FriendListUiState>>
+
+internal fun emptyPokeFriendListSections(): PokeFriendListSections = persistentListOf(
+    PokeFriendType.NEW to FriendListUiState(friendCount = 0),
+    PokeFriendType.BEST_FRIEND to FriendListUiState(friendCount = 0),
+    PokeFriendType.SOULMATE to FriendListUiState(friendCount = 0),
+)

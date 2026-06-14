@@ -24,32 +24,31 @@ import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.v2.R
-import org.sopt.official.feature.poke.v2.main.model.FriendListSummaryUiState
 import org.sopt.official.feature.poke.v2.main.model.FriendListUiState
+import org.sopt.official.feature.poke.v2.main.model.PokeFriendListSections
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.main.model.emptyPokeFriendListSections
 
 @Composable
 internal fun PokeFriendListBlock(
-    state: FriendListSummaryUiState,
+    sections: PokeFriendListSections,
     onToggleClick: () -> Unit, // TODO: 로직에 맞게 수정
     onProfileClick: (Int) -> Unit, // TODO: 로직에 맞게 수정
     onPokeClick: (PokeUserUiState) -> Unit, // TODO: 로직에 맞게 수정
     modifier: Modifier = Modifier
 ) {
-    val types = PokeFriendType.entries
-
     Column(
         modifier = modifier.fillMaxWidth()
     ) {
-        state.sections.forEachIndexed { index, sectionState ->
+        sections.forEachIndexed { index, (type, sectionState) ->
             PokeFriendListSection(
-                type = types[index],
+                type = type,
                 state = sectionState,
                 onToggleClick = { onToggleClick() },
                 onProfileClick = onProfileClick,
                 onPokeClick = onPokeClick
             )
-            if (index < state.sections.lastIndex) {
+            if (index < sections.lastIndex) {
                 HorizontalDivider(
                     thickness = 8.dp,
                     color = SoptTheme.colors.onSurface800
@@ -150,11 +149,11 @@ private fun PokeFriendListHeader(
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 private fun PokeFriendListBlockPreview(
-    @PreviewParameter(PokeFriendListBlockPreviewParameterProvider::class) summaryState: FriendListSummaryUiState,
+    @PreviewParameter(PokeFriendListBlockPreviewParameterProvider::class) sections: PokeFriendListSections,
 ) {
     SoptTheme {
         PokeFriendListBlock(
-            state = summaryState,
+            sections = sections,
             onToggleClick = {},
             onProfileClick = {},
             onPokeClick = {}
@@ -162,10 +161,10 @@ private fun PokeFriendListBlockPreview(
     }
 }
 
-private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProvider<FriendListSummaryUiState> {
+private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProvider<PokeFriendListSections> {
     override val values = sequenceOf(
-        FriendListSummaryUiState(
-            newFriend = FriendListUiState(
+        persistentListOf(
+            PokeFriendType.NEW to FriendListUiState(
                 friendCount = 2,
                 items = persistentListOf(
                     PokeUserUiState(
@@ -192,7 +191,7 @@ private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProv
                     )
                 )
             ),
-            bestFriend = FriendListUiState(
+            PokeFriendType.BEST_FRIEND to FriendListUiState(
                 friendCount = 1,
                 items = persistentListOf(
                     PokeUserUiState(
@@ -209,16 +208,11 @@ private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProv
                     )
                 )
             ),
-            soulmate = FriendListUiState(
+            PokeFriendType.SOULMATE to FriendListUiState(
                 friendCount = 0,
                 items = persistentListOf()
             )
         ),
-
-        FriendListSummaryUiState(
-            newFriend = FriendListUiState(friendCount = 0, items = persistentListOf()),
-            bestFriend = FriendListUiState(friendCount = 0, items = persistentListOf()),
-            soulmate = FriendListUiState(friendCount = 0, items = persistentListOf())
-        )
+        emptyPokeFriendListSections()
     )
 }
