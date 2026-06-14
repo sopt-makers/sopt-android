@@ -55,11 +55,11 @@ private val PokeUserUiState.relationStrokeColor: Color get() = when (relationNam
 
 @Composable
 internal fun PokeUserItem(
-    modifier: Modifier = Modifier,
     user: PokeUserUiState,
     pokeViewType: PokeViewType = PokeViewType.SMALL,
     onProfileClick: (Int) -> Unit,
-    onPokeClick: (PokeUserUiState) -> Unit
+    onPokeClick: (PokeUserUiState) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     when (pokeViewType) {
         PokeViewType.SMALL -> PokeUserSmallItem(
