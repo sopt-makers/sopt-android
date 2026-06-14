@@ -32,7 +32,7 @@ import org.sopt.official.feature.poke.v2.main.model.emptyPokeFriendListSections
 @Composable
 internal fun PokeFriendListBlock(
     sections: PokeFriendListSections,
-    onToggleClick: () -> Unit, // TODO: 로직에 맞게 수정
+    onFriendListClick: () -> Unit, // TODO: 로직에 맞게 수정
     onProfileClick: (Int) -> Unit, // TODO: 로직에 맞게 수정
     onPokeClick: (PokeUserUiState) -> Unit, // TODO: 로직에 맞게 수정
     modifier: Modifier = Modifier
@@ -44,7 +44,7 @@ internal fun PokeFriendListBlock(
             PokeFriendListSection(
                 type = type,
                 state = sectionState,
-                onToggleClick = { onToggleClick() },
+                onFriendListClick = { onFriendListClick() },
                 onProfileClick = onProfileClick,
                 onPokeClick = onPokeClick
             )
@@ -62,7 +62,7 @@ internal fun PokeFriendListBlock(
 private fun PokeFriendListSection(
     type: PokeFriendType,
     state: FriendListUiState,
-    onToggleClick: () -> Unit,
+    onFriendListClick: () -> Unit,
     onProfileClick: (Int) -> Unit,
     onPokeClick: (PokeUserUiState) -> Unit
 ) {
@@ -74,7 +74,7 @@ private fun PokeFriendListSection(
         PokeFriendListHeader(
             type = type,
             state = state,
-            onToggleClick = onToggleClick
+            onFriendListClick = onFriendListClick
         )
 
         if (state.isEmpty) {
@@ -104,7 +104,7 @@ private fun PokeFriendListSection(
 private fun PokeFriendListHeader(
     type: PokeFriendType,
     state: FriendListUiState,
-    onToggleClick: () -> Unit
+    onFriendListClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -141,7 +141,7 @@ private fun PokeFriendListHeader(
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp)
-                .throttledNoRippleClickable(onClick = onToggleClick)
+                .throttledNoRippleClickable(onClick = onFriendListClick)
         )
     }
 }
@@ -154,7 +154,7 @@ private fun PokeFriendListBlockPreview(
     SoptTheme {
         PokeFriendListBlock(
             sections = sections,
-            onToggleClick = {},
+            onFriendListClick = {},
             onProfileClick = {},
             onPokeClick = {}
         )
