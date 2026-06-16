@@ -158,8 +158,8 @@ internal data class HomeAppService(
     val serviceName: String = "",
     val isShowAlarmBadge: Boolean = false,
     val alarmBadgeContent: String = "",
-    val iconUrl: String = "",
-    val deepLink: String = "",
+    val iconUrl: String? = null,
+    val deepLink: String? = null,
     @DrawableRes val defaultIcon: Int? = null,
 )
 

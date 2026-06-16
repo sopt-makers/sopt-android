@@ -61,7 +61,7 @@ import org.sopt.official.feature.home.model.HomeAppService
 @Composable
 internal fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
-    onAppServiceClick: (url: String, appServiceName: String) -> Unit,
+    onAppServiceClick: (url: String?, appServiceName: String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -103,7 +103,7 @@ private fun HomeEnjoySoptServicesBlockPreview() {
 @Composable
 private fun AppServiceItem(
     appService: HomeAppService,
-    onItemClick: (url: String, appServiceName: String) -> Unit,
+    onItemClick: (url: String?, appServiceName: String) -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -119,7 +119,7 @@ private fun AppServiceItem(
                     )
                 } else {
                     UrlImage(
-                        url = appService.iconUrl,
+                        url = appService.iconUrl ?: "",
                         modifier = Modifier.size(size = 60.dp),
                     )
                 }

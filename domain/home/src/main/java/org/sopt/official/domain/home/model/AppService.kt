@@ -28,6 +28,6 @@ data class AppService(
     val serviceName: String,
     val displayAlarmBadge: Boolean,
     val alarmBadge: String,
-    val iconUrl: String,
-    val deepLink: String,
+    val iconUrl: String?,
+    val deepLink: String?,
 )
