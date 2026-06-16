@@ -87,7 +87,7 @@ enum class MainTab(
             return entries.map { it.route }.any { predicate(it) }
         }
 
-        fun getActiveTabs(activeServices: List<String>): List<MainTab> {
+        fun getActiveTabs(activeServices: List<String?>): List<MainTab> {
             val activeServices = entries.filter { tab ->
                 tab.deeplink != null && activeServices.contains(tab.deeplink)
             }

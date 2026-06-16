@@ -47,7 +47,7 @@ fun NavGraphBuilder.homeNavGraph(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     paddingValues: PaddingValues,
-    onUpdateBottomBadge: (Map<String, String>) -> Unit
+    onUpdateBottomBadge: (Map<String?, String>) -> Unit
 ) {
     composable<Home> {
         HomeRoute(

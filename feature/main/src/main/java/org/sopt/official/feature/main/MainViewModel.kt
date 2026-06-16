@@ -53,7 +53,7 @@ class MainViewModel @Inject constructor(
         observeAppServices()
     }
 
-    fun updateBadge(badges: Map<String, String?>) {
+    fun updateBadge(badges: Map<String?, String?>) {
         _badgeMap.update {
             _mainTabs.value.associateWith { tab ->
                 tab.deeplink?.let { badges[it] }

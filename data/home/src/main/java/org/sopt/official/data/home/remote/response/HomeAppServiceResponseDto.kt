@@ -36,7 +36,7 @@ internal data class HomeAppServiceResponseDto(
     @SerialName("alarmBadge")
     val alarmBadge: String,
     @SerialName("iconUrl")
-    val iconUrl: String,
+    val iconUrl: String?,
     @SerialName("deepLink")
-    val deepLink: String,
+    val deepLink: String?,
 )

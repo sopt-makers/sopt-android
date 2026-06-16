@@ -93,7 +93,7 @@ internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
-    onUpdateBottomBadge: (Map<String, String>) -> Unit,
+    onUpdateBottomBadge: (Map<String?, String>) -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
