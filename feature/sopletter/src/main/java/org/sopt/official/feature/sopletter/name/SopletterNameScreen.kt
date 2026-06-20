@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.name
+package org.sopt.official.feature.sopletter.name
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -41,8 +41,8 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.component.SopletterButton
-import org.sopt.official.sopletter.name.component.SopletterNameInfoHolder
+import org.sopt.official.feature.sopletter.common.component.SopletterButton
+import org.sopt.official.feature.sopletter.name.component.SopletterNameInfoHolder
 
 @Composable
 fun SopletterNameRoute(

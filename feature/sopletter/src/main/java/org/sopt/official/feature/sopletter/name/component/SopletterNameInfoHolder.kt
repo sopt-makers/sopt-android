@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.name.component
+package org.sopt.official.feature.sopletter.name.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -44,7 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.sopletter.R
-import org.sopt.official.sopletter.name.NameState
+import org.sopt.official.feature.sopletter.name.NameState
 
 @Composable
 internal fun SopletterNameInfoHolder(
