@@ -39,7 +39,6 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -53,9 +52,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
@@ -72,17 +73,16 @@ import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewPara
 fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
 
     LaunchedEffect(Unit) {
-        viewModel.snackbarMessage.collect { message ->
-            snackBarHostState.showSnackbar(
-                message = message,
-                duration = SnackbarDuration.Short,
-            )
-        }
+        viewModel.snackbarEvent.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { visuals ->
+                snackBarHostState.showSnackbar(visuals)
+            }
     }
 
     SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
@@ -94,6 +94,7 @@ fun SopletterMainRoute(
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
             onReportClick = { /* TODO report click */ },
+            onTopicClick = { /* TODO topic click */ },
             onEditFABClick = { /* TODO edit FAB click */ },
             modifier = Modifier.padding(paddingValues),
         )
@@ -110,6 +111,7 @@ private fun SopletterMainScreen(
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
+    onTopicClick: () -> Unit,
     onEditFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -129,6 +131,7 @@ private fun SopletterMainScreen(
             onCloseClick = onCloseClick,
             onDownloadClick = onDownloadClick,
             onReportClick = onReportClick,
+            onTopicClick = onTopicClick
         )
 
         if (uiState.memoList.isEmpty()) {
@@ -230,6 +233,7 @@ private fun SopletterMainScreenPreview(
             onDownloadClick = {},
             onReportClick = {},
             onEditFABClick = {},
+            onTopicClick = {},
         )
     }
 }
