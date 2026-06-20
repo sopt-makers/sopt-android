@@ -1,4 +1,4 @@
-package org.sopt.official.feature.sopletter.write.component
+package org.sopt.official.feature.sopletter.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,12 +22,14 @@ import org.sopt.official.sopletter.R
 fun SopletterTopbar(
     onBackClick : () -> Unit ,
     modifier: Modifier = Modifier,
+    topbarTitle: String = "솝레터 작성"
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .background(color = SoptTheme.colors.background)
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp)
+            .padding(start = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -35,11 +37,12 @@ fun SopletterTopbar(
             imageVector = ImageVector.vectorResource(id = R.drawable.icon_chevron_left),
             contentDescription = null,
             tint = Color.Unspecified,
-            modifier = Modifier.noRippleClickable (onClick = onBackClick)
+            modifier = Modifier
+                .noRippleClickable(onClick = onBackClick)
         )
 
         Text(
-            text = "솝레터 작성",
+            text = topbarTitle,
             color = SoptTheme.colors.onSurface10,
             style = SoptTheme.typography.heading18B
         )

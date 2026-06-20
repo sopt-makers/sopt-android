@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.component
+package org.sopt.official.feature.sopletter.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -46,9 +47,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.R
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 
 @Composable
 internal fun SopletterScaffold(
@@ -65,7 +69,17 @@ internal fun SopletterScaffold(
                         .padding(top = 16.dp)
                         .align(Alignment.TopCenter),
                     snackbar = { data ->
-                        SopletterSnackBar(message = data.visuals.message)
+                        when (val visuals = data.visuals) {
+                            is SopletterSnackbarVisuals -> {
+                                SopletterSnackBar(
+                                    sopletterSnackbarType = visuals.type,
+                                    message = visuals.message,
+                                )
+                            }
+                            else -> {
+                                Snackbar(snackbarData = data)
+                            }
+                        }
                     },
                 )
             }
@@ -78,6 +92,7 @@ internal fun SopletterScaffold(
 
 @Composable
 private fun SopletterSnackBar(
+    sopletterSnackbarType: SopletterSnackbarType,
     message: String,
     modifier: Modifier = Modifier,
 ) {
@@ -92,12 +107,15 @@ private fun SopletterSnackBar(
             ),
     ) {
         Spacer(modifier = Modifier.width(16.dp))
+
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_alert_circle_20),
+            imageVector = ImageVector.vectorResource(id = sopletterSnackbarType.iconRes),
             tint = Color.Unspecified,
             contentDescription = null,
         )
+
         Spacer(modifier = Modifier.width(8.dp))
+
         Text(
             text = message,
             style = SoptTheme.typography.title14SB,
@@ -107,12 +125,23 @@ private fun SopletterSnackBar(
     }
 }
 
+class SopletterSnackbarTypeProvider : PreviewParameterProvider<SopletterSnackbarType> {
+    override val values = SopletterSnackbarType.entries.asSequence()
+}
+
 @Preview
 @Composable
-private fun SopletterSnackBarPreview() {
+private fun SopletterSnackBarPreview(
+    @PreviewParameter(SopletterSnackbarTypeProvider::class) type: SopletterSnackbarType
+) {
     SoptTheme {
         SopletterSnackBar(
-            message = "내가 작성한 솝레터에는 좋아요를 누를 수 없어요.",
+            sopletterSnackbarType = type,
+            message = when (type) {
+                SopletterSnackbarType.SUCCESS -> "성공!"
+                SopletterSnackbarType.WARNING -> "주의!"
+                SopletterSnackbarType.FAILURE -> "실패!"
+            }
         )
     }
 }
