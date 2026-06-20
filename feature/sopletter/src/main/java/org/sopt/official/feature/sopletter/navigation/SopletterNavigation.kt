@@ -22,17 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.onboarding.navigation
+package org.sopt.official.feature.sopletter.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
 import kotlinx.serialization.Serializable
+import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
+import org.sopt.official.feature.sopletter.onboarding.navigation.SopletterOnboarding
 
 @Serializable
-data object SopletterOnboarding
+data object SopletterGraph
 
-fun NavController.navigateToSopletterOnboarding(
-    navOptions: NavOptions? = null,
+fun NavGraphBuilder.sopletterGraph(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    navigateUp: () -> Unit,
 ) {
-    navigate(SopletterOnboarding, navOptions)
+    navigation<SopletterGraph> (
+        startDestination = SopletterOnboarding
+    ) {
+       composable<SopletterOnboarding> {
+           SopletterOnboardingRoute (
+               paddingValues = paddingValues,
+               navigateToNickname = {}
+           )
+       }
+    }
 }
