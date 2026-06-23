@@ -53,6 +53,7 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import timber.log.Timber
 
 @Composable
 internal fun SopletterScaffold(
@@ -77,6 +78,10 @@ internal fun SopletterScaffold(
                                 )
                             }
                             else -> {
+                                Timber.w(
+                                    "Invalid snackbar usage. Use SopletterSnackbarVisuals instead of default showSnackbar(message)."
+                                )
+
                                 Snackbar(snackbarData = data)
                             }
                         }
