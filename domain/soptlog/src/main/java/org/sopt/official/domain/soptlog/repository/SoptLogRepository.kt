@@ -24,8 +24,11 @@
  */
 package org.sopt.official.domain.soptlog.repository
 
+import kotlinx.coroutines.flow.StateFlow
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
 interface SoptLogRepository {
+    val soptLogInfo: StateFlow<SoptLogInfo?>
     suspend fun getSoptLogInfo(): Result<SoptLogInfo>
+    suspend fun invalidate()
 }

@@ -30,12 +30,9 @@ import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
-import org.sopt.official.domain.home.model.UserInfo
-import org.sopt.official.domain.home.model.UserInfo.UserDescription
+import org.sopt.official.domain.home.model.UserDescription
 
 interface HomeRepository {
-
-    suspend fun getUserInfo(): Result<UserInfo>
 
     suspend fun getRecentCalendar(): Result<RecentCalendar>
 
