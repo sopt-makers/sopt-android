@@ -12,7 +12,7 @@
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *     https://opensource.org/licenses/MIT
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -22,27 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.model
+package org.sopt.official.feature.sopletter.main.contract
 
-import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+sealed interface SopletterMainSideEffect {
+    data class NavigateToReportForm(
+        val url: String,
+    ) : SopletterMainSideEffect
 
-@Immutable
-data class SopletterMainUiState(
-    val topicId: Long = 0L,
-    val topicTitle: String = "",
-    val totalCount: Int = 0,
-    val nextCursor: Long? = null,
-    val hasNext: Boolean = false,
-    val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
-    val reportFormUrl: String? = null,
-    val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
-    val isInitialized: Boolean = false,
-    val isLoading: Boolean = false,
-    val isMessageRefreshing: Boolean = false,
-    val isPaging: Boolean = false,
-    val isShowErrorDialog: Boolean = false,
-)
+    data class ShowSnackbar(
+        val message: String,
+    ) : SopletterMainSideEffect
+}

@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
+import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
@@ -48,8 +49,9 @@ class SopletterMainViewModel @Inject constructor(
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
-    private val _snackbarMessage = MutableSharedFlow<String>()
-    val snackbarMessage: SharedFlow<String> = _snackbarMessage.asSharedFlow()
+
+    private val _sideEffect = MutableSharedFlow<SopletterMainSideEffect>()
+    val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         fetchDefaultMessages()
@@ -65,7 +67,11 @@ class SopletterMainViewModel @Inject constructor(
         val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
 
         if (selectedMemoDetail.isMine) {
-            _snackbarMessage.tryEmit("내가 작성한 솝레터에는 좋아요를 누를 수 없어요.")
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar("내가 작성한 솝레터에는 좋아요를 누를 수 없어요."),
+                )
+            }
             return
         }
 
@@ -95,7 +101,7 @@ class SopletterMainViewModel @Inject constructor(
 
     fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
-        if (currentState.isLoading || currentState.isPaging) return@launch
+        if (currentState.isLoading) return@launch
 
         val cursor = if (isLoadMore) {
             if (!currentState.hasNext) return@launch
@@ -106,7 +112,8 @@ class SopletterMainViewModel @Inject constructor(
 
         _uiState.update { state ->
             state.copy(
-                isLoading = !isLoadMore,
+                isLoading = true,
+                isMessageRefreshing = !isLoadMore && currentState.isInitialized,
                 isPaging = isLoadMore,
                 isShowErrorDialog = false,
             )
@@ -130,6 +137,7 @@ class SopletterMainViewModel @Inject constructor(
                         },
                         isInitialized = true,
                         isLoading = false,
+                        isMessageRefreshing = false,
                         isPaging = false,
                         isShowErrorDialog = false,
                     )
@@ -139,10 +147,52 @@ class SopletterMainViewModel @Inject constructor(
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
+                        isMessageRefreshing = false,
                         isPaging = false,
                         isShowErrorDialog = true,
                     )
                 }
             }
+    }
+
+    fun openReportForm() = viewModelScope.launch {
+        _uiState.value.reportFormUrl?.let { url ->
+            _sideEffect.emit(SopletterMainSideEffect.NavigateToReportForm(url))
+            return@launch
+        }
+
+        if (_uiState.value.isLoading) return@launch
+
+        _uiState.update { state ->
+            state.copy(
+                isLoading = true,
+                isShowErrorDialog = false,
+            )
+        }
+
+        sopletterRepository.getReportFormUrl()
+            .onSuccess { url ->
+                _uiState.update { state ->
+                    state.copy(
+                        reportFormUrl = url,
+                        isLoading = false,
+                    )
+                }
+                _sideEffect.emit(SopletterMainSideEffect.NavigateToReportForm(url))
+            }
+            .onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
+    }
+
+    fun dismissErrorDialog() {
+        _uiState.update { state ->
+            state.copy(isShowErrorDialog = false)
+        }
     }
 }

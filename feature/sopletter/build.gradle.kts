@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.model)
     implementation(projects.core.localstorage)
+    implementation(projects.core.webview)
 
     // domain
     implementation(projects.domain.sopletter)
