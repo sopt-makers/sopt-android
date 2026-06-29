@@ -28,6 +28,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
+import org.sopt.official.feature.mypage.navigation.MyPageGraph
 
 enum class MainTab(
     @param:DrawableRes val icon: Int,
@@ -68,12 +69,12 @@ enum class MainTab(
         deeplink = "poke"
     ),
 
-    SoptLog(
-        icon = R.drawable.ic_main_soptlog,
-        contentDescription = "솝트로그",
-        route = org.sopt.official.feature.soptlog.navigation.SoptLog,
-        loggingName = "navi_soptlog",
-        deeplink = "soptlog"
+    MyPage(
+        icon = R.drawable.ic_main_mypage,
+        contentDescription = "마이페이지",
+        route = MyPageGraph,
+        loggingName = "navi_mypage",
+        deeplink = null
     );
 
     companion object {
@@ -92,7 +93,7 @@ enum class MainTab(
                 tab.deeplink != null && activeServices.contains(tab.deeplink)
             }
 
-            return listOf(Home) + activeServices + listOf(SoptLog)
+            return listOf(Home) + activeServices + listOf(MyPage)
         }
     }
 }
