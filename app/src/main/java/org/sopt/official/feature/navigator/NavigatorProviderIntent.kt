@@ -34,7 +34,6 @@ import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
 import org.sopt.official.feature.fortune.FortuneActivity
 import org.sopt.official.feature.main.MainActivity
-import org.sopt.official.feature.mypage.mypage.MyPageActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.all.NotificationActivity
@@ -51,11 +50,6 @@ class NavigatorProviderIntent @Inject constructor(
     override fun getNotificationDetailActivityIntent(notificationId: String) = NotificationDetailActivity.getIntent(
         context,
         notificationId
-    )
-
-    override fun getMyPageActivityIntent(name: String) = MyPageActivity.getIntent(
-        context,
-        MyPageActivity.Argument(UserStatus.valueOf(name))
     )
 
     override fun getAdjustSentenceActivityIntent(): Intent = AdjustSentenceActivity.getIntent(
