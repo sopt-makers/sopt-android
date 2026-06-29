@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
@@ -197,6 +198,10 @@ private fun SopletterMainScreen(
             state = memo,
             actions = dialogActions,
         )
+    }
+
+    if (uiState.isShowErrorDialog) {
+        NetworkErrorDialog(onConfirm = onRefresh)
     }
 }
 

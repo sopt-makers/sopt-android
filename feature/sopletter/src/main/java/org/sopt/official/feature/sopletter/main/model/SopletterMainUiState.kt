@@ -40,4 +40,5 @@ data class SopletterMainUiState(
     val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
     val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
     val isLoading: Boolean = false,
+    val isShowErrorDialog: Boolean = false,
 )
