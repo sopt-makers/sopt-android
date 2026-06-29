@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.remote.api
+package org.sopt.official.data.soptlog.di
 
-import org.sopt.official.data.home.remote.response.UserMainResponseDto
-import retrofit2.http.GET
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.cache.InMemoryCache
+import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
-internal interface UserApi {
+@Module
+@InstallIn(SingletonComponent::class)
+internal object CacheModule {
 
-    @GET("user/main")
-    suspend fun getUserMain(): UserMainResponseDto
+    @Provides
+    @Singleton
+    fun provideSoptLogInfoCache(): InMemoryCache<SoptLogInfo> = InMemoryCache()
 }

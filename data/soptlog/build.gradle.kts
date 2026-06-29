@@ -33,6 +33,7 @@ android {
 dependencies {
     implementation(projects.domain.soptlog)
 
+    implementation(projects.core.cache)
     implementation(projects.core.network)
     implementation(projects.core.common)
     implementation(platform(libs.okhttp.bom))
