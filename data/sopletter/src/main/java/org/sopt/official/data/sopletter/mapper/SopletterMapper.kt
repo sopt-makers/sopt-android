@@ -4,6 +4,7 @@ import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesRes
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDto
 import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.domain.sopletter.model.SopletterShapeType
 
 internal fun SopletterDefaultMessagesResponseDto.toDomain(): SopletterDefaultMessages = SopletterDefaultMessages(
     topicId = topicId,
@@ -19,5 +20,5 @@ internal fun SopletterMessageDto.toDomain(): SopletterMessage = SopletterMessage
     previewContent = previewContent,
     colorCode = colorCode,
     rotationDegree = rotationDegree,
-    shapeType = shapeType,
+    shapeType = SopletterShapeType.from(shapeType),
 )

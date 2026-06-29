@@ -14,5 +14,17 @@ data class SopletterMessage(
     val previewContent: String,
     val colorCode: String,
     val rotationDegree: Double,
-    val shapeType: String,
+    val shapeType: SopletterShapeType,
 )
+
+enum class SopletterShapeType {
+    SMOOTH,
+    SHARP,
+    POINT,
+    CLOUD;
+
+    companion object {
+        fun from(value: String): SopletterShapeType =
+            entries.find { it.name == value } ?: SHARP
+    }
+}
