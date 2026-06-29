@@ -222,7 +222,7 @@ internal fun MyPageScreen(
                 userStatus = state.userStatus,
                 totalSoptampCount = state.soptampCount,
                 totalPokeCount = state.totalPokeCount,
-                isAppjamPeriod = true, // Todo: 현재는 앱잼기간(26.06.29) 이라서 true
+                isAppjamPeriod = false, // Todo: 현재는 앱잼기간(26.06.29) 이라서 true 해야함
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
