@@ -55,6 +55,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
@@ -64,7 +65,6 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDia
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -104,7 +104,7 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
-    onMemoClick: (SopletterMemoUiModel) -> Unit,
+    onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     dialogActions: SopletterMemoDetailDialogContract.Actions,
     onCloseClick: () -> Unit,
@@ -124,7 +124,7 @@ private fun SopletterMainScreen(
             .background(color = SoptTheme.colors.background),
     ) {
         SopletterMainTopBar(
-            generation = uiState.generation,
+            title = uiState.topicTitle,
             isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
             onCloseClick = onCloseClick,
             onDownloadClick = onDownloadClick,
@@ -164,7 +164,7 @@ private fun SopletterMainScreen(
                 ) {
                     itemsIndexed(
                         items = uiState.memoList,
-                        key = { _, item -> item.id },
+                        key = { _, item -> item.messageId },
                     ) { index, item ->
                         SopletterMemoCard(
                             memo = item,
