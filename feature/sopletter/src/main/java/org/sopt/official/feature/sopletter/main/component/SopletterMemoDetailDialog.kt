@@ -64,7 +64,7 @@ internal fun SopletterMemoDetailDialog(
                 .padding(20.dp)
                 .fillMaxWidth()
                 .background(
-                    color = state.memoColor.color,
+                    color = state.memoColor,
                     shape = RoundedCornerShape(10.dp)
                 )
                 .padding(20.dp),
