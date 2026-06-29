@@ -39,6 +39,8 @@ data class SopletterMainUiState(
     val hasNext: Boolean = false,
     val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
     val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
+    val isInitialized: Boolean = false,
     val isLoading: Boolean = false,
+    val isPaging: Boolean = false,
     val isShowErrorDialog: Boolean = false,
 )

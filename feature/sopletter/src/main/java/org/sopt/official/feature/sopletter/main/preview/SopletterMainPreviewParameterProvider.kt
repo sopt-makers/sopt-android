@@ -65,9 +65,12 @@ class SopletterMainPreviewParameterProvider : PreviewParameterProvider<Sopletter
     )
 
     private val previewStates = listOf(
-        SopletterMainUiState(),
+        SopletterMainUiState(
+            topicTitle = "nn기 솝레터",
+        ),
         SopletterMainUiState(
             memoList = memoList,
+            topicTitle = "nn기 솝레터"
         ),
         SopletterMainUiState(
             memoList = memoList,

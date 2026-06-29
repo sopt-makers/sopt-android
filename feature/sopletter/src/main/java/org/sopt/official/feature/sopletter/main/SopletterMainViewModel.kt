@@ -27,6 +27,7 @@ package org.sopt.official.feature.sopletter.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,17 +36,24 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterMainViewModel @Inject constructor(
+    private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
     private val _snackbarMessage = MutableSharedFlow<String>()
     val snackbarMessage: SharedFlow<String> = _snackbarMessage.asSharedFlow()
+
+    init {
+        fetchDefaultMessages()
+    }
 
     fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogContract.State) {
         _uiState.update { state ->
@@ -85,17 +93,56 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    fun refreshMemoList() {
-        viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(isLoading = true)
-            }
+    fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
+        val currentState = _uiState.value
+        if (currentState.isLoading || currentState.isPaging) return@launch
 
-            // TODO Refresh 로직
-
-            _uiState.update { state ->
-                state.copy(isLoading = false)
-            }
+        val cursor = if (isLoadMore) {
+            if (!currentState.hasNext) return@launch
+            currentState.nextCursor ?: return@launch
+        } else {
+            null
         }
+
+        _uiState.update { state ->
+            state.copy(
+                isLoading = !isLoadMore,
+                isPaging = isLoadMore,
+                isShowErrorDialog = false,
+            )
+        }
+
+        sopletterRepository.getDefaultMessages(cursor = cursor)
+            .onSuccess { response ->
+                _uiState.update { state ->
+                    state.copy(
+                        topicId = response.topicId,
+                        topicTitle = response.title,
+                        totalCount = response.totalCount,
+                        nextCursor = response.nextCursor,
+                        hasNext = response.hasNext,
+                        memoList = if (isLoadMore) {
+                            (state.memoList + response.messages)
+                                .distinctBy(SopletterMessage::messageId)
+                                .toPersistentList()
+                        } else {
+                            response.messages.toPersistentList()
+                        },
+                        isInitialized = true,
+                        isLoading = false,
+                        isPaging = false,
+                        isShowErrorDialog = false,
+                    )
+                }
+            }
+            .onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        isPaging = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
     }
 }

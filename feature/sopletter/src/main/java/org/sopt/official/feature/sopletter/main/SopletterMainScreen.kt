@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
@@ -54,6 +55,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.sopt.official.common.util.onBottomReached
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
@@ -90,7 +92,8 @@ fun SopletterMainRoute(
         SopletterMainScreen(
             uiState = uiState,
             onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
-            onRefresh = viewModel::refreshMemoList,
+            onRefresh = viewModel::fetchDefaultMessages,
+            onLoadMore = { viewModel.fetchDefaultMessages(isLoadMore = true) },
             dialogActions = dialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
@@ -107,6 +110,7 @@ private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
     dialogActions: SopletterMemoDetailDialogContract.Actions,
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
@@ -114,9 +118,17 @@ private fun SopletterMainScreen(
     onEditFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val gridState = rememberLazyStaggeredGridState()
     val refreshState = rememberPullRefreshState(
         refreshing = uiState.isLoading,
         onRefresh = onRefresh,
+    )
+
+    gridState.onBottomReached(
+        threshold = 4,
+        hasNext = uiState.hasNext,
+        isPaging = uiState.isPaging,
+        onLoadMore = onLoadMore,
     )
 
     Column(
@@ -132,7 +144,13 @@ private fun SopletterMainScreen(
             onReportClick = onReportClick,
         )
 
-        if (uiState.memoList.isEmpty()) {
+        if (!uiState.isInitialized && uiState.memoList.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .pullRefresh(refreshState),
+            )
+        } else if (uiState.memoList.isEmpty()) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -160,6 +178,7 @@ private fun SopletterMainScreen(
             ) {
                 LazyVerticalStaggeredGrid(
                     modifier = Modifier.fillMaxSize(),
+                    state = gridState,
                     columns = StaggeredGridCells.Fixed(2),
                     verticalItemSpacing = (-10).dp,
                 ) {
@@ -230,6 +249,7 @@ private fun SopletterMainScreenPreview(
             uiState = previewState,
             onMemoClick = { _ -> },
             onRefresh = {},
+            onLoadMore = {},
             dialogActions = previewDialogActions,
             onCloseClick = {},
             onDownloadClick = {},
