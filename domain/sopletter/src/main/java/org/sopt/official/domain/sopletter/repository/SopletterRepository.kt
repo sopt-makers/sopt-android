@@ -8,6 +8,8 @@ interface SopletterRepository {
         size: Int = DEFAULT_PAGE_SIZE,
     ): Result<SopletterDefaultMessages>
 
+    suspend fun getReportFormUrl(): Result<String>
+
     private companion object {
         const val DEFAULT_PAGE_SIZE = 20
     }

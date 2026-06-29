@@ -19,4 +19,8 @@ internal class SopletterRepositoryImpl @Inject constructor(
             size = size,
         ).toDomain()
     }
+
+    override suspend fun getReportFormUrl(): Result<String> = suspendRunCatching {
+        sopletterDataSource.getReportForm().reportFormUrl
+    }
 }
