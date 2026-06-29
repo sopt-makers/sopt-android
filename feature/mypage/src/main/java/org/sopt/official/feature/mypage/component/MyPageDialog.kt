@@ -37,7 +37,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -45,7 +44,6 @@ import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray600
-import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
 
@@ -64,57 +62,81 @@ fun MyPageDialog(
         onDismissRequest = onDismissRequest,
         properties = properties,
     ) {
-        Column(
-            modifier = modifier
-                .padding(horizontal = 25.dp)
-                .background(
-                    color = Gray700,
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .padding(top = 26.dp, bottom = 12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
+       MyPageDialogContent(
+           title = title,
+           subTitle = subTitle,
+           negativeText = negativeText,
+           positiveText = positiveText,
+           onDismissRequest = onDismissRequest,
+           onPositiveButtonClick = onPositiveButtonClick,
+           modifier = modifier
+       )
+    }
+}
+
+@Composable
+private fun MyPageDialogContent(
+    title: String,
+    subTitle: String,
+    negativeText: String,
+    positiveText: String,
+    onDismissRequest: () -> Unit,
+    onPositiveButtonClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = 25.dp)
+            .background(
+                color = SoptTheme.colors.onSurface800,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .padding(top = 26.dp, bottom = 12.dp),
+        horizontalAlignment = Alignment.Start,
+    ) {
+        Text(
+            text = title,
+            color = White,
+            style = SoptTheme.typography.title18SB,
+            modifier = Modifier
+                .padding(start = 20.dp)
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = subTitle,
+            color = Gray100,
+            style = SoptTheme.typography.body14R,
+            modifier = Modifier
+                .padding(start = 20.dp)
+        )
+        Spacer(modifier = Modifier.height(24.dp))
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(9.dp)
         ) {
-            Text(
-                text = title,
-                color = White,
-                style = SoptTheme.typography.heading16B
-            )
-            Spacer(modifier = Modifier.height(28.dp))
-            Text(
-                text = subTitle,
-                color = Gray100,
-                style = SoptTheme.typography.body14M,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(modifier = Modifier.height(34.dp))
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 7.dp),
-                horizontalArrangement = Arrangement.spacedBy(6.dp)
+            MyPageButton(
+                modifier = Modifier.weight(1f),
+                paddingVertical = 9.dp,
+                onClick = onDismissRequest,
+                containerColor = Gray600,
+                contentColor = Gray10,
             ) {
-                MyPageButton(
-                    modifier = Modifier.weight(1f),
-                    paddingVertical = 9.dp,
-                    onClick = onDismissRequest,
-                    containerColor = Gray600,
-                    contentColor = Gray10,
-                ) {
-                    Text(
-                        text = negativeText,
-                        style = SoptTheme.typography.body14M
-                    )
-                }
-                MyPageButton(
-                    modifier = Modifier.weight(1f),
-                    paddingVertical = 9.dp,
-                    onClick = onPositiveButtonClick,
-                ) {
-                    Text(
-                        text = positiveText,
-                        style = SoptTheme.typography.body14M
-                    )
-                }
+                Text(
+                    text = negativeText,
+                    style = SoptTheme.typography.label14SB
+                )
+            }
+            MyPageButton(
+                modifier = Modifier.weight(1f),
+                paddingVertical = 9.dp,
+                onClick = onPositiveButtonClick,
+            ) {
+                Text(
+                    text = positiveText,
+                    style = SoptTheme.typography.label14SB
+                )
             }
         }
     }
@@ -124,12 +146,13 @@ fun MyPageDialog(
 @Composable
 fun MyPageDialogPreview() {
     SoptTheme {
-        MyPageDialog(
+        MyPageDialogContent(
             onDismissRequest = {},
             title = "미션을 초기화 하실건가요?",
             subTitle = "사진, 메모가 삭제되고\n전체 미션이 미완료상태로 초기화됩니다.",
             negativeText = "취소",
-            positiveText = "초기화"
+            positiveText = "초기화",
+            onPositiveButtonClick = {}
         )
     }
 }
