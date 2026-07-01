@@ -16,6 +16,16 @@ interface SopletterRepository {
         messageId: Long,
     ): Result<SopletterMessageDetail>
 
+    suspend fun addMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
+    suspend fun deleteMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
     private companion object {
         const val DEFAULT_PAGE_SIZE = 20
     }

@@ -34,4 +34,24 @@ internal class SopletterRepositoryImpl @Inject constructor(
             messageId = messageId,
         ).toDomain()
     }
+
+    override suspend fun addMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit> = suspendRunCatching {
+        sopletterDataSource.addMessageLike(
+            topicId = topicId,
+            messageId = messageId,
+        )
+    }
+
+    override suspend fun deleteMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit> = suspendRunCatching {
+        sopletterDataSource.deleteMessageLike(
+            topicId = topicId,
+            messageId = messageId,
+        )
+    }
 }

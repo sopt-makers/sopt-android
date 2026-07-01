@@ -3,7 +3,9 @@ package org.sopt.official.data.sopletter.service
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -22,4 +24,16 @@ interface SopletterService {
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
     ): SopletterMessageDetailResponseDto
+
+    @POST("sopt-letter/topics/{topicId}/messages/{messageId}/likes")
+    suspend fun addMessageLike(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+    )
+
+    @DELETE("sopt-letter/topics/{topicId}/messages/{messageId}/likes")
+    suspend fun deleteMessageLike(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+    )
 }

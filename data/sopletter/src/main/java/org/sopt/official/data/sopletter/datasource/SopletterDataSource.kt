@@ -16,4 +16,14 @@ interface SopletterDataSource {
         topicId: Long,
         messageId: Long,
     ): SopletterMessageDetailResponseDto
+
+    suspend fun addMessageLike(
+        topicId: Long,
+        messageId: Long,
+    )
+
+    suspend fun deleteMessageLike(
+        topicId: Long,
+        messageId: Long,
+    )
 }

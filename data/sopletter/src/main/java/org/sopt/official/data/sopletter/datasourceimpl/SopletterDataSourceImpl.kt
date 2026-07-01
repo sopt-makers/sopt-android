@@ -27,4 +27,20 @@ internal class SopletterDataSourceImpl @Inject constructor(
         topicId = topicId,
         messageId = messageId,
     )
+
+    override suspend fun addMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ) = sopletterService.addMessageLike(
+        topicId = topicId,
+        messageId = messageId,
+    )
+
+    override suspend fun deleteMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ) = sopletterService.deleteMessageLike(
+        topicId = topicId,
+        messageId = messageId,
+    )
 }

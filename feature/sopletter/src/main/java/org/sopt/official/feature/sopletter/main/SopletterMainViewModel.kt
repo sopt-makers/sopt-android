@@ -182,28 +182,54 @@ class SopletterMainViewModel @Inject constructor(
     }
 
     override fun onLikeClick() {
-        val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
 
-        if (selectedMemoDetail.isMine) {
-            viewModelScope.launch {
+        if (topicId <= 0L) return
+
+        viewModelScope.launch {
+            if (selectedMemoDetail.isMine) {
                 _sideEffect.emit(
                     SopletterMainSideEffect.ShowSnackbar("내가 작성한 솝레터에는 좋아요를 누를 수 없어요."),
                 )
+                return@launch
             }
-            return
-        }
 
-        _uiState.update { state ->
-            state.copy(
-                selectedMemoDetail = selectedMemoDetail.copy(
-                    isLiked = !selectedMemoDetail.isLiked,
-                    likeCount = if (selectedMemoDetail.isLiked) {
-                        selectedMemoDetail.likeCount - 1
-                    } else {
-                        selectedMemoDetail.likeCount + 1
-                    },
-                ),
-            )
+            val result = if (selectedMemoDetail.isLiked) {
+                sopletterRepository.deleteMessageLike(
+                    topicId = topicId,
+                    messageId = selectedMemoDetail.memoId,
+                )
+            } else {
+                sopletterRepository.addMessageLike(
+                    topicId = topicId,
+                    messageId = selectedMemoDetail.memoId,
+                )
+            }
+
+            result.onSuccess {
+                _uiState.update { state ->
+                    val currentDetail = state.selectedMemoDetail ?: return@update state
+                    if (currentDetail.memoId != selectedMemoDetail.memoId) return@update state
+
+                    state.copy(
+                        isShowErrorDialog = false,
+                        selectedMemoDetail = currentDetail.copy(
+                            isLiked = !currentDetail.isLiked,
+                            likeCount = if (currentDetail.isLiked) {
+                                currentDetail.likeCount - 1
+                            } else {
+                                currentDetail.likeCount + 1
+                            },
+                        ),
+                    )
+                }
+            }.onFailure {
+                _uiState.update { state ->
+                    state.copy(isShowErrorDialog = true)
+                }
+            }
         }
     }
 
