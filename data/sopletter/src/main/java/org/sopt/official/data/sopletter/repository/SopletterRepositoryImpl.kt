@@ -5,6 +5,7 @@ import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.mapper.toDomain
 import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
+import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 
 internal class SopletterRepositoryImpl @Inject constructor(
@@ -22,5 +23,15 @@ internal class SopletterRepositoryImpl @Inject constructor(
 
     override suspend fun getReportFormUrl(): Result<String> = suspendRunCatching {
         sopletterDataSource.getReportForm().reportFormUrl
+    }
+
+    override suspend fun getMessageDetail(
+        topicId: Long,
+        messageId: Long,
+    ): Result<SopletterMessageDetail> = suspendRunCatching {
+        sopletterDataSource.getMessageDetail(
+            topicId = topicId,
+            messageId = messageId,
+        ).toDomain()
     }
 }

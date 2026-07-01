@@ -1,6 +1,7 @@
 package org.sopt.official.data.sopletter.datasource
 
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
 
 interface SopletterDataSource {
@@ -10,4 +11,9 @@ interface SopletterDataSource {
     ): SopletterDefaultMessagesResponseDto
 
     suspend fun getReportForm(): SopletterReportFormResponseDto
+
+    suspend fun getMessageDetail(
+        topicId: Long,
+        messageId: Long,
+    ): SopletterMessageDetailResponseDto
 }

@@ -1,8 +1,9 @@
 package org.sopt.official.data.sopletter.mapper
-
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDto
 import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
+import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.model.SopletterShapeType
 
@@ -21,4 +22,15 @@ internal fun SopletterMessageDto.toDomain(): SopletterMessage = SopletterMessage
     colorCode = colorCode,
     rotationDegree = rotationDegree,
     shapeType = SopletterShapeType.from(shapeType),
+)
+
+internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetail = SopletterMessageDetail(
+    messageId = messageId,
+    topicId = topicId,
+    authorNickname = authorNickname,
+    content = content,
+    createdAt = createdAt,
+    likeCount = likeCount,
+    likedByMe = likedByMe,
+    mine = mine,
 )
