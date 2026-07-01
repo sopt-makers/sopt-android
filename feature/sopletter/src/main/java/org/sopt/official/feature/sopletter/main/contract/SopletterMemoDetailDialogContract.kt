@@ -26,9 +26,9 @@ package org.sopt.official.feature.sopletter.main.contract
 
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.memoColor
+import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
 
 interface SopletterMemoDetailDialogContract {
     @Immutable
@@ -51,15 +51,14 @@ interface SopletterMemoDetailDialogContract {
     }
 }
 
-// TODO: 임시 로직 추후 서버 연결시 수정 예정
-internal fun SopletterMessage.toMemoDetailDialogState(): State =
+internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
     State(
         memoId = messageId,
-        memoColor = memoColor(),
-        writerName = "익명의 솝레터",
-        isMine = false,
-        isLiked = false,
-        likeCount = 32,
-        date = "mm.dd",
-        content = previewContent,
+        memoColor = memoColor,
+        writerName = authorNickname,
+        isMine = mine,
+        isLiked = likedByMe,
+        likeCount = likeCount.toLong(),
+        date = createdAt.formatCreatedAt(),
+        content = content,
     )

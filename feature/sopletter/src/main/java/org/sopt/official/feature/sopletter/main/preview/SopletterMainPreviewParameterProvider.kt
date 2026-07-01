@@ -26,6 +26,7 @@ package org.sopt.official.feature.sopletter.main.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.model.SopletterShapeType
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
@@ -74,14 +75,19 @@ class SopletterMainPreviewParameterProvider : PreviewParameterProvider<Sopletter
         ),
         SopletterMainUiState(
             memoList = memoList,
-            selectedMemoDetail = memoList.first().toMemoDetailDialogState().copy(
-                memoColor = memoList[1].memoColor(),
-                isMine = true,
-                isLiked = true,
-                date = "04.18",
+            selectedMemoDetail = SopletterMessageDetail(
+                messageId = 1L,
+                topicId = 1L,
+                authorNickname = "익명의 솝레터",
                 content = "안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요" +
-                "녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요" +
+                    "녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요" +
                     "안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요녕하세안녕하세요녕하세하세안녕하세요녕하안녕하세요안녕하세요안녕하세요안녕하세요안녕하세요",
+                createdAt = "2026-04-18T10:30:00",
+                likeCount = 32,
+                likedByMe = true,
+                mine = true,
+            ).toMemoDetailDialogState(
+                memoColor = memoList[1].memoColor(),
             ),
         ),
     )

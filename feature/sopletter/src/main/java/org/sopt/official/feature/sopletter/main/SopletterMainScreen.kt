@@ -71,8 +71,8 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
-import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
+import org.sopt.official.feature.sopletter.main.model.memoColor
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 import org.sopt.official.webview.view.WebViewActivity
 
@@ -111,7 +111,12 @@ fun SopletterMainRoute(
     SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
         SopletterMainScreen(
             uiState = uiState,
-            onMemoClick = { viewModel.updateSelectMemoDetail(it.toMemoDetailDialogState()) },
+            onMemoClick = {
+                viewModel.fetchMemoDetail(
+                    messageId = it.messageId,
+                    memoColor = it.memoColor(),
+                )
+            },
             onRefresh = viewModel::fetchDefaultMessages,
             onLoadMore = { viewModel.fetchDefaultMessages(isLoadMore = true) },
             dialogActions = dialogActions,

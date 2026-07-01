@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.sopletter.main
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +41,7 @@ import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
 
@@ -57,47 +59,7 @@ class SopletterMainViewModel @Inject constructor(
         fetchDefaultMessages()
     }
 
-    fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogContract.State) {
-        _uiState.update { state ->
-            state.copy(selectedMemoDetail = memo)
-        }
-    }
-
-    override fun onLikeClick() {
-        val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
-
-        if (selectedMemoDetail.isMine) {
-            viewModelScope.launch {
-                _sideEffect.emit(
-                    SopletterMainSideEffect.ShowSnackbar("내가 작성한 솝레터에는 좋아요를 누를 수 없어요."),
-                )
-            }
-            return
-        }
-
-        _uiState.update { state ->
-            state.copy(
-                selectedMemoDetail = selectedMemoDetail.copy(
-                    isLiked = !selectedMemoDetail.isLiked,
-                    likeCount = if (selectedMemoDetail.isLiked) {
-                        selectedMemoDetail.likeCount - 1
-                    } else {
-                        selectedMemoDetail.likeCount + 1
-                    },
-                ),
-            )
-        }
-    }
-
-    override fun onEditClick() = Unit
-
-    override fun onDeleteClick() = Unit
-
-    override fun onDismissClick() {
-        _uiState.update { state ->
-            state.copy(selectedMemoDetail = null)
-        }
-    }
+    // ---------------- Main screen ----------------
 
     fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
@@ -193,6 +155,65 @@ class SopletterMainViewModel @Inject constructor(
     fun dismissErrorDialog() {
         _uiState.update { state ->
             state.copy(isShowErrorDialog = false)
+        }
+    }
+
+    // ---------------- Memo detail dialog ----------------
+
+    fun fetchMemoDetail(messageId: Long, memoColor: Color) = viewModelScope.launch {
+        val topicId = _uiState.value.topicId
+        if (topicId <= 0L) return@launch
+
+        sopletterRepository.getMessageDetail(
+            topicId = topicId,
+            messageId = messageId,
+        ).onSuccess { detail ->
+            _uiState.update { state ->
+                state.copy(
+                    selectedMemoDetail = detail.toMemoDetailDialogState(memoColor = memoColor),
+                    isShowErrorDialog = false,
+                )
+            }
+        }.onFailure {
+            _uiState.update { state ->
+                state.copy(isShowErrorDialog = true)
+            }
+        }
+    }
+
+    override fun onLikeClick() {
+        val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
+
+        if (selectedMemoDetail.isMine) {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar("내가 작성한 솝레터에는 좋아요를 누를 수 없어요."),
+                )
+            }
+            return
+        }
+
+        _uiState.update { state ->
+            state.copy(
+                selectedMemoDetail = selectedMemoDetail.copy(
+                    isLiked = !selectedMemoDetail.isLiked,
+                    likeCount = if (selectedMemoDetail.isLiked) {
+                        selectedMemoDetail.likeCount - 1
+                    } else {
+                        selectedMemoDetail.likeCount + 1
+                    },
+                ),
+            )
+        }
+    }
+
+    override fun onEditClick() = Unit
+
+    override fun onDeleteClick() = Unit
+
+    override fun onDismissClick() {
+        _uiState.update { state ->
+            state.copy(selectedMemoDetail = null)
         }
     }
 }
