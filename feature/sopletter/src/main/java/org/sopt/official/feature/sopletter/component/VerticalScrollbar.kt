@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.component
+package org.sopt.official.feature.sopletter.component
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.ui.Modifier
