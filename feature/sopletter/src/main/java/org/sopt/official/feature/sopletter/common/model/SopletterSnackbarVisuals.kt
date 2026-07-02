@@ -22,17 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.onboarding.navigation
+package org.sopt.official.feature.sopletter.common.model
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import kotlinx.serialization.Serializable
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarVisuals
+import androidx.compose.runtime.Stable
 
-@Serializable
-data object SopletterOnboarding
-
-fun NavController.navigateToSopletterOnboarding(
-    navOptions: NavOptions? = null,
-) {
-    navigate(SopletterOnboarding, navOptions)
-}
+@Stable
+data class SopletterSnackbarVisuals(
+    override val message: String,
+    val type: SopletterSnackbarType,
+    override val actionLabel: String? = null,
+    override val duration: SnackbarDuration = SnackbarDuration.Short,
+    override val withDismissAction: Boolean = false,
+) : SnackbarVisuals

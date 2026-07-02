@@ -36,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
@@ -48,6 +49,7 @@ internal fun SopletterMainTopBar(
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
+    onTopicClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -100,6 +102,29 @@ internal fun SopletterMainTopBar(
                 modifier = Modifier
                     .noRippleClickable(onClick = onReportClick),
             )
+
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_topic_32),
+                contentDescription = null,
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .noRippleClickable(onClick = onTopicClick),
+            )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun SopletterMainTopBarPreview() {
+    SoptTheme {
+        SopletterMainTopBar(
+            generation = 38,
+            isDownloadBtnVisible = true,
+            onCloseClick = {},
+            onDownloadClick = {},
+            onReportClick = {},
+            onTopicClick = {},
+        )
     }
 }
