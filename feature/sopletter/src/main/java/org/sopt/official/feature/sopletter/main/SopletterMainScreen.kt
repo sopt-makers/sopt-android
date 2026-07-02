@@ -27,6 +27,7 @@ package org.sopt.official.feature.sopletter.main
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -39,6 +40,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.SnackbarDuration
@@ -171,70 +173,62 @@ private fun SopletterMainScreen(
             onReportClick = onReportClick,
         )
 
-        if (!uiState.isInitialized && uiState.memoList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pullRefresh(refreshState),
-            )
-        } else if (uiState.memoList.isEmpty()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pullRefresh(refreshState),
-            ) {
-                Column(modifier = Modifier.fillMaxSize()) {
-                    Spacer(modifier = Modifier.weight(160f))
-
-                    EmptySopletterContent(modifier = Modifier.weight(187f))
-
-                    Spacer(modifier = Modifier.weight(343f))
-                }
-
-                PullRefreshIndicator(
-                    refreshing = uiState.isMessageRefreshing,
-                    state = refreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
+        when {
+            !uiState.isInitialized && uiState.memoList.isEmpty() -> {
+                SopletterPullRefreshContainer(
+                    refreshState = refreshState,
+                    isRefreshing = uiState.isMessageRefreshing,
+                    isShowIndicator = false,
                 )
             }
-        } else {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .pullRefresh(refreshState),
-            ) {
-                LazyVerticalStaggeredGrid(
-                    modifier = Modifier.fillMaxSize(),
-                    state = gridState,
-                    columns = StaggeredGridCells.Fixed(2),
-                    verticalItemSpacing = (-10).dp,
+
+            uiState.memoList.isEmpty() -> {
+                SopletterPullRefreshContainer(
+                    refreshState = refreshState,
+                    isRefreshing = uiState.isMessageRefreshing,
                 ) {
-                    itemsIndexed(
-                        items = uiState.memoList,
-                        key = { _, item -> item.messageId },
-                    ) { index, item ->
-                        SopletterMemoCard(
-                            memo = item,
-                            onClick = { onMemoClick(item) },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
-                        )
+                    Column(modifier = Modifier.fillMaxSize()) {
+                        Spacer(modifier = Modifier.weight(160f))
+
+                        EmptySopletterContent(modifier = Modifier.weight(187f))
+
+                        Spacer(modifier = Modifier.weight(343f))
                     }
                 }
+            }
 
-                EditSopletterFloatingActionButton(
-                    onEditFABClick = onEditFABClick,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 20.dp, bottom = 24.dp),
-                )
+            else -> {
+                SopletterPullRefreshContainer(
+                    refreshState = refreshState,
+                    isRefreshing = uiState.isMessageRefreshing,
+                ) {
+                    LazyVerticalStaggeredGrid(
+                        modifier = Modifier.fillMaxSize(),
+                        state = gridState,
+                        columns = StaggeredGridCells.Fixed(2),
+                        verticalItemSpacing = (-10).dp,
+                    ) {
+                        itemsIndexed(
+                            items = uiState.memoList,
+                            key = { _, item -> item.messageId },
+                        ) { index, item ->
+                            SopletterMemoCard(
+                                memo = item,
+                                onClick = { onMemoClick(item) },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
+                            )
+                        }
+                    }
 
-                PullRefreshIndicator(
-                    refreshing = uiState.isMessageRefreshing,
-                    state = refreshState,
-                    modifier = Modifier.align(Alignment.TopCenter),
-                )
+                    EditSopletterFloatingActionButton(
+                        onEditFABClick = onEditFABClick,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 20.dp, bottom = 24.dp),
+                    )
+                }
             }
         }
     }
@@ -248,6 +242,31 @@ private fun SopletterMainScreen(
 
     if (uiState.isShowErrorDialog) {
         NetworkErrorDialog(onConfirm = onErrorConfirm)
+    }
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
+private fun SopletterPullRefreshContainer(
+    refreshState: PullRefreshState,
+    isRefreshing: Boolean,
+    isShowIndicator: Boolean = true,
+    content: @Composable BoxScope.() -> Unit = {},
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .pullRefresh(refreshState),
+    ) {
+        content()
+
+        if (isShowIndicator) {
+            PullRefreshIndicator(
+                refreshing = isRefreshing,
+                state = refreshState,
+                modifier = Modifier.align(Alignment.TopCenter),
+            )
+        }
     }
 }
 
