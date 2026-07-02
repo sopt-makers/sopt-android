@@ -26,7 +26,7 @@ package org.sopt.official.feature.sopletter.component
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -38,31 +38,35 @@ internal fun Modifier.verticalScrollbar(
     thumbWidth: Dp,
     thumbHeight: Dp,
     thumbColor: Color,
-): Modifier = drawWithContent {
-    drawContent()
-
-    if (scrollState.maxValue <= 0) return@drawWithContent
-
+): Modifier = drawWithCache {
     val thumbWidthPx = thumbWidth.toPx()
     val thumbHeightPx = thumbHeight.toPx()
-
     val viewportHeight = size.height
     val viewportWidth = size.width
     val visibleThumbHeight = minOf(thumbHeightPx, viewportHeight)
-    val scrollProgress = scrollState.value.toFloat() / scrollState.maxValue.toFloat()
-    val thumbOffsetY = (viewportHeight - visibleThumbHeight) * scrollProgress
-    val thumbOffset = Offset(
-        x = viewportWidth - thumbWidthPx,
-        y = thumbOffsetY,
+    val thumbSize = Size(
+        width = thumbWidthPx,
+        height = visibleThumbHeight,
     )
+    val thumbCornerRadius = CornerRadius(thumbWidthPx / 2f)
 
-    drawRoundRect(
-        color = thumbColor,
-        topLeft = thumbOffset,
-        size = Size(
-            width = thumbWidthPx,
-            height = visibleThumbHeight,
-        ),
-        cornerRadius = CornerRadius(thumbWidthPx / 2f),
-    )
+    onDrawWithContent {
+        drawContent()
+
+        if (scrollState.maxValue <= 0) return@onDrawWithContent
+
+        val scrollProgress = scrollState.value.toFloat() / scrollState.maxValue.toFloat()
+        val thumbOffsetY = (viewportHeight - visibleThumbHeight) * scrollProgress
+        val thumbOffset = Offset(
+            x = viewportWidth - thumbWidthPx,
+            y = thumbOffsetY,
+        )
+
+        drawRoundRect(
+            color = thumbColor,
+            topLeft = thumbOffset,
+            size = thumbSize,
+            cornerRadius = thumbCornerRadius,
+        )
+    }
 }
