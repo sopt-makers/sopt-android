@@ -25,13 +25,20 @@
 package org.sopt.official.feature.sopletter.main.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +53,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.component.verticalScrollbar
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.sopletter.R
 
@@ -59,115 +67,155 @@ internal fun SopletterMemoDetailDialog(
         onDismissRequest = actions::onDismissClick,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        Column(
-            modifier = modifier
-                .padding(20.dp)
-                .fillMaxWidth()
-                .background(
-                    color = state.memoColor.color,
-                    shape = RoundedCornerShape(10.dp)
-                )
-                .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+        BoxWithConstraints(
+            modifier = Modifier.padding(20.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
+            val scrollState = rememberScrollState()
+            val dialogMaxHeight = maxHeight * 0.7f
+            val dialogMinHeight = minOf(338.dp, dialogMaxHeight)
+
+            Column(
+                modifier = modifier
+                    .fillMaxWidth()
+                    .heightIn(
+                        min = dialogMinHeight,
+                        max = dialogMaxHeight,
+                    )
+                    .background(
+                        color = state.memoColor,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                Text(
-                    text = state.writerName,
-                    style = SoptTheme.typography.title16SB,
-                    color = SoptTheme.colors.onSurface600,
-                    modifier = Modifier
-                        .padding(
-                            top = 8.dp,
-                            bottom = 4.dp,
-                        ),
-                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Text(
+                        text = state.writerName,
+                        style = SoptTheme.typography.title16SB,
+                        color = SoptTheme.colors.onSurface600,
+                        modifier = Modifier
+                            .padding(
+                                top = 8.dp,
+                                bottom = 4.dp,
+                            ),
+                    )
 
-                when (state.isMine) {
-                    true -> {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
-                                contentDescription = null,
-                                tint = Color.Unspecified,
-                                modifier = Modifier
-                                    .noRippleClickable(actions::onEditClick),
-                            )
+                    when (state.isMine) {
+                        true -> {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier
+                                        .noRippleClickable(actions::onEditClick),
+                                )
 
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
-                                contentDescription = null,
-                                tint = Color.Unspecified,
-                                modifier = Modifier
-                                    .noRippleClickable(actions::onDeleteClick),
-                            )
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
+                                    contentDescription = null,
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier
+                                        .noRippleClickable(actions::onDeleteClick),
+                                )
+                            }
                         }
+
+                        false -> Unit
                     }
-
-                    false -> Unit
                 }
-            }
 
-            Text(
-                text = state.content,
-                style = SoptTheme.typography.body16R,
-                color = SoptTheme.colors.onSurface600,
-            )
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Text(
+                            text = state.content,
+                            style = SoptTheme.typography.body16R,
+                            color = SoptTheme.colors.onSurface600,
+                            modifier = Modifier
+                                .weight(1f)
+                                .verticalScroll(scrollState),
+                        )
 
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = state.date,
-                    style = SoptTheme.typography.body16R,
-                    color = SoptTheme.colors.onSurface300,
-                )
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .width(12.dp)
+                                .padding(4.dp)
+                                .verticalScrollbar(
+                                    scrollState = scrollState,
+                                    thumbWidth = 4.dp,
+                                    thumbHeight = 220.dp,
+                                    thumbColor = SoptTheme.colors.onSurface500,
+                                ),
+                        )
+                    }
+                }
 
                 Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp),
-                    modifier = Modifier.noRippleClickable(actions::onLikeClick),
                 ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(
-                            if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
-                        ),
-                        contentDescription = null,
-                        tint = Color.Unspecified,
-                    )
                     Text(
-                        text = "${state.likeCount}",
+                        text = state.date,
                         style = SoptTheme.typography.body16R,
-                        color = SoptTheme.colors.onSurface600,
+                        color = SoptTheme.colors.onSurface300,
+                    )
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(2.dp),
+                        modifier = Modifier.noRippleClickable(actions::onLikeClick),
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(
+                                if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
+                            ),
+                            contentDescription = null,
+                            tint = Color.Unspecified,
+                        )
+                        Text(
+                            text = "${state.likeCount}",
+                            style = SoptTheme.typography.body16R,
+                            color = SoptTheme.colors.onSurface600,
+                        )
+                    }
+                }
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(
+                            color = SoptTheme.colors.onSurface800,
+                            shape = RoundedCornerShape(10.dp),
+                        )
+                        .noRippleClickable(actions::onDismissClick),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = "확인",
+                        style = SoptTheme.typography.title16SB,
+                        color = SoptTheme.colors.primary,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(14.dp),
                     )
                 }
-            }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(
-                        color = SoptTheme.colors.onSurface800,
-                        shape = RoundedCornerShape(10.dp),
-                    )
-                    .noRippleClickable(actions::onDismissClick),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = "확인",
-                    style = SoptTheme.typography.title16SB,
-                    color = SoptTheme.colors.primary,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(14.dp),
-                )
             }
         }
     }

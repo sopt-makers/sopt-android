@@ -22,27 +22,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.model
+package org.sopt.official.data.sopletter.di
 
-import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.data.sopletter.datasource.SopletterDataSource
+import org.sopt.official.data.sopletter.datasourceimpl.SopletterDataSourceImpl
 
-@Immutable
-data class SopletterMainUiState(
-    val topicId: Long = 0L,
-    val topicTitle: String = "",
-    val totalCount: Int = 0,
-    val nextCursor: Long? = null,
-    val hasNext: Boolean = false,
-    val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
-    val reportFormUrl: String? = null,
-    val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
-    val isInitialized: Boolean = false,
-    val isLoading: Boolean = false,
-    val isMessageRefreshing: Boolean = false,
-    val isPaging: Boolean = false,
-    val isShowErrorDialog: Boolean = false,
-)
+@Module
+@InstallIn(SingletonComponent::class)
+internal abstract class DataSourceModule {
+    @Binds
+    @Singleton
+    abstract fun bindSopletterDataSource(
+        sopletterDataSourceImpl: SopletterDataSourceImpl,
+    ): SopletterDataSource
+}

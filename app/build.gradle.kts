@@ -138,6 +138,7 @@ dependencies {
     implementation(projects.data.appjamtamp)
     implementation(projects.data.schedule)
     implementation(projects.data.soptlog)
+    implementation(projects.data.sopletter)
 
     implementation(projects.feature.soptamp)
     implementation(projects.feature.auth)

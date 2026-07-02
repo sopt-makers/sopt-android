@@ -22,27 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.model
+package org.sopt.official.data.sopletter.dto.response
 
-import androidx.compose.runtime.Immutable
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Immutable
-data class SopletterMainUiState(
-    val topicId: Long = 0L,
-    val topicTitle: String = "",
-    val totalCount: Int = 0,
-    val nextCursor: Long? = null,
-    val hasNext: Boolean = false,
-    val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
-    val reportFormUrl: String? = null,
-    val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
-    val isInitialized: Boolean = false,
-    val isLoading: Boolean = false,
-    val isMessageRefreshing: Boolean = false,
-    val isPaging: Boolean = false,
-    val isShowErrorDialog: Boolean = false,
+@Serializable
+data class SopletterMessageDetailResponseDto(
+    @SerialName("messageId")
+    val messageId: Long,
+    @SerialName("topicId")
+    val topicId: Long? = null,
+    @SerialName("authorNickname")
+    val authorNickname: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("likeCount")
+    val likeCount: Int,
+    @SerialName("likedByMe")
+    val likedByMe: Boolean,
+    @SerialName("mine")
+    val mine: Boolean,
 )

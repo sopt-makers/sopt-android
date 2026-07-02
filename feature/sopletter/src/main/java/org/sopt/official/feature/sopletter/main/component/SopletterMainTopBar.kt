@@ -44,7 +44,7 @@ import org.sopt.official.sopletter.R
 
 @Composable
 internal fun SopletterMainTopBar(
-    generation: Int,
+    title: String,
     isDownloadBtnVisible: Boolean,
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
@@ -75,7 +75,7 @@ internal fun SopletterMainTopBar(
             )
 
             Text(
-                text = "${generation}기 솝레터",
+                text = title,
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10,
             )
@@ -119,7 +119,7 @@ internal fun SopletterMainTopBar(
 private fun SopletterMainTopBarPreview() {
     SoptTheme {
         SopletterMainTopBar(
-            generation = 38,
+            title = "38기 솝레터",
             isDownloadBtnVisible = true,
             onCloseClick = {},
             onDownloadClick = {},

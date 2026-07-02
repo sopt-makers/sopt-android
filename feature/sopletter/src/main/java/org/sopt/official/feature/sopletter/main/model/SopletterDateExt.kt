@@ -22,43 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.contract
+package org.sopt.official.feature.sopletter.main.model
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-interface SopletterMemoDetailDialogContract {
-    @Immutable
-    data class State(
-        val memoId: Long,
-        val memoColor: Color,
-        val writerName: String,
-        val isMine: Boolean,
-        val isLiked: Boolean,
-        val likeCount: Long,
-        val date: String,
-        val content: String,
-    )
+private val memoDateFormatter: DateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd")
 
-    interface Actions {
-        fun onLikeClick()
-        fun onEditClick()
-        fun onDeleteClick()
-        fun onDismissClick()
-    }
-}
-
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
-    State(
-        memoId = messageId,
-        memoColor = memoColor,
-        writerName = authorNickname,
-        isMine = mine,
-        isLiked = likedByMe,
-        likeCount = likeCount.toLong(),
-        date = createdAt.formatCreatedAt(),
-        content = content,
-    )
+internal fun String.formatCreatedAt(): String = runCatching {
+    LocalDateTime.parse(this).format(memoDateFormatter)
+}.getOrDefault("")
