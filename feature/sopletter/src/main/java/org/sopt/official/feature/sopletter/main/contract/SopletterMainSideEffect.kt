@@ -24,12 +24,14 @@
  */
 package org.sopt.official.feature.sopletter.main.contract
 
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+
 sealed interface SopletterMainSideEffect {
     data class NavigateToReportForm(
         val url: String,
     ) : SopletterMainSideEffect
 
     data class ShowSnackbar(
-        val message: String,
+        val visuals: SopletterSnackbarVisuals,
     ) : SopletterMainSideEffect
 }

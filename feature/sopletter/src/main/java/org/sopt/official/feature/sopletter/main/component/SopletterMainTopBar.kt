@@ -119,7 +119,7 @@ internal fun SopletterMainTopBar(
 private fun SopletterMainTopBarPreview() {
     SoptTheme {
         SopletterMainTopBar(
-            generation = 38,
+            title = "38기 솝레터",
             isDownloadBtnVisible = true,
             onCloseClick = {},
             onDownloadClick = {},

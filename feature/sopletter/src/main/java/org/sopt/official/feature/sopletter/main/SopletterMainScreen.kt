@@ -61,11 +61,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.common.util.onBottomReached
-import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
@@ -91,10 +89,6 @@ fun SopletterMainRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        viewModel.snackbarEvent.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { visuals ->
-                snackBarHostState.showSnackbar(visuals)
-            }
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
@@ -106,10 +100,7 @@ fun SopletterMainRoute(
                     }
 
                     is SopletterMainSideEffect.ShowSnackbar -> {
-                        snackBarHostState.showSnackbar(
-                            message = sideEffect.message,
-                            duration = SnackbarDuration.Short,
-                        )
+                        snackBarHostState.showSnackbar(sideEffect.visuals)
                     }
                 }
             }
