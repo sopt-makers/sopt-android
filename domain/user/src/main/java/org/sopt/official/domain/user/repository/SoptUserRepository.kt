@@ -26,6 +26,7 @@ package org.sopt.official.domain.user.repository
 
 import kotlinx.coroutines.flow.StateFlow
 import org.sopt.official.domain.user.model.UserInfo
+import org.sopt.official.domain.user.model.WithdrawModel
 
 /**
  * UserApi(탈퇴, 유저 정보 받기)를 통해 사용자 정보 캐싱 외부 노출 인터페이스
@@ -34,5 +35,6 @@ interface SoptUserRepository {
     val userInfo: StateFlow<UserInfo?>
     suspend fun getUserInfo(): Result<UserInfo>
     suspend fun refreshUserInfo(): Result<UserInfo>
-    suspend fun withdraw(): Result<Unit>
+    suspend fun withdraw(): Result<WithdrawModel>
+    suspend fun invalidate()
 }
