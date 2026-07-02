@@ -196,6 +196,16 @@ class SopletterMainViewModel @Inject constructor(
                 return@launch
             }
 
+            updateSelectedMemoLikeState(
+                memoId = selectedMemoDetail.memoId,
+                isLiked = !selectedMemoDetail.isLiked,
+                likeCount = if (selectedMemoDetail.isLiked) {
+                    selectedMemoDetail.likeCount - 1
+                } else {
+                    selectedMemoDetail.likeCount + 1
+                },
+            )
+
             val result = if (selectedMemoDetail.isLiked) {
                 sopletterRepository.deleteMessageLike(
                     topicId = topicId,
@@ -210,22 +220,16 @@ class SopletterMainViewModel @Inject constructor(
 
             result.onSuccess {
                 _uiState.update { state ->
-                    val currentDetail = state.selectedMemoDetail ?: return@update state
-                    if (currentDetail.memoId != selectedMemoDetail.memoId) return@update state
-
                     state.copy(
                         isShowErrorDialog = false,
-                        selectedMemoDetail = currentDetail.copy(
-                            isLiked = !currentDetail.isLiked,
-                            likeCount = if (currentDetail.isLiked) {
-                                currentDetail.likeCount - 1
-                            } else {
-                                currentDetail.likeCount + 1
-                            },
-                        ),
                     )
                 }
             }.onFailure {
+                updateSelectedMemoLikeState(
+                    memoId = selectedMemoDetail.memoId,
+                    isLiked = selectedMemoDetail.isLiked,
+                    likeCount = selectedMemoDetail.likeCount,
+                )
                 _uiState.update { state ->
                     state.copy(isShowErrorDialog = true)
                 }
@@ -240,6 +244,25 @@ class SopletterMainViewModel @Inject constructor(
     override fun onDismissClick() {
         _uiState.update { state ->
             state.copy(selectedMemoDetail = null)
+        }
+    }
+
+    private fun updateSelectedMemoLikeState(
+        memoId: Long,
+        isLiked: Boolean,
+        likeCount: Long,
+    ) {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+            if (currentDetail.memoId != memoId) return@update state
+
+            state.copy(
+                isShowErrorDialog = false,
+                selectedMemoDetail = currentDetail.copy(
+                    isLiked = isLiked,
+                    likeCount = likeCount,
+                ),
+            )
         }
     }
 }
