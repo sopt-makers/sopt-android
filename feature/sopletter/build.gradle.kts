@@ -37,4 +37,6 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.model)
     implementation(projects.core.localstorage)
+    implementation(projects.data.sopletter)
+    implementation(projects.domain.sopletter)
 }
