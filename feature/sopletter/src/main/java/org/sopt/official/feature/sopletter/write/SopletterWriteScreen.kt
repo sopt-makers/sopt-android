@@ -21,9 +21,9 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
-import org.sopt.official.feature.sopletter.write.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteButton
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteTextBox
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect

@@ -35,6 +35,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
@@ -44,8 +46,8 @@ class SopletterMainViewModel @Inject constructor(
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
-    private val _snackbarMessage = MutableSharedFlow<String>()
-    val snackbarMessage: SharedFlow<String> = _snackbarMessage.asSharedFlow()
+    private val _snackbarEvent = MutableSharedFlow<SopletterSnackbarVisuals>()
+    val snackbarEvent: SharedFlow<SopletterSnackbarVisuals> = _snackbarEvent.asSharedFlow()
 
     fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogContract.State) {
         _uiState.update { state ->
@@ -57,7 +59,12 @@ class SopletterMainViewModel @Inject constructor(
         val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
 
         if (selectedMemoDetail.isMine) {
-            _snackbarMessage.tryEmit("내가 작성한 솝레터에는 좋아요를 누를 수 없어요.")
+            _snackbarEvent.tryEmit(
+                SopletterSnackbarVisuals(
+                    message = "내가 작성한 솝레터에는 좋아요를 누를 수 없어요.",
+                    type = SopletterSnackbarType.WARNING,
+                )
+            )
             return
         }
 

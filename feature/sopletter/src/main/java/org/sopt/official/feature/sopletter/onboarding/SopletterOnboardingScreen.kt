@@ -22,95 +22,75 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.name
+package org.sopt.official.feature.sopletter.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.component.SopletterButton
-import org.sopt.official.sopletter.name.component.SopletterNameInfoHolder
+import org.sopt.official.feature.sopletter.common.component.SopletterButton
+import org.sopt.official.feature.sopletter.onboarding.component.SopletterOnboardingInfoHolder
 
 @Composable
-fun SopletterNameRoute(
-    viewModel: SopletterNameViewModel = hiltViewModel()
+fun SopletterOnboardingRoute(
+    paddingValues: PaddingValues,
+    navigateToNickname: () -> Unit,
 ) {
-    val lifeCycleOwner = LocalLifecycleOwner.current
-
-    val state by viewModel.state.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
-            .collect { sideEffect ->
-                when (sideEffect) {
-                    NameSideEffect.NavigateToSopletterMain -> { /* Todo : SopltterMain 네비게이션 연결 */}
-                }
-            }
-    }
-
-
-    SopletterNameScreen(
-        state = state
+    SopletterOnboardingScreen(
+        paddingValues = paddingValues,
+        navigateToNickname = navigateToNickname,
     )
 }
 
 @Composable
-private fun SopletterNameScreen(
-    state: NameState,
-    navigateToSopletterMain: () -> Unit= {}
+private fun SopletterOnboardingScreen(
+    paddingValues: PaddingValues,
+    navigateToNickname: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(SoptTheme.colors.onSurface950)
+            .padding(paddingValues),
     ) {
-        Spacer(modifier = Modifier.weight(20f))
+        // Todo : 탑바
 
-        SopletterNameInfoHolder(
-            info = state,
+        Spacer(modifier = Modifier.weight(58f))
+
+        SopletterOnboardingInfoHolder(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 25.dp)
         )
 
-        Spacer(modifier = Modifier.weight(228f))
+        Spacer(modifier = Modifier.weight(140f))
 
         SopletterButton(
-            buttonText = "${state.generation}기 솝레터 바로가기",
-            onClick = navigateToSopletterMain,
+            buttonText = "솝레터 시작하기",
+            onClick = navigateToNickname,
             modifier = Modifier
-                .fillMaxWidth()
                 .padding(horizontal = 20.dp)
         )
 
         Spacer(modifier = Modifier.weight(40f))
-
     }
 }
 
 @Preview
 @Composable
-private fun SopletterNameScreenPreview() {
+private fun SopletterOnboardingScreenPreview() {
     SoptTheme {
-        SopletterNameScreen(
-            state = NameState(
-                name = "익명의 김솝트",
-                generation = 38
-            ),
-            navigateToSopletterMain = {}
+        SopletterOnboardingScreen(
+            paddingValues = PaddingValues(),
+            navigateToNickname = {},
         )
     }
 }
