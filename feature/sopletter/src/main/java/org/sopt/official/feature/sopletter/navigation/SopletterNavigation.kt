@@ -22,17 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.name
+package org.sopt.official.feature.sopletter.navigation
 
-import androidx.compose.runtime.Immutable
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
+import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import kotlinx.serialization.Serializable
+import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
+import org.sopt.official.feature.sopletter.onboarding.navigation.SopletterOnboarding
 
-// Todo : 추후 서버 반영
-@Immutable
-data class NameState(
-    val name : String = "",
-    val generation : Int = 0
-)
+@Serializable
+data object SopletterGraph
 
-sealed interface NameSideEffect {
-    data object NavigateToSopletterMain : NameSideEffect
+fun NavGraphBuilder.sopletterGraph(
+    paddingValues: PaddingValues,
+    navController: NavController,
+    navigateUp: () -> Unit,
+) {
+    navigation<SopletterGraph> (
+        startDestination = SopletterOnboarding
+    ) {
+       composable<SopletterOnboarding> {
+           SopletterOnboardingRoute (
+               paddingValues = paddingValues,
+               navigateToNickname = {}
+           )
+       }
+    }
 }

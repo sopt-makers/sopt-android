@@ -22,25 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.name
+package org.sopt.official.feature.sopletter.name
 
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+import androidx.compose.runtime.Immutable
 
-@HiltViewModel
-class SopletterNameViewModel @Inject constructor(
+// Todo : 추후 서버 반영
+@Immutable
+data class NameState(
+    val name : String = "",
+    val generation : Int = 0
+)
 
-) : ViewModel() {
-    private val _state = MutableStateFlow(NameState())
-    val state = _state.asStateFlow()
-
-    private val _sideEffect = MutableSharedFlow<NameSideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
-
-
+sealed interface NameSideEffect {
+    data object NavigateToSopletterMain : NameSideEffect
 }

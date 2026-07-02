@@ -22,54 +22,75 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.component
+package org.sopt.official.feature.sopletter.onboarding
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.common.component.SopletterButton
+import org.sopt.official.feature.sopletter.onboarding.component.SopletterOnboardingInfoHolder
 
 @Composable
-internal fun SopletterButton(
-    buttonText: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
+fun SopletterOnboardingRoute(
+    paddingValues: PaddingValues,
+    navigateToNickname: () -> Unit,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(color = SoptTheme.colors.primary)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+    SopletterOnboardingScreen(
+        paddingValues = paddingValues,
+        navigateToNickname = navigateToNickname,
+    )
+}
+
+@Composable
+private fun SopletterOnboardingScreen(
+    paddingValues: PaddingValues,
+    navigateToNickname: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoptTheme.colors.onSurface950)
+            .padding(paddingValues),
     ) {
-        Text(
-            text = buttonText,
-            style = SoptTheme.typography.label18SB,
-            color = SoptTheme.colors.onSurface,
+        // Todo : 탑바
+
+        Spacer(modifier = Modifier.weight(58f))
+
+        SopletterOnboardingInfoHolder(
             modifier = Modifier
-                .padding(vertical = 16.dp)
+                .fillMaxWidth()
+                .padding(horizontal = 25.dp)
         )
+
+        Spacer(modifier = Modifier.weight(140f))
+
+        SopletterButton(
+            buttonText = "솝레터 시작하기",
+            onClick = navigateToNickname,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+        )
+
+        Spacer(modifier = Modifier.weight(40f))
     }
 }
 
 @Preview
 @Composable
-private fun SopletterButtonPreview() {
+private fun SopletterOnboardingScreenPreview() {
     SoptTheme {
-        SopletterButton(
-            buttonText = "솝레터 시작하기",
-            onClick = {}
+        SopletterOnboardingScreen(
+            paddingValues = PaddingValues(),
+            navigateToNickname = {},
         )
     }
 }

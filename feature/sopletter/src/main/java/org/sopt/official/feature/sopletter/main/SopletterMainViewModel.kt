@@ -40,6 +40,8 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
@@ -80,6 +82,8 @@ class SopletterMainViewModel @Inject constructor(
                 isShowErrorDialog = false,
             )
         }
+    private val _snackbarEvent = MutableSharedFlow<SopletterSnackbarVisuals>()
+    val snackbarEvent: SharedFlow<SopletterSnackbarVisuals> = _snackbarEvent.asSharedFlow()
 
         sopletterRepository.getDefaultMessages(cursor = cursor)
             .onSuccess { response ->
@@ -186,6 +190,15 @@ class SopletterMainViewModel @Inject constructor(
         val selectedMemoDetail = currentState.selectedMemoDetail ?: return
         val topicId = currentState.topicId
 
+        if (selectedMemoDetail.isMine) {
+            _snackbarEvent.tryEmit(
+                SopletterSnackbarVisuals(
+                    message = "내가 작성한 솝레터에는 좋아요를 누를 수 없어요.",
+                    type = SopletterSnackbarType.WARNING,
+                )
+            )
+            return
+        }
         if (topicId <= 0L) return
 
         viewModelScope.launch {

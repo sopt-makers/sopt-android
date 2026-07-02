@@ -43,7 +43,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -62,10 +61,12 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.common.util.onBottomReached
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
@@ -90,6 +91,10 @@ fun SopletterMainRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
+        viewModel.snackbarEvent.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { visuals ->
+                snackBarHostState.showSnackbar(visuals)
+            }
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
@@ -124,6 +129,7 @@ fun SopletterMainRoute(
             dialogActions = dialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
+            onTopicClick = { /* TODO topic click */ },
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
             onEditFABClick = { /* TODO edit FAB click */ },
@@ -143,6 +149,7 @@ private fun SopletterMainScreen(
     onCloseClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
+    onTopicClick: () -> Unit,
     onErrorConfirm: () -> Unit,
     onEditFABClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -171,6 +178,7 @@ private fun SopletterMainScreen(
             onCloseClick = onCloseClick,
             onDownloadClick = onDownloadClick,
             onReportClick = onReportClick,
+            onTopicClick = onTopicClick
         )
 
         when {
@@ -302,6 +310,7 @@ private fun SopletterMainScreenPreview(
             onReportClick = {},
             onErrorConfirm = {},
             onEditFABClick = {},
+            onTopicClick = {},
         )
     }
 }

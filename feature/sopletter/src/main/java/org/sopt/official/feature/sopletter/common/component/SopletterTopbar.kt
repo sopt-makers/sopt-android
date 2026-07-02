@@ -22,75 +22,63 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter.onboarding
+package org.sopt.official.feature.sopletter.common.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.component.SopletterButton
-import org.sopt.official.sopletter.onboarding.component.SopletterOnboardingInfoHolder
-
+import org.sopt.official.sopletter.R
 @Composable
-fun SopletterOnboardingRoute(
-    paddingValues: PaddingValues,
-    navigateToNickname: () -> Unit,
+fun SopletterTopbar(
+    onBackClick : () -> Unit ,
+    modifier: Modifier = Modifier,
+    topbarTitle: String = "솝레터 작성"
 ) {
-    SopletterOnboardingScreen(
-        paddingValues = paddingValues,
-        navigateToNickname = navigateToNickname,
-    )
-}
-
-@Composable
-private fun SopletterOnboardingScreen(
-    paddingValues: PaddingValues,
-    navigateToNickname: () -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(SoptTheme.colors.onSurface950)
-            .padding(paddingValues),
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(color = SoptTheme.colors.background)
+            .padding(vertical = 12.dp)
+            .padding(start = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Todo : 탑바
-
-        Spacer(modifier = Modifier.weight(58f))
-
-        SopletterOnboardingInfoHolder(
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.icon_chevron_left),
+            contentDescription = null,
+            tint = Color.Unspecified,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 25.dp)
+                .noRippleClickable(onClick = onBackClick)
         )
 
-        Spacer(modifier = Modifier.weight(140f))
-
-        SopletterButton(
-            buttonText = "솝레터 시작하기",
-            onClick = navigateToNickname,
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
+        Text(
+            text = topbarTitle,
+            color = SoptTheme.colors.onSurface10,
+            style = SoptTheme.typography.heading18B
         )
-
-        Spacer(modifier = Modifier.weight(40f))
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun SopletterOnboardingScreenPreview() {
+private fun SopletterTopbarPreview() {
     SoptTheme {
-        SopletterOnboardingScreen(
-            paddingValues = PaddingValues(),
-            navigateToNickname = {},
+        SopletterTopbar(
+            onBackClick = { }
         )
     }
 }

@@ -22,60 +22,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.write.component
+package org.sopt.official.feature.sopletter.common.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.R
+
 @Composable
-fun SopletterTopbar(
-    onBackClick : () -> Unit ,
-    modifier: Modifier = Modifier,
+internal fun SopletterButton(
+    buttonText: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    Row(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = SoptTheme.colors.background)
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+            .clip(shape = RoundedCornerShape(12.dp))
+            .background(color = SoptTheme.colors.primary)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
     ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.icon_chevron_left),
-            contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.noRippleClickable (onClick = onBackClick)
-        )
-
         Text(
-            text = "솝레터 작성",
-            color = SoptTheme.colors.onSurface10,
-            style = SoptTheme.typography.heading18B
+            text = buttonText,
+            style = SoptTheme.typography.label18SB,
+            color = SoptTheme.colors.onSurface,
+            modifier = Modifier
+                .padding(vertical = 16.dp)
         )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun SopletterTopbarPreview() {
+private fun SopletterButtonPreview() {
     SoptTheme {
-        SopletterTopbar(
-            onBackClick = { }
+        SopletterButton(
+            buttonText = "솝레터 시작하기",
+            onClick = {}
         )
     }
 }
