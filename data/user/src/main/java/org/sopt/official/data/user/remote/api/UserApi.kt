@@ -25,15 +25,15 @@
 package org.sopt.official.data.user.remote.api
 
 import org.sopt.official.data.user.remote.response.UserMainResponseDto
-import retrofit2.Response
+import org.sopt.official.data.user.remote.response.WithdrawResponseDto
 import retrofit2.http.GET
-import retrofit2.http.HTTP
+import retrofit2.http.POST
 
 internal interface UserApi {
 
     @GET("user/main")
     suspend fun getUserMain(): UserMainResponseDto
 
-    @HTTP(method = "DELETE", path = "user", hasBody = false)
-    suspend fun withdraw(): Response<Unit>
+    @POST("user/withdraw")
+    suspend fun withdraw(): WithdrawResponseDto
 }

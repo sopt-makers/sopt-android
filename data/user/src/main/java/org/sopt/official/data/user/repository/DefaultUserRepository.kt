@@ -32,6 +32,7 @@ import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.user.mapper.toDomain
 import org.sopt.official.data.user.remote.api.UserApi
 import org.sopt.official.domain.user.model.UserInfo
+import org.sopt.official.domain.user.model.WithdrawModel
 import org.sopt.official.domain.user.repository.SoptUserRepository
 
 /**
@@ -53,8 +54,12 @@ internal class DefaultUserRepository @Inject constructor(
         cache.getOrFetch { userApi.getUserMain().toDomain() }
     }
 
-    override suspend fun withdraw(): Result<Unit> = suspendRunCatching {
+    override suspend fun withdraw(): Result<WithdrawModel> = suspendRunCatching {
         cache.invalidate()
-        userApi.withdraw()
+        userApi.withdraw().toDomain()
+    }
+
+    override suspend fun invalidate() {
+        cache.invalidate()
     }
 }
