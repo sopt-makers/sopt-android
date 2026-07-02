@@ -41,12 +41,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
@@ -60,6 +62,7 @@ class SignOutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
+                val uriHandler = LocalUriHandler.current
                 val scope = rememberCoroutineScope()
 
                 SignOutScreen(
@@ -69,8 +72,12 @@ class SignOutActivity : AppCompatActivity() {
                     onWithDraw = {
                         scope.launch {
                             soptUserRepository.withdraw()
-                            authRepository.clearUserToken()
-                            ProcessPhoenix.triggerRebirth(this@SignOutActivity)
+                                .onSuccess {
+                                    authRepository.clearUserToken()
+                                    uriHandler.openUri(it.withdrawFormUrl)
+                                    ProcessPhoenix.triggerRebirth(this@SignOutActivity)
+                                }
+                                .onFailure { Timber.e(it) }
                         }
                     }
                 )

@@ -150,6 +150,7 @@ class MyPageViewModel @Inject constructor(
             }
 
             soptLogRepository.invalidate()
+            soptUserRepository.invalidate()
 
             _sideEffect.send(MyPageSideEffect.NavigateToAuth)
         }
