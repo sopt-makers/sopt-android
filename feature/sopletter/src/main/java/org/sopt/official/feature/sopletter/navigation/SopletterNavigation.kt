@@ -31,11 +31,27 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kotlinx.serialization.Serializable
+import org.sopt.official.feature.sopletter.main.SopletterMainRoute
 import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
 import org.sopt.official.feature.sopletter.onboarding.navigation.SopletterOnboarding
+import org.sopt.official.feature.sopletter.topic.SopletterTopicRoute
 
 @Serializable
 data object SopletterGraph
+
+@Serializable
+data class SopletterMain(
+    val topicId: Long? = null,
+)
+
+@Serializable
+data object SopletterTopic
+
+fun NavController.navigateToSopletter(
+    navOptions: NavOptions? = null,
+) {
+    navigate(SopletterGraph, navOptions)
+}
 
 fun NavGraphBuilder.sopletterGraph(
     paddingValues: PaddingValues,
@@ -45,11 +61,37 @@ fun NavGraphBuilder.sopletterGraph(
     navigation<SopletterGraph> (
         startDestination = SopletterOnboarding
     ) {
-       composable<SopletterOnboarding> {
-           SopletterOnboardingRoute (
-               paddingValues = paddingValues,
-               navigateToNickname = {}
-           )
-       }
+        composable<SopletterOnboarding> {
+            SopletterOnboardingRoute(
+                paddingValues = paddingValues,
+                navigateToNickname = {
+                    navController.navigate(SopletterMain()) {
+                        launchSingleTop = true
+                        popUpTo<SopletterOnboarding> {
+                            inclusive = true
+                        }
+                    }
+                },
+            )
+        }
+
+        composable<SopletterMain> {
+            SopletterMainRoute(
+                navigateUp = navController::popBackStack,
+                navigateToTopic = {
+                    navController.navigate(SopletterTopic)
+                },
+            )
+        }
+
+        composable<SopletterTopic> {
+            SopletterTopicRoute(
+                paddingValues = paddingValues,
+                navigateUp = navController::popBackStack,
+                navigateToMain = { topicId ->
+                    navController.navigate(SopletterMain(topicId = topicId))
+                },
+            )
+        }
     }
 }
