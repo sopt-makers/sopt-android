@@ -78,4 +78,12 @@ internal class SopletterDataSourceImpl @Inject constructor(
         messageId = messageId,
         body = UpdateSopletterMessageRequestDto(content = content),
     )
+
+    override suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ) = sopletterService.deleteMessage(
+        topicId = topicId,
+        messageId = messageId,
+    )
 }

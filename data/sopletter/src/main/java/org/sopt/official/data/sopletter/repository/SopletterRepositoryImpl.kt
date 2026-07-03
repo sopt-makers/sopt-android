@@ -90,4 +90,14 @@ internal class SopletterRepositoryImpl @Inject constructor(
             content = content,
         ).toDomain()
     }
+
+    override suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit> = suspendRunCatching {
+        sopletterDataSource.deleteMessage(
+            topicId = topicId,
+            messageId = messageId,
+        )
+    }
 }

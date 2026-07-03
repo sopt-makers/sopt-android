@@ -349,8 +349,44 @@ class SopletterMainViewModel @Inject constructor(
     }
 
     override fun onDeleteConfirmClick() {
-        _uiState.update { state ->
-            state.copy(isDeleteDialogVisible = false)
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
+        if (topicId <= 0L) return
+
+        viewModelScope.launch {
+            sopletterRepository.deleteMessage(
+                topicId = topicId,
+                messageId = selectedMemoDetail.memoId,
+            ).onSuccess {
+                _uiState.update { state ->
+                    state.copy(
+                        totalCount = (state.totalCount - 1).coerceAtLeast(0),
+                        memoList = state.memoList
+                            .filterNot { message -> message.messageId == selectedMemoDetail.memoId }
+                            .toPersistentList(),
+                        selectedMemoDetail = null,
+                        isDeleteDialogVisible = false,
+                        isShowErrorDialog = false,
+                    )
+                }
+
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "메시지 삭제를 완료했어요.",
+                            type = SopletterSnackbarType.SUCCESS,
+                        ),
+                    ),
+                )
+            }.onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isDeleteDialogVisible = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
         }
     }
 

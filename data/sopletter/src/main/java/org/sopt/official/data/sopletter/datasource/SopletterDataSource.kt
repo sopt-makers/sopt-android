@@ -56,4 +56,9 @@ interface SopletterDataSource {
         messageId: Long,
         content: String,
     ): SopletterMessageDetailResponseDto
+
+    suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    )
 }

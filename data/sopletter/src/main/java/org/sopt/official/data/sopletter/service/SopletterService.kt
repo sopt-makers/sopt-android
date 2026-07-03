@@ -70,4 +70,10 @@ interface SopletterService {
         @Path("messageId") messageId: Long,
         @Body body: UpdateSopletterMessageRequestDto,
     ): SopletterMessageDetailResponseDto
+
+    @DELETE("sopt-letter/topics/{topicId}/messages/{messageId}")
+    suspend fun deleteMessage(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+    )
 }

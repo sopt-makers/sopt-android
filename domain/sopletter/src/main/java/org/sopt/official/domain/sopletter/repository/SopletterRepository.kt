@@ -56,6 +56,11 @@ interface SopletterRepository {
         content: String,
     ): Result<SopletterMessageDetail>
 
+    suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
     private companion object {
         const val DEFAULT_PAGE_SIZE = 20
     }
