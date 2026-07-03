@@ -30,7 +30,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +46,7 @@ import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteButton
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteTextBox
@@ -70,8 +70,10 @@ fun SopletterWriteRoute(
                 when (sideEffect) {
                     is SopletterWriteSideEffect.ShowSnackbar -> {
                         snackBarHostState.showSnackbar(
-                            message = sideEffect.message,
-                            duration = SnackbarDuration.Short,
+                            SopletterSnackbarVisuals(
+                                message = sideEffect.message,
+                                type = sideEffect.type
+                            )
                         )
                     }
                     is SopletterWriteSideEffect.NavigateToMain -> {
