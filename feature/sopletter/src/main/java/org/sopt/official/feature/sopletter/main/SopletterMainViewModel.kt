@@ -331,8 +331,16 @@ class SopletterMainViewModel @Inject constructor(
                 )
             }.onFailure {
                 _uiState.update { state ->
-                    state.copy(isShowErrorDialog = true)
+                    state.copy(isShowErrorDialog = false)
                 }
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "일시적인 오류가 발생했어요.",
+                            type = SopletterSnackbarType.FAILURE,
+                        ),
+                    ),
+                )
             }
         }
     }
