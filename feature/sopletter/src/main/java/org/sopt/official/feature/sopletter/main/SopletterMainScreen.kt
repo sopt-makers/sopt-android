@@ -65,7 +65,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
-import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
+import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
@@ -76,6 +76,7 @@ import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.memoColor
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 import org.sopt.official.webview.view.WebViewActivity
+import kotlin.jvm.java
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -123,7 +124,7 @@ fun SopletterMainRoute(
             onTopicClick = { /* TODO topic click */ },
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
-            onEditFABClick = { /* TODO edit FAB click */ },
+            onWriteFABClick = { /* TODO write FAB click */ },
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -142,7 +143,7 @@ private fun SopletterMainScreen(
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
     onErrorConfirm: () -> Unit,
-    onEditFABClick: () -> Unit,
+    onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val gridState = rememberLazyStaggeredGridState()
@@ -221,8 +222,8 @@ private fun SopletterMainScreen(
                         }
                     }
 
-                    EditSopletterFloatingActionButton(
-                        onEditFABClick = onEditFABClick,
+                    WriteSopletterFloatingActionButton(
+                        onWriteFABClick = onWriteFABClick,
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .padding(end = 20.dp, bottom = 24.dp),
@@ -300,7 +301,7 @@ private fun SopletterMainScreenPreview(
             onDownloadClick = {},
             onReportClick = {},
             onErrorConfirm = {},
-            onEditFABClick = {},
+            onWriteFABClick = {},
             onTopicClick = {},
         )
     }
