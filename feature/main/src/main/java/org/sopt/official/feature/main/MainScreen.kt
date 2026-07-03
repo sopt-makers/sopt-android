@@ -103,6 +103,8 @@ import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
+import org.sopt.official.feature.sopletter.navigation.navigateToSopletter
+import org.sopt.official.feature.sopletter.navigation.sopletterGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
 import org.sopt.official.model.UserStatus
@@ -320,6 +322,9 @@ fun MainScreen(
                                         getIntent("${PlaygroundWebLink.MEMBER}/$userId")
                                     )
                                 }
+                            },
+                            navigateToSopletter = {
+                                navigator.navController.navigateToSopletter()
                             }
                         )
 
@@ -371,6 +376,14 @@ fun MainScreen(
                                 context.startActivity(
                                     applicationNavigator.getFortuneActivityIntent()
                                 )
+                            }
+                        )
+
+                        sopletterGraph(
+                            paddingValues = innerPadding,
+                            navController = navigator.navController,
+                            navigateToHome = {
+                                navigator.navigateAndClear(MainTab.Home, userStatus)
                             }
                         )
                     }

@@ -51,6 +51,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
@@ -61,6 +62,7 @@ import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
+import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
 import org.sopt.official.feature.home.component.HomeLatestNewsSection
 import org.sopt.official.feature.home.component.HomeOfficialChannelButton
 import org.sopt.official.feature.home.component.HomePopularNewsSection
@@ -94,6 +96,7 @@ internal fun HomeRoute(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     onUpdateBottomBadge: (Map<String?, String>) -> Unit,
+    navigateToSopletter: () -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
@@ -184,6 +187,7 @@ internal fun HomeRoute(
                         }
                     }
                 },
+                navigateToSopletter = navigateToSopletter,
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
@@ -208,6 +212,7 @@ private fun HomeScreenForMember(
     homeShortcutNavigation: HomeShortcutNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     onAppServiceClick: (url: String, appServiceName: String) -> Unit,
+    navigateToSopletter: () -> Unit,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
@@ -309,18 +314,17 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            // 솝트 더 재밌게 즐기기 영역 숨김 - 솝마디, 콕찌르기는 GNB에서만 표시
-            // TODO: SP2 솝레터 구현이 완료되면 SOPT 더 재밌게 즐기기에 솝레터 추가하여 오픈 예정
-            /* if (homeAppServices.isNotEmpty()) {
+            // 솝트 더 재밌게 즐기기 영역
+             if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
-                    appServices = homeAppServices,
-                    onAppServiceClick = onAppServiceClick,
+                    appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
+                    onAppServiceClick = navigateToSopletter,
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                 )
-            } */
+            }
 
             if (popularPosts.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 36.dp))
