@@ -25,8 +25,10 @@
 package org.sopt.official.feature.sopletter.main
 
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,12 +50,16 @@ import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
+import org.sopt.official.feature.sopletter.navigation.SopletterMain
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterMainViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
+    private val route: SopletterMain = savedStateHandle.toRoute()
+
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
 
@@ -61,14 +67,23 @@ class SopletterMainViewModel @Inject constructor(
     val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        fetchDefaultMessages()
+        initMessages(topicId = route.topicId)
     }
 
     // ---------------- Main screen ----------------
 
-    fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
+    fun initMessages(topicId: Long?) {
+        val currentState = _uiState.value
+        if (currentState.isInitialized && currentState.selectedTopicId == topicId) return
+
+        _uiState.value = SopletterMainUiState(selectedTopicId = topicId)
+        fetchMessages()
+    }
+
+    fun fetchMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
         if (currentState.isLoading) return@launch
+        val selectedTopicId = currentState.selectedTopicId
 
         val cursor = if (isLoadMore) {
             if (!currentState.hasNext) return@launch
@@ -86,10 +101,20 @@ class SopletterMainViewModel @Inject constructor(
             )
         }
 
-        sopletterRepository.getDefaultMessages(cursor = cursor)
+        val result = if (selectedTopicId == null) {
+            sopletterRepository.getDefaultMessages(cursor = cursor)
+        } else {
+            sopletterRepository.getTopicMessages(
+                topicId = selectedTopicId,
+                cursor = cursor,
+            )
+        }
+
+        result
             .onSuccess { response ->
                 _uiState.update { state ->
                     state.copy(
+                        selectedTopicId = selectedTopicId,
                         topicId = response.topicId,
                         topicTitle = response.title,
                         totalCount = response.totalCount,

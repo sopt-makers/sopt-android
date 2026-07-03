@@ -138,8 +138,8 @@ fun SopletterMainRoute(
                     memoColor = it.memoColor(),
                 )
             },
-            onRefresh = viewModel::fetchDefaultMessages,
-            onLoadMore = { viewModel.fetchDefaultMessages(isLoadMore = true) },
+            onRefresh = viewModel::fetchMessages,
+            onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
