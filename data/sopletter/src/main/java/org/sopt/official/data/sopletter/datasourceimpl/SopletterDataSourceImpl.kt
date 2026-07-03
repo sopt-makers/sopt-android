@@ -29,6 +29,7 @@ import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageReques
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 import org.sopt.official.data.sopletter.service.SopletterService
 import javax.inject.Inject
 
@@ -86,4 +87,8 @@ internal class SopletterDataSourceImpl @Inject constructor(
         topicId = topicId,
         messageId = messageId,
     )
+
+    override suspend fun getTopics(
+        type: String,
+    ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type)
 }

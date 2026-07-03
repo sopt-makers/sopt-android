@@ -28,6 +28,7 @@ import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageReques
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -76,4 +77,9 @@ interface SopletterService {
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
     )
+
+    @GET("sopt-letter/topics")
+    suspend fun getTopics(
+        @Query("type") type: String,
+    ): SopletterTopicsResponseDto
 }

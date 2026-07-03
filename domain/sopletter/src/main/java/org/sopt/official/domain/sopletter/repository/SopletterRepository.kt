@@ -26,6 +26,7 @@ package org.sopt.official.domain.sopletter.repository
 
 import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
+import org.sopt.official.domain.sopletter.model.SopletterTopic
 
 interface SopletterRepository {
     suspend fun getDefaultMessages(
@@ -61,7 +62,10 @@ interface SopletterRepository {
         messageId: Long,
     ): Result<Unit>
 
-    private companion object {
+    suspend fun getTopics(): Result<List<SopletterTopic>>
+
+    companion object {
         const val DEFAULT_PAGE_SIZE = 20
+        const val TOPIC_TYPE_NORMAL = "normal"
     }
 }

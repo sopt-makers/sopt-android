@@ -26,10 +26,15 @@ package org.sopt.official.data.sopletter.mapper
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.model.SopletterShapeType
+import org.sopt.official.domain.sopletter.model.SopletterTopic
+
+internal fun SopletterTopicsResponseDto.toDomain(): List<SopletterTopic> = topics.map(SopletterTopicDto::toDomain)
 
 internal fun SopletterDefaultMessagesResponseDto.toDomain(): SopletterDefaultMessages = SopletterDefaultMessages(
     topicId = topicId,
@@ -57,4 +62,9 @@ internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetai
     likeCount = likeCount,
     likedByMe = likedByMe,
     mine = mine,
+)
+
+internal fun SopletterTopicDto.toDomain(): SopletterTopic = SopletterTopic(
+    topicId = topicId,
+    title = title,
 )
