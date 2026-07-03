@@ -26,7 +26,7 @@ package org.sopt.official.data.sopletter.datasourceimpl
 
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
-import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
@@ -39,7 +39,7 @@ internal class SopletterDataSourceImpl @Inject constructor(
     override suspend fun getDefaultMessages(
         cursor: Long?,
         size: Int,
-    ): SopletterDefaultMessagesResponseDto = sopletterService.getDefaultMessages(
+    ): SopletterMessagesResponseDto = sopletterService.getDefaultMessages(
         cursor = cursor,
         size = size,
     )

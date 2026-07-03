@@ -24,7 +24,7 @@
  */
 package org.sopt.official.data.sopletter.datasource
 
-import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
@@ -33,7 +33,7 @@ interface SopletterDataSource {
     suspend fun getDefaultMessages(
         cursor: Long?,
         size: Int,
-    ): SopletterDefaultMessagesResponseDto
+    ): SopletterMessagesResponseDto
 
     suspend fun getReportForm(): SopletterReportFormResponseDto
 
