@@ -49,6 +49,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,6 +72,7 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
+import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect.SnackbarTarget
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.memoColor
@@ -85,7 +87,9 @@ fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackBarHostState = remember { SnackbarHostState() }
+    val outerSnackbarHostState = remember { SnackbarHostState() }
+    val dialogSnackbarHostState = remember { SnackbarHostState() }
+    val isMemoDialogVisible by rememberUpdatedState(uiState.selectedMemoDetail != null)
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -102,19 +106,31 @@ fun SopletterMainRoute(
                     }
 
                     is SopletterMainSideEffect.ShowSnackbar -> {
-                        snackBarHostState.showSnackbar(sideEffect.visuals)
+                        if (sideEffect.target == SnackbarTarget.OUTER) {
+                            outerSnackbarHostState.showSnackbar(sideEffect.visuals)
+                        } else if (isMemoDialogVisible) {
+                            dialogSnackbarHostState.showSnackbar(sideEffect.visuals)
+                        } else {
+                            outerSnackbarHostState.showSnackbar(sideEffect.visuals)
+                        }
                     }
                 }
             }
     }
 
+    LaunchedEffect(uiState.selectedMemoDetail) {
+        if (uiState.selectedMemoDetail == null) {
+            dialogSnackbarHostState.currentSnackbarData?.dismiss()
+        }
+    }
+
     SopletterScaffold(
-        snackbarHostState = snackBarHostState,
+        snackbarHostState = outerSnackbarHostState,
         isOuterSnackbarHostVisible = uiState.selectedMemoDetail == null,
     ) { paddingValues ->
         SopletterMainScreen(
             uiState = uiState,
-            snackbarHostState = snackBarHostState,
+            dialogSnackbarHostState = dialogSnackbarHostState,
             onMemoClick = {
                 viewModel.fetchMemoDetail(
                     messageId = it.messageId,
@@ -139,7 +155,7 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
-    snackbarHostState: SnackbarHostState,
+    dialogSnackbarHostState: SnackbarHostState,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
@@ -243,7 +259,7 @@ private fun SopletterMainScreen(
         SopletterMemoDetailDialog(
             state = memo,
             actions = dialogActions,
-            snackbarHostState = snackbarHostState,
+            snackbarHostState = dialogSnackbarHostState,
         )
     }
 
@@ -317,7 +333,7 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
-            snackbarHostState = remember { SnackbarHostState() },
+            dialogSnackbarHostState = remember { SnackbarHostState() },
             onMemoClick = { _ -> },
             onRefresh = {},
             onLoadMore = {},
