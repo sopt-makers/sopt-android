@@ -41,7 +41,6 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -52,7 +51,6 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
@@ -87,7 +85,6 @@ import org.sopt.official.feature.home.navigation.HomeNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
-import org.sopt.official.feature.home.navigation.HomeUrl
 import org.sopt.official.model.UserStatus
 
 @Composable
@@ -101,7 +98,6 @@ internal fun HomeRoute(
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
-    val scope = rememberCoroutineScope()
     val lifecycleOwner = LocalLifecycleOwner.current
 
     val badgeContentList = remember(uiState) {
@@ -157,7 +153,7 @@ internal fun HomeRoute(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
-                onAppServiceClick = { url, _ ->
+                /*onAppServiceClick = { url, _ ->
                     val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
 
                     when (HomeUrl.from(url)) {
@@ -186,7 +182,7 @@ internal fun HomeRoute(
                             }
                         }
                     }
-                },
+                },*/
                 navigateToSopletter = navigateToSopletter,
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
@@ -211,7 +207,7 @@ private fun HomeScreenForMember(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeShortcutNavigation: HomeShortcutNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
-    onAppServiceClick: (url: String, appServiceName: String) -> Unit,
+    //onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     navigateToSopletter: () -> Unit,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
