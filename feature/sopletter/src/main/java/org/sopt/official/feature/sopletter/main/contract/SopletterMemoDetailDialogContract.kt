@@ -53,6 +53,8 @@ interface SopletterMemoDetailDialogContract {
         fun showMemoLengthWarning()
         fun onEditCompleteClick(content: String)
         fun onDeleteClick()
+        fun onDeleteDialogDismissClick()
+        fun onDeleteConfirmClick()
         fun onDismissClick()
     }
 }

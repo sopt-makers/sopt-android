@@ -45,4 +45,5 @@ data class SopletterMainUiState(
     val isMessageRefreshing: Boolean = false,
     val isPaging: Boolean = false,
     val isShowErrorDialog: Boolean = false,
+    val isDeleteDialogVisible: Boolean = false,
 )

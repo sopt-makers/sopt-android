@@ -55,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,6 +63,7 @@ import org.sopt.official.common.util.onBottomReached
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
@@ -77,6 +77,7 @@ import org.sopt.official.feature.sopletter.main.model.memoColor
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 import org.sopt.official.webview.view.WebViewActivity
 import kotlin.jvm.java
+import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -240,6 +241,13 @@ private fun SopletterMainScreen(
         )
     }
 
+    if (uiState.isDeleteDialogVisible) {
+        SopletterDeleteDialog(
+            onDismiss = dialogActions::onDeleteDialogDismissClick,
+            onDeleteClick = dialogActions::onDeleteConfirmClick,
+        )
+    }
+
     if (uiState.isShowErrorDialog) {
         NetworkErrorDialog(onConfirm = onErrorConfirm)
     }
@@ -290,6 +298,10 @@ private fun SopletterMainScreenPreview(
                 override fun onEditCompleteClick(content: String) = Unit
 
                 override fun onDeleteClick() = Unit
+
+                override fun onDeleteDialogDismissClick() = Unit
+
+                override fun onDeleteConfirmClick() = Unit
 
                 override fun onDismissClick() {
                     previewState = previewState.copy(selectedMemoDetail = null)

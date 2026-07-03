@@ -336,11 +336,30 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    override fun onDeleteClick() = Unit
+    override fun onDeleteClick() {
+        _uiState.update { state ->
+            state.copy(isDeleteDialogVisible = true)
+        }
+    }
+
+    override fun onDeleteDialogDismissClick() {
+        _uiState.update { state ->
+            state.copy(isDeleteDialogVisible = false)
+        }
+    }
+
+    override fun onDeleteConfirmClick() {
+        _uiState.update { state ->
+            state.copy(isDeleteDialogVisible = false)
+        }
+    }
 
     override fun onDismissClick() {
         _uiState.update { state ->
-            state.copy(selectedMemoDetail = null)
+            state.copy(
+                selectedMemoDetail = null,
+                isDeleteDialogVisible = false,
+            )
         }
     }
 
