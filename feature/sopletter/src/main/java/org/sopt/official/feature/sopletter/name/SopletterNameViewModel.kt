@@ -24,17 +24,21 @@
  */
 package org.sopt.official.feature.sopletter.name
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import org.sopt.official.feature.sopletter.name.navigation.SopletterName
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterNameViewModel @Inject constructor(
-
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _state = MutableStateFlow(NameState())
     val state = _state.asStateFlow()
@@ -42,5 +46,14 @@ class SopletterNameViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<NameSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-
+    init {
+        val nickname = savedStateHandle.toRoute<SopletterName>().nickname
+        val generation = savedStateHandle.toRoute<SopletterName>().generation
+        _state.update {
+            it.copy(
+                name = nickname,
+                generation = generation
+            )
+        }
+    }
 }

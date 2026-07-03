@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.sopletter.common.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -46,7 +47,8 @@ import org.sopt.official.sopletter.R
 fun SopletterTopbar(
     onBackClick : () -> Unit ,
     modifier: Modifier = Modifier,
-    topbarTitle: String = "솝레터 작성"
+    topbarTitle: String = "솝레터 작성",
+    @DrawableRes iconRes: Int = R.drawable.icon_chevron_left
 ) {
     Row(
         modifier = modifier
@@ -58,7 +60,7 @@ fun SopletterTopbar(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.icon_chevron_left),
+            imageVector = ImageVector.vectorResource(id = iconRes),
             contentDescription = null,
             tint = Color.Unspecified,
             modifier = Modifier

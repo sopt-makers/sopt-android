@@ -61,7 +61,7 @@ import org.sopt.official.feature.home.model.HomeAppService
 @Composable
 internal fun HomeEnjoySoptServicesBlock(
     appServices: ImmutableList<HomeAppService>,
-    onAppServiceClick: (url: String?, appServiceName: String) -> Unit,
+    onAppServiceClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -94,7 +94,7 @@ private fun HomeEnjoySoptServicesBlockPreview() {
         Column {
             HomeEnjoySoptServicesBlock(
                 appServices = PREVIEW_FIXTURE,
-                onAppServiceClick = { _, _ -> },
+                onAppServiceClick = { },
             )
         }
     }
@@ -103,11 +103,12 @@ private fun HomeEnjoySoptServicesBlockPreview() {
 @Composable
 private fun AppServiceItem(
     appService: HomeAppService,
-    onItemClick: (url: String?, appServiceName: String) -> Unit,
+    // 원래 url: String?, appServiceName: String 을 받아 딥링크/서비스명 기반 라우팅에 사용
+    onItemClick: () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onItemClick(appService.deepLink, appService.serviceName) }
+        modifier = Modifier.clickable { onItemClick() }
     ) {
         Box(contentAlignment = TopEnd) {
             HomeButtonCircleBox {
@@ -142,7 +143,7 @@ private fun AppServiceItemPreview() {
     SoptTheme {
         AppServiceItem(
             appService = PREVIEW_FIXTURE[0],
-            onItemClick = { _, _ -> },
+            onItemClick = { },
         )
     }
 }
