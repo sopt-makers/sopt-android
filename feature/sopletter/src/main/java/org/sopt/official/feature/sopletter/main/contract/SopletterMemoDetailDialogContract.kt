@@ -30,6 +30,8 @@ import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
 import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
 
+internal const val SOPLETTER_MEMO_MAX_LENGTH = 350
+
 interface SopletterMemoDetailDialogContract {
     @Immutable
     data class State(
@@ -48,6 +50,7 @@ interface SopletterMemoDetailDialogContract {
         fun onLikeClick()
         fun onEditClick()
         fun onEditCancelClick()
+        fun showMemoLengthWarning()
         fun onEditCompleteClick(content: String)
         fun onDeleteClick()
         fun onDismissClick()

@@ -41,6 +41,8 @@ import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.common.util.characterCount
+import org.sopt.official.feature.sopletter.main.contract.SOPLETTER_MEMO_MAX_LENGTH
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
@@ -265,8 +267,25 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
+    override fun showMemoLengthWarning() {
+        viewModelScope.launch {
+            _sideEffect.emit(
+                SopletterMainSideEffect.ShowSnackbar(
+                    visuals = SopletterSnackbarVisuals(
+                        message = "공백 포함 350자 이하로만 작성할 수 있어요.",
+                        type = SopletterSnackbarType.WARNING,
+                    ),
+                ),
+            )
+        }
+    }
+
     override fun onEditCompleteClick(content: String) {
         if (content.isBlank()) return
+        if (content.characterCount() > SOPLETTER_MEMO_MAX_LENGTH) {
+            showMemoLengthWarning()
+            return
+        }
 
         _uiState.update { state ->
             val currentDetail = state.selectedMemoDetail ?: return@update state

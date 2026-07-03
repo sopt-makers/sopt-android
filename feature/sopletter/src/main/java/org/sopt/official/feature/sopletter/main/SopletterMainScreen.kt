@@ -285,6 +285,8 @@ private fun SopletterMainScreenPreview(
 
                 override fun onEditCancelClick() = Unit
 
+                override fun showMemoLengthWarning() = Unit
+
                 override fun onEditCompleteClick(content: String) = Unit
 
                 override fun onDeleteClick() = Unit

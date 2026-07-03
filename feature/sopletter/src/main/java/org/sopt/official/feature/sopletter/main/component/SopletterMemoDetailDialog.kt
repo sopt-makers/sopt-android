@@ -43,6 +43,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,10 +58,9 @@ import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
+import org.sopt.official.feature.sopletter.main.contract.SOPLETTER_MEMO_MAX_LENGTH
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.sopletter.R
-
-private const val MEMO_MAX_LENGTH = 350
 
 @Composable
 internal fun SopletterMemoDetailDialog(
@@ -77,8 +77,16 @@ internal fun SopletterMemoDetailDialog(
         ) {
             val scrollState = rememberScrollState()
             val editTextState = rememberTextFieldState(initialText = state.content)
+            val editCharacterCount = editTextState.text.characterCount()
+            val isOverLengthLimit = editCharacterCount > SOPLETTER_MEMO_MAX_LENGTH
             val dialogMaxHeight = maxHeight * 0.7f
             val dialogMinHeight = minOf(338.dp, dialogMaxHeight)
+
+            LaunchedEffect(state.isEditing, isOverLengthLimit) {
+                if (state.isEditing && isOverLengthLimit) {
+                    actions.showMemoLengthWarning()
+                }
+            }
 
             Column(
                 modifier = modifier
@@ -197,9 +205,13 @@ internal fun SopletterMemoDetailDialog(
 
                 if (state.isEditing) {
                     Text(
-                        text = "${editTextState.text.characterCount()}/$MEMO_MAX_LENGTH",
+                        text = "$editCharacterCount/$SOPLETTER_MEMO_MAX_LENGTH",
                         style = SoptTheme.typography.body14M,
-                        color = SoptTheme.colors.onSurface300,
+                        color = if (isOverLengthLimit) {
+                            SoptTheme.colors.error
+                        } else {
+                            SoptTheme.colors.onSurface300
+                        },
                         modifier = Modifier.align(Alignment.End),
                     )
                 } else {
@@ -239,22 +251,36 @@ internal fun SopletterMemoDetailDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = SoptTheme.colors.onSurface800,
+                            color = if (state.isEditing && isOverLengthLimit) {
+                                SoptTheme.colors.onSurface100
+                            } else {
+                                SoptTheme.colors.onSurface800
+                            },
                             shape = RoundedCornerShape(10.dp),
                         )
-                        .noRippleClickable {
-                            if (state.isEditing) {
-                                actions.onEditCompleteClick(editTextState.text.toString())
+                        .then(
+                            if (!state.isEditing || !isOverLengthLimit) {
+                                Modifier.noRippleClickable {
+                                    if (state.isEditing) {
+                                        actions.onEditCompleteClick(editTextState.text.toString())
+                                    } else {
+                                        actions.onDismissClick()
+                                    }
+                                }
                             } else {
-                                actions.onDismissClick()
-                            }
-                        },
+                                Modifier
+                            },
+                        ),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = if (state.isEditing) "수정 완료" else "확인",
                         style = SoptTheme.typography.title16SB,
-                        color = SoptTheme.colors.primary,
+                        color = if (state.isEditing && isOverLengthLimit) {
+                            SoptTheme.colors.onSurface300
+                        } else {
+                            SoptTheme.colors.primary
+                        },
                         textAlign = TextAlign.Center,
                         modifier = Modifier.padding(14.dp),
                     )
