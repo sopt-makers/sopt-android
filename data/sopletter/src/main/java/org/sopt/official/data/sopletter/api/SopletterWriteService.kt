@@ -6,7 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
 
-interface SopletterService {
+interface SopletterWriteService {
     @POST("sopt-letter/topics/{topicId}/messages")
     suspend fun postTopicSopletter(
         @Path("topicId") topicId: Long,
