@@ -283,6 +283,10 @@ private fun SopletterMainScreenPreview(
 
                 override fun onEditClick() = Unit
 
+                override fun onEditCancelClick() = Unit
+
+                override fun onEditCompleteClick(content: String) = Unit
+
                 override fun onDeleteClick() = Unit
 
                 override fun onDismissClick() {

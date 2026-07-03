@@ -41,11 +41,14 @@ interface SopletterMemoDetailDialogContract {
         val likeCount: Long,
         val date: String,
         val content: String,
+        val isEditing: Boolean = false,
     )
 
     interface Actions {
         fun onLikeClick()
         fun onEditClick()
+        fun onEditCancelClick()
+        fun onEditCompleteClick(content: String)
         fun onDeleteClick()
         fun onDismissClick()
     }

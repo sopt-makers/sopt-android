@@ -25,10 +25,9 @@
 package org.sopt.official.feature.sopletter.main.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.ScrollState
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -38,6 +37,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -45,6 +46,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
@@ -53,9 +55,12 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.sopletter.R
+
+private const val MEMO_MAX_LENGTH = 350
 
 @Composable
 internal fun SopletterMemoDetailDialog(
@@ -71,6 +76,7 @@ internal fun SopletterMemoDetailDialog(
             modifier = Modifier.padding(20.dp),
         ) {
             val scrollState = rememberScrollState()
+            val editTextState = rememberTextFieldState(initialText = state.content)
             val dialogMaxHeight = maxHeight * 0.7f
             val dialogMinHeight = minOf(338.dp, dialogMaxHeight)
 
@@ -104,8 +110,17 @@ internal fun SopletterMemoDetailDialog(
                             ),
                     )
 
-                    when (state.isMine) {
-                        true -> {
+                    when {
+                        state.isEditing -> {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
+                                contentDescription = null,
+                                tint = SoptTheme.colors.onSurface500,
+                                modifier = Modifier.noRippleClickable(actions::onEditCancelClick),
+                            )
+                        }
+
+                        state.isMine -> {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -128,7 +143,7 @@ internal fun SopletterMemoDetailDialog(
                             }
                         }
 
-                        false -> Unit
+                        else -> Unit
                     }
                 }
 
@@ -143,14 +158,27 @@ internal fun SopletterMemoDetailDialog(
                             .fillMaxHeight(),
                         horizontalArrangement = Arrangement.spacedBy(4.dp),
                     ) {
-                        Text(
-                            text = state.content,
-                            style = SoptTheme.typography.body16R,
-                            color = SoptTheme.colors.onSurface600,
-                            modifier = Modifier
-                                .weight(1f)
-                                .verticalScroll(scrollState),
-                        )
+                        if (state.isEditing) {
+                            BasicTextField(
+                                state = editTextState,
+                                textStyle = SoptTheme.typography.body16R.copy(
+                                    color = SoptTheme.colors.onSurface600,
+                                ),
+                                cursorBrush = SolidColor(SoptTheme.colors.onSurface600),
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .verticalScroll(scrollState),
+                            )
+                        } else {
+                            Text(
+                                text = state.content,
+                                style = SoptTheme.typography.body16R,
+                                color = SoptTheme.colors.onSurface600,
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .verticalScroll(scrollState),
+                            )
+                        }
 
                         Box(
                             modifier = Modifier
@@ -167,34 +195,43 @@ internal fun SopletterMemoDetailDialog(
                     }
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
+                if (state.isEditing) {
                     Text(
-                        text = state.date,
-                        style = SoptTheme.typography.body16R,
+                        text = "${editTextState.text.characterCount()}/$MEMO_MAX_LENGTH",
+                        style = SoptTheme.typography.body14M,
                         color = SoptTheme.colors.onSurface300,
+                        modifier = Modifier.align(Alignment.End),
                     )
-
+                } else {
                     Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(2.dp),
-                        modifier = Modifier.noRippleClickable(actions::onLikeClick),
                     ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(
-                                if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
-                            ),
-                            contentDescription = null,
-                            tint = Color.Unspecified,
-                        )
                         Text(
-                            text = "${state.likeCount}",
+                            text = state.date,
                             style = SoptTheme.typography.body16R,
-                            color = SoptTheme.colors.onSurface600,
+                            color = SoptTheme.colors.onSurface300,
                         )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp),
+                            modifier = Modifier.noRippleClickable(actions::onLikeClick),
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(
+                                    if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
+                                ),
+                                contentDescription = null,
+                                tint = Color.Unspecified,
+                            )
+                            Text(
+                                text = "${state.likeCount}",
+                                style = SoptTheme.typography.body16R,
+                                color = SoptTheme.colors.onSurface600,
+                            )
+                        }
                     }
                 }
 
@@ -205,11 +242,17 @@ internal fun SopletterMemoDetailDialog(
                             color = SoptTheme.colors.onSurface800,
                             shape = RoundedCornerShape(10.dp),
                         )
-                        .noRippleClickable(actions::onDismissClick),
+                        .noRippleClickable {
+                            if (state.isEditing) {
+                                actions.onEditCompleteClick(editTextState.text.toString())
+                            } else {
+                                actions.onDismissClick()
+                            }
+                        },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = "확인",
+                        text = if (state.isEditing) "수정 완료" else "확인",
                         style = SoptTheme.typography.title16SB,
                         color = SoptTheme.colors.primary,
                         textAlign = TextAlign.Center,

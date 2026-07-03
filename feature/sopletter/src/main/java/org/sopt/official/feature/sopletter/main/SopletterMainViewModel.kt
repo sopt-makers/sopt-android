@@ -245,7 +245,40 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    override fun onEditClick() = Unit
+    override fun onEditClick() {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+
+            state.copy(
+                selectedMemoDetail = currentDetail.copy(isEditing = true),
+            )
+        }
+    }
+
+    override fun onEditCancelClick() {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+
+            state.copy(
+                selectedMemoDetail = currentDetail.copy(isEditing = false),
+            )
+        }
+    }
+
+    override fun onEditCompleteClick(content: String) {
+        if (content.isBlank()) return
+
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+
+            state.copy(
+                selectedMemoDetail = currentDetail.copy(
+                    content = content,
+                    isEditing = false,
+                ),
+            )
+        }
+    }
 
     override fun onDeleteClick() = Unit
 
