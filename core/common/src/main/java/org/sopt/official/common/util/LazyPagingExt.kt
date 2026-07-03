@@ -22,43 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.contract
+package org.sopt.official.common.util
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 
-interface SopletterMemoDetailDialogContract {
-    @Immutable
-    data class State(
-        val memoId: Long,
-        val memoColor: Color,
-        val writerName: String,
-        val isMine: Boolean,
-        val isLiked: Boolean,
-        val likeCount: Long,
-        val date: String,
-        val content: String,
-    )
+@Composable
+fun LazyStaggeredGridState.onBottomReached(
+    threshold: Int,
+    hasNext: Boolean,
+    isPaging: Boolean,
+    onLoadMore: () -> Unit,
+) {
+    require(threshold >= 0) { "threshold cannot be negative, but was $threshold" }
 
-    interface Actions {
-        fun onLikeClick()
-        fun onEditClick()
-        fun onDeleteClick()
-        fun onDismissClick()
+    LaunchedEffect(this, hasNext, isPaging) {
+        snapshotFlow {
+            val totalItemCount = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+
+            hasNext && !isPaging && totalItemCount > 0 &&
+                lastVisibleItemIndex >= totalItemCount - 1 - threshold
+        }
+            .distinctUntilChanged()
+            .filter { it }
+            .collect { onLoadMore() }
     }
 }
-
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
-    State(
-        memoId = messageId,
-        memoColor = memoColor,
-        writerName = authorNickname,
-        isMine = mine,
-        isLiked = likedByMe,
-        likeCount = likeCount.toLong(),
-        date = createdAt.formatCreatedAt(),
-        content = content,
-    )

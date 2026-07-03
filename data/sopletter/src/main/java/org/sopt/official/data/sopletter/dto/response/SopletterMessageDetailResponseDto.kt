@@ -22,24 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.data.sopletter.dto.response
 
-android {
-    namespace = "org.sopt.official.sopletter"
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-dependencies {
-    // core
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.model)
-    implementation(projects.core.localstorage)
-    implementation(projects.core.webview)
-
-    // domain
-    implementation(projects.domain.sopletter)
-    implementation(projects.data.sopletter)
-}
+@Serializable
+data class SopletterMessageDetailResponseDto(
+    @SerialName("messageId")
+    val messageId: Long,
+    @SerialName("topicId")
+    val topicId: Long? = null,
+    @SerialName("authorNickname")
+    val authorNickname: String,
+    @SerialName("content")
+    val content: String,
+    @SerialName("createdAt")
+    val createdAt: String,
+    @SerialName("likeCount")
+    val likeCount: Int,
+    @SerialName("likedByMe")
+    val likedByMe: Boolean,
+    @SerialName("mine")
+    val mine: Boolean,
+)

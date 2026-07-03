@@ -22,24 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.domain.sopletter.model
 
-android {
-    namespace = "org.sopt.official.sopletter"
-}
-
-dependencies {
-    // core
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.model)
-    implementation(projects.core.localstorage)
-    implementation(projects.core.webview)
-
-    // domain
-    implementation(projects.domain.sopletter)
-    implementation(projects.data.sopletter)
-}
+data class SopletterMessageDetail(
+    val messageId: Long,
+    val topicId: Long?,
+    val authorNickname: String,
+    val content: String,
+    val createdAt: String,
+    val likeCount: Int,
+    val likedByMe: Boolean,
+    val mine: Boolean,
+)

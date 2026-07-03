@@ -22,43 +22,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.contract
+package org.sopt.official.domain.sopletter.repository
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
+import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
 
-interface SopletterMemoDetailDialogContract {
-    @Immutable
-    data class State(
-        val memoId: Long,
-        val memoColor: Color,
-        val writerName: String,
-        val isMine: Boolean,
-        val isLiked: Boolean,
-        val likeCount: Long,
-        val date: String,
-        val content: String,
-    )
+interface SopletterRepository {
+    suspend fun getDefaultMessages(
+        cursor: Long? = null,
+        size: Int = DEFAULT_PAGE_SIZE,
+    ): Result<SopletterDefaultMessages>
 
-    interface Actions {
-        fun onLikeClick()
-        fun onEditClick()
-        fun onDeleteClick()
-        fun onDismissClick()
+    suspend fun getReportFormUrl(): Result<String>
+
+    suspend fun getMessageDetail(
+        topicId: Long,
+        messageId: Long,
+    ): Result<SopletterMessageDetail>
+
+    suspend fun addMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
+    suspend fun deleteMessageLike(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
+    private companion object {
+        const val DEFAULT_PAGE_SIZE = 20
     }
 }
-
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
-    State(
-        memoId = messageId,
-        memoColor = memoColor,
-        writerName = authorNickname,
-        isMine = mine,
-        isLiked = likedByMe,
-        likeCount = likeCount.toLong(),
-        date = createdAt.formatCreatedAt(),
-        content = content,
-    )

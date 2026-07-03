@@ -24,9 +24,11 @@
  */
 package org.sopt.official.feature.sopletter.main
 
+import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,50 +37,211 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
+import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterMainViewModel @Inject constructor(
+    private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
-    private val _snackbarEvent = MutableSharedFlow<SopletterSnackbarVisuals>()
-    val snackbarEvent: SharedFlow<SopletterSnackbarVisuals> = _snackbarEvent.asSharedFlow()
 
-    fun updateSelectMemoDetail(memo: SopletterMemoDetailDialogContract.State) {
-        _uiState.update { state ->
-            state.copy(selectedMemoDetail = memo)
-        }
+    private val _sideEffect = MutableSharedFlow<SopletterMainSideEffect>()
+    val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
+
+    init {
+        fetchDefaultMessages()
     }
 
-    override fun onLikeClick() {
-        val selectedMemoDetail = _uiState.value.selectedMemoDetail ?: return
+    // ---------------- Main screen ----------------
 
-        if (selectedMemoDetail.isMine) {
-            _snackbarEvent.tryEmit(
-                SopletterSnackbarVisuals(
-                    message = "내가 작성한 솝레터에는 좋아요를 누를 수 없어요.",
-                    type = SopletterSnackbarType.WARNING,
-                )
-            )
-            return
+    fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
+        val currentState = _uiState.value
+        if (currentState.isLoading) return@launch
+
+        val cursor = if (isLoadMore) {
+            if (!currentState.hasNext) return@launch
+            currentState.nextCursor ?: return@launch
+        } else {
+            null
         }
 
         _uiState.update { state ->
             state.copy(
-                selectedMemoDetail = selectedMemoDetail.copy(
-                    isLiked = !selectedMemoDetail.isLiked,
-                    likeCount = if (selectedMemoDetail.isLiked) {
-                        selectedMemoDetail.likeCount - 1
-                    } else {
-                        selectedMemoDetail.likeCount + 1
-                    },
-                ),
+                isLoading = true,
+                isMessageRefreshing = !isLoadMore && currentState.isInitialized,
+                isPaging = isLoadMore,
+                isShowErrorDialog = false,
             )
+        }
+
+        sopletterRepository.getDefaultMessages(cursor = cursor)
+            .onSuccess { response ->
+                _uiState.update { state ->
+                    state.copy(
+                        topicId = response.topicId,
+                        topicTitle = response.title,
+                        totalCount = response.totalCount,
+                        nextCursor = response.nextCursor,
+                        hasNext = response.hasNext,
+                        memoList = if (isLoadMore) {
+                            (state.memoList + response.messages)
+                                .distinctBy(SopletterMessage::messageId)
+                                .toPersistentList()
+                        } else {
+                            response.messages.toPersistentList()
+                        },
+                        isInitialized = true,
+                        isLoading = false,
+                        isMessageRefreshing = false,
+                        isPaging = false,
+                        isShowErrorDialog = false,
+                    )
+                }
+            }
+            .onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        isMessageRefreshing = false,
+                        isPaging = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
+    }
+
+    fun openReportForm() = viewModelScope.launch {
+        _uiState.value.reportFormUrl?.let { url ->
+            _sideEffect.emit(SopletterMainSideEffect.NavigateToReportForm(url))
+            return@launch
+        }
+
+        if (_uiState.value.isLoading) return@launch
+
+        _uiState.update { state ->
+            state.copy(
+                isLoading = true,
+                isShowErrorDialog = false,
+            )
+        }
+
+        sopletterRepository.getReportFormUrl()
+            .onSuccess { url ->
+                _uiState.update { state ->
+                    state.copy(
+                        reportFormUrl = url,
+                        isLoading = false,
+                    )
+                }
+                _sideEffect.emit(SopletterMainSideEffect.NavigateToReportForm(url))
+            }
+            .onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isLoading = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
+    }
+
+    fun dismissErrorDialog() {
+        _uiState.update { state ->
+            state.copy(isShowErrorDialog = false)
+        }
+    }
+
+    // ---------------- Memo detail dialog ----------------
+
+    fun fetchMemoDetail(messageId: Long, memoColor: Color) = viewModelScope.launch {
+        val topicId = _uiState.value.topicId
+        if (topicId <= 0L) return@launch
+
+        sopletterRepository.getMessageDetail(
+            topicId = topicId,
+            messageId = messageId,
+        ).onSuccess { detail ->
+            _uiState.update { state ->
+                state.copy(
+                    selectedMemoDetail = detail.toMemoDetailDialogState(memoColor = memoColor),
+                    isShowErrorDialog = false,
+                )
+            }
+        }.onFailure {
+            _uiState.update { state ->
+                state.copy(isShowErrorDialog = true)
+            }
+        }
+    }
+
+    override fun onLikeClick() {
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
+
+        if (selectedMemoDetail.isMine) {
+            viewModelScope.launch {
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "내가 작성한 솝레터에는 좋아요를 누를 수 없어요.",
+                            type = SopletterSnackbarType.WARNING,
+                        ),
+                    ),
+                )
+            }
+            return
+        }
+        if (topicId <= 0L) return
+
+        viewModelScope.launch {
+            updateSelectedMemoLikeState(
+                memoId = selectedMemoDetail.memoId,
+                isLiked = !selectedMemoDetail.isLiked,
+                likeCount = if (selectedMemoDetail.isLiked) {
+                    selectedMemoDetail.likeCount - 1
+                } else {
+                    selectedMemoDetail.likeCount + 1
+                },
+            )
+
+            val result = if (selectedMemoDetail.isLiked) {
+                sopletterRepository.deleteMessageLike(
+                    topicId = topicId,
+                    messageId = selectedMemoDetail.memoId,
+                )
+            } else {
+                sopletterRepository.addMessageLike(
+                    topicId = topicId,
+                    messageId = selectedMemoDetail.memoId,
+                )
+            }
+
+            result.onSuccess {
+                _uiState.update { state ->
+                    state.copy(
+                        isShowErrorDialog = false,
+                    )
+                }
+            }.onFailure {
+                updateSelectedMemoLikeState(
+                    memoId = selectedMemoDetail.memoId,
+                    isLiked = selectedMemoDetail.isLiked,
+                    likeCount = selectedMemoDetail.likeCount,
+                )
+                _uiState.update { state ->
+                    state.copy(isShowErrorDialog = true)
+                }
+            }
         }
     }
 
@@ -92,17 +255,22 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    fun refreshMemoList() {
-        viewModelScope.launch {
-            _uiState.update { state ->
-                state.copy(isLoading = true)
-            }
+    private fun updateSelectedMemoLikeState(
+        memoId: Long,
+        isLiked: Boolean,
+        likeCount: Long,
+    ) {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+            if (currentDetail.memoId != memoId) return@update state
 
-            // TODO Refresh 로직
-
-            _uiState.update { state ->
-                state.copy(isLoading = false)
-            }
+            state.copy(
+                isShowErrorDialog = false,
+                selectedMemoDetail = currentDetail.copy(
+                    isLiked = isLiked,
+                    likeCount = likeCount,
+                ),
+            )
         }
     }
 }

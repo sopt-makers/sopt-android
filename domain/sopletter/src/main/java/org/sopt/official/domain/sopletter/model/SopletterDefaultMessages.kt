@@ -22,43 +22,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.contract
+package org.sopt.official.domain.sopletter.model
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
-import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+data class SopletterDefaultMessages(
+    val topicId: Long,
+    val title: String,
+    val totalCount: Int,
+    val nextCursor: Long?,
+    val hasNext: Boolean,
+    val messages: List<SopletterMessage>,
+)
 
-interface SopletterMemoDetailDialogContract {
-    @Immutable
-    data class State(
-        val memoId: Long,
-        val memoColor: Color,
-        val writerName: String,
-        val isMine: Boolean,
-        val isLiked: Boolean,
-        val likeCount: Long,
-        val date: String,
-        val content: String,
-    )
+data class SopletterMessage(
+    val messageId: Long,
+    val previewContent: String,
+    val colorCode: String,
+    val rotationDegree: Double,
+    val shapeType: SopletterShapeType,
+)
 
-    interface Actions {
-        fun onLikeClick()
-        fun onEditClick()
-        fun onDeleteClick()
-        fun onDismissClick()
+enum class SopletterShapeType {
+    SMOOTH,
+    SHARP,
+    POINT,
+    CLOUD;
+
+    companion object {
+        fun from(value: String): SopletterShapeType =
+            entries.find { it.name == value } ?: SHARP
     }
 }
-
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
-    State(
-        memoId = messageId,
-        memoColor = memoColor,
-        writerName = authorNickname,
-        isMine = mine,
-        isLiked = likedByMe,
-        likeCount = likeCount.toLong(),
-        date = createdAt.formatCreatedAt(),
-        content = content,
-    )

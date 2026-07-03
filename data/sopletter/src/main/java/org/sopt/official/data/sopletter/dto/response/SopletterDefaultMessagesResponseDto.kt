@@ -22,33 +22,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.model
+package org.sopt.official.data.sopletter.dto.response
 
-import androidx.annotation.DrawableRes
-import androidx.compose.ui.graphics.Color
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-enum class SopletterMemoRotationType(
-    val degree: Float,
-) {
-    LEFT(-10f),
-    CENTER(0f),
-    RIGHT(10f),
-}
+@Serializable
+data class SopletterDefaultMessagesResponseDto(
+    @SerialName("topicId")
+    val topicId: Long,
+    @SerialName("title")
+    val title: String,
+    @SerialName("totalCount")
+    val totalCount: Int,
+    @SerialName("nextCursor")
+    val nextCursor: Long? = null,
+    @SerialName("hasNext")
+    val hasNext: Boolean,
+    @SerialName("messages")
+    val messages: List<SopletterMessageDto>,
+)
 
-enum class SopletterMemoColor(
-    val color: Color,
-) {
-    BLUE(Color(0xFFC8E1FF)),
-    MINT(Color(0xFFCCFFEC)),
-    PINK(Color(0xFFFFD1D3)),
-    YELLOW(Color(0xFFFFF4D4)),
-}
-
-// TODO 서버 스펙에 맞게 추후 수정 예정
-data class SopletterMemoUiModel(
-    val id: Long,
-    val message: String,
-    @param:DrawableRes val shapeImageRes: Int,
-    val rotation: SopletterMemoRotationType,
-    val memoColor: SopletterMemoColor,
+@Serializable
+data class SopletterMessageDto(
+    @SerialName("messageId")
+    val messageId: Long,
+    @SerialName("previewContent")
+    val previewContent: String,
+    @SerialName("colorCode")
+    val colorCode: String,
+    @SerialName("rotationDegree")
+    val rotationDegree: Double,
+    @SerialName("shapeType")
+    val shapeType: String,
 )

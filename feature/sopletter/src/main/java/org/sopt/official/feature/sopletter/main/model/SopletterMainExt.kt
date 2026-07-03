@@ -22,43 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.contract
+package org.sopt.official.feature.sopletter.main.model
 
-import androidx.compose.runtime.Immutable
+import androidx.annotation.DrawableRes
 import androidx.compose.ui.graphics.Color
-import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
-import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
-import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+import androidx.core.graphics.toColorInt
+import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.domain.sopletter.model.SopletterShapeType
+import org.sopt.official.sopletter.R
 
-interface SopletterMemoDetailDialogContract {
-    @Immutable
-    data class State(
-        val memoId: Long,
-        val memoColor: Color,
-        val writerName: String,
-        val isMine: Boolean,
-        val isLiked: Boolean,
-        val likeCount: Long,
-        val date: String,
-        val content: String,
-    )
-
-    interface Actions {
-        fun onLikeClick()
-        fun onEditClick()
-        fun onDeleteClick()
-        fun onDismissClick()
-    }
+@DrawableRes
+internal fun SopletterShapeType.imageRes(): Int = when (this) {
+    SopletterShapeType.SMOOTH -> R.drawable.ic_sopletter_memo_smooth
+    SopletterShapeType.SHARP -> R.drawable.ic_sopletter_memo_sharp
+    SopletterShapeType.POINT -> R.drawable.ic_sopletter_memo_point
+    SopletterShapeType.CLOUD -> R.drawable.ic_sopletter_memo_cloud
 }
 
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
-    State(
-        memoId = messageId,
-        memoColor = memoColor,
-        writerName = authorNickname,
-        isMine = mine,
-        isLiked = likedByMe,
-        likeCount = likeCount.toLong(),
-        date = createdAt.formatCreatedAt(),
-        content = content,
-    )
+internal fun SopletterMessage.memoColor(): Color = runCatching {
+    Color(colorCode.toColorInt())
+}.getOrDefault(DEFAULT_MEMO_COLOR)
+
+private val DEFAULT_MEMO_COLOR = Color(0xFFC8E1FF)

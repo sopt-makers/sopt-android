@@ -27,12 +27,22 @@ package org.sopt.official.feature.sopletter.main.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 
 @Immutable
 data class SopletterMainUiState(
-    val generation: Int = 0,
-    val memoList: ImmutableList<SopletterMemoUiModel> = persistentListOf(),
+    val topicId: Long = 0L,
+    val topicTitle: String = "",
+    val totalCount: Int = 0,
+    val nextCursor: Long? = null,
+    val hasNext: Boolean = false,
+    val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
+    val reportFormUrl: String? = null,
     val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,
+    val isInitialized: Boolean = false,
     val isLoading: Boolean = false,
+    val isMessageRefreshing: Boolean = false,
+    val isPaging: Boolean = false,
+    val isShowErrorDialog: Boolean = false,
 )
