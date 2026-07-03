@@ -30,8 +30,7 @@ import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailRespo
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
 import org.sopt.official.data.sopletter.service.SopletterService
 import javax.inject.Inject
-
-internal class SopletterDataSourceImpl @Inject constructor(
+class SopletterDataSourceImpl @Inject constructor(
     private val sopletterService: SopletterService,
 ) : SopletterDataSource {
     override suspend fun getDefaultMessages(

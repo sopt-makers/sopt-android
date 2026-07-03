@@ -26,6 +26,7 @@ package org.sopt.official.localstorage.sourceimpl
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
@@ -56,6 +57,10 @@ class DefaultSoptStorage @Inject constructor(
 
     override val playgroundToken: Flow<String> = dataStore.data.map { preferences ->
         preferences[KEY_PLAYGROUND_TOKEN]?.decryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
+    }
+
+    override val isOnboardingCompleted: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[KEY_ONBOARDING_COMPLETED] ?: false
     }
 
     override suspend fun saveTokens(accessToken: String, refreshToken: String) {
@@ -110,6 +115,12 @@ class DefaultSoptStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveOnboardingCompleted(isOnboarded: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[KEY_ONBOARDING_COMPLETED] = isOnboarded
+        }
+    }
+
     override suspend fun clearUser() {
         dataStore.edit { preferences ->
             preferences.remove(KEY_USER_STATUS)
@@ -131,6 +142,7 @@ class DefaultSoptStorage @Inject constructor(
         private val KEY_USER_STATUS = stringPreferencesKey("user_status")
         private val KEY_PUSH_TOKEN = stringPreferencesKey("push_token")
         private val KEY_PLATFORM = stringPreferencesKey("platform")
+        private val KEY_ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
 
 
         private const val DEFAULT_VALUE = ""

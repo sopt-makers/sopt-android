@@ -42,10 +42,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
+import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.name.component.SopletterNameInfoHolder
+import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterNameRoute(
+    navigateToHome: () -> Unit,
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
@@ -63,20 +66,28 @@ fun SopletterNameRoute(
 
 
     SopletterNameScreen(
-        state = state
+        state = state,
+        navigateToHome = navigateToHome,
     )
 }
 
 @Composable
 private fun SopletterNameScreen(
     state: NameState,
-    navigateToSopletterMain: () -> Unit= {}
+    navigateToSopletterMain: () -> Unit= {},
+    navigateToHome: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(SoptTheme.colors.onSurface950)
     ) {
+        SopletterTopbar(
+            onBackClick = navigateToHome,
+            topbarTitle = "",
+            iconRes = R.drawable.ic_close_32
+        )
+
         Spacer(modifier = Modifier.weight(20f))
 
         SopletterNameInfoHolder(
