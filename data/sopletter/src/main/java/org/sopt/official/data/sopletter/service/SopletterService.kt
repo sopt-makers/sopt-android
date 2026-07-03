@@ -44,6 +44,13 @@ interface SopletterService {
         @Query("size") size: Int,
     ): SopletterMessagesResponseDto
 
+    @GET("sopt-letter/topics/{topicId}/messages")
+    suspend fun getTopicMessages(
+        @Path("topicId") topicId: Long,
+        @Query("cursor") cursor: Long?,
+        @Query("size") size: Int,
+    ): SopletterMessagesResponseDto
+
     @GET("sopt-letter/report-form")
     suspend fun getReportForm(): SopletterReportFormResponseDto
 

@@ -35,6 +35,12 @@ interface SopletterDataSource {
         size: Int,
     ): SopletterMessagesResponseDto
 
+    suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): SopletterMessagesResponseDto
+
     suspend fun getReportForm(): SopletterReportFormResponseDto
 
     suspend fun getMessageDetail(

@@ -44,6 +44,16 @@ internal class SopletterDataSourceImpl @Inject constructor(
         size = size,
     )
 
+    override suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): SopletterMessagesResponseDto = sopletterService.getTopicMessages(
+        topicId = topicId,
+        cursor = cursor,
+        size = size,
+    )
+
     override suspend fun getReportForm(): SopletterReportFormResponseDto = sopletterService.getReportForm()
 
     override suspend fun getMessageDetail(

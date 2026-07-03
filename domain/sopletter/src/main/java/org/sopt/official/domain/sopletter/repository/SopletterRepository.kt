@@ -34,6 +34,12 @@ interface SopletterRepository {
         size: Int = DEFAULT_PAGE_SIZE,
     ): Result<SopletterMessages>
 
+    suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long? = null,
+        size: Int = DEFAULT_PAGE_SIZE,
+    ): Result<SopletterMessages>
+
     suspend fun getReportFormUrl(): Result<String>
 
     suspend fun getMessageDetail(

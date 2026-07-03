@@ -46,6 +46,18 @@ internal class SopletterRepositoryImpl @Inject constructor(
         ).toDomain()
     }
 
+    override suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): Result<SopletterMessages> = suspendRunCatching {
+        sopletterDataSource.getTopicMessages(
+            topicId = topicId,
+            cursor = cursor,
+            size = size,
+        ).toDomain()
+    }
+
     override suspend fun getReportFormUrl(): Result<String> = suspendRunCatching {
         sopletterDataSource.getReportForm().reportFormUrl
     }
