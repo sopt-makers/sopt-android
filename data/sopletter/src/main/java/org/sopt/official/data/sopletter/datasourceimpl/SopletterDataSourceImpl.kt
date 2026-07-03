@@ -25,6 +25,7 @@
 package org.sopt.official.data.sopletter.datasourceimpl
 
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
+import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
@@ -66,5 +67,15 @@ internal class SopletterDataSourceImpl @Inject constructor(
     ) = sopletterService.deleteMessageLike(
         topicId = topicId,
         messageId = messageId,
+    )
+
+    override suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): SopletterMessageDetailResponseDto = sopletterService.updateMessage(
+        topicId = topicId,
+        messageId = messageId,
+        body = UpdateSopletterMessageRequestDto(content = content),
     )
 }

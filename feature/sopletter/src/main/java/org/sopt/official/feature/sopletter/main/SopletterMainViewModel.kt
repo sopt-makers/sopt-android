@@ -287,15 +287,52 @@ class SopletterMainViewModel @Inject constructor(
             return
         }
 
-        _uiState.update { state ->
-            val currentDetail = state.selectedMemoDetail ?: return@update state
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
+        if (topicId <= 0L) return
 
-            state.copy(
-                selectedMemoDetail = currentDetail.copy(
-                    content = content,
-                    isEditing = false,
-                ),
-            )
+        viewModelScope.launch {
+            sopletterRepository.updateMessage(
+                topicId = topicId,
+                messageId = selectedMemoDetail.memoId,
+                content = content,
+            ).onSuccess { updatedMessage ->
+                _uiState.update { state ->
+                    val currentDetail = state.selectedMemoDetail
+
+                    state.copy(
+                        memoList = state.memoList.map { message ->
+                            if (message.messageId == updatedMessage.messageId) {
+                                message.copy(previewContent = updatedMessage.content)
+                            } else {
+                                message
+                            }
+                        }.toPersistentList(),
+                        selectedMemoDetail = if (currentDetail?.memoId == updatedMessage.messageId) {
+                            updatedMessage.toMemoDetailDialogState(
+                                memoColor = currentDetail.memoColor,
+                            )
+                        } else {
+                            currentDetail
+                        },
+                        isShowErrorDialog = false,
+                    )
+                }
+
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "메시지 수정을 완료했어요.",
+                            type = SopletterSnackbarType.SUCCESS,
+                        ),
+                    ),
+                )
+            }.onFailure {
+                _uiState.update { state ->
+                    state.copy(isShowErrorDialog = true)
+                }
+            }
         }
     }
 

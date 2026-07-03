@@ -50,4 +50,10 @@ interface SopletterDataSource {
         topicId: Long,
         messageId: Long,
     )
+
+    suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): SopletterMessageDetailResponseDto
 }

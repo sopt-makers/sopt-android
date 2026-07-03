@@ -24,11 +24,14 @@
  */
 package org.sopt.official.data.sopletter.service
 
+import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
 import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -60,4 +63,11 @@ interface SopletterService {
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
     )
+
+    @PATCH("sopt-letter/topics/{topicId}/messages/{messageId}")
+    suspend fun updateMessage(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+        @Body body: UpdateSopletterMessageRequestDto,
+    ): SopletterMessageDetailResponseDto
 }

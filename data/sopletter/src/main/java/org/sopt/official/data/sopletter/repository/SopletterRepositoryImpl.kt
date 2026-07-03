@@ -78,4 +78,16 @@ internal class SopletterRepositoryImpl @Inject constructor(
             messageId = messageId,
         )
     }
+
+    override suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): Result<SopletterMessageDetail> = suspendRunCatching {
+        sopletterDataSource.updateMessage(
+            topicId = topicId,
+            messageId = messageId,
+            content = content,
+        ).toDomain()
+    }
 }

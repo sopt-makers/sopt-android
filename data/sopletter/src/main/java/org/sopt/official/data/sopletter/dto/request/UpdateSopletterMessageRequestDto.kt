@@ -22,41 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.sopletter.repository
+package org.sopt.official.data.sopletter.dto.request
 
-import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
-import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-interface SopletterRepository {
-    suspend fun getDefaultMessages(
-        cursor: Long? = null,
-        size: Int = DEFAULT_PAGE_SIZE,
-    ): Result<SopletterDefaultMessages>
-
-    suspend fun getReportFormUrl(): Result<String>
-
-    suspend fun getMessageDetail(
-        topicId: Long,
-        messageId: Long,
-    ): Result<SopletterMessageDetail>
-
-    suspend fun addMessageLike(
-        topicId: Long,
-        messageId: Long,
-    ): Result<Unit>
-
-    suspend fun deleteMessageLike(
-        topicId: Long,
-        messageId: Long,
-    ): Result<Unit>
-
-    suspend fun updateMessage(
-        topicId: Long,
-        messageId: Long,
-        content: String,
-    ): Result<SopletterMessageDetail>
-
-    private companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-    }
-}
+@Serializable
+data class UpdateSopletterMessageRequestDto(
+    @SerialName("content")
+    val content: String,
+)
