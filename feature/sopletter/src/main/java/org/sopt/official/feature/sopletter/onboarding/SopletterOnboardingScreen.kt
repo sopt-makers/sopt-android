@@ -85,7 +85,6 @@ fun SopletterOnboardingRoute(
 
     SopletterScaffold(
         snackbarHostState = snackbarHostState,
-        modifier = Modifier.padding(paddingValues),
     ) { innerPadding ->
         SopletterOnboardingScreen(
             paddingValues = innerPadding,

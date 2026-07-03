@@ -323,9 +323,7 @@ fun MainScreen(
                                     )
                                 }
                             },
-                            navigateToSopletter = {
-                                navigator.navController.navigateToSopletter()
-                            }
+                            navigateToSopletter = navigator.navController::navigateToSopletter
                         )
 
                         soptampNavGraph(

@@ -2,10 +2,9 @@ package org.sopt.official.feature.sopletter.onboarding
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
@@ -16,6 +15,7 @@ import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 import javax.inject.Inject
 
+@HiltViewModel
 class SopletterOnboardingViewModel @Inject constructor(
     private val userStorage: UserStorage,
     private val sopletterOnboardingRepository: SopletterOnboardingRepository
