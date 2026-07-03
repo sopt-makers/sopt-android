@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
+    navigateToTopic: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val outerSnackbarHostState = remember { SnackbarHostState() }
@@ -142,7 +143,7 @@ fun SopletterMainRoute(
             dialogActions = dialogActions,
             onCloseClick = { /* TODO close click */ },
             onDownloadClick = { /* TODO download click */ },
-            onTopicClick = { /* TODO topic click */ },
+            onTopicClick = navigateToTopic,
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
             onWriteFABClick = { /* TODO write FAB click */ },
