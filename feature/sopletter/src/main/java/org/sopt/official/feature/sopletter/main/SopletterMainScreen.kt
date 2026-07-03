@@ -108,9 +108,13 @@ fun SopletterMainRoute(
             }
     }
 
-    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
+    SopletterScaffold(
+        snackbarHostState = snackBarHostState,
+        isOuterSnackbarHostVisible = uiState.selectedMemoDetail == null,
+    ) { paddingValues ->
         SopletterMainScreen(
             uiState = uiState,
+            snackbarHostState = snackBarHostState,
             onMemoClick = {
                 viewModel.fetchMemoDetail(
                     messageId = it.messageId,
@@ -135,6 +139,7 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
+    snackbarHostState: SnackbarHostState,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
@@ -238,6 +243,7 @@ private fun SopletterMainScreen(
         SopletterMemoDetailDialog(
             state = memo,
             actions = dialogActions,
+            snackbarHostState = snackbarHostState,
         )
     }
 
@@ -311,6 +317,7 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
+            snackbarHostState = remember { SnackbarHostState() },
             onMemoClick = { _ -> },
             onRefresh = {},
             onLoadMore = {},

@@ -46,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
@@ -58,40 +59,55 @@ import timber.log.Timber
 @Composable
 internal fun SopletterScaffold(
     snackbarHostState: SnackbarHostState,
+    isOuterSnackbarHostVisible: Boolean = true,
     modifier: Modifier = Modifier,
     content: @Composable (innerPadding: PaddingValues) -> Unit,
 ) {
     Scaffold(
         snackbarHost = {
             Box(modifier = Modifier.fillMaxSize()) {
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .align(Alignment.TopCenter),
-                    snackbar = { data ->
-                        when (val visuals = data.visuals) {
-                            is SopletterSnackbarVisuals -> {
-                                SopletterSnackBar(
-                                    sopletterSnackbarType = visuals.type,
-                                    message = visuals.message,
-                                )
-                            }
-                            else -> {
-                                Timber.w(
-                                    "Invalid snackbar usage. Use SopletterSnackbarVisuals instead of default showSnackbar(message)."
-                                )
-
-                                Snackbar(snackbarData = data)
-                            }
-                        }
-                    },
-                )
+                if (isOuterSnackbarHostVisible) {
+                    SopletterSnackbarHost(
+                        snackbarHostState = snackbarHostState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp, start = 16.dp, end = 16.dp)
+                            .align(Alignment.TopCenter),
+                    )
+                }
             }
         },
         containerColor = SoptTheme.colors.background,
         modifier = modifier.fillMaxSize(),
         content = content,
+    )
+}
+
+@Composable
+internal fun SopletterSnackbarHost(
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+) {
+    SnackbarHost(
+        hostState = snackbarHostState,
+        modifier = modifier,
+        snackbar = { data ->
+            when (val visuals = data.visuals) {
+                is SopletterSnackbarVisuals -> {
+                    SopletterSnackBar(
+                        sopletterSnackbarType = visuals.type,
+                        message = visuals.message,
+                    )
+                }
+                else -> {
+                    Timber.w(
+                        "Invalid snackbar usage. Use SopletterSnackbarVisuals instead of default showSnackbar(message)."
+                    )
+
+                    Snackbar(snackbarData = data)
+                }
+            }
+        },
     )
 }
 
@@ -105,7 +121,6 @@ private fun SopletterSnackBar(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
             .background(
                 color = SoptTheme.colors.onSurface10,
                 shape = RoundedCornerShape(18.dp),
@@ -125,7 +140,11 @@ private fun SopletterSnackBar(
             text = message,
             style = SoptTheme.typography.title14SB,
             color = SoptTheme.colors.onSurface900,
-            modifier = Modifier.padding(vertical = 16.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(top = 16.dp, bottom = 16.dp, end = 16.dp),
         )
     }
 }
