@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
@@ -45,8 +47,9 @@ import org.sopt.official.sopletter.R
 @Composable
 internal fun SopletterMainTopBar(
     title: String,
+    isTopicDetail: Boolean,
     isDownloadBtnVisible: Boolean,
-    onCloseClick: () -> Unit,
+    onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
@@ -63,21 +66,28 @@ internal fun SopletterMainTopBar(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Row(
+            modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
+                imageVector = ImageVector.vectorResource(
+                    if (isTopicDetail) R.drawable.ic_btn_arrow_left else R.drawable.ic_close_32,
+                ),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
-                    .noRippleClickable(onClick = onCloseClick),
+                    .size(32.dp)
+                    .noRippleClickable(onClick = onBackClick),
             )
 
             Text(
                 text = title,
                 style = SoptTheme.typography.heading18B,
                 color = SoptTheme.colors.onSurface10,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f, fill = false),
             )
         }
 
@@ -91,6 +101,7 @@ internal fun SopletterMainTopBar(
                     contentDescription = null,
                     tint = Color.Unspecified,
                     modifier = Modifier
+                        .size(32.dp)
                         .noRippleClickable(onClick = onDownloadClick),
                 )
             }
@@ -100,6 +111,7 @@ internal fun SopletterMainTopBar(
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
+                    .size(32.dp)
                     .noRippleClickable(onClick = onReportClick),
             )
 
@@ -108,6 +120,7 @@ internal fun SopletterMainTopBar(
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
+                    .size(32.dp)
                     .noRippleClickable(onClick = onTopicClick),
             )
         }
@@ -120,8 +133,9 @@ private fun SopletterMainTopBarPreview() {
     SoptTheme {
         SopletterMainTopBar(
             title = "38기 솝레터",
+            isTopicDetail = false,
             isDownloadBtnVisible = true,
-            onCloseClick = {},
+            onBackClick = {},
             onDownloadClick = {},
             onReportClick = {},
             onTopicClick = {},

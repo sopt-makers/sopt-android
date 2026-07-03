@@ -85,6 +85,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
+    navigateUp: () -> Unit = {},
     navigateToTopic: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -141,7 +142,7 @@ fun SopletterMainRoute(
             onRefresh = viewModel::fetchMessages,
             onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
-            onCloseClick = { /* TODO close click */ },
+            onBackClick = navigateUp,
             onDownloadClick = { /* TODO download click */ },
             onTopicClick = navigateToTopic,
             onReportClick = viewModel::openReportForm,
@@ -161,7 +162,7 @@ private fun SopletterMainScreen(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     dialogActions: SopletterMemoDetailDialogContract.Actions,
-    onCloseClick: () -> Unit,
+    onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
@@ -189,11 +190,12 @@ private fun SopletterMainScreen(
     ) {
         SopletterMainTopBar(
             title = uiState.topicTitle,
+            isTopicDetail = uiState.selectedTopicId != null,
             isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
-            onCloseClick = onCloseClick,
+            onBackClick = onBackClick,
             onDownloadClick = onDownloadClick,
             onReportClick = onReportClick,
-            onTopicClick = onTopicClick
+            onTopicClick = if (uiState.selectedTopicId == null) onTopicClick else onBackClick,
         )
 
         when {
@@ -339,7 +341,7 @@ private fun SopletterMainScreenPreview(
             onRefresh = {},
             onLoadMore = {},
             dialogActions = previewDialogActions,
-            onCloseClick = {},
+            onBackClick = {},
             onDownloadClick = {},
             onReportClick = {},
             onErrorConfirm = {},
