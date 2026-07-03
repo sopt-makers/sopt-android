@@ -29,6 +29,8 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.sopt.official.data.sopletter.repository.SopletterRepositoryImpl
+import org.sopt.official.data.sopletter.repository.SopletterWriteRepositoryImpl
+import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.sopletter.repository.SopletterWriteRepository
 import javax.inject.Singleton
 
@@ -40,5 +42,11 @@ internal abstract class RepositoryModule {
     @Singleton
     abstract fun bindSopletterRepository(
         impl: SopletterRepositoryImpl
+    ): SopletterRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSopletterWriteRepository(
+        impl: SopletterWriteRepositoryImpl
     ): SopletterWriteRepository
 }
