@@ -1,10 +1,10 @@
 package org.sopt.official.data.sopletter.mapper
 
 import org.sopt.official.data.sopletter.dto.SopletterWriteResponse
-import org.sopt.official.sopletter.model.Sopletter
+import org.sopt.official.sopletter.model.SopletterWrite
 
-internal fun SopletterWriteResponse.toDomain(): Sopletter {
-    return Sopletter(
+internal fun SopletterWriteResponse.toDomain(): SopletterWrite {
+    return SopletterWrite(
         messageId = messageId,
         topicId = topicId,
         authorNickname = authorNickname,

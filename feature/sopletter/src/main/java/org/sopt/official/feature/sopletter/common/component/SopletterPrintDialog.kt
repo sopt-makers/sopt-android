@@ -66,7 +66,7 @@ fun SopletterPrintDialog(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    SoptDialogButton(
+                    SopletterDialogButton(
                         text = "취소",
                         textColor = SoptTheme.colors.onSurface10,
                         backgroundColor = SoptTheme.colors.onSurface600,
@@ -74,7 +74,7 @@ fun SopletterPrintDialog(
                         modifier = Modifier.weight(1f)
                     )
 
-                    SoptDialogButton(
+                    SopletterDialogButton(
                         text = "출력",
                         textColor = SoptTheme.colors.background,
                         backgroundColor = SoptTheme.colors.onSurface10,
@@ -88,7 +88,7 @@ fun SopletterPrintDialog(
 }
 
 @Composable
-private fun SoptDialogButton(
+private fun SopletterDialogButton(
     text: String,
     textColor: Color,
     backgroundColor: Color,

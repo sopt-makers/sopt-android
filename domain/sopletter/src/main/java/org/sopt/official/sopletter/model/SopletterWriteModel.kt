@@ -1,7 +1,7 @@
 package org.sopt.official.sopletter.model
 
 
-data class Sopletter(
+data class SopletterWrite(
     val messageId: Long,
     val topicId: Long?,
     val authorNickname: String,
