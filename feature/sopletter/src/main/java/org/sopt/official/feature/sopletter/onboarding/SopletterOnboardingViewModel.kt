@@ -53,7 +53,7 @@ class SopletterOnboardingViewModel @Inject constructor(
             sopletterOnboardingRepository.completeOnboarding()
                 .onSuccess {
                     userStorage.saveOnboardingCompleted(it.isOnboarded)
-                    _sideEffect.send(SopletterOnboardingSideEffect.NavigateToNickname(it.nickname, 38)) // Todo generation 추가
+                    _sideEffect.send(SopletterOnboardingSideEffect.NavigateToNickname(it.nickname, it.currentGeneration))
                 }
                 .onFailure {
                     Timber.e(it)
