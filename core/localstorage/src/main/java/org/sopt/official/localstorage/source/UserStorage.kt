@@ -32,6 +32,7 @@ import org.sopt.official.model.UserStatus
  * @param userStatus 유저 상태
  * @param pushToken 푸시 토큰
  * @param platform 인증 플랫폼
+ * @param isSopletterOnboardingCompleted 솝레터 온보딩 완료 여부
  * @param saveUserStatus 유저 상태 저장
  * @param savePushToken 푸시 토큰 저장
  * @param savePlatform 인증 플랫폼 저장
@@ -41,9 +42,11 @@ interface UserStorage {
     val userStatus: Flow<UserStatus>
     val pushToken: Flow<String>
     val platform: Flow<String>
+    val isSopletterOnboardingCompleted: Flow<Boolean>
 
     suspend fun saveUserStatus(status: UserStatus)
     suspend fun savePushToken(token: String)
     suspend fun savePlatform(platform: String)
+    suspend fun saveOnboardingCompleted(isOnboarded: Boolean)
     suspend fun clearUser()
 }

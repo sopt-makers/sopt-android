@@ -41,29 +41,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.Text
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.main.model.SopletterMemoUiModel
-import org.sopt.official.sopletter.R
+import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.feature.sopletter.main.model.imageRes
+import org.sopt.official.feature.sopletter.main.model.memoColor
 
 @Composable
 internal fun SopletterMemoCard(
-    memo: SopletterMemoUiModel,
+    memo: SopletterMessage,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .rotate(memo.rotation.degree)
+            .rotate(memo.rotationDegree.toFloat())
             .noRippleClickable(onClick),
         contentAlignment = Alignment.Center,
     ) {
         Image(
-            imageVector = ImageVector.vectorResource(memo.shapeImageRes),
+            imageVector = ImageVector.vectorResource(memo.shapeType.imageRes()),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(memo.memoColor.color),
+            colorFilter = ColorFilter.tint(memo.memoColor()),
         )
 
         Text(
-            text = memo.message,
+            text = memo.previewContent,
             modifier = Modifier
                 .width(111.dp)
                 .height(110.dp),

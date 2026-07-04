@@ -139,6 +139,7 @@ dependencies {
     implementation(projects.data.schedule)
     implementation(projects.data.soptlog)
     implementation(projects.data.user)
+    implementation(projects.data.sopletter)
 
     implementation(projects.feature.soptamp)
     implementation(projects.feature.auth)
