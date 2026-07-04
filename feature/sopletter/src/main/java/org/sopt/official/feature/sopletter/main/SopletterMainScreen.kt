@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -56,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -64,13 +66,14 @@ import org.sopt.official.common.util.onBottomReached
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
-import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
+import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
+import org.sopt.official.feature.sopletter.main.component.SopletterTopicCta
+import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect.SnackbarTarget
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
@@ -78,8 +81,6 @@ import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
 import org.sopt.official.feature.sopletter.main.model.memoColor
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 import org.sopt.official.webview.view.WebViewActivity
-import kotlin.jvm.java
-import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -199,26 +200,34 @@ private fun SopletterMainScreen(
         )
 
         when {
-            !uiState.isInitialized && uiState.memoList.isEmpty() -> {
-                SopletterPullRefreshContainer(
-                    refreshState = refreshState,
-                    isRefreshing = uiState.isMessageRefreshing,
-                    isShowIndicator = false,
-                )
-            }
-
             uiState.memoList.isEmpty() -> {
                 SopletterPullRefreshContainer(
                     refreshState = refreshState,
                     isRefreshing = uiState.isMessageRefreshing,
+                    isShowIndicator = uiState.isInitialized,
                 ) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        Spacer(modifier = Modifier.weight(160f))
+                        SopletterTopicCta(
+                            text = "이번 기수 회고하러 가볼까요?",
+                            onClick = { /* TODO API 연동후 추가 예정 */ },
+                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                        )
 
-                        EmptySopletterContent(modifier = Modifier.weight(187f))
+                        Spacer(modifier = Modifier.weight(86f))
 
-                        Spacer(modifier = Modifier.weight(343f))
+                        EmptySopletterContent(
+                            modifier = Modifier.weight(187f),
+                        )
+
+                        Spacer(modifier = Modifier.weight(342f))
                     }
+
+                    WriteSopletterFloatingActionButton(
+                        onWriteFABClick = onWriteFABClick,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(end = 20.dp, bottom = 24.dp),
+                    )
                 }
             }
 
@@ -233,6 +242,14 @@ private fun SopletterMainScreen(
                         columns = StaggeredGridCells.Fixed(2),
                         verticalItemSpacing = (-10).dp,
                     ) {
+                        item(span = StaggeredGridItemSpan.FullLine) {
+                            SopletterTopicCta(
+                                text = "이번 기수 회고하러 가볼까요?",
+                                onClick = { /* TODO API 연동후 추가 예정 */ },
+                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                            )
+                        }
+
                         itemsIndexed(
                             items = uiState.memoList,
                             key = { _, item -> item.messageId },
