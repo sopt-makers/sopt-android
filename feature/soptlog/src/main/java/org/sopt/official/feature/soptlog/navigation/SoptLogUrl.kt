@@ -24,13 +24,10 @@
  */
 package org.sopt.official.feature.soptlog.navigation
 
-import org.sopt.official.common.BuildConfig
-
 enum class SoptLogUrl(val url: String) {
     POKE("home/poke"),
-
-    // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
-    SOPTAMP(if (BuildConfig.DEBUG) "appjamtamp" else "soptamp"),  // 일반 솝탬프의 경우는 (기존) url = "soptamp" / 앱잼탬프만 appjamtamp 사용 (앱잼탬프 기간만)
+    SOPTAMP("soptamp"),
+    APPJAMTAMP("appjamtamp"),
     POKE_FRIEND_SUMMARY("home/poke/friend-list-summary"),
     UNKNOWN("");
 

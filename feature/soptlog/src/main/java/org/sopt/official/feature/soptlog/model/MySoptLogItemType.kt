@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.soptlog.model
 
-import org.sopt.official.common.BuildConfig
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
 internal enum class MySoptLogItemType(
@@ -35,10 +34,8 @@ internal enum class MySoptLogItemType(
     val hasHelpIcon: Boolean = false,
     val hasArrow: Boolean = true
 ) {
-    // 솝탬프 로그
-    // 일반 솝탬프의 경우는 (기존) url = "soptamp" / 앱잼탬프만 appjamtamp 사용 (앱잼탬프 기간만)
-    // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
-    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = if (BuildConfig.DEBUG) "appjamtamp" else "soptamp", count = { it.soptampCount ?: 0 }),
+    // 솝탬프 로그 — 실제 이동 url은 isAppjamMode에 따라 ViewModel에서 결정
+    COMPLETED_MISSION(title = "완료미션", category = SoptLogCategory.SOPTAMP, url = "soptamp", count = { it.soptampCount ?: 0 }),
     VIEW_COUNT(title = "조회수", category = SoptLogCategory.SOPTAMP, hasHelpIcon = true, hasArrow = false, count = { it.viewCount ?: 0 }),
     RECEIVED_CLAP(title = "받은 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.myClapCount ?: 0 }),
     SENT_CLAP(title = "쳐준 박수", category = SoptLogCategory.SOPTAMP, hasArrow = false, count = { it.clapCount ?: 0 }),

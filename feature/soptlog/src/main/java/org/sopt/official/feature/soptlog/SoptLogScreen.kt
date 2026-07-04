@@ -54,7 +54,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
@@ -75,11 +74,7 @@ internal fun SoptLogRoute(
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
-        if (BuildConfig.DEBUG) { // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
-            viewModel.getSoptLogInfoData()
-        } else {
-            viewModel.getSoptLogInfo()
-        }
+        viewModel.loadSoptLogInfo()
     }
 
     LaunchedEffect(Unit) {
@@ -103,23 +98,21 @@ internal fun SoptLogRoute(
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
     val soptLogInfo = soptLogState.soptLogInfo
-    val isAppjamJoined by viewModel.isAppjamJoined.collectAsStateWithLifecycle(false)
+    val isAppjamJoined by viewModel.isAppjamJoined.collectAsStateWithLifecycle()
+    val isAppjamMode by viewModel.isAppjamMode.collectAsStateWithLifecycle()
     val todayFortuneText by viewModel.todayFortuneText.collectAsStateWithLifecycle("")
     val tracker = LocalTracker.current
 
     when {
         soptLogState.isLoading -> LoadingIndicator()
         soptLogState.isError -> {
-            if (BuildConfig.DEBUG) { // Todo : 앱잼탬프 기간일 때 다시 열기 if Build.Debug 제거
-                NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfoData)
-            } else {
-                NetworkErrorDialog(onConfirm = viewModel::getSoptLogInfo)
-            }
+            NetworkErrorDialog(onConfirm = viewModel::loadSoptLogInfo)
         }
 
         else -> {
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
+                    isAppjamMode = isAppjamMode,
                     isAppjamJoined = isAppjamJoined,
                     soptLogInfo = soptLogInfo,
                     todayFortuneText = todayFortuneText,
@@ -141,6 +134,7 @@ internal fun SoptLogRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SoptlogScreen(
+    isAppjamMode: Boolean,
     isAppjamJoined: Boolean,
     soptLogInfo: SoptLogInfo,
     todayFortuneText: String,
@@ -193,11 +187,8 @@ private fun SoptlogScreen(
         Spacer(modifier = Modifier.height(36.dp))
 
         SoptlogContents {
-            // 활동 기수 여부에 관계없이 앱잼참여 회원만 보여줌 (앱잼탬프 기간만)
-            // 앱잼 기간 솝탬프의 경우는 isAppjamJoined 가 true인 경우에만 보여줌 (앱잼 참여인 경우에만)
-            // 일반 솝탬프의 경우는 (기존) soptLogInfo.isActive인 경우에만 보여줌 (활동 기수인 경우에만)
-            // 2026-05-21 기획 상으로 앱잼 기간에는 임시 숨김 처리 개편예정
-            if (soptLogInfo.isActive) {
+            val showSoptampSection = if (isAppjamMode) isAppjamJoined else soptLogInfo.isActive
+            if (showSoptampSection) {
                 SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
@@ -283,6 +274,7 @@ private fun PreviewSoptlogScreen() {
         }
 
         SoptlogScreen(
+            isAppjamMode = false,
             isAppjamJoined = false,
             soptLogInfo = soptLogInfo,
             todayFortuneText = "오늘의 운세",
