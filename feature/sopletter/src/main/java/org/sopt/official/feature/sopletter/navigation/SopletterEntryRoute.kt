@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,7 +14,6 @@ import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
 
 @Composable
 fun SopletterEntryRoute(
-    paddingValues: PaddingValues,
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
     navigateUp: () -> Unit,
@@ -34,7 +32,6 @@ fun SopletterEntryRoute(
 
         false -> {
             SopletterOnboardingRoute(
-                paddingValues = paddingValues,
                 navigateToNickname = navigateToNickname,
                 navigateToHome = navigateToHome,
             )
