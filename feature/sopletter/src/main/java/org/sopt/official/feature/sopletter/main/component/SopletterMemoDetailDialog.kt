@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -57,16 +58,17 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
+import org.sopt.official.feature.sopletter.common.util.consumeClicks
 import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
 import org.sopt.official.feature.sopletter.main.contract.SOPLETTER_MEMO_MAX_LENGTH
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.sopletter.R
+
+private const val MEMO_DIALOG_OVERLAY_ALPHA = 0.7f
 
 @Composable
 internal fun SopletterMemoDetailDialog(
@@ -86,116 +88,117 @@ internal fun SopletterMemoDetailDialog(
         }
     }
 
-    Dialog(
-        onDismissRequest = actions::onDismissClick,
-        properties = DialogProperties(usePlatformDefaultWidth = false),
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(SoptTheme.colors.onSurface950.copy(alpha = MEMO_DIALOG_OVERLAY_ALPHA))
+            .noRippleClickable(actions::onDismissClick),
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            BoxWithConstraints(
-                modifier = Modifier
+        BoxWithConstraints(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            val dialogMaxHeight = maxHeight * 0.7f
+            val dialogMinHeight = if (state.isEditing) minOf(338.dp, dialogMaxHeight) else 0.dp
+
+            Column(
+                modifier = modifier
                     .fillMaxWidth()
                     .align(Alignment.Center)
+                    .padding(20.dp)
+                    .then(if (state.isEditing) Modifier.imePadding() else Modifier)
+                    .heightIn(
+                        min = dialogMinHeight,
+                        max = dialogMaxHeight,
+                    )
+                    .background(
+                        color = state.memoColor,
+                        shape = RoundedCornerShape(10.dp),
+                    )
+                    .consumeClicks()
                     .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
-                val dialogMaxHeight = maxHeight * 0.7f
-                val dialogMinHeight = minOf(338.dp, dialogMaxHeight)
+                MemoDialogHeader(
+                    writerName = state.writerName,
+                    isEditing = state.isEditing,
+                    isMine = state.isMine,
+                    onEditClick = actions::onEditClick,
+                    onDeleteClick = actions::onDeleteClick,
+                    onEditCancelClick = actions::onEditCancelClick,
+                )
 
-                Column(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .heightIn(
-                            min = dialogMinHeight,
-                            max = dialogMaxHeight,
-                        )
-                        .background(
-                            color = state.memoColor,
-                            shape = RoundedCornerShape(10.dp),
-                        )
-                        .padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    MemoDialogHeader(
-                        writerName = state.writerName,
-                        isEditing = state.isEditing,
-                        isMine = state.isMine,
-                        onEditClick = actions::onEditClick,
-                        onDeleteClick = actions::onDeleteClick,
-                        onEditCancelClick = actions::onEditCancelClick,
+                MemoDialogContent(
+                    content = state.content,
+                    isEditing = state.isEditing,
+                    editTextState = editTextState,
+                    scrollState = scrollState,
+                )
+
+                if (state.isEditing) {
+                    Text(
+                        text = "$editCharacterCount/$SOPLETTER_MEMO_MAX_LENGTH",
+                        style = SoptTheme.typography.body14M,
+                        color = if (isOverLengthLimit) {
+                            SoptTheme.colors.error
+                        } else {
+                            SoptTheme.colors.onSurface300
+                        },
+                        modifier = Modifier.align(Alignment.End),
                     )
-
-                    MemoDialogContent(
-                        content = state.content,
-                        isEditing = state.isEditing,
-                        editTextState = editTextState,
-                        scrollState = scrollState,
-                    )
-
-                    if (state.isEditing) {
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
                         Text(
-                            text = "$editCharacterCount/$SOPLETTER_MEMO_MAX_LENGTH",
-                            style = SoptTheme.typography.body14M,
-                            color = if (isOverLengthLimit) {
-                                SoptTheme.colors.error
-                            } else {
-                                SoptTheme.colors.onSurface300
-                            },
-                            modifier = Modifier.align(Alignment.End),
+                            text = state.date,
+                            style = SoptTheme.typography.body16R,
+                            color = SoptTheme.colors.onSurface300,
                         )
-                    } else {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = state.date,
-                                style = SoptTheme.typography.body16R,
-                                color = SoptTheme.colors.onSurface300,
-                            )
 
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.spacedBy(2.dp),
-                                modifier = Modifier.noRippleClickable(actions::onLikeClick),
-                            ) {
-                                Icon(
-                                    imageVector = ImageVector.vectorResource(
-                                        if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
-                                    ),
-                                    contentDescription = null,
-                                    tint = Color.Unspecified,
-                                )
-                                Text(
-                                    text = "${state.likeCount}",
-                                    style = SoptTheme.typography.body16R,
-                                    color = SoptTheme.colors.onSurface600,
-                                )
-                            }
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(2.dp),
+                            modifier = Modifier.noRippleClickable(actions::onLikeClick),
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(
+                                    if (state.isLiked) R.drawable.ic_active_heart_24 else R.drawable.ic_inactive_heart_24
+                                ),
+                                contentDescription = null,
+                                tint = Color.Unspecified,
+                            )
+                            Text(
+                                text = "${state.likeCount}",
+                                style = SoptTheme.typography.body16R,
+                                color = SoptTheme.colors.onSurface600,
+                            )
                         }
                     }
-
-                    MemoDialogActionButton(
-                        isEditing = state.isEditing,
-                        isOverLengthLimit = isOverLengthLimit,
-                        onClick = {
-                            if (state.isEditing) {
-                                actions.onEditCompleteClick(editTextState.text.toString())
-                            } else {
-                                actions.onDismissClick()
-                            }
-                        },
-                    )
                 }
 
+                MemoDialogActionButton(
+                    isEditing = state.isEditing,
+                    isOverLengthLimit = isOverLengthLimit,
+                    onClick = {
+                        if (state.isEditing) {
+                            actions.onEditCompleteClick(editTextState.text.toString())
+                        } else {
+                            actions.onDismissClick()
+                        }
+                    },
+                )
             }
 
-            SopletterSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-            )
         }
+
+        SopletterSnackbarHost(
+            snackbarHostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+        )
     }
 }
 
