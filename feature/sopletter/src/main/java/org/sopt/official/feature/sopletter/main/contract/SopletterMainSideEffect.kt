@@ -31,13 +31,7 @@ sealed interface SopletterMainSideEffect {
         val url: String,
     ) : SopletterMainSideEffect
 
-    enum class SnackbarTarget {
-        AUTO, // 기존 동작 유지
-        OUTER,
-    }
-
     data class ShowSnackbar(
         val visuals: SopletterSnackbarVisuals,
-        val target: SnackbarTarget = SnackbarTarget.AUTO,
     ) : SopletterMainSideEffect
 }

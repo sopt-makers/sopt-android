@@ -45,7 +45,6 @@ import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.main.contract.SOPLETTER_MEMO_MAX_LENGTH
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
-import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect.SnackbarTarget
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
@@ -409,7 +408,6 @@ class SopletterMainViewModel @Inject constructor(
                             message = "메시지 삭제를 완료했어요.",
                             type = SopletterSnackbarType.SUCCESS,
                         ),
-                        target = SnackbarTarget.OUTER,
                     ),
                 )
             }.onFailure {

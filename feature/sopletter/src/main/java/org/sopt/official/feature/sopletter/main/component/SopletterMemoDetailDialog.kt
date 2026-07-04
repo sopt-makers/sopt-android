@@ -46,7 +46,6 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -60,7 +59,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
 import org.sopt.official.feature.sopletter.common.util.consumeClicks
 import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
@@ -74,7 +72,6 @@ private const val MEMO_DIALOG_OVERLAY_ALPHA = 0.7f
 internal fun SopletterMemoDetailDialog(
     state: SopletterMemoDetailDialogContract.State,
     actions: SopletterMemoDetailDialogContract.Actions,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     val scrollState = rememberScrollState()
@@ -192,13 +189,6 @@ internal fun SopletterMemoDetailDialog(
             }
 
         }
-
-        SopletterSnackbarHost(
-            snackbarHostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-        )
     }
 }
 
