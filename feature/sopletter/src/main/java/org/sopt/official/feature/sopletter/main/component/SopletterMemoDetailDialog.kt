@@ -44,6 +44,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -121,7 +122,10 @@ internal fun SopletterMemoDetailDialog(
                     isMine = state.isMine,
                     onEditClick = actions::onEditClick,
                     onDeleteClick = actions::onDeleteClick,
-                    onEditCancelClick = actions::onEditCancelClick,
+                    onEditCancelClick = {
+                        editTextState.setTextAndPlaceCursorAtEnd(state.content)
+                        actions.onEditCancelClick()
+                    },
                 )
 
                 MemoDialogContent(
