@@ -11,6 +11,6 @@ data class SopletterOnboardingState(
 
 sealed interface SopletterOnboardingSideEffect {
     data class ShowSnackbar(val message: String) : SopletterOnboardingSideEffect
-    data class NavigateToNickname(val nickname: String, val generation: Int) : SopletterOnboardingSideEffect
+    data class NavigateToNickname(val nickname: String, val currentGeneration: Int) : SopletterOnboardingSideEffect
 }
 

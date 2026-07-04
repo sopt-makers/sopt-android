@@ -38,20 +38,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.sopt.official.designsystem.Gray300
+import timber.log.Timber
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.authRepository
+import org.sopt.official.feature.mypage.di.soptUserRepository
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
@@ -59,64 +62,25 @@ class SignOutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             SoptTheme {
+                val uriHandler = LocalUriHandler.current
                 val scope = rememberCoroutineScope()
 
-                Scaffold(
-                    modifier = Modifier
-                        .background(SoptTheme.colors.background)
-                        .fillMaxSize(),
-                    topBar = {
-                        MyPageTopBar(
-                            title = "마이페이지",
-                            onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
-                        )
-                    }
-                ) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                            .background(SoptTheme.colors.background)
-                    ) {
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.sign_out_title),
-                            color = White,
-                            style = SoptTheme.typography.heading16B,
-                            modifier = Modifier.padding(start = 20.dp)
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = stringResource(id = R.string.sign_out_subtitle),
-                            color = Gray300,
-                            style = SoptTheme.typography.body14R,
-                            modifier = Modifier.padding(horizontal = 20.dp)
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        MyPageButton(
-                            paddingVertical = 16.dp,
-                            modifier = Modifier
-                                .padding(20.dp)
-                                .fillMaxWidth(),
-                            onClick = {
-                                scope.launch {
-                                    //TODO: 탈퇴 API가 없어요?
-//                                    authRepository.withdraw()
-//                                        .onSuccess { ProcessPhoenix.triggerRebirth(this@SignOutActivity) }
-//                                        .onFailure(Timber::e)
+                SignOutScreen(
+                    onNavigationIconClick = {
+                        onBackPressedDispatcher.onBackPressed()
+                    },
+                    onWithDraw = {
+                        scope.launch {
+                            soptUserRepository.withdraw()
+                                .onSuccess {
                                     authRepository.clearUserToken()
+                                    uriHandler.openUri(it.withdrawFormUrl)
                                     ProcessPhoenix.triggerRebirth(this@SignOutActivity)
                                 }
-                            },
-                        ) {
-                            Text(
-                                text = stringResource(R.string.sign_out_button),
-                                style = SoptTheme.typography.heading18B
-                            )
+                                .onFailure { Timber.e(it) }
                         }
-                        Spacer(modifier = Modifier.height(14.dp))
                     }
-                }
+                )
             }
         }
     }
@@ -124,5 +88,65 @@ class SignOutActivity : AppCompatActivity() {
     companion object {
         @JvmStatic
         fun getIntent(context: Context) = Intent(context, SignOutActivity::class.java)
+    }
+}
+
+@Composable
+private fun SignOutScreen(
+    onNavigationIconClick: () -> Unit,
+    onWithDraw: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        modifier = modifier
+            .fillMaxSize()
+            .background(SoptTheme.colors.background),
+        topBar = {
+            MyPageTopBar(
+                title = "탈퇴하기",
+                onNavigationIconClick = onNavigationIconClick
+            )
+        }
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(SoptTheme.colors.background)
+                .padding(innerPadding),
+        ) {
+            Spacer(modifier = Modifier.height(16.dp))
+
+            SignOutWithdrawInfo(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+            MyPageButton(
+                paddingVertical = 16.dp,
+                modifier = Modifier
+                    .padding(20.dp)
+                    .fillMaxWidth(),
+                onClick = onWithDraw,
+            ) {
+                Text(
+                    text = stringResource(R.string.sign_out_button),
+                    style = SoptTheme.typography.heading18B,
+                    color = SoptTheme.colors.error
+                )
+            }
+            Spacer(modifier = Modifier.height(14.dp))
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SignOutScreenPreview() {
+    SoptTheme {
+        SignOutScreen(
+            onNavigationIconClick = {},
+            onWithDraw = {}
+        )
     }
 }

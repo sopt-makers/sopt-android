@@ -46,5 +46,6 @@ dependencies {
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)
     implementation(projects.feature.appjamtamp)
+    implementation(projects.feature.mypage)
     implementation(projects.feature.sopletter)
 }

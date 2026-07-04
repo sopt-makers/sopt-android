@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.remote.response
+package org.sopt.official.data.user.di
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import dagger.Binds
+import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.data.user.repository.DefaultUserRepository
+import org.sopt.official.domain.user.repository.SoptUserRepository
 
-@Serializable
-internal data class UserMainResponseDto(
-    @SerialName("user")
-    val user: UserResponseDto,
-    @SerialName("operation")
-    val operation: OperationResponseDto,
-    @SerialName("isAllConfirm")
-    val isAllConfirm: Boolean,
-) {
-    @Serializable
-    data class UserResponseDto(
-        @SerialName("status")
-        val status: String,
-        @SerialName("name")
-        val name: String?,
-        @SerialName("profileImage")
-        val profileImage: String?,
-        @SerialName("generationList")
-        val generationList: List<Long>?,
-    )
+@Module
+@InstallIn(SingletonComponent::class)
+internal interface RepositoryModule {
 
-    @Serializable
-    data class OperationResponseDto(
-        @SerialName("attendanceScore")
-        val attendanceScore: Double?,
-        @SerialName("announcement")
-        val announcement: String?,
-    )
+    @Binds
+    @Singleton
+    fun bindDefaultUserRepository(defaultUserRepository: DefaultUserRepository): SoptUserRepository
 }

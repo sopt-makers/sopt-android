@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.model
+package org.sopt.official.data.user.mapper
 
-import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.Stable
-import org.sopt.official.model.UserStatus
+import org.sopt.official.data.user.remote.response.UserMainResponseDto
+import org.sopt.official.domain.user.model.UserInfo
 
-@Stable
-sealed interface MyPageUiState {
+internal fun UserMainResponseDto.toDomain(): UserInfo = UserInfo(
+    user = user.toDomain(),
+    isAllConfirm = isAllConfirm,
+)
 
-    @Immutable
-    data object UnInitialized : MyPageUiState
-
-    @Immutable
-    data class Authenticated(
-        val activeState: UserStatus,
-    ) : MyPageUiState
-
-    @Immutable
-    data object UnAuthenticated : MyPageUiState
-}
+internal fun UserMainResponseDto.UserResponseDto.toDomain(): UserInfo.User = UserInfo.User(
+    status = status,
+    name = name.orEmpty(),
+    profileImage = profileImage.orEmpty(),
+    part = part.orEmpty(),
+    generationList = generationList ?: emptyList(),
+)

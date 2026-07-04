@@ -45,7 +45,6 @@ fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.sopletterGraph(
-    paddingValues: PaddingValues,
     navController: NavController,
     navigateToHome: () -> Unit,
 ) {
@@ -54,7 +53,6 @@ fun NavGraphBuilder.sopletterGraph(
     ) {
        composable<SopletterOnboarding> {
            SopletterOnboardingRoute (
-               paddingValues = paddingValues,
                navigateToNickname = navController::navigateToSopletterName,
                navigateToHome = navigateToHome
            )

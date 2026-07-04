@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,19 +22,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.mypage.state
+package org.sopt.official.feature.mypage.model
 
-import org.sopt.official.model.UserStatus
-
-data class MyPageUiState(
-    val user: UserStatus,
-    val dialogState: MyPageDialogState,
-    val onEventSink: (action: MyPageAction) -> Unit,
-)
-
-// 다이얼로그 상태 관리
 enum class MyPageDialogState {
+    CLEAR,
     CLEAR_SOPTAMP,
     REQUEST_LOGOUT,
-    CLEAR;
 }

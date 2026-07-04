@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,11 +22,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.mypage.mypage.state
+package org.sopt.official.domain.user.repository
 
-sealed interface MyPageAction
-data object ResetSoptamp : MyPageAction
-data object ClearSoptamp : MyPageAction
-data object ConfirmLogout : MyPageAction
-data object RequestLogout : MyPageAction
-data object CloseDialog : MyPageAction
+import kotlinx.coroutines.flow.StateFlow
+import org.sopt.official.domain.user.model.UserInfo
+import org.sopt.official.domain.user.model.WithdrawModel
+
+/**
+ * UserApi(탈퇴, 유저 정보 받기)를 통해 사용자 정보 캐싱 외부 노출 인터페이스
+ * */
+interface SoptUserRepository {
+    val userInfo: StateFlow<UserInfo?>
+    suspend fun getUserInfo(): Result<UserInfo>
+    suspend fun refreshUserInfo(): Result<UserInfo>
+    suspend fun withdraw(): Result<WithdrawModel>
+    suspend fun invalidate()
+}

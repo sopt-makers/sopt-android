@@ -34,14 +34,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
@@ -54,12 +52,10 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterOnboardingRoute(
-    paddingValues: PaddingValues,
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterOnboardingViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
 
@@ -77,7 +73,7 @@ fun SopletterOnboardingRoute(
                     }
 
                     is SopletterOnboardingSideEffect.NavigateToNickname -> {
-                        navigateToNickname(sideEffect.nickname, sideEffect.generation)
+                        navigateToNickname(sideEffect.nickname, sideEffect.currentGeneration)
                     }
                 }
             }
@@ -85,6 +81,8 @@ fun SopletterOnboardingRoute(
 
     SopletterScaffold(
         snackbarHostState = snackbarHostState,
+        modifier = Modifier
+            .fillMaxSize(),
     ) { innerPadding ->
         SopletterOnboardingScreen(
             paddingValues = innerPadding,

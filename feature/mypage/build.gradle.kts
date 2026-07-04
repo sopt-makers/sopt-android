@@ -36,11 +36,16 @@ android {
 dependencies {
     implementation(projects.domain.auth)
     implementation(projects.domain.soptamp)
+    implementation(projects.domain.soptlog)
     implementation(projects.domain.notification)
     implementation(projects.domain.mypage)
+    implementation(projects.domain.user)
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
+    implementation(projects.core.localstorage)
     implementation(projects.core.model)
+    implementation(projects.core.navigation)
+    implementation(projects.core.webview)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)

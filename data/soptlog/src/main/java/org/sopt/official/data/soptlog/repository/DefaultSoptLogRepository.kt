@@ -24,17 +24,27 @@
  */
 package org.sopt.official.data.soptlog.repository
 
+import javax.inject.Inject
+import javax.inject.Singleton
+import kotlinx.coroutines.flow.StateFlow
+import org.sopt.official.cache.InMemoryCache
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.soptlog.api.SoptLogApi
 import org.sopt.official.data.soptlog.mapper.toDomain
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
-import javax.inject.Inject
-
-
+@Singleton
 internal class DefaultSoptLogRepository @Inject constructor(
     private val soptLogApi: SoptLogApi,
+    private val cache: InMemoryCache<SoptLogInfo>,
 ) : SoptLogRepository {
-    override suspend fun getSoptLogInfo(): Result<SoptLogInfo> = runCatching {
-        soptLogApi.getSoptLogInfo().toDomain()
+
+    override val soptLogInfo: StateFlow<SoptLogInfo?> = cache.data
+
+    override suspend fun getSoptLogInfo(): Result<SoptLogInfo> =
+        suspendRunCatching { cache.getOrFetch { soptLogApi.getSoptLogInfo().toDomain() } }
+
+    override suspend fun invalidate() {
+        cache.invalidate()
     }
 }

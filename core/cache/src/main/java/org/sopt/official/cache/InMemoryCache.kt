@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.data.home.remote.api
+package org.sopt.official.cache
 
-import org.sopt.official.data.home.remote.response.UserMainResponseDto
-import retrofit2.http.GET
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
-internal interface UserApi {
+class InMemoryCache<T> {
+    private val mutex = Mutex()
+    private val _data = MutableStateFlow<T?>(null)
+    val data: StateFlow<T?> = _data.asStateFlow()
 
-    @GET("user/main")
-    suspend fun getUserMain(): UserMainResponseDto
+    suspend fun getOrFetch(fetcher: suspend () -> T): T {
+        _data.value?.let { return it }
+        return mutex.withLock {
+            _data.value ?: fetcher().also { _data.value = it }
+        }
+    }
+
+    suspend fun invalidate() {
+        mutex.withLock { _data.value = null }
+    }
 }

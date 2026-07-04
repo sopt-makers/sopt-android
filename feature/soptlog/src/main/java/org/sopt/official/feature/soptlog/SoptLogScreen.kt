@@ -36,12 +36,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -53,6 +55,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.common.BuildConfig
+import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
@@ -68,6 +71,7 @@ import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 internal fun SoptLogRoute(
     soptLogNavigation: SoptLogNavigation,
     navigateToFortune: () -> Unit = {},
+    navigateUp: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -126,7 +130,8 @@ internal fun SoptLogRoute(
                             name = "at36_soptlog_soptmadi",
                             type = EventType.CLICK
                         )
-                    }
+                    },
+                    navigateUp = navigateUp
                 )
             }
         }
@@ -141,7 +146,8 @@ private fun SoptlogScreen(
     todayFortuneText: String,
     onNavigationClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToFortune: () -> Unit = {}
+    navigateToFortune: () -> Unit = {},
+    navigateUp: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -161,6 +167,18 @@ private fun SoptlogScreen(
                     text = "마이 솝트로그",
                     style = SoptTheme.typography.body16M,
                 )
+            },
+            navigationIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptlog_arrow_left),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .throttledNoRippleClickable(
+                            onClick = navigateUp
+                        )
+                        .padding(start = 20.dp)
+                )
             }
         )
 
@@ -179,7 +197,7 @@ private fun SoptlogScreen(
             // 앱잼 기간 솝탬프의 경우는 isAppjamJoined 가 true인 경우에만 보여줌 (앱잼 참여인 경우에만)
             // 일반 솝탬프의 경우는 (기존) soptLogInfo.isActive인 경우에만 보여줌 (활동 기수인 경우에만)
             // 2026-05-21 기획 상으로 앱잼 기간에는 임시 숨김 처리 개편예정
-            /*if (soptLogInfo.isActive) {
+            if (soptLogInfo.isActive) {
                 SoptLogSection(
                     title = "솝탬프 로그",
                     items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.SOPTAMP }.toImmutableList(),
@@ -191,7 +209,7 @@ private fun SoptlogScreen(
                     }
                 )
                 Spacer(modifier = Modifier.height(28.dp))
-            }*/
+            }
 
             // 각 섹션 엠티뷰 표시 시
             /*SoptLogEmptySection(

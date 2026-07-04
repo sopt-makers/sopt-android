@@ -31,28 +31,13 @@ import org.sopt.official.data.home.remote.response.HomeLatestPostResponseDto
 import org.sopt.official.data.home.remote.response.HomePopularPostResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
-import org.sopt.official.data.home.remote.response.UserMainResponseDto
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
-import org.sopt.official.domain.home.model.UserInfo
-import org.sopt.official.domain.home.model.UserInfo.User
-import org.sopt.official.domain.home.model.UserInfo.UserDescription
-
-internal fun UserMainResponseDto.toDomain(): UserInfo = UserInfo(
-    user = user.toDomain(),
-    isAllConfirm = isAllConfirm,
-)
-
-internal fun UserMainResponseDto.UserResponseDto.toDomain(): User = User(
-    status = status,
-    name = name.orEmpty(),
-    profileImage = profileImage.orEmpty(),
-    generationList = generationList ?: emptyList()
-)
+import org.sopt.official.domain.home.model.UserDescription
 
 internal fun RecentCalendarResponseDto.toDomain(): RecentCalendar = RecentCalendar(
     date = date,

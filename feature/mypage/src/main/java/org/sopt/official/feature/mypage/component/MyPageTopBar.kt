@@ -40,8 +40,8 @@ import org.sopt.official.feature.mypage.R
 @Composable
 fun MyPageTopBar(
     title: String,
-    onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onNavigationIconClick: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
@@ -52,12 +52,14 @@ fun MyPageTopBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onNavigationIconClick) {
-                Icon(
-                    painterResource(R.drawable.btn_arrow_left),
-                    contentDescription = "navigation icon",
-                    tint = SoptTheme.colors.onBackground
-                )
+            if (onNavigationIconClick != null) {
+                IconButton(onClick = onNavigationIconClick) {
+                    Icon(
+                        painterResource(R.drawable.btn_arrow_left),
+                        contentDescription = "navigation icon",
+                        tint = SoptTheme.colors.onBackground
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
