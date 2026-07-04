@@ -7,10 +7,11 @@ import org.sopt.official.domain.sopletter.onboarding.model.SopletterOnboardingMo
 data class SopletterOnboardingUiModel(
     val nickname: String = "",
     val isOnboarded: Boolean = false,
-    val generation: Int = 38
+    val currentGeneration: Int = 38
 )
 
 internal fun SopletterOnboardingModel.toUiModel() = SopletterOnboardingUiModel(
     nickname = nickname,
-    isOnboarded = isOnboarded
+    isOnboarded = isOnboarded,
+    currentGeneration = currentGeneration
 )

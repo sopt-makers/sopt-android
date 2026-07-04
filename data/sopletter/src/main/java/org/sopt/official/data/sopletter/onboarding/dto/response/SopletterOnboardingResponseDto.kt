@@ -9,10 +9,13 @@ data class SopletterOnboardingResponseDto(
     @SerialName("nickname")
     val nickname: String,
     @SerialName("isOnboarded")
-    val isOnboarded: Boolean // 온보딩 진행 여부
+    val isOnboarded: Boolean, // 온보딩 진행 여부
+    @SerialName("currentGeneration")
+    val currentGeneration: Int
 ) {
     fun toDomain() = SopletterOnboardingModel(
         nickname = nickname,
-        isOnboarded = isOnboarded
+        isOnboarded = isOnboarded,
+        currentGeneration = currentGeneration
     )
 }
