@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.print.manager.PdfHelper
@@ -43,25 +44,38 @@ class SopletterPrintViewModel @Inject constructor(
         fetchPreviewMessages()
     }
 
+    private suspend fun fetchMessages(size: Int): Result<SopletterMessages> {
+        val topicId = currentTopicId
+        return if (topicId != null) {
+            sopletterRepository.getTopicMessages(topicId = topicId, cursor = null, size = size)
+        } else {
+            sopletterRepository.getDefaultMessages(cursor = null, size = size)
+        }
+    }
+
     private fun fetchPreviewMessages() {
         viewModelScope.launch {
-            sopletterRepository.getDefaultMessages(null, 16).onSuccess { response ->
+            fetchMessages(size = 16).onSuccess { response ->
                 _uiState.update { it.copy(topicTitle = response.title, totalCount = response.totalCount, previewMemoList = response.messages) }
+            }.onFailure {
+                _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("일시적인 오류가 발생했어요.", SopletterSnackbarType.FAILURE))
             }
         }
     }
 
     fun fetchAllAndTriggerCapture() {
+        if (_uiState.value.isSaving) return
+
         val totalCount = _uiState.value.totalCount
 
         viewModelScope.launch {
             _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장 중 ...", SopletterSnackbarType.WARNING))
             _uiState.update { it.copy(isSaving = true) }
 
-            sopletterRepository.getDefaultMessages(null, if (totalCount > 0) totalCount else 100).onSuccess { response ->
+            fetchMessages(size = if (totalCount > 0) totalCount else 100).onSuccess { response ->
                 _uiState.update { it.copy(fullMemoList = response.messages, isCaptureRequested = true) }
             }.onFailure {
-                onCaptureFailed("데이터를 가져오는 데 실패했습니다.")
+                onCaptureFailed("이미지 저장에 실패했어요.")
             }
         }
     }
@@ -80,6 +94,9 @@ class SopletterPrintViewModel @Inject constructor(
 
     fun onCaptureFailed(message: String = "이미지 캡처 중 에러가 발생했습니다.") {
         _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
-        viewModelScope.launch { _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar(message, SopletterSnackbarType.FAILURE)) }
+        viewModelScope.launch {
+            _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar(message, SopletterSnackbarType.FAILURE))
+            _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
+        }
     }
 }
