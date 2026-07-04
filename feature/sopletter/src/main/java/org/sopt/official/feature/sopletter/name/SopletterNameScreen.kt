@@ -52,6 +52,7 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterNameRoute(
+    navigateToSopletterMain: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
@@ -64,7 +65,7 @@ fun SopletterNameRoute(
         viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    NameSideEffect.NavigateToSopletterMain -> { /* Todo : SopltterMain 네비게이션 연결 */}
+                    NameSideEffect.NavigateToSopletterMain -> navigateToSopletterMain()
                 }
             }
     }
@@ -75,6 +76,7 @@ fun SopletterNameRoute(
         SopletterNameScreen(
             paddingValues = innerPadding,
             state = state,
+            navigateToSopletterMain = navigateToSopletterMain,
             navigateToHome = navigateToHome,
         )
     }

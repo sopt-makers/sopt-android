@@ -29,14 +29,20 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import kotlinx.serialization.Serializable
 import org.sopt.official.feature.sopletter.main.SopletterMainRoute
+import org.sopt.official.feature.sopletter.main.navigation.SopletterMain
+import org.sopt.official.feature.sopletter.main.navigation.navigateToSopletterMain
 import org.sopt.official.feature.sopletter.name.SopletterNameRoute
 import org.sopt.official.feature.sopletter.name.navigation.SopletterName
 import org.sopt.official.feature.sopletter.name.navigation.navigateToSopletterName
 import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
 import org.sopt.official.feature.sopletter.onboarding.navigation.SopletterOnboarding
+import org.sopt.official.feature.sopletter.topic.SopletterTopicRoute
+import org.sopt.official.feature.sopletter.topic.navigation.SopletterTopic
+import org.sopt.official.feature.sopletter.topic.navigation.navigateToSopletterTopic
 
 @Serializable
 data object SopletterGraph
@@ -45,20 +51,12 @@ fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
     navigate(SopletterGraph, navOptions)
 }
 
-@Serializable
-data class SopletterMain(
-    val topicId: Long? = null,
-)
-
-@Serializable
-data object SopletterTopic
-
 fun NavGraphBuilder.sopletterGraph(
     paddingValues: PaddingValues,
     navController: NavController,
     navigateToHome: () -> Unit,
 ) {
-    navigation<SopletterGraph> (
+    navigation<SopletterGraph>(
         startDestination = SopletterOnboarding
     ) {
         composable<SopletterOnboarding> {
@@ -71,26 +69,33 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterName> {
             SopletterNameRoute(
-                navigateToHome = navigateToHome
+                navigateToSopletterMain = {
+                    navController.navigateToSopletterMain(
+                        navOptions = navOptions {
+                            launchSingleTop = true
+                            popUpTo<SopletterOnboarding> {
+                                inclusive = true
+                            }
+                        },
+                    )
+                },
+                navigateToHome = navigateToHome,
             )
         }
 
-
         composable<SopletterMain> {
             SopletterMainRoute(
-                navigateUp = navController::popBackStack,
-                navigateToTopic = {
-                    navController.navigate(SopletterTopic)
-                },
+                navigateUp = navController::navigateUp,
+                navigateToTopic = navController::navigateToSopletterTopic,
             )
         }
 
         composable<SopletterTopic> {
             SopletterTopicRoute(
                 paddingValues = paddingValues,
-                navigateUp = navController::popBackStack,
+                navigateUp = navController::navigateUp,
                 navigateToMain = { topicId ->
-                    navController.navigate(SopletterMain(topicId = topicId))
+                    navController.navigateToSopletterMain(topicId = topicId)
                 },
             )
         }

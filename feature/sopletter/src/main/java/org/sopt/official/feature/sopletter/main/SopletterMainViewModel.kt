@@ -50,7 +50,7 @@ import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.navigation.SopletterMain
+import org.sopt.official.feature.sopletter.main.navigation.SopletterMain
 import javax.inject.Inject
 
 @HiltViewModel
