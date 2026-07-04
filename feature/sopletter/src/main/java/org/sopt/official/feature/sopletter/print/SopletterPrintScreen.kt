@@ -53,6 +53,8 @@ import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.print.component.SopletterPrintTopBar
+import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
+import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 
 @Composable
 fun SopletterPrintRoute(

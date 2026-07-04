@@ -1,4 +1,4 @@
-package org.sopt.official.feature.sopletter.print
+package org.sopt.official.feature.sopletter.print.model
 
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
