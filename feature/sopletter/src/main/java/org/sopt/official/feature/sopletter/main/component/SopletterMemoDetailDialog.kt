@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.sopletter.main.component
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -79,6 +80,15 @@ internal fun SopletterMemoDetailDialog(
     val editTextState = rememberTextFieldState(initialText = state.content)
     val editCharacterCount = editTextState.text.characterCount()
     val isOverLengthLimit = editCharacterCount > SOPLETTER_MEMO_MAX_LENGTH
+
+    BackHandler {
+        if (state.isEditing) {
+            editTextState.setTextAndPlaceCursorAtEnd(state.content)
+            actions.onEditCancelClick()
+        } else {
+            actions.onDismissClick()
+        }
+    }
 
     LaunchedEffect(state.isEditing, isOverLengthLimit) {
         if (state.isEditing && isOverLengthLimit) {
