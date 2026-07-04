@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -48,6 +49,7 @@ import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
+import org.sopt.official.feature.sopletter.main.navigation.SopletterMain
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,7 +57,7 @@ class SopletterMainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
-    private val topicId: Long? = savedStateHandle.get<Long?>("topicId")
+    private val topicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
 
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
