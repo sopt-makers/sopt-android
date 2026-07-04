@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.sopletter.write.component
 
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -44,18 +43,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.component.verticalScrollbar
 
 @Composable
 fun SopletterWriteTextBox(
@@ -109,7 +104,9 @@ fun SopletterWriteTextBox(
                 .fillMaxWidth()
                 .verticalScrollbar(
                     scrollState = scrollState,
-                    color = SoptTheme.colors.onSurface300.copy(alpha = 0.5f)
+                    thumbWidth = 4.dp,
+                    thumbHeight = 40.dp,
+                    thumbColor = SoptTheme.colors.onSurface300.copy(alpha = 0.5f)
                 ),
             decorator = { innerTextField ->
                 Box(
@@ -134,30 +131,6 @@ fun SopletterWriteTextBox(
             style = SoptTheme.typography.body14M,
             color = counterColor,
             modifier = Modifier.align(Alignment.End)
-        )
-    }
-}
-
-//TODO : main 쪽 scrollbar 사용하는거 고려
-private fun Modifier.verticalScrollbar(
-    scrollState: ScrollState,
-    color: Color,
-    width: Dp = 4.dp
-): Modifier = drawWithContent {
-    drawContent()
-
-    val maxValue = scrollState.maxValue.toFloat()
-    if (maxValue > 0f) {
-        val viewHeight = size.height
-        val contentHeight = viewHeight + maxValue
-        val thumbHeight = (viewHeight / contentHeight) * viewHeight
-        val thumbY = (scrollState.value.toFloat() / maxValue) * (viewHeight - thumbHeight)
-
-        drawRoundRect(
-            color = color,
-            topLeft = Offset(size.width - width.toPx(), thumbY),
-            size = Size(width.toPx(), thumbHeight),
-            cornerRadius = CornerRadius(width.toPx() / 2, width.toPx() / 2)
         )
     }
 }

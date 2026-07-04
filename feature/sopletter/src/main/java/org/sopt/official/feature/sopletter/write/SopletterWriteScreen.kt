@@ -78,7 +78,6 @@ fun SopletterWriteRoute(
                     }
                     is SopletterWriteSideEffect.NavigateToMain -> {
                         onNavigateToMain()
-                        //TODO : 네비게이션 연결
                     }
                 }
             }
