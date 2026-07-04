@@ -24,11 +24,15 @@
  */
 package org.sopt.official.data.sopletter.service
 
-import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
+import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -38,7 +42,14 @@ interface SopletterService {
     suspend fun getDefaultMessages(
         @Query("cursor") cursor: Long?,
         @Query("size") size: Int,
-    ): SopletterDefaultMessagesResponseDto
+    ): SopletterMessagesResponseDto
+
+    @GET("sopt-letter/topics/{topicId}/messages")
+    suspend fun getTopicMessages(
+        @Path("topicId") topicId: Long,
+        @Query("cursor") cursor: Long?,
+        @Query("size") size: Int,
+    ): SopletterMessagesResponseDto
 
     @GET("sopt-letter/report-form")
     suspend fun getReportForm(): SopletterReportFormResponseDto
@@ -60,4 +71,22 @@ interface SopletterService {
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
     )
+
+    @PATCH("sopt-letter/topics/{topicId}/messages/{messageId}")
+    suspend fun updateMessage(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+        @Body body: UpdateSopletterMessageRequestDto,
+    ): SopletterMessageDetailResponseDto
+
+    @DELETE("sopt-letter/topics/{topicId}/messages/{messageId}")
+    suspend fun deleteMessage(
+        @Path("topicId") topicId: Long,
+        @Path("messageId") messageId: Long,
+    )
+
+    @GET("sopt-letter/topics")
+    suspend fun getTopics(
+        @Query("type") type: String,
+    ): SopletterTopicsResponseDto
 }

@@ -28,8 +28,9 @@ import javax.inject.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.mapper.toDomain
-import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
+import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
+import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 
 internal class SopletterRepositoryImpl @Inject constructor(
@@ -38,8 +39,20 @@ internal class SopletterRepositoryImpl @Inject constructor(
     override suspend fun getDefaultMessages(
         cursor: Long?,
         size: Int,
-    ): Result<SopletterDefaultMessages> = suspendRunCatching {
+    ): Result<SopletterMessages> = suspendRunCatching {
         sopletterDataSource.getDefaultMessages(
+            cursor = cursor,
+            size = size,
+        ).toDomain()
+    }
+
+    override suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): Result<SopletterMessages> = suspendRunCatching {
+        sopletterDataSource.getTopicMessages(
+            topicId = topicId,
             cursor = cursor,
             size = size,
         ).toDomain()
@@ -77,5 +90,31 @@ internal class SopletterRepositoryImpl @Inject constructor(
             topicId = topicId,
             messageId = messageId,
         )
+    }
+
+    override suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): Result<SopletterMessageDetail> = suspendRunCatching {
+        sopletterDataSource.updateMessage(
+            topicId = topicId,
+            messageId = messageId,
+            content = content,
+        ).toDomain()
+    }
+
+    override suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit> = suspendRunCatching {
+        sopletterDataSource.deleteMessage(
+            topicId = topicId,
+            messageId = messageId,
+        )
+    }
+
+    override suspend fun getTopics(): Result<List<SopletterTopic>> = suspendRunCatching {
+        sopletterDataSource.getTopics(type = SopletterRepository.TOPIC_TYPE_NORMAL).toDomain()
     }
 }

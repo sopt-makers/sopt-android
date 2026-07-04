@@ -27,9 +27,10 @@ package org.sopt.official.feature.sopletter.onboarding.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
+import org.sopt.official.core.navigation.Route
 
 @Serializable
-data object SopletterOnboarding
+data object SopletterOnboarding: Route
 
 fun NavController.navigateToSopletterOnboarding(
     navOptions: NavOptions? = null,

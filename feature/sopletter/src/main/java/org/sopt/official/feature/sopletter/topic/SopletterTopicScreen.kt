@@ -16,15 +16,16 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
+import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
-import org.sopt.official.feature.sopletter.topic.model.SopletterTopicUiModel
 
 @Composable
 internal fun SopletterTopicRoute(
     paddingValues: PaddingValues,
     navigateUp: () -> Unit,
-    navigateToMain: (Int) -> Unit,
+    navigateToMain: (Long) -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -34,7 +35,8 @@ internal fun SopletterTopicRoute(
             .padding(paddingValues),
         uiState = uiState,
         onBackClick = navigateUp,
-        onTopicClick = navigateToMain
+        onTopicClick = navigateToMain,
+        onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
 
@@ -42,7 +44,8 @@ internal fun SopletterTopicRoute(
 private fun SopletterTopicScreen(
     uiState: SopletterTopicState,
     onBackClick: () -> Unit,
-    onTopicClick: (Int) -> Unit,
+    onTopicClick: (Long) -> Unit,
+    onErrorConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -75,6 +78,10 @@ private fun SopletterTopicScreen(
 
         Spacer(modifier = Modifier.weight(1f))
     }
+
+    if (uiState.isShowErrorDialog) {
+        NetworkErrorDialog(onConfirm = onErrorConfirm)
+    }
 }
 
 @Preview
@@ -84,19 +91,20 @@ private fun SopletterTopicScreenPreview() {
         SopletterTopicScreen(
             uiState = SopletterTopicState(
                 topicList = persistentListOf(
-                    SopletterTopicUiModel(
+                    SopletterTopic(
                         topicId = 1,
-                        title = "38기 회고"
+                        title = "38기 회고",
                     ),
-                    SopletterTopicUiModel(
+                    SopletterTopic(
                         topicId = 2,
-                        title = "38기 회고"
+                        title = "38기 회고",
                     ),
 
                 )
             ),
             onBackClick = {},
-            onTopicClick = {}
+            onTopicClick = {},
+            onErrorConfirm = {},
         )
     }
 }

@@ -24,14 +24,21 @@
  */
 package org.sopt.official.domain.sopletter.repository
 
-import org.sopt.official.domain.sopletter.model.SopletterDefaultMessages
+import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
+import org.sopt.official.domain.sopletter.model.SopletterTopic
 
 interface SopletterRepository {
     suspend fun getDefaultMessages(
         cursor: Long? = null,
         size: Int = DEFAULT_PAGE_SIZE,
-    ): Result<SopletterDefaultMessages>
+    ): Result<SopletterMessages>
+
+    suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long? = null,
+        size: Int = DEFAULT_PAGE_SIZE,
+    ): Result<SopletterMessages>
 
     suspend fun getReportFormUrl(): Result<String>
 
@@ -50,7 +57,21 @@ interface SopletterRepository {
         messageId: Long,
     ): Result<Unit>
 
-    private companion object {
+    suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): Result<SopletterMessageDetail>
+
+    suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ): Result<Unit>
+
+    suspend fun getTopics(): Result<List<SopletterTopic>>
+
+    companion object {
         const val DEFAULT_PAGE_SIZE = 20
+        const val TOPIC_TYPE_NORMAL = "normal"
     }
 }

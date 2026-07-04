@@ -45,12 +45,10 @@ import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
-import org.sopt.official.domain.home.model.UserInfo
-import org.sopt.official.domain.home.model.UserStatus
-import org.sopt.official.domain.home.model.UserStatus.ACTIVE
-import org.sopt.official.domain.home.model.UserStatus.INACTIVE
-import org.sopt.official.domain.home.model.UserStatus.UNAUTHENTICATED
+import org.sopt.official.domain.home.model.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
+import org.sopt.official.domain.user.model.UserInfo
+import org.sopt.official.domain.user.repository.SoptUserRepository
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
@@ -68,12 +66,14 @@ import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
 import org.sopt.official.feature.home.model.Schedule
 import org.sopt.official.feature.home.model.defaultAppServices
 import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
+    private val soptUserRepository: SoptUserRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
     private val appServiceManager: AppServiceManager,
     private val userStorage: UserStorage,
@@ -107,7 +107,7 @@ internal class NewHomeViewModel @Inject constructor(
         viewModelState.update { it.copy(isLoading = true) }
 
         viewModelScope.launch {
-            val userInfoDeferred = async { homeRepository.getUserInfo() }
+            val userInfoDeferred = async { soptUserRepository.refreshUserInfo() }
             val userDescriptionDeferred = async { homeRepository.getHomeDescription() }
             val recentCalendarDeferred = async { homeRepository.getRecentCalendar() }
             val surveyDataDeferred = async { homeRepository.getHomeReviewForm() }
@@ -123,7 +123,7 @@ internal class NewHomeViewModel @Inject constructor(
             val userInfoResult = userInfoDeferred.await()
 
             val userDescription =
-                userDescriptionDeferred.await().successOr(UserInfo.UserDescription())
+                userDescriptionDeferred.await().successOr(UserDescription())
             val recentCalendar = recentCalendarDeferred.await().successOr(RecentCalendar())
             val surveyData = surveyDataDeferred.await().successOr(ReviewForm.default)
             val toastData = toastDataDeferred.await().successOr(FloatingToast.default)
@@ -177,7 +177,7 @@ internal class NewHomeViewModel @Inject constructor(
 
     fun refreshNotificationStatus() {
         viewModelScope.launch {
-            val result = homeRepository.getUserInfo()
+            val result = soptUserRepository.refreshUserInfo()
             val userInfo = result.successOr(UserInfo(UserInfo.User()))
             Timber.d("refreshNotificationStatus: $userInfo")
             if (result.isSuccess) {
@@ -195,9 +195,9 @@ internal class NewHomeViewModel @Inject constructor(
 private data class HomeViewModelState(
     val isLoading: Boolean = false,
     val isError: Boolean = false,
-    val userState: UserStatus = UNAUTHENTICATED,
+    val userState: UserStatus = UserStatus.UNAUTHENTICATED,
     val userInfo: UserInfo = UserInfo(),
-    val userDescription: UserInfo.UserDescription = UserInfo.UserDescription(),
+    val userDescription: UserDescription = UserDescription(),
     val recentCalendar: RecentCalendar = RecentCalendar(),
     val appServices: List<AppService> = emptyList(),
     val surveyData: HomeSurveyData = HomeSurveyData(),
@@ -206,7 +206,7 @@ private data class HomeViewModelState(
     val latestPostData: ImmutableList<HomePlaygroundPostModel> = persistentListOf()
 ) {
     fun toUiState(): HomeUiState = when (userState) {
-        UNAUTHENTICATED -> Unauthenticated(
+        UserStatus.UNAUTHENTICATED -> Unauthenticated(
             isLoading = isLoading,
             isError = isError,
             homeServices = defaultAppServices,
@@ -214,7 +214,7 @@ private data class HomeViewModelState(
             floatingToastData = toastData
         )
 
-        ACTIVE -> ActiveMember(
+        UserStatus.ACTIVE -> ActiveMember(
             isLoading = isLoading,
             isError = isError,
             hasNotification = userInfo.isAllConfirm.not(),
@@ -244,7 +244,7 @@ private data class HomeViewModelState(
             latestPosts = latestPostData,
         )
 
-        INACTIVE -> InactiveMember(
+        UserStatus.INACTIVE -> InactiveMember(
             isLoading = isLoading,
             isError = isError,
             hasNotification = userInfo.isAllConfirm.not(),

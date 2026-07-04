@@ -42,6 +42,7 @@ dependencies {
 
     // domain
     implementation(projects.domain.home)
+    implementation(projects.domain.user)
     implementation(projects.domain.poke)
 
     // compose

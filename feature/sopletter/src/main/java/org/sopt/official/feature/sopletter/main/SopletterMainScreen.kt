@@ -36,6 +36,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -65,11 +66,14 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
-import org.sopt.official.feature.sopletter.main.component.EditSopletterFloatingActionButton
+import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
+import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
+import org.sopt.official.feature.sopletter.main.component.SopletterTopicCta
+import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
@@ -81,9 +85,11 @@ import org.sopt.official.webview.view.WebViewActivity
 @Composable
 fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
+    navigateUp: () -> Unit = {},
+    navigateToTopic: () -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackBarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -100,30 +106,34 @@ fun SopletterMainRoute(
                     }
 
                     is SopletterMainSideEffect.ShowSnackbar -> {
-                        snackBarHostState.showSnackbar(sideEffect.visuals)
+                        snackbarHostState.showSnackbar(sideEffect.visuals)
                     }
                 }
             }
     }
 
-    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
+    SopletterScaffold(
+        snackbarHostState = snackbarHostState,
+        isSnackbarHostVisible = false,
+    ) { paddingValues ->
         SopletterMainScreen(
             uiState = uiState,
+            snackbarHostState = snackbarHostState,
             onMemoClick = {
                 viewModel.fetchMemoDetail(
                     messageId = it.messageId,
                     memoColor = it.memoColor(),
                 )
             },
-            onRefresh = viewModel::fetchDefaultMessages,
-            onLoadMore = { viewModel.fetchDefaultMessages(isLoadMore = true) },
+            onRefresh = viewModel::fetchMessages,
+            onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
-            onCloseClick = { /* TODO close click */ },
+            onBackClick = navigateUp,
             onDownloadClick = { /* TODO download click */ },
-            onTopicClick = { /* TODO topic click */ },
+            onTopicClick = navigateToTopic,
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
-            onEditFABClick = { /* TODO edit FAB click */ },
+            onWriteFABClick = { /* TODO write FAB click */ },
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -133,16 +143,17 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
+    snackbarHostState: SnackbarHostState,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     dialogActions: SopletterMemoDetailDialogContract.Actions,
-    onCloseClick: () -> Unit,
+    onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
     onErrorConfirm: () -> Unit,
-    onEditFABClick: () -> Unit,
+    onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val gridState = rememberLazyStaggeredGridState()
@@ -150,6 +161,7 @@ private fun SopletterMainScreen(
         refreshing = uiState.isMessageRefreshing,
         onRefresh = onRefresh,
     )
+    val isTopicCtaVisible = uiState.selectedTopicId == null
 
     gridState.onBottomReached(
         threshold = 4,
@@ -158,89 +170,142 @@ private fun SopletterMainScreen(
         onLoadMore = onLoadMore,
     )
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = SoptTheme.colors.background),
+    Box(
+        modifier = modifier.fillMaxSize(),
     ) {
-        SopletterMainTopBar(
-            title = uiState.topicTitle,
-            isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
-            onCloseClick = onCloseClick,
-            onDownloadClick = onDownloadClick,
-            onReportClick = onReportClick,
-            onTopicClick = onTopicClick
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = SoptTheme.colors.background),
+        ) {
+            SopletterMainTopBar(
+                title = uiState.topicTitle,
+                isTopicDetail = uiState.selectedTopicId != null,
+                isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
+                onBackClick = onBackClick,
+                onDownloadClick = onDownloadClick,
+                onReportClick = onReportClick,
+                onTopicClick = if (uiState.selectedTopicId == null) onTopicClick else onBackClick,
+            )
 
-        when {
-            !uiState.isInitialized && uiState.memoList.isEmpty() -> {
-                SopletterPullRefreshContainer(
-                    refreshState = refreshState,
-                    isRefreshing = uiState.isMessageRefreshing,
-                    isShowIndicator = false,
-                )
-            }
-
-            uiState.memoList.isEmpty() -> {
-                SopletterPullRefreshContainer(
-                    refreshState = refreshState,
-                    isRefreshing = uiState.isMessageRefreshing,
-                ) {
-                    Column(modifier = Modifier.fillMaxSize()) {
-                        Spacer(modifier = Modifier.weight(160f))
-
-                        EmptySopletterContent(modifier = Modifier.weight(187f))
-
-                        Spacer(modifier = Modifier.weight(343f))
+            when {
+                !uiState.isInitialized -> {
+                    SopletterPullRefreshContainer(
+                        refreshState = refreshState,
+                        isRefreshing = uiState.isMessageRefreshing,
+                        isShowIndicator = false,
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(SoptTheme.colors.background),
+                        )
                     }
                 }
-            }
 
-            else -> {
-                SopletterPullRefreshContainer(
-                    refreshState = refreshState,
-                    isRefreshing = uiState.isMessageRefreshing,
-                ) {
-                    LazyVerticalStaggeredGrid(
-                        modifier = Modifier.fillMaxSize(),
-                        state = gridState,
-                        columns = StaggeredGridCells.Fixed(2),
-                        verticalItemSpacing = (-10).dp,
+                uiState.memoList.isEmpty() -> {
+                    SopletterPullRefreshContainer(
+                        refreshState = refreshState,
+                        isRefreshing = uiState.isMessageRefreshing,
+                        isShowIndicator = uiState.isInitialized,
                     ) {
-                        itemsIndexed(
-                            items = uiState.memoList,
-                            key = { _, item -> item.messageId },
-                        ) { index, item ->
-                            SopletterMemoCard(
-                                memo = item,
-                                onClick = { onMemoClick(item) },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
-                            )
-                        }
-                    }
+                        Column(modifier = Modifier.fillMaxSize()) {
+                            if (isTopicCtaVisible) {
+                                SopletterTopicCta(
+                                    text = "이번 기수 회고하러 가볼까요?",
+                                    onClick = { /* TODO API 연동후 추가 예정 */ },
+                                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                                )
+                            }
 
-                    EditSopletterFloatingActionButton(
-                        onEditFABClick = onEditFABClick,
-                        modifier = Modifier
-                            .align(Alignment.BottomEnd)
-                            .padding(end = 20.dp, bottom = 24.dp),
-                    )
+                            Spacer(modifier = Modifier.weight(86f))
+
+                            EmptySopletterContent(
+                                modifier = Modifier.weight(187f),
+                            )
+
+                            Spacer(modifier = Modifier.weight(342f))
+                        }
+
+                        WriteSopletterFloatingActionButton(
+                            onWriteFABClick = onWriteFABClick,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 20.dp, bottom = 24.dp),
+                        )
+                    }
+                }
+
+                else -> {
+                    SopletterPullRefreshContainer(
+                        refreshState = refreshState,
+                        isRefreshing = uiState.isMessageRefreshing,
+                    ) {
+                        LazyVerticalStaggeredGrid(
+                            modifier = Modifier.fillMaxSize(),
+                            state = gridState,
+                            columns = StaggeredGridCells.Fixed(2),
+                            verticalItemSpacing = (-10).dp,
+                        ) {
+                            if (isTopicCtaVisible) {
+                                item(span = StaggeredGridItemSpan.FullLine) {
+                                    SopletterTopicCta(
+                                        text = "이번 기수 회고하러 가볼까요?",
+                                        onClick = { /* TODO API 연동후 추가 예정 */ },
+                                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                                    )
+                                }
+                            }
+
+                            itemsIndexed(
+                                items = uiState.memoList,
+                                key = { _, item -> item.messageId },
+                            ) { index, item ->
+                                SopletterMemoCard(
+                                    memo = item,
+                                    onClick = { onMemoClick(item) },
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .offset(x = if (index % 2 == 0) 5.dp else (-5).dp),
+                                )
+                            }
+                        }
+
+                        WriteSopletterFloatingActionButton(
+                            onWriteFABClick = onWriteFABClick,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(end = 20.dp, bottom = 24.dp),
+                        )
+                    }
                 }
             }
         }
-    }
 
-    uiState.selectedMemoDetail?.let { memo ->
-        SopletterMemoDetailDialog(
-            state = memo,
-            actions = dialogActions,
+        uiState.selectedMemoDetail?.let { memo ->
+            SopletterMemoDetailDialog(
+                state = memo,
+                actions = dialogActions,
+            )
+        }
+
+        if (uiState.isDeleteDialogVisible) {
+            SopletterDeleteDialog(
+                onDismiss = dialogActions::onDeleteDialogDismissClick,
+                onDeleteClick = dialogActions::onDeleteConfirmClick,
+            )
+        }
+
+        if (uiState.isShowErrorDialog) {
+            NetworkErrorDialog(onConfirm = onErrorConfirm)
+        }
+
+        SopletterSnackbarHost(
+            snackbarHostState = snackbarHostState,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
         )
-    }
-
-    if (uiState.isShowErrorDialog) {
-        NetworkErrorDialog(onConfirm = onErrorConfirm)
     }
 }
 
@@ -282,7 +347,17 @@ private fun SopletterMainScreenPreview(
 
                 override fun onEditClick() = Unit
 
+                override fun onEditCancelClick() = Unit
+
+                override fun showMemoLengthWarning() = Unit
+
+                override fun onEditCompleteClick(content: String) = Unit
+
                 override fun onDeleteClick() = Unit
+
+                override fun onDeleteDialogDismissClick() = Unit
+
+                override fun onDeleteConfirmClick() = Unit
 
                 override fun onDismissClick() {
                     previewState = previewState.copy(selectedMemoDetail = null)
@@ -292,15 +367,16 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
+            snackbarHostState = remember { SnackbarHostState() },
             onMemoClick = { _ -> },
             onRefresh = {},
             onLoadMore = {},
             dialogActions = previewDialogActions,
-            onCloseClick = {},
+            onBackClick = {},
             onDownloadClick = {},
             onReportClick = {},
             onErrorConfirm = {},
-            onEditFABClick = {},
+            onWriteFABClick = {},
             onTopicClick = {},
         )
     }

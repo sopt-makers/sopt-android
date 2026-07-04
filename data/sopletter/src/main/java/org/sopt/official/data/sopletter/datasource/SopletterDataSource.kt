@@ -24,15 +24,22 @@
  */
 package org.sopt.official.data.sopletter.datasource
 
-import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 
 interface SopletterDataSource {
     suspend fun getDefaultMessages(
         cursor: Long?,
         size: Int,
-    ): SopletterDefaultMessagesResponseDto
+    ): SopletterMessagesResponseDto
+
+    suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): SopletterMessagesResponseDto
 
     suspend fun getReportForm(): SopletterReportFormResponseDto
 
@@ -50,4 +57,19 @@ interface SopletterDataSource {
         topicId: Long,
         messageId: Long,
     )
+
+    suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): SopletterMessageDetailResponseDto
+
+    suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    )
+
+    suspend fun getTopics(
+        type: String,
+    ): SopletterTopicsResponseDto
 }
