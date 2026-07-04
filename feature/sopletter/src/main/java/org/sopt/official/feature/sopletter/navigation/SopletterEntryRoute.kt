@@ -18,6 +18,8 @@ fun SopletterEntryRoute(
     navigateToHome: () -> Unit,
     navigateUp: () -> Unit,
     navigateToTopic: () -> Unit,
+    navigateToWrite: (Long?) -> Unit,
+    navigateToPrint: (Long?) -> Unit,
     viewModel: SopletterEntryViewModel = hiltViewModel(),
 ) {
     val isOnboardingCompleted by viewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
@@ -27,6 +29,8 @@ fun SopletterEntryRoute(
             SopletterMainRoute(
                 navigateUp = navigateUp,
                 navigateToTopic = navigateToTopic,
+                navigateToWrite = navigateToWrite,
+                navigateToPrint = navigateToPrint,
             )
         }
 

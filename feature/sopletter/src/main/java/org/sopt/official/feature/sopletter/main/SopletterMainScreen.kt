@@ -87,6 +87,8 @@ fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     navigateToTopic: () -> Unit = {},
+    navigateToWrite: (Long?) -> Unit = {},
+    navigateToPrint: (Long?) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -129,11 +131,11 @@ fun SopletterMainRoute(
             onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
             onBackClick = navigateUp,
-            onDownloadClick = { /* TODO download click */ },
+            onDownloadClick = {navigateToPrint(uiState.selectedTopicId) },
             onTopicClick = navigateToTopic,
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
-            onWriteFABClick = { /* TODO write FAB click */ },
+            onWriteFABClick = { navigateToWrite(uiState.selectedTopicId) },
             modifier = Modifier.padding(paddingValues),
         )
     }
