@@ -117,6 +117,8 @@ private fun SopletterPrintScreen(
     var isViewReady by remember { mutableStateOf(false) }
     var isCapturing by remember { mutableStateOf(false) }
 
+    val isPreviewLoading = uiState.previewMemoList.isEmpty()
+
     Box(modifier = modifier.fillMaxSize()) {
 
         if (uiState.isCaptureRequested && chunks.isNotEmpty()) {
@@ -199,18 +201,29 @@ private fun SopletterPrintScreen(
                     .padding(8.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .wrapContentWidth()
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    SopletterBoardLayout(
-                        generation = uiState.generation,
-                        memos = uiState.previewMemoList.take(16),
-                        scale = 0.45f
-                    )
+                if (isPreviewLoading) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(color = SoptTheme.colors.primary)
+                    }
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .wrapContentWidth()
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        SopletterBoardLayout(
+                            generation = uiState.generation,
+                            memos = uiState.previewMemoList.take(16),
+                            scale = 0.45f
+                        )
+                    }
                 }
             }
 
