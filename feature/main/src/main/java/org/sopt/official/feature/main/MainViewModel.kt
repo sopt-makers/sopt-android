@@ -29,18 +29,25 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.home.AppServiceManager
 import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.usecase.GetTabAppServiceUseCase
+import org.sopt.official.localstorage.source.UserStorage
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appServiceManager: AppServiceManager
+    private val getTabAppServiceUseCase: GetTabAppServiceUseCase,
+    userStorage: UserStorage,
 ) : ViewModel() {
+
+    private val isAppjamMode: StateFlow<Boolean> = userStorage.isAppjamMode
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     private val _mainTabs = MutableStateFlow(MainTab.getActiveTabs(emptyList()))
     val mainTabs: StateFlow<List<MainTab>>
         get() = _mainTabs.asStateFlow()
@@ -63,13 +70,8 @@ class MainViewModel @Inject constructor(
 
     private fun observeAppServices() {
         viewModelScope.launch {
-            appServiceManager.fetchAppServices()
-
-            appServiceManager.appServices
-                .filterNotNull()
-                .collect { appServices ->
-                    updateMainTabs(appServices)
-                }
+            getTabAppServiceUseCase()
+                .onSuccess { appServices -> updateMainTabs(appServices) }
         }
     }
 
@@ -78,9 +80,15 @@ class MainViewModel @Inject constructor(
             it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null
         }
 
-        _mainTabs.update {
-            MainTab.getActiveTabs(services.map { it.deepLink })
+        val deepLinks = services.map { it.deepLink }.filter { deepLink ->
+            when (deepLink) {
+                "soptamp" -> !isAppjamMode.value
+                "appjamtamp" -> isAppjamMode.value
+                else -> true
+            }
         }
+
+        _mainTabs.update { MainTab.getActiveTabs(deepLinks) }
 
         updateBadge(badgeByDeeplink)
     }

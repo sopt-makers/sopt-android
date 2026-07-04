@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.core.webview)
 
+    implementation(projects.core.localstorage)
     implementation(projects.domain.home)
 
     implementation(projects.feature.poke)
