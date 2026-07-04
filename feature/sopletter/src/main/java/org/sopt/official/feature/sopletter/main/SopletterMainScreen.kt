@@ -176,6 +176,7 @@ private fun SopletterMainScreen(
         refreshing = uiState.isMessageRefreshing,
         onRefresh = onRefresh,
     )
+    val isTopicCtaVisible = uiState.selectedTopicId == null
 
     gridState.onBottomReached(
         threshold = 4,
@@ -207,11 +208,13 @@ private fun SopletterMainScreen(
                     isShowIndicator = uiState.isInitialized,
                 ) {
                     Column(modifier = Modifier.fillMaxSize()) {
-                        SopletterTopicCta(
-                            text = "이번 기수 회고하러 가볼까요?",
-                            onClick = { /* TODO API 연동후 추가 예정 */ },
-                            modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                        )
+                        if (isTopicCtaVisible) {
+                            SopletterTopicCta(
+                                text = "이번 기수 회고하러 가볼까요?",
+                                onClick = { /* TODO API 연동후 추가 예정 */ },
+                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                            )
+                        }
 
                         Spacer(modifier = Modifier.weight(86f))
 
@@ -242,12 +245,14 @@ private fun SopletterMainScreen(
                         columns = StaggeredGridCells.Fixed(2),
                         verticalItemSpacing = (-10).dp,
                     ) {
-                        item(span = StaggeredGridItemSpan.FullLine) {
-                            SopletterTopicCta(
-                                text = "이번 기수 회고하러 가볼까요?",
-                                onClick = { /* TODO API 연동후 추가 예정 */ },
-                                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                            )
+                        if (isTopicCtaVisible) {
+                            item(span = StaggeredGridItemSpan.FullLine) {
+                                SopletterTopicCta(
+                                    text = "이번 기수 회고하러 가볼까요?",
+                                    onClick = { /* TODO API 연동후 추가 예정 */ },
+                                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
+                                )
+                            }
                         }
 
                         itemsIndexed(
