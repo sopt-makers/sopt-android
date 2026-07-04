@@ -68,13 +68,16 @@ class SopletterMainPreviewParameterProvider : PreviewParameterProvider<Sopletter
     private val previewStates = listOf(
         SopletterMainUiState(
             topicTitle = "nn기 솝레터",
+            isInitialized = true,
         ),
         SopletterMainUiState(
             memoList = memoList,
-            topicTitle = "nn기 솝레터"
+            topicTitle = "nn기 솝레터",
+            isInitialized = true,
         ),
         SopletterMainUiState(
             memoList = memoList,
+            isInitialized = true,
             selectedMemoDetail = SopletterMessageDetail(
                 messageId = 1L,
                 topicId = 1L,

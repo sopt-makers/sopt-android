@@ -37,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 import org.sopt.official.designsystem.SoptTheme
@@ -49,6 +50,7 @@ fun TwoButtonDialog(
     onPositiveClick: () -> Unit,
     onNegativeClick: () -> Unit,
     modifier: Modifier = Modifier,
+    buttonVerticalPadding: Dp = 11.dp,
     properties: DialogProperties = DialogProperties(
         usePlatformDefaultWidth = false
     ),
@@ -77,6 +79,7 @@ fun TwoButtonDialog(
                         disabledContainerColor = SoptTheme.colors.onSurface600,
                         disabledContentColor = SoptTheme.colors.primary
                     ),
+                    verticalPadding = buttonVerticalPadding,
                     modifier = Modifier.weight(1f)
                 )
 
@@ -89,6 +92,7 @@ fun TwoButtonDialog(
                         disabledContainerColor = SoptTheme.colors.primary,
                         disabledContentColor = SoptTheme.colors.onSurface
                     ),
+                    verticalPadding = buttonVerticalPadding,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -101,11 +105,12 @@ private fun DialogButton(
     text: String,
     onClick: () -> Unit,
     colors: ButtonColors,
+    verticalPadding: Dp,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
-        contentPadding = PaddingValues(vertical = 11.dp),
+        contentPadding = PaddingValues(vertical = verticalPadding),
         colors = colors,
         shape = RoundedCornerShape(10.dp),
         modifier = modifier

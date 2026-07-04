@@ -22,33 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.sopletter.model
+package org.sopt.official.feature.sopletter.common.util
 
-data class SopletterDefaultMessages(
-    val topicId: Long,
-    val title: String,
-    val totalCount: Int,
-    val nextCursor: Long?,
-    val hasNext: Boolean,
-    val messages: List<SopletterMessage>,
-)
+import android.icu.text.BreakIterator
+import java.util.Locale
 
-data class SopletterMessage(
-    val messageId: Long,
-    val previewContent: String,
-    val colorCode: String,
-    val rotationDegree: Double,
-    val shapeType: SopletterShapeType,
-)
+/**
+ * TextField 입력값의 이모지와 결합 문자를 각각 한 글자로 계산하는 함수
+ */
+internal fun CharSequence.characterCount(): Int {
+    if (isEmpty()) return 0
 
-enum class SopletterShapeType {
-    SMOOTH,
-    SHARP,
-    POINT,
-    CLOUD;
-
-    companion object {
-        fun from(value: String): SopletterShapeType =
-            entries.find { it.name == value } ?: SHARP
+    val iterator = BreakIterator.getCharacterInstance(Locale.ROOT).apply {
+        setText(this@characterCount.toString())
+        first()
     }
+
+    var count = 0
+    while (iterator.next() != BreakIterator.DONE) {
+        count++
+    }
+    return count
 }

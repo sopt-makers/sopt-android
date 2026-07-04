@@ -25,9 +25,11 @@
 package org.sopt.official.data.sopletter.datasourceimpl
 
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
-import org.sopt.official.data.sopletter.dto.response.SopletterDefaultMessagesResponseDto
+import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
+import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
+import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 import org.sopt.official.data.sopletter.service.SopletterService
 import javax.inject.Inject
 class SopletterDataSourceImpl @Inject constructor(
@@ -36,7 +38,17 @@ class SopletterDataSourceImpl @Inject constructor(
     override suspend fun getDefaultMessages(
         cursor: Long?,
         size: Int,
-    ): SopletterDefaultMessagesResponseDto = sopletterService.getDefaultMessages(
+    ): SopletterMessagesResponseDto = sopletterService.getDefaultMessages(
+        cursor = cursor,
+        size = size,
+    )
+
+    override suspend fun getTopicMessages(
+        topicId: Long,
+        cursor: Long?,
+        size: Int,
+    ): SopletterMessagesResponseDto = sopletterService.getTopicMessages(
+        topicId = topicId,
         cursor = cursor,
         size = size,
     )
@@ -66,4 +78,26 @@ class SopletterDataSourceImpl @Inject constructor(
         topicId = topicId,
         messageId = messageId,
     )
+
+    override suspend fun updateMessage(
+        topicId: Long,
+        messageId: Long,
+        content: String,
+    ): SopletterMessageDetailResponseDto = sopletterService.updateMessage(
+        topicId = topicId,
+        messageId = messageId,
+        body = UpdateSopletterMessageRequestDto(content = content),
+    )
+
+    override suspend fun deleteMessage(
+        topicId: Long,
+        messageId: Long,
+    ) = sopletterService.deleteMessage(
+        topicId = topicId,
+        messageId = messageId,
+    )
+
+    override suspend fun getTopics(
+        type: String,
+    ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type)
 }

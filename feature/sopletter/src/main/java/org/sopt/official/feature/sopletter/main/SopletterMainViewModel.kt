@@ -25,8 +25,10 @@
 package org.sopt.official.feature.sopletter.main
 
 import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,16 +43,22 @@ import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.common.util.characterCount
+import org.sopt.official.feature.sopletter.main.contract.SOPLETTER_MEMO_MAX_LENGTH
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.contract.toMemoDetailDialogState
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
+import org.sopt.official.feature.sopletter.main.navigation.SopletterMain
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterMainViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
+    private val topicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
+
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
 
@@ -58,14 +66,23 @@ class SopletterMainViewModel @Inject constructor(
     val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        fetchDefaultMessages()
+        initMessages(topicId = topicId)
     }
 
     // ---------------- Main screen ----------------
 
-    fun fetchDefaultMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
+    fun initMessages(topicId: Long?) {
+        val currentState = _uiState.value
+        if (currentState.isInitialized && currentState.selectedTopicId == topicId) return
+
+        _uiState.value = SopletterMainUiState(selectedTopicId = topicId)
+        fetchMessages()
+    }
+
+    fun fetchMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
         if (currentState.isLoading) return@launch
+        val selectedTopicId = currentState.selectedTopicId
 
         val cursor = if (isLoadMore) {
             if (!currentState.hasNext) return@launch
@@ -83,10 +100,20 @@ class SopletterMainViewModel @Inject constructor(
             )
         }
 
-        sopletterRepository.getDefaultMessages(cursor = cursor)
+        val result = if (selectedTopicId == null) {
+            sopletterRepository.getDefaultMessages(cursor = cursor)
+        } else {
+            sopletterRepository.getTopicMessages(
+                topicId = selectedTopicId,
+                cursor = cursor,
+            )
+        }
+
+        result
             .onSuccess { response ->
                 _uiState.update { state ->
                     state.copy(
+                        selectedTopicId = selectedTopicId,
                         topicId = response.topicId,
                         topicTitle = response.title,
                         totalCount = response.totalCount,
@@ -245,13 +272,163 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
-    override fun onEditClick() = Unit
+    override fun onEditClick() {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
 
-    override fun onDeleteClick() = Unit
+            state.copy(
+                selectedMemoDetail = currentDetail.copy(isEditing = true),
+            )
+        }
+    }
+
+    override fun onEditCancelClick() {
+        _uiState.update { state ->
+            val currentDetail = state.selectedMemoDetail ?: return@update state
+
+            state.copy(
+                selectedMemoDetail = currentDetail.copy(isEditing = false),
+            )
+        }
+    }
+
+    override fun showMemoLengthWarning() {
+        viewModelScope.launch {
+            _sideEffect.emit(
+                SopletterMainSideEffect.ShowSnackbar(
+                    visuals = SopletterSnackbarVisuals(
+                        message = "공백 포함 350자 이하로만 작성할 수 있어요.",
+                        type = SopletterSnackbarType.WARNING,
+                    ),
+                ),
+            )
+        }
+    }
+
+    override fun onEditCompleteClick(content: String) {
+        if (content.isBlank()) return
+        if (content.characterCount() > SOPLETTER_MEMO_MAX_LENGTH) {
+            showMemoLengthWarning()
+            return
+        }
+
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
+        if (topicId <= 0L) return
+
+        viewModelScope.launch {
+            sopletterRepository.updateMessage(
+                topicId = topicId,
+                messageId = selectedMemoDetail.memoId,
+                content = content,
+            ).onSuccess { updatedMessage ->
+                _uiState.update { state ->
+                    val currentDetail = state.selectedMemoDetail
+
+                    state.copy(
+                        memoList = state.memoList.map { message ->
+                            if (message.messageId == updatedMessage.messageId) {
+                                message.copy(previewContent = updatedMessage.content)
+                            } else {
+                                message
+                            }
+                        }.toPersistentList(),
+                        selectedMemoDetail = if (currentDetail?.memoId == updatedMessage.messageId) {
+                            updatedMessage.toMemoDetailDialogState(
+                                memoColor = currentDetail.memoColor,
+                            )
+                        } else {
+                            currentDetail
+                        },
+                        isShowErrorDialog = false,
+                    )
+                }
+
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "메시지 수정을 완료했어요.",
+                            type = SopletterSnackbarType.SUCCESS,
+                        ),
+                    ),
+                )
+            }.onFailure {
+                _uiState.update { state ->
+                    state.copy(isShowErrorDialog = false)
+                }
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "일시적인 오류가 발생했어요.",
+                            type = SopletterSnackbarType.FAILURE,
+                        ),
+                    ),
+                )
+            }
+        }
+    }
+
+    override fun onDeleteClick() {
+        _uiState.update { state ->
+            state.copy(isDeleteDialogVisible = true)
+        }
+    }
+
+    override fun onDeleteDialogDismissClick() {
+        _uiState.update { state ->
+            state.copy(isDeleteDialogVisible = false)
+        }
+    }
+
+    override fun onDeleteConfirmClick() {
+        val currentState = _uiState.value
+        val selectedMemoDetail = currentState.selectedMemoDetail ?: return
+        val topicId = currentState.topicId
+        if (topicId <= 0L) return
+
+        viewModelScope.launch {
+            sopletterRepository.deleteMessage(
+                topicId = topicId,
+                messageId = selectedMemoDetail.memoId,
+            ).onSuccess {
+                _uiState.update { state ->
+                    state.copy(
+                        totalCount = (state.totalCount - 1).coerceAtLeast(0),
+                        memoList = state.memoList
+                            .filterNot { message -> message.messageId == selectedMemoDetail.memoId }
+                            .toPersistentList(),
+                        selectedMemoDetail = null,
+                        isDeleteDialogVisible = false,
+                        isShowErrorDialog = false,
+                    )
+                }
+
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "메시지 삭제를 완료했어요.",
+                            type = SopletterSnackbarType.SUCCESS,
+                        ),
+                    ),
+                )
+            }.onFailure {
+                _uiState.update { state ->
+                    state.copy(
+                        isDeleteDialogVisible = false,
+                        isShowErrorDialog = true,
+                    )
+                }
+            }
+        }
+    }
 
     override fun onDismissClick() {
         _uiState.update { state ->
-            state.copy(selectedMemoDetail = null)
+            state.copy(
+                selectedMemoDetail = null,
+                isDeleteDialogVisible = false,
+            )
         }
     }
 

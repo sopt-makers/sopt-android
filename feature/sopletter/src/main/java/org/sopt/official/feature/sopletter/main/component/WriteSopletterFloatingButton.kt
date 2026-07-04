@@ -40,8 +40,8 @@ import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.sopletter.R
 
 @Composable
-internal fun EditSopletterFloatingActionButton(
-    onEditFABClick: () -> Unit,
+internal fun WriteSopletterFloatingActionButton(
+    onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -51,7 +51,7 @@ internal fun EditSopletterFloatingActionButton(
                 color = Color.White,
                 shape = RoundedCornerShape(24.dp),
             )
-            .noRippleClickable(onEditFABClick),
+            .noRippleClickable(onWriteFABClick),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

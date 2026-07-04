@@ -403,13 +403,15 @@ fun MainScreen(
                                 },
                                 navigateUp = navigator::navigateUp
                             )
-                            sopletterGraph(
-                                navController = navigator.navController,
-                                navigateToHome = {
-                                    navigator.navigateAndClear(MainTab.Home, userStatus)
-                                }
-                            )
                         }
+
+                        sopletterGraph(
+                            paddingValues = innerPadding,
+                            navController = navigator.navController,
+                            navigateToHome = {
+                                navigator.navigateAndClear(MainTab.Home, userStatus)
+                            }
+                        )
                     }
 
                     MainFloatingMenuOverlay(
