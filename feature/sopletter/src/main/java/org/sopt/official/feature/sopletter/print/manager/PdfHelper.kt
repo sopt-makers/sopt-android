@@ -8,6 +8,7 @@ import android.graphics.pdf.PdfDocument
 import android.provider.MediaStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.sopt.official.common.coroutines.suspendRunCatching
 
 object PdfHelper {
 
@@ -16,7 +17,7 @@ object PdfHelper {
         bitmaps: List<Bitmap>,
         fileName: String
     ): Result<Unit> = withContext(Dispatchers.IO) {
-        runCatching {
+        suspendRunCatching {
             val pdfDocument = PdfDocument()
             val pdfWidth = 595f
 
@@ -32,14 +33,16 @@ object PdfHelper {
                     val pdfHeight = (softwareBitmap.height * scale).toInt()
 
                     val pageInfo = PdfDocument.PageInfo.Builder(pdfWidth.toInt(), pdfHeight, index + 1).create()
-                    val page = pdfDocument.startPage(pageInfo)
-
                     val matrix = Matrix().apply { postScale(scale, scale) }
-                    page.canvas.drawBitmap(softwareBitmap, matrix, null)
-                    pdfDocument.finishPage(page)
 
-                    if (softwareBitmap !== bitmap) {
-                        softwareBitmap.recycle()
+                    try {
+                        val page = pdfDocument.startPage(pageInfo)
+                        page.canvas.drawBitmap(softwareBitmap, matrix, null)
+                        pdfDocument.finishPage(page)
+                    } finally {
+                        if (softwareBitmap !== bitmap) {
+                            softwareBitmap.recycle()
+                        }
                     }
                 }
 
