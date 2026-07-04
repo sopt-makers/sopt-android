@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,6 +37,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -61,9 +63,11 @@ internal fun SopletterScaffold(
     snackbarHostState: SnackbarHostState,
     isOuterSnackbarHostVisible: Boolean = true,
     modifier: Modifier = Modifier,
+    contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (innerPadding: PaddingValues) -> Unit,
 ) {
     Scaffold(
+        contentWindowInsets = contentWindowInsets,
         snackbarHost = {
             Box(modifier = Modifier.fillMaxSize()) {
                 if (isOuterSnackbarHostVisible) {

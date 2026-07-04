@@ -32,12 +32,18 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import kotlinx.serialization.Serializable
 import org.sopt.official.feature.sopletter.main.SopletterMainRoute
+import org.sopt.official.feature.sopletter.name.SopletterNameRoute
+import org.sopt.official.feature.sopletter.name.navigation.SopletterName
+import org.sopt.official.feature.sopletter.name.navigation.navigateToSopletterName
 import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
 import org.sopt.official.feature.sopletter.onboarding.navigation.SopletterOnboarding
-import org.sopt.official.feature.sopletter.topic.SopletterTopicRoute
 
 @Serializable
 data object SopletterGraph
+
+fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
+    navigate(SopletterGraph, navOptions)
+}
 
 @Serializable
 data class SopletterMain(
@@ -47,16 +53,10 @@ data class SopletterMain(
 @Serializable
 data object SopletterTopic
 
-fun NavController.navigateToSopletter(
-    navOptions: NavOptions? = null,
-) {
-    navigate(SopletterGraph, navOptions)
-}
-
 fun NavGraphBuilder.sopletterGraph(
     paddingValues: PaddingValues,
     navController: NavController,
-    navigateUp: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     navigation<SopletterGraph> (
         startDestination = SopletterOnboarding
@@ -64,16 +64,17 @@ fun NavGraphBuilder.sopletterGraph(
         composable<SopletterOnboarding> {
             SopletterOnboardingRoute(
                 paddingValues = paddingValues,
-                navigateToNickname = {
-                    navController.navigate(SopletterMain()) {
-                        launchSingleTop = true
-                        popUpTo<SopletterOnboarding> {
-                            inclusive = true
-                        }
-                    }
-                },
+                navigateToNickname = navController::navigateToSopletterName,
+                navigateToHome = navigateToHome,
             )
         }
+
+        composable<SopletterName> {
+            SopletterNameRoute(
+                navigateToHome = navigateToHome
+            )
+        }
+
 
         composable<SopletterMain> {
             SopletterMainRoute(

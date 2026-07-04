@@ -22,18 +22,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.onboarding.navigation
+package org.sopt.official.data.sopletter.onboarding.di
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.Route
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.data.sopletter.onboarding.service.SopletterOnboardingService
+import retrofit2.Retrofit
+import retrofit2.create
+import javax.inject.Singleton
 
-@Serializable
-data object SopletterOnboarding: Route
+@Module
+@InstallIn(SingletonComponent::class)
+internal object SopletterOnboardingServiceModule {
 
-fun NavController.navigateToSopletterOnboarding(
-    navOptions: NavOptions? = null,
-) {
-    navigate(SopletterOnboarding, navOptions)
+    @Provides
+    @Singleton
+    internal fun provideSopletterOnboardingService(
+        @AppRetrofit(true) retrofit: Retrofit,
+    ): SopletterOnboardingService = retrofit.create()
 }

@@ -94,12 +94,18 @@ internal fun SopletterNameInfoHolder(
             text = "나의 닉네임은",
             style = SoptTheme.typography.title20SB,
             color = SoptTheme.colors.onSurface300,
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
 
         Text(
             text = info.name,
             style = SoptTheme.typography.title24SB,
             color = SoptTheme.colors.onSurface30,
+            modifier = Modifier
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(34.dp))
