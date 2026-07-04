@@ -31,9 +31,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -60,6 +62,9 @@ class MyPageViewModel @Inject constructor(
 
     private val _state = MutableStateFlow(MyPageState())
     val state: StateFlow<MyPageState> = _state.asStateFlow()
+
+    val isAppjamMode: StateFlow<Boolean> = userStorage.isAppjamMode
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     private val _sideEffect = Channel<MyPageSideEffect>(Channel.BUFFERED)
     val sideEffect = _sideEffect.receiveAsFlow()
