@@ -2,8 +2,10 @@ package org.sopt.official.feature.sopletter.print
 
 import android.content.Context
 import android.graphics.Bitmap
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,10 +18,14 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.print.manager.PdfHelper
+import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
+import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
+import org.sopt.official.feature.sopletter.print.navigation.SopletterPrint
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterPrintViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel() {
 
@@ -33,6 +39,7 @@ class SopletterPrintViewModel @Inject constructor(
         fetchPreviewMessages()
     }
 
+    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
 
     private fun fetchPreviewMessages() {
         viewModelScope.launch {

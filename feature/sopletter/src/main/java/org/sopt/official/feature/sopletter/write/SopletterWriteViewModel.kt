@@ -24,8 +24,10 @@
  */
 package org.sopt.official.feature.sopletter.write
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,11 +40,13 @@ import kotlinx.coroutines.launch
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
+import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 import org.sopt.official.sopletter.repository.SopletterWriteRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterWriteViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sopletterWriteRepository: SopletterWriteRepository
 ) : ViewModel() {
 
@@ -52,8 +56,7 @@ class SopletterWriteViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<SopletterWriteSideEffect>()
     val sideEffect: SharedFlow<SopletterWriteSideEffect> = _sideEffect.asSharedFlow()
 
-    private var currentTopicId: Long? = 1 //TODO : topicId를 받아오는 것으로 변경예정
-
+    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterWrite>().topicId
     fun postSopletter(content: String) {
         if (_uiState.value.isLoading) return
 
