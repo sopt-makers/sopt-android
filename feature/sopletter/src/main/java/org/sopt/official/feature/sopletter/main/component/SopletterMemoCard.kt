@@ -27,6 +27,8 @@ package org.sopt.official.feature.sopletter.main.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,6 +40,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.material3.Text
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
@@ -50,6 +53,7 @@ internal fun SopletterMemoCard(
     memo: SopletterMessage,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    scale: Float = 1f
 ) {
     Box(
         modifier = modifier
@@ -61,16 +65,22 @@ internal fun SopletterMemoCard(
             imageVector = ImageVector.vectorResource(memo.shapeType.imageRes()),
             contentDescription = null,
             colorFilter = ColorFilter.tint(memo.memoColor()),
+            modifier = Modifier.size((140 * scale).dp)
         )
 
         Text(
             text = memo.previewContent,
             modifier = Modifier
-                .width(111.dp)
-                .height(110.dp),
-            style = SoptTheme.typography.body14M,
+                .width((111 * scale).dp)
+                .height((110 * scale).dp)
+                .padding((8 * scale).dp),
+            style = SoptTheme.typography.body14M.copy(
+                fontSize = (14 * scale).sp,
+                lineHeight = (22 * scale).sp
+            ),
             color = SoptTheme.colors.onSurface800,
             textAlign = TextAlign.Center,
+            maxLines = 5,
             overflow = TextOverflow.Ellipsis,
         )
     }
