@@ -29,25 +29,19 @@ import javax.inject.Inject
 import org.sopt.official.data.home.mapper.toDomain
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi
-import org.sopt.official.data.home.remote.api.UserApi
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
-import org.sopt.official.domain.home.model.UserInfo
-import org.sopt.official.domain.home.model.UserInfo.UserDescription
+import org.sopt.official.domain.home.model.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
 
 internal class DefaultHomeRepository @Inject constructor(
-    private val userApi: UserApi,
     private val homeApi: HomeApi,
     private val calendarApi: CalendarApi,
 ) : HomeRepository {
-
-    override suspend fun getUserInfo(): Result<UserInfo> =
-        suspendRunCatching { userApi.getUserMain().toDomain() }
 
     override suspend fun getRecentCalendar(): Result<RecentCalendar> =
         suspendRunCatching { calendarApi.getRecentCalendar().toDomain() }

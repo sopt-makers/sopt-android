@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
@@ -73,6 +74,7 @@ import org.sopt.official.designsystem.Gray50
 import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.White
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
 import org.sopt.official.feature.auth.component.LoginErrorDialog
@@ -92,6 +94,7 @@ internal fun AuthMainRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
 
     val googleLoginManager = remember(context) {
         EntryPointAccessors.fromApplication(
@@ -134,13 +137,16 @@ internal fun AuthMainRoute(
 
     AuthMainScreen(
         platform = platform,
+        isLoading = isLoading,
         showDialog = {
             loginDialogVisibility = true
         },
         onGoogleLoginCLick = {
-            scope.launch {
-                val idToken = googleLoginManager.getGoogleIdToken(context)
-                viewModel.signIn(idToken)
+            if (!isLoading) {
+                scope.launch {
+                    val idToken = googleLoginManager.getGoogleIdToken(context)
+                    viewModel.signIn(idToken)
+                }
             }
         },
         onLoginLaterClick = navigateToUnAuthenticatedHome,
@@ -153,6 +159,7 @@ internal fun AuthMainRoute(
 @Composable
 private fun AuthMainScreen(
     platform: String,
+    isLoading: Boolean,
     showDialog: () -> Unit,
     onGoogleLoginCLick: () -> Unit,
     onLoginLaterClick: () -> Unit,
@@ -201,6 +208,9 @@ private fun AuthMainScreen(
                 onLoginLaterClick = onLoginLaterClick,
                 navigateToCertification = navigateToCertification
             )
+        }
+        if (isLoading) {
+            LoadingIndicator()
         }
     }
 }
@@ -303,6 +313,7 @@ private fun AuthMainScreenPreview() {
     SoptTheme {
         AuthMainScreen(
             platform = "",
+            isLoading = false,
             showDialog = {},
             onGoogleLoginCLick = {},
             onLoginLaterClick = {},

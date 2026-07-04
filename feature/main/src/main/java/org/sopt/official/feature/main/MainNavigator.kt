@@ -37,9 +37,10 @@ import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.appjamtamp.navigation.navigateToAppjamtamp
 import org.sopt.official.feature.home.navigation.Home
 import org.sopt.official.feature.home.navigation.navigateToHome
+import org.sopt.official.feature.mypage.navigation.MyPageGraph
+import org.sopt.official.feature.mypage.navigation.navigateToMyPage
 import org.sopt.official.feature.poke.navigation.PokeGraph
 import org.sopt.official.feature.poke.navigation.navigateToPokeEntry
-import org.sopt.official.feature.soptlog.navigation.navigateToSoptLog
 import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.navigateToSoptamp
 
@@ -100,8 +101,8 @@ class MainNavigator(
                 )
             }
 
-            MainTab.SoptLog -> {
-                navController.navigateToSoptLog(
+            MainTab.MyPage -> {
+                navController.navigateToMyPage(
                     navOptions = navOptions
                 )
             }
@@ -139,7 +140,7 @@ class MainNavigator(
                 )
             }
 
-            MainTab.Poke -> { // PokeGraph가 있다고 가정
+            MainTab.Poke -> {
                 navController.navigateToPokeEntry(
                     navOptions = navOptions {
                         popUpTo<PokeGraph> { inclusive = true }
@@ -148,23 +149,18 @@ class MainNavigator(
                 )
             }
 
-            MainTab.SoptLog -> {
-                when (userStatus) {
-                    UserStatus.ACTIVE, UserStatus.INACTIVE -> {
-                        navController.navigateToSoptLog(
-                            navOptions = navOptions {
-                                launchSingleTop = true
-                            }
-                        )
+            MainTab.MyPage -> {
+                navController.navigateToMyPage(
+                    navOptions = navOptions {
+                        popUpTo<MyPageGraph> { inclusive = true }
+                        launchSingleTop = true
                     }
-
-                    UserStatus.UNAUTHENTICATED -> onFailure()
-                }
+                )
             }
         }
     }
 
-    private fun navigateUp() {
+    fun navigateUp() {
         navController.navigateUp()
     }
 

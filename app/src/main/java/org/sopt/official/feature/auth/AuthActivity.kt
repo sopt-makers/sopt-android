@@ -51,6 +51,7 @@ import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
@@ -89,7 +90,7 @@ class AuthActivity : AppCompatActivity() {
                 }
 
                 when (val state = updateState) {
-                    is UpdateState.Default -> {}
+                    is UpdateState.Default -> LoadingIndicator()
                     is UpdateState.PatchUpdateAvailable -> {
                         var dialogVisibility by rememberSaveable { mutableStateOf(true) }
 

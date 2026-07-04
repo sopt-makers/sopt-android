@@ -22,7 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.sopletter
+package org.sopt.official.data.user.di
 
-class MyClass {
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.cache.InMemoryCache
+import org.sopt.official.domain.user.model.UserInfo
+
+@Module
+@InstallIn(SingletonComponent::class)
+internal object CacheModule {
+
+    @Provides
+    @Singleton
+    fun provideUserInfoCache(): InMemoryCache<UserInfo> = InMemoryCache()
 }

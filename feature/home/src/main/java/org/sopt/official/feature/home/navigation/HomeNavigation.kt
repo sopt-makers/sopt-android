@@ -45,7 +45,6 @@ sealed interface HomeNavigation {
     @Stable
     interface HomeDashboardNavigation : HomeNavigation {
         fun navigateToNotification()
-        fun navigateToSetting()
         fun navigateToSchedule()
         fun navigateToEditProfile()
         fun navigateToAttendance()

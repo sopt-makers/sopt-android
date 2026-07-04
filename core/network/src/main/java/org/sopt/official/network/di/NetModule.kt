@@ -62,7 +62,7 @@ object NetModule {
     fun provideOkHttpClient(
         @Logging loggingInterceptor: Interceptor,
         @Auth authInterceptor: Interceptor,
-        authenticator: CentralizeAuthenticator
+        authenticator: CentralizeAuthenticator,
     ): OkHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .addInterceptor(authInterceptor)

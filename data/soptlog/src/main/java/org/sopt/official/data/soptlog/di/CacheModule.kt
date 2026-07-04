@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.home.model
+package org.sopt.official.data.soptlog.di
 
-data class UserInfo(
-    val user: User = User(),
-    val isAllConfirm: Boolean = false,
-) {
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
+import org.sopt.official.cache.InMemoryCache
+import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
-    data class User(
-        val status: String = "",
-        val name: String = "",
-        val profileImage: String = "",
-        val generationList: List<Long> = emptyList(),
-    ) {
-        val userStatus = UserStatus.from(status)
-    }
+@Module
+@InstallIn(SingletonComponent::class)
+internal object CacheModule {
 
-    data class UserDescription(
-        val activityDescription: String = "",
-    )
-}
-
-enum class UserStatus {
-    ACTIVE, INACTIVE, UNAUTHENTICATED
-    ;
-
-    companion object {
-        fun from(userStatus: String): UserStatus =
-            UserStatus.entries.find {
-                it.name == userStatus
-            } ?: UNAUTHENTICATED
-    }
+    @Provides
+    @Singleton
+    fun provideSoptLogInfoCache(): InMemoryCache<SoptLogInfo> = InMemoryCache()
 }

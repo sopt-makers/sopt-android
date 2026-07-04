@@ -103,10 +103,6 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
-            android:name=".feature.mypage.mypage.MyPageActivity"
-            android:exported="false"
-            android:launchMode="singleTop" />
-        <activity
             android:name=".feature.mypage.signout.SignOutActivity"
             android:exported="false" />
         <activity

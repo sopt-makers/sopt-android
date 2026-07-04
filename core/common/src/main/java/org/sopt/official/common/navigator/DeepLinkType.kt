@@ -54,7 +54,12 @@ enum class DeepLinkType(
     },
     MY_PAGE("home/mypage") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
-            userStatus.setIntent(navigator.getMyPageActivityIntent(userStatus.name))
+            userStatus.setIntent(
+                navigator.getMainActivityIntent(userStatus, null).apply {
+                    putExtra("isMyPageDeepLink", true)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                }
+            )
     },
     MY_PAGE_SOPTAMP("mypage/soptamp") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =

@@ -33,14 +33,15 @@ import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.mypage.repository.UserRepository
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
+import org.sopt.official.domain.user.repository.SoptUserRepository
 
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 internal interface AuthEntryPoint {
     fun authRepository(): AuthRepository
     fun userRepository(): UserRepository
-    fun stampRepository(): StampRepository
-    fun notificationRepository(): NotificationRepository
+
+    fun soptUserRepository(): SoptUserRepository
 }
 
 internal val authRepository by lazy {
@@ -55,14 +56,8 @@ internal val userRepository by lazy {
         .userRepository()
 }
 
-internal val stampRepository by lazy {
+internal val soptUserRepository by lazy {
     EntryPointAccessors
         .fromApplication(appContext, AuthEntryPoint::class.java)
-        .stampRepository()
-}
-
-internal val notificationRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .notificationRepository()
+        .soptUserRepository()
 }

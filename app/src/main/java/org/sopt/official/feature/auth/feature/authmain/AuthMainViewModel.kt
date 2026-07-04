@@ -28,8 +28,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.domain.auth.model.Auth
@@ -45,8 +48,12 @@ class AuthMainViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<AuthMainSideEffect>()
     val sideEffect: SharedFlow<AuthMainSideEffect> = _sideEffect.asSharedFlow()
 
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
     fun signIn(token: String) {
         viewModelScope.launch {
+            _isLoading.value = true
             authRepository.signIn(
                 Auth(
                     token = token,
@@ -66,6 +73,7 @@ class AuthMainViewModel @Inject constructor(
 
                 _sideEffect.emit(AuthMainSideEffect.NavigateToHome)
             }.onFailure {
+                _isLoading.value = false
                 _sideEffect.emit(AuthMainSideEffect.NavigateToAuthError)
             }
         }
