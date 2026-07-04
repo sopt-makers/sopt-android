@@ -47,6 +47,9 @@ import org.sopt.official.feature.sopletter.topic.navigation.navigateToSopletterT
 @Serializable
 data object SopletterGraph
 
+@Serializable
+data object SopletterEntry
+
 fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
     navigate(SopletterGraph, navOptions)
 }
@@ -57,8 +60,18 @@ fun NavGraphBuilder.sopletterGraph(
     navigateToHome: () -> Unit,
 ) {
     navigation<SopletterGraph>(
-        startDestination = SopletterOnboarding
+        startDestination = SopletterEntry
     ) {
+        composable<SopletterEntry> {
+            SopletterEntryRoute(
+                paddingValues = paddingValues,
+                navigateToNickname = navController::navigateToSopletterName,
+                navigateToHome = navigateToHome,
+                navigateUp = navController::navigateUp,
+                navigateToTopic = navController::navigateToSopletterTopic,
+            )
+        }
+
         composable<SopletterOnboarding> {
             SopletterOnboardingRoute(
                 paddingValues = paddingValues,
