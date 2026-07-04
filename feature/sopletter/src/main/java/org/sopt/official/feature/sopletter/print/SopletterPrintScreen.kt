@@ -14,16 +14,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,20 +36,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
@@ -64,7 +72,7 @@ fun SopletterPrintRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
+    val applicationContext = LocalContext.current.applicationContext
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -88,7 +96,8 @@ fun SopletterPrintRoute(
             uiState = uiState,
             onBackClick = onBackClick,
             onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
-            onBitmapCaptured = { bitmap -> viewModel.processSavePdf(context, bitmap) },
+            onBitmapsCaptured = { bitmaps -> viewModel.processSavePdf(applicationContext, bitmaps) },
+            onCaptureFailed = viewModel::onCaptureFailed,
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -99,47 +108,76 @@ private fun SopletterPrintScreen(
     uiState: SopletterPrintUiState,
     onBackClick: () -> Unit,
     onPdfSaveClick: () -> Unit,
-    onBitmapCaptured: (Bitmap) -> Unit,
+    onBitmapsCaptured: (List<Bitmap>) -> Unit,
+    onCaptureFailed: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val graphicsLayer = rememberGraphicsLayer()
-    val coroutineScope = rememberCoroutineScope()
+
+    val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
+    var currentChunkIndex by remember { mutableIntStateOf(0) }
+    val capturedBitmaps = remember { mutableStateListOf<Bitmap>() }
+    var isViewReady by remember { mutableStateOf(false) }
     var isCapturing by remember { mutableStateOf(false) }
 
     Box(modifier = modifier.fillMaxSize()) {
 
-        if (uiState.isCaptureRequested && uiState.fullMemoList != null) {
-            Box(
-                modifier = Modifier
-                    .offset(x = 10000.dp)
-                    .wrapContentSize(unbounded = true)
-                    .drawWithCache {
-                        onDrawWithContent {
-                            graphicsLayer.record { this@onDrawWithContent.drawContent() }
-                            drawLayer(graphicsLayer)
-
-                            if (!isCapturing) {
-                                isCapturing = true
-                                coroutineScope.launch {
-                                    try {
-                                        delay(500L)
-                                        val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                                        onBitmapCaptured(bitmap)
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                    } finally {
-                                        isCapturing = false
-                                    }
-                                }
+        if (uiState.isCaptureRequested && chunks.isNotEmpty()) {
+            val currentMemos = chunks.getOrNull(currentChunkIndex)
+            if (currentMemos != null) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .zIndex(-1f)
+                        .graphicsLayer { alpha = 0.01f }
+                        .drawWithCache {
+                            onDrawWithContent {
+                                graphicsLayer.record { this@onDrawWithContent.drawContent() }
+                                drawLayer(graphicsLayer)
                             }
                         }
+                        .onGloballyPositioned { isViewReady = true }
+                ) {
+                    SopletterBoardLayout(
+                        generation = uiState.generation,
+                        memos = currentMemos,
+                        scale = 1f
+                    )
+                }
+
+                LaunchedEffect(currentChunkIndex, isViewReady) {
+                    if (isViewReady && !isCapturing) {
+                        isCapturing = true
+                        try {
+                            delay(300L)
+                            val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+                            capturedBitmaps.add(bitmap)
+
+                            if (currentChunkIndex < chunks.size - 1) {
+                                isViewReady = false
+                                isCapturing = false
+                                currentChunkIndex++
+                            } else {
+                                onBitmapsCaptured(capturedBitmaps.toList())
+                                capturedBitmaps.clear()
+                                currentChunkIndex = 0
+                                isViewReady = false
+                                isCapturing = false
+                            }
+                        } catch (e: CancellationException) {
+                            isCapturing = false
+                            throw e
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            onCaptureFailed()
+                            capturedBitmaps.clear()
+                            currentChunkIndex = 0
+                            isViewReady = false
+                            isCapturing = false
+                        }
                     }
-            ) {
-                SopletterBoardLayout(
-                    generation = uiState.generation,
-                    memos = uiState.fullMemoList,
-                    scale = 1f
-                )
+                }
             }
         }
 
@@ -147,9 +185,10 @@ private fun SopletterPrintScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = SoptTheme.colors.background)
+                .zIndex(1f)
         ) {
             SopletterTopbar(
-                onBackClick = onBackClick,
+                onBackClick = { if (!uiState.isSaving) onBackClick() },
                 topbarTitle = "솝레터 출력"
             )
 
@@ -197,7 +236,9 @@ private fun SopletterPrintScreen(
                     .padding(horizontal = 20.dp, vertical = 24.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(SoptTheme.colors.onSurface600)
-                    .noRippleClickable(onClick = onPdfSaveClick)
+                    .noRippleClickable {
+                        if (!uiState.isSaving) onPdfSaveClick()
+                    }
                     .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
@@ -206,6 +247,19 @@ private fun SopletterPrintScreen(
                     style = SoptTheme.typography.title16SB,
                     color = SoptTheme.colors.onSurface30
                 )
+            }
+        }
+
+        if (uiState.isSaving) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.3f))
+                    .zIndex(10f)
+                    ,
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(color = SoptTheme.colors.primary)
             }
         }
     }
@@ -254,11 +308,8 @@ private fun SopletterBoardLayout(
 @Preview(showBackground = true)
 private fun PreviewSopletterPrintScreen(){
     SoptTheme {
-        SopletterPrintScreen(
-            uiState = SopletterPrintUiState(),
-            onBackClick = {},
-            onPdfSaveClick = {},
-            onBitmapCaptured = {}
+        SopletterPrintRoute(
+            onBackClick = {}
         )
     }
 }

@@ -43,17 +43,8 @@ class SopletterPrintViewModel @Inject constructor(
 
     private fun fetchPreviewMessages() {
         viewModelScope.launch {
-            sopletterRepository.getDefaultMessages(
-                cursor = null,
-                size = 16
-            ).onSuccess { response ->
-                _uiState.update {
-                    it.copy(
-                        topicTitle = response.title,
-                        totalCount = response.totalCount,
-                        previewMemoList = response.messages
-                    )
-                }
+            sopletterRepository.getDefaultMessages(null, 16).onSuccess { response ->
+                _uiState.update { it.copy(topicTitle = response.title, totalCount = response.totalCount, previewMemoList = response.messages) }
             }
         }
     }
@@ -65,37 +56,28 @@ class SopletterPrintViewModel @Inject constructor(
             _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장 중 ...", SopletterSnackbarType.WARNING))
             _uiState.update { it.copy(isSaving = true) }
 
-            sopletterRepository.getDefaultMessages(
-                cursor = null,
-                size = if (totalCount > 0) totalCount else 100
-            ).onSuccess { response ->
-                _uiState.update {
-                    it.copy(
-                        fullMemoList = response.messages,
-                        isCaptureRequested = true
-                    )
-                }
+            sopletterRepository.getDefaultMessages(null, if (totalCount > 0) totalCount else 100).onSuccess { response ->
+                _uiState.update { it.copy(fullMemoList = response.messages, isCaptureRequested = true) }
             }.onFailure {
-                _uiState.update { it.copy(isSaving = false) }
-                _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("데이터를 가져오는 데 실패했습니다.", SopletterSnackbarType.FAILURE))
+                onCaptureFailed("데이터를 가져오는 데 실패했습니다.")
             }
         }
     }
 
-    fun processSavePdf(context: Context, bitmap: Bitmap) {
+    fun processSavePdf(context: Context, bitmaps: List<Bitmap>) {
         viewModelScope.launch {
-            PdfHelper.saveBitmapAsPdf(
-                context = context,
-                bitmap = bitmap,
-                fileName = "sopletter_${_uiState.value.generation}기"
-            ).onSuccess {
+            PdfHelper.saveBitmapsAsPdf(context, bitmaps, "sopletter_${_uiState.value.generation}기").onSuccess {
                 _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
                 _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
                 _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
             }.onFailure {
-                _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
-                _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("PDF 저장 중 에러 발생.", SopletterSnackbarType.FAILURE))
+                onCaptureFailed("이미지 저장에 실패했어요.")
             }
         }
+    }
+
+    fun onCaptureFailed(message: String = "이미지 캡처 중 에러가 발생했습니다.") {
+        _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
+        viewModelScope.launch { _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar(message, SopletterSnackbarType.FAILURE)) }
     }
 }
