@@ -44,8 +44,8 @@ import org.sopt.official.domain.home.repository.HomeRepository
 internal class DefaultHomeRepository @Inject constructor(
     private val homeApi: HomeApi,
     private val calendarApi: CalendarApi,
-    @Named("homeAppService") private val homeAppServiceCache: InMemoryCache<HomeAppServiceInfo>,
-    @Named("tabAppService") private val tabAppServiceCache: InMemoryCache<List<AppService>>,
+    @param:Named("homeAppService") private val homeAppServiceCache: InMemoryCache<HomeAppServiceInfo>,
+    @param:Named("tabAppService") private val tabAppServiceCache: InMemoryCache<List<AppService>>,
 ) : HomeRepository {
 
     override suspend fun getRecentCalendar(): Result<RecentCalendar> =
