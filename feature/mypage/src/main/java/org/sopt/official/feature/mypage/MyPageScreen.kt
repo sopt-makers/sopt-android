@@ -27,6 +27,7 @@ package org.sopt.official.feature.mypage
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.background
+import org.sopt.official.webview.view.WebViewActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -87,11 +88,21 @@ internal fun MyPageRoute(
             MyPageUiModel.Header(title = "서비스 이용 방침"),
             MyPageUiModel.MyPageItem(
                 title = "개인정보 처리 방침",
-                onItemClick = { urlHandler.openUri(WebUrlConstant.NOTICE_PRIVATE_INFO) }
+                onItemClick = {
+                    Intent(context, WebViewActivity::class.java).apply {
+                        putExtra(WebViewActivity.INTENT_URL, WebUrlConstant.NOTICE_PRIVATE_INFO)
+                        context.startActivity(this)
+                    }
+                }
             ),
             MyPageUiModel.MyPageItem(
                 title = "서비스 이용약관",
-                onItemClick = { urlHandler.openUri(WebUrlConstant.NOTICE_SERVICE_RULE) }
+                onItemClick = {
+                    Intent(context, WebViewActivity::class.java).apply {
+                        putExtra(WebViewActivity.INTENT_URL, WebUrlConstant.NOTICE_SERVICE_RULE)
+                        context.startActivity(this)
+                    }
+                }
             ),
             MyPageUiModel.MyPageItem(
                 title = "의견 보내기",

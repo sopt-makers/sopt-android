@@ -104,13 +104,12 @@ import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
-import org.sopt.official.feature.soptlog.navigation.SoptLog
 import org.sopt.official.feature.sopletter.navigation.navigateToSopletter
 import org.sopt.official.feature.sopletter.navigation.sopletterGraph
+import org.sopt.official.feature.soptlog.navigation.SoptLog
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
 import org.sopt.official.model.UserStatus
-import org.sopt.official.sopletter.navigation.sopletterGraph
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
@@ -405,7 +404,6 @@ fun MainScreen(
                                 navigateUp = navigator::navigateUp
                             )
                             sopletterGraph(
-                                paddingValues = innerPadding,
                                 navController = navigator.navController,
                                 navigateToHome = {
                                     navigator.navigateAndClear(MainTab.Home, userStatus)
