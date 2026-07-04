@@ -35,11 +35,13 @@ class SopletterPrintViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<SopletterPrintSideEffect>()
     val sideEffect: SharedFlow<SopletterPrintSideEffect> = _sideEffect.asSharedFlow()
 
+    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
+
+    // TODO: uiState.generation이 기본값 0으로 고정되어 있고 갱신 로직이 없음.
+    //  실제 기수 정보를 서버에서 받아와 반영하는 로직 추가 필요.
     init {
         fetchPreviewMessages()
     }
-
-    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
 
     private fun fetchPreviewMessages() {
         viewModelScope.launch {
