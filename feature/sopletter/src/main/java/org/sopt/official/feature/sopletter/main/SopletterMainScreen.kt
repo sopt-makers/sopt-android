@@ -114,7 +114,7 @@ fun SopletterMainRoute(
 
     SopletterScaffold(
         snackbarHostState = snackbarHostState,
-        isOuterSnackbarHostVisible = false,
+        isSnackbarHostVisible = false,
     ) { paddingValues ->
         SopletterMainScreen(
             uiState = uiState,

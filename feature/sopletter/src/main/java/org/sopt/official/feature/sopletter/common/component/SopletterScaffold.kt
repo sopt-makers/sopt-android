@@ -61,8 +61,8 @@ import timber.log.Timber
 @Composable
 internal fun SopletterScaffold(
     snackbarHostState: SnackbarHostState,
-    isOuterSnackbarHostVisible: Boolean = true,
     modifier: Modifier = Modifier,
+    isSnackbarHostVisible: Boolean = true,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (innerPadding: PaddingValues) -> Unit,
 ) {
@@ -70,7 +70,7 @@ internal fun SopletterScaffold(
         contentWindowInsets = contentWindowInsets,
         snackbarHost = {
             Box(modifier = Modifier.fillMaxSize()) {
-                if (isOuterSnackbarHostVisible) {
+                if (isSnackbarHostVisible) {
                     SopletterSnackbarHost(
                         snackbarHostState = snackbarHostState,
                         modifier = Modifier
