@@ -44,7 +44,7 @@ fun SopletterEntryRoute(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(SoptTheme.colors.onSurface950),
+                    .background(SoptTheme.colors.background),
             )
         }
     }
