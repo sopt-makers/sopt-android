@@ -50,9 +50,9 @@ import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
-import org.sopt.official.feature.sopletter.print.component.SopletterPrintTopBar
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 
@@ -148,7 +148,11 @@ private fun SopletterPrintScreen(
                 .fillMaxSize()
                 .background(color = SoptTheme.colors.background)
         ) {
-            SopletterPrintTopBar(onBackClick = onBackClick)
+            SopletterTopbar(
+                onBackClick = onBackClick,
+                topbarTitle = "솝레터 출력"
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             Box(
