@@ -201,6 +201,20 @@ private fun SopletterMainScreen(
         )
 
         when {
+            !uiState.isInitialized -> {
+                SopletterPullRefreshContainer(
+                    refreshState = refreshState,
+                    isRefreshing = uiState.isMessageRefreshing,
+                    isShowIndicator = false,
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(SoptTheme.colors.background),
+                    )
+                }
+            }
+
             uiState.memoList.isEmpty() -> {
                 SopletterPullRefreshContainer(
                     refreshState = refreshState,
