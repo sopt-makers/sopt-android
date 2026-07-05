@@ -80,7 +80,7 @@ fun SopletterWriteTextBox(
             .fillMaxWidth()
             .background(color = SoptTheme.colors.onSurface700, shape = RoundedCornerShape(10.dp))
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
-            .padding(16.dp),
+            .padding(all = 20.dp ),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(

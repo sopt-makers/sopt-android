@@ -37,17 +37,20 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.sopletter.onboarding.repository.SopletterOnboardingRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
 import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 import org.sopt.official.sopletter.repository.SopletterWriteRepository
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterWriteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val sopletterWriteRepository: SopletterWriteRepository
+    private val sopletterWriteRepository: SopletterWriteRepository,
+    private val sopletterOnboardingRepository: SopletterOnboardingRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SopletterWriteUiState())
@@ -57,6 +60,23 @@ class SopletterWriteViewModel @Inject constructor(
     val sideEffect: SharedFlow<SopletterWriteSideEffect> = _sideEffect.asSharedFlow()
 
     private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterWrite>().topicId
+
+    init {
+        fetchWriterProfile()
+    }
+
+    private fun fetchWriterProfile() {
+        viewModelScope.launch {
+            sopletterOnboardingRepository.getOnboarding()
+                .onSuccess { onboarding ->
+                    _uiState.update { it.copy(writerName = onboarding.nickname) }
+                }
+                .onFailure {
+                    Timber.e(it)
+                }
+        }
+    }
+
     fun postSopletter(content: String) {
         if (_uiState.value.isLoading) return
 

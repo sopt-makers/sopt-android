@@ -28,6 +28,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.SnackbarHostState
@@ -117,7 +118,7 @@ private fun SopletterWriteScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = SoptTheme.colors.background)
-            .padding(horizontal = 20.dp),
+            .imePadding(),
     ) {
         SopletterTopbar(onBackClick = onBackClick)
 
@@ -129,14 +130,18 @@ private fun SopletterWriteScreen(
             userName = uiState.writerName,
             state = textFieldState,
             maxLength = maxLength,
-            onLimitExceeded = onLimitExceeded
+            onLimitExceeded = onLimitExceeded,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         SopletterWriteButton(
             isEnabled = isButtonEnabled,
-            onButtonClick = onPostClick
+            onButtonClick = onPostClick,
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
         )
 
         Spacer(modifier = Modifier.padding(vertical = 24.dp))
