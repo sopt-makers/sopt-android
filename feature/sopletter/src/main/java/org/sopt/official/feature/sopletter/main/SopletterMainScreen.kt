@@ -88,6 +88,7 @@ fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     navigateToTopic: () -> Unit = {},
+    navigateToTopicDetail: (Long) -> Unit = {},
     navigateToWrite: (Long?) -> Unit = {},
     navigateToPrint: (Long?) -> Unit = {},
 ) {
@@ -129,7 +130,7 @@ fun SopletterMainRoute(
                     memoColor = it.memoColor(),
                 )
             },
-            onRefresh = viewModel::fetchMessages,
+            onRefresh = viewModel::refreshMainContent,
             onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
             onBackClick = navigateUp,
@@ -142,6 +143,7 @@ fun SopletterMainRoute(
             },
             printDialogTitle = uiState.topicTitle,
             onTopicClick = navigateToTopic,
+            onTopicCtaClick = navigateToTopicDetail,
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
             onWriteFABClick = { navigateToWrite(uiState.selectedTopicId) },
@@ -167,6 +169,7 @@ private fun SopletterMainScreen(
     printDialogTitle: String,
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
+    onTopicCtaClick: (Long) -> Unit,
     onErrorConfirm: () -> Unit,
     onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -176,7 +179,8 @@ private fun SopletterMainScreen(
         refreshing = uiState.isMessageRefreshing,
         onRefresh = onRefresh,
     )
-    val isTopicCtaVisible = uiState.selectedTopicId == null
+    val isTopicCtaVisible = uiState.routeTopicId == null
+    val cta = uiState.cta
 
     gridState.onBottomReached(
         threshold = 4,
@@ -195,12 +199,12 @@ private fun SopletterMainScreen(
         ) {
             SopletterMainTopBar(
                 title = uiState.topicTitle,
-                isTopicDetail = uiState.selectedTopicId != null,
+                isTopicDetail = uiState.routeTopicId != null,
                 isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,
                 onReportClick = onReportClick,
-                onTopicClick = if (uiState.selectedTopicId == null) onTopicClick else onBackClick,
+                onTopicClick = if (uiState.routeTopicId == null) onTopicClick else onBackClick,
             )
 
             when {
@@ -225,10 +229,10 @@ private fun SopletterMainScreen(
                         isShowIndicator = uiState.isInitialized,
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            if (isTopicCtaVisible) {
+                            if (isTopicCtaVisible && cta != null) {
                                 SopletterTopicCta(
-                                    text = "이번 기수 회고하러 가볼까요?",
-                                    onClick = { /* TODO API 연동후 추가 예정 */ },
+                                    text = cta.ctaText.orEmpty(),
+                                    onClick = { onTopicCtaClick(cta.topicId ?: return@SopletterTopicCta) },
                                     modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                                 )
                             }
@@ -262,11 +266,11 @@ private fun SopletterMainScreen(
                             columns = StaggeredGridCells.Fixed(2),
                             verticalItemSpacing = (-10).dp,
                         ) {
-                            if (isTopicCtaVisible) {
+                            if (isTopicCtaVisible && cta != null) {
                                 item(span = StaggeredGridItemSpan.FullLine) {
                                     SopletterTopicCta(
-                                        text = "이번 기수 회고하러 가볼까요?",
-                                        onClick = { /* TODO API 연동후 추가 예정 */ },
+                                        text = cta.ctaText.orEmpty(),
+                                        onClick = { onTopicCtaClick(cta.topicId ?: return@SopletterTopicCta) },
                                         modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
                                     )
                                 }
@@ -402,6 +406,7 @@ private fun SopletterMainScreenPreview(
             onPrintConfirm = {},
             printDialogTitle = previewState.topicTitle,
             onReportClick = {},
+            onTopicCtaClick = {},
             onErrorConfirm = {},
             onWriteFABClick = {},
             onTopicClick = {},
