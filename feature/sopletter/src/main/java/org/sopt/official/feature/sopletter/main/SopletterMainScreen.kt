@@ -66,6 +66,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
@@ -87,12 +88,15 @@ fun SopletterMainRoute(
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     navigateToTopic: () -> Unit = {},
+    navigateToWrite: (Long?) -> Unit = {},
+    navigateToPrint: (Long?) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    var isPrintDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -129,11 +133,18 @@ fun SopletterMainRoute(
             onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
             dialogActions = dialogActions,
             onBackClick = navigateUp,
-            onDownloadClick = { /* TODO download click */ },
+            onDownloadClick = { isPrintDialogVisible = true },
+            isPrintDialogVisible = isPrintDialogVisible,
+            onPrintDialogDismiss = { isPrintDialogVisible = false },
+            onPrintConfirm = {
+                isPrintDialogVisible = false
+                navigateToPrint(uiState.selectedTopicId)
+            },
+            printDialogTitle = uiState.topicTitle,
             onTopicClick = navigateToTopic,
             onReportClick = viewModel::openReportForm,
             onErrorConfirm = viewModel::dismissErrorDialog,
-            onWriteFABClick = { /* TODO write FAB click */ },
+            onWriteFABClick = { navigateToWrite(uiState.selectedTopicId) },
             modifier = Modifier.padding(paddingValues),
         )
     }
@@ -150,6 +161,10 @@ private fun SopletterMainScreen(
     dialogActions: SopletterMemoDetailDialogContract.Actions,
     onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
+    isPrintDialogVisible: Boolean,
+    onPrintDialogDismiss: () -> Unit,
+    onPrintConfirm: () -> Unit,
+    printDialogTitle: String,
     onReportClick: () -> Unit,
     onTopicClick: () -> Unit,
     onErrorConfirm: () -> Unit,
@@ -300,6 +315,14 @@ private fun SopletterMainScreen(
             NetworkErrorDialog(onConfirm = onErrorConfirm)
         }
 
+        if (isPrintDialogVisible) {
+            SopletterPrintDialog(
+                title = printDialogTitle,
+                onDismissRequest = onPrintDialogDismiss,
+                onPrintConfirm = onPrintConfirm,
+            )
+        }
+
         SopletterSnackbarHost(
             snackbarHostState = snackbarHostState,
             modifier = Modifier
@@ -374,6 +397,10 @@ private fun SopletterMainScreenPreview(
             dialogActions = previewDialogActions,
             onBackClick = {},
             onDownloadClick = {},
+            isPrintDialogVisible = false,
+            onPrintDialogDismiss = {},
+            onPrintConfirm = {},
+            printDialogTitle = previewState.topicTitle,
             onReportClick = {},
             onErrorConfirm = {},
             onWriteFABClick = {},

@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -39,12 +40,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteButton
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteTextBox
+import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
 
 @Composable
@@ -55,19 +61,38 @@ fun SopletterWriteRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val textFieldState = remember { TextFieldState() }
+    val snackBarHostState = remember { SnackbarHostState() }
+    val lifecycleOwner = LocalLifecycleOwner.current
 
-    LaunchedEffect(uiState.isSuccess) {
-        if (uiState.isSuccess) {
-            onNavigateToMain()
-        }
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
+                when (sideEffect) {
+                    is SopletterWriteSideEffect.ShowSnackbar -> {
+                        snackBarHostState.showSnackbar(
+                            SopletterSnackbarVisuals(
+                                message = sideEffect.message,
+                                type = sideEffect.type
+                            )
+                        )
+                    }
+                    is SopletterWriteSideEffect.NavigateToMain -> {
+                        onNavigateToMain()
+                    }
+                }
+            }
     }
 
-    SopletterWriteScreen(
-        uiState = uiState,
-        textFieldState = textFieldState,
-        onBackClick = onBackClick,
-        onPostClick = viewModel::postSopletter
-    )
+    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
+        SopletterWriteScreen(
+            uiState = uiState,
+            textFieldState = textFieldState,
+            onBackClick = onBackClick,
+            onPostClick = { viewModel.postSopletter(textFieldState.text.toString()) },
+            onLimitExceeded = viewModel::onLimitExceeded,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
 }
 
 @Composable
@@ -76,6 +101,7 @@ private fun SopletterWriteScreen(
     textFieldState: TextFieldState,
     onBackClick: () -> Unit,
     onPostClick: () -> Unit,
+    onLimitExceeded: () -> Unit,
     modifier: Modifier = Modifier,
     maxLength: Int = 350
 ) {
@@ -102,7 +128,8 @@ private fun SopletterWriteScreen(
         SopletterWriteTextBox(
             userName = uiState.writerName,
             state = textFieldState,
-            maxLength = maxLength
+            maxLength = maxLength,
+            onLimitExceeded = onLimitExceeded
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -112,7 +139,7 @@ private fun SopletterWriteScreen(
             onButtonClick = onPostClick
         )
 
-        Spacer(modifier= Modifier.padding(vertical = 24.dp))
+        Spacer(modifier = Modifier.padding(vertical = 24.dp))
     }
 }
 
@@ -126,7 +153,8 @@ private fun SopletterWriteScreenPreview() {
             uiState = SopletterWriteUiState(writerName = "익명의 무무"),
             textFieldState = textFieldState,
             onBackClick = { },
-            onPostClick = { }
+            onPostClick = { },
+            onLimitExceeded = { }
         )
     }
 }

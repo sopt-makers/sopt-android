@@ -28,9 +28,11 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
+import org.sopt.official.data.sopletter.datasource.SopletterWriteDataSource
 import org.sopt.official.data.sopletter.datasourceimpl.SopletterDataSourceImpl
+import org.sopt.official.data.sopletter.datasourceimpl.SopletterWriteDataSourceImpl
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -40,4 +42,10 @@ internal abstract class DataSourceModule {
     abstract fun bindSopletterDataSource(
         sopletterDataSourceImpl: SopletterDataSourceImpl,
     ): SopletterDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindSopletterWriteDataSource(
+        sopletterWriteDataSourceImpl: SopletterWriteDataSourceImpl,
+    ): SopletterWriteDataSource
 }

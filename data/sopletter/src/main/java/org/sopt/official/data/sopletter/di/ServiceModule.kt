@@ -28,17 +28,29 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
 import org.sopt.official.common.di.AppRetrofit
+import org.sopt.official.data.sopletter.api.SopletterWriteService
 import org.sopt.official.data.sopletter.service.SopletterService
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 internal object ServiceModule {
+
     @Provides
     @Singleton
     fun provideSopletterService(
-        @AppRetrofit(true) retrofit: Retrofit,
-    ): SopletterService = retrofit.create(SopletterService::class.java)
+        @AppRetrofit retrofit: Retrofit
+    ): SopletterService {
+        return retrofit.create(SopletterService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSopletterWriteService(
+        @AppRetrofit(true) retrofit: Retrofit
+    ): SopletterWriteService {
+        return retrofit.create(SopletterWriteService::class.java)
+    }
 }
