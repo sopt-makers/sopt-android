@@ -74,6 +74,7 @@ fun NavGraphBuilder.sopletterGraph(
                 navigateToHome = navigateToHome,
                 navigateUp = navController::navigateUp,
                 navigateToTopic = navController::navigateToSopletterTopic,
+                navigateToTopicDetail = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
                 navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId) },
                 navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
             )
@@ -106,6 +107,7 @@ fun NavGraphBuilder.sopletterGraph(
             SopletterMainRoute(
                 navigateUp = navController::navigateUp,
                 navigateToTopic = navController::navigateToSopletterTopic,
+                navigateToTopicDetail = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
                 navigateToWrite = { topicId ->
                    navController.navigateToSopletterWrite(topicId)
                  },

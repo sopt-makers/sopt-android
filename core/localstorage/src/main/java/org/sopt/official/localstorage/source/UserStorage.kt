@@ -42,7 +42,7 @@ interface UserStorage {
     val userStatus: Flow<UserStatus>
     val pushToken: Flow<String>
     val platform: Flow<String>
-    val isSopletterOnboardingCompleted: Flow<Boolean>
+    val isSopletterOnboardingCompleted: Flow<Boolean?>
     val isAppjamMode: Flow<Boolean>
 
     suspend fun saveUserStatus(status: UserStatus)

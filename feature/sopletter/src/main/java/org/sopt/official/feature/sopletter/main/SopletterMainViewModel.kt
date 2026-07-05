@@ -73,16 +73,47 @@ class SopletterMainViewModel @Inject constructor(
 
     fun initMessages(topicId: Long?) {
         val currentState = _uiState.value
-        if (currentState.isInitialized && currentState.selectedTopicId == topicId) return
+        if (currentState.isInitialized && currentState.routeTopicId == topicId) return
 
-        _uiState.value = SopletterMainUiState(selectedTopicId = topicId)
+        _uiState.value = SopletterMainUiState(
+            routeTopicId = topicId,
+        )
+        if (topicId == null) {
+            refreshMainContent()
+        } else {
+            fetchMessages()
+        }
+    }
+
+    fun refreshMainContent() {
+        if (_uiState.value.routeTopicId == null) {
+            fetchCta()
+        }
         fetchMessages()
+    }
+
+    fun fetchCta() = viewModelScope.launch {
+        if (_uiState.value.routeTopicId != null) return@launch
+
+        sopletterRepository.getCta()
+            .onSuccess { cta ->
+                _uiState.update { state ->
+                    state.copy(
+                        cta = cta.takeIf { it.showCta },
+                    )
+                }
+            }
+            .onFailure {
+                _uiState.update { state ->
+                    state.copy(cta = null)
+                }
+            }
     }
 
     fun fetchMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
         if (currentState.isLoading) return@launch
-        val selectedTopicId = currentState.selectedTopicId
+        val routeTopicId = currentState.routeTopicId
 
         val cursor = if (isLoadMore) {
             if (!currentState.hasNext) return@launch
@@ -100,11 +131,11 @@ class SopletterMainViewModel @Inject constructor(
             )
         }
 
-        val result = if (selectedTopicId == null) {
+        val result = if (routeTopicId == null) {
             sopletterRepository.getDefaultMessages(cursor = cursor)
         } else {
             sopletterRepository.getTopicMessages(
-                topicId = selectedTopicId,
+                topicId = routeTopicId,
                 cursor = cursor,
             )
         }
@@ -113,7 +144,8 @@ class SopletterMainViewModel @Inject constructor(
             .onSuccess { response ->
                 _uiState.update { state ->
                     state.copy(
-                        selectedTopicId = selectedTopicId,
+                        routeTopicId = routeTopicId,
+                        selectedTopicId = response.topicId,
                         topicId = response.topicId,
                         topicTitle = response.title,
                         totalCount = response.totalCount,

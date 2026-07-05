@@ -18,6 +18,7 @@ fun SopletterEntryRoute(
     navigateToHome: () -> Unit,
     navigateUp: () -> Unit,
     navigateToTopic: () -> Unit,
+    navigateToTopicDetail: (Long) -> Unit,
     navigateToWrite: (Long?) -> Unit,
     navigateToPrint: (Long?) -> Unit,
     viewModel: SopletterEntryViewModel = hiltViewModel(),
@@ -29,6 +30,7 @@ fun SopletterEntryRoute(
             SopletterMainRoute(
                 navigateUp = navigateUp,
                 navigateToTopic = navigateToTopic,
+                navigateToTopicDetail = navigateToTopicDetail,
                 navigateToWrite = navigateToWrite,
                 navigateToPrint = navigateToPrint,
             )

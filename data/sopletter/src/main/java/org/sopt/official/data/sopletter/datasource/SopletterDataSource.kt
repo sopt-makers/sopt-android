@@ -24,6 +24,7 @@
  */
 package org.sopt.official.data.sopletter.datasource
 
+import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
@@ -72,4 +73,6 @@ interface SopletterDataSource {
     suspend fun getTopics(
         type: String,
     ): SopletterTopicsResponseDto
+
+    suspend fun getCta(): SopletterCtaResponseDto
 }

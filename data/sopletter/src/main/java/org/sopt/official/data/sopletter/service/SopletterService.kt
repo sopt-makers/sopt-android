@@ -25,6 +25,7 @@
 package org.sopt.official.data.sopletter.service
 
 import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
+import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
@@ -89,4 +90,7 @@ interface SopletterService {
     suspend fun getTopics(
         @Query("type") type: String,
     ): SopletterTopicsResponseDto
+
+    @GET("sopt-letter/cta")
+    suspend fun getCta(): SopletterCtaResponseDto
 }

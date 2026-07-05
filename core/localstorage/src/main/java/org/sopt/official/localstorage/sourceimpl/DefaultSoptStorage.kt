@@ -59,8 +59,8 @@ class DefaultSoptStorage @Inject constructor(
         preferences[KEY_PLAYGROUND_TOKEN]?.decryptInReleaseMode(keyAlias = PLAYGROUND_TOKEN_KEY_ALIAS) ?: DEFAULT_VALUE
     }
 
-    override val isSopletterOnboardingCompleted: Flow<Boolean> = dataStore.data.map { preferences ->
-        preferences[KEY_ONBOARDING_COMPLETED] ?: false
+    override val isSopletterOnboardingCompleted: Flow<Boolean?> = dataStore.data.map { preferences ->
+        preferences[KEY_ONBOARDING_COMPLETED]
     }
 
     override val isAppjamMode: Flow<Boolean> = dataStore.data.map { preferences ->
