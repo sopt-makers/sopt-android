@@ -44,7 +44,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -84,6 +83,7 @@ fun SopletterPrintRoute(
                             )
                         )
                     }
+
                     is SopletterPrintSideEffect.NavigateBack -> onBackClick()
                 }
             }
@@ -293,7 +293,9 @@ private fun SopletterBoardLayout(
             text = title,
             style = SoptTheme.typography.title16SB,
             color = SoptTheme.colors.onSurface100,
-            modifier = Modifier.align(Alignment.Start).padding(bottom = 16.dp, start = 12.dp)
+            modifier = Modifier
+                .align(Alignment.Start)
+                .padding(bottom = 16.dp, start = 12.dp)
         )
 
         Row(
@@ -313,7 +315,9 @@ private fun SopletterBoardLayout(
                 }
             }
             Column(
-                modifier = Modifier.wrapContentWidth().padding(top = 20.dp),
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .padding(top = 20.dp),
                 verticalArrangement = Arrangement.spacedBy((-8).dp)
             ) {
                 rightColMemos.forEach { item ->
