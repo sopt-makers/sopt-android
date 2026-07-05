@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -126,7 +127,7 @@ private fun SopletterPrintScreen(
             if (currentMemos != null) {
                 Box(
                     modifier = Modifier
-                        .wrapContentSize()
+                        .wrapContentSize(unbounded = true)
                         .zIndex(-1f)
                         .graphicsLayer { alpha = 0.01f }
                         .drawWithCache {
@@ -140,7 +141,6 @@ private fun SopletterPrintScreen(
                     SopletterBoardLayout(
                         generation = uiState.generation,
                         memos = currentMemos,
-                        scale = 1f
                     )
                 }
 
@@ -218,11 +218,12 @@ private fun SopletterPrintScreen(
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        SopletterBoardLayout(
-                            generation = uiState.generation,
-                            memos = uiState.previewMemoList.take(16),
-                            scale = 0.45f
-                        )
+                        ScaledSopletterBoard(scale = 0.45f) {
+                            SopletterBoardLayout(
+                                generation = uiState.generation,
+                                memos = uiState.previewMemoList.take(16),
+                            )
+                        }
                     }
                 }
             }
@@ -277,36 +278,76 @@ private fun SopletterPrintScreen(
 private fun SopletterBoardLayout(
     generation: Int,
     memos: List<SopletterMessage>,
-    scale: Float,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val leftColMemos = memos.filterIndexed { index, _ -> index % 2 == 0 }
     val rightColMemos = memos.filterIndexed { index, _ -> index % 2 == 1 }
 
-    Column(modifier = modifier.wrapContentWidth().background(SoptTheme.colors.background)) {
+    Column(
+        modifier = modifier
+            .wrapContentSize(unbounded = true)
+            .background(SoptTheme.colors.background)
+    ) {
         Text(
             text = "${generation}기 솝레터",
-            style = SoptTheme.typography.title16SB.copy(fontSize = (16 * scale).sp),
+            style = SoptTheme.typography.title16SB,
             color = SoptTheme.colors.onSurface100,
-            modifier = Modifier.align(Alignment.Start).padding(bottom = (16 * scale).dp, start = 12.dp)
+            modifier = Modifier.align(Alignment.Start).padding(bottom = 16.dp, start = 12.dp)
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy((8 * scale).dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.Top,
             modifier = Modifier.wrapContentWidth()
         ) {
             Column(
                 modifier = Modifier.wrapContentWidth(),
-                verticalArrangement = Arrangement.spacedBy((-8 * scale).dp)
+                verticalArrangement = Arrangement.spacedBy((-8).dp)
             ) {
-                leftColMemos.forEach { item -> SopletterMemoCard(memo = item, onClick = {}, scale = scale) }
+                leftColMemos.forEach { item ->
+                    SopletterMemoCard(
+                        memo = item,
+                        onClick = {},
+                    )
+                }
             }
             Column(
-                modifier = Modifier.wrapContentWidth().padding(top = (20 * scale).dp),
-                verticalArrangement = Arrangement.spacedBy((-8 * scale).dp)
+                modifier = Modifier.wrapContentWidth().padding(top = 20.dp),
+                verticalArrangement = Arrangement.spacedBy((-8).dp)
             ) {
-                rightColMemos.forEach { item -> SopletterMemoCard(memo = item, onClick = {}, scale = scale) }
+                rightColMemos.forEach { item ->
+                    SopletterMemoCard(
+                        memo = item,
+                        onClick = {},
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ScaledSopletterBoard(
+    scale: Float,
+    content: @Composable () -> Unit,
+) {
+    if (scale == 1f) {
+        content()
+        return
+    }
+
+    Layout(content = content) { measurables, constraints ->
+        val placeable = measurables.first().measure(constraints)
+        val scaledWidth = (placeable.width * scale).toInt()
+        val scaledHeight = (placeable.height * scale).toInt()
+
+        layout(scaledWidth, scaledHeight) {
+            val xOffset = (scaledWidth - placeable.width) / 2
+            val yOffset = (scaledHeight - placeable.height) / 2
+
+            placeable.placeWithLayer(x = xOffset, y = yOffset) {
+                scaleX = scale
+                scaleY = scale
             }
         }
     }
@@ -314,7 +355,7 @@ private fun SopletterBoardLayout(
 
 @Composable
 @Preview(showBackground = true)
-private fun PreviewSopletterPrintScreen(){
+private fun PreviewSopletterPrintScreen() {
     SoptTheme {
         SopletterPrintRoute(
             onBackClick = {}

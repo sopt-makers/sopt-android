@@ -27,8 +27,6 @@ package org.sopt.official.feature.sopletter.main.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,8 +37,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
@@ -52,10 +50,7 @@ internal fun SopletterMemoCard(
     memo: SopletterMessage,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    scale: Float = 1f
 ) {
-    val effectiveScale = if (scale < 1f) scale else 1f
-
     Box(
         modifier = modifier
             .rotate(memo.rotationDegree.toFloat())
@@ -66,21 +61,17 @@ internal fun SopletterMemoCard(
             imageVector = ImageVector.vectorResource(memo.shapeType.imageRes()),
             contentDescription = null,
             colorFilter = ColorFilter.tint(memo.memoColor()),
-            modifier = Modifier.size((140 * effectiveScale).dp)
         )
 
         Text(
             text = memo.previewContent,
             modifier = Modifier
-                .width((111 * effectiveScale).dp)
-                .height((110 * effectiveScale).dp)
-                .padding((8 * effectiveScale).dp),
-            style = SoptTheme.typography.body14M.copy(
-                fontSize = (14 * effectiveScale).sp,
-                lineHeight = (22 * effectiveScale).sp
-            ),
+                .width(111.dp)
+                .height(110.dp),
+            style = SoptTheme.typography.body14M,
             color = SoptTheme.colors.onSurface800,
             textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
