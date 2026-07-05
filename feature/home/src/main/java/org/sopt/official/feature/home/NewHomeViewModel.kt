@@ -34,19 +34,18 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.common.util.successOr
-import org.sopt.official.domain.home.AppServiceManager
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.RecentCalendar
 import org.sopt.official.domain.home.model.ReviewForm
 import org.sopt.official.domain.home.model.UserDescription
 import org.sopt.official.domain.home.repository.HomeRepository
+import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 import org.sopt.official.domain.user.model.UserInfo
 import org.sopt.official.domain.user.repository.SoptUserRepository
 import org.sopt.official.domain.poke.entity.ApiResult
@@ -75,7 +74,7 @@ internal class NewHomeViewModel @Inject constructor(
     private val homeRepository: HomeRepository,
     private val soptUserRepository: SoptUserRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
-    private val appServiceManager: AppServiceManager,
+    private val getAppServiceUseCase: GetAppServiceUseCase,
     private val userStorage: UserStorage,
 ) : ViewModel() {
     private val viewModelState: MutableStateFlow<HomeViewModelState> =
@@ -89,20 +88,6 @@ internal class NewHomeViewModel @Inject constructor(
             initialValue = viewModelState.value.toUiState(),
         )
 
-    init {
-        observeAppServices()
-    }
-
-    private fun observeAppServices() {
-        viewModelScope.launch {
-            appServiceManager.appServices
-                .filterNotNull()
-                .collect { appServices ->
-                    viewModelState.update { it.copy(appServices = appServices) }
-                }
-        }
-    }
-
     fun refreshAll() {
         viewModelState.update { it.copy(isLoading = true) }
 
@@ -114,11 +99,14 @@ internal class NewHomeViewModel @Inject constructor(
             val toastDataDeferred = async { homeRepository.getHomeFloatingToast() }
             val popularPostsDeferred = async { homeRepository.getHomePopularPosts() }
             val latestPostsDeferred = async { homeRepository.getHomeLatestPosts() }
-            val appServiceDeferred = async {
-                appServiceManager.fetchAppServices(forceUpdate = true)
-            }
+            val appServiceDeferred = async { getAppServiceUseCase(forceRefresh = true) }
 
-            appServiceDeferred.await()
+            val appServiceResult = appServiceDeferred.await()
+
+            appServiceResult.onSuccess { result ->
+                userStorage.saveIsAppjamMode(result.isAppjamMode)
+                viewModelState.update { it.copy(appServices = result.appServices) }
+            }
 
             val userInfoResult = userInfoDeferred.await()
 

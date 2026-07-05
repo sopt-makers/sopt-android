@@ -25,6 +25,7 @@
 package org.sopt.official.data.home.remote.api
 
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
+import org.sopt.official.data.home.remote.response.HomeAppServicesResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
 import org.sopt.official.data.home.remote.response.HomeLatestPostsResponseDto
@@ -38,7 +39,10 @@ internal interface HomeApi {
     suspend fun getHomeDescription(): HomeDescriptionResponseDto
 
     @GET("home/app-service")
-    suspend fun getHomeAppService(): List<HomeAppServiceResponseDto>
+    suspend fun getHomeAppService(): HomeAppServicesResponseDto
+
+    @GET("home/tab-app-service")
+    suspend fun getTabAppService(): List<HomeAppServiceResponseDto>
 
     @GET("home/review-form")
     suspend fun getReviewForm(): HomeReviewFormResponseDto

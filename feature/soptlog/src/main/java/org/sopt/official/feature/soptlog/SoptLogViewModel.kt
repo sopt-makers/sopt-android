@@ -28,14 +28,16 @@ import androidx.core.net.toUri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.async
 import kotlinx.coroutines.channels.Channel
-import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
@@ -44,8 +46,9 @@ import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
-import org.sopt.official.feature.soptlog.state.SoptLogState
 import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
+import org.sopt.official.feature.soptlog.state.SoptLogState
+import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 
 @HiltViewModel
@@ -53,6 +56,7 @@ class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
     private val appjamtampRepository: AppjamtampRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
@@ -64,19 +68,32 @@ class SoptLogViewModel @Inject constructor(
     val isAppjamJoined: StateFlow<Boolean>
         get() = _isAppjamJoined.asStateFlow()
 
+    val isAppjamMode: StateFlow<Boolean> = userStorage.isAppjamMode
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
+
     private val _navigationEvent = Channel<SoptLogNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
+    fun loadSoptLogInfo() {
+        if (isAppjamMode.value) {
+            loadSoptLogWithAppjamInfo()
+        } else {
+            loadSoptLogInfoOnly()
+        }
+    }
+
     fun onNavigationClick(url: String) {
         when (SoptLogUrl.from(url)) {
-            SoptLogUrl.POKE, SoptLogUrl.POKE_FRIEND_SUMMARY -> {
-                handlePokeNavigation(url)
-            }
+            SoptLogUrl.POKE, SoptLogUrl.POKE_FRIEND_SUMMARY -> handlePokeNavigation(url)
             SoptLogUrl.SOPTAMP -> {
+                val deepLinkUrl = if (isAppjamMode.value) "appjamtamp" else "soptamp"
                 viewModelScope.launch {
-                    _navigationEvent.send(
-                        SoptLogNavigationEvent.NavigateToDeepLink(url)
-                    )
+                    _navigationEvent.send(SoptLogNavigationEvent.NavigateToDeepLink(deepLinkUrl))
+                }
+            }
+            SoptLogUrl.APPJAMTAMP -> {
+                viewModelScope.launch {
+                    _navigationEvent.send(SoptLogNavigationEvent.NavigateToDeepLink(url))
                 }
             }
             else -> {}
@@ -106,8 +123,7 @@ class SoptLogViewModel @Inject constructor(
         }
     }
 
-    // 나의 앱잼 정보도 같이 가져옴 (앱잼탬프 기간만)
-    fun getSoptLogInfoData() {
+    private fun loadSoptLogWithAppjamInfo() {
         viewModelScope.launch {
             _soptLogInfo.update { it.copy(isLoading = true) }
 
@@ -118,6 +134,7 @@ class SoptLogViewModel @Inject constructor(
             val appjamResult = appjamInfoDeferred.await()
 
             if (soptLogResult.isSuccess && appjamResult.isSuccess) {
+                _isAppjamJoined.value = appjamResult.getOrThrow().isAppjamJoined
                 _soptLogInfo.update {
                     it.copy(
                         soptLogInfo = soptLogResult.getOrThrow(),
@@ -125,49 +142,33 @@ class SoptLogViewModel @Inject constructor(
                         isError = false
                     )
                 }
-                _isAppjamJoined.value = appjamResult.getOrThrow().isAppjamJoined
             } else {
-                val error = soptLogResult.exceptionOrNull() ?: appjamResult.exceptionOrNull() ?: Exception("Unknown error")
+                val error = soptLogResult.exceptionOrNull()
+                    ?: appjamResult.exceptionOrNull()
+                    ?: Exception("Unknown error")
                 Timber.e(error)
                 _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
             }
         }
     }
 
-    fun getSoptLogInfo() {
+    private fun loadSoptLogInfoOnly() {
         viewModelScope.launch {
-            _soptLogInfo.update {
-                it.copy(
-                    isLoading = true
-                )
-            }
+            _soptLogInfo.update { it.copy(isLoading = true) }
 
             soptLogRepository.getSoptLogInfo()
                 .onSuccess { info ->
                     _soptLogInfo.update {
-                        it.copy(
-                            soptLogInfo = info,
-                            isError = false,
-                        )
-                    }
-                }.onFailure { error ->
-                    Timber.e(error)
-                    _soptLogInfo.update {
-                        it.copy(
-                            isError = true,
-                        )
+                        it.copy(soptLogInfo = info, isLoading = false, isError = false)
                     }
                 }
-
-            _soptLogInfo.update {
-                it.copy(
-                    isLoading = false
-                )
-            }
+                .onFailure { error ->
+                    Timber.e(error)
+                    _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
+                }
         }
     }
 
-    // 신규 유저인지 판단하는 함수 (콕 찌르기 온보딩)
     suspend fun fetchIsNewPoke(): Result<Boolean> {
         val apiResult: ApiResult<*> = checkNewInPokeUseCase()
 
@@ -175,11 +176,9 @@ class SoptLogViewModel @Inject constructor(
             is ApiResult.Success -> {
                 Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
             }
-
             is ApiResult.ApiError -> {
                 Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
             }
-
             is ApiResult.Failure -> {
                 Result.failure(apiResult.throwable)
             }

@@ -31,16 +31,24 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.home.AppServiceManager
 import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.usecase.GetTabAppServiceUseCase
+import org.sopt.official.domain.home.usecase.ObserveTabAppServiceUseCase
+import org.sopt.official.localstorage.source.UserStorage
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val appServiceManager: AppServiceManager
+    private val getTabAppServiceUseCase: GetTabAppServiceUseCase,
+    private val observeTabAppServiceUseCase: ObserveTabAppServiceUseCase,
+    userStorage: UserStorage,
 ) : ViewModel() {
+
     private val _mainTabs = MutableStateFlow(MainTab.getActiveTabs(emptyList()))
     val mainTabs: StateFlow<List<MainTab>>
         get() = _mainTabs.asStateFlow()
@@ -50,7 +58,12 @@ class MainViewModel @Inject constructor(
         get() = _badgeMap.asStateFlow()
 
     init {
-        observeAppServices()
+        fetchTabAppServices()
+        combine(
+            observeTabAppServiceUseCase().filterNotNull(),
+            userStorage.isAppjamMode,
+        ) { services, isAppjam -> updateMainTabs(services, isAppjam) }
+            .launchIn(viewModelScope)
     }
 
     fun updateBadge(badges: Map<String?, String?>) {
@@ -61,27 +74,24 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private fun observeAppServices() {
-        viewModelScope.launch {
-            appServiceManager.fetchAppServices()
-
-            appServiceManager.appServices
-                .filterNotNull()
-                .collect { appServices ->
-                    updateMainTabs(appServices)
-                }
-        }
+    private fun fetchTabAppServices() {
+        viewModelScope.launch { getTabAppServiceUseCase() }
     }
 
-    private fun updateMainTabs(services: List<AppService>) {
+    private fun updateMainTabs(services: List<AppService>, isAppjam: Boolean) {
         val badgeByDeeplink = services.associate {
             it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null
         }
 
-        _mainTabs.update {
-            MainTab.getActiveTabs(services.map { it.deepLink })
+        val deepLinks = services.map { it.deepLink }.filter { deepLink ->
+            when (deepLink) {
+                "soptamp" -> !isAppjam
+                "appjamtamp" -> isAppjam
+                else -> true
+            }
         }
 
+        _mainTabs.update { MainTab.getActiveTabs(deepLinks) }
         updateBadge(badgeByDeeplink)
     }
 }

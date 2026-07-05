@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2026 SOPT - Shout Our Passion Together
+ * Copyright 2024-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.home
+package org.sopt.official.data.home.di
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import org.sopt.official.domain.home.model.AppService
-import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
-import javax.inject.Inject
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
+import org.sopt.official.cache.InMemoryCache
+import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 
-/**
- * AppServiceManager: app-service 관리 클래스
- * */
-@Singleton
-class AppServiceManager @Inject constructor(
-    private val getAppServiceUseCase: GetAppServiceUseCase
-) {
-    private val _appServices = MutableStateFlow<List<AppService>?>(null)
-    val appServices: StateFlow<List<AppService>?> = _appServices.asStateFlow()
+@Module
+@InstallIn(SingletonComponent::class)
+internal object CacheModule {
 
-    suspend fun fetchAppServices(forceUpdate: Boolean = false) {
-        if (!forceUpdate && _appServices.value != null) return
+    @Provides
+    @Singleton
+    @Named("homeAppService")
+    fun provideHomeAppServiceCache(): InMemoryCache<HomeAppServiceInfo> = InMemoryCache()
 
-        getAppServiceUseCase()
-            .onSuccess { _appServices.value = it }
-    }
+    @Provides
+    @Singleton
+    @Named("tabAppService")
+    fun provideTabAppServiceCache(): InMemoryCache<List<AppService>> = InMemoryCache()
 }

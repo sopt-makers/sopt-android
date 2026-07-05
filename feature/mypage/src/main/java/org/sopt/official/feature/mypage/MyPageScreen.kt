@@ -74,6 +74,7 @@ internal fun MyPageRoute(
     val context = LocalContext.current
     val urlHandler = LocalUriHandler.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val isAppjamMode by viewModel.isAppjamMode.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.collect { effect ->
@@ -167,6 +168,7 @@ internal fun MyPageRoute(
 
     MyPageScreen(
         state = state,
+        isAppjamMode = isAppjamMode,
         serviceSectionItems = serviceSectionItems,
         notificationSectionItems = notificationSectionItems,
         soptampSectionItems = soptampSectionItems,
@@ -181,6 +183,7 @@ internal fun MyPageRoute(
 @Composable
 internal fun MyPageScreen(
     state: MyPageState,
+    isAppjamMode: Boolean,
     serviceSectionItems: ImmutableList<MyPageUiModel>,
     notificationSectionItems: ImmutableList<MyPageUiModel>,
     soptampSectionItems: ImmutableList<MyPageUiModel>,
@@ -233,7 +236,7 @@ internal fun MyPageScreen(
                 userStatus = state.userStatus,
                 totalSoptampCount = state.soptampCount,
                 totalPokeCount = state.totalPokeCount,
-                isAppjamPeriod = false, // Todo: 현재는 앱잼기간(26.06.29) 이라서 true 해야함
+                isAppjamPeriod = isAppjamMode,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
@@ -329,7 +332,7 @@ private fun MyPageScreenPreview() {
                 userStatus = UserStatus.ACTIVE,
                 dialogState = MyPageDialogState.CLEAR,
             ),
-
+            isAppjamMode = false,
             serviceSectionItems = persistentListOf(
                 MyPageUiModel.Header(title = "서비스 이용 방침"),
                 MyPageUiModel.MyPageItem(title = "개인정보 처리 방침", onItemClick = {}),

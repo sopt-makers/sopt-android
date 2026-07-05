@@ -25,6 +25,7 @@
 package org.sopt.official.data.home.mapper
 
 import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
+import org.sopt.official.data.home.remote.response.HomeAppServicesResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
 import org.sopt.official.data.home.remote.response.HomeLatestPostResponseDto
@@ -33,6 +34,7 @@ import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
@@ -55,6 +57,11 @@ internal fun HomeAppServiceResponseDto.toDomain(): AppService = AppService(
     alarmBadge = alarmBadge,
     iconUrl = iconUrl,
     deepLink = deepLink,
+)
+
+internal fun HomeAppServicesResponseDto.toDomain(): HomeAppServiceInfo = HomeAppServiceInfo(
+    isAppjamMode = isAppjamMode,
+    appServices = appServices.map { it.toDomain() },
 )
 
 internal fun HomeReviewFormResponseDto.toDomain(): ReviewForm = ReviewForm(

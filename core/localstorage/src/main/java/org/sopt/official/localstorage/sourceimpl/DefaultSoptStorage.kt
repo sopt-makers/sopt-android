@@ -63,6 +63,10 @@ class DefaultSoptStorage @Inject constructor(
         preferences[KEY_ONBOARDING_COMPLETED] ?: false
     }
 
+    override val isAppjamMode: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[KEY_IS_APPJAM_MODE] ?: false
+    }
+
     override suspend fun saveTokens(accessToken: String, refreshToken: String) {
         dataStore.edit { preferences ->
             preferences[KEY_ACCESS_TOKEN] = accessToken.encryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS)
@@ -121,6 +125,12 @@ class DefaultSoptStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveIsAppjamMode(isAppjamMode: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[KEY_IS_APPJAM_MODE] = isAppjamMode
+        }
+    }
+
     override suspend fun clearUser() {
         dataStore.edit { preferences ->
             preferences.remove(KEY_USER_STATUS)
@@ -143,6 +153,7 @@ class DefaultSoptStorage @Inject constructor(
         private val KEY_PUSH_TOKEN = stringPreferencesKey("push_token")
         private val KEY_PLATFORM = stringPreferencesKey("platform")
         private val KEY_ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        private val KEY_IS_APPJAM_MODE = booleanPreferencesKey("is_appjam_mode")
 
 
         private const val DEFAULT_VALUE = ""

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2026 SOPT - Shout Our Passion Together
+ * Copyright 2024-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.data.home.remote.response
 
-android {
-    namespace = "org.sopt.official.feature.main"
-}
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-dependencies {
-    implementation(projects.core.model)
-    implementation(projects.core.common)
-    implementation(projects.core.analytics)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.navigation)
-    implementation(projects.core.webview)
-
-    implementation(projects.core.localstorage)
-    implementation(projects.domain.home)
-
-    implementation(projects.feature.poke)
-    implementation(projects.feature.soptamp)
-    implementation(projects.feature.soptlog)
-    implementation(projects.feature.home)
-    implementation(projects.feature.appjamtamp)
-    implementation(projects.feature.mypage)
-    implementation(projects.feature.sopletter)
-}
+@Serializable
+internal data class HomeAppServicesResponseDto(
+    @SerialName("isAppjamMode")
+    val isAppjamMode: Boolean,
+    @SerialName("appServices")
+    val appServices: List<HomeAppServiceResponseDto>,
+)

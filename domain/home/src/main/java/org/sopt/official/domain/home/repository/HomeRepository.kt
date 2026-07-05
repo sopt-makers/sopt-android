@@ -24,8 +24,10 @@
  */
 package org.sopt.official.domain.home.repository
 
+import kotlinx.coroutines.flow.Flow
 import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.model.LatestPost
 import org.sopt.official.domain.home.model.PopularPost
 import org.sopt.official.domain.home.model.RecentCalendar
@@ -38,7 +40,11 @@ interface HomeRepository {
 
     suspend fun getHomeDescription(): Result<UserDescription>
 
-    suspend fun getHomeAppService(): Result<List<AppService>>
+    suspend fun getHomeAppService(forceRefresh: Boolean = false): Result<HomeAppServiceInfo>
+
+    suspend fun getTabAppService(): Result<List<AppService>>
+
+    fun observeTabAppService(): Flow<List<AppService>?>
 
     suspend fun getHomeReviewForm(): Result<ReviewForm>
 
