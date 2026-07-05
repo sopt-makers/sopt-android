@@ -42,4 +42,5 @@ dependencies {
 
     // domain
     implementation(projects.domain.sopletter)
+    implementation(projects.data.sopletter)
 }
