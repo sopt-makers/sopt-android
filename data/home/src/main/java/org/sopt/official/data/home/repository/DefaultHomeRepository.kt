@@ -26,6 +26,7 @@ package org.sopt.official.data.home.repository
 
 import javax.inject.Inject
 import javax.inject.Named
+import kotlinx.coroutines.flow.Flow
 import org.sopt.official.cache.InMemoryCache
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.home.mapper.toDomain
@@ -64,6 +65,8 @@ internal class DefaultHomeRepository @Inject constructor(
         suspendRunCatching {
             tabAppServiceCache.getOrFetch { homeApi.getTabAppService().map { it.toDomain() } }
         }
+
+    override fun observeTabAppService(): Flow<List<AppService>?> = tabAppServiceCache.data
 
     override suspend fun getHomeReviewForm(): Result<ReviewForm> =
         suspendRunCatching { homeApi.getReviewForm().toDomain() }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2024-2025 SOPT - Shout Our Passion Together
+ * Copyright 2024-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,35 +22,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.home.repository
+package org.sopt.official.domain.home.usecase
 
+import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import org.sopt.official.domain.home.model.AppService
-import org.sopt.official.domain.home.model.FloatingToast
-import org.sopt.official.domain.home.model.HomeAppServiceInfo
-import org.sopt.official.domain.home.model.LatestPost
-import org.sopt.official.domain.home.model.PopularPost
-import org.sopt.official.domain.home.model.RecentCalendar
-import org.sopt.official.domain.home.model.ReviewForm
-import org.sopt.official.domain.home.model.UserDescription
+import org.sopt.official.domain.home.repository.HomeRepository
 
-interface HomeRepository {
-
-    suspend fun getRecentCalendar(): Result<RecentCalendar>
-
-    suspend fun getHomeDescription(): Result<UserDescription>
-
-    suspend fun getHomeAppService(forceRefresh: Boolean = false): Result<HomeAppServiceInfo>
-
-    suspend fun getTabAppService(): Result<List<AppService>>
-
-    fun observeTabAppService(): Flow<List<AppService>?>
-
-    suspend fun getHomeReviewForm(): Result<ReviewForm>
-
-    suspend fun getHomeFloatingToast(): Result<FloatingToast>
-
-    suspend fun getHomePopularPosts(): Result<List<PopularPost>>
-
-    suspend fun getHomeLatestPosts(): Result<List<LatestPost>>
+class ObserveTabAppServiceUseCase @Inject constructor(
+    private val homeRepository: HomeRepository
+) {
+    operator fun invoke(): Flow<List<AppService>?> = homeRepository.observeTabAppService()
 }
