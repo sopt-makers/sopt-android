@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
+import org.sopt.official.feature.sopletter.common.util.toSafeFileName
 import org.sopt.official.feature.sopletter.print.manager.PdfHelper
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
@@ -82,7 +83,13 @@ class SopletterPrintViewModel @Inject constructor(
 
     fun processSavePdf(context: Context, bitmaps: List<Bitmap>) {
         viewModelScope.launch {
-            PdfHelper.saveBitmapsAsPdf(context, bitmaps, "sopletter_${_uiState.value.generation}기").onSuccess {
+            val safeTopicTitle = _uiState.value.topicTitle.toSafeFileName()
+
+            PdfHelper.saveBitmapsAsPdf(
+                context = context,
+                bitmaps = bitmaps,
+                fileName = "sopletter_$safeTopicTitle",
+            ).onSuccess {
                 _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
                 _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
                 _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)

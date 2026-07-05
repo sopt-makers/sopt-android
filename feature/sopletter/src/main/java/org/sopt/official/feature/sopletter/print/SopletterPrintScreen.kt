@@ -139,7 +139,7 @@ private fun SopletterPrintScreen(
                         .onGloballyPositioned { isViewReady = true }
                 ) {
                     SopletterBoardLayout(
-                        generation = uiState.generation,
+                        title = uiState.topicTitle,
                         memos = currentMemos,
                     )
                 }
@@ -220,7 +220,7 @@ private fun SopletterPrintScreen(
                     ) {
                         ScaledSopletterBoard(scale = 0.45f) {
                             SopletterBoardLayout(
-                                generation = uiState.generation,
+                                title = uiState.topicTitle,
                                 memos = uiState.previewMemoList.take(16),
                             )
                         }
@@ -271,12 +271,13 @@ private fun SopletterPrintScreen(
                 CircularProgressIndicator(color = SoptTheme.colors.primary)
             }
         }
+
     }
 }
 
 @Composable
 private fun SopletterBoardLayout(
-    generation: Int,
+    title: String,
     memos: List<SopletterMessage>,
     modifier: Modifier = Modifier,
 ) {
@@ -289,7 +290,7 @@ private fun SopletterBoardLayout(
             .background(SoptTheme.colors.background)
     ) {
         Text(
-            text = "${generation}기 솝레터",
+            text = title,
             style = SoptTheme.typography.title16SB,
             color = SoptTheme.colors.onSurface100,
             modifier = Modifier.align(Alignment.Start).padding(bottom = 16.dp, start = 12.dp)
