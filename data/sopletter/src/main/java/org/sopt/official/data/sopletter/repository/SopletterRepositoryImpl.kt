@@ -28,6 +28,7 @@ import javax.inject.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.mapper.toDomain
+import org.sopt.official.domain.sopletter.model.SopletterCta
 import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterTopic
@@ -116,5 +117,9 @@ internal class SopletterRepositoryImpl @Inject constructor(
 
     override suspend fun getTopics(): Result<List<SopletterTopic>> = suspendRunCatching {
         sopletterDataSource.getTopics(type = SopletterRepository.TOPIC_TYPE_NORMAL).toDomain()
+    }
+
+    override suspend fun getCta(): Result<SopletterCta> = suspendRunCatching {
+        sopletterDataSource.getCta().toDomain()
     }
 }
