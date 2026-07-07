@@ -19,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,15 +45,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
@@ -63,42 +62,35 @@ import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 
 @Composable
 fun SopletterPrintRoute(
+    onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
     viewModel: SopletterPrintViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackBarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
     val applicationContext = LocalContext.current.applicationContext
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     is SopletterPrintSideEffect.ShowSnackbar -> {
-                        snackBarHostState.showSnackbar(
-                            SopletterSnackbarVisuals(
-                                message = sideEffect.message,
-                                type = sideEffect.type
-                            )
-                        )
+                        onShowSnackbar(SopletterSnackbarVisuals(sideEffect.message, sideEffect.type))
                     }
 
                     is SopletterPrintSideEffect.NavigateBack -> onBackClick()
                 }
             }
+        }
     }
 
-    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
-        SopletterPrintScreen(
-            uiState = uiState,
-            onBackClick = onBackClick,
-            onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
-            onBitmapsCaptured = { bitmaps -> viewModel.processSavePdf(applicationContext, bitmaps) },
-            onCaptureFailed = viewModel::onCaptureFailed,
-            modifier = Modifier.padding(paddingValues)
-        )
-    }
+    SopletterPrintScreen(
+        uiState = uiState,
+        onBackClick = onBackClick,
+        onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
+        onBitmapsCaptured = { bitmaps -> viewModel.processSavePdf(applicationContext, bitmaps) },
+        onCaptureFailed = viewModel::onCaptureFailed,
+    )
 }
 
 @Composable
@@ -363,6 +355,7 @@ private fun ScaledSopletterBoard(
 private fun PreviewSopletterPrintScreen() {
     SoptTheme {
         SopletterPrintRoute(
+            onShowSnackbar = {},
             onBackClick = {}
         )
     }

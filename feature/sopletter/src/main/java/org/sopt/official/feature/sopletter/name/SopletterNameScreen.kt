@@ -26,26 +26,23 @@ package org.sopt.official.feature.sopletter.name
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.name.component.SopletterNameInfoHolder
 import org.sopt.official.sopletter.R
@@ -57,43 +54,35 @@ fun SopletterNameRoute(
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
-
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
-            .collect { sideEffect ->
+        lifeCycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     NameSideEffect.NavigateToSopletterMain -> navigateToSopletterMain()
                 }
             }
+        }
     }
 
-    SopletterScaffold(
-        snackbarHostState = snackbarHostState,
-    ) { innerPadding ->
-        SopletterNameScreen(
-            paddingValues = innerPadding,
-            state = state,
-            navigateToSopletterMain = navigateToSopletterMain,
-            navigateToHome = navigateToHome,
-        )
-    }
+    SopletterNameScreen(
+        state = state,
+        navigateToSopletterMain = navigateToSopletterMain,
+        navigateToHome = navigateToHome,
+    )
 }
 
 @Composable
 private fun SopletterNameScreen(
-    paddingValues: PaddingValues,
     state: NameState,
-    navigateToSopletterMain: () -> Unit= {},
+    navigateToSopletterMain: () -> Unit = {},
     navigateToHome: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(SoptTheme.colors.onSurface950)
-            .padding(paddingValues)
     ) {
         SopletterTopbar(
             onBackClick = navigateToHome,
@@ -130,7 +119,6 @@ private fun SopletterNameScreen(
 private fun SopletterNameScreenPreview() {
     SoptTheme {
         SopletterNameScreen(
-            paddingValues = PaddingValues(),
             state = NameState(
                 name = "익명의 김솝트",
                 generation = 38
