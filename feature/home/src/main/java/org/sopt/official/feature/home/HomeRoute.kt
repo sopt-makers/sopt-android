@@ -258,15 +258,15 @@ private fun HomeScreenForMember(
             HomeShortcutButtonsForMember(
                 onMemberClick = {
                     homeShortcutNavigation.navigateToPlaygroundMember()
-                    tracker.track(HomeAnalyticsEvent.CLICK_MEMBER)
+                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_MEMBER)
                 },
                 onStudyClick = {
                     homeShortcutNavigation.navigateToPlaygroundGroup()
-                    tracker.track(HomeAnalyticsEvent.CLICK_GROUP)
+                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_GROUP)
                 },
                 onProjectClick = {
                     homeShortcutNavigation.navigateToPlaygroundProject()
-                    tracker.track(HomeAnalyticsEvent.CLICK_PROJECT)
+                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT)
                 },
                 onCoffeeChat = {
                     homeShortcutNavigation.navigateToPlaygroundCoffeeChat()
@@ -277,10 +277,11 @@ private fun HomeScreenForMember(
             )
 
             // 솝트 더 재밌게 즐기기 영역
-            if (homeAppServices.isNotEmpty()) {
+             if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
+                    // Current server policy returns only "솝레터" for home app-services.
                     appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
                     onAppServiceClick = {
                         tracker.track(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU)
