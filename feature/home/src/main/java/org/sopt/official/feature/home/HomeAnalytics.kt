@@ -20,6 +20,7 @@ enum class HomeAnalyticsEvent(
     CLICK_SOPTLETTER_MENU(EventType.CLICK, "soptletter_menu"),
     CLICK_HOTBOARD(EventType.CLICK, "hotboard"),
     CLICK_HOMEPAGE(EventType.CLICK, "homepage"),
+    CLICK_REVIEW(EventType.CLICK, "review"),
     CLICK_FAQ(EventType.CLICK, "faq"),
     CLICK_YOUTUBE(EventType.CLICK, "youtube"),
     CLICK_INSTAGRAM(EventType.CLICK, "instagram"),

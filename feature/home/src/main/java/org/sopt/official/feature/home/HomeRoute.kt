@@ -54,6 +54,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.track
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -87,6 +88,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesN
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Composable
 internal fun HomeRoute(
@@ -127,8 +129,10 @@ internal fun HomeRoute(
         if (userStatus != UserStatus.UNAUTHENTICATED) newHomeViewModel.refreshAll()
     }
 
+    val viewType = userStatus.toViewType()
+
     LaunchedEffect(Unit) {
-        tracker.track(HomeAnalyticsEvent.VIEW_APP_HOME)
+        tracker.trackViewType(HomeAnalyticsEvent.VIEW_APP_HOME, viewType)
     }
 
     LaunchedEffect(badgeContentList) {
@@ -142,6 +146,8 @@ internal fun HomeRoute(
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeAppServices = uiState.homeServices,
+                tracker = tracker,
+                viewType = viewType,
                 paddingValues = paddingValues,
             )
         }
@@ -152,6 +158,7 @@ internal fun HomeRoute(
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 navigateToSopletter = navigateToSopletter,
+                viewType = viewType,
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
@@ -176,6 +183,7 @@ private fun HomeScreenForMember(
     homeShortcutNavigation: HomeShortcutNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     navigateToSopletter: () -> Unit,
+    viewType: String,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
@@ -210,7 +218,7 @@ private fun HomeScreenForMember(
                 hasNotification = hasNotification,
                 onNotificationClick = {
                     homeDashboardNavigation.navigateToNotification()
-                    tracker.track(HomeAnalyticsEvent.CLICK_ALARM)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALARM, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -232,11 +240,11 @@ private fun HomeScreenForMember(
                 isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
                 onScheduleClick = {
                     homeDashboardNavigation.navigateToSchedule()
-                    tracker.track(HomeAnalyticsEvent.CLICK_ALL_CALENDAR)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALL_CALENDAR, viewType)
                 },
                 onAttendanceButtonClick = {
                     homeDashboardNavigation.navigateToAttendance()
-                    tracker.track(HomeAnalyticsEvent.CLICK_ATTENDANCE)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ATTENDANCE, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -258,19 +266,19 @@ private fun HomeScreenForMember(
             HomeShortcutButtonsForMember(
                 onMemberClick = {
                     homeShortcutNavigation.navigateToPlaygroundMember()
-                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_MEMBER)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_MEMBER, viewType)
                 },
                 onStudyClick = {
                     homeShortcutNavigation.navigateToPlaygroundGroup()
-                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_GROUP)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_GROUP, viewType)
                 },
                 onProjectClick = {
                     homeShortcutNavigation.navigateToPlaygroundProject()
-                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT, viewType)
                 },
                 onCoffeeChat = {
                     homeShortcutNavigation.navigateToPlaygroundCoffeeChat()
-                    tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_COFFEE_CHAT)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COFFEE_CHAT, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -284,7 +292,7 @@ private fun HomeScreenForMember(
                     // Current server policy returns only "솝레터" for home app-services.
                     appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
                     onAppServiceClick = {
-                        tracker.track(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU)
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU, viewType)
                         navigateToSopletter()
                     },
                     modifier = Modifier
@@ -301,10 +309,10 @@ private fun HomeScreenForMember(
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
                     navigateToPlaygroundCommunity = homeShortcutNavigation::navigateToPlaygroundCommunity,
                     onCommunityClick = {
-                        tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY)
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY, viewType)
                     },
                     onPostClick = {
-                        tracker.track(HomeAnalyticsEvent.CLICK_HOTBOARD)
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOTBOARD, viewType)
                     },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
@@ -319,7 +327,7 @@ private fun HomeScreenForMember(
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
                     onCommunityClick = {
-                        tracker.track(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY)
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY, viewType)
                     }
                 )
             }
@@ -333,7 +341,7 @@ private fun HomeScreenForMember(
                     buttonText = surveyData.buttonText,
                     onClick = {
                         homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
-                        tracker.track(HomeAnalyticsEvent.CLICK_SURVEY_BUTTON)
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_SURVEY_BUTTON, viewType)
                     },
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
@@ -345,9 +353,9 @@ private fun HomeScreenForMember(
             HomeOfficialChannelButton(
                 onChannelClick = { channel ->
                     when (channel) {
-                        HomeOfficialChannel.HOMEPAGE -> tracker.track(HomeAnalyticsEvent.CLICK_HOMEPAGE)
-                        HomeOfficialChannel.INSTAGRAM -> tracker.track(HomeAnalyticsEvent.CLICK_INSTAGRAM)
-                        HomeOfficialChannel.YOUTUBE -> tracker.track(HomeAnalyticsEvent.CLICK_YOUTUBE)
+                        HomeOfficialChannel.HOMEPAGE -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOMEPAGE, viewType)
+                        HomeOfficialChannel.INSTAGRAM -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_INSTAGRAM, viewType)
+                        HomeOfficialChannel.YOUTUBE -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_YOUTUBE, viewType)
                     }
                     homeAppServicesNavigation.navigateToWebUrl(channel.link)
                 },
@@ -366,7 +374,7 @@ private fun HomeScreenForMember(
                 buttonText = toastData.buttonText,
                 onClick = {
                     homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                    tracker.track(HomeAnalyticsEvent.CLICK_TOAST_BUTTON)
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_TOAST_BUTTON, viewType)
                 },
                 modifier = shadowModifier
                     .align(Alignment.BottomCenter)
@@ -383,6 +391,8 @@ private fun HomeScreenForVisitor(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     homeAppServices: ImmutableList<HomeAppService>,
+    tracker: Tracker,
+    viewType: String,
     paddingValues: PaddingValues
 ) {
     Column(
@@ -403,10 +413,22 @@ private fun HomeScreenForVisitor(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeShortcutButtonsForVisitor(
-            onHomePageClick = homeShortcutNavigation::navigateToSoptHomepage,
-            onPlaygroundClick = homeShortcutNavigation::navigateToSoptReview,
-            onProjectClick = homeShortcutNavigation::navigateToSoptProject,
-            onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
+            onHomePageClick = {
+                homeShortcutNavigation.navigateToSoptHomepage()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOMEPAGE, viewType)
+            },
+            onPlaygroundClick = {
+                homeShortcutNavigation.navigateToSoptReview()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_REVIEW, viewType)
+            },
+            onProjectClick = {
+                homeShortcutNavigation.navigateToSoptProject()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT, viewType)
+            },
+            onInstagramClick = {
+                homeShortcutNavigation.navigateToSoptInstagram()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_INSTAGRAM, viewType)
+            },
         )
     }
 }
