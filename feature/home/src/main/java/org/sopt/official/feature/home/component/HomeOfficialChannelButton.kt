@@ -46,16 +46,17 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R
+import org.sopt.official.feature.home.model.HomeOfficialChannel
 
 private val officialChannelList = persistentListOf(
-    Triple(R.drawable.ic_homepage_24, "홈페이지", "https://www.sopt.org/"),
-    Triple(R.drawable.ic_instagram_24, "인스타", "https://www.instagram.com/sopt_official/"),
-    Triple(R.drawable.ic_youtube_24, "유튜브", "https://www.youtube.com/@SOPTMEDIA")
+    HomeOfficialChannel.HOMEPAGE to R.drawable.ic_homepage_24,
+    HomeOfficialChannel.INSTAGRAM to R.drawable.ic_instagram_24,
+    HomeOfficialChannel.YOUTUBE to R.drawable.ic_youtube_24
 )
 
 @Composable
 internal fun HomeOfficialChannelButton(
-    navigateToWebUrl: (String) -> Unit,
+    onChannelClick: (channel: HomeOfficialChannel) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -63,7 +64,7 @@ internal fun HomeOfficialChannelButton(
         modifier = modifier
             .width(IntrinsicSize.Max)
     ) {
-        officialChannelList.forEach { (icon, title, link) ->
+        officialChannelList.forEach { (channel, iconRes) ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
@@ -72,16 +73,16 @@ internal fun HomeOfficialChannelButton(
                     .clip(RoundedCornerShape(8.dp))
                     .background(SoptTheme.colors.onSurface800)
                     .padding(vertical = 10.dp, horizontal = 8.dp)
-                    .clickable { navigateToWebUrl(link) }
+                    .clickable { onChannelClick(channel) }
             ) {
                 Icon(
-                    imageVector = ImageVector.vectorResource(icon),
+                    imageVector = ImageVector.vectorResource(iconRes),
                     contentDescription = null,
                     tint = SoptTheme.colors.onSurface100
                 )
 
                 Text(
-                    text = title,
+                    text = channel.title,
                     style = SoptTheme.typography.body14M,
                     color = SoptTheme.colors.onSurface100
                 )
