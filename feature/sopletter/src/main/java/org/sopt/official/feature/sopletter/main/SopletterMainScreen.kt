@@ -60,6 +60,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import org.sopt.official.common.util.onBottomReached
 import org.sopt.official.designsystem.SoptTheme
@@ -99,8 +100,8 @@ fun SopletterMainRoute(
     var isPrintDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.sideEffect.collect { sideEffect ->
+        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
+            .collect { sideEffect ->
                 when (sideEffect) {
                     is SopletterMainSideEffect.NavigateToReportForm -> {
                         Intent(context, WebViewActivity::class.java).apply {
@@ -114,7 +115,6 @@ fun SopletterMainRoute(
                     }
                 }
             }
-        }
     }
 
     SopletterMainScreen(
