@@ -24,6 +24,5 @@ enum class HomeAnalyticsEvent(
     CLICK_YOUTUBE(EventType.CLICK, "youtube"),
     CLICK_INSTAGRAM(EventType.CLICK, "instagram"),
     CLICK_SURVEY_BUTTON(EventType.CLICK, "survey_button"),
-    CLICK_TOAST_BUTTON(EventType.CLICK, "toast_button"),
-    CLICK_PLUS_BUTTON(EventType.CLICK, "plus_button")
+    CLICK_TOAST_BUTTON(EventType.CLICK, "toast_button")
 }
