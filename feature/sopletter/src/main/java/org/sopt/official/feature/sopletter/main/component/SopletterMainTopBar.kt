@@ -52,7 +52,7 @@ internal fun SopletterMainTopBar(
     onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
-    onTopicClick: () -> Unit,
+    onTopicClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -115,14 +115,16 @@ internal fun SopletterMainTopBar(
                     .noRippleClickable(onClick = onReportClick),
             )
 
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_topic_32),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(32.dp)
-                    .noRippleClickable(onClick = onTopicClick),
-            )
+            if (onTopicClick != null) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_topic_32),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier
+                        .size(32.dp)
+                        .noRippleClickable(onClick = onTopicClick),
+                )
+            }
         }
     }
 }
