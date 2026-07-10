@@ -406,10 +406,10 @@ fun MainScreen(
                         }
 
                         sopletterGraph(
-                            paddingValues = innerPadding,
-                            navController = navigator.navController,
                             navigateToHome = {
-                                navigator.navigateAndClear(MainTab.Home, userStatus)
+                                if (!navigator.navController.popBackStack()) {
+                                    navigator.navigateAndClear(MainTab.Home, userStatus)
+                                }
                             }
                         )
                     }
