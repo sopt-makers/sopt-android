@@ -6,6 +6,7 @@ data class SopletterMessages(
     val totalCount: Int,
     val nextCursor: Long?,
     val hasNext: Boolean,
+    val hasNormalTopic: Boolean?,
     val messages: List<SopletterMessage>,
 )
 

@@ -194,7 +194,7 @@ private fun SopletterMainScreen(
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,
                 onReportClick = onReportClick,
-                onTopicClick = if (uiState.routeTopicId == null) onTopicClick else null,
+                onTopicClick = if (uiState.routeTopicId == null && uiState.hasNormalTopic == true) onTopicClick else null,
             )
 
             when {
