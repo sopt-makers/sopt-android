@@ -34,13 +34,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,19 +62,17 @@ fun SopletterWriteTextBox(
     maxLength: Int = 350,
     onLimitExceeded: () -> Unit = {}
 ) {
-    val isAtLimit = state.text.length >= maxLength
-    val borderColor = if (isAtLimit) SoptTheme.colors.error else Color.Transparent
-    val counterColor = if (isAtLimit) SoptTheme.colors.error else SoptTheme.colors.onSurface300
+    val isOverLimit = state.text.length > maxLength
+    val borderColor = if (isOverLimit) SoptTheme.colors.error else Color.Transparent
+    val counterColor = if (isOverLimit) SoptTheme.colors.error else SoptTheme.colors.onSurface300
 
     val scrollState = rememberScrollState()
 
-    val inputTransformation = remember(maxLength) {
-        InputTransformation {
-            if (length > maxLength) {
-                revertAllChanges()
-                onLimitExceeded()
-            }
-        }
+    LaunchedEffect(state) {
+        snapshotFlow { state.text.length > maxLength }
+            .drop(1)
+            .filter { it }
+            .collect { onLimitExceeded() }
     }
 
     Column(
@@ -99,7 +99,6 @@ fun SopletterWriteTextBox(
             ),
             cursorBrush = SolidColor(SoptTheme.colors.onSurface10),
             lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 5, maxHeightInLines = 10),
-            inputTransformation = inputTransformation,
             modifier = Modifier
                 .fillMaxWidth()
                 .verticalScrollbar(

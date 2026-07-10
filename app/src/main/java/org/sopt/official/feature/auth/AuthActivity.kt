@@ -33,11 +33,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -89,39 +92,6 @@ class AuthActivity : AppCompatActivity() {
                     viewModel.getUpdateConfig(context.getVersionName())
                 }
 
-                when (val state = updateState) {
-                    is UpdateState.Default -> LoadingIndicator()
-                    is UpdateState.PatchUpdateAvailable -> {
-                        var dialogVisibility by rememberSaveable { mutableStateOf(true) }
-
-                        if (dialogVisibility) {
-                            UpdateDialog(
-                                description = state.message,
-                                onDismiss = {
-                                    dialogVisibility = false
-                                    navigateToMainActivity(accessToken)
-                                },
-                                onPositiveClick = this@AuthActivity::launchPlayStore,
-                                onNegativeClick = {
-                                    dialogVisibility = false
-                                    navigateToMainActivity(accessToken)
-                                }
-                            )
-                        }
-                    }
-
-                    is UpdateState.UpdateRequired -> {
-                        UpdateDialog(
-                            description = state.message,
-                            onDismiss = this@AuthActivity::finishAffinity,
-                            onPositiveClick = this@AuthActivity::launchPlayStore,
-                            onNegativeClick = this@AuthActivity::finishAffinity,
-                        )
-                    }
-
-                    else -> navigateToMainActivity(accessToken)
-                }
-
                 LaunchedEffect(true) {
                     NotificationChannel(
                         getString(R.string.toolbar_notification),
@@ -151,33 +121,74 @@ class AuthActivity : AppCompatActivity() {
                         }
                 }
 
-                AuthScreen(
-                    navigateToHome = {
-                        try {
-                            if (accessToken.isNotEmpty()) {
+                Box(modifier = Modifier.fillMaxSize()) {
+                    if (accessToken.isEmpty()) {
+                        AuthScreen(
+                            navigateToHome = {
+                                try {
+                                    if (accessToken.isNotEmpty()) {
+                                        startActivity(
+                                            MainActivity.getIntent(
+                                                context = context,
+                                                args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                            )
+                                        )
+                                    }
+                                } catch (e: Exception) {
+                                    Timber.e(e)
+                                }
+                            },
+                            navigateToUnAuthenticatedHome = {
                                 startActivity(
                                     MainActivity.getIntent(
-                                        context = context,
-                                        args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                        context = this@AuthActivity,
+                                        args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
                                     )
                                 )
-                            }
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                        }
-                    },
-                    navigateToUnAuthenticatedHome = {
-                        startActivity(
-                            MainActivity.getIntent(
-                                context = this,
-                                args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
-                            )
+                            },
+                            onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
+                            onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
+                            platform = platform
                         )
-                    },
-                    onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
-                    onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
-                    platform = platform
-                )
+                    }
+
+                    when (val state = updateState) {
+                        is UpdateState.Default -> LoadingIndicator()
+                        is UpdateState.PatchUpdateAvailable -> {
+                            var dialogVisibility by rememberSaveable { mutableStateOf(true) }
+
+                            if (dialogVisibility) {
+                                UpdateDialog(
+                                    description = state.message,
+                                    onDismiss = {
+                                        dialogVisibility = false
+                                        navigateToMainActivity(accessToken)
+                                    },
+                                    onPositiveClick = this@AuthActivity::launchPlayStore,
+                                    onNegativeClick = {
+                                        dialogVisibility = false
+                                        navigateToMainActivity(accessToken)
+                                    }
+                                )
+                            }
+                        }
+
+                        is UpdateState.UpdateRequired -> {
+                            UpdateDialog(
+                                description = state.message,
+                                onDismiss = this@AuthActivity::finishAffinity,
+                                onPositiveClick = this@AuthActivity::launchPlayStore,
+                                onNegativeClick = this@AuthActivity::finishAffinity,
+                            )
+                        }
+
+                        else -> {
+                            LaunchedEffect(accessToken) {
+                                navigateToMainActivity(accessToken)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
