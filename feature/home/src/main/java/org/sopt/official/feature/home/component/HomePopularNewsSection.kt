@@ -71,6 +71,8 @@ internal fun HomePopularNewsSection(
     navigateToWebLink: (String) -> Unit,
     navigateToMemberProfile: (Int) -> Unit,
     navigateToPlaygroundCommunity: () -> Unit,
+    onCommunityClick: () -> Unit,
+    onPostClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var highlightedIndex by remember { mutableIntStateOf(0) }
@@ -106,6 +108,7 @@ internal fun HomePopularNewsSection(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.noRippleClickable {
+                    onCommunityClick()
                     navigateToPlaygroundCommunity()
                 }
             ) {
@@ -153,6 +156,7 @@ internal fun HomePopularNewsSection(
                     description = content,
                     isAnonymous = userId == null,
                     onClick = {
+                        onPostClick()
                         navigateToWebLink(webLink)
                     },
                     onProfileClick = { if (userId != null) navigateToMemberProfile(userId) },
@@ -194,7 +198,9 @@ private fun HomePlaygroundSectionPreview() {
             ),
             navigateToWebLink = {},
             navigateToMemberProfile = {},
-            navigateToPlaygroundCommunity = {}
+            navigateToPlaygroundCommunity = {},
+            onCommunityClick = {},
+            onPostClick = {}
         )
     }
 }
