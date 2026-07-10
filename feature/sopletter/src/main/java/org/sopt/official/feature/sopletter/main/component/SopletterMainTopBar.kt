@@ -72,7 +72,7 @@ internal fun SopletterMainTopBar(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(
-                    if (isTopicDetail) R.drawable.ic_btn_arrow_left else R.drawable.ic_close_32,
+                    if (isTopicDetail) R.drawable.icon_chevron_left else R.drawable.ic_close_32,
                 ),
                 contentDescription = null,
                 tint = Color.Unspecified,
