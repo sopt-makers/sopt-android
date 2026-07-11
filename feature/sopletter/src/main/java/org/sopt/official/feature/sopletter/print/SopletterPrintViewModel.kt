@@ -82,19 +82,30 @@ class SopletterPrintViewModel @Inject constructor(
     }
 
     fun processSavePdf(context: Context, bitmaps: List<Bitmap>) {
-        viewModelScope.launch {
-            val safeTopicTitle = _uiState.value.topicTitle.toSafeFileName()
+         _uiState.update { it.copy(isCaptureRequested = false) }
 
-            PdfHelper.saveBitmapsAsPdf(
-                context = context,
-                bitmaps = bitmaps,
-                fileName = "sopletter_$safeTopicTitle",
-            ).onSuccess {
-                _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
-                _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
-                _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
-            }.onFailure {
-                onCaptureFailed("이미지 저장에 실패했어요.")
+        viewModelScope.launch {
+            try {
+                val safeTopicTitle = _uiState.value.topicTitle.toSafeFileName()
+
+                PdfHelper.saveBitmapsAsPdf(
+                    context = context,
+                    bitmaps = bitmaps,
+                    fileName = "sopletter_$safeTopicTitle",
+                ).onSuccess {
+                    _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
+                    _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
+                }.onFailure { e ->
+                    e.printStackTrace()
+                    onCaptureFailed("이미지 저장에 실패했어요.")
+                }
+            } finally {
+                _uiState.update {
+                    it.copy(
+                        isSaving = false,
+                        fullMemoList = null
+                    )
+                }
             }
         }
     }
