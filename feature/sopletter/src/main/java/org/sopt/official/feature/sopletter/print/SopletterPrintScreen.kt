@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -22,27 +24,32 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -71,6 +78,11 @@ fun SopletterPrintRoute(
     val lifecycleOwner = LocalLifecycleOwner.current
     val applicationContext = LocalContext.current.applicationContext
 
+    val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
+    var currentChunkIndex by remember { mutableIntStateOf(0) }
+    val capturedBitmaps = remember { mutableStateListOf<Bitmap>() }
+    var isCaptureFinished by remember { mutableStateOf(false) }
+
     LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
@@ -89,13 +101,41 @@ fun SopletterPrintRoute(
             }
     }
 
+    LaunchedEffect(uiState.isCaptureRequested) {
+        if (uiState.isCaptureRequested) {
+            currentChunkIndex = 0
+            isCaptureFinished = false
+            capturedBitmaps.clear()
+        }
+    }
+
+    LaunchedEffect(uiState.isCaptureRequested, chunks) {
+        if (uiState.isCaptureRequested && chunks.isEmpty()) {
+            viewModel.onCaptureFailed("저장할 데이터가 없습니다.")
+        }
+    }
+
     SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
         SopletterPrintScreen(
             uiState = uiState,
+            currentChunkMemos = chunks.getOrNull(currentChunkIndex),
+            isCaptureFinished = isCaptureFinished,
             onBackClick = onBackClick,
             onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
-            onBitmapsCaptured = { bitmaps -> viewModel.processSavePdf(applicationContext, bitmaps) },
-            onCaptureFailed = viewModel::onCaptureFailed,
+            onChunkCaptured = { bitmap ->
+                capturedBitmaps.add(bitmap)
+                if (currentChunkIndex < chunks.size - 1) {
+                    currentChunkIndex++
+                } else {
+                    isCaptureFinished = true
+                    viewModel.processSavePdf(applicationContext, capturedBitmaps.toList())
+                }
+            },
+            onCaptureFailed = { e ->
+                e?.printStackTrace()
+                isCaptureFinished = true
+                viewModel.onCaptureFailed()
+            },
             modifier = Modifier.padding(paddingValues)
         )
     }
@@ -104,76 +144,50 @@ fun SopletterPrintRoute(
 @Composable
 private fun SopletterPrintScreen(
     uiState: SopletterPrintUiState,
+    currentChunkMemos: List<SopletterMessage>?,
+    isCaptureFinished: Boolean,
     onBackClick: () -> Unit,
     onPdfSaveClick: () -> Unit,
-    onBitmapsCaptured: (List<Bitmap>) -> Unit,
-    onCaptureFailed: () -> Unit,
+    onChunkCaptured: (Bitmap) -> Unit,
+    onCaptureFailed: (Throwable?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val graphicsLayer = rememberGraphicsLayer()
-
-    val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
-    var currentChunkIndex by remember { mutableIntStateOf(0) }
-    val capturedBitmaps = remember { mutableStateListOf<Bitmap>() }
-    var isViewReady by remember { mutableStateOf(false) }
-    var isCapturing by remember { mutableStateOf(false) }
-
     val isPreviewLoading = uiState.previewMemoList.isEmpty()
 
     Box(modifier = modifier.fillMaxSize()) {
 
-        if (uiState.isCaptureRequested && chunks.isNotEmpty()) {
-            val currentMemos = chunks.getOrNull(currentChunkIndex)
-            if (currentMemos != null) {
+        if (uiState.isCaptureRequested && currentChunkMemos != null && !isCaptureFinished) {
+            key(currentChunkMemos) {
                 Box(
                     modifier = Modifier
                         .wrapContentSize(unbounded = true)
-                        .zIndex(-1f)
+                        .zIndex(5f)
                         .graphicsLayer { alpha = 0.01f }
-                        .drawWithCache {
-                            onDrawWithContent {
-                                graphicsLayer.record { this@onDrawWithContent.drawContent() }
-                                drawLayer(graphicsLayer)
+                        .drawWithContent {
+                            graphicsLayer.record {
+                                this@drawWithContent.drawContent()
                             }
+                            drawLayer(graphicsLayer)
                         }
-                        .onGloballyPositioned { isViewReady = true }
                 ) {
                     SopletterBoardLayout(
                         title = uiState.topicTitle,
-                        memos = currentMemos,
+                        memos = currentChunkMemos,
                     )
                 }
 
-                LaunchedEffect(currentChunkIndex, isViewReady) {
-                    if (isViewReady && !isCapturing) {
-                        isCapturing = true
-                        try {
-                            delay(300L)
-                            val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                            capturedBitmaps.add(bitmap)
-
-                            if (currentChunkIndex < chunks.size - 1) {
-                                isViewReady = false
-                                isCapturing = false
-                                currentChunkIndex++
-                            } else {
-                                onBitmapsCaptured(capturedBitmaps.toList())
-                                capturedBitmaps.clear()
-                                currentChunkIndex = 0
-                                isViewReady = false
-                                isCapturing = false
-                            }
-                        } catch (e: CancellationException) {
-                            isCapturing = false
-                            throw e
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            onCaptureFailed()
-                            capturedBitmaps.clear()
-                            currentChunkIndex = 0
-                            isViewReady = false
-                            isCapturing = false
-                        }
+                LaunchedEffect(currentChunkMemos) {
+                    try {
+                        withFrameNanos { }
+                        //withFrameNanos { }
+                        delay(100L)
+                        val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+                        onChunkCaptured(bitmap)
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (e: Throwable) {
+                        onCaptureFailed(e)
                     }
                 }
             }
@@ -280,7 +294,10 @@ private fun SopletterBoardLayout(
     title: String,
     memos: List<SopletterMessage>,
     modifier: Modifier = Modifier,
+    memoColumnSpacing: Dp = 140.dp,
+    memoCardWidth: Dp = 8.dp
 ) {
+    val density = LocalDensity.current
     val leftColMemos = memos.filterIndexed { index, _ -> index % 2 == 0 }
     val rightColMemos = memos.filterIndexed { index, _ -> index % 2 == 1 }
 
@@ -298,33 +315,34 @@ private fun SopletterBoardLayout(
                 .padding(bottom = 16.dp, start = 12.dp)
         )
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.Top,
-            modifier = Modifier.wrapContentWidth()
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                density = density.density,
+                fontScale = density.fontScale * 0.85f
+            )
         ) {
-            Column(
-                modifier = Modifier.wrapContentWidth(),
-                verticalArrangement = Arrangement.spacedBy((-8).dp)
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(memoColumnSpacing),
+                verticalAlignment = Alignment.Top,
+                modifier = Modifier.wrapContentWidth()
             ) {
-                leftColMemos.forEach { item ->
-                    SopletterMemoCard(
-                        memo = item,
-                        onClick = {},
-                    )
+                Column(
+                    modifier = Modifier.width(memoCardWidth),
+                    verticalArrangement = Arrangement.spacedBy((-8).dp)
+                ) {
+                    leftColMemos.forEach { item ->
+                        SopletterMemoCard(memo = item, onClick = {},    textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),)
+                    }
                 }
-            }
-            Column(
-                modifier = Modifier
-                    .wrapContentWidth()
-                    .padding(top = 20.dp),
-                verticalArrangement = Arrangement.spacedBy((-8).dp)
-            ) {
-                rightColMemos.forEach { item ->
-                    SopletterMemoCard(
-                        memo = item,
-                        onClick = {},
-                    )
+                Column(
+                    modifier = Modifier
+                        .width(memoCardWidth)
+                        .padding(top = 20.dp),
+                    verticalArrangement = Arrangement.spacedBy((-8).dp)
+                ) {
+                    rightColMemos.forEach { item ->
+                        SopletterMemoCard(memo = item, onClick = {},    textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),)
+                    }
                 }
             }
         }
