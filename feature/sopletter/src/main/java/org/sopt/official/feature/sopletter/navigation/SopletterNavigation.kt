@@ -49,6 +49,8 @@ import org.sopt.official.feature.sopletter.topic.navigation.navigateToSopletterT
 import org.sopt.official.feature.sopletter.write.SopletterWriteRoute
 import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterWrite
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Serializable
 data object SopletterGraph
@@ -63,13 +65,16 @@ fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.sopletterGraph(
     paddingValues: PaddingValues,
     navController: NavController,
+    userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
+    val viewType = userStatus.toViewType()
     navigation<SopletterGraph>(
         startDestination = SopletterEntry
     ) {
         composable<SopletterEntry> {
             SopletterEntryRoute(
+                viewType = viewType,
                 navigateToNickname = navController::navigateToSopletterName,
                 navigateToHome = navigateToHome,
                 navigateUp = navController::navigateUp,
@@ -82,6 +87,7 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterOnboarding> {
             SopletterOnboardingRoute(
+                viewType = viewType,
                 navigateToNickname = navController::navigateToSopletterName,
                 navigateToHome = navigateToHome,
             )
@@ -89,6 +95,7 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterName> {
             SopletterNameRoute(
+                viewType = viewType,
                 navigateToSopletterMain = {
                     navController.navigateToSopletterMain(
                         navOptions = navOptions {
@@ -105,6 +112,7 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterMain> {
             SopletterMainRoute(
+                viewType = viewType,
                 navigateUp = navController::navigateUp,
                 navigateToTopic = navController::navigateToSopletterTopic,
                 navigateToTopicDetail = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
@@ -129,6 +137,7 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterWrite> {
             SopletterWriteRoute(
+                viewType = viewType,
                 onBackClick = navController::navigateUp,
                 onNavigateToMain = { navController.navigateToSopletterMain() }
             )
@@ -136,6 +145,7 @@ fun NavGraphBuilder.sopletterGraph(
 
         composable<SopletterPrint> {
             SopletterPrintRoute(
+                viewType = viewType,
                 onBackClick = navController::navigateUp
             )
         }

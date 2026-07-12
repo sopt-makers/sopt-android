@@ -408,6 +408,7 @@ fun MainScreen(
                         sopletterGraph(
                             paddingValues = innerPadding,
                             navController = navigator.navController,
+                            userStatus = userStatus,
                             navigateToHome = {
                                 navigator.navigateAndClear(MainTab.Home, userStatus)
                             }

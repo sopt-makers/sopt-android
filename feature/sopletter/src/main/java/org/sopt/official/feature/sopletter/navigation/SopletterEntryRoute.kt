@@ -14,6 +14,7 @@ import org.sopt.official.feature.sopletter.onboarding.SopletterOnboardingRoute
 
 @Composable
 fun SopletterEntryRoute(
+    viewType: String,
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
     navigateUp: () -> Unit,
@@ -28,6 +29,7 @@ fun SopletterEntryRoute(
     when (isOnboardingCompleted) {
         true -> {
             SopletterMainRoute(
+                viewType = viewType,
                 navigateUp = navigateUp,
                 navigateToTopic = navigateToTopic,
                 navigateToTopicDetail = navigateToTopicDetail,
@@ -38,6 +40,7 @@ fun SopletterEntryRoute(
 
         false -> {
             SopletterOnboardingRoute(
+                viewType = viewType,
                 navigateToNickname = navigateToNickname,
                 navigateToHome = navigateToHome,
             )

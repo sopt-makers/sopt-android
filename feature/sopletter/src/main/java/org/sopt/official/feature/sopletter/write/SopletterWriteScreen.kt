@@ -44,7 +44,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
@@ -56,6 +59,7 @@ import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
 
 @Composable
 fun SopletterWriteRoute(
+    viewType: String,
     onBackClick: () -> Unit,
     onNavigateToMain: () -> Unit,
     viewModel: SopletterWriteViewModel = hiltViewModel(),
@@ -64,6 +68,7 @@ fun SopletterWriteRoute(
     val textFieldState = remember { TextFieldState() }
     val snackBarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -89,7 +94,10 @@ fun SopletterWriteRoute(
             uiState = uiState,
             textFieldState = textFieldState,
             onBackClick = onBackClick,
-            onPostClick = { viewModel.postSopletter(textFieldState.text.toString()) },
+            onPostClick = {
+                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_DONE_WRITE_SOPTLETTER, viewType)
+                viewModel.postSopletter(textFieldState.text.toString())
+            },
             onLimitExceeded = viewModel::onLimitExceeded,
             modifier = Modifier.padding(paddingValues)
         )

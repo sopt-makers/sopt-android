@@ -41,7 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
@@ -52,14 +55,17 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterOnboardingRoute(
+    viewType: String,
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterOnboardingViewModel = hiltViewModel(),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_ONBOARDING, viewType)
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
@@ -86,7 +92,10 @@ fun SopletterOnboardingRoute(
     ) { innerPadding ->
         SopletterOnboardingScreen(
             paddingValues = innerPadding,
-            navigateToNickname = viewModel::updateSopletterOnboardingStatus,
+            navigateToNickname = {
+                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_START_BUTTON, viewType)
+                viewModel.updateSopletterOnboardingStatus()
+            },
             navigateToHome = navigateToHome,
         )
     }

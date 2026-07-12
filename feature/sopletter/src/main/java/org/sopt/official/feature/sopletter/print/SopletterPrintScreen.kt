@@ -51,9 +51,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
@@ -63,6 +66,7 @@ import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 
 @Composable
 fun SopletterPrintRoute(
+    viewType: String,
     onBackClick: () -> Unit,
     viewModel: SopletterPrintViewModel = hiltViewModel(),
 ) {
@@ -70,6 +74,7 @@ fun SopletterPrintRoute(
     val snackBarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
     val applicationContext = LocalContext.current.applicationContext
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -93,7 +98,10 @@ fun SopletterPrintRoute(
         SopletterPrintScreen(
             uiState = uiState,
             onBackClick = onBackClick,
-            onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
+            onPdfSaveClick = {
+                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_DONE_EXPORT_SOPTLETTER, viewType)
+                viewModel.fetchAllAndTriggerCapture()
+            },
             onBitmapsCaptured = { bitmaps -> viewModel.processSavePdf(applicationContext, bitmaps) },
             onCaptureFailed = viewModel::onCaptureFailed,
             modifier = Modifier.padding(paddingValues)
@@ -363,6 +371,7 @@ private fun ScaledSopletterBoard(
 private fun PreviewSopletterPrintScreen() {
     SoptTheme {
         SopletterPrintRoute(
+            viewType = "active",
             onBackClick = {}
         )
     }

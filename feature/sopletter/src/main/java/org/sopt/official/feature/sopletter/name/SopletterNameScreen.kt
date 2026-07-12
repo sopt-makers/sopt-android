@@ -43,7 +43,10 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
@@ -52,6 +55,7 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterNameRoute(
+    viewType: String,
     navigateToSopletterMain: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterNameViewModel = hiltViewModel()
@@ -60,8 +64,10 @@ fun SopletterNameRoute(
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_NICKNAME, viewType)
         viewModel.sideEffect.flowWithLifecycle(lifeCycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
@@ -81,6 +87,7 @@ fun SopletterNameRoute(
         )
     }
 }
+
 
 @Composable
 private fun SopletterNameScreen(

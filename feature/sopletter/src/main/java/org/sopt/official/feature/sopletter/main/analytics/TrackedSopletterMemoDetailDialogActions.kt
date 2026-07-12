@@ -22,26 +22,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-plugins {
-    sopt("feature")
-    sopt("compose")
-}
+package org.sopt.official.feature.sopletter.main.analytics
 
-android {
-    namespace = "org.sopt.official.sopletter"
-}
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
+import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 
-dependencies {
-    // core
-    implementation(projects.core.analytics)
-    implementation(projects.core.common)
-    implementation(projects.core.designsystem)
-    implementation(projects.core.model)
-    implementation(projects.core.localstorage)
-    implementation(projects.core.webview)
-    implementation(projects.core.navigation)
+internal class TrackedSopletterMemoDetailDialogActions(
+    private val delegate: SopletterMemoDetailDialogContract.Actions,
+    private val trackEvent: (SopletterAnalyticsEvent) -> Unit,
+) : SopletterMemoDetailDialogContract.Actions by delegate {
+    override fun onLikeClick() {
+        trackEvent(SopletterAnalyticsEvent.CLICK_SOPTLETTER_LIKE_BUTTON)
+        delegate.onLikeClick()
+    }
 
-    // domain
-    implementation(projects.domain.sopletter)
-    implementation(projects.data.sopletter)
+    override fun onEditClick() {
+        trackEvent(SopletterAnalyticsEvent.CLICK_EDIT_SOPTLETTER)
+        delegate.onEditClick()
+    }
+
+    override fun onEditCompleteClick(content: String) {
+        trackEvent(SopletterAnalyticsEvent.CLICK_DONE_EDIT_SOPTLETTER)
+        delegate.onEditCompleteClick(content)
+    }
+
+    override fun onDeleteConfirmClick() {
+        trackEvent(SopletterAnalyticsEvent.CLICK_DELETE_SOPTLETTER)
+        delegate.onDeleteConfirmClick()
+    }
 }
