@@ -45,6 +45,7 @@ dependencies {
     implementation(projects.core.localstorage)
     implementation(projects.core.navigation)
     implementation(projects.core.analytics)
+    implementation(projects.core.model)
 
     // domain
     implementation(projects.domain.appjamtamp)
