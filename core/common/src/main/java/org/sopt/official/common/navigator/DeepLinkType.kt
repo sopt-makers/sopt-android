@@ -63,7 +63,7 @@ enum class DeepLinkType(
     },
     MY_PAGE_SOPTAMP("mypage/soptamp") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
-            userStatus.setIntent(navigator.getAdjustSentenceActivityIntent())
+            userStatus.setIntent(navigator.getAdjustSentenceActivityIntent(userStatus))
     },
     ATTENDANCE("home/attendance") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
