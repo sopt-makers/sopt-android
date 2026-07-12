@@ -63,6 +63,7 @@ internal fun HomeLatestNewsSection(
     navigateToPlayground: () -> Unit,
     navigateToWebLink: (String) -> Unit,
     navigateToMemberProfile: (Int) -> Unit,
+    onCommunityClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -90,7 +91,12 @@ internal fun HomeLatestNewsSection(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
     ) {
-        TitleSection(onClick = navigateToPlayground)
+        TitleSection(
+            onClick = {
+                onCommunityClick()
+                navigateToPlayground()
+            }
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 

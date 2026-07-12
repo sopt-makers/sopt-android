@@ -51,9 +51,10 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.track
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -75,6 +76,7 @@ import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForMembe
 import org.sopt.official.feature.home.component.HomeUserSoptLogDashboardForVisitor
 import org.sopt.official.feature.home.model.HomeAppService
 import org.sopt.official.feature.home.model.HomeFloatingToastData
+import org.sopt.official.feature.home.model.HomeOfficialChannel
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.HomeSurveyData
@@ -86,6 +88,7 @@ import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesN
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Composable
 internal fun HomeRoute(
@@ -126,11 +129,10 @@ internal fun HomeRoute(
         if (userStatus != UserStatus.UNAUTHENTICATED) newHomeViewModel.refreshAll()
     }
 
+    val viewType = userStatus.toViewType()
+
     LaunchedEffect(Unit) {
-        tracker.track(
-            name = "at36_apphome",
-            type = EventType.VIEW
-        )
+        tracker.trackViewType(HomeAnalyticsEvent.VIEW_APP_HOME, viewType)
     }
 
     LaunchedEffect(badgeContentList) {
@@ -144,7 +146,9 @@ internal fun HomeRoute(
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeAppServices = uiState.homeServices,
-                paddingValues = paddingValues
+                tracker = tracker,
+                viewType = viewType,
+                paddingValues = paddingValues,
             )
         }
 
@@ -153,37 +157,8 @@ internal fun HomeRoute(
                 homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
                 homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
-                /*onAppServiceClick = { url, _ ->
-                    val homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation
-
-                    when (HomeUrl.from(url)) {
-                        HomeUrl.POKE -> {
-                            scope.launch {
-                                newHomeViewModel.fetchIsNewPoke()
-                                    .onSuccess { isNewPoke ->
-                                        trackClickEvent(tracker, "poke_menu")
-                                        homeAppServicesNavigation.navigateToPoke(
-                                            url = url,
-                                            isNewPoke = isNewPoke,
-                                            currentDestination = state.homeUserSoptLogDashboardModel.recentGeneration,
-                                        )
-                                    }
-                            }
-                        }
-
-                        HomeUrl.SOPTAMP -> {
-                            homeAppServicesNavigation.navigateToDeepLink(url)
-                            trackClickEvent(tracker, "soptamp_menu")
-                        }
-
-                        HomeUrl.UNKNOWN -> {
-                            if (isValidUrl(url)) {
-                                homeAppServicesNavigation.navigateToDeepLink(url)
-                            }
-                        }
-                    }
-                },*/
                 navigateToSopletter = navigateToSopletter,
+                viewType = viewType,
                 hasNotification = state.hasNotification,
                 homeUserSoptLogDashboardModel = state.homeUserSoptLogDashboardModel,
                 homeSoptScheduleModel = state.homeSoptScheduleModel,
@@ -207,8 +182,8 @@ private fun HomeScreenForMember(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeShortcutNavigation: HomeShortcutNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
-    //onAppServiceClick: (url: String, appServiceName: String) -> Unit,
     navigateToSopletter: () -> Unit,
+    viewType: String,
     hasNotification: Boolean,
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     homeSoptScheduleModel: HomeSoptScheduleModel,
@@ -243,7 +218,7 @@ private fun HomeScreenForMember(
                 hasNotification = hasNotification,
                 onNotificationClick = {
                     homeDashboardNavigation.navigateToNotification()
-                    trackClickEvent(tracker, "at36_alarm")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALARM, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -265,11 +240,11 @@ private fun HomeScreenForMember(
                 isActivatedGeneration = homeUserSoptLogDashboardModel.isActivated,
                 onScheduleClick = {
                     homeDashboardNavigation.navigateToSchedule()
-                    trackClickEvent(tracker, "at36_all_calendar")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALL_CALENDAR, viewType)
                 },
                 onAttendanceButtonClick = {
                     homeDashboardNavigation.navigateToAttendance()
-                    trackClickEvent(tracker, "at36_attendance")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_ATTENDANCE, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -291,19 +266,19 @@ private fun HomeScreenForMember(
             HomeShortcutButtonsForMember(
                 onMemberClick = {
                     homeShortcutNavigation.navigateToPlaygroundMember()
-                    trackClickEvent(tracker, "at36_member")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_MEMBER, viewType)
                 },
                 onStudyClick = {
                     homeShortcutNavigation.navigateToPlaygroundGroup()
-                    trackClickEvent(tracker, "at36_moim")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_GROUP, viewType)
                 },
                 onProjectClick = {
                     homeShortcutNavigation.navigateToPlaygroundProject()
-                    trackClickEvent(tracker, "at36_project")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT, viewType)
                 },
                 onCoffeeChat = {
                     homeShortcutNavigation.navigateToPlaygroundCoffeeChat()
-                    trackClickEvent(tracker, "at38_playground_coffee_chat")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COFFEE_CHAT, viewType)
                 },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
@@ -314,8 +289,12 @@ private fun HomeScreenForMember(
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
+                    // Current server policy returns only "솝레터" for home app-services.
                     appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
-                    onAppServiceClick = navigateToSopletter,
+                    onAppServiceClick = {
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU, viewType)
+                        navigateToSopletter()
+                    },
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
                 )
@@ -329,6 +308,12 @@ private fun HomeScreenForMember(
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
                     navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
                     navigateToPlaygroundCommunity = homeShortcutNavigation::navigateToPlaygroundCommunity,
+                    onCommunityClick = {
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY, viewType)
+                    },
+                    onPostClick = {
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOTBOARD, viewType)
+                    },
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )
             }
@@ -340,7 +325,10 @@ private fun HomeScreenForMember(
                     feedList = latestPosts,
                     navigateToPlayground = homeShortcutNavigation::navigateToPlaygroundCommunity,
                     navigateToWebLink = homeAppServicesNavigation::navigateToWebUrl,
-                    navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile
+                    navigateToMemberProfile = homeAppServicesNavigation::navigateToPlaygroundMemberProfile,
+                    onCommunityClick = {
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_COMMUNITY, viewType)
+                    }
                 )
             }
 
@@ -353,7 +341,7 @@ private fun HomeScreenForMember(
                     buttonText = surveyData.buttonText,
                     onClick = {
                         homeAppServicesNavigation.navigateToWebUrl(surveyData.surveyLink)
-                        trackClickEvent(tracker, "at36_survey_button")
+                        tracker.trackViewType(HomeAnalyticsEvent.CLICK_SURVEY_BUTTON, viewType)
                     },
                     modifier = Modifier
                         .padding(horizontal = 20.dp)
@@ -363,7 +351,14 @@ private fun HomeScreenForMember(
             Spacer(modifier = Modifier.height(height = 70.dp))
 
             HomeOfficialChannelButton(
-                navigateToWebUrl = homeAppServicesNavigation::navigateToWebUrl,
+                onChannelClick = { channel ->
+                    when (channel) {
+                        HomeOfficialChannel.HOMEPAGE -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOMEPAGE, viewType)
+                        HomeOfficialChannel.INSTAGRAM -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_INSTAGRAM, viewType)
+                        HomeOfficialChannel.YOUTUBE -> tracker.trackViewType(HomeAnalyticsEvent.CLICK_YOUTUBE, viewType)
+                    }
+                    homeAppServicesNavigation.navigateToWebUrl(channel.link)
+                },
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
@@ -379,7 +374,7 @@ private fun HomeScreenForMember(
                 buttonText = toastData.buttonText,
                 onClick = {
                     homeAppServicesNavigation.navigateToDeepLink(toastData.linkUrl)
-                    trackClickEvent(tracker, "at36_toast_button")
+                    tracker.trackViewType(HomeAnalyticsEvent.CLICK_TOAST_BUTTON, viewType)
                 },
                 modifier = shadowModifier
                     .align(Alignment.BottomCenter)
@@ -396,6 +391,8 @@ private fun HomeScreenForVisitor(
     homeDashboardNavigation: HomeDashboardNavigation,
     homeAppServicesNavigation: HomeAppServicesNavigation,
     homeAppServices: ImmutableList<HomeAppService>,
+    tracker: Tracker,
+    viewType: String,
     paddingValues: PaddingValues
 ) {
     Column(
@@ -416,10 +413,22 @@ private fun HomeScreenForVisitor(
         )
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeShortcutButtonsForVisitor(
-            onHomePageClick = homeShortcutNavigation::navigateToSoptHomepage,
-            onPlaygroundClick = homeShortcutNavigation::navigateToSoptReview,
-            onProjectClick = homeShortcutNavigation::navigateToSoptProject,
-            onInstagramClick = homeShortcutNavigation::navigateToSoptInstagram,
+            onHomePageClick = {
+                homeShortcutNavigation.navigateToSoptHomepage()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_HOMEPAGE, viewType)
+            },
+            onPlaygroundClick = {
+                homeShortcutNavigation.navigateToSoptReview()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_REVIEW, viewType)
+            },
+            onProjectClick = {
+                homeShortcutNavigation.navigateToSoptProject()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_PLAYGROUND_PROJECT, viewType)
+            },
+            onInstagramClick = {
+                homeShortcutNavigation.navigateToSoptInstagram()
+                tracker.trackViewType(HomeAnalyticsEvent.CLICK_INSTAGRAM, viewType)
+            },
         )
     }
 }

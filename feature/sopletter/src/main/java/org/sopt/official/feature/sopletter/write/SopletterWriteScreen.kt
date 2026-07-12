@@ -48,11 +48,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
@@ -63,44 +63,37 @@ import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
 
 @Composable
 fun SopletterWriteRoute(
+    onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
     onNavigateToMain: () -> Unit,
     viewModel: SopletterWriteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val textFieldState = remember { TextFieldState() }
-    val snackBarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     is SopletterWriteSideEffect.ShowSnackbar -> {
-                        snackBarHostState.showSnackbar(
-                            SopletterSnackbarVisuals(
-                                message = sideEffect.message,
-                                type = sideEffect.type
-                            )
-                        )
+                        onShowSnackbar(SopletterSnackbarVisuals(sideEffect.message, sideEffect.type))
                     }
                     is SopletterWriteSideEffect.NavigateToMain -> {
                         onNavigateToMain()
                     }
                 }
             }
+        }
     }
 
-    SopletterScaffold(snackbarHostState = snackBarHostState) { paddingValues ->
-        SopletterWriteScreen(
-            uiState = uiState,
-            textFieldState = textFieldState,
-            onBackClick = onBackClick,
-            onPostClick = { viewModel.postSopletter(textFieldState.text.toString()) },
-            onLimitExceeded = viewModel::onLimitExceeded,
-            modifier = Modifier.padding(paddingValues)
-        )
-    }
+    SopletterWriteScreen(
+        uiState = uiState,
+        textFieldState = textFieldState,
+        onBackClick = onBackClick,
+        onPostClick = { viewModel.postSopletter(textFieldState.text.toString()) },
+        onLimitExceeded = viewModel::onLimitExceeded,
+    )
 }
 
 @Composable
@@ -143,7 +136,6 @@ private fun SopletterWriteScreen(
                     userName = uiState.writerName,
                     state = textFieldState,
                     maxLength = maxLength,
-                    enabled = !uiState.isLoading,
                     onLimitExceeded = onLimitExceeded,
                     modifier = Modifier.padding(horizontal = 20.dp)
                 )

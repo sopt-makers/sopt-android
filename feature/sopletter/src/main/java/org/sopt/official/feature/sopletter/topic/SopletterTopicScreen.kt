@@ -2,7 +2,6 @@ package org.sopt.official.feature.sopletter.topic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -23,7 +22,6 @@ import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
 
 @Composable
 internal fun SopletterTopicRoute(
-    paddingValues: PaddingValues,
     navigateUp: () -> Unit,
     navigateToMain: (Long) -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
@@ -31,8 +29,6 @@ internal fun SopletterTopicRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     SopletterTopicScreen(
-        modifier = Modifier
-            .padding(paddingValues),
         uiState = uiState,
         onBackClick = navigateUp,
         onTopicClick = navigateToMain,

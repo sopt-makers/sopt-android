@@ -26,24 +26,21 @@ package org.sopt.official.feature.sopletter.onboarding
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
@@ -54,17 +51,17 @@ import org.sopt.official.sopletter.R
 fun SopletterOnboardingRoute(
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
+    onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterOnboardingViewModel = hiltViewModel(),
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
     val lifecycleOwner = LocalLifecycleOwner.current
 
     LaunchedEffect(Unit) {
-        viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
-            .collect { sideEffect ->
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     is SopletterOnboardingSideEffect.ShowSnackbar -> {
-                        snackbarHostState.showSnackbar(
+                        onShowSnackbar(
                             SopletterSnackbarVisuals(
                                 message = sideEffect.message,
                                 type = SopletterSnackbarType.FAILURE,
@@ -77,32 +74,24 @@ fun SopletterOnboardingRoute(
                     }
                 }
             }
+        }
     }
 
-    SopletterScaffold(
-        snackbarHostState = snackbarHostState,
-        modifier = Modifier
-            .fillMaxSize(),
-    ) { innerPadding ->
-        SopletterOnboardingScreen(
-            paddingValues = innerPadding,
-            navigateToNickname = viewModel::updateSopletterOnboardingStatus,
-            navigateToHome = navigateToHome,
-        )
-    }
+    SopletterOnboardingScreen(
+        navigateToNickname = viewModel::updateSopletterOnboardingStatus,
+        navigateToHome = navigateToHome,
+    )
 }
 
 @Composable
 private fun SopletterOnboardingScreen(
-    paddingValues: PaddingValues,
     navigateToNickname: () -> Unit,
     navigateToHome: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(SoptTheme.colors.onSurface950)
-            .padding(paddingValues),
+            .background(SoptTheme.colors.onSurface950),
     ) {
         SopletterTopbar(
             onBackClick = navigateToHome,
@@ -136,7 +125,6 @@ private fun SopletterOnboardingScreen(
 private fun SopletterOnboardingScreenPreview() {
     SoptTheme {
         SopletterOnboardingScreen(
-            paddingValues = PaddingValues(),
             navigateToNickname = {},
             navigateToHome = {}
         )
