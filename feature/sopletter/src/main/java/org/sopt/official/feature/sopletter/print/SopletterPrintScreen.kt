@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -130,7 +131,6 @@ fun SopletterPrintRoute(
                 isCaptureFinished = true
                 viewModel.onCaptureFailed()
             },
-            modifier = Modifier.padding(paddingValues)
         )
 }
 
@@ -197,22 +197,22 @@ private fun SopletterPrintScreen(
                 topbarTitle = "솝레터 출력"
             )
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Box(
                 modifier = Modifier
                     .weight(1.5f)
                     .wrapContentWidth()
-                    .align(Alignment.CenterHorizontally)
-                    .border(1.dp, SoptTheme.colors.onSurface100, RoundedCornerShape(10.dp))
-                    .padding(8.dp),
+                    .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.TopCenter
             ) {
                 if (isPreviewLoading) {
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
-                            .fillMaxWidth(),
+                            .fillMaxWidth()
+                            .border(1.dp, SoptTheme.colors.onSurface100, RoundedCornerShape(10.dp))
+                            .padding(8.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         CircularProgressIndicator(color = SoptTheme.colors.primary)
@@ -220,12 +220,14 @@ private fun SopletterPrintScreen(
                 } else {
                     Column(
                         modifier = Modifier
-                            .fillMaxHeight()
+                            .wrapContentHeight()
                             .wrapContentWidth()
+                            .border(1.dp, SoptTheme.colors.onSurface100, RoundedCornerShape(10.dp))
+                            .padding(8.dp)
                             .verticalScroll(rememberScrollState()),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        ScaledSopletterBoard(scale = 0.45f) {
+                        ScaledSopletterBoard(scale = 0.55f) {
                             SopletterBoardLayout(
                                 title = uiState.topicTitle,
                                 memos = uiState.previewMemoList.take(16),
@@ -287,8 +289,8 @@ private fun SopletterBoardLayout(
     title: String,
     memos: List<SopletterMessage>,
     modifier: Modifier = Modifier,
-    memoColumnSpacing: Dp = 140.dp,
-    memoCardWidth: Dp = 8.dp
+    memoCardWidth: Dp = 140.dp,
+    memoColumnSpacing: Dp = 8.dp,
 ) {
     val density = LocalDensity.current
     val leftColMemos = memos.filterIndexed { index, _ -> index % 2 == 0 }
@@ -324,7 +326,7 @@ private fun SopletterBoardLayout(
                     verticalArrangement = Arrangement.spacedBy((-8).dp)
                 ) {
                     leftColMemos.forEach { item ->
-                        SopletterMemoCard(memo = item, onClick = {},    textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),)
+                        SopletterMemoCard(memo = item, onClick = {}, textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp))
                     }
                 }
                 Column(
@@ -334,7 +336,7 @@ private fun SopletterBoardLayout(
                     verticalArrangement = Arrangement.spacedBy((-8).dp)
                 ) {
                     rightColMemos.forEach { item ->
-                        SopletterMemoCard(memo = item, onClick = {},    textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp),)
+                        SopletterMemoCard(memo = item, onClick = {}, textPadding = PaddingValues(horizontal = 12.dp, vertical = 16.dp))
                     }
                 }
             }
