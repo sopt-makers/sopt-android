@@ -44,6 +44,7 @@ internal fun SopletterMessagesResponseDto.toDomain(): SopletterMessages = Soplet
     totalCount = totalCount,
     nextCursor = nextCursor,
     hasNext = hasNext,
+    hasNormalTopic = hasNormalTopic,
     messages = messages.map(SopletterMessageDto::toDomain),
 )
 
