@@ -29,11 +29,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -58,6 +56,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
@@ -67,6 +66,7 @@ import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
+import timber.log.Timber
 
 @Composable
 fun SopletterPrintRoute(
@@ -80,7 +80,7 @@ fun SopletterPrintRoute(
 
     val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
     var currentChunkIndex by remember { mutableIntStateOf(0) }
-    val capturedBitmaps = remember { mutableStateListOf<Bitmap>() }
+    val capturedBitmaps = remember { mutableListOf<Bitmap>() }
     var isCaptureFinished by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -111,33 +111,37 @@ fun SopletterPrintRoute(
         }
     }
 
-     SopletterPrintScreen(
-            uiState = uiState,
-            currentChunkMemos = chunks.getOrNull(currentChunkIndex),
-            isCaptureFinished = isCaptureFinished,
-            onBackClick = onBackClick,
-            onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
-            onChunkCaptured = { bitmap ->
-                capturedBitmaps.add(bitmap)
-                if (currentChunkIndex < chunks.size - 1) {
-                    currentChunkIndex++
-                } else {
-                    isCaptureFinished = true
-                    viewModel.processSavePdf(applicationContext, capturedBitmaps.toList())
-                }
-            },
-            onCaptureFailed = { e ->
-                e?.printStackTrace()
+    SopletterPrintScreen(
+        uiState = uiState,
+        currentChunkMemos = chunks.getOrNull(currentChunkIndex),
+        currentChunkIndex = currentChunkIndex,
+        isCaptureFinished = isCaptureFinished,
+        onBackClick = onBackClick,
+        onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
+        onChunkCaptured = { bitmap ->
+            capturedBitmaps.add(bitmap)
+            if (currentChunkIndex < chunks.size - 1) {
+                currentChunkIndex++
+            } else {
                 isCaptureFinished = true
-                viewModel.onCaptureFailed()
-            },
-        )
+                viewModel.processSavePdf(applicationContext, capturedBitmaps.toList())
+            }
+        },
+        onCaptureFailed = { e ->
+            if (e != null) {
+                Timber.e(e, "타겟 보드 이미지 캡처 실패")
+            }
+            isCaptureFinished = true
+            viewModel.onCaptureFailed()
+        },
+    )
 }
 
 @Composable
 private fun SopletterPrintScreen(
     uiState: SopletterPrintUiState,
     currentChunkMemos: List<SopletterMessage>?,
+    currentChunkIndex: Int,
     isCaptureFinished: Boolean,
     onBackClick: () -> Unit,
     onPdfSaveClick: () -> Unit,
@@ -145,44 +149,19 @@ private fun SopletterPrintScreen(
     onCaptureFailed: (Throwable?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val graphicsLayer = rememberGraphicsLayer()
     val isPreviewLoading = uiState.previewMemoList.isEmpty()
 
     Box(modifier = modifier.fillMaxSize()) {
 
         if (uiState.isCaptureRequested && currentChunkMemos != null && !isCaptureFinished) {
             key(currentChunkMemos) {
-                Box(
-                    modifier = Modifier
-                        .wrapContentSize(unbounded = true)
-                        .zIndex(5f)
-                        .graphicsLayer { alpha = 0.01f }
-                        .drawWithContent {
-                            graphicsLayer.record {
-                                this@drawWithContent.drawContent()
-                            }
-                            drawLayer(graphicsLayer)
-                        }
-                ) {
-                    SopletterBoardLayout(
-                        title = uiState.topicTitle,
-                        memos = currentChunkMemos,
-                    )
-                }
-
-                LaunchedEffect(currentChunkMemos) {
-                    try {
-                        withFrameNanos { }
-                        //withFrameNanos { }
-                        delay(100L)
-                        val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
-                        onChunkCaptured(bitmap)
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Throwable) {
-                        onCaptureFailed(e)
-                    }
-                }
+                SopletterCaptureTarget(
+                    requestKey = currentChunkIndex,
+                    title = uiState.topicTitle,
+                    memos = currentChunkMemos,
+                    onCaptured = onChunkCaptured,
+                    onCaptureFailed = onCaptureFailed
+                )
             }
         }
 
@@ -281,6 +260,50 @@ private fun SopletterPrintScreen(
             }
         }
 
+    }
+}
+
+@Composable
+private fun SopletterCaptureTarget(
+    requestKey: Any,
+    title: String,
+    memos: List<SopletterMessage>,
+    onCaptured: (Bitmap) -> Unit,
+    onCaptureFailed: (Throwable) -> Unit,
+) {
+    val graphicsLayer = rememberGraphicsLayer()
+    val drawCompleted = remember(requestKey) { CompletableDeferred<Unit>() }
+
+    Box(
+        modifier = Modifier
+            .wrapContentSize(unbounded = true)
+            .zIndex(5f)
+            .graphicsLayer { alpha = 0.01f }
+            .drawWithContent {
+                graphicsLayer.record {
+                    this@drawWithContent.drawContent()
+                }
+                drawLayer(graphicsLayer)
+                drawCompleted.complete(Unit)
+            }
+    ) {
+        SopletterBoardLayout(
+            title = title,
+            memos = memos,
+        )
+    }
+
+    LaunchedEffect(requestKey) {
+        try {
+            drawCompleted.await()
+            delay(50L)
+            val bitmap = graphicsLayer.toImageBitmap().asAndroidBitmap()
+            onCaptured(bitmap)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
+            onCaptureFailed(e)
+        }
     }
 }
 

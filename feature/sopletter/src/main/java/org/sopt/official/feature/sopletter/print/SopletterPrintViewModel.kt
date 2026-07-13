@@ -23,6 +23,7 @@ import org.sopt.official.feature.sopletter.print.manager.PdfHelper
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 import org.sopt.official.feature.sopletter.print.navigation.SopletterPrint
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,8 +40,6 @@ class SopletterPrintViewModel @Inject constructor(
 
     private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
 
-    // TODO: uiState.generation이 기본값 0으로 고정되어 있고 갱신 로직이 없음.
-    //  실제 기수 정보를 서버에서 받아와 반영하는 로직 추가 필요.
     init {
         fetchPreviewMessages()
     }
@@ -82,7 +81,7 @@ class SopletterPrintViewModel @Inject constructor(
     }
 
     fun processSavePdf(context: Context, bitmaps: List<Bitmap>) {
-         _uiState.update { it.copy(isCaptureRequested = false) }
+        _uiState.update { it.copy(isCaptureRequested = false) }
 
         viewModelScope.launch {
             try {
@@ -96,7 +95,7 @@ class SopletterPrintViewModel @Inject constructor(
                     _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
                     _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
                 }.onFailure { e ->
-                    e.printStackTrace()
+                    Timber.e(e, "PDF 변환 및 파일 저장 실패")
                     onCaptureFailed("이미지 저장에 실패했어요.")
                 }
             } finally {

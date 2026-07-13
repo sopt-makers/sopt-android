@@ -43,6 +43,7 @@ object PdfHelper {
                         if (softwareBitmap !== bitmap) {
                             softwareBitmap.recycle()
                         }
+                        bitmap.recycle()
                     }
                 }
 
