@@ -175,7 +175,6 @@ internal fun MyPageRoute(
                 title = "로그아웃",
                 onItemClick = {
                     viewModel.onAction(MyPageAction.RequestLogout)
-                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
                 }
             ),
             MyPageUiModel.MyPageItem(
@@ -325,7 +324,10 @@ internal fun MyPageScreen(
                 dialogState = state.dialogState,
                 onDismissRequest = { onAction(MyPageAction.CloseDialog) },
                 onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
-                onLogoutClick = { onAction(MyPageAction.ConfirmLogout) },
+                onLogoutClick = {
+                    onAction(MyPageAction.ConfirmLogout)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
+                },
             )
         }
     }

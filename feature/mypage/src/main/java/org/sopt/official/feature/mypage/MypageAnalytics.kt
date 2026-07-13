@@ -7,7 +7,7 @@ enum class MypageAnalyticsEvent(
     override val type : EventType,
     override val eventName : String
 ):AnalyticsEvent {
-    VIEW_MYPAGE_MAIN(EventType.VIEW,"mapage_main"),
+    VIEW_MYPAGE_MAIN(EventType.VIEW,"mypage_main"),
     CLICK_PROFILE_EDIT_BUTTON(EventType.CLICK,"profile_edit_button"),
     CLICK_MYPAGE_SOPTLOG(EventType.CLICK,"mypage_soptlog"),
     CLICK_MYPAGE_FEEDBACK(EventType.CLICK,"mypage_feedback"),

@@ -1,3 +1,5 @@
+package org.sopt.official.feature.soptlog
+
 import org.sopt.official.analytics.AnalyticsEvent
 import org.sopt.official.analytics.EventType
 
