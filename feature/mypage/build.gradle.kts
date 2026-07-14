@@ -46,6 +46,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.navigation)
     implementation(projects.core.webview)
+    implementation(projects.core.analytics)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)

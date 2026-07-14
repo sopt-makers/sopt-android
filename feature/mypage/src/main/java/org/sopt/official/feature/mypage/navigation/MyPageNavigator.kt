@@ -33,6 +33,7 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.mypage.MyPageRoute
+import org.sopt.official.model.UserStatus
 
 @Serializable
 data object MyPageGraph : MainTabRoute
@@ -45,6 +46,7 @@ fun NavController.navigateToMyPage(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.myPageNavGraph(
+    userStatus: UserStatus,
     navigateToSoptLog: () -> Unit,
     navigateToAuthActivity: () -> Unit,
     navigateToPlayGroundProfile: () -> Unit,
@@ -56,6 +58,7 @@ fun NavGraphBuilder.myPageNavGraph(
                 navigateToSoptLog = navigateToSoptLog,
                 navigateToPlayGroundProfile = navigateToPlayGroundProfile,
                 onRestartApp = navigateToAuthActivity,
+                userStatus = userStatus
             )
         }
         builder()

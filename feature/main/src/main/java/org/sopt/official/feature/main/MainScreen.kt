@@ -356,6 +356,7 @@ fun MainScreen(
                         )
 
                         myPageNavGraph(
+                            userStatus = userStatus,
                             navigateToSoptLog = {
                                 navigator.navController.navigate(SoptLog)
                             },
@@ -370,6 +371,7 @@ fun MainScreen(
                             }
                         ) {
                             soptLogNavGraph(
+                                userStatus = userStatus,
                                 soptLogNavigation = object : SoptLogNavigation {
                                     override fun navigateToDeepLink(url: String) {
                                         if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true

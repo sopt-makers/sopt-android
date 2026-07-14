@@ -43,23 +43,38 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.mypage.MypageAnalyticsEvent
 import org.sopt.official.feature.mypage.R
 import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.userRepository
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {
 
+    private val args by serializableExtra(StartArgs(UserStatus.UNAUTHENTICATED.name))
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val userStatus = args?.userStatus?.let { UserStatus.of(it) } ?: UserStatus.UNAUTHENTICATED
+
         setContent {
             SoptTheme {
                 val context = LocalContext.current
+                val tracker = LocalTracker.current
+                val viewType = userStatus.toViewType()
+
                 val uiState = rememberModifyProfileState(
                     userRepository = userRepository,
                     onShowToast = { context.toast(it) }
@@ -94,7 +109,10 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .padding(20.dp)
                                 .fillMaxWidth(),
-                            onClick = uiState.onUpdate,
+                            onClick = {
+                                uiState.onUpdate()
+                                tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_EDIT_STATUSMESSAGE, viewType)
+                            },
                             isEnabled = uiState.isConfirmed
                         ) {
                             Text(
@@ -108,8 +126,14 @@ class AdjustSentenceActivity : AppCompatActivity() {
         }
     }
 
+    data class StartArgs(
+        val userStatus: String,
+    ) : Serializable
+
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, AdjustSentenceActivity::class.java)
+        fun getIntent(context: Context, args: StartArgs) = Intent(context, AdjustSentenceActivity::class.java).apply {
+            putExtra("args", args)
+        }
     }
 }
