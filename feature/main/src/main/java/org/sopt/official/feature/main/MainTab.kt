@@ -26,8 +26,10 @@ package org.sopt.official.feature.main
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import org.sopt.official.analytics.EventType
 import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
+import org.sopt.official.feature.appjamtamp.navigation.AppjamtampNavGraph
 import org.sopt.official.feature.mypage.navigation.MyPageGraph
 
 enum class MainTab(
@@ -56,8 +58,8 @@ enum class MainTab(
     Appjamtamp(
         icon = R.drawable.ic_main_soptamp,
         contentDescription = "솝탬프",
-        route = org.sopt.official.feature.appjamtamp.navigation.AppjamtampNavGraph,
-        loggingName = null,
+        route = AppjamtampNavGraph,
+        loggingName = "navi_appjamtamp",
         deeplink = "appjamtamp"
     ),
 
@@ -78,6 +80,9 @@ enum class MainTab(
     );
 
     companion object {
+        val CLICK_EVENT_TYPE = EventType.CLICK
+        const val PLUS_BUTTON_LOGGING_NAME = "plus_button"
+
         @Composable
         fun find(predicate: @Composable (MainTabRoute) -> Boolean): MainTab? {
             return entries.find { predicate(it.route) }

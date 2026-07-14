@@ -83,8 +83,8 @@ import androidx.navigation.compose.NavHost
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentList
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
@@ -428,11 +428,11 @@ fun MainScreen(
                     showBadgeContent = badgeList,
                     currentTab = navigator.currentTab,
                     onTabSelected = { selectedTab ->
-                        if (selectedTab.loggingName != null) {
-                            tracker.track(
-                                name = selectedTab.loggingName,
-                                type = EventType.CLICK,
-                                properties = mapOf("view_type" to userStatus.value)
+                        selectedTab.loggingName?.let { loggingName ->
+                            tracker.trackViewType(
+                                type = MainTab.CLICK_EVENT_TYPE,
+                                name = loggingName,
+                                viewType = userStatus.value,
                             )
                         }
 
@@ -447,7 +447,14 @@ fun MainScreen(
                         }
                     },
                     isMenuOpen = isFloatingMenuOpen,
-                    onMenuToggle = { isFloatingMenuOpen = !isFloatingMenuOpen }
+                    onMenuToggle = {
+                        tracker.trackViewType(
+                            type = MainTab.CLICK_EVENT_TYPE,
+                            name = MainTab.PLUS_BUTTON_LOGGING_NAME,
+                            viewType = userStatus.value,
+                        )
+                        isFloatingMenuOpen = !isFloatingMenuOpen
+                    }
                 )
             }
         }
