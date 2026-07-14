@@ -40,6 +40,8 @@ class SopletterPrintViewModel @Inject constructor(
 
     private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
 
+    private var pdfWriter: PdfHelper.ProgressiveWriter? = null
+
     init {
         fetchPreviewMessages()
     }
@@ -73,6 +75,8 @@ class SopletterPrintViewModel @Inject constructor(
             _uiState.update { it.copy(isSaving = true) }
 
             fetchMessages(size = if (totalCount > 0) totalCount else 100).onSuccess { response ->
+                val safeTopicTitle = response.title.toSafeFileName()
+                pdfWriter = PdfHelper.ProgressiveWriter("sopletter_$safeTopicTitle")
                 _uiState.update { it.copy(fullMemoList = response.messages, isCaptureRequested = true) }
             }.onFailure {
                 onCaptureFailed("이미지 저장에 실패했어요.")
@@ -80,25 +84,28 @@ class SopletterPrintViewModel @Inject constructor(
         }
     }
 
-    fun processSavePdf(context: Context, bitmaps: List<Bitmap>) {
+    fun addPageToPdf(bitmap: Bitmap) {
+        pdfWriter?.addPageAndRecycle(bitmap)
+    }
+
+    fun processSavePdf(context: Context) {
         _uiState.update { it.copy(isCaptureRequested = false) }
 
         viewModelScope.launch {
             try {
-                val safeTopicTitle = _uiState.value.topicTitle.toSafeFileName()
-
-                PdfHelper.saveBitmapsAsPdf(
-                    context = context,
-                    bitmaps = bitmaps,
-                    fileName = "sopletter_$safeTopicTitle",
-                ).onSuccess {
+                val writer = pdfWriter ?: error("PdfWriter가 초기화되지 않았습니다.")
+                writer.saveAndClose(context).onSuccess {
                     _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar("이미지 저장을 완료했어요.", SopletterSnackbarType.SUCCESS))
                     _sideEffect.emit(SopletterPrintSideEffect.NavigateBack)
                 }.onFailure { e ->
                     Timber.e(e, "PDF 변환 및 파일 저장 실패")
                     onCaptureFailed("이미지 저장에 실패했어요.")
                 }
+            } catch (e: Throwable) {
+                Timber.e(e, "PDF 처리 중 에러 발생")
+                onCaptureFailed("이미지 저장에 실패했어요.")
             } finally {
+                pdfWriter = null
                 _uiState.update {
                     it.copy(
                         isSaving = false,
@@ -110,6 +117,8 @@ class SopletterPrintViewModel @Inject constructor(
     }
 
     fun onCaptureFailed(message: String = "이미지 캡처 중 에러가 발생했습니다.") {
+        pdfWriter?.close()
+        pdfWriter = null
         _uiState.update { it.copy(isSaving = false, isCaptureRequested = false, fullMemoList = null) }
         viewModelScope.launch {
             _sideEffect.emit(SopletterPrintSideEffect.ShowSnackbar(message, SopletterSnackbarType.FAILURE))

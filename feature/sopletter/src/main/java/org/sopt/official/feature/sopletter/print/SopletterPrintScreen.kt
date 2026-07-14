@@ -80,7 +80,6 @@ fun SopletterPrintRoute(
 
     val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
     var currentChunkIndex by remember { mutableIntStateOf(0) }
-    val capturedBitmaps = remember { mutableListOf<Bitmap>() }
     var isCaptureFinished by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -101,7 +100,6 @@ fun SopletterPrintRoute(
         if (uiState.isCaptureRequested) {
             currentChunkIndex = 0
             isCaptureFinished = false
-            capturedBitmaps.clear()
         }
     }
 
@@ -119,12 +117,12 @@ fun SopletterPrintRoute(
         onBackClick = onBackClick,
         onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
         onChunkCaptured = { bitmap ->
-            capturedBitmaps.add(bitmap)
+            viewModel.addPageToPdf(bitmap)
             if (currentChunkIndex < chunks.size - 1) {
                 currentChunkIndex++
             } else {
                 isCaptureFinished = true
-                viewModel.processSavePdf(applicationContext, capturedBitmaps.toList())
+                viewModel.processSavePdf(applicationContext)
             }
         },
         onCaptureFailed = { e ->
