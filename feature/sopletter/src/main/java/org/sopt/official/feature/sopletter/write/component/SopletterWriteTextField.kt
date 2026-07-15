@@ -41,8 +41,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filter
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +49,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filter
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
 
@@ -80,7 +80,12 @@ fun SopletterWriteTextBox(
             .fillMaxWidth()
             .background(color = SoptTheme.colors.onSurface700, shape = RoundedCornerShape(10.dp))
             .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
-            .padding(all = 20.dp ),
+            .padding(
+                top = 28.dp,
+                start = 20.dp,
+                end = 20.dp,
+                bottom = 20.dp
+            ),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
@@ -92,19 +97,16 @@ fun SopletterWriteTextBox(
         BasicTextField(
             state = state,
             scrollState = scrollState,
-            textStyle = TextStyle(
-                color = SoptTheme.colors.onSurface10,
-                fontSize = 14.sp,
-                lineHeight = 22.sp
-            ),
+            textStyle = SoptTheme.typography.body16R.copy(color = SoptTheme.colors.primary),
             cursorBrush = SolidColor(SoptTheme.colors.onSurface10),
-            lineLimits = TextFieldLineLimits.MultiLine(minHeightInLines = 5, maxHeightInLines = 10),
+            lineLimits = TextFieldLineLimits.MultiLine(),
             modifier = Modifier
                 .fillMaxWidth()
+                .weight(weight = 1f, fill = false)
                 .verticalScrollbar(
                     scrollState = scrollState,
                     thumbWidth = 4.dp,
-                    thumbHeight = 40.dp,
+                    thumbHeight = 100.dp,
                     thumbColor = SoptTheme.colors.onSurface300.copy(alpha = 0.5f)
                 ),
             decorator = { innerTextField ->
@@ -115,7 +117,7 @@ fun SopletterWriteTextBox(
                 ) {
                     if (state.text.isEmpty()) {
                         Text(
-                            text = "나와 같은 기수의 솝트인들에게 전하고 싶은\n말을 자유롭게 적어보세요.",
+                            text = "나와 같은 기수의 솝트인들에게 전하고 싶은 말을 자유롭게 적어보세요.",
                             style = SoptTheme.typography.body16R,
                             color = SoptTheme.colors.onSurface400
                         )

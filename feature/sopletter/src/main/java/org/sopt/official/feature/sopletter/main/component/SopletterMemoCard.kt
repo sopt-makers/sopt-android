@@ -26,7 +26,9 @@ package org.sopt.official.feature.sopletter.main.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -50,6 +52,7 @@ internal fun SopletterMemoCard(
     memo: SopletterMessage,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    textPadding: PaddingValues = PaddingValues(0.dp),
 ) {
     Box(
         modifier = modifier
@@ -67,7 +70,8 @@ internal fun SopletterMemoCard(
             text = memo.previewContent,
             modifier = Modifier
                 .width(111.dp)
-                .height(110.dp),
+                .height(110.dp)
+                .padding(textPadding),
             style = SoptTheme.typography.body14M,
             color = SoptTheme.colors.onSurface800,
             textAlign = TextAlign.Center,
