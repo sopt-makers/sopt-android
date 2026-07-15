@@ -24,18 +24,24 @@
  */
 package org.sopt.official.feature.sopletter.write
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.input.TextFieldState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -79,6 +85,7 @@ fun SopletterWriteRoute(
                     is SopletterWriteSideEffect.ShowSnackbar -> {
                         onShowSnackbar(SopletterSnackbarVisuals(sideEffect.message, sideEffect.type))
                     }
+
                     is SopletterWriteSideEffect.NavigateToMain -> {
                         onNavigateToMain()
                     }
@@ -96,6 +103,7 @@ fun SopletterWriteRoute(
     )
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun SopletterWriteScreen(
     uiState: SopletterWriteUiState,
@@ -106,6 +114,7 @@ private fun SopletterWriteScreen(
     modifier: Modifier = Modifier,
     maxLength: Int = 350
 ) {
+    val isImeVisible = WindowInsets.isImeVisible
     val isButtonEnabled by remember {
         derivedStateOf {
             textFieldState.text.isNotEmpty() &&
@@ -126,30 +135,39 @@ private fun SopletterWriteScreen(
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
             ) {
-                SopletterExplainArea()
-
-                Spacer(modifier = Modifier.padding(vertical = 10.dp))
+                AnimatedVisibility(
+                    visible = !isImeVisible,
+                    enter = fadeIn() + expandVertically(),
+                    exit = fadeOut() + shrinkVertically()
+                ) {
+                    Column {
+                        SopletterExplainArea()
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
 
                 SopletterWriteTextBox(
                     userName = uiState.writerName,
                     state = textFieldState,
                     maxLength = maxLength,
                     onLimitExceeded = onLimitExceeded,
-                    modifier = Modifier.padding(horizontal = 20.dp)
+                    modifier = Modifier
+                        .weight(weight = 1f, fill = false)
+                        .padding(horizontal = 20.dp)
                 )
-
-                Spacer(modifier = Modifier.padding(vertical = 12.dp))
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
 
             SopletterWriteButton(
                 isEnabled = isButtonEnabled,
                 onButtonClick = onPostClick,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.padding(vertical = 24.dp))
+            Spacer(modifier = Modifier.height(24.dp))
         }
 
         if (uiState.isLoading) {
