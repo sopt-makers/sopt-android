@@ -15,6 +15,8 @@ data class SopletterMessagesResponseDto(
     val nextCursor: Long? = null,
     @SerialName("hasNext")
     val hasNext: Boolean,
+    @SerialName("hasNormalTopic")
+    val hasNormalTopic: Boolean? = null,
     @SerialName("messages")
     val messages: List<SopletterMessageDto>,
 )

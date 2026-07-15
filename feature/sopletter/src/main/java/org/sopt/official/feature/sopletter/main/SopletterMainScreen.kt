@@ -44,7 +44,6 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,6 +69,7 @@ import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
 import org.sopt.official.feature.sopletter.main.analytics.TrackedSopletterMemoDetailDialogActions
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
@@ -90,6 +90,7 @@ import org.sopt.official.webview.view.WebViewActivity
 @Composable
 fun SopletterMainRoute(
     viewType: String,
+    onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     navigateToTopic: () -> Unit = {},
@@ -98,7 +99,6 @@ fun SopletterMainRoute(
     navigateToPrint: (Long?) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -123,64 +123,56 @@ fun SopletterMainRoute(
                     }
 
                     is SopletterMainSideEffect.ShowSnackbar -> {
-                        snackbarHostState.showSnackbar(sideEffect.visuals)
+                        onShowSnackbar(sideEffect.visuals)
                     }
                 }
             }
     }
 
-    SopletterScaffold(
-        snackbarHostState = snackbarHostState,
-        isSnackbarHostVisible = false,
-    ) { paddingValues ->
-        SopletterMainScreen(
-            uiState = uiState,
-            snackbarHostState = snackbarHostState,
-            onMemoClick = {
-                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
-                viewModel.fetchMemoDetail(
-                    messageId = it.messageId,
-                    memoColor = it.memoColor(),
-                )
-            },
-            onRefresh = viewModel::refreshMainContent,
-            onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
-            dialogActions = trackedDialogActions,
-            onBackClick = {
-                if (uiState.routeTopicId == null) {
-                    tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
-                }
-                navigateUp()
-            },
-            onDownloadClick = {
-                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_EXPORT_SOPTLETTER, viewType)
-                isPrintDialogVisible = true
-            },
-            isPrintDialogVisible = isPrintDialogVisible,
-            onPrintDialogDismiss = { isPrintDialogVisible = false },
-            onPrintConfirm = {
-                isPrintDialogVisible = false
-                navigateToPrint(uiState.selectedTopicId)
-            },
-            printDialogTitle = uiState.topicTitle,
-            onTopicClick = navigateToTopic,
-            onTopicCtaClick = navigateToTopicDetail,
-            onReportClick = viewModel::openReportForm,
-            onErrorConfirm = viewModel::dismissErrorDialog,
-            onWriteFABClick = {
-                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
-                navigateToWrite(uiState.selectedTopicId)
-            },
-            modifier = Modifier.padding(paddingValues),
-        )
-    }
+    SopletterMainScreen(
+        uiState = uiState,
+        onMemoClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
+            viewModel.fetchMemoDetail(
+                messageId = it.messageId,
+                memoColor = it.memoColor(),
+            )
+        },
+        onRefresh = viewModel::refreshMainContent,
+        onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
+        dialogActions = trackedDialogActions,
+        onBackClick = {
+            if (uiState.routeTopicId == null) {
+                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
+            }
+            navigateUp()
+        },
+        onDownloadClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_EXPORT_SOPTLETTER, viewType)
+            isPrintDialogVisible = true
+        },
+        isPrintDialogVisible = isPrintDialogVisible,
+        onPrintDialogDismiss = { isPrintDialogVisible = false },
+        onPrintConfirm = {
+            isPrintDialogVisible = false
+            navigateToPrint(uiState.selectedTopicId)
+        },
+        printDialogTitle = uiState.topicTitle,
+        onTopicClick = navigateToTopic,
+        onTopicCtaClick = navigateToTopicDetail,
+        onReportClick = viewModel::openReportForm,
+        onErrorConfirm = viewModel::dismissErrorDialog,
+        onWriteFABClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
+            navigateToWrite(uiState.selectedTopicId)
+        },
+    )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
-    snackbarHostState: SnackbarHostState,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
@@ -228,7 +220,7 @@ private fun SopletterMainScreen(
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,
                 onReportClick = onReportClick,
-                onTopicClick = if (uiState.routeTopicId == null) onTopicClick else onBackClick,
+                onTopicClick = if (uiState.routeTopicId == null && uiState.hasNormalTopic == true) onTopicClick else null,
             )
 
             when {
@@ -351,12 +343,6 @@ private fun SopletterMainScreen(
             )
         }
 
-        SopletterSnackbarHost(
-            snackbarHostState = snackbarHostState,
-            modifier = Modifier
-                .align(Alignment.TopCenter)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
-        )
     }
 }
 
@@ -418,7 +404,6 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
-            snackbarHostState = remember { SnackbarHostState() },
             onMemoClick = { _ -> },
             onRefresh = {},
             onLoadMore = {},

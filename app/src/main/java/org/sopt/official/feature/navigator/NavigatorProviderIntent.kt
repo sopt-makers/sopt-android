@@ -52,8 +52,9 @@ class NavigatorProviderIntent @Inject constructor(
         notificationId
     )
 
-    override fun getAdjustSentenceActivityIntent(): Intent = AdjustSentenceActivity.getIntent(
-        context
+    override fun getAdjustSentenceActivityIntent(userStatus: UserStatus): Intent = AdjustSentenceActivity.getIntent(
+        context,
+        AdjustSentenceActivity.StartArgs(userStatus = userStatus.name),
     )
 
     override fun getPokeActivityIntent(userStatus: UserStatus): Intent {

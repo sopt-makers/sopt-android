@@ -27,7 +27,6 @@ package org.sopt.official.feature.mypage
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.background
-import org.sopt.official.webview.view.WebViewActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -50,6 +49,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.component.MyPageDialog
 import org.sopt.official.feature.mypage.component.MyPageNavigatorButton
@@ -63,16 +65,21 @@ import org.sopt.official.feature.mypage.signout.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
+import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun MyPageRoute(
     navigateToSoptLog: () -> Unit,
     navigateToPlayGroundProfile: () -> Unit,
     onRestartApp: () -> Unit,
+    userStatus: UserStatus,
     viewModel: MyPageViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
+    val tracker = LocalTracker.current
     val urlHandler = LocalUriHandler.current
+    val viewType = userStatus.toViewType()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val isAppjamMode by viewModel.isAppjamMode.collectAsStateWithLifecycle()
 
@@ -82,6 +89,10 @@ internal fun MyPageRoute(
                 is MyPageSideEffect.NavigateToAuth -> onRestartApp()
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        tracker.trackViewType(MypageAnalyticsEvent.VIEW_MYPAGE_MAIN, viewType)
     }
 
     val serviceSectionItems = remember {
@@ -107,7 +118,10 @@ internal fun MyPageRoute(
             ),
             MyPageUiModel.MyPageItem(
                 title = "의견 보내기",
-                onItemClick = { urlHandler.openUri(WebUrlConstant.OPINION_KAKAO_CHAT) }
+                onItemClick = {
+                    urlHandler.openUri(WebUrlConstant.OPINION_KAKAO_CHAT)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_FEEDBACK, viewType)
+                }
             )
         )
     }
@@ -123,6 +137,7 @@ internal fun MyPageRoute(
                         putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                     }
                     context.startActivity(intent)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_NOTIFICATION, viewType)
                 }
             )
         )
@@ -133,11 +148,22 @@ internal fun MyPageRoute(
             MyPageUiModel.Header(title = "솝탬프 설정"),
             MyPageUiModel.MyPageItem(
                 title = "한 마디 편집",
-                onItemClick = { context.startActivity(AdjustSentenceActivity.getIntent(context)) }
+                onItemClick = {
+                    context.startActivity(
+                        AdjustSentenceActivity.getIntent(
+                            context,
+                            AdjustSentenceActivity.StartArgs(userStatus = userStatus.name),
+                        )
+                    )
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_EDIT_STATUSMESSAGE, viewType)
+                }
             ),
             MyPageUiModel.MyPageItem(
                 title = "스탬프 초기화",
-                onItemClick = { viewModel.onAction(MyPageAction.ClearSoptamp) }
+                onItemClick = {
+                    viewModel.onAction(MyPageAction.ClearSoptamp)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_RESET_STAMP, viewType)
+                }
             )
         )
     }
@@ -147,11 +173,16 @@ internal fun MyPageRoute(
             MyPageUiModel.Header(title = "기타"),
             MyPageUiModel.MyPageItem(
                 title = "로그아웃",
-                onItemClick = { viewModel.onAction(MyPageAction.RequestLogout) }
+                onItemClick = {
+                    viewModel.onAction(MyPageAction.RequestLogout)
+                }
             ),
             MyPageUiModel.MyPageItem(
                 title = "탈퇴하기",
-                onItemClick = { context.startActivity(SignOutActivity.getIntent(context)) }
+                onItemClick = {
+                    context.startActivity(SignOutActivity.getIntent(context))
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_QUIT, viewType)
+                }
             )
         )
     }
@@ -177,6 +208,8 @@ internal fun MyPageRoute(
         onAction = viewModel::onAction,
         navigateToSoptLog = navigateToSoptLog,
         navigateToPlayGroundProfile = navigateToPlayGroundProfile,
+        tracker = tracker,
+        viewType = viewType
     )
 }
 
@@ -192,6 +225,8 @@ internal fun MyPageScreen(
     onAction: (MyPageAction) -> Unit,
     navigateToSoptLog: () -> Unit,
     navigateToPlayGroundProfile: () -> Unit,
+    tracker:Tracker,
+    viewType:String
 ) {
     val scrollState = rememberScrollState()
 
@@ -227,7 +262,10 @@ internal fun MyPageScreen(
                 text = "프로필 수정",
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                onClick = navigateToPlayGroundProfile
+                onClick = {
+                    navigateToPlayGroundProfile()
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_PROFILE_EDIT_BUTTON, viewType )
+                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -248,7 +286,10 @@ internal fun MyPageScreen(
                 shape = RoundedCornerShape(999.dp),
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                onClick = navigateToSoptLog
+                onClick = {
+                    navigateToSoptLog()
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_SOPTLOG, viewType )
+                }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -283,7 +324,10 @@ internal fun MyPageScreen(
                 dialogState = state.dialogState,
                 onDismissRequest = { onAction(MyPageAction.CloseDialog) },
                 onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
-                onLogoutClick = { onAction(MyPageAction.ConfirmLogout) },
+                onLogoutClick = {
+                    onAction(MyPageAction.ConfirmLogout)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
+                },
             )
         }
     }
@@ -327,6 +371,8 @@ private fun ShowMyPageDialog(
 @Composable
 private fun MyPageScreenPreview() {
     SoptTheme {
+        val track = LocalTracker.current
+
         MyPageScreen(
             state = MyPageState(
                 userStatus = UserStatus.ACTIVE,
@@ -360,6 +406,8 @@ private fun MyPageScreenPreview() {
             onAction = {},
             navigateToSoptLog = {},
             navigateToPlayGroundProfile = {},
+            tracker = track,
+            viewType = "",
         )
     }
 }

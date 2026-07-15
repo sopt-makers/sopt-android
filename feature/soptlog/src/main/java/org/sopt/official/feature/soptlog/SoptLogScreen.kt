@@ -54,6 +54,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
@@ -65,10 +66,13 @@ import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Composable
 internal fun SoptLogRoute(
     soptLogNavigation: SoptLogNavigation,
+    userStatus: UserStatus,
     navigateToFortune: () -> Unit = {},
     navigateUp: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel()
@@ -102,6 +106,11 @@ internal fun SoptLogRoute(
     val isAppjamMode by viewModel.isAppjamMode.collectAsStateWithLifecycle()
     val todayFortuneText by viewModel.todayFortuneText.collectAsStateWithLifecycle("")
     val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
+
+    LaunchedEffect(Unit) {
+        tracker.trackViewType(SoptlogAnalyticsEvent.VIEW_SOPTLOG_MAIN, viewType)
+    }
 
     when {
         soptLogState.isLoading -> LoadingIndicator()
