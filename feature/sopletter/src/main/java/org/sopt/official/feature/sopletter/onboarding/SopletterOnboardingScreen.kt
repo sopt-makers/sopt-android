@@ -86,7 +86,6 @@ fun SopletterOnboardingRoute(
 
     SopletterOnboardingScreen(
         navigateToNickname = {
-            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_START_BUTTON, viewType)
             viewModel.updateSopletterOnboardingStatus()
         },
         navigateToHome = navigateToHome,

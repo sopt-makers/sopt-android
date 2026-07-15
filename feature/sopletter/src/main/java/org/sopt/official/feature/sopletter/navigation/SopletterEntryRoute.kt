@@ -13,7 +13,6 @@ import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun SopletterEntryRoute(
-    viewType: String,
     navigateToMain: () -> Unit,
     navigateToOnboarding: () -> Unit,
     viewModel: SopletterEntryViewModel = hiltViewModel(),

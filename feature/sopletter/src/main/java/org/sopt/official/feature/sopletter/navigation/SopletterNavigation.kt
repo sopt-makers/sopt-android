@@ -91,10 +91,14 @@ fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.sopletterGraph(
+    userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
     composable<SopletterGraph> {
-        SopletterNavHost(navigateToHome = navigateToHome)
+        SopletterNavHost(
+            userStatus = userStatus,
+            navigateToHome = navigateToHome,
+        )
     }
 }
 
@@ -121,7 +125,6 @@ private fun SopletterNavHost(
             composable<SopletterEntry> {
                 SopletterEntryRoute(
                     navigateToMain = {
-                        viewType = viewType,
                         navController.navigateToSopletterMain(
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )

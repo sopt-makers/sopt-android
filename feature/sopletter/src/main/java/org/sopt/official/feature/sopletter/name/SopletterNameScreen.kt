@@ -41,6 +41,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
@@ -72,7 +74,10 @@ fun SopletterNameRoute(
 
     SopletterNameScreen(
         state = state,
-        navigateToSopletterMain = navigateToSopletterMain,
+        navigateToSopletterMain = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_START_BUTTON, viewType)
+            navigateToSopletterMain()
+        },
         navigateToHome = navigateToHome,
     )
 }
