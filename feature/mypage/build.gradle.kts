@@ -34,6 +34,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.domain.appjamtamp)
     implementation(projects.domain.auth)
     implementation(projects.domain.soptamp)
     implementation(projects.domain.soptlog)
