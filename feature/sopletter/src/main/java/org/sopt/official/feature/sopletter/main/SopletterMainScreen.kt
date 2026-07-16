@@ -60,12 +60,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.onBottomReached
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
+import org.sopt.official.feature.sopletter.main.analytics.TrackedSopletterMemoDetailDialogActions
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
@@ -83,6 +89,7 @@ import org.sopt.official.webview.view.WebViewActivity
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SopletterMainRoute(
+    viewType: String,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
@@ -95,9 +102,16 @@ fun SopletterMainRoute(
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
+    val tracker = LocalTracker.current
+    val trackedDialogActions = remember(dialogActions, tracker, viewType) {
+        TrackedSopletterMemoDetailDialogActions(dialogActions) { event ->
+            tracker.trackViewType(event, viewType)
+        }
+    }
     var isPrintDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_MAIN, viewType)
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
@@ -118,6 +132,7 @@ fun SopletterMainRoute(
     SopletterMainScreen(
         uiState = uiState,
         onMemoClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
             viewModel.fetchMemoDetail(
                 messageId = it.messageId,
                 memoColor = it.memoColor(),
@@ -125,9 +140,17 @@ fun SopletterMainRoute(
         },
         onRefresh = viewModel::refreshMainContent,
         onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
-        dialogActions = dialogActions,
-        onBackClick = navigateUp,
-        onDownloadClick = { isPrintDialogVisible = true },
+        dialogActions = trackedDialogActions,
+        onBackClick = {
+            if (uiState.routeTopicId == null) {
+                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
+            }
+            navigateUp()
+        },
+        onDownloadClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_EXPORT_SOPTLETTER, viewType)
+            isPrintDialogVisible = true
+        },
         isPrintDialogVisible = isPrintDialogVisible,
         onPrintDialogDismiss = { isPrintDialogVisible = false },
         onPrintConfirm = {
@@ -139,7 +162,10 @@ fun SopletterMainRoute(
         onTopicCtaClick = navigateToTopicDetail,
         onReportClick = viewModel::openReportForm,
         onErrorConfirm = viewModel::dismissErrorDialog,
-        onWriteFABClick = { navigateToWrite(uiState.selectedTopicId) },
+        onWriteFABClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
+            navigateToWrite(uiState.selectedTopicId)
+        },
     )
 }
 

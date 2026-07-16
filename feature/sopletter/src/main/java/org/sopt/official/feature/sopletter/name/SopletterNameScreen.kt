@@ -41,7 +41,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.name.component.SopletterNameInfoHolder
@@ -49,14 +52,17 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterNameRoute(
+    viewType: String,
     navigateToSopletterMain: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
     val lifeCycleOwner = LocalLifecycleOwner.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_NICKNAME, viewType)
         lifeCycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
@@ -68,7 +74,10 @@ fun SopletterNameRoute(
 
     SopletterNameScreen(
         state = state,
-        navigateToSopletterMain = navigateToSopletterMain,
+        navigateToSopletterMain = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_START_BUTTON, viewType)
+            navigateToSopletterMain()
+        },
         navigateToHome = navigateToHome,
     )
 }

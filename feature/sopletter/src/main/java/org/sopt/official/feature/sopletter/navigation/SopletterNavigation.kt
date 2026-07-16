@@ -60,6 +60,8 @@ import org.sopt.official.feature.sopletter.topic.navigation.navigateToSopletterT
 import org.sopt.official.feature.sopletter.write.SopletterWriteRoute
 import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterWrite
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Serializable
 data object SopletterGraph
@@ -89,20 +91,26 @@ fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.sopletterGraph(
+    userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
     composable<SopletterGraph> {
-        SopletterNavHost(navigateToHome = navigateToHome)
+        SopletterNavHost(
+            userStatus = userStatus,
+            navigateToHome = navigateToHome,
+        )
     }
 }
 
 @Composable
 private fun SopletterNavHost(
+    userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
     val navController = rememberNavController()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val viewType = userStatus.toViewType()
 
     val onShowSnackbar: (SopletterSnackbarVisuals) -> Unit = { visuals ->
         scope.launch { snackBarHostState.showSnackbar(visuals) }
@@ -131,6 +139,7 @@ private fun SopletterNavHost(
 
             composable<SopletterOnboarding> {
                 SopletterOnboardingRoute(
+                    viewType = viewType,
                     navigateToNickname = navController::navigateToSopletterName,
                     navigateToHome = navigateToHome,
                     onShowSnackbar = onShowSnackbar,
@@ -139,6 +148,7 @@ private fun SopletterNavHost(
 
             composable<SopletterName> {
                 SopletterNameRoute(
+                    viewType = viewType,
                     navigateToSopletterMain = {
                         navController.navigateToSopletterMain(
                             navOptions = singleTopNavOptions<SopletterOnboarding>(),
@@ -156,6 +166,7 @@ private fun SopletterNavHost(
                     navigateToHome
                 }
                 SopletterMainRoute(
+                    viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     navigateUp = onNavigateUp,
                     navigateToTopic = navController::navigateToSopletterTopic,
@@ -174,6 +185,7 @@ private fun SopletterNavHost(
 
             composable<SopletterWrite> {
                 SopletterWriteRoute(
+                    viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     onBackClick = navController::navigateUp,
                     onNavigateToMain = {
@@ -194,6 +206,7 @@ private fun SopletterNavHost(
 
             composable<SopletterPrint> {
                 SopletterPrintRoute(
+                    viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     onBackClick = navController::navigateUp,
                 )

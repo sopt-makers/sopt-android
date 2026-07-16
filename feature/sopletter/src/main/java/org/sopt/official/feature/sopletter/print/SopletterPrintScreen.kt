@@ -58,9 +58,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
+import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
@@ -70,6 +74,7 @@ import timber.log.Timber
 
 @Composable
 fun SopletterPrintRoute(
+    viewType: String,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
     viewModel: SopletterPrintViewModel = hiltViewModel(),
@@ -77,6 +82,7 @@ fun SopletterPrintRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val applicationContext = LocalContext.current.applicationContext
+    val tracker = LocalTracker.current
 
     val chunks = remember(uiState.fullMemoList) { uiState.fullMemoList?.chunked(16) ?: emptyList() }
     var currentChunkIndex by remember { mutableIntStateOf(0) }
@@ -115,7 +121,10 @@ fun SopletterPrintRoute(
         currentChunkIndex = currentChunkIndex,
         isCaptureFinished = isCaptureFinished,
         onBackClick = onBackClick,
-        onPdfSaveClick = viewModel::fetchAllAndTriggerCapture,
+        onPdfSaveClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_DONE_EXPORT_SOPTLETTER, viewType)
+            viewModel.fetchAllAndTriggerCapture()
+        },
         onChunkCaptured = { bitmap ->
             viewModel.addPageToPdf(bitmap)
             if (currentChunkIndex < chunks.size - 1) {
@@ -397,6 +406,7 @@ private fun ScaledSopletterBoard(
 private fun PreviewSopletterPrintScreen() {
     SoptTheme {
         SopletterPrintRoute(
+            viewType = "active",
             onShowSnackbar = {},
             onBackClick = {}
         )

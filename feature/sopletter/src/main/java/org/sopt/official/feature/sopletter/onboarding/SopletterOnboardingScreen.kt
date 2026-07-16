@@ -39,7 +39,11 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.lifecycle.flowWithLifecycle
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterButton
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
@@ -49,14 +53,17 @@ import org.sopt.official.sopletter.R
 
 @Composable
 fun SopletterOnboardingRoute(
+    viewType: String,
     navigateToNickname: (String, Int) -> Unit,
     navigateToHome: () -> Unit,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterOnboardingViewModel = hiltViewModel(),
 ) {
     val lifecycleOwner = LocalLifecycleOwner.current
+    val tracker = LocalTracker.current
 
     LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_ONBOARDING, viewType)
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
