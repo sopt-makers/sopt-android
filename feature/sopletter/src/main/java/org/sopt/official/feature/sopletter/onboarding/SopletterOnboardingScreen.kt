@@ -85,9 +85,7 @@ fun SopletterOnboardingRoute(
     }
 
     SopletterOnboardingScreen(
-        navigateToNickname = {
-            viewModel.updateSopletterOnboardingStatus()
-        },
+        navigateToNickname = viewModel::updateSopletterOnboardingStatus,
         navigateToHome = navigateToHome,
     )
 }
