@@ -36,14 +36,12 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -55,7 +53,6 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
-import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
@@ -74,7 +71,6 @@ internal fun SoptLogRoute(
     soptLogNavigation: SoptLogNavigation,
     userStatus: UserStatus,
     navigateToFortune: () -> Unit = {},
-    navigateUp: () -> Unit = {},
     viewModel: SoptLogViewModel = hiltViewModel()
 ) {
     LaunchedEffect(Unit) {
@@ -102,7 +98,6 @@ internal fun SoptLogRoute(
 
     val soptLogState by viewModel.soptLogInfo.collectAsStateWithLifecycle()
     val soptLogInfo = soptLogState.soptLogInfo
-    val isAppjamJoined by viewModel.isAppjamJoined.collectAsStateWithLifecycle()
     val isAppjamMode by viewModel.isAppjamMode.collectAsStateWithLifecycle()
     val todayFortuneText by viewModel.todayFortuneText.collectAsStateWithLifecycle("")
     val tracker = LocalTracker.current
@@ -122,7 +117,6 @@ internal fun SoptLogRoute(
             with(receiver = soptLogState.soptLogInfo) {
                 SoptlogScreen(
                     isAppjamMode = isAppjamMode,
-                    isAppjamJoined = isAppjamJoined,
                     soptLogInfo = soptLogInfo,
                     todayFortuneText = todayFortuneText,
                     onNavigationClick = viewModel::onNavigationClick,
@@ -132,8 +126,7 @@ internal fun SoptLogRoute(
                             name = "at36_soptlog_soptmadi",
                             type = EventType.CLICK
                         )
-                    },
-                    navigateUp = navigateUp
+                    }
                 )
             }
         }
@@ -144,13 +137,11 @@ internal fun SoptLogRoute(
 @Composable
 private fun SoptlogScreen(
     isAppjamMode: Boolean,
-    isAppjamJoined: Boolean,
     soptLogInfo: SoptLogInfo,
     todayFortuneText: String,
     onNavigationClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToFortune: () -> Unit = {},
-    navigateUp: () -> Unit = {}
+    navigateToFortune: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -171,18 +162,6 @@ private fun SoptlogScreen(
                     style = SoptTheme.typography.body16M,
                 )
             },
-            navigationIcon = {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptlog_arrow_left),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .throttledNoRippleClickable(
-                            onClick = navigateUp
-                        )
-                        .padding(start = 20.dp)
-                )
-            }
         )
 
         Spacer(modifier = Modifier.height(20.dp))
@@ -196,7 +175,7 @@ private fun SoptlogScreen(
         Spacer(modifier = Modifier.height(36.dp))
 
         SoptlogContents {
-            val showSoptampSection = if (isAppjamMode) isAppjamJoined else soptLogInfo.isActive
+            val showSoptampSection = !isAppjamMode && soptLogInfo.isActive
             if (showSoptampSection) {
                 SoptLogSection(
                     title = "솝탬프 로그",
@@ -284,7 +263,6 @@ private fun PreviewSoptlogScreen() {
 
         SoptlogScreen(
             isAppjamMode = false,
-            isAppjamJoined = false,
             soptLogInfo = soptLogInfo,
             todayFortuneText = "오늘의 운세",
             onNavigationClick = { url ->

@@ -35,6 +35,7 @@ data class MyPageState(
     val name: String = "",
     val profileImage: String = "",
     val part: String = "",
+    val isAppjamJoined: Boolean = false,
     val soptampCount: Int? = null,
     val totalPokeCount: Int? = null,
 )

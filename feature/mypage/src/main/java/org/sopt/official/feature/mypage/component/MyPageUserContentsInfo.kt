@@ -30,6 +30,7 @@ internal fun MyPageUserContentsInfo(
     userStatus: UserStatus,
     modifier: Modifier = Modifier,
     isAppjamPeriod : Boolean = false,
+    isAppjamJoined: Boolean = false,
     totalSoptampCount: Int? = 0,
     totalPokeCount: Int? = 0,
 ) {
@@ -42,8 +43,8 @@ internal fun MyPageUserContentsInfo(
             )
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
-        // 활동 기수이면서 앱잼 탬프 기간이 아니라면 보이기
-        if (userStatus == UserStatus.ACTIVE && !isAppjamPeriod) {
+        val showSoptampLog = userStatus == UserStatus.ACTIVE || (isAppjamPeriod && isAppjamJoined)
+        if (showSoptampLog) {
             MyPageUserContentsInfoItem(
                 icon = R.drawable.ic_mypage_soptamp,
                 infoTitleText = "솝탬프",

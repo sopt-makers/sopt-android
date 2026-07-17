@@ -220,6 +220,7 @@ private fun HomeScreenForMember(
                     homeDashboardNavigation.navigateToNotification()
                     tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALARM, viewType)
                 },
+                onSettingClick = homeDashboardNavigation::navigateToLegacyMyPage,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
@@ -402,7 +403,7 @@ private fun HomeScreenForVisitor(
             .padding(horizontal = 20.dp),
     ) {
         Spacer(modifier = Modifier.height(height = 8.dp))
-        HomeTopBarForVisitor()
+        HomeTopBarForVisitor(onSettingClick = homeDashboardNavigation::navigateToLegacyMyPage)
         Spacer(modifier = Modifier.height(height = 16.dp))
         HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToEditProfile)
         Spacer(modifier = Modifier.height(height = 36.dp))
