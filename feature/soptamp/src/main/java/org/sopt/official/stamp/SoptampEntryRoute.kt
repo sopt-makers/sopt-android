@@ -35,6 +35,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.MissionDetail
 import org.sopt.official.stamp.feature.navigation.PartRanking
 import org.sopt.official.stamp.feature.navigation.Ranking

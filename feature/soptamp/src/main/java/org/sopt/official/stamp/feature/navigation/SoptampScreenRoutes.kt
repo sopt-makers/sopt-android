@@ -35,6 +35,7 @@ import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.error.Error
 import org.sopt.official.domain.soptamp.model.MissionsFilter
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
 import org.sopt.official.stamp.feature.mission.MissionsState
 import org.sopt.official.stamp.feature.mission.MissionsViewModel
@@ -50,12 +51,25 @@ import org.sopt.official.stamp.feature.ranking.part.PartRankingViewModel
 import org.sopt.official.stamp.feature.ranking.rank.RankingScreen
 import org.sopt.official.stamp.feature.ranking.rank.RankingState
 import org.sopt.official.stamp.feature.ranking.rank.RankingViewModel
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
+import org.sopt.official.model.toViewType
+import org.sopt.official.stamp.SoptampAnalyticsEvent
 
 @Composable
-fun MissionListScreenRoute(navController: NavController) {
+fun MissionListScreenRoute(
+    navController: NavController,
+    userStatus: UserStatus,
+) {
     val missionsViewModel: MissionsViewModel = hiltViewModel()
     val resultFlow = navController.getMissionDetailResult()
     val result by resultFlow.collectAsStateWithLifecycle()
+    val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
+
+    LaunchedEffect(Unit) {
+        tracker.trackViewType(SoptampAnalyticsEvent.CLICK_SOPTAMP, viewType)
+    }
 
     LaunchedEffect(result) {
         result?.let { isRefreshNeeded ->
@@ -76,6 +90,7 @@ fun MissionListScreenRoute(navController: NavController) {
 @Composable
 fun MissionDetailScreenRoute(
     args: MissionDetail,
+    userStatus: UserStatus,
     navController: NavController,
 ) {
     val viewModel: MissionDetailViewModel = hiltViewModel()
@@ -92,6 +107,7 @@ fun MissionDetailScreenRoute(
                 nickname = args.nickname,
             ),
         navController = navController,
+        userStatus = userStatus,
         viewModel = viewModel,
     )
 }
@@ -100,11 +116,11 @@ fun MissionDetailScreenRoute(
 fun RankingScreenRoute(
     args: Ranking,
     navController: NavController,
+    userStatus: UserStatus,
 ) {
     val rankingViewModel: RankingViewModel = hiltViewModel()
     val context = LocalContext.current
     val state by rankingViewModel.state.collectAsStateWithLifecycle()
-    val userStatus by rankingViewModel.userStatus.collectAsStateWithLifecycle()
 
     LaunchedEffect(true) {
         val isCurrent = args.type.first().isDigit()
@@ -135,6 +151,7 @@ fun RankingScreenRoute(
                 onClickUser = { ranker ->
                     navController.navigateToUserMissionList(ranker)
                 },
+                userStatus = userStatus,
                 navigateToMyPageStamp = {
                     val intent = DeepLinkType.MY_PAGE_SOPTAMP.getIntent(
                         context = context,
@@ -149,11 +166,13 @@ fun RankingScreenRoute(
 }
 
 @Composable
-fun PartRankingScreenRoute(navController: NavController) {
+fun PartRankingScreenRoute(
+    navController: NavController,
+    userStatus: UserStatus,
+) {
     val context = LocalContext.current
     val partRankingViewModel: PartRankingViewModel = hiltViewModel()
     val state by partRankingViewModel.state.collectAsStateWithLifecycle()
-    val userStatus by partRankingViewModel.userStatus.collectAsStateWithLifecycle()
     val partRankingEntrySource = "partRanking"
 
     LaunchedEffect(true) {
@@ -193,6 +212,7 @@ fun PartRankingScreenRoute(navController: NavController) {
 @Composable
 fun UserMissionListScreenRoute(
     args: UserMissionList,
+    userStatus: UserStatus,
     navController: NavController,
 ) {
     val missionsViewModel: MissionsViewModel = hiltViewModel()
@@ -229,6 +249,7 @@ fun UserMissionListScreenRoute(
                 onMissionItemClick = { item ->
                     navController.navigateToMissionDetail(item)
                 },
+                userStatus = userStatus,
                 onClickBack = { navController.popBackStack() },
             )
         }

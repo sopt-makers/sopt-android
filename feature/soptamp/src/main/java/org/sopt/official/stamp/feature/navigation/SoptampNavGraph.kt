@@ -33,6 +33,7 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.core.navigation.MainTabRoute
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.SoptampEntryRoute
 
 @Serializable
@@ -53,6 +54,7 @@ data class SoptampMissionArgs(
 fun NavGraphBuilder.soptampNavGraph(
     navController: NavController,
     tracker: Tracker,
+    userStatus: UserStatus,
     currentIntent: Intent?,
 ) {
     navigation<SoptampGraph>(
@@ -64,28 +66,28 @@ fun NavGraphBuilder.soptampNavGraph(
                 tracker = tracker,
                 currentIntent = currentIntent,
                 content = {
-                    MissionListScreenRoute(navController)
+                    MissionListScreenRoute(navController, userStatus)
                 }
             )
         }
 
         composable<MissionDetail> { backStackEntry ->
             val args = backStackEntry.toRoute<MissionDetail>()
-            MissionDetailScreenRoute(args, navController)
+            MissionDetailScreenRoute(args, userStatus,navController)
         }
 
         composable<Ranking> { backStackEntry ->
             val args = backStackEntry.toRoute<Ranking>()
-            RankingScreenRoute(args, navController)
+            RankingScreenRoute(args, navController, userStatus)
         }
 
         composable<PartRanking> {
-            PartRankingScreenRoute(navController)
+            PartRankingScreenRoute(navController, userStatus)
         }
 
         composable<UserMissionList> { backStackEntry ->
             val args = backStackEntry.toRoute<UserMissionList>()
-            UserMissionListScreenRoute(args, navController)
+            UserMissionListScreenRoute(args, userStatus, navController)
         }
 
         composable<Onboarding> {
