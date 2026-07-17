@@ -48,6 +48,7 @@ import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.soptamp.MissionLevel
+import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
 import org.sopt.official.stamp.feature.mission.model.MissionListUiModel
@@ -62,6 +63,7 @@ fun UserMissionListScreen(
     description: String,
     missionListUiModel: MissionListUiModel,
     isMe: Boolean,
+    userStatus: UserStatus,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     onClickBack: () -> Unit = {},
 ) {
@@ -97,6 +99,7 @@ fun UserMissionListScreen(
                 myName = myName,
                 entrySource = entrySource,
                 nickname = userName,
+                userStatus = userStatus
             )
         }
     }
@@ -218,6 +221,7 @@ fun PreviewUserMissionListScreen() {
                         ),
                 ),
             isMe = false,
+            userStatus = UserStatus.ACTIVE
         )
     }
 }
