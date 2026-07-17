@@ -41,6 +41,7 @@ import org.sopt.official.feature.mypage.navigation.MyPageGraph
 import org.sopt.official.feature.mypage.navigation.navigateToMyPage
 import org.sopt.official.feature.poke.navigation.PokeGraph
 import org.sopt.official.feature.poke.navigation.navigateToPokeEntry
+import org.sopt.official.feature.soptlog.navigation.navigateToSoptLog
 import org.sopt.official.model.UserStatus
 import org.sopt.official.stamp.feature.navigation.navigateToSoptamp
 
@@ -106,6 +107,12 @@ class MainNavigator(
                     navOptions = navOptions
                 )
             }
+
+            MainTab.SoptLog -> {
+                navController.navigateToSoptLog(
+                    navOptions = navOptions
+                )
+            }
         }
     }
 
@@ -153,6 +160,14 @@ class MainNavigator(
                 navController.navigateToMyPage(
                     navOptions = navOptions {
                         popUpTo<MyPageGraph> { inclusive = true }
+                        launchSingleTop = true
+                    }
+                )
+            }
+
+            MainTab.SoptLog -> {
+                navController.navigateToSoptLog(
+                    navOptions = navOptions {
                         launchSingleTop = true
                     }
                 )

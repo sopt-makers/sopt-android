@@ -45,12 +45,14 @@ import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R.drawable.ic_notification_off
 import org.sopt.official.feature.home.R.drawable.ic_notification_on
+import org.sopt.official.feature.home.R.drawable.ic_setting
 import org.sopt.official.feature.home.R.drawable.img_logo
 
 @Composable
 internal fun HomeTopBarForMember(
     hasNotification: Boolean,
     onNotificationClick: () -> Unit,
+    onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     HomeTopBar(modifier = modifier) {
@@ -62,6 +64,12 @@ internal fun HomeTopBarForMember(
             tint = Unspecified,
             modifier = Modifier.clickable(onClick = onNotificationClick),
         )
+        Icon(
+            imageVector = ImageVector.vectorResource(ic_setting),
+            contentDescription = "마이페이지",
+            tint = Unspecified,
+            modifier = Modifier.clickable(onClick = onSettingClick),
+        )
     }
 }
 
@@ -72,22 +80,31 @@ private fun HomeTopBarForMemberPreview() {
         HomeTopBarForMember(
             hasNotification = true,
             onNotificationClick = {},
+            onSettingClick = {},
         )
     }
 }
 
 @Composable
 internal fun HomeTopBarForVisitor(
+    onSettingClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    HomeTopBar(modifier = modifier) {}
+    HomeTopBar(modifier = modifier) {
+        Icon(
+            imageVector = ImageVector.vectorResource(ic_setting),
+            contentDescription = "마이페이지",
+            tint = Unspecified,
+            modifier = Modifier.clickable(onClick = onSettingClick),
+        )
+    }
 }
 
 @Preview
 @Composable
 private fun HomeTopBarForVisitorPreview() {
     SoptTheme {
-        HomeTopBarForVisitor()
+        HomeTopBarForVisitor(onSettingClick = {})
     }
 }
 

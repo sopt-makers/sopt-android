@@ -103,6 +103,13 @@
             android:exported="false"
             android:launchMode="singleTop" />
         <activity
+            android:name=".feature.mypage.legacy.LegacyMyPageActivity"
+            android:exported="false"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".feature.mypage.legacy.LegacySignOutActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.mypage.signout.SignOutActivity"
             android:exported="false" />
         <activity
