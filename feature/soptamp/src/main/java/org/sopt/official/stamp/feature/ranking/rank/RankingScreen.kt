@@ -120,8 +120,8 @@ fun RankingScreen(
                 SoptampFloatingButton(
                     text = "내 랭킹 보기",
                 ) {
-                    if(isCurrent) {  tracker.trackViewType(SoptampAnalyticsEvent.CLICK_PARTRANKING_MYRANKING, viewType)}
-                    else tracker.trackViewType(SoptampAnalyticsEvent.CLICK_ALLRAKING_MYRANKING, viewType)
+                    if(isCurrent) { tracker.trackViewType(SoptampAnalyticsEvent.CLICK_ALLRANKING_MYRANKING, viewType)}
+                    else tracker.trackViewType(SoptampAnalyticsEvent.CLICK_PARTRANKING_MYRANKING, viewType)
                     coroutineScope.launch {
                         listState.animateScrollToItem(
                             index = myIndex.index,

@@ -68,7 +68,7 @@ fun MissionListScreenRoute(
     val viewType = userStatus.toViewType()
 
     LaunchedEffect(Unit) {
-        tracker.trackViewType(SoptampAnalyticsEvent.CLICK_SOPTAMP, viewType)
+        tracker.trackViewType(SoptampAnalyticsEvent.VIEW_SOPTAMP, viewType)
     }
 
     LaunchedEffect(result) {
