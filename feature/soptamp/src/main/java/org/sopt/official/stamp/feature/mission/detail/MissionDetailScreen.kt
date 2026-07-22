@@ -65,15 +65,18 @@ import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
 import org.sopt.official.domain.soptamp.fake.FakeUserRepository
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.SoptampAnalyticsEvent
 import org.sopt.official.stamp.designsystem.component.button.SoptampButton
 import org.sopt.official.stamp.designsystem.component.dialog.DoubleOptionDialog
 import org.sopt.official.stamp.designsystem.component.toolbar.Toolbar
@@ -98,6 +101,7 @@ import org.sopt.official.stamp.util.DefaultPreview
 internal fun MissionDetailScreen(
     args: MissionNavArgs,
     navController: NavController,
+    userStatus: UserStatus,
     modifier: Modifier = Modifier,
     viewModel: MissionDetailViewModel = hiltViewModel(),
 ) {
@@ -140,6 +144,7 @@ internal fun MissionDetailScreen(
     val scrollState = rememberScrollState()
 
     val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
     val snackBarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
@@ -256,16 +261,7 @@ internal fun MissionDetailScreen(
                         onClickZoomIn = { url ->
                             isZoomInDialogOpen = true
                             selectedZoomInImage = url
-                            tracker.track(
-                                type = EventType.CLICK,
-                                name = "get_image_zoom",
-                                properties = mapOf(
-                                    "image" to url,
-                                    "stampId" to uiState.stampId,
-                                    "missionId" to id,
-                                    "nickname" to myNickname
-                                )
-                            )
+                            tracker.trackViewType(SoptampAnalyticsEvent.CLICK_GET_IMAGE_ZOOM, viewType)
                         },
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -315,6 +311,7 @@ internal fun MissionDetailScreen(
                 SoptampButton(
                     text = "누가 박수쳤을까요?",
                     onClicked = {
+                        tracker.trackViewType(SoptampAnalyticsEvent.CLICK_CLAPPERLIST, viewType)
                         isClapUserListOpen = true
                         viewModel.getStampClappers(stampId = uiState.stampId)
                     },
@@ -330,18 +327,7 @@ internal fun MissionDetailScreen(
                     myClapCount = myClapCount,
                     isBadgeVisible = isBadgeVisible,
                     onPressClap = {
-                        tracker.track(
-                            type = EventType.CLICK,
-                            name = "update_clap",
-                            properties = mapOf(
-                                "stampId" to uiState.stampId,
-                                "missionId" to id,
-                                "appliedCount" to appliedCount,
-                                "totalClapCount" to totalClapCount,
-                                "clappersNick" to myNickname,
-                                "receiverNick" to nickname
-                            )
-                        )
+                        tracker.trackViewType(SoptampAnalyticsEvent.CLICK_UPDATE_CLAP, viewType)
                         viewModel.onPressClap()
                     },
                 )
@@ -435,7 +421,8 @@ fun MissionDetailPreview() {
         MissionDetailScreen(
             args = args,
             navController = PreviewNavController(context),
-            viewModel = fakeViewModel
+            viewModel = fakeViewModel,
+            userStatus = UserStatus.ACTIVE
         )
     }
 }

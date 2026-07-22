@@ -74,12 +74,16 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.error.Error
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.SoptampAnalyticsEvent
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampSegmentedFloatingButton
 import org.sopt.official.stamp.designsystem.component.layout.LoadingScreen
@@ -100,6 +104,7 @@ import org.sopt.official.webview.view.WebViewActivity
 fun MissionListScreen(
     nickname: String,
     generation: Int,
+    userStatus: UserStatus,
     missionListUiModel: MissionListUiModel,
     menuTexts: ImmutableList<String>,
     onMenuClick: (String) -> Unit = {},
@@ -154,7 +159,8 @@ fun MissionListScreen(
                     onMissionItemClick = onMissionItemClick,
                     isMe = true,
                     nickname = nickname,
-                    myName = "" // 나의 미션인 경우 nickName = myNam
+                    myName = "" ,// 나의 미션인 경우 nickName = myNam
+                    userStatus = userStatus
                 )
             }
         }
@@ -164,6 +170,7 @@ fun MissionListScreen(
 @Composable
 fun MissionsGridComponent(
     missions: ImmutableList<MissionUiModel>,
+    userStatus: UserStatus,
     onMissionItemClick: (item: MissionNavArgs) -> Unit = {},
     isMe: Boolean = true,
     myName: String,
@@ -171,6 +178,10 @@ fun MissionsGridComponent(
     nickname: String
 ) {
     val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
+
+
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -185,18 +196,7 @@ fun MissionsGridComponent(
                     onMissionItemClick(missionUiModel.toArgs(isMe, nickname))
                 },
                 onMissionItemClickTricked = {
-                    tracker.track(
-                        type = EventType.CLICK,
-                        name = "click_feed_mission",
-                        properties = mapOf(
-                            "entrySource" to entrySource,
-                            "feedOwnerNick" to nickname,
-                            "viewerNick" to myName,
-                            "missionId" to missionUiModel.id,
-                            "missionTitle" to missionUiModel.title,
-                            "missionLevel" to missionUiModel.level
-                        )
-                    )
+                    tracker.trackViewType(SoptampAnalyticsEvent.CLICK_FEED_MISSION, viewType)
                 }
             )
         }
@@ -400,7 +400,8 @@ fun PreviewMissionListScreen() {
         MissionListScreen(
             nickname = "Nunu",
             generation = 35,
-            missionListUiModel,
+            userStatus = UserStatus.ACTIVE,
+            missionListUiModel = missionListUiModel,
             persistentListOf("전체 미션", "완료 미션", "미완료 미션"),
         )
     }
@@ -440,6 +441,7 @@ fun MissionListScreenNew(
             val missionListUiModel = (state as MissionsState.Success).missionListUiModel
             MissionListScreen(
                 nickname = nickname,
+                userStatus = userStatus,
                 generation = generation,
                 missionListUiModel = missionListUiModel,
                 menuTexts = persistentListOf("전체 미션", "완료 미션", "미완료 미션"),

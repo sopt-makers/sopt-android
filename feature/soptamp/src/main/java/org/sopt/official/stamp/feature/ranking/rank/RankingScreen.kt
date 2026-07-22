@@ -54,9 +54,13 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import org.sopt.official.stamp.R
+import org.sopt.official.stamp.SoptampAnalyticsEvent
 import org.sopt.official.stamp.designsystem.component.button.SoptampFloatingButton
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.stamp.designsystem.component.topappbar.SoptTopAppBar
@@ -75,6 +79,7 @@ fun RankingScreen(
     entrySource: String,
     isCurrent: Boolean,
     type: String,
+    userStatus: UserStatus,
     refreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     rankingListUiModel: RankingListUiModel,
@@ -92,12 +97,13 @@ fun RankingScreen(
     val coroutineScope = rememberCoroutineScope()
     val scrollOffsetPx = (-257).dp.toPx()
     val tracker = LocalTracker.current
+    val viewType  = userStatus.toViewType()
 
     LaunchedEffect(true) {
-        tracker.track(
-            EventType.VIEW,
-            if (isCurrent) "nowranking" else "partdetailranking",
-        )
+        if (isCurrent){
+            tracker.trackViewType(SoptampAnalyticsEvent.VIEW_ALLRANKING, viewType)
+        }
+        else tracker.trackViewType(SoptampAnalyticsEvent.VIEW_PARTRANKING, viewType)
     }
 
     Scaffold(
@@ -114,7 +120,8 @@ fun RankingScreen(
                 SoptampFloatingButton(
                     text = "내 랭킹 보기",
                 ) {
-                    tracker.track(EventType.CLICK, if (isCurrent) "myranking_nowranking" else "myranking_allranking")
+                    if(isCurrent) { tracker.trackViewType(SoptampAnalyticsEvent.CLICK_ALLRANKING_MYRANKING, viewType)}
+                    else tracker.trackViewType(SoptampAnalyticsEvent.CLICK_PARTRANKING_MYRANKING, viewType)
                     coroutineScope.launch {
                         listState.animateScrollToItem(
                             index = myIndex.index,
@@ -225,6 +232,7 @@ fun PreviewRankingScreen() {
             type = "34기",
             rankingListUiModel = RankingListUiModel(previewRanking),
             nickname = "",
+            userStatus = UserStatus.ACTIVE,
         )
     }
 }

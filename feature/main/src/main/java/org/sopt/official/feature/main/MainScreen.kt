@@ -343,6 +343,7 @@ fun MainScreen(
                         soptampNavGraph(
                             navController = navigator.navController,
                             tracker = tracker,
+                            userStatus = userStatus,
                             currentIntent = intentState
                         )
 
