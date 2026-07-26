@@ -34,7 +34,6 @@ interface NavigatorProvider {
     fun getAuthActivityIntent(): Intent
     fun getNotificationActivityIntent(): Intent
     fun getNotificationDetailActivityIntent(notificationId: String): Intent
-    fun getLegacyMyPageActivityIntent(userStatus: UserStatus): Intent
     fun getAdjustSentenceActivityIntent(userStatus: UserStatus): Intent
     fun getAttendanceActivityIntent(): Intent
     fun getSoptampActivityIntent(): Intent

@@ -207,12 +207,13 @@ fun MainScreen(
         }
 
         if (shouldNavigateToMyPage) {
-            context.startActivity(applicationNavigator.getLegacyMyPageActivityIntent(userStatus))
+            navigator.navigate(MainTab.MyPage, userStatus)
             activity?.intent?.putExtra("isMyPageDeepLink", false)
         }
 
         if (shouldNavigateToSoptLog) {
-            navigator.navigate(MainTab.SoptLog, userStatus)
+            navigator.navigate(MainTab.MyPage, userStatus)
+            navigator.navController.navigate(SoptLog)
             activity?.intent?.putExtra("isSoptLogDeepLink", false)
         }
 
@@ -281,9 +282,6 @@ fun MainScreen(
 
                                 override fun navigateToNotification() =
                                     context.startActivity(applicationNavigator.getNotificationActivityIntent())
-
-                                override fun navigateToLegacyMyPage() =
-                                    context.startActivity(applicationNavigator.getLegacyMyPageActivityIntent(userStatus))
 
                                 override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
                                 override fun navigateToEditProfile() {
@@ -358,7 +356,6 @@ fun MainScreen(
                             userStatus = userStatus
                         )
 
-                        // Keep the redesigned graph compiled while release entry points use legacy MyPage.
                         myPageNavGraph(
                             userStatus = userStatus,
                             navigateToSoptLog = {
@@ -373,42 +370,43 @@ fun MainScreen(
                                 }
                                 context.startActivity(intent)
                             }
-                        )
-
-                        soptLogNavGraph(
-                            userStatus = userStatus,
-                            soptLogNavigation = object : SoptLogNavigation {
-                                override fun navigateToDeepLink(url: String) {
-                                    if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
-                                    else if (url == DeepLinkType.SOPTAMP.link) {
-                                        navigator.navigate(MainTab.Soptamp, userStatus)
-                                    } else {
-                                        context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
-                                    }
-                                }
-
-                                override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {
-                                    when {
-                                        url.contains("home/poke/friend-list-summary") -> {
-                                            navigator.navController.navigateToPokeFriendList(friendType, null)
-                                        }
-
-                                        isNewPoke -> {
-                                            navigator.navController.navigateToPokeOnboarding(currentDestination, userStatus.name)
-                                        }
-
-                                        else -> {
-                                            navigator.navigate(MainTab.Poke, userStatus)
+                        ) {
+                            soptLogNavGraph(
+                                userStatus = userStatus,
+                                soptLogNavigation = object : SoptLogNavigation {
+                                    override fun navigateToDeepLink(url: String) {
+                                        if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
+                                        else if (url == DeepLinkType.SOPTAMP.link) {
+                                            navigator.navigate(MainTab.Soptamp, userStatus)
+                                        } else {
+                                            context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
                                         }
                                     }
-                                }
-                            },
-                            navigateToFortune = {
-                                context.startActivity(
-                                    applicationNavigator.getFortuneActivityIntent()
-                                )
-                            }
-                        )
+
+                                    override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {
+                                        when {
+                                            url.contains("home/poke/friend-list-summary") -> {
+                                                navigator.navController.navigateToPokeFriendList(friendType, null)
+                                            }
+
+                                            isNewPoke -> {
+                                                navigator.navController.navigateToPokeOnboarding(currentDestination, userStatus.name)
+                                            }
+
+                                            else -> {
+                                                navigator.navigate(MainTab.Poke, userStatus)
+                                            }
+                                        }
+                                    }
+                                },
+                                navigateToFortune = {
+                                    context.startActivity(
+                                        applicationNavigator.getFortuneActivityIntent()
+                                    )
+                                },
+                                navigateUp = navigator::navigateUp
+                            )
+                        }
 
                         sopletterGraph(
                             userStatus = userStatus,

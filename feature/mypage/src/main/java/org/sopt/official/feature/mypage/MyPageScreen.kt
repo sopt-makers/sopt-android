@@ -272,7 +272,6 @@ internal fun MyPageScreen(
 
             MyPageUserContentsInfo(
                 userStatus = state.userStatus,
-                isAppjamJoined = state.isAppjamJoined,
                 totalSoptampCount = state.soptampCount,
                 totalPokeCount = state.totalPokeCount,
                 isAppjamPeriod = isAppjamMode,

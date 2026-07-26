@@ -29,12 +29,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.MainTabRoute
+import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.soptlog.SoptLogRoute
 import org.sopt.official.model.UserStatus
 
 @Serializable
-data object SoptLog : MainTabRoute
+data object SoptLog : Route
 
 fun NavController.navigateToSoptLog(navOptions: NavOptions) {
     navigate(SoptLog, navOptions)
@@ -43,13 +43,15 @@ fun NavController.navigateToSoptLog(navOptions: NavOptions) {
 fun NavGraphBuilder.soptLogNavGraph(
     userStatus: UserStatus,
     soptLogNavigation: SoptLogNavigation,
-    navigateToFortune: () -> Unit
+    navigateToFortune: () -> Unit,
+    navigateUp: () -> Unit
 ) {
     composable<SoptLog> {
         SoptLogRoute(
             userStatus = userStatus,
             soptLogNavigation = soptLogNavigation,
-            navigateToFortune = navigateToFortune
+            navigateToFortune = navigateToFortune,
+            navigateUp = navigateUp
         )
     }
 }

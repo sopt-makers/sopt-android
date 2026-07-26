@@ -40,7 +40,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.domain.notification.repository.NotificationRepository
 import org.sopt.official.domain.soptamp.repository.StampRepository
@@ -59,7 +58,6 @@ class MyPageViewModel @Inject constructor(
     private val notificationRepository: NotificationRepository,
     private val soptUserRepository: SoptUserRepository,
     private val soptLogRepository: SoptLogRepository,
-    private val appjamtampRepository: AppjamtampRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MyPageState())
@@ -75,19 +73,6 @@ class MyPageViewModel @Inject constructor(
         viewModelScope.launch {
             userStorage.userStatus.collect { status ->
                 _state.update { it.copy(userStatus = status) }
-            }
-        }
-        viewModelScope.launch {
-            userStorage.isAppjamMode.collect { isAppjamMode ->
-                if (isAppjamMode) {
-                    appjamtampRepository.getMyAppjamInfo()
-                        .onSuccess { info ->
-                            _state.update { it.copy(isAppjamJoined = info.isAppjamJoined) }
-                        }
-                        .onFailure(Timber::e)
-                } else {
-                    _state.update { it.copy(isAppjamJoined = false) }
-                }
             }
         }
         viewModelScope.launch {

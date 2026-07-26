@@ -44,10 +44,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
-import javax.inject.Inject
-import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.view.toast
@@ -65,9 +62,6 @@ import org.sopt.official.model.toViewType
 @AndroidEntryPoint
 class AdjustSentenceActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var analyticsTracker: Tracker
-
     private val args by serializableExtra(StartArgs(UserStatus.UNAUTHENTICATED.name))
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,56 +71,54 @@ class AdjustSentenceActivity : AppCompatActivity() {
 
         setContent {
             SoptTheme {
-                ProvideTracker(analyticsTracker) {
-                    val context = LocalContext.current
-                    val tracker = LocalTracker.current
-                    val viewType = userStatus.toViewType()
+                val context = LocalContext.current
+                val tracker = LocalTracker.current
+                val viewType = userStatus.toViewType()
 
-                    val uiState = rememberModifyProfileState(
-                        userRepository = userRepository,
-                        onShowToast = { context.toast(it) }
-                    )
+                val uiState = rememberModifyProfileState(
+                    userRepository = userRepository,
+                    onShowToast = { context.toast(it) }
+                )
 
-                    Scaffold(
+                Scaffold(
+                    modifier = Modifier
+                        .background(SoptTheme.colors.background)
+                        .fillMaxSize(),
+                    topBar = {
+                        MyPageTopBar(
+                            title = "한 마디 편집",
+                            onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
+                        )
+                    }
+                ) { innerPadding ->
+                    Column(
                         modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
                             .background(SoptTheme.colors.background)
-                            .fillMaxSize(),
-                        topBar = {
-                            MyPageTopBar(
-                                title = "한 마디 편집",
-                                onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
-                            )
-                        }
-                    ) { innerPadding ->
-                        Column(
+                    ) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                        MyPageTextField(
+                            sentence = uiState.current,
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            onTextChange = { uiState.onChangeCurrent(it) },
+                        )
+                        Spacer(modifier = Modifier.height(32.dp))
+                        MyPageButton(
+                            paddingVertical = 16.dp,
                             modifier = Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding)
-                                .background(SoptTheme.colors.background)
+                                .padding(20.dp)
+                                .fillMaxWidth(),
+                            onClick = {
+                                uiState.onUpdate()
+                                tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_EDIT_STATUSMESSAGE, viewType)
+                            },
+                            isEnabled = uiState.isConfirmed
                         ) {
-                            Spacer(modifier = Modifier.height(20.dp))
-                            MyPageTextField(
-                                sentence = uiState.current,
-                                modifier = Modifier.padding(horizontal = 20.dp),
-                                onTextChange = { uiState.onChangeCurrent(it) },
+                            Text(
+                                text = stringResource(R.string.adjust_sentence_button),
+                                style = SoptTheme.typography.heading18B
                             )
-                            Spacer(modifier = Modifier.height(32.dp))
-                            MyPageButton(
-                                paddingVertical = 16.dp,
-                                modifier = Modifier
-                                    .padding(20.dp)
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    uiState.onUpdate()
-                                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_EDIT_STATUSMESSAGE, viewType)
-                                },
-                                isEnabled = uiState.isConfirmed
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.adjust_sentence_button),
-                                    style = SoptTheme.typography.heading18B
-                                )
-                            }
                         }
                     }
                 }
@@ -139,9 +131,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
     ) : Serializable
 
     companion object {
-        @JvmStatic
-        fun getIntent(context: Context) = Intent(context, AdjustSentenceActivity::class.java)
-
         @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, AdjustSentenceActivity::class.java).apply {
             putExtra("args", args)
