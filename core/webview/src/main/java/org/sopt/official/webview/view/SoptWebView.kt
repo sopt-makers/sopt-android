@@ -72,6 +72,7 @@ open class SoptWebView : WebView {
             mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
             useWideViewPort = true
             loadWithOverviewMode = true
+            offscreenPreRaster = true
             builtInZoomControls = false
             displayZoomControls = false
             javaScriptCanOpenWindowsAutomatically = true

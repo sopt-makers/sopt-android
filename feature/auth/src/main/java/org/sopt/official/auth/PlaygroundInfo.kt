@@ -25,7 +25,7 @@
 package org.sopt.official.auth
 
 internal object PlaygroundInfo {
-    const val DEBUG_HOST: String = "sopt-internal-dev.pages.dev"
+    const val DEBUG_HOST: String = "sopt-internal-dev.sopt.org"
     const val HOST: String = "playground.sopt.org"
     const val AUTH_PATH: String = "auth/oauth"
     const val REDIRECT_URI = "app://org.sopt.makers.android/oauth2redirect"

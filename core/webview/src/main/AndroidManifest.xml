@@ -28,6 +28,8 @@
     <application>
         <activity
             android:name=".view.WebViewActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 </manifest>
