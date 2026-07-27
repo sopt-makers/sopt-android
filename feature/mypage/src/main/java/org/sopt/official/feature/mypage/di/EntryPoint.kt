@@ -40,8 +40,7 @@ import org.sopt.official.domain.user.repository.SoptUserRepository
 internal interface AuthEntryPoint {
     fun authRepository(): AuthRepository
     fun userRepository(): UserRepository
-    fun stampRepository(): StampRepository
-    fun notificationRepository(): NotificationRepository
+
     fun soptUserRepository(): SoptUserRepository
 }
 
@@ -55,18 +54,6 @@ internal val userRepository by lazy {
     EntryPointAccessors
         .fromApplication(appContext, AuthEntryPoint::class.java)
         .userRepository()
-}
-
-internal val stampRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .stampRepository()
-}
-
-internal val notificationRepository by lazy {
-    EntryPointAccessors
-        .fromApplication(appContext, AuthEntryPoint::class.java)
-        .notificationRepository()
 }
 
 internal val soptUserRepository by lazy {

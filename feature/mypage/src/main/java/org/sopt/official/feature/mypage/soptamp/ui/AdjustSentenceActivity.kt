@@ -140,9 +140,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
 
     companion object {
         @JvmStatic
-        fun getIntent(context: Context) = Intent(context, AdjustSentenceActivity::class.java)
-
-        @JvmStatic
         fun getIntent(context: Context, args: StartArgs) = Intent(context, AdjustSentenceActivity::class.java).apply {
             putExtra("args", args)
         }
