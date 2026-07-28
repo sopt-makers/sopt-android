@@ -31,7 +31,6 @@ import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.appjamtamp.navigation.AppjamtampNavGraph
 import org.sopt.official.feature.mypage.navigation.MyPageGraph
-import org.sopt.official.feature.soptlog.navigation.SoptLog as SoptLogRoute
 
 enum class MainTab(
     @param:DrawableRes val icon: Int,
@@ -78,14 +77,6 @@ enum class MainTab(
         route = MyPageGraph,
         loggingName = "navi_mypage",
         deeplink = null
-    ),
-
-    SoptLog(
-        icon = R.drawable.ic_main_soptlog,
-        contentDescription = "솝트로그",
-        route = SoptLogRoute,
-        loggingName = "navi_soptlog",
-        deeplink = "soptlog"
     );
 
     companion object {
@@ -104,11 +95,10 @@ enum class MainTab(
 
         fun getActiveTabs(activeServices: List<String?>): List<MainTab> {
             val activeServices = entries.filter { tab ->
-                tab != MyPage && tab != SoptLog &&
-                    tab.deeplink != null && activeServices.contains(tab.deeplink)
+                tab.deeplink != null && activeServices.contains(tab.deeplink)
             }
 
-            return listOf(Home) + activeServices + listOf(SoptLog)
+            return listOf(Home) + activeServices + listOf(MyPage)
         }
     }
 }
