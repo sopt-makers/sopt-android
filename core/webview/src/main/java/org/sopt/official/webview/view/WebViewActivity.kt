@@ -41,6 +41,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
+import androidx.core.graphics.Insets
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
@@ -76,6 +79,7 @@ class WebViewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         enableEdgeToEdge()
+        applySystemBarInsetsAsPadding()
         binding.webView.webChromeClient = object : WebChromeClient() {
             override fun onShowFileChooser(
                 webView: WebView?,
@@ -125,6 +129,17 @@ class WebViewActivity : AppCompatActivity() {
 
         handleLinkUrl()
         handleOnBackPressed()
+    }
+
+    private fun applySystemBarInsetsAsPadding() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
+            val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            val insets = windowInsets.getInsets(types)
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+            WindowInsetsCompat.Builder(windowInsets)
+                .setInsets(types, Insets.NONE)
+                .build()
+        }
     }
 
     private fun handleLinkUrl() {
