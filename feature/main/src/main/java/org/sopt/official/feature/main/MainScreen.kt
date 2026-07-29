@@ -270,6 +270,7 @@ fun MainScreen(
                                     putExtra(INTENT_URL, url)
                                 }
 
+                                override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
                                 override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
                                 override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
                                 override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))

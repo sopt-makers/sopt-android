@@ -55,6 +55,7 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.track
 import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
@@ -258,6 +259,7 @@ private fun HomeScreenForMember(
                 color = colors.onSurface400,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .noRippleClickable(onClick = homeShortcutNavigation::navigateToPlaygroundHome)
                     .padding(horizontal = 20.dp)
             )
 
