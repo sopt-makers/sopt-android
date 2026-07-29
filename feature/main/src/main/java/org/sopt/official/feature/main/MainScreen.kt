@@ -184,7 +184,6 @@ fun MainScreen(
     val shouldNavigatePokeFriendList = remember(intentState) {
         val intent = intentState
         intent?.getBooleanExtra("isPokeFriendList", false) == true
-        intent?.hasExtra("friendType") == true
     }
 
     LaunchedEffect(
@@ -203,7 +202,7 @@ fun MainScreen(
 
         if (shouldNavigateToAppjamtamp()) {
             navigator.navigateAndClear(MainTab.Appjamtamp, userStatus)
-            activity?.intent?.putExtra("isSoptampDeepLink", false)
+            activity?.intent?.putExtra("isAppjamtampDeepLink", false)
         }
 
         if (shouldNavigateToMyPage) {
