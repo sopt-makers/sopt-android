@@ -399,11 +399,6 @@ fun MainScreen(
                                         }
                                     }
                                 },
-                                navigateToFortune = {
-                                    context.startActivity(
-                                        applicationNavigator.getFortuneActivityIntent()
-                                    )
-                                },
                                 navigateUp = navigator::navigateUp
                             )
                         }

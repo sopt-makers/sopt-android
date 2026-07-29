@@ -35,8 +35,6 @@ import kotlinx.coroutines.launch
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.deeplink.AppDeeplinkModule
 import org.sopt.official.deeplink.AppDeeplinkModuleRegistry
-import org.sopt.official.feature.fortune.deeplink.FortuneDeeplinkModule
-import org.sopt.official.feature.fortune.deeplink.FortuneDeeplinkModuleRegistry
 import org.sopt.official.localstorage.source.TokenStorage
 import org.sopt.official.webview.deeplink.WebDeeplinkModule
 import org.sopt.official.webview.deeplink.WebDeeplinkModuleRegistry
@@ -45,7 +43,7 @@ import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 import javax.inject.Inject
 
 @AndroidEntryPoint
-@DeepLinkHandler(value = [AppDeeplinkModule::class, FortuneDeeplinkModule::class, WebDeeplinkModule::class])
+@DeepLinkHandler(value = [AppDeeplinkModule::class, WebDeeplinkModule::class])
 class DeepLinkSchemeActivity : AppCompatActivity() {
 
     @Inject
@@ -83,7 +81,6 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
     private fun dispatchDeepLink() {
         val deepLinkDelegate = DeepLinkDelegate(
             AppDeeplinkModuleRegistry(),
-            FortuneDeeplinkModuleRegistry(),
             WebDeeplinkModuleRegistry()
         )
         deepLinkDelegate.dispatchFrom(this)

@@ -59,7 +59,6 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
-import org.sopt.official.feature.poke.friend.summary.FriendListSummaryActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
@@ -78,6 +77,7 @@ fun PokeScreen(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     navigateToPokeNotification: (String) -> Unit,
+    navigateToPokeFriendList: () -> Unit,
     viewModel: PokeMainViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -289,12 +289,7 @@ fun PokeScreen(
             }
 
             imgNextPokeMyFriend.setOnClickListener {
-                context.startActivity(
-                    FriendListSummaryActivity.getIntent(
-                        context,
-                        FriendListSummaryActivity.StartArgs(userStatus.name),
-                    ),
-                )
+                navigateToPokeFriendList()
             }
 
             scrollviewPokeMain.viewTreeObserver.addOnScrollChangedListener {

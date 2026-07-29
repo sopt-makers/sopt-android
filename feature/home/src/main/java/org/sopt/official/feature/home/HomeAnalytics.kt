@@ -40,7 +40,6 @@ enum class HomeAnalyticsEvent(
     CLICK_PLAYGROUND_PROJECT(EventType.CLICK, "playground_project"),
     CLICK_PLAYGROUND_COFFEE_CHAT(EventType.CLICK, "playground_coffee_chat"),
     CLICK_PLAYGROUND_COMMUNITY(EventType.CLICK, "playground_community"),
-    CLICK_TODAYSOPTMADI(EventType.CLICK, "todaysoptmadi"),
     CLICK_SOPTLETTER_MENU(EventType.CLICK, "soptletter_menu"),
     CLICK_HOTBOARD(EventType.CLICK, "hotboard"),
     CLICK_HOMEPAGE(EventType.CLICK, "homepage"),
