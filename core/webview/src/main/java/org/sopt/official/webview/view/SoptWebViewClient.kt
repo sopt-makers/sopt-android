@@ -168,9 +168,51 @@ class SoptWebViewClient(
     override fun onPageFinished(view: WebView?, url: String?) {
         super.onPageFinished(view, url)
         (view?.parent as? SwipeRefreshLayout)?.isRefreshing = false
+        view?.injectFocusedInputScrollFix(url)
+    }
+
+    private fun WebView.injectFocusedInputScrollFix(url: String?) {
+        val uri = url?.toUri() ?: return
+        val host = uri.host ?: return
+        if (!host.endsWith(PLAYGROUND_HOST)) return
+
+        evaluateJavascript(
+            """
+                (function() {
+                    if (window.__soptFocusedInputScrollFixInstalled) return;
+                    window.__soptFocusedInputScrollFixInstalled = true;
+
+                    function isEditable(element) {
+                        if (!element) return false;
+                        return element.matches('input, textarea, [contenteditable="true"]');
+                    }
+
+                    function scrollFocusedElementIntoView() {
+                        var element = document.activeElement;
+                        if (!isEditable(element)) return;
+
+                        window.setTimeout(function() {
+                            element.scrollIntoView({
+                                block: 'center',
+                                inline: 'nearest',
+                                behavior: 'smooth'
+                            });
+                        }, 120);
+                    }
+
+                    document.addEventListener('focusin', scrollFocusedElementIntoView, true);
+
+                    if (window.visualViewport) {
+                        window.visualViewport.addEventListener('resize', scrollFocusedElementIntoView);
+                    }
+                })();
+            """.trimIndent(),
+            null
+        )
     }
 
     companion object {
         private const val COOKIE_DOMAIN = ".sopt.org"
+        private const val PLAYGROUND_HOST = "sopt.org"
     }
 }
