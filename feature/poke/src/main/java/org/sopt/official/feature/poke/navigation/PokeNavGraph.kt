@@ -60,6 +60,9 @@ fun NavGraphBuilder.pokeNavGraph(
                 userStatus = userStatus,
                 navigateToPokeNotification = {
                     navController.navigate(PokeNotification(userStatus.name))
+                },
+                navigateToPokeFriendList = {
+                    navController.navigateToPokeFriendList(initialFriendType = null)
                 }
             )
         }
@@ -96,6 +99,7 @@ fun NavGraphBuilder.pokeNavGraph(
             FriendListSummaryScreen(
                 paddingValues = paddingValues,
                 userStatus = userStatus,
+                navigateUp = navController::navigateUp,
             )
         }
     }

@@ -83,6 +83,7 @@ import org.sopt.official.model.UserStatus
 fun FriendListSummaryScreen(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
+    navigateUp: () -> Unit,
     viewModel: FriendListSummaryViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -271,7 +272,8 @@ fun FriendListSummaryScreen(
     ) {
         binding = this
         if (includeFriendListBlockNewFriend.recyclerView.adapter == null) {
-            includeAppBar.textViewTitle.text = root.context.getString(R.string.poke_title)
+            includeAppBar.textViewTitle.text = root.context.getString(R.string.my_friend_title)
+            includeAppBar.toolbar.setOnClickListener { navigateUp() }
 
             swipeRefreshLayout.setOnRefreshListener {
                 viewModel.getFriendListSummary()

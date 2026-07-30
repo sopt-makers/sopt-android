@@ -43,14 +43,12 @@ fun NavController.navigateToSoptLog(navOptions: NavOptions) {
 fun NavGraphBuilder.soptLogNavGraph(
     userStatus: UserStatus,
     soptLogNavigation: SoptLogNavigation,
-    navigateToFortune: () -> Unit,
     navigateUp: () -> Unit
 ) {
     composable<SoptLog> {
         SoptLogRoute(
             userStatus = userStatus,
             soptLogNavigation = soptLogNavigation,
-            navigateToFortune = navigateToFortune,
             navigateUp = navigateUp
         )
     }

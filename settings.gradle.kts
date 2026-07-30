@@ -36,7 +36,6 @@ include(
     ":core:localstorage",
 
     ":data:auth",
-    ":data:fortune",
     ":data:home",
     ":data:user",
     ":data:mypage",
@@ -49,7 +48,6 @@ include(
     ":data:sopletter",
 
     ":domain:auth",
-    ":domain:fortune",
     ":domain:home",
     ":domain:user",
     ":domain:mypage",
@@ -62,7 +60,6 @@ include(
     ":domain:sopletter",
 
     ":feature:auth",
-    ":feature:fortune",
     ":feature:home",
     ":feature:mypage",
     ":feature:notification",
