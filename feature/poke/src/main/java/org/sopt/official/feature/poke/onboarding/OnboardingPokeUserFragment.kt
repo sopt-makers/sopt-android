@@ -37,14 +37,18 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.serializableArgs
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.PokeClickSource
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.model.toViewType
 import org.sopt.official.feature.poke.databinding.FragmentOnboardingFriendsBinding
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
 import org.sopt.official.feature.poke.onboarding.model.PokeOnboardingUiState
@@ -89,10 +93,9 @@ class OnboardingPokeUserFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        tracker.track(
-            type = EventType.VIEW,
-            name = "poke_onboarding_fragment",
-            properties = mapOf("view_type" to args?.userStatus)
+        tracker.trackViewType(
+            PokeAnalyticsEvent.VIEW_POKE_ONBOARDING_FRAGMENT,
+            args?.userStatus.toViewType(),
         )
     }
 
@@ -170,29 +173,32 @@ class OnboardingPokeUserFragment : Fragment() {
     private val pokeUserListClickLister =
         object : PokeUserListClickListener {
             override fun onClickProfileImage(userId: Int) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
-                    properties = mapOf("view_type" to args?.userStatus, "click_view_type" to "onboarding", "view_profile" to userId),
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                    viewType = args?.userStatus.toViewType(),
+                    properties = mapOf(
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.ONBOARDING.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to userId,
+                    ),
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, userId))))
             }
 
             override fun onClickPokeButton(user: PokeUser) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                    viewType = args?.userStatus.toViewType(),
                     properties =
                     mapOf(
-                        "view_type" to args?.userStatus,
-                        "click_view_type" to "onboarding",
-                        "view_profile" to user.userId,
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.ONBOARDING.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to user.userId,
                     ),
                 )
 
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_SOMEONE)
+                        .setAnalyticsViewType(args?.userStatus.toViewType())
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,

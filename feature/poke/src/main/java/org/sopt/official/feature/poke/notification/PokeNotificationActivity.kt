@@ -45,14 +45,18 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.PokeClickSource
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.model.toViewType
 import org.sopt.official.feature.poke.databinding.ActivityPokeNotificationBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
@@ -92,10 +96,9 @@ class PokeNotificationActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        tracker.track(
-            EventType.VIEW,
-            name = "view_poke_alarm_detail",
-            properties = mapOf("view_type" to intent.getStringExtra("userStatus")),
+        tracker.trackViewType(
+            PokeAnalyticsEvent.VIEW_POKE_ALARM_DETAIL,
+            args?.userStatus.toViewType(),
         )
         initLottieView()
     }
@@ -149,13 +152,12 @@ class PokeNotificationActivity : AppCompatActivity() {
     private val pokeUserListClickLister = object : PokeUserListClickListener {
         override fun onClickProfileImage(userId: Int) {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, userId))))
-            tracker.track(
-                type = EventType.CLICK,
-                name = "memberprofile",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                viewType = args?.userStatus.toViewType(),
                 properties = mapOf(
-                    "view_type" to args?.userStatus,
-                    "click_view_type" to "poke_alarm",
-                    "view_profile" to userId,
+                    PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.ALARM_DETAIL.value,
+                    PokeAnalyticsPropertyKey.VIEW_PROFILE to userId,
                 ),
             )
         }
@@ -166,22 +168,24 @@ class PokeNotificationActivity : AppCompatActivity() {
                 false -> PokeMessageType.POKE_FRIEND
             }
             messageListBottomSheet =
-                MessageListBottomSheetFragment.Builder().setMessageListType(messageType).onClickMessageListItem { message, isAnonymous ->
-                    viewModel.pokeUser(
-                        userId = user.userId, isAnonymous = isAnonymous, message = message, isFirstMeet = user.isFirstMeet
-                    )
-                }.create()
+                MessageListBottomSheetFragment.Builder()
+                    .setMessageListType(messageType)
+                    .setAnalyticsViewType(args?.userStatus.toViewType())
+                    .onClickMessageListItem { message, isAnonymous ->
+                        viewModel.pokeUser(
+                            userId = user.userId, isAnonymous = isAnonymous, message = message, isFirstMeet = user.isFirstMeet
+                        )
+                    }.create()
 
             messageListBottomSheet?.let {
                 it.show(supportFragmentManager, it.tag)
             }
-            tracker.track(
-                type = EventType.CLICK,
-                name = "poke_icon",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                viewType = args?.userStatus.toViewType(),
                 properties = mapOf(
-                    "view_type" to args?.userStatus,
-                    "click_view_type" to "poke_alarm",
-                    "view_profile" to user.userId,
+                    PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.ALARM_DETAIL.value,
+                    PokeAnalyticsPropertyKey.VIEW_PROFILE to user.userId,
                 ),
             )
         }

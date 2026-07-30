@@ -24,6 +24,8 @@
  */
 package org.sopt.official.feature.poke.message
 
+import org.sopt.official.domain.poke.entity.PokeMessageList
+
 fun interface MessageItemClickListener {
-    fun onClickMessageItem(message: String)
+    fun onClickMessageItem(message: PokeMessageList.PokeMessage)
 }

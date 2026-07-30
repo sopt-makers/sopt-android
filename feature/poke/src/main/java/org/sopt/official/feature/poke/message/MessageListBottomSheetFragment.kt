@@ -35,13 +35,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeMessageList
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentMessageListBottomSheetBinding
+import org.sopt.official.feature.poke.toAnalyticsValue
 import org.sopt.official.feature.poke.util.showPokeToast
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
@@ -51,6 +57,10 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     var pokeMessageType: PokeMessageType? = null
     var onClickMessageListItem: ((message: String, isAnonymous: Boolean) -> Unit)? = null
     var isAnonymousCheckboxLocked: Boolean = false
+    var analyticsViewType: String = DEFAULT_VIEW_TYPE
+
+    @Inject
+    lateinit var tracker: Tracker
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewModel = ViewModelProvider(this)[MessageListBottomSheetViewModel::class.java]
@@ -94,6 +104,20 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
                 showPokeToast(getString(R.string.toast_poke_soulmate_realname_only))
             } else {
                 viewModel.setPokeAnonymousCheckboxClicked()
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_ANONYMITY,
+                    viewType = analyticsViewType,
+                    properties =
+                        buildMap {
+                            pokeMessageType?.let {
+                                put(PokeAnalyticsPropertyKey.MESSAGE_TYPE, it.toAnalyticsValue())
+                            }
+                            put(
+                                PokeAnalyticsPropertyKey.IS_ANONYMOUS,
+                                viewModel.pokeAnonymousCheckboxChecked.value,
+                            )
+                        },
+                )
             }
         }
 
@@ -109,7 +133,19 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
     private val messageListItemClickListener =
         MessageItemClickListener { message ->
             val isAnonymous = if (isAnonymousCheckboxLocked) false else viewModel.pokeAnonymousCheckboxChecked.value
-            onClickMessageListItem?.let { it(message, isAnonymous) }
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_POKE_SEND_MESSAGE,
+                viewType = analyticsViewType,
+                properties =
+                    buildMap {
+                        pokeMessageType?.let {
+                            put(PokeAnalyticsPropertyKey.MESSAGE_TYPE, it.toAnalyticsValue())
+                        }
+                        put(PokeAnalyticsPropertyKey.MESSAGE_ID, message.messageId)
+                        put(PokeAnalyticsPropertyKey.IS_ANONYMOUS, isAnonymous)
+                    },
+            )
+            onClickMessageListItem?.let { it(message.content, isAnonymous) }
         }
 
     class Builder {
@@ -131,5 +167,14 @@ class MessageListBottomSheetFragment : BottomSheetDialogFragment() {
             bottomSheet.isAnonymousCheckboxLocked = isLocked
             return this
         }
+
+        fun setAnalyticsViewType(viewType: String): Builder {
+            bottomSheet.analyticsViewType = viewType
+            return this
+        }
+    }
+
+    private companion object {
+        const val DEFAULT_VIEW_TYPE = "visitor"
     }
 }

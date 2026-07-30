@@ -49,13 +49,16 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.context.findActivity
 import org.sopt.official.common.util.ui.setVisible
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.PokeClickSource
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityPokeMainBinding
@@ -69,6 +72,7 @@ import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 private const val MESSAGE_LIST_BOTTOM_SHEET_TAG = "MessageListBottomSheet"
 
@@ -82,6 +86,7 @@ fun PokeScreen(
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
     val activity = LocalActivity.current
     val coroutineScope = rememberCoroutineScope()
 
@@ -107,25 +112,20 @@ fun PokeScreen(
     }
 
     LifecycleResumeEffect(Unit) {
-        tracker.track(
-            type = EventType.VIEW,
-            name = "poke_main",
-            properties = mapOf("view_type" to userStatus.name)
-        )
+        tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_MAIN, viewType)
 
         onPauseOrDispose {}
     }
 
-    val pokeMainListAdapter = remember {
+    val pokeMainListAdapter = remember(viewType) {
         PokeMainListAdapter(object : PokeUserListClickListener {
             override fun onClickProfileImage(userId: Int) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                    viewType = viewType,
                     properties = mapOf(
-                        "view_type" to userStatus.name,
-                        "click_view_type" to "onboarding",
-                        "view_profile" to userId
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_RECOMMENDATION.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to userId
                     ),
                 )
                 context.startActivity(
@@ -134,17 +134,22 @@ fun PokeScreen(
             }
 
             override fun onClickPokeButton(user: PokeUser) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                    viewType = viewType,
                     properties = mapOf(
-                        "view_type" to userStatus.name,
-                        "click_view_type" to "onboarding",
-                        "view_profile" to user.userId,
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_RECOMMENDATION.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to user.userId,
                     ),
                 )
                 if (fragmentActivity != null) {
-                    showMessageListBottomSheet(fragmentActivity, viewModel, user.userId, PokeMessageType.POKE_SOMEONE)
+                    showMessageListBottomSheet(
+                        activity = fragmentActivity,
+                        viewModel = viewModel,
+                        userId = user.userId,
+                        pokeMessageType = PokeMessageType.POKE_SOMEONE,
+                        viewType = viewType,
+                    )
                 }
             }
         })
@@ -280,11 +285,7 @@ fun PokeScreen(
             recyclerViewPokeMain.adapter = pokeMainListAdapter
 
             btnNextSomeonePokeMe.setOnClickListener {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_alarm_detail",
-                    properties = mapOf("view_type" to userStatus.name)
-                )
+                tracker.trackViewType(PokeAnalyticsEvent.CLICK_POKE_ALARM_DETAIL, viewType)
                 navigateToPokeNotification(userStatus.name)
             }
 
@@ -344,18 +345,18 @@ private fun initPokeMeView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val viewType = userStatus.toViewType()
     val isAnonymousVisible = pokeMeItem.isAnonymous
     with(binding) {
         layoutSomeonePokeMe.setVisible(true)
         imgUserProfileSomeonePokeMe.setOnClickListener {
             if (isAnonymousVisible) return@setOnClickListener
-            tracker.track(
-                type = EventType.CLICK,
-                name = "memberprofile",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                viewType = viewType,
                 properties = mapOf(
-                    "view_type" to userStatus.name,
-                    "click_view_type" to "poke_main_alarm",
-                    "view_profile" to pokeMeItem.userId
+                    PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_ALARM.value,
+                    PokeAnalyticsPropertyKey.VIEW_PROFILE to pokeMeItem.userId
                 ),
             )
             context.startActivity(Intent(Intent.ACTION_VIEW, context.getString(R.string.poke_user_profile_url, pokeMeItem.userId).toUri()))
@@ -383,14 +384,13 @@ private fun initPokeMeView(
         tvUserMsgSomeonePokeMe.text = pokeMeItem.message
         btnSomeonePokeMe.isEnabled = !pokeMeItem.isAlreadyPoke
         btnSomeonePokeMe.setOnClickListener {
-            tracker.track(
-                type = EventType.CLICK,
-                name = "poke_icon",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                viewType = viewType,
                 properties =
                     mapOf(
-                        "view_type" to userStatus.name,
-                        "click_view_type" to "poke_main_alarm",
-                        "view_profile" to pokeMeItem.userId,
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_ALARM.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to pokeMeItem.userId,
                     ),
             )
             showMessageListBottomSheet(
@@ -403,6 +403,7 @@ private fun initPokeMeView(
                 },
                 pokeMeItem.isFirstMeet,
                 isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeMeItem.pokeNum),
+                viewType = viewType,
             )
         }
     }
@@ -417,19 +418,19 @@ private fun initPokeFriendView(
     viewModel: PokeMainViewModel
 ) {
     val context = binding.root.context
+    val viewType = userStatus.toViewType()
     val isAnonymousVisible = pokeFriendItem.isAnonymous
     with(binding) {
         imgUserProfilePokeMyFriend.setOnClickListener {
             if (isAnonymousVisible) return@setOnClickListener
 
-            tracker.track(
-                type = EventType.CLICK,
-                name = "memberprofile",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                viewType = viewType,
                 properties =
                     mapOf(
-                        "view_type" to userStatus.name,
-                        "click_view_type" to "poke_main_friend",
-                        "view_profile" to pokeFriendItem.userId,
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_FRIEND.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to pokeFriendItem.userId,
                     ),
             )
             context.startActivity(
@@ -454,14 +455,13 @@ private fun initPokeFriendView(
         tvCountPokeMyFriend.text = "${pokeFriendItem.pokeNum}콕"
         btnPokeMyFriend.isEnabled = !pokeFriendItem.isAlreadyPoke
         btnPokeMyFriend.setOnClickListener {
-            tracker.track(
-                type = EventType.CLICK,
-                name = "poke_icon",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                viewType = viewType,
                 properties =
                     mapOf(
-                        "view_type" to userStatus.name,
-                        "click_view_type" to "poke_main_friend",
-                        "view_profile" to pokeFriendItem.userId,
+                        PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.MAIN_FRIEND.value,
+                        PokeAnalyticsPropertyKey.VIEW_PROFILE to pokeFriendItem.userId,
                     ),
             )
             showMessageListBottomSheet(
@@ -470,6 +470,7 @@ private fun initPokeFriendView(
                 userId = pokeFriendItem.userId,
                 pokeMessageType = PokeMessageType.POKE_FRIEND,
                 isAnonymousCheckboxLocked = isAnonymousCheckboxLocked(pokeFriendItem.pokeNum),
+                viewType = viewType,
             )
         }
     }
@@ -482,11 +483,13 @@ private fun showMessageListBottomSheet(
     pokeMessageType: PokeMessageType,
     isFirstMeet: Boolean = false,
     isAnonymousCheckboxLocked: Boolean = false,
+    viewType: String,
 ) {
     val messageListBottomSheet =
         MessageListBottomSheetFragment.Builder()
             .setMessageListType(pokeMessageType)
             .setAnonymousCheckboxLocked(isAnonymousCheckboxLocked)
+            .setAnalyticsViewType(viewType)
             .onClickMessageListItem { message, isAnonymous ->
                 viewModel.pokeUser(
                     userId = userId,
