@@ -26,7 +26,9 @@ package org.sopt.official.feature.main
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -66,7 +68,11 @@ class MainActivity : AppCompatActivity() {
         intentState = intent
         val startArgs = intent.getSerializableExtra(ARGS) as? StartArgs
 
-        enableEdgeToEdge()
+        enableEdgeToEdge(
+            statusBarStyle = SystemBarStyle.dark(
+                scrim = Color.TRANSPARENT,
+            ),
+        )
         setContent {
             SoptTheme {
                 ProvideTracker(tracker) {

@@ -40,6 +40,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import org.sopt.official.feature.poke.main.PokeScreen
+import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.onboarding.OnboardingScreen
 import org.sopt.official.model.UserStatus
@@ -89,6 +90,9 @@ fun PokeEntryRoute(
                 userStatus = userStatus,
                 navigateToPokeNotification = {
                     navController.navigateToPokeNotification(userStatus.name)
+                },
+                navigateToPokeFriendList = {
+                    navController.navigateToPokeFriendList(initialFriendType = null)
                 },
             )
         }

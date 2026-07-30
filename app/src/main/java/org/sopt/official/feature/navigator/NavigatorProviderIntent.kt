@@ -32,7 +32,6 @@ import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.feature.attendance.AttendanceActivity
 import org.sopt.official.feature.auth.AuthActivity
-import org.sopt.official.feature.fortune.FortuneActivity
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.notification.SchemeActivity
@@ -133,7 +132,6 @@ class NavigatorProviderIntent @Inject constructor(
         }
     }
 
-    override fun getFortuneActivityIntent(): Intent = FortuneActivity.getIntent(context)
     override fun getScheduleActivityIntent(): Intent = ScheduleActivity.getIntent(context)
 
     override fun getSoptLogIntent(): Intent {

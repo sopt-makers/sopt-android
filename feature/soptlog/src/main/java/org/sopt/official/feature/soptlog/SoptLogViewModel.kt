@@ -29,18 +29,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.appjamtamp.repository.AppjamtampRepository
 import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
@@ -48,37 +44,41 @@ import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
 import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
 import org.sopt.official.feature.soptlog.state.SoptLogState
-import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 
 @HiltViewModel
 class SoptLogViewModel @Inject constructor(
     private val soptLogRepository: SoptLogRepository,
-    private val appjamtampRepository: AppjamtampRepository,
     private val checkNewInPokeUseCase: CheckNewInPokeUseCase,
-    private val userStorage: UserStorage,
 ) : ViewModel() {
     private val _soptLogInfo = MutableStateFlow(SoptLogState())
     val soptLogInfo: StateFlow<SoptLogState>
         get() = _soptLogInfo.asStateFlow()
 
-    val todayFortuneText = _soptLogInfo.map { it.soptLogInfo.todayFortuneText }
-
-    private val _isAppjamJoined = MutableStateFlow(false)
-    val isAppjamJoined: StateFlow<Boolean>
-        get() = _isAppjamJoined.asStateFlow()
-
-    val isAppjamMode: StateFlow<Boolean> = userStorage.isAppjamMode
-        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
-
     private val _navigationEvent = Channel<SoptLogNavigationEvent>()
     val navigationEvent = _navigationEvent.receiveAsFlow()
 
+    private var loadSoptLogInfoJob: Job? = null
+
     fun loadSoptLogInfo() {
-        if (isAppjamMode.value) {
-            loadSoptLogWithAppjamInfo()
-        } else {
-            loadSoptLogInfoOnly()
+        loadSoptLogInfoJob?.cancel()
+        loadSoptLogInfoJob = viewModelScope.launch {
+            _soptLogInfo.update { it.copy(isLoading = true) }
+
+            soptLogRepository.getSoptLogInfo()
+                .onSuccess { info ->
+                    Timber.d(
+                        "[AppjamMode] soptLog.isActive=${info.isActive}, " +
+                            "isAppjamMode=${info.isAppjamMode}, isAppjamParticipant=${info.isAppjamParticipant}"
+                    )
+                    _soptLogInfo.update {
+                        it.copy(soptLogInfo = info, isLoading = false, isError = false)
+                    }
+                }
+                .onFailure { error ->
+                    Timber.e(error)
+                    _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
+                }
         }
     }
 
@@ -86,7 +86,8 @@ class SoptLogViewModel @Inject constructor(
         when (SoptLogUrl.from(url)) {
             SoptLogUrl.POKE, SoptLogUrl.POKE_FRIEND_SUMMARY -> handlePokeNavigation(url)
             SoptLogUrl.SOPTAMP -> {
-                val deepLinkUrl = if (isAppjamMode.value) "appjamtamp" else "soptamp"
+                val isAppjamMode = _soptLogInfo.value.soptLogInfo.isAppjamMode
+                val deepLinkUrl = if (isAppjamMode) "appjamtamp" else "soptamp"
                 viewModelScope.launch {
                     _navigationEvent.send(SoptLogNavigationEvent.NavigateToDeepLink(deepLinkUrl))
                 }
@@ -120,52 +121,6 @@ class SoptLogViewModel @Inject constructor(
                 .onFailure(Timber::e)
 
             _soptLogInfo.update { it.copy(isLoading = false) }
-        }
-    }
-
-    private fun loadSoptLogWithAppjamInfo() {
-        viewModelScope.launch {
-            _soptLogInfo.update { it.copy(isLoading = true) }
-
-            val soptLogDeferred = async { soptLogRepository.getSoptLogInfo() }
-            val appjamInfoDeferred = async { appjamtampRepository.getMyAppjamInfo() }
-
-            val soptLogResult = soptLogDeferred.await()
-            val appjamResult = appjamInfoDeferred.await()
-
-            if (soptLogResult.isSuccess && appjamResult.isSuccess) {
-                _isAppjamJoined.value = appjamResult.getOrThrow().isAppjamJoined
-                _soptLogInfo.update {
-                    it.copy(
-                        soptLogInfo = soptLogResult.getOrThrow(),
-                        isLoading = false,
-                        isError = false
-                    )
-                }
-            } else {
-                val error = soptLogResult.exceptionOrNull()
-                    ?: appjamResult.exceptionOrNull()
-                    ?: Exception("Unknown error")
-                Timber.e(error)
-                _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
-            }
-        }
-    }
-
-    private fun loadSoptLogInfoOnly() {
-        viewModelScope.launch {
-            _soptLogInfo.update { it.copy(isLoading = true) }
-
-            soptLogRepository.getSoptLogInfo()
-                .onSuccess { info ->
-                    _soptLogInfo.update {
-                        it.copy(soptLogInfo = info, isLoading = false, isError = false)
-                    }
-                }
-                .onFailure { error ->
-                    Timber.e(error)
-                    _soptLogInfo.update { it.copy(isLoading = false, isError = true) }
-                }
         }
     }
 

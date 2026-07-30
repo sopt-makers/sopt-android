@@ -184,7 +184,6 @@ fun MainScreen(
     val shouldNavigatePokeFriendList = remember(intentState) {
         val intent = intentState
         intent?.getBooleanExtra("isPokeFriendList", false) == true
-        intent?.hasExtra("friendType") == true
     }
 
     LaunchedEffect(
@@ -203,7 +202,7 @@ fun MainScreen(
 
         if (shouldNavigateToAppjamtamp()) {
             navigator.navigateAndClear(MainTab.Appjamtamp, userStatus)
-            activity?.intent?.putExtra("isSoptampDeepLink", false)
+            activity?.intent?.putExtra("isAppjamtampDeepLink", false)
         }
 
         if (shouldNavigateToMyPage) {
@@ -270,6 +269,7 @@ fun MainScreen(
                                     putExtra(INTENT_URL, url)
                                 }
 
+                                override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
                                 override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
                                 override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
                                 override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
@@ -398,11 +398,6 @@ fun MainScreen(
                                             }
                                         }
                                     }
-                                },
-                                navigateToFortune = {
-                                    context.startActivity(
-                                        applicationNavigator.getFortuneActivityIntent()
-                                    )
                                 },
                                 navigateUp = navigator::navigateUp
                             )

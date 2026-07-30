@@ -104,6 +104,7 @@ internal class NewHomeViewModel @Inject constructor(
             val appServiceResult = appServiceDeferred.await()
 
             appServiceResult.onSuccess { result ->
+                Timber.d("[AppjamMode] API 응답 isAppjamMode=${result.isAppjamMode} -> UserStorage에 저장")
                 userStorage.saveIsAppjamMode(result.isAppjamMode)
                 viewModelState.update { it.copy(appServices = result.appServices) }
             }

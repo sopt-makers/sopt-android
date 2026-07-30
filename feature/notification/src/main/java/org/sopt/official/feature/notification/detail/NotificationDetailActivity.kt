@@ -47,13 +47,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -63,14 +59,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
-import kotlinx.coroutines.launch
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
-import org.sopt.official.common.navigator.SOPTLOG_FORTUNE
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.R
-import org.sopt.official.feature.notification.detail.component.ErrorSnackBar
-import java.time.LocalDate
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -89,18 +81,6 @@ class NotificationDetailActivity : AppCompatActivity() {
         setContent {
             val notification by viewModel.notificationDetail.collectAsStateWithLifecycle()
             val context = LocalContext.current
-
-            val snackBarHostState = remember { SnackbarHostState() }
-            val coroutineScope = rememberCoroutineScope()
-            val onShowErrorSnackBar: (String?) -> Unit = { text ->
-                coroutineScope.launch {
-                    snackBarHostState.currentSnackbarData?.dismiss()
-
-                    snackBarHostState.showSnackbar(
-                        message = text ?: "오류가 발생했어요. 다시 시도해주세요.",
-                    )
-                }
-            }
 
             SoptTheme {
                 Scaffold(
@@ -172,20 +152,12 @@ class NotificationDetailActivity : AppCompatActivity() {
                                     onClick = {
                                         val link = notification?.webLink ?: notification?.deepLink
 
-                                        when {
-                                            link == SOPTLOG_FORTUNE && !isToday(notification?.createdAt?.split("T")?.get(0)) -> {
-                                                onShowErrorSnackBar("앗, 오늘의 솝마디만 볼 수 있어요.")
-                                            }
-
-                                            else -> {
-                                                context.startActivity(
-                                                    navigator.getSchemeActivityIntent(
-                                                        notificationId = notification?.notificationId.orEmpty(),
-                                                        link = link.orEmpty()
-                                                    )
-                                                )
-                                            }
-                                        }
+                                        context.startActivity(
+                                            navigator.getSchemeActivityIntent(
+                                                notificationId = notification?.notificationId.orEmpty(),
+                                                link = link.orEmpty()
+                                            )
+                                        )
                                     },
                                     colors = ButtonDefaults.buttonColors(
                                         containerColor = SoptTheme.colors.primary,
@@ -206,22 +178,12 @@ class NotificationDetailActivity : AppCompatActivity() {
                         }
                     }
                 }
-
-                SnackbarHost(
-                    hostState = snackBarHostState,
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                ) {
-                    ErrorSnackBar(message = it.visuals.message)
-                }
             }
         }
     }
 
     private fun isValidLinks(deepLink: String?, webLink: String?): Boolean =
         !deepLink.isNullOrBlank() || !webLink.isNullOrBlank()
-
-    private fun isToday(date: String?): Boolean = LocalDate.now().toString() == date
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)

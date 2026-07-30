@@ -32,7 +32,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import org.sopt.official.feature.home.R.drawable.img_poke
 import org.sopt.official.feature.home.R.drawable.img_soptamp
-import org.sopt.official.feature.home.R.drawable.img_soptmadi
 import org.sopt.official.feature.home.model.Schedule.EVENT
 
 @Stable

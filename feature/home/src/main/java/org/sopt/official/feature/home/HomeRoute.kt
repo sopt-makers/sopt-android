@@ -24,9 +24,11 @@
  */
 package org.sopt.official.feature.home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -35,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -43,6 +46,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -53,12 +58,13 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
-import org.sopt.official.analytics.track
 import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
 import org.sopt.official.designsystem.SoptTheme.colors
 import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
@@ -252,14 +258,25 @@ private fun HomeScreenForMember(
 
             Spacer(modifier = Modifier.height(height = 12.dp))
 
-            Text(
-                text = "SOPT Playground",
-                style = typography.title14SB,
-                color = colors.onSurface400,
+            Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-            )
+                    .noRippleClickable(onClick = homeShortcutNavigation::navigateToPlaygroundHome)
+                    .padding(horizontal = 20.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = "SOPT Playground",
+                    style = typography.title14SB,
+                    color = White,
+                )
+
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                    contentDescription = null,
+                    tint = White
+                )
+            }
 
             Spacer(modifier = Modifier.height(height = 12.dp))
 

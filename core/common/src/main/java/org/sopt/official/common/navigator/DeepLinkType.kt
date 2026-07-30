@@ -128,10 +128,6 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getPokeActivityIntent(userStatus))
     },
-    FORTUNE(SOPTLOG_FORTUNE) {
-        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
-            userStatus.setIntent(navigator.getFortuneActivityIntent())
-    },
     SCHEDULE("home/schedule") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getScheduleActivityIntent())
@@ -168,5 +164,3 @@ enum class DeepLinkType(
         }
     }
 }
-
-const val SOPTLOG_FORTUNE = "soptlog/fortune"

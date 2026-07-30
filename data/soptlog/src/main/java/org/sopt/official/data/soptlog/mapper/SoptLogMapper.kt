@@ -29,8 +29,8 @@ import org.sopt.official.domain.soptlog.model.SoptLogInfo
 
 internal fun SoptLogInfoResponse.toDomain() = SoptLogInfo(
     isActive = this.isActive,
-    isFortuneChecked = this.isFortuneChecked,
-    todayFortuneText = this.todayFortuneText,
+    isAppjamMode = this.isAppjamMode,
+    isAppjamParticipant = this.isAppjamParticipant,
     soptampCount = this.soptampCount,
     viewCount = this.viewCount,
     myClapCount = this.myClapCount,

@@ -26,8 +26,8 @@ package org.sopt.official.domain.soptlog.model
 
 data class SoptLogInfo(
     val isActive: Boolean = false,
-    val isFortuneChecked: Boolean,
-    val todayFortuneText: String,
+    val isAppjamMode: Boolean = false,
+    val isAppjamParticipant: Boolean = false,
     val soptampCount: Int? = null,
     val viewCount: Int? = null,
     val myClapCount: Int? = null,
