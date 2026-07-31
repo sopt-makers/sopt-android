@@ -38,7 +38,7 @@ object WebUrlConstant {
     const val SOPT_OFFICIAL_YOUTUBE = "https://www.youtube.com/@SOPTMEDIA"
     const val SOPT_GOOGLE_FROM = "https://docs.google.com/forms/d/e/1FAIpQLSdBxksqlkAHShYdQYxDIK1Mnsy45MbYMkEeGuCMpeXjn6C1NQ/viewform"
     const val NOTICE_PRIVATE_INFO =
-        "https://florentine-legend-ffc.notion.site/SOPT-0b378275554d4d65a442310e83c7c988"
+        "https://sopt-makers.notion.site/d17c0071ab0e440baadd36c548bc36e4"
     const val NOTICE_SERVICE_RULE =
         "https://florentine-legend-ffc.notion.site/SOPT-69e33dccb59543dd91f5f44ed1250881"
     const val OPINION_KAKAO_CHAT = "http://pf.kakao.com/_sxaIWG"
