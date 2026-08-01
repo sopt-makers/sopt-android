@@ -37,6 +37,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.config.FcmPushTokenManager
 import org.sopt.official.feature.notification.NotificationAnalyticsEvent
 import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
@@ -85,19 +86,23 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         val link = webLink.ifBlank { deepLink }
 
         lifecycleScope.launch {
-            tracker.trackViewType(
-                event = NotificationAnalyticsEvent.RECEIVED_PUSH,
-                viewType = userStorage.userStatus.first().toViewType(),
-                properties = buildMap {
-                    notificationId.takeIf(String::isNotBlank)?.let {
-                        put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it)
-                    }
-                    put(
-                        NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
-                        link.toNotificationLinkType().value,
-                    )
-                },
-            )
+            suspendRunCatching {
+                tracker.trackViewType(
+                    event = NotificationAnalyticsEvent.RECEIVED_PUSH,
+                    viewType = userStorage.userStatus.first().toViewType(),
+                    properties = buildMap {
+                        notificationId.takeIf(String::isNotBlank)?.let {
+                            put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it)
+                        }
+                        put(
+                            NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
+                            link.toNotificationLinkType().value,
+                        )
+                    },
+                )
+            }.onFailure { exception ->
+                Timber.e(exception, "received_push 전송 실패")
+            }
         }
 
         val notifyId = System.currentTimeMillis().toInt()
@@ -121,8 +126,8 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
             SchemeActivity.Argument(
                 notificationId = notificationId,
                 link = link,
-                isPush = true,
             ),
+            isPush = true,
         )
 
         return this.setContentIntent(
