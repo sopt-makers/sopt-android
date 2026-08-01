@@ -93,14 +93,14 @@ fun NavGraphBuilder.pokeNavGraph(
                 navigateUp = navController::navigateUp,
             )
         }
+    }
 
-        // 친한 친구 리스트
-        composable<PokeFriendList> {
-            FriendListSummaryScreen(
-                paddingValues = paddingValues,
-                userStatus = userStatus,
-                navigateUp = navController::navigateUp,
-            )
-        }
+    // 친한 친구 리스트
+    composable<PokeFriendList> {
+        FriendListSummaryScreen(
+            paddingValues = paddingValues,
+            userStatus = userStatus,
+            navigateUp = navController::navigateUp,
+        )
     }
 }
