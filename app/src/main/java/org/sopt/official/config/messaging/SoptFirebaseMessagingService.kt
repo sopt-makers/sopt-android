@@ -32,10 +32,18 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.RemoteMessage
 import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessagingService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.official.R
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.config.FcmPushTokenManager
+import org.sopt.official.feature.notification.NotificationAnalyticsEvent
+import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.SchemeActivity
+import org.sopt.official.feature.notification.toNotificationLinkType
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.toViewType
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -44,6 +52,12 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
     @Inject
     lateinit var fcmPushTokenManager: FcmPushTokenManager
+
+    @Inject
+    lateinit var tracker: Tracker
+
+    @Inject
+    lateinit var userStorage: UserStorage
 
     // 토큰이 갱신되는 시점에만 재등록
     override fun onNewToken(token: String) {
@@ -68,6 +82,23 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         val body = receivedData["content"] ?: ""
         val webLink = receivedData["webLink"]?.takeIf { it != "null" } ?: ""
         val deepLink = receivedData["deepLink"]?.takeIf { it != "null" } ?: ""
+        val link = webLink.ifBlank { deepLink }
+
+        lifecycleScope.launch {
+            tracker.trackViewType(
+                event = NotificationAnalyticsEvent.RECEIVED_PUSH,
+                viewType = userStorage.userStatus.first().toViewType(),
+                properties = buildMap {
+                    notificationId.takeIf(String::isNotBlank)?.let {
+                        put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it)
+                    }
+                    put(
+                        NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
+                        link.toNotificationLinkType().value,
+                    )
+                },
+            )
+        }
 
         val notifyId = System.currentTimeMillis().toInt()
         val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
@@ -75,7 +106,7 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
             .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setChannelId(getString(R.string.toolbar_notification)).setAutoCancel(true)
 
         notificationBuilder.setNotificationContentIntent(
-            notificationId, webLink.ifBlank { deepLink.ifBlank { "" } }, notifyId
+            notificationId, link, notifyId
         )
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -86,7 +117,12 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         notificationId: String, link: String, notifyId: Int
     ): NotificationCompat.Builder {
         val intent = SchemeActivity.getIntent(
-            this@SoptFirebaseMessagingService, SchemeActivity.Argument(notificationId, link)
+            this@SoptFirebaseMessagingService,
+            SchemeActivity.Argument(
+                notificationId = notificationId,
+                link = link,
+                isPush = true,
+            ),
         )
 
         return this.setContentIntent(

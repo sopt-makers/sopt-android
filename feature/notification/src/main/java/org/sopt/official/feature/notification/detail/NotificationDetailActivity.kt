@@ -59,10 +59,18 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.feature.notification.NotificationAnalyticsEvent
+import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.R
+import org.sopt.official.feature.notification.toNotificationLinkType
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
+import javax.inject.Inject
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -74,6 +82,14 @@ private val navigator by lazy {
 @AndroidEntryPoint
 class NotificationDetailActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationDetailViewModel>()
+    private val userStatus by lazy {
+        intent.getStringExtra(USER_STATUS)
+            ?.let { runCatching { UserStatus.of(it) }.getOrNull() }
+            ?: UserStatus.UNAUTHENTICATED
+    }
+
+    @Inject
+    lateinit var tracker: Tracker
 
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -150,7 +166,23 @@ class NotificationDetailActivity : AppCompatActivity() {
                             Column {
                                 Button(
                                     onClick = {
-                                        val link = notification?.webLink ?: notification?.deepLink
+                                        val link = notification?.webLink
+                                            ?.takeIf(String::isNotBlank)
+                                            ?: notification?.deepLink
+
+                                        tracker.trackViewType(
+                                            event = NotificationAnalyticsEvent.CLICK_LINK_BUTTON,
+                                            viewType = userStatus.toViewType(),
+                                            properties = buildMap {
+                                                notification?.notificationId
+                                                    ?.takeIf(String::isNotBlank)
+                                                    ?.let { put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it) }
+                                                put(
+                                                    NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
+                                                    link.toNotificationLinkType().value,
+                                                )
+                                            },
+                                        )
 
                                         context.startActivity(
                                             navigator.getSchemeActivityIntent(
@@ -192,16 +224,20 @@ class NotificationDetailActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val NOTIFICATION_ID = "notificationId"
+        private const val USER_STATUS = "userStatus"
+
         @JvmStatic
         fun getIntent(
             context: Context,
             notificationId: String,
+            userStatus: UserStatus,
         ) = Intent(
             context,
             NotificationDetailActivity::class.java
-        ).putExtra(
-            "notificationId",
-            notificationId
-        )
+        ).apply {
+            putExtra(NOTIFICATION_ID, notificationId)
+            putExtra(USER_STATUS, userStatus.value)
+        }
     }
 }

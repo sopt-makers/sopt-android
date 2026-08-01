@@ -45,10 +45,11 @@ class NavigatorProviderIntent @Inject constructor(
     @param:ApplicationContext private val context: Context,
 ) : NavigatorProvider {
     override fun getAuthActivityIntent(): Intent = AuthActivity.newInstance(context)
-    override fun getNotificationActivityIntent() = NotificationActivity.newInstance(context)
-    override fun getNotificationDetailActivityIntent(notificationId: String) = NotificationDetailActivity.getIntent(
+    override fun getNotificationActivityIntent(userStatus: UserStatus) = NotificationActivity.newInstance(context, userStatus)
+    override fun getNotificationDetailActivityIntent(notificationId: String, userStatus: UserStatus) = NotificationDetailActivity.getIntent(
         context,
-        notificationId
+        notificationId,
+        userStatus,
     )
 
     override fun getAdjustSentenceActivityIntent(userStatus: UserStatus): Intent = AdjustSentenceActivity.getIntent(

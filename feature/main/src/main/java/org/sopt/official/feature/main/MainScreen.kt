@@ -282,7 +282,7 @@ fun MainScreen(
                                 override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
 
                                 override fun navigateToNotification() =
-                                    context.startActivity(applicationNavigator.getNotificationActivityIntent())
+                                    context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
 
                                 override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
                                 override fun navigateToEditProfile() {
