@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
+    implementation(projects.core.model)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
@@ -50,7 +51,6 @@ dependencies {
 
     implementation(libs.coil.core)
     implementation(libs.android.lottie)
-    implementation(projects.core.analytics)
     implementation(libs.fragment.ktx)
     implementation(libs.dotsindicator)
 }

@@ -46,16 +46,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.context.findActivity
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.onboarding.model.StartArgs
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 
 @Composable
@@ -88,11 +90,7 @@ fun OnboardingScreen(
     var isInitialRoutingDone by rememberSaveable { mutableStateOf(false) }
 
     LifecycleResumeEffect(Unit) {
-        tracker.track(
-            type = EventType.VIEW,
-            name = "poke_onboarding",
-            properties = mapOf("view_type" to args.userStatus)
-        )
+        tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_ONBOARDING, userStatus.toViewType())
         viewModel.checkNewInPokeOnboarding()
         onPauseOrDispose {}
     }

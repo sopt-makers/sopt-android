@@ -44,12 +44,12 @@ enum class DeepLinkType(
     },
     NOTIFICATION_LIST("home/notification") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
-            userStatus.setIntent(navigator.getNotificationActivityIntent())
+            userStatus.setIntent(navigator.getNotificationActivityIntent(userStatus))
     },
     NOTIFICATION_DETAIL("home/notification/detail") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
             val notificationId = deepLink.extractQueryParameter("id")
-            return userStatus.setIntent(navigator.getNotificationDetailActivityIntent(notificationId))
+            return userStatus.setIntent(navigator.getNotificationDetailActivityIntent(notificationId, userStatus))
         }
     },
     MY_PAGE("home/mypage") {

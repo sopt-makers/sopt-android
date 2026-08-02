@@ -110,6 +110,7 @@ import org.sopt.official.feature.soptlog.navigation.SoptLog
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
@@ -281,7 +282,7 @@ fun MainScreen(
                                 override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
 
                                 override fun navigateToNotification() =
-                                    context.startActivity(applicationNavigator.getNotificationActivityIntent())
+                                    context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
 
                                 override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
                                 override fun navigateToEditProfile() {
@@ -430,7 +431,7 @@ fun MainScreen(
                             tracker.trackViewType(
                                 type = MainTab.CLICK_EVENT_TYPE,
                                 name = loggingName,
-                                viewType = userStatus.value,
+                                viewType = userStatus.toViewType(),
                             )
                         }
 
@@ -449,7 +450,7 @@ fun MainScreen(
                         tracker.trackViewType(
                             type = MainTab.CLICK_EVENT_TYPE,
                             name = MainTab.PLUS_BUTTON_LOGGING_NAME,
-                            viewType = userStatus.value,
+                            viewType = userStatus.toViewType(),
                         )
                         isFloatingMenuOpen = !isFloatingMenuOpen
                     }

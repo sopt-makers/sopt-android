@@ -65,7 +65,7 @@ fun MissionComponent(
                     shape = shape,
                 )
                 .noRippleClickable {
-                    if(mission.isCompleted) { onMissionItemClickTricked() }
+                    onMissionItemClickTricked()
                     onClick()
                 },
         horizontalAlignment = Alignment.CenterHorizontally,

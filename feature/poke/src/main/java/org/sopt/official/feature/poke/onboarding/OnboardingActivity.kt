@@ -36,13 +36,15 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
+import org.sopt.official.model.toViewType
 import org.sopt.official.feature.poke.databinding.ActivityOnboardingBinding
 import org.sopt.official.feature.poke.main.PokeMainActivity
 import org.sopt.official.feature.poke.util.addOnAnimationEndListener
@@ -76,7 +78,10 @@ class OnboardingActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        tracker.track(type = EventType.VIEW, name = "poke_onboarding", properties = mapOf("view_type" to args?.userStatus))
+        tracker.trackViewType(
+            PokeAnalyticsEvent.VIEW_POKE_ONBOARDING,
+            args?.userStatus.toViewType(),
+        )
     }
 
     private fun initAppBar() {

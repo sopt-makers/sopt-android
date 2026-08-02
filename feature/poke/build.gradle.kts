@@ -40,7 +40,6 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.analytics)
     implementation(projects.core.navigation)
-    implementation(projects.core.analytics)
 
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)

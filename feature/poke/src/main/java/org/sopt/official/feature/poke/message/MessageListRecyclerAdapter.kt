@@ -50,7 +50,7 @@ class MessageListRecyclerAdapter(
                 val currentTime = System.currentTimeMillis()
                 if (currentTime - lastClickTime >= clickInterval) {
                     lastClickTime = currentTime
-                    clickListener.onClickMessageItem(messageList[position].content)
+                    clickListener.onClickMessageItem(messageList[position])
                 }
             }
         }

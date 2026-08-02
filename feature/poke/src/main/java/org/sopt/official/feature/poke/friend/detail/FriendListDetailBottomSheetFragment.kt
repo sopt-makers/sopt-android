@@ -44,8 +44,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
 import org.sopt.official.common.util.ui.setVisible
@@ -53,10 +53,14 @@ import org.sopt.official.common.util.viewBinding
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.PokeClickSource
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.FragmentFriendListDetailBottomSheetBinding
 import org.sopt.official.feature.poke.message.MessageListBottomSheetFragment
+import org.sopt.official.feature.poke.toAnalyticsValue
 import org.sopt.official.feature.poke.user.ItemDecorationDivider
 import org.sopt.official.feature.poke.user.PokeUserListAdapter
 import org.sopt.official.feature.poke.user.PokeUserListClickListener
@@ -67,6 +71,7 @@ import org.sopt.official.feature.poke.util.isBestFriend
 import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
+import org.sopt.official.model.toViewType
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -104,18 +109,12 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
 
         pokeFriendType?.let {
             viewModel.getFriendListDetail(it)
-            tracker.track(
-                type = EventType.VIEW,
-                name = "poke_friend_detail",
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.VIEW_POKE_FRIEND_DETAIL,
+                viewType = userStatus.toViewType(),
                 properties =
                     mapOf(
-                        "view_type" to userStatus,
-                        "friend_type" to
-                            when (it) {
-                                PokeFriendType.NEW -> "newFriend"
-                                PokeFriendType.BEST_FRIEND -> "bestFriend"
-                                PokeFriendType.SOULMATE -> "soulmate"
-                            },
+                        PokeAnalyticsPropertyKey.FRIEND_TYPE to it.toAnalyticsValue(),
                     ),
             )
         }
@@ -215,34 +214,39 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
     private val pokeUserListClickLister =
         object : PokeUserListClickListener {
             override fun onClickProfileImage(userId: Int) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                    viewType = userStatus.toViewType(),
                     properties =
-                        mapOf(
-                            "view_type" to userStatus,
-                            "click_view_type" to "friend_detail",
-                            "view_profile" to userId,
-                        ),
+                        buildMap {
+                            put(PokeAnalyticsPropertyKey.CLICK_SOURCE, PokeClickSource.FRIEND_DETAIL.value)
+                            put(PokeAnalyticsPropertyKey.VIEW_PROFILE, userId)
+                            pokeFriendType?.let {
+                                put(PokeAnalyticsPropertyKey.FRIEND_TYPE, it.toAnalyticsValue())
+                            }
+                        },
                 )
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.poke_user_profile_url, userId))))
             }
 
             override fun onClickPokeButton(user: PokeUser) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                    viewType = userStatus.toViewType(),
                     properties =
-                        mapOf(
-                            "view_type" to userStatus,
-                            "click_view_type" to "friend_detail",
-                            "view_profile" to user.userId,
-                        ),
+                        buildMap {
+                            put(PokeAnalyticsPropertyKey.CLICK_SOURCE, PokeClickSource.FRIEND_DETAIL.value)
+                            put(PokeAnalyticsPropertyKey.VIEW_PROFILE, user.userId)
+                            pokeFriendType?.let {
+                                put(PokeAnalyticsPropertyKey.FRIEND_TYPE, it.toAnalyticsValue())
+                            }
+                        },
                 )
                 messageListBottomSheet =
                     MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
                         .setAnonymousCheckboxLocked(isLocked = isAnonymousCheckboxLocked(user.pokeNum))
+                        .setAnalyticsViewType(userStatus.toViewType())
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,

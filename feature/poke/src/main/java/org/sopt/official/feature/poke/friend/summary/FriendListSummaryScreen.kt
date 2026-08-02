@@ -50,8 +50,8 @@ import coil.load
 import coil.transform.CircleCropTransformation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.context.findActivity
 import org.sopt.official.common.util.colorOf
 import org.sopt.official.common.util.dp
@@ -60,6 +60,9 @@ import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.PokeClickSource
 import org.sopt.official.feature.poke.R
 import org.sopt.official.feature.poke.UiState
 import org.sopt.official.feature.poke.databinding.ActivityFriendListSummaryBinding
@@ -78,6 +81,7 @@ import org.sopt.official.feature.poke.util.isSoulMate
 import org.sopt.official.feature.poke.util.setRelationStrokeColor
 import org.sopt.official.feature.poke.util.showPokeToast
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 
 @Composable
 fun FriendListSummaryScreen(
@@ -88,6 +92,7 @@ fun FriendListSummaryScreen(
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
     val coroutineScope = rememberCoroutineScope()
 
     val initialFriendType = viewModel.friendType.initialFriendType
@@ -112,17 +117,16 @@ fun FriendListSummaryScreen(
         height = 1.dp,
     )
 
-    val pokeUserListClickLister = remember {
+    val pokeUserListClickLister = remember(viewType) {
         object : PokeUserListClickListener {
             override fun onClickProfileImage(userId: Int) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "memberprofile",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                    viewType = viewType,
                     properties =
                         mapOf(
-                            "view_type" to userStatus.name,
-                            "click_view_type" to "friend",
-                            "view_profile" to userId,
+                            PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.FRIEND_SUMMARY.value,
+                            PokeAnalyticsPropertyKey.VIEW_PROFILE to userId,
                         ),
                 )
                 val intent = Intent(Intent.ACTION_VIEW, context.getString(R.string.poke_user_profile_url, userId).toUri())
@@ -130,14 +134,13 @@ fun FriendListSummaryScreen(
             }
 
             override fun onClickPokeButton(user: PokeUser) {
-                tracker.track(
-                    type = EventType.CLICK,
-                    name = "poke_icon",
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                    viewType = viewType,
                     properties =
                         mapOf(
-                            "view_type" to userStatus.name,
-                            "click_view_type" to "friend",
-                            "view_profile" to user.userId,
+                            PokeAnalyticsPropertyKey.CLICK_SOURCE to PokeClickSource.FRIEND_SUMMARY.value,
+                            PokeAnalyticsPropertyKey.VIEW_PROFILE to user.userId,
                         ),
                 )
 
@@ -145,6 +148,7 @@ fun FriendListSummaryScreen(
                     val bottomSheet = MessageListBottomSheetFragment.Builder()
                         .setMessageListType(PokeMessageType.POKE_FRIEND)
                         .setAnonymousCheckboxLocked(isLocked = isAnonymousCheckboxLocked(user.pokeNum))
+                        .setAnalyticsViewType(viewType)
                         .onClickMessageListItem { message, isAnonymous ->
                             viewModel.pokeUser(
                                 userId = user.userId,
@@ -160,9 +164,15 @@ fun FriendListSummaryScreen(
         }
     }
 
-    val newFriendListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
-    val bestFriendListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
-    val soulmateListAdapter = remember { PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister) }
+    val newFriendListAdapter = remember(pokeUserListClickLister) {
+        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    }
+    val bestFriendListAdapter = remember(pokeUserListClickLister) {
+        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    }
+    val soulmateListAdapter = remember(pokeUserListClickLister) {
+        PokeUserListAdapter(PokeUserListItemViewType.SMALL, pokeUserListClickLister)
+    }
 
     val detailSheetLauncher: (PokeFriendType) -> Unit = { type ->
         showFriendListDetailBottomSheet(
@@ -255,11 +265,7 @@ fun FriendListSummaryScreen(
     }
 
     LifecycleResumeEffect(Unit) {
-        tracker.track(
-            EventType.VIEW,
-            name = "view_poke_alarm_detail",
-            properties = mapOf("view_type" to userStatus.name),
-        )
+        tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_FRIEND, viewType)
 
         onPauseOrDispose {  }
     }

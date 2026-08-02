@@ -70,19 +70,34 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
+import org.sopt.official.feature.notification.NotificationAnalyticsEvent
+import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
     private val viewModel by viewModels<NotificationViewModel>()
+    private val userStatus by lazy {
+        intent.getStringExtra(USER_STATUS)
+            ?.let { runCatching { UserStatus.of(it) }.getOrNull() }
+            ?: UserStatus.UNAUTHENTICATED
+    }
+
+    @Inject
+    lateinit var tracker: Tracker
 
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +123,13 @@ class NotificationActivity : AppCompatActivity() {
                     context,
                     NavigatorEntryPoint::class.java
                 ).navigatorProvider()
+            }
+
+            LaunchedEffect(Unit) {
+                tracker.trackViewType(
+                    event = NotificationAnalyticsEvent.VIEW_NOTIFICATION_LIST,
+                    viewType = userStatus.toViewType(),
+                )
             }
 
             LaunchedEffect(refreshLoadState) {
@@ -147,7 +169,11 @@ class NotificationActivity : AppCompatActivity() {
                                         color = Orange400,
                                         modifier = Modifier
                                             .padding(end = 20.dp)
-                                            .clickable{
+                                            .clickable {
+                                                tracker.trackViewType(
+                                                    event = NotificationAnalyticsEvent.CLICK_ALLREAD_BUTTON,
+                                                    viewType = userStatus.toViewType(),
+                                                )
                                                 coroutineScope.launch {
                                                     viewModel.updateEntireNotificationReadingState().onSuccess {
                                                         notifications.refresh()
@@ -213,7 +239,19 @@ class NotificationActivity : AppCompatActivity() {
                                                         if (notification?.notificationId == null) {
                                                             context.toast("문제가 발생했습니다.")
                                                         } else {
-                                                            context.startActivity(navigator.getNotificationDetailActivityIntent(notification.notificationId))
+                                                            tracker.trackViewType(
+                                                                event = NotificationAnalyticsEvent.CLICK_NOTIFICATION_ITEM,
+                                                                viewType = userStatus.toViewType(),
+                                                                properties = mapOf(
+                                                                    NotificationAnalyticsPropertyKey.NOTIFICATION_ID to notification.notificationId,
+                                                                ),
+                                                            )
+                                                            context.startActivity(
+                                                                navigator.getNotificationDetailActivityIntent(
+                                                                    notification.notificationId,
+                                                                    userStatus,
+                                                                )
+                                                            )
                                                         }
                                                     }
                                                 )
@@ -260,9 +298,11 @@ class NotificationActivity : AppCompatActivity() {
     }
 
     companion object {
-        fun newInstance(context: Context) = Intent(
+        private const val USER_STATUS = "userStatus"
+
+        fun newInstance(context: Context, userStatus: UserStatus) = Intent(
             context,
             NotificationActivity::class.java
-        )
+        ).putExtra(USER_STATUS, userStatus.value)
     }
 }

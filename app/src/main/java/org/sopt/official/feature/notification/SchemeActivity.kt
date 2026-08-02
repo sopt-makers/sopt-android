@@ -31,9 +31,13 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.Tracker
+import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.util.extractQueryParameter
 import org.sopt.official.common.util.isExpiredDate
@@ -41,9 +45,12 @@ import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.feature.notification.detail.NotificationDetailActivity
 import org.sopt.official.localstorage.di.StorageEntryPoint
 import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import timber.log.Timber
 import java.io.Serializable
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {
     private val userStorage by lazy {
         EntryPointAccessors
@@ -52,11 +59,47 @@ class SchemeActivity : AppCompatActivity() {
     }
 
     private val args by serializableExtra(Argument("", ""))
+    private val isPush by lazy { intent.getBooleanExtra(EXTRA_IS_PUSH, false) }
+
+    @Inject
+    lateinit var tracker: Tracker
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val launchType = when (isTaskRoot) {
+            true -> NotificationLaunchType.COLD_START
+            false -> NotificationLaunchType.WARM_START
+        }
         lifecycleScope.launch {
-            val userStatus = userStorage.userStatus.first()
+            val userStatus = suspendRunCatching {
+                userStorage.userStatus.first()
+            }.onFailure { exception ->
+                Timber.e(exception, "사용자 상태 조회 실패")
+            }.getOrDefault(UserStatus.UNAUTHENTICATED)
+
+            if (isPush) {
+                suspendRunCatching {
+                    tracker.trackViewType(
+                        event = NotificationAnalyticsEvent.CLICK_PUSH,
+                        viewType = userStatus.toViewType(),
+                        properties = buildMap {
+                            args?.notificationId
+                                ?.takeIf(String::isNotBlank)
+                                ?.let { put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it) }
+                            put(
+                                NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
+                                args?.link.toNotificationLinkType().value,
+                            )
+                            put(
+                                NotificationAnalyticsPropertyKey.NOTIFICATION_LAUNCH_TYPE,
+                                launchType.value,
+                            )
+                        },
+                    )
+                }.onFailure { exception ->
+                    Timber.e(exception, "click_push 전송 실패")
+                }
+            }
             handleDeepLink(userStatus)
         }
     }
@@ -66,7 +109,8 @@ class SchemeActivity : AppCompatActivity() {
         val linkIntent = if (link.isNullOrBlank()) {
             NotificationDetailActivity.getIntent(
                 this,
-                args?.notificationId.orEmpty()
+                args?.notificationId.orEmpty(),
+                userStatus,
             )
         } else {
             checkLinkExpiration(link, userStatus)
@@ -126,12 +170,20 @@ class SchemeActivity : AppCompatActivity() {
 
     data class Argument(
         val notificationId: String,
-        val link: String
+        val link: String,
     ) : Serializable
 
     companion object {
+        private const val EXTRA_IS_PUSH = "isPush"
+
         @JvmStatic
-        fun getIntent(context: Context, args: Argument) = Intent(context, SchemeActivity::class.java)
-            .putExtra("args", args)
+        fun getIntent(
+            context: Context,
+            args: Argument,
+            isPush: Boolean = false,
+        ) = Intent(context, SchemeActivity::class.java).apply {
+            putExtra("args", args)
+            putExtra(EXTRA_IS_PUSH, isPush)
+        }
     }
 }

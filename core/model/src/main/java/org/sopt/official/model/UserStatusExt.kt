@@ -24,8 +24,28 @@
  */
 package org.sopt.official.model
 
+/**
+ * [UserStatus]를 Amplitude의 `view_type` 프로퍼티 값으로 변환하는 함수
+ *
+ * @return 활동 유저는 `active`, 비활동 유저는 `inactive`, 비회원은 `visitor`
+ */
 fun UserStatus.toViewType(): String = when (this) {
     UserStatus.ACTIVE -> "active"
     UserStatus.INACTIVE -> "inactive"
     UserStatus.UNAUTHENTICATED -> "visitor"
 }
+
+/**
+ * 문자열로 전달된 유저 상태를 Amplitude의 `view_type` 프로퍼티 값으로 변환하는 함수
+ *
+ * 대소문자를 구분하지 않으며, 값이 `null`이거나 지원하지 않는 값이면 `visitor`를 반환합니다.
+ *
+ * @return `active`, `inactive`, `visitor` 중 하나
+ */
+fun String?.toViewType(): String =
+    when (this?.uppercase()) {
+        UserStatus.ACTIVE.value -> UserStatus.ACTIVE.toViewType()
+        UserStatus.INACTIVE.value -> UserStatus.INACTIVE.toViewType()
+        UserStatus.UNAUTHENTICATED.value -> UserStatus.UNAUTHENTICATED.toViewType()
+        else -> UserStatus.UNAUTHENTICATED.toViewType()
+    }
