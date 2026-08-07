@@ -146,7 +146,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".feature.notification.SchemeActivity"
-            android:exported="true"
+            android:exported="false"
             android:launchMode="singleTop"/>
         <activity
             android:name=".feature.main.MainActivity"
