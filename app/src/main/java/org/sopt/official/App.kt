@@ -36,6 +36,7 @@ import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.sopt.official.common.context.appContext
+import org.sopt.official.config.messaging.SoptNotificationChannel
 import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 import javax.inject.Inject
@@ -50,6 +51,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         appContext = this.applicationContext
+        SoptNotificationChannel.create(this)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         lifecycleOwner.lifecycleScope.launch {
