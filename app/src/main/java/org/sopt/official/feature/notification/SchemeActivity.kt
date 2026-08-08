@@ -27,9 +27,9 @@ package org.sopt.official.feature.notification
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
@@ -49,7 +49,6 @@ import org.sopt.official.model.toViewType
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
-import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {

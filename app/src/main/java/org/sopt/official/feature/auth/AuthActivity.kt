@@ -46,7 +46,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.sopt.official.R
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.config.FcmPushTokenManager
@@ -67,6 +66,7 @@ class AuthActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userStorage: UserStorage
+
     @Inject
     lateinit var tokenStorage: TokenStorage
 
@@ -176,7 +176,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToMainActivity(accessToken : String) {
+    private fun navigateToMainActivity(accessToken: String) {
         try {
             if (accessToken.isNotEmpty()) {
                 lifecycleScope.launch {
