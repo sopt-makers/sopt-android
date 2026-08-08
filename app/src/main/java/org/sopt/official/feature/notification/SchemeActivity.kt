@@ -49,6 +49,7 @@ import org.sopt.official.model.toViewType
 import timber.log.Timber
 import java.io.Serializable
 import javax.inject.Inject
+import androidx.core.net.toUri
 
 @AndroidEntryPoint
 class SchemeActivity : AppCompatActivity() {
@@ -142,10 +143,10 @@ class SchemeActivity : AppCompatActivity() {
                     DeepLinkType.EXPIRED
                 )
 
-                else -> when (link.contains("http://") || link.contains("https://")) {
+                else -> when (link.startsWith("http://") || link.startsWith("https://")) {
                     true -> Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(link)
+                        link.toUri()
                     )
 
                     false -> DeepLinkType.of(link).getIntent(
