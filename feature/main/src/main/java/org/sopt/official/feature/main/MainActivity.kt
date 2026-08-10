@@ -24,26 +24,35 @@
  */
 package org.sopt.official.feature.main
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.context.appContext
-import org.sopt.official.model.UserStatus
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.model.UserStatus
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -61,12 +70,19 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var tracker: Tracker
 
+    @Inject
+    lateinit var userStorage: UserStorage
+
     private var intentState by mutableStateOf<Intent?>(null)
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         intentState = intent
         val startArgs = intent.getSerializableExtra(ARGS) as? StartArgs
+        val userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED
 
         enableEdgeToEdge(
             statusBarStyle = SystemBarStyle.dark(
@@ -77,13 +93,14 @@ class MainActivity : AppCompatActivity() {
             SoptTheme {
                 ProvideTracker(tracker) {
                     MainScreen(
-                        userStatus = startArgs?.userStatus ?: UserStatus.UNAUTHENTICATED,
+                        userStatus = userStatus,
                         intentState = intentState,
                         applicationNavigator = applicationNavigator
                     )
                 }
             }
         }
+        requestNotificationPermissionOnce(userStatus)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -91,6 +108,28 @@ class MainActivity : AppCompatActivity() {
         setIntent(intent)
 
         intentState = intent
+    }
+
+    private fun requestNotificationPermissionOnce(userStatus: UserStatus) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
+        if (userStatus == UserStatus.UNAUTHENTICATED) return
+
+        lifecycleScope.launch {
+            if (
+                ContextCompat.checkSelfPermission(
+                    this@MainActivity,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                userStorage.saveNotificationPermissionRequested(true)
+                return@launch
+            }
+
+            if (userStorage.isNotificationPermissionRequested.first()) return@launch
+
+            userStorage.saveNotificationPermissionRequested(true)
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 
     data class StartArgs(

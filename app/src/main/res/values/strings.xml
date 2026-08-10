@@ -24,7 +24,8 @@
 -->
 <resources>
     <string name="app_name">SOPT</string>
-    <string name="default_channel_id">SOPT_MESSAGE</string>
+    <!-- Keep the legacy channel ID so existing users retain their channel settings. -->
+    <string name="default_channel_id" translatable="false">알림</string>
     <string name="main_content_header">SOPT를 알차게 즐기고 싶다면?</string>
     <string name="soptamp">SOPT-AMP!</string>
     <string name="poke">콕 찌르기</string>

@@ -24,8 +24,6 @@
  */
 package org.sopt.official.feature.auth
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -42,14 +40,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import org.sopt.official.R
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.config.FcmPushTokenManager
@@ -70,6 +66,7 @@ class AuthActivity : AppCompatActivity() {
 
     @Inject
     lateinit var userStorage: UserStorage
+
     @Inject
     lateinit var tokenStorage: TokenStorage
 
@@ -90,20 +87,6 @@ class AuthActivity : AppCompatActivity() {
 
                 LaunchedEffect(Unit) {
                     viewModel.getUpdateConfig(context.getVersionName())
-                }
-
-                LaunchedEffect(true) {
-                    NotificationChannel(
-                        getString(R.string.toolbar_notification),
-                        getString(R.string.toolbar_notification),
-                        NotificationManager.IMPORTANCE_HIGH
-                    ).apply {
-                        setSound(null, null)
-                        enableLights(false)
-                        enableVibration(false)
-                        lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-                        (getSystemService(NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(this)
-                    }
                 }
 
                 LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
@@ -193,7 +176,7 @@ class AuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToMainActivity(accessToken : String) {
+    private fun navigateToMainActivity(accessToken: String) {
         try {
             if (accessToken.isNotEmpty()) {
                 lifecycleScope.launch {

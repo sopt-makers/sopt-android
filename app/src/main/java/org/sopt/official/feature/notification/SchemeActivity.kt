@@ -27,9 +27,9 @@ package org.sopt.official.feature.notification
 import android.app.TaskStackBuilder
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
@@ -142,10 +142,10 @@ class SchemeActivity : AppCompatActivity() {
                     DeepLinkType.EXPIRED
                 )
 
-                else -> when (link.contains("http://") || link.contains("https://")) {
+                else -> when (link.startsWith("http://") || link.startsWith("https://")) {
                     true -> Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(link)
+                        link.toUri()
                     )
 
                     false -> DeepLinkType.of(link).getIntent(

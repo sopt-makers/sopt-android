@@ -1,7 +1,7 @@
 [versions]
 compileSdk = "36"
 minSdk = "30"
-targetSdk = "35"
+targetSdk = "36"
 appVersion = "4.9.0"
 versionCode = "40900"
 

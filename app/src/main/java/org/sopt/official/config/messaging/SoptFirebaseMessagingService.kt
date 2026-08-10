@@ -24,10 +24,13 @@
  */
 package org.sopt.official.config.messaging
 
-import android.app.NotificationManager
+import android.Manifest
 import android.app.PendingIntent
+import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.messaging.RemoteMessage
 import com.skydoves.firebase.messaging.lifecycle.ktx.LifecycleAwareFirebaseMessagingService
@@ -106,16 +109,24 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
         }
 
         val notifyId = System.currentTimeMillis().toInt()
-        val notificationBuilder = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID).setContentTitle(title).setContentText(body)
+        val channelId = SoptNotificationChannel.id(this)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId).setContentTitle(title).setContentText(body)
             .setStyle(NotificationCompat.BigTextStyle().bigText(body)).setSmallIcon(R.drawable.img_logo_small)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setChannelId(getString(R.string.toolbar_notification)).setAutoCancel(true)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC).setAutoCancel(true)
 
         notificationBuilder.setNotificationContentIntent(
             notificationId, link, notifyId
         )
 
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notifyId, notificationBuilder.build())
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) return
+
+        NotificationManagerCompat.from(this).notify(notifyId, notificationBuilder.build())
     }
 
     private fun NotificationCompat.Builder.setNotificationContentIntent(
@@ -132,16 +143,11 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
         return this.setContentIntent(
             PendingIntent.getActivity(
-                this@SoptFirebaseMessagingService, notifyId, intent, if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-                } else {
-                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-                }
+                this@SoptFirebaseMessagingService,
+                notifyId,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
         )
-    }
-
-    companion object {
-        const val NOTIFICATION_CHANNEL_ID = "SOPT"
     }
 }
