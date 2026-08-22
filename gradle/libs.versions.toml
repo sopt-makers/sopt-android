@@ -64,7 +64,7 @@ balloonCompose = "1.7.3"
 
 google-services = "4.4.4"
 playServicesAuth = "21.5.1"
-crashlytics = "3.0.6"
+crashlytics = "3.0.8"
 firebase = "34.9.0"
 firebaseMessagingLifecycleKtx = "0.3.0"
 app-distribution = "5.2.1"
