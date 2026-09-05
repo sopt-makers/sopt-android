@@ -43,6 +43,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import java.io.Serializable
+import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.Tracker
@@ -50,11 +52,9 @@ import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
-import java.io.Serializable
-import javax.inject.Inject
 
 private val applicationNavigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -90,13 +90,15 @@ class MainActivity : AppCompatActivity() {
             ),
         )
         setContent {
-            SoptTheme {
-                ProvideTracker(tracker) {
-                    MainScreen(
-                        userStatus = userStatus,
-                        intentState = intentState,
-                        applicationNavigator = applicationNavigator
-                    )
+            org.sopt.official.designsystem.SoptTheme {
+                SoptTheme {
+                    ProvideTracker(tracker) {
+                        MainScreen(
+                            userStatus = userStatus,
+                            intentState = intentState,
+                            applicationNavigator = applicationNavigator
+                        )
+                    }
                 }
             }
         }
