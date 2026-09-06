@@ -55,6 +55,7 @@ import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
+import org.sopt.official.designsystem.SoptTheme as SoptAppTheme
 
 private val applicationNavigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -90,7 +91,7 @@ class MainActivity : AppCompatActivity() {
             ),
         )
         setContent {
-            org.sopt.official.designsystem.SoptTheme {
+            SoptAppTheme {
                 SoptTheme {
                     ProvideTracker(tracker) {
                         MainScreen(
