@@ -35,6 +35,10 @@ object DependencyManager {
             "implementation"(libs.findLibrary("kotlin-collections-immutable").get())
             "implementation"(libs.findLibrary("compose-navigation").get())
             "implementation"(libs.findLibrary("compose-hilt-navigation").get())
+
+            "implementation"(
+                files(rootProject.file("libs/mds-release.aar"))
+            )
         }
     }
 
