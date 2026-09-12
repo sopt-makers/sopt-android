@@ -286,12 +286,7 @@ class NotificationActivity : AppCompatActivity() {
                                         description = "인터넷 연결을 확인하고 다시 시도해 주세요.",
                                         positiveButtonText = "확인",
                                         onPositiveButtonClick = notifications::refresh,
-                                        onDismiss = {}
-                                    )
-                                    NetworkErrorDialog(
-                                        onConfirm = {
-                                            notifications.refresh()
-                                        }
+                                        onDismiss = { }
                                     )
                                 }
                             }
