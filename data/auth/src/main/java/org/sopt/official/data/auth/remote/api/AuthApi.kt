@@ -24,8 +24,6 @@
  */
 package org.sopt.official.data.auth.remote.api
 
-import org.sopt.official.data.auth.model.BaseAuthResponse
-import org.sopt.official.data.auth.model.NullableBaseAuthResponse
 import org.sopt.official.data.auth.remote.request.CertificateCodeRequest
 import org.sopt.official.data.auth.remote.request.ChangeAccountRequest
 import org.sopt.official.data.auth.remote.request.CreateCodeRequest
@@ -39,36 +37,37 @@ import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 internal interface AuthApi {
     @POST("/api/v1/auth/phone")
     suspend fun createCode(
         @Body request: CreateCodeRequest,
-    ): NullableBaseAuthResponse<Unit>
+    ): BaseResponse<Unit?>
 
     @POST("/api/v1/auth/verify/phone")
     suspend fun certificateCode(
         @Body request: CertificateCodeRequest,
-    ): BaseAuthResponse<CertificateCodeResponse>
+    ): BaseResponse<CertificateCodeResponse>
 
     @POST("/api/v1/auth/login/app")
     suspend fun signIn(
         @Body request: SignInRequest,
-    ): BaseAuthResponse<SignInResponse>
+    ): BaseResponse<SignInResponse>
 
     @POST("/api/v1/auth/signup")
     suspend fun signUp(
         @Body request: SignUpRequest,
-    ): NullableBaseAuthResponse<Unit>
+    ): BaseResponse<Unit?>
 
     @PATCH("/api/v1/social/accounts")
     suspend fun changeAccount(
         @Body request: ChangeAccountRequest
-    ): NullableBaseAuthResponse<Unit>
+    ): BaseResponse<Unit?>
 
     @GET("/api/v1/social/accounts/platform")
     suspend fun findAccount(
         @Query("name") name: String,
         @Query("phone") phone: String
-    ): BaseAuthResponse<FindAccountResponse>
+    ): BaseResponse<FindAccountResponse>
 }

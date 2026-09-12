@@ -29,17 +29,18 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import org.sopt.official.common.network.BaseResponse
 
 interface AttendanceService {
     @GET("/api/v1/app/lectures")
-    suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse>
+    suspend fun getSoptEvent(): BaseResponse<SoptEventResponse>
 
     @GET("/api/v1/app/members/attendances")
-    suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse>
+    suspend fun getAttendanceHistory(): BaseResponse<AttendanceHistoryResponse>
 
     @GET("/api/v1/app/lectures/round/{lectureId}")
-    suspend fun getAttendanceRound(@Path("lectureId") lectureId: Long): BaseAttendanceResponse<AttendanceRoundResponse>
+    suspend fun getAttendanceRound(@Path("lectureId") lectureId: Long): BaseResponse<AttendanceRoundResponse?>
 
     @POST("/api/v1/app/attendances/attend")
-    suspend fun confirmAttendanceCode(@Body param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse>
+    suspend fun confirmAttendanceCode(@Body param: RequestAttendanceCode): BaseResponse<AttendanceCodeResponse?>
 }
