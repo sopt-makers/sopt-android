@@ -35,10 +35,10 @@ internal class SopletterOnboardingRepositoryImpl @Inject constructor(
 ) : SopletterOnboardingRepository {
 
     override suspend fun getOnboarding(): Result<SopletterOnboardingModel> = suspendRunCatching {
-        sopletterOnboardingService.getOnboarding().toDomain()
+        sopletterOnboardingService.getOnboarding().data.toDomain()
     }
 
     override suspend fun completeOnboarding(): Result<SopletterOnboardingModel> = suspendRunCatching {
-        sopletterOnboardingService.completeOnboarding().toDomain()
+        sopletterOnboardingService.completeOnboarding().data.toDomain()
     }
 }

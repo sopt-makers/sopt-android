@@ -50,7 +50,7 @@ class PokeRemoteDataSource @Inject constructor(
         return CheckNewInPokeResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -59,7 +59,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetOnboardingPokeUserListResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -68,7 +68,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetPokeMeResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -77,7 +77,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetPokeFriendResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.map { it.toEntity() }
+            data = response.body()?.data?.map { it.toEntity() }
         }
     }
 
@@ -86,7 +86,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetPokeFriendOfFriendListResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.map { it.toEntity() }
+            data = response.body()?.data?.map { it.toEntity() }
         }
     }
 
@@ -98,7 +98,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetPokeNotificationListResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -107,7 +107,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetFriendListSummaryResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -120,7 +120,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetFriendListDetailResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -132,7 +132,7 @@ class PokeRemoteDataSource @Inject constructor(
         return GetPokeMessageListResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 
@@ -148,7 +148,7 @@ class PokeRemoteDataSource @Inject constructor(
         return PokeUserResponse().apply {
             statusCode = response.code().toString()
             responseMessage = response.message()
-            data = response.body()?.toEntity()
+            data = response.body()?.data?.toEntity()
         }
     }
 }

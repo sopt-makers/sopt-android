@@ -26,13 +26,13 @@ package org.sopt.official.data.mypage.remote.api
 
 import org.sopt.official.data.mypage.model.request.UpdateNicknameRequest
 import org.sopt.official.data.mypage.model.request.UpdateProfileMessageRequest
-import org.sopt.official.data.mypage.model.response.UpdateProfileMessageResponse
 import org.sopt.official.data.mypage.model.response.UserGenerationResponse
 import org.sopt.official.data.mypage.model.response.UserResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.Path
+import org.sopt.official.common.network.BaseResponse
 
 interface SoptampUserService {
     // 닉네임 중복검사
@@ -40,15 +40,15 @@ interface SoptampUserService {
     suspend fun checkNickname(@Path("nickname") nickname: String)
 
     @GET("user/soptamp")
-    suspend fun getUserInformation(): UserResponse
+    suspend fun getUserInformation(): BaseResponse<UserResponse>
 
     @GET("user/generation")
-    suspend fun getGeneration(): UserGenerationResponse
+    suspend fun getGeneration(): BaseResponse<UserGenerationResponse>
 
     // 닉네임 변경
     @PATCH("user/nickname")
     suspend fun updateNickname(@Body nickname: UpdateNicknameRequest)
 
     @PATCH("user/profile-message")
-    suspend fun updateProfileMessage(@Body profileMessage: UpdateProfileMessageRequest): UpdateProfileMessageResponse
+    suspend fun updateProfileMessage(@Body profileMessage: UpdateProfileMessageRequest)
 }

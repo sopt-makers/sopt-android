@@ -27,7 +27,6 @@ package org.sopt.official.data.notification.service
 import org.sopt.official.data.notification.model.request.UpdatePushTokenRequest
 import org.sopt.official.data.notification.model.response.NotificationDetailResponse
 import org.sopt.official.data.notification.model.response.NotificationHistoryItemResponse
-import org.sopt.official.data.notification.model.response.UpdatePushTokenResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.HTTP
@@ -35,12 +34,13 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 interface NotificationService {
     @POST("user/push-token")
     suspend fun registerToken(
         @Body body: UpdatePushTokenRequest
-    ): UpdatePushTokenResponse
+    )
 
     @HTTP(method = "DELETE", path="user/push-token", hasBody = true)
     suspend fun deleteToken(
@@ -50,18 +50,18 @@ interface NotificationService {
     @GET("notification/all")
     suspend fun getNotificationHistory(
         @Query("page") page: Int
-    ): List<NotificationHistoryItemResponse>
+    ): BaseResponse<List<NotificationHistoryItemResponse>>
 
     @GET("notification/all")
     suspend fun getNotificationHistoryByCategory(
         @Query("page") page: Int,
         @Query("category") category: String
-    ): List<NotificationHistoryItemResponse>
+    ): BaseResponse<List<NotificationHistoryItemResponse>>
 
     @GET("notification/detail/{notificationId}")
     suspend fun getNotificationDetail(
         @Path("notificationId") notificationId: String
-    ): NotificationDetailResponse
+    ): BaseResponse<NotificationDetailResponse>
 
     @PATCH("notification/read/{notificationId}")
     suspend fun updateNotificationReadingState(

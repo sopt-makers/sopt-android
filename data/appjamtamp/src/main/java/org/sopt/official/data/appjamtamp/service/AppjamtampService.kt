@@ -35,27 +35,28 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 interface AppjamtampService {
     @GET("appjamtamp/mission")
     suspend fun getAppjamtampMissions(
         @Query("teamNumber") teamNumber: String? = null,
         @Query("isCompleted") isCompleted: Boolean? = null
-    ): AppjamtampMissionsResponseDto
+    ): BaseResponse<AppjamtampMissionsResponseDto>
 
     @GET("appjamtamp/stamp")
     suspend fun getAppjamtampStamp(
         @Query("missionId") missionId: Int,
         @Query("nickname") nickname: String
-    ): AppjamtampStampResponseDto
+    ): BaseResponse<AppjamtampStampResponseDto>
 
     @POST("appjamtamp/stamp")
     suspend fun postAppjamtampStamp(
         @Body body: AppjamtampPostStampRequestDto
-    ): AppjamtampPostStampResponseDto
+    ): BaseResponse<AppjamtampPostStampResponseDto>
 
     @GET("user/appjam-info")
-    suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto
+    suspend fun getMyAppjamInfo(): BaseResponse<AppjamtampMyAppjamInfoResponseDto>
 
     /**
      * 앱잼에 참여하는 전체 팀의 득점 랭킹 조회
@@ -66,10 +67,10 @@ interface AppjamtampService {
     @GET("appjamrank/today")
     suspend fun getAppjamtampMissionRanking(
         @Query("size") size: Int? = 10
-    ): AppjamtampTop10MissionScoreResponse
+    ): BaseResponse<AppjamtampTop10MissionScoreResponse>
 
     @GET("appjamrank/recent")
     suspend fun getAppjamtampMissionTop3(
         @Query("size") size: Int? = 3
-    ): AppjamtampTop3RecentMissionResponse
+    ): BaseResponse<AppjamtampTop3RecentMissionResponse>
 }

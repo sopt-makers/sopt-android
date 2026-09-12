@@ -27,11 +27,12 @@ package org.sopt.official.data.sopletter.onboarding.service
 import org.sopt.official.data.sopletter.onboarding.dto.response.SopletterOnboardingResponseDto
 import retrofit2.http.GET
 import retrofit2.http.POST
+import org.sopt.official.common.network.BaseResponse
 
 interface SopletterOnboardingService {
     @GET("sopt-letter/onboarding")
-    suspend fun getOnboarding(): SopletterOnboardingResponseDto
+    suspend fun getOnboarding(): BaseResponse<SopletterOnboardingResponseDto>
 
     @POST("sopt-letter/onboarding/complete")
-    suspend fun completeOnboarding(): SopletterOnboardingResponseDto
+    suspend fun completeOnboarding(): BaseResponse<SopletterOnboardingResponseDto>
 }

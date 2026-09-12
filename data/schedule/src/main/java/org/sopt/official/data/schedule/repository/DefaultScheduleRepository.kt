@@ -34,6 +34,6 @@ class DefaultScheduleRepository @Inject constructor(
     private val scheduleApi: ScheduleApi,
 ) : ScheduleRepository {
     override suspend fun getScheduleList(): Result<List<Schedule>> = runCatching {
-        scheduleApi.getSchedule().map { it.toDomain() }
+        scheduleApi.getSchedule().data.map { it.toDomain() }
     }
 }

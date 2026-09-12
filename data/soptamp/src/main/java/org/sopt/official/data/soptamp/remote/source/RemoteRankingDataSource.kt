@@ -37,13 +37,13 @@ internal class RemoteRankingDataSource @Inject constructor(
 ) : RankingDataSource {
     override suspend fun getRanking(): Result<List<RankData>> {
         return runCatching {
-            rankService.getRanking().toData()
+            rankService.getRanking().data.toData()
         }.validate()
     }
 
     override suspend fun getCurrentTermRanking(): Result<List<RankData>> {
         return runCatching {
-            rankService.getCurrentRanking().toData()
+            rankService.getCurrentRanking().data.toData()
         }.validate()
     }
 

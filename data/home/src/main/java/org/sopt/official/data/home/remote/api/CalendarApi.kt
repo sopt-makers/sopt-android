@@ -25,10 +25,11 @@
 package org.sopt.official.data.home.remote.api
 
 import org.sopt.official.data.home.remote.response.RecentCalendarResponseDto
+import org.sopt.official.common.network.BaseResponse
 import retrofit2.http.GET
 
 internal interface CalendarApi {
 
     @GET("calendar/recent")
-    suspend fun getRecentCalendar(): RecentCalendarResponseDto
+    suspend fun getRecentCalendar(): BaseResponse<RecentCalendarResponseDto>
 }

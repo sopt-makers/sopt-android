@@ -29,11 +29,12 @@ import org.sopt.official.data.sopletter.dto.SopletterWriteResponse
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
+import org.sopt.official.common.network.BaseResponse
 
 interface SopletterWriteService {
     @POST("sopt-letter/topics/{topicId}/messages")
     suspend fun postTopicSopletter(
         @Path("topicId") topicId: Long,
         @Body request: SopletterWriteRequest
-    ): SopletterWriteResponse
+    ): BaseResponse<SopletterWriteResponse>
 }
