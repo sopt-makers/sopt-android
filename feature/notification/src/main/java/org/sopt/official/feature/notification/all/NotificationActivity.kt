@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -48,7 +49,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -75,7 +75,6 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.common.view.toast
-import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.notification.NotificationAnalyticsEvent
@@ -83,10 +82,11 @@ import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.dialog.MdsDialog
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
-import org.sopt.official.designsystem.SoptTheme as SoptAppTheme
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -139,162 +139,168 @@ class NotificationActivity : AppCompatActivity() {
                 }
             }
 
-            SoptAppTheme() {
-                SoptTheme {
-                    val state by viewModel.state.collectAsStateWithLifecycle()
+            SoptTheme {
+                val state by viewModel.state.collectAsStateWithLifecycle()
 
-                    Scaffold(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        topBar = {
-                            CenterAlignedTopAppBar(
-                                title = {
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    topBar = {
+                        CenterAlignedTopAppBar(
+                            title = {
+                                Text(
+                                    text = "알림",
+                                    style = SoptTheme.typography.title5
+                                )
+                            },
+                            navigationIcon = {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .size(24.dp)
+                                        .clickable(onClick = onBackPressedDispatcher::onBackPressed)
+                                )
+                            },
+                            actions = {
+                                if (notifications.itemCount > 0) {
                                     Text(
-                                        text = "알림",
-                                        style = SoptAppTheme.typography.body16M
-                                    )
-                                },
-                                navigationIcon = {
-                                    IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
-                                        Icon(
-                                            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
-                                            contentDescription = null,
-                                            tint = SoptAppTheme.colors.onSurface10
-                                        )
-                                    }
-                                },
-                                actions = {
-                                    if (notifications.itemCount > 0) {
-                                        Text(
-                                            text = "모두 읽음",
-                                            style = SoptAppTheme.typography.body16M,
-                                            color = Orange400,
-                                            modifier = Modifier
-                                                .padding(end = 20.dp)
-                                                .clickable {
-                                                    tracker.trackViewType(
-                                                        event = NotificationAnalyticsEvent.CLICK_ALLREAD_BUTTON,
-                                                        viewType = userStatus.toViewType(),
-                                                    )
-                                                    coroutineScope.launch {
-                                                        viewModel.updateEntireNotificationReadingState().onSuccess {
-                                                            notifications.refresh()
-                                                        }
+                                        text = "모두 읽음",
+                                        style = SoptTheme.typography.title5,
+                                        modifier = Modifier
+                                            .padding(end = 20.dp)
+                                            .clickable {
+                                                tracker.trackViewType(
+                                                    event = NotificationAnalyticsEvent.CLICK_ALLREAD_BUTTON,
+                                                    viewType = userStatus.toViewType(),
+                                                )
+                                                coroutineScope.launch {
+                                                    viewModel.updateEntireNotificationReadingState().onSuccess {
+                                                        notifications.refresh()
                                                     }
                                                 }
-                                                .padding(vertical = 8.dp, horizontal = 4.dp)
-                                        )
-                                    }
-                                },
-                                colors = TopAppBarDefaults.topAppBarColors(
-                                    containerColor = SoptAppTheme.colors.background,
-                                    titleContentColor = SoptAppTheme.colors.onBackground,
-                                    actionIconContentColor = SoptAppTheme.colors.primary
-                                )
+                                            }
+                                            .padding(vertical = 8.dp, horizontal = 4.dp)
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = SoptTheme.colors.bg.layer.basement,
+                                titleContentColor = SoptTheme.colors.fg.neutral.bold,
+                                navigationIconContentColor = SoptTheme.colors.fg.neutral.bold,
+                                actionIconContentColor = SoptTheme.colors.fg.brand.default
                             )
-                        },
-                        containerColor = SoptAppTheme.colors.background
-                    ) { innerPadding ->
-                        Column(
+                        )
+                    },
+                    containerColor = SoptTheme.colors.bg.layer.basement
+                ) { innerPadding ->
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding)
+                    ) {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            modifier = Modifier
+                                .padding(start = 20.dp, top = 12.dp, bottom = 10.dp)
+                        ) {
+                            NotificationCategory.entries.forEach { notification ->
+                                NotificationCategoryChip(
+                                    category = notification.category,
+                                    isSelected = state.notificationCategory == notification,
+                                    onClick = {
+                                        viewModel.updateNotificationCategory(category = notification)
+                                    }
+                                )
+                            }
+                        }
+
+                        Box(
                             modifier = Modifier
                                 .fillMaxSize()
-                                .padding(innerPadding)
+                                .pullRefresh(refreshState)
                         ) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                modifier = Modifier
-                                    .padding(start = 20.dp, top = 12.dp, bottom = 10.dp)
-                            ) {
-                                NotificationCategory.entries.forEach { notification ->
-                                    NotificationCategoryChip(
-                                        category = notification.category,
-                                        isSelected = state.notificationCategory == notification,
-                                        onClick = {
-                                            viewModel.updateNotificationCategory(category = notification)
+                            when (refreshLoadState) {
+                                is LoadState.Loading -> {
+                                    if (notifications.itemCount == 0 && !isPullRefreshing) {
+                                        LoadingIndicator()
+                                    }
+                                }
+
+                                is LoadState.NotLoading -> {
+                                    if (notifications.itemCount > 0) {
+                                        LazyColumn {
+                                            items(
+                                                count = notifications.itemCount,
+                                                key = { index -> notifications[index]?.notificationId ?: index }
+                                            ) { index ->
+                                                val notification = notifications[index]
+                                                NotificationInfoItem(
+                                                    notification = notification,
+                                                    onCLick = {
+                                                        if (notification?.notificationId == null) {
+                                                            context.toast("문제가 발생했습니다.")
+                                                        } else {
+                                                            tracker.trackViewType(
+                                                                event = NotificationAnalyticsEvent.CLICK_NOTIFICATION_ITEM,
+                                                                viewType = userStatus.toViewType(),
+                                                                properties = mapOf(
+                                                                    NotificationAnalyticsPropertyKey.NOTIFICATION_ID to notification.notificationId,
+                                                                ),
+                                                            )
+                                                            context.startActivity(
+                                                                navigator.getNotificationDetailActivityIntent(
+                                                                    notification.notificationId,
+                                                                    userStatus,
+                                                                )
+                                                            )
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    } else {
+                                        Column(
+                                            modifier = Modifier.fillMaxSize(),
+                                            verticalArrangement = Arrangement.Center,
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Image(
+                                                imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
+                                                contentDescription = null
+                                            )
+                                            Spacer(modifier = Modifier.height(16.dp))
+                                            Text(
+                                                text = "아직 도착한 알림이 없어요.",
+                                                style = SoptTheme.typography.body1,
+                                                color = SoptTheme.colors.fg.neutral.ghost
+                                            )
+                                        }
+                                    }
+                                }
+
+                                is LoadState.Error -> {
+                                    MdsDialog(
+                                        title = "네트워크가 원활하지 않습니다.",
+                                        description = "인터넷 연결을 확인하고 다시 시도해 주세요.",
+                                        positiveButtonText = "확인",
+                                        onPositiveButtonClick = notifications::refresh,
+                                        onDismiss = {}
+                                    )
+                                    NetworkErrorDialog(
+                                        onConfirm = {
+                                            notifications.refresh()
                                         }
                                     )
                                 }
                             }
 
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .pullRefresh(refreshState)
-                            ) {
-                                when (refreshLoadState) {
-                                    is LoadState.Loading -> {
-                                        if (notifications.itemCount == 0 && !isPullRefreshing) {
-                                            LoadingIndicator()
-                                        }
-                                    }
-
-                                    is LoadState.NotLoading -> {
-                                        if (notifications.itemCount > 0) {
-                                            LazyColumn {
-                                                items(
-                                                    count = notifications.itemCount,
-                                                    key = { index -> notifications[index]?.notificationId ?: index }
-                                                ) { index ->
-                                                    val notification = notifications[index]
-                                                    NotificationInfoItem(
-                                                        notification = notification,
-                                                        onCLick = {
-                                                            if (notification?.notificationId == null) {
-                                                                context.toast("문제가 발생했습니다.")
-                                                            } else {
-                                                                tracker.trackViewType(
-                                                                    event = NotificationAnalyticsEvent.CLICK_NOTIFICATION_ITEM,
-                                                                    viewType = userStatus.toViewType(),
-                                                                    properties = mapOf(
-                                                                        NotificationAnalyticsPropertyKey.NOTIFICATION_ID to notification.notificationId,
-                                                                    ),
-                                                                )
-                                                                context.startActivity(
-                                                                    navigator.getNotificationDetailActivityIntent(
-                                                                        notification.notificationId,
-                                                                        userStatus,
-                                                                    )
-                                                                )
-                                                            }
-                                                        }
-                                                    )
-                                                }
-                                            }
-                                        } else {
-                                            Column(
-                                                modifier = Modifier.fillMaxSize(),
-                                                verticalArrangement = Arrangement.Center,
-                                                horizontalAlignment = Alignment.CenterHorizontally
-                                            ) {
-                                                Image(
-                                                    imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
-                                                    contentDescription = "알림이 없습니다."
-                                                )
-                                                Spacer(modifier = Modifier.height(24.dp))
-                                                Text(
-                                                    text = "아직 도착한 알림이 없어요.",
-                                                    style = SoptAppTheme.typography.heading18B,
-                                                    color = SoptAppTheme.colors.onSurface400
-                                                )
-                                            }
-                                        }
-                                    }
-
-                                    is LoadState.Error -> {
-                                        NetworkErrorDialog(
-                                            onConfirm = {
-                                                notifications.refresh()
-                                            }
-                                        )
-                                    }
-                                }
-
-                                PullRefreshIndicator(
-                                    refreshing = isPullRefreshing,
-                                    state = refreshState,
-                                    modifier = Modifier.align(Alignment.TopCenter)
-                                )
-                            }
+                            PullRefreshIndicator(
+                                refreshing = isPullRefreshing,
+                                state = refreshState,
+                                modifier = Modifier.align(Alignment.TopCenter)
+                            )
                         }
                     }
                 }
