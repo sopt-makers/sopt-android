@@ -2,7 +2,7 @@ name: Makers Builder
 
 on:
     push:
-        branches: [ develop, master ]
+        branches: [ develop, master, migration/server-unification ]
 
 defaults:
     run:
@@ -32,6 +32,8 @@ jobs:
                     DATA_STORE_KEY: ${{ secrets.SENTRY_DSN }}
                     DEV_API: ${{ secrets.SENTRY_DSN }}
                     NEW_API: ${{ secrets.SENTRY_DSN }}
+                    DEV_BASE_URL: ${{ secrets.DEV_BASE_URL }}
+                    PROD_BASE_URL: ${{ secrets.PROD_BASE_URL }}
                     SOPT_DEV_OPERATION_BASE_URL: ${{ secrets.SOPT_DEV_OPERATION_BASE_URL }}
                     SOPT_OPERATION_BASE_URL: ${{ secrets.SOPT_OPERATION_BASE_URL }}
                     KEY_ALIAS: ${{ secrets.SENTRY_DSN }}
@@ -58,6 +60,8 @@ jobs:
                     echo operationApi=\"$SOPT_OPERATION_BASE_URL\" >> ./local.properties
                     echo devApi=\"$DEV_API\" >> ./local.properties
                     echo newApi=\"$NEW_API\" >> ./local.properties
+                    echo devBaseUrl=\"$DEV_BASE_URL\" >> ./local.properties
+                    echo prodBaseUrl=\"$PROD_BASE_URL\" >> ./local.properties
                     echo keyAlias=\"KEY_ALIAS\" >> ./local.properties
                     echo keyPassword=\"KEY_PASSWORD\" >> ./local.properties
                     echo storePassword=\"STORE_PASSWORD\" >> ./local.properties
