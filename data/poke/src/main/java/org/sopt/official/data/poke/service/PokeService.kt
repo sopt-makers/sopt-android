@@ -39,38 +39,39 @@ import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 interface PokeService {
     @GET("poke/new")
-    suspend fun checkNewInPoke(): Response<CheckNewInPokeResult>
+    suspend fun checkNewInPoke(): Response<BaseResponse<CheckNewInPokeResult>>
 
     @GET("poke/random")
     suspend fun getOnboardingPokeUserList(
         @Query("randomType") randomType: String?,
         @Query("size") size: Int,
-    ): Response<PokeRandomUserListResult>
+    ): Response<BaseResponse<PokeRandomUserListResult>>
 
     @GET("poke/to/me")
-    suspend fun getPokeMe(): Response<PokeUserResult>
+    suspend fun getPokeMe(): Response<BaseResponse<PokeUserResult>>
 
     @GET("poke/friend")
-    suspend fun getPokeFriend(): Response<List<PokeUserResult>>
+    suspend fun getPokeFriend(): Response<BaseResponse<List<PokeUserResult>>>
 
     @GET("poke/friend/random-user")
-    suspend fun getPokeFriendOfFriendList(): Response<List<PokeFriendOfFriendListResult>>
+    suspend fun getPokeFriendOfFriendList(): Response<BaseResponse<List<PokeFriendOfFriendListResult>>>
 
     @GET("poke/to/me/list")
-    suspend fun getPokeNotificationList(@Query("page") page: Int): Response<PokeNotificationResult>
+    suspend fun getPokeNotificationList(@Query("page") page: Int): Response<BaseResponse<PokeNotificationResult>>
 
     @GET("poke/friend/list")
-    suspend fun getFriendListSummary(): Response<GetFriendListSummaryResult>
+    suspend fun getFriendListSummary(): Response<BaseResponse<GetFriendListSummaryResult>>
 
     @GET("poke/friend/list")
-    suspend fun getFriendListDetail(@Query("type") type: String, @Query("page") page: Int): Response<GetFriendListDetailResult>
+    suspend fun getFriendListDetail(@Query("type") type: String, @Query("page") page: Int): Response<BaseResponse<GetFriendListDetailResult>>
 
     @GET("poke/message")
-    suspend fun getPokeMessageList(@Query("messageType") messageType: String): Response<GetPokeMessageListResult>
+    suspend fun getPokeMessageList(@Query("messageType") messageType: String): Response<BaseResponse<GetPokeMessageListResult>>
 
     @PUT("poke/{userId}")
-    suspend fun pokeUser(@Path("userId") userId: Int, @Body pokeMessageRequest: PokeMessageRequest): Response<PokeUserResult>
+    suspend fun pokeUser(@Path("userId") userId: Int, @Body pokeMessageRequest: PokeMessageRequest): Response<BaseResponse<PokeUserResult>>
 }

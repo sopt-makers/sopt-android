@@ -26,7 +26,7 @@ package org.sopt.official.auth.impl.mapper
 
 import org.sopt.official.auth.model.CentralizeToken
 import org.sopt.official.network.model.request.ExpiredTokenRequest
-import org.sopt.official.network.model.response.ValidTokenResponse
+import org.sopt.official.network.model.response.RefreshTokenResponse
 
 fun CentralizeToken.toRequest(): ExpiredTokenRequest =
     ExpiredTokenRequest(
@@ -34,7 +34,7 @@ fun CentralizeToken.toRequest(): ExpiredTokenRequest =
         refreshToken = refreshToken
     )
 
-fun ValidTokenResponse.toDomain(): CentralizeToken =
+fun RefreshTokenResponse.toDomain(): CentralizeToken =
     CentralizeToken(
         accessToken = accessToken,
         refreshToken = refreshToken

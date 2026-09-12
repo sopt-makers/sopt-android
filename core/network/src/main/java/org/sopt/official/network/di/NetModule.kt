@@ -85,7 +85,7 @@ object NetModule {
     fun provideAppRetrofit(@Auth client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
         .build()
 
     @AppRetrofit(false)
@@ -94,7 +94,7 @@ object NetModule {
     fun provideNoneAuthAppRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_BASE_URL else BuildConfig.SOPT_BASE_URL)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
         .build()
 
     @OperationRetrofit
@@ -103,7 +103,7 @@ object NetModule {
     fun provideOperationRetrofit(@Auth client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.SOPT_DEV_OPERATION_BASE_URL else BuildConfig.SOPT_OPERATION_BASE_URL)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
         .build()
 
     @AuthRetrofit
@@ -112,6 +112,6 @@ object NetModule {
     fun provideAuthRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_AUTH_API else BuildConfig.PROD_AUTH_API)
+        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
         .build()
 }

@@ -42,7 +42,7 @@ internal class DefaultSoptLogRepository @Inject constructor(
     override val soptLogInfo: StateFlow<SoptLogInfo?> = cache.data
 
     override suspend fun getSoptLogInfo(): Result<SoptLogInfo> =
-        suspendRunCatching { cache.getOrFetch { soptLogApi.getSoptLogInfo().toDomain() } }
+        suspendRunCatching { cache.getOrFetch { soptLogApi.getSoptLogInfo().data.toDomain() } }
 
     override suspend fun invalidate() {
         cache.invalidate()

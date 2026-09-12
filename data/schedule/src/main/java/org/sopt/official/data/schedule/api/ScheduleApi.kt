@@ -26,8 +26,9 @@ package org.sopt.official.data.schedule.api
 
 import org.sopt.official.data.schedule.dto.ScheduleResponse
 import retrofit2.http.GET
+import org.sopt.official.common.network.BaseResponse
 
 interface ScheduleApi {
     @GET("calendar/all")
-    suspend fun getSchedule(): List<ScheduleResponse>
+    suspend fun getSchedule(): BaseResponse<List<ScheduleResponse>>
 }

@@ -49,10 +49,10 @@ internal class RemoteUserDataSource @Inject constructor(
     }
 
     override suspend fun getUserInfo(): UserResponse {
-        return soptampUserService.getUserInformation()
+        return soptampUserService.getUserInformation().data
     }
 
     override suspend fun getUserGeneration(): UserGenerationResponse {
-        return soptampUserService.getGeneration()
+        return soptampUserService.getGeneration().data
     }
 }

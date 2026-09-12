@@ -43,7 +43,7 @@ class StampRepositoryImpl @Inject constructor(
         return runCatching {
             service.registerStamp(
                 stamp.toData()
-            ).toDomain()
+            ).data.toDomain()
         }
     }
 
@@ -52,7 +52,7 @@ class StampRepositoryImpl @Inject constructor(
             service.retrieveStamp(
                 missionId = missionId,
                 nickname = nickname
-            ).toDomain()
+            ).data.toDomain()
         }
     }
 
@@ -73,7 +73,7 @@ class StampRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getReportUrl(): Result<String> = runCatching {
-        service.getReportUrl().reportUrl
+        service.getReportUrl().data.reportUrl
     }
 
     override suspend fun deleteAllStamps(): Result<Unit> {
@@ -81,10 +81,10 @@ class StampRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getClappers(stampId: Int): Result<StampClappers> = runCatching {
-        service.getClapUser(stampId).toDomain()
+        service.getClapUser(stampId).data.toDomain()
     }
 
     override suspend fun clapStamp(stampId: Int, clap: StampClap): Result<StampClapResult> = runCatching {
-        service.postClapStamp(stampId, clap.toData()).toDomain()
+        service.postClapStamp(stampId, clap.toData()).data.toDomain()
     }
 }

@@ -53,14 +53,14 @@ internal class RemoteRankingRepository @Inject constructor(
     }
 
     override suspend fun getRankDetail(nickname: String) = runCatching {
-        service.getRankDetail(nickname).toEntity()
+        service.getRankDetail(nickname).data.toEntity()
     }
 
     override suspend fun getPartRanking(): Result<List<PartRank>> = runCatching {
-        service.getPartRanking().map { it.toDomain() }
+        service.getPartRanking().data.map { it.toDomain() }
     }
 
     override suspend fun getCurrentPartRanking(part: String): Result<List<Rank>> = runCatching {
-        service.getCurrentPartRanking(part).map { it.toDomain() }
+        service.getCurrentPartRanking(part).data.map { it.toDomain() }
     }
 }

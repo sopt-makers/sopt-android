@@ -52,19 +52,19 @@ class DefaultNotificationRepository @Inject constructor(
 
   override suspend fun getNotificationHistory(page: Int): Result<List<NotificationItem>> {
     return runCatching {
-      service.getNotificationHistory(page).map { it.asDomain() }
+      service.getNotificationHistory(page).data.map { it.asDomain() }
     }
   }
 
     override suspend fun getNotificationHistoryByCategory(page: Int, category: String): Result<List<NotificationItem>> {
         return runCatching {
-            service.getNotificationHistoryByCategory(page = page, category = category).map { it.asDomain() }
+            service.getNotificationHistoryByCategory(page = page, category = category).data.map { it.asDomain() }
         }
     }
 
   override suspend fun getNotificationDetail(notificationId: String): Result<Notification> {
     return runCatching {
-      service.getNotificationDetail(notificationId).asDomain()
+      service.getNotificationDetail(notificationId).data.asDomain()
     }
   }
 

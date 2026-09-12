@@ -44,9 +44,9 @@ class AttendanceRepositoryImpl @Inject constructor(
     private val attendanceService: AttendanceService,
     private val json: Json
 ) : AttendanceRepository {
-    override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data!!.toEntity() }
+    override suspend fun fetchSoptEvent(): Result<SoptEvent> = runCatching { attendanceService.getSoptEvent().data.toEntity() }
     override suspend fun fetchAttendanceHistory(): Result<AttendanceHistory> =
-        runCatching { attendanceService.getAttendanceHistory().data!!.toEntity() }
+        runCatching { attendanceService.getAttendanceHistory().data.toEntity() }
 
     override suspend fun fetchAttendanceRound(lectureId: Long): Result<AttendanceRound> = runCatching {
         attendanceService.getAttendanceRound(lectureId).data?.toEntity() ?: AttendanceButtonType.ERROR.attendanceRound
