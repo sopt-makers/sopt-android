@@ -40,6 +40,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -48,7 +49,6 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -69,13 +69,12 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.common.view.toast
-import org.sopt.official.designsystem.Orange400
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.notification.NotificationAnalyticsEvent
@@ -83,9 +82,11 @@ import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.dialog.MdsDialog
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class NotificationActivity : AppCompatActivity() {
@@ -149,24 +150,24 @@ class NotificationActivity : AppCompatActivity() {
                             title = {
                                 Text(
                                     text = "알림",
-                                    style = SoptTheme.typography.body16M
+                                    style = SoptTheme.typography.title5
                                 )
                             },
                             navigationIcon = {
-                                IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
-                                        contentDescription = null,
-                                        tint = SoptTheme.colors.onSurface10
-                                    )
-                                }
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .size(24.dp)
+                                        .clickable(onClick = onBackPressedDispatcher::onBackPressed)
+                                )
                             },
                             actions = {
                                 if (notifications.itemCount > 0) {
                                     Text(
                                         text = "모두 읽음",
-                                        style = SoptTheme.typography.body16M,
-                                        color = Orange400,
+                                        style = SoptTheme.typography.title5,
                                         modifier = Modifier
                                             .padding(end = 20.dp)
                                             .clickable {
@@ -185,13 +186,14 @@ class NotificationActivity : AppCompatActivity() {
                                 }
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = SoptTheme.colors.background,
-                                titleContentColor = SoptTheme.colors.onBackground,
-                                actionIconContentColor = SoptTheme.colors.primary
+                                containerColor = SoptTheme.colors.bg.layer.basement,
+                                titleContentColor = SoptTheme.colors.fg.neutral.bold,
+                                navigationIconContentColor = SoptTheme.colors.fg.neutral.bold,
+                                actionIconContentColor = SoptTheme.colors.fg.brand.default
                             )
                         )
                     },
-                    containerColor = SoptTheme.colors.background
+                    containerColor = SoptTheme.colors.bg.layer.basement
                 ) { innerPadding ->
                     Column(
                         modifier = Modifier
@@ -225,6 +227,7 @@ class NotificationActivity : AppCompatActivity() {
                                         LoadingIndicator()
                                     }
                                 }
+
                                 is LoadState.NotLoading -> {
                                     if (notifications.itemCount > 0) {
                                         LazyColumn {
@@ -265,22 +268,25 @@ class NotificationActivity : AppCompatActivity() {
                                         ) {
                                             Image(
                                                 imageVector = ImageVector.vectorResource(R.drawable.icon_notification_empty),
-                                                contentDescription = "알림이 없습니다."
+                                                contentDescription = null
                                             )
-                                            Spacer(modifier = Modifier.height(24.dp))
+                                            Spacer(modifier = Modifier.height(16.dp))
                                             Text(
                                                 text = "아직 도착한 알림이 없어요.",
-                                                style = SoptTheme.typography.heading18B,
-                                                color = SoptTheme.colors.onSurface400
+                                                style = SoptTheme.typography.body1,
+                                                color = SoptTheme.colors.fg.neutral.ghost
                                             )
                                         }
                                     }
                                 }
+
                                 is LoadState.Error -> {
-                                    NetworkErrorDialog(
-                                        onConfirm = {
-                                            notifications.refresh()
-                                        }
+                                    MdsDialog(
+                                        title = "네트워크가 원활하지 않습니다.",
+                                        description = "인터넷 연결을 확인하고 다시 시도해 주세요.",
+                                        positiveButtonText = "확인",
+                                        onPositiveButtonClick = notifications::refresh,
+                                        onDismiss = { }
                                     )
                                 }
                             }

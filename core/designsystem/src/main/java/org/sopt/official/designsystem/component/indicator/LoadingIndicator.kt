@@ -34,7 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme.colors
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 fun LoadingIndicator(
@@ -44,7 +44,7 @@ fun LoadingIndicator(
         contentAlignment = Center,
         modifier = modifier
             .fillMaxSize()
-            .background(color = colors.background.copy(alpha = 0.55f))
+            .background(color = SoptTheme.colors.bg.dim.default)
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(32.dp),
