@@ -25,80 +25,72 @@
 package org.sopt.official.feature.schedule.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Blue400
-import org.sopt.official.designsystem.Green400
-import org.sopt.official.designsystem.Orange400
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
-fun ScheduleItem(
+internal fun ScheduleItem(
     date: String,
     title: String,
     type: String,
     isRecentSchedule: Boolean = false,
 ) {
-    val (event, containerColor, textColor) = remember {
-        when (type) {
-            "SEMINAR" -> Triple("세미나", Orange400.copy(alpha = 0.2f), Orange400)
-            "JOINT_SEMINAR" -> Triple("합동 세미나", Orange400.copy(alpha = 0.2f), Orange400)
-            "BREAK" -> Triple("휴식", Green400.copy(alpha = 0.2f), Green400)
-            else -> Triple("행사", Blue400.copy(alpha = 0.2f), Blue400)
-        }
+    val (event, containerColor, textColor) = when (type) {
+        "SEMINAR" -> Triple("세미나", SoptTheme.colors.bg.brand.ghost, SoptTheme.colors.fg.brand.default)
+        "JOINT_SEMINAR" -> Triple("합동 세미나", SoptTheme.colors.bg.brand.ghost, SoptTheme.colors.fg.brand.default)
+        "BREAK" -> Triple("휴식", SoptTheme.colors.bg.neutral.subtle, SoptTheme.colors.fg.neutral.subtle)
+        else -> Triple("행사", SoptTheme.colors.bg.secondary.subtle, SoptTheme.colors.fg.secondary.default)
     }
 
-    Row {
-        VerticalDividerWithCircle(
-            circleColor = if (isRecentSchedule) SoptTheme.colors.onSurface10 else SoptTheme.colors.onSurface500,
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(bottom = 40.dp)
+    ) {
+        ScheduleIndicator(
+            circleColor = if (isRecentSchedule) SoptTheme.colors.fg.neutral.bold else SoptTheme.colors.fg.neutral.ghost,
         )
-        Spacer(modifier = Modifier.width(8.dp))
+
         Column(
-            modifier = Modifier
-                .padding(vertical = 12.dp)
-                .fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
                 text = date,
-                color = SoptTheme.colors.primary,
-                style = SoptTheme.typography.body14M,
+                color = SoptTheme.colors.fg.neutral.subtle,
+                style = SoptTheme.typography.label4,
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
-
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     text = event,
                     color = textColor,
                     modifier = Modifier
                         .background(containerColor, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 6.dp, vertical = 3.dp),
-                    style = SoptTheme.typography.label11SB,
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                    style = SoptTheme.typography.label4,
                 )
-                Spacer(modifier = Modifier.width(10.dp))
+
                 Text(
                     text = title,
-                    color = SoptTheme.colors.onSurface10,
-                    style = SoptTheme.typography.heading18B
+                    color = SoptTheme.colors.fg.neutral.bold,
+                    style = SoptTheme.typography.title4
                 )
             }
         }
-
     }
 }
 
