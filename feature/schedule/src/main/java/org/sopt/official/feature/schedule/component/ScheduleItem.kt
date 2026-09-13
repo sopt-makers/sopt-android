@@ -24,19 +24,22 @@
  */
 package org.sopt.official.feature.schedule.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.mds.components.tag.MdsTag
+import org.sopt.official.mds.components.tag.MdsTagEmphasis
+import org.sopt.official.mds.components.tag.MdsTagShape
+import org.sopt.official.mds.components.tag.MdsTagSize
+import org.sopt.official.mds.components.tag.MdsTagType
 import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
@@ -46,11 +49,11 @@ internal fun ScheduleItem(
     type: String,
     isRecentSchedule: Boolean = false,
 ) {
-    val (event, containerColor, textColor) = when (type) {
-        "SEMINAR" -> Triple("세미나", SoptTheme.colors.bg.brand.ghost, SoptTheme.colors.fg.brand.default)
-        "JOINT_SEMINAR" -> Triple("합동 세미나", SoptTheme.colors.bg.brand.ghost, SoptTheme.colors.fg.brand.default)
-        "BREAK" -> Triple("휴식", SoptTheme.colors.bg.neutral.subtle, SoptTheme.colors.fg.neutral.subtle)
-        else -> Triple("행사", SoptTheme.colors.bg.secondary.subtle, SoptTheme.colors.fg.secondary.default)
+    val (event, tagType) = when (type) {
+        "SEMINAR" -> "세미나" to MdsTagType.PRIMARY
+        "JOINT_SEMINAR" -> "합동 세미나" to MdsTagType.PRIMARY
+        "BREAK" -> "휴식" to MdsTagType.DEFAULT
+        else -> "행사" to MdsTagType.SECONDARY
     }
 
     Row(
@@ -75,13 +78,12 @@ internal fun ScheduleItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                Text(
+                MdsTag(
                     text = event,
-                    color = textColor,
-                    modifier = Modifier
-                        .background(containerColor, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
-                    style = SoptTheme.typography.label4,
+                    emphasis = MdsTagEmphasis.SUBTLE,
+                    size = MdsTagSize.SMALL,
+                    shape = MdsTagShape.RECT,
+                    type = tagType
                 )
 
                 Text(
