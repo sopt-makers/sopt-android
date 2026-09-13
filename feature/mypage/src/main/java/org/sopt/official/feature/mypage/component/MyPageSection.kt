@@ -35,32 +35,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
-import org.sopt.official.designsystem.Gray400
-import org.sopt.official.designsystem.Gray900
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.model.MyPageUiModel
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
-fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
+internal fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
     Column(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
             .background(
-                color = Gray900,
+                color = SoptTheme.colors.bg.layer.default,
                 shape = RoundedCornerShape(10.dp)
             )
-            .padding(top = 16.dp, bottom = 5.dp)
+            .padding(vertical = 16.dp)
     ) {
         items.forEach { item ->
             when (item) {
                 is MyPageUiModel.Header -> {
                     Text(
                         text = item.title,
-                        style = SoptTheme.typography.label12SB,
-                        color = Gray400,
-                        modifier = Modifier.padding(start = 16.dp)
+                        style = SoptTheme.typography.label4,
+                        color = SoptTheme.colors.fg.neutral.subtle,
+                        modifier = Modifier.padding(horizontal = 16.dp)
                     )
-                    Spacer(modifier = Modifier.height(23.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
                 }
 
                 is MyPageUiModel.MyPageItem -> {
@@ -68,7 +65,6 @@ fun MyPageSection(items: ImmutableList<MyPageUiModel>) {
                         text = item.title,
                         onClick = item.onItemClick
                     )
-                    Spacer(modifier = Modifier.height(22.dp))
                 }
             }
         }

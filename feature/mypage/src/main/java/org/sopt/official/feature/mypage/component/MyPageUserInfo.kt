@@ -29,24 +29,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
-import org.sopt.official.designsystem.component.UrlImage
-import org.sopt.official.feature.mypage.R
+import org.sopt.official.mds.components.avatar.MdsAvatar
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun MyPageUserInfo(
@@ -56,30 +46,14 @@ internal fun MyPageUserInfo(
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (profileImage.isEmpty()) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_empty_profile),
-                contentDescription = null,
-                tint = Unspecified,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
-            )
-        } else {
-            UrlImage(
-                url = profileImage,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(80.dp)
-                    .clip(CircleShape)
-            )
-        }
+        MdsAvatar(
+            imageUrl = profileImage,
+            size = 80.dp
+        )
 
         Column(
             modifier = Modifier
@@ -89,14 +63,14 @@ internal fun MyPageUserInfo(
         ) {
             Text(
                 text = name,
-                style = SoptTheme.typography.heading20B,
-                color = White
+                style = SoptTheme.typography.heading3,
+                color = SoptTheme.colors.fg.neutral.bold
             )
 
             Text(
                 text = part,
-                style = SoptTheme.typography.body14R,
-                color = SoptTheme.colors.onSurface100
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.neutral.default
             )
         }
     }

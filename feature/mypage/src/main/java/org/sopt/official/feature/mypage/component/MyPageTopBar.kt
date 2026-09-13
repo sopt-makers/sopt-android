@@ -24,17 +24,18 @@
  */
 package org.sopt.official.feature.mypage.component
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.R
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,24 +49,23 @@ fun MyPageTopBar(
         title = {
             Text(
                 text = title,
-                style = SoptTheme.typography.body16M
+                style = SoptTheme.typography.heading4
             )
         },
         navigationIcon = {
             if (onNavigationIconClick != null) {
-                IconButton(onClick = onNavigationIconClick) {
-                    Icon(
-                        painterResource(R.drawable.btn_arrow_left),
-                        contentDescription = "navigation icon",
-                        tint = SoptTheme.colors.onBackground
-                    )
-                }
+                Icon(
+                    imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clickable(onClick = onNavigationIconClick),
+                )
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = SoptTheme.colors.background,
-            titleContentColor = SoptTheme.colors.onBackground,
-            actionIconContentColor = SoptTheme.colors.primary
+            containerColor = SoptTheme.colors.bg.layer.basement,
+            titleContentColor = SoptTheme.colors.fg.neutral.bold,
+            actionIconContentColor = SoptTheme.colors.fg.neutral.bold
         )
     )
 }
