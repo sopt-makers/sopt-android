@@ -36,9 +36,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.common.di.Logging
-import org.sopt.official.common.di.OperationRetrofit
 import org.sopt.official.network.authenticator.CentralizeAuthenticator
 import retrofit2.Converter.Factory
 import retrofit2.Retrofit
@@ -92,24 +90,6 @@ object NetModule {
     @Provides
     @Singleton
     fun provideNoneAuthAppRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-        .client(client)
-        .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
-        .build()
-
-    @OperationRetrofit
-    @Provides
-    @Singleton
-    fun provideOperationRetrofit(@Auth client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
-        .client(client)
-        .addConverterFactory(converter)
-        .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
-        .build()
-
-    @AuthRetrofit
-    @Provides
-    @Singleton
-    fun provideAuthRetrofit(client: OkHttpClient, converter: Factory): Retrofit = Retrofit.Builder()
         .client(client)
         .addConverterFactory(converter)
         .baseUrl(if (BuildConfig.DEBUG) BuildConfig.DEV_BASE_URL else BuildConfig.PROD_BASE_URL)
