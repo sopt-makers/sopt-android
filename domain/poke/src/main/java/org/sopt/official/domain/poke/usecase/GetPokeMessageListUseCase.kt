@@ -25,20 +25,16 @@
 package org.sopt.official.domain.poke.usecase
 
 import javax.inject.Inject
-import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeMessageList
-import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeMessageType
 
 class GetPokeMessageListUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
-    suspend operator fun invoke(messageType: PokeMessageType): ApiResult<PokeMessageList> {
-        return apiResult {
-            repository.getPokeMessageList(
+    suspend operator fun invoke(messageType: PokeMessageType): Result<PokeMessageList> {
+        return repository.getPokeMessageList(
                 messageType = messageType,
             )
-        }
     }
 }

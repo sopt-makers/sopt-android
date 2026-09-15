@@ -190,13 +190,8 @@ fun FriendListSummaryScreen(
                         updateRecyclerView(currentBinding, state.data, activity, newFriendListAdapter, bestFriendListAdapter, soulmateListAdapter)
                     }
                     currentBinding.swipeRefreshLayout.isRefreshing = false
-                }
-                is UiState.ApiError -> {
+                }                is UiState.Failure -> {
                     fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                    currentBinding.swipeRefreshLayout.isRefreshing = false
-                }
-                is UiState.Failure -> {
-                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
                     currentBinding.swipeRefreshLayout.isRefreshing = false
                 }
                 is UiState.Loading -> {}
@@ -234,15 +229,9 @@ fun FriendListSummaryScreen(
                         }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                }
-
                 is UiState.Failure -> {
                     dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
                 else -> {}
             }

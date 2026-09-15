@@ -225,8 +225,7 @@ class FriendListSummaryActivity : AppCompatActivity() {
                 when (it) {
                     is UiState.Loading -> {}
                     is UiState.Success<FriendListSummary> -> updateRecyclerView(it.data)
-                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -360,15 +359,9 @@ class FriendListSummaryActivity : AppCompatActivity() {
                             showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_error))
-                    }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
                 }
             }

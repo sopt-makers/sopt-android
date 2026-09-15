@@ -42,7 +42,7 @@ class SopletterDataSourceImpl @Inject constructor(
     ): SopletterMessagesResponseDto = sopletterService.getDefaultMessages(
         cursor = cursor,
         size = size,
-    )
+    ).data
 
     override suspend fun getTopicMessages(
         topicId: Long,
@@ -52,9 +52,9 @@ class SopletterDataSourceImpl @Inject constructor(
         topicId = topicId,
         cursor = cursor,
         size = size,
-    )
+    ).data
 
-    override suspend fun getReportForm(): SopletterReportFormResponseDto = sopletterService.getReportForm()
+    override suspend fun getReportForm(): SopletterReportFormResponseDto = sopletterService.getReportForm().data
 
     override suspend fun getMessageDetail(
         topicId: Long,
@@ -62,7 +62,7 @@ class SopletterDataSourceImpl @Inject constructor(
     ): SopletterMessageDetailResponseDto = sopletterService.getMessageDetail(
         topicId = topicId,
         messageId = messageId,
-    )
+    ).data
 
     override suspend fun addMessageLike(
         topicId: Long,
@@ -88,7 +88,7 @@ class SopletterDataSourceImpl @Inject constructor(
         topicId = topicId,
         messageId = messageId,
         body = UpdateSopletterMessageRequestDto(content = content),
-    )
+    ).data
 
     override suspend fun deleteMessage(
         topicId: Long,
@@ -100,7 +100,7 @@ class SopletterDataSourceImpl @Inject constructor(
 
     override suspend fun getTopics(
         type: String,
-    ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type)
+    ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type).data
 
-    override suspend fun getCta(): SopletterCtaResponseDto = sopletterService.getCta()
+    override suspend fun getCta(): SopletterCtaResponseDto = sopletterService.getCta().data
 }

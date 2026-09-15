@@ -32,7 +32,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.common.di.Auth
-import org.sopt.official.common.di.AuthRetrofit
 import org.sopt.official.network.interceptor.AuthInterceptor
 import org.sopt.official.network.service.RefreshApi
 import org.sopt.official.network.service.RefreshService
@@ -49,7 +48,7 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideRefreshApi(@AuthRetrofit retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
+    fun provideRefreshApi(@AppRetrofit(false) retrofit: Retrofit): RefreshApi = retrofit.create(RefreshApi::class.java)
 
     @Module
     @InstallIn(SingletonComponent::class)

@@ -31,16 +31,14 @@ import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
 import org.sopt.official.data.poke.dto.request.PokeUserRequest
 import org.sopt.official.data.poke.source.local.PokeLocalDataSource
 import org.sopt.official.data.poke.source.remote.PokeRemoteDataSource
-import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
-import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
-import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
-import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
-import org.sopt.official.domain.poke.entity.GetPokeMeResponse
-import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
-import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
-import org.sopt.official.domain.poke.entity.PokeUserResponse
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.entity.FriendListDetail
+import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeMessageList
+import org.sopt.official.domain.poke.entity.PokeNotificationList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.repository.PokeRepository
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
@@ -55,7 +53,7 @@ class PokeRepositoryImpl @Inject constructor(
         if (!localDataSource.isAnonymousInPokeOnboarding) return false
 
         return suspendRunCatching {
-            remoteDataSource.checkNewInPoke().data?.isNew == true
+            remoteDataSource.checkNewInPoke().isNew
         }.getOrDefault(false)
     }
 
@@ -63,28 +61,28 @@ class PokeRepositoryImpl @Inject constructor(
         localDataSource.isAnonymousInPokeOnboarding = false
     }
 
-    override suspend fun checkNewInPoke(): CheckNewInPokeResponse {
-        return remoteDataSource.checkNewInPoke()
+    override suspend fun checkNewInPoke(): Result<CheckNewInPoke> = suspendRunCatching {
+        remoteDataSource.checkNewInPoke()
     }
 
-    override suspend fun getOnboardingPokeUserList(randomType: String?, size: Int): GetOnboardingPokeUserListResponse {
-        return remoteDataSource.getOnboardingPokeUserList(randomType, size)
+    override suspend fun getOnboardingPokeUserList(randomType: String?, size: Int): Result<PokeRandomUserList> = suspendRunCatching {
+        remoteDataSource.getOnboardingPokeUserList(randomType, size)
     }
 
-    override suspend fun getPokeMe(): GetPokeMeResponse {
-        return remoteDataSource.getPokeMe()
+    override suspend fun getPokeMe(): Result<PokeUser> = suspendRunCatching {
+        remoteDataSource.getPokeMe()
     }
 
-    override suspend fun getPokeFriend(): GetPokeFriendResponse {
-        return remoteDataSource.getPokeFriend()
+    override suspend fun getPokeFriend(): Result<List<PokeUser>> = suspendRunCatching {
+        remoteDataSource.getPokeFriend()
     }
 
-    override suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {
-        return remoteDataSource.getPokeFriendOfFriendList()
+    override suspend fun getPokeFriendOfFriendList(): Result<List<PokeFriendOfFriendList>> = suspendRunCatching {
+        remoteDataSource.getPokeFriendOfFriendList()
     }
 
-    override suspend fun getPokeNotificationList(page: Int): GetPokeNotificationListResponse {
-        return remoteDataSource.getPokeNotificationList(
+    override suspend fun getPokeNotificationList(page: Int): Result<PokeNotificationList> = suspendRunCatching {
+        remoteDataSource.getPokeNotificationList(
             getPokeNotificationListRequest =
                 GetPokeNotificationListRequest(
                     page = page,
@@ -92,12 +90,12 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getFriendListSummary(): GetFriendListSummaryResponse {
-        return remoteDataSource.getFriendListSummary()
+    override suspend fun getFriendListSummary(): Result<FriendListSummary> = suspendRunCatching {
+        remoteDataSource.getFriendListSummary()
     }
 
-    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse {
-        return remoteDataSource.getFriendListDetail(
+    override suspend fun getFriendListDetail(type: PokeFriendType, page: Int): Result<FriendListDetail> = suspendRunCatching {
+        remoteDataSource.getFriendListDetail(
             getFriendListDetailRequest =
                 GetFriendListDetailRequest(
                     type = type,
@@ -106,8 +104,8 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getPokeMessageList(messageType: PokeMessageType): GetPokeMessageListResponse {
-        return remoteDataSource.getPokeMessageList(
+    override suspend fun getPokeMessageList(messageType: PokeMessageType): Result<PokeMessageList> = suspendRunCatching {
+        remoteDataSource.getPokeMessageList(
             getPokeMessageListRequest =
                 GetPokeMessageListRequest(
                     messageType = messageType,
@@ -115,8 +113,8 @@ class PokeRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): PokeUserResponse {
-        return remoteDataSource.pokeUser(
+    override suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): Result<PokeUser> = suspendRunCatching {
+        remoteDataSource.pokeUser(
             pokeUserRequest =
                 PokeUserRequest(
                     userId = userId,

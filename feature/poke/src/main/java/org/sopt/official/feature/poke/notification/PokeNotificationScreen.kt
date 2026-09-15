@@ -168,8 +168,7 @@ fun PokeNotificationScreen(
         when (val state = pokeNotificationUiState) {
             is UiState.Loading -> {}
             is UiState.Success -> adapter.updatePokeNotification(state.data)
-            is UiState.ApiError -> fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
-            is UiState.Failure -> fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+            is UiState.Failure -> fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
         }
     }
 
@@ -225,15 +224,9 @@ fun PokeNotificationScreen(
                         }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                }
-
                 is UiState.Failure -> {
                     dismissBottomSheet(fragmentManager, bottomSheetTag)
-                    fragmentActivity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    fragmentActivity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
             }
         }

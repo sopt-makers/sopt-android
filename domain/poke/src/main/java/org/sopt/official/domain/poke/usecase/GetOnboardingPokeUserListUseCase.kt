@@ -24,18 +24,14 @@
  */
 package org.sopt.official.domain.poke.usecase
 
-import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
-import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 import javax.inject.Inject
 
 class GetOnboardingPokeUserListUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
-    suspend operator fun invoke(randomType: String = "ALL", size: Int): ApiResult<PokeRandomUserList> {
-        return apiResult {
-            repository.getOnboardingPokeUserList(randomType, size)
-        }
+    suspend operator fun invoke(randomType: String = "ALL", size: Int): Result<PokeRandomUserList> {
+        return repository.getOnboardingPokeUserList(randomType, size)
     }
 }

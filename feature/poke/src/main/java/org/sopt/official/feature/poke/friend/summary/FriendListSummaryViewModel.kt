@@ -34,9 +34,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.FriendListSummary
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
@@ -71,9 +68,6 @@ class FriendListSummaryViewModel @Inject constructor(
                 .onSuccess { response ->
                     _friendListSummaryUiState.emit(UiState.Success(response))
                 }
-                .onApiError { statusCode, responseMessage ->
-                    _friendListSummaryUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
                 .onFailure { throwable ->
                     _friendListSummaryUiState.emit(UiState.Failure(throwable))
                 }
@@ -90,9 +84,6 @@ class FriendListSummaryViewModel @Inject constructor(
             )
                 .onSuccess { response ->
                     _pokeUserUiState.emit(UiState.Success(response))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))

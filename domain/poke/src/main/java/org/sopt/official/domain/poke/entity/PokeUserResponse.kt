@@ -24,8 +24,6 @@
  */
 package org.sopt.official.domain.poke.entity
 
-class PokeUserResponse : BaseResponse<PokeUser>()
-
 data class PokeUser(
     val userId: Int,
     val profileImage: String,

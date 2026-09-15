@@ -42,12 +42,12 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
         teamNumber: String?,
         isCompleted: Boolean?
     ): AppjamtampMissionsResponseDto =
-        appjamtampService.getAppjamtampMissions(teamNumber, isCompleted)
+        appjamtampService.getAppjamtampMissions(teamNumber, isCompleted).data
 
     override suspend fun getAppjamtampStamp(
         missionId: Int,
         nickname: String
-    ): AppjamtampStampResponseDto = appjamtampService.getAppjamtampStamp(missionId, nickname)
+    ): AppjamtampStampResponseDto = appjamtampService.getAppjamtampStamp(missionId, nickname).data
 
     override suspend fun postAppjamtampStamp(
         missionId: Int,
@@ -61,13 +61,13 @@ internal class AppjamtampDataSourceImpl @Inject constructor(
             contents = contents,
             activityDate = activityDate
         )
-    )
+    ).data
 
-    override suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto = appjamtampService.getMyAppjamInfo()
+    override suspend fun getMyAppjamInfo(): AppjamtampMyAppjamInfoResponseDto = appjamtampService.getMyAppjamInfo().data
 
     override suspend fun getAppjamtampMissionTop3(size: Int): AppjamtampTop3RecentMissionResponse =
-        appjamtampService.getAppjamtampMissionTop3(size = size)
+        appjamtampService.getAppjamtampMissionTop3(size = size).data
 
     override suspend fun getAppjamtampMissionRanking(size: Int): AppjamtampTop10MissionScoreResponse =
-        appjamtampService.getAppjamtampMissionRanking(size = size)
+        appjamtampService.getAppjamtampMissionRanking(size = size).data
 }

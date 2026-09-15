@@ -31,28 +31,29 @@ import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
 import org.sopt.official.data.home.remote.response.HomeLatestPostsResponseDto
 import org.sopt.official.data.home.remote.response.HomePopularPostsResponseDto
 import org.sopt.official.data.home.remote.response.HomeReviewFormResponseDto
+import org.sopt.official.common.network.BaseResponse
 import retrofit2.http.GET
 
 internal interface HomeApi {
 
     @GET("home/description")
-    suspend fun getHomeDescription(): HomeDescriptionResponseDto
+    suspend fun getHomeDescription(): BaseResponse<HomeDescriptionResponseDto>
 
     @GET("home/app-service")
-    suspend fun getHomeAppService(): HomeAppServicesResponseDto
+    suspend fun getHomeAppService(): BaseResponse<HomeAppServicesResponseDto>
 
     @GET("home/tab-app-service")
-    suspend fun getTabAppService(): List<HomeAppServiceResponseDto>
+    suspend fun getTabAppService(): BaseResponse<List<HomeAppServiceResponseDto>>
 
     @GET("home/review-form")
-    suspend fun getReviewForm(): HomeReviewFormResponseDto
+    suspend fun getReviewForm(): BaseResponse<HomeReviewFormResponseDto>
 
     @GET("home/floating-button")
-    suspend fun getHomeFloatingToast(): HomeFloatingToastDto
+    suspend fun getHomeFloatingToast(): BaseResponse<HomeFloatingToastDto>
 
     @GET("home/posts/popular")
-    suspend fun getHomePopularPosts(): HomePopularPostsResponseDto
+    suspend fun getHomePopularPosts(): BaseResponse<HomePopularPostsResponseDto>
 
     @GET("home/posts/latest")
-    suspend fun getHomeLatestPosts(): HomeLatestPostsResponseDto
+    suspend fun getHomeLatestPosts(): BaseResponse<HomeLatestPostsResponseDto>
 }

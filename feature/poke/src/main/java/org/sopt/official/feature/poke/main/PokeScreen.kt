@@ -163,7 +163,7 @@ fun PokeScreen(
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
 
-                is UiState.ApiError, is UiState.Failure -> {
+                is UiState.Failure -> {
                     activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
@@ -182,7 +182,7 @@ fun PokeScreen(
                     }
                 }
 
-                is UiState.ApiError, is UiState.Failure -> {
+                is UiState.Failure -> {
                     currentBinding.layoutSomeonePokeMe.setVisible(false)
                 }
 
@@ -195,22 +195,14 @@ fun PokeScreen(
         binding?.let { currentBinding ->
             when (val state = pokeFriendUiState) {
                 is UiState.Success -> {
-                    currentBinding.layoutPokeMyFriend.setVisible(true)
+                    currentBinding.layoutPokeMyFriend.setVisible(state.data != null)
                     if (activity is FragmentActivity) {
-                        initPokeFriendView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
+                        state.data?.let { initPokeFriendView(currentBinding, it, tracker, userStatus, activity, viewModel) }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    currentBinding.layoutPokeMyFriend.setVisible(false)
-                    if (state.statusCode != POKE_FRIEND_EMPTY_STATUS_CODE) {
-                        activity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                    }
-                }
-
                 is UiState.Failure -> {
                     currentBinding.layoutPokeMyFriend.setVisible(false)
-                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 else -> {}
@@ -258,13 +250,8 @@ fun PokeScreen(
                         }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                }
-
                 is UiState.Failure -> {
-                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 else -> {}

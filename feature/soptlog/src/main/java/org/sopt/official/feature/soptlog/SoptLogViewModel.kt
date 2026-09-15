@@ -37,8 +37,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.ApiResult
-import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.domain.soptlog.repository.SoptLogRepository
 import org.sopt.official.feature.soptlog.navigation.SoptLogUrl
@@ -125,18 +123,6 @@ class SoptLogViewModel @Inject constructor(
     }
 
     suspend fun fetchIsNewPoke(): Result<Boolean> {
-        val apiResult: ApiResult<*> = checkNewInPokeUseCase()
-
-        return when (apiResult) {
-            is ApiResult.Success -> {
-                Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
-            }
-            is ApiResult.ApiError -> {
-                Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
-            }
-            is ApiResult.Failure -> {
-                Result.failure(apiResult.throwable)
-            }
-        }
+        return checkNewInPokeUseCase().map { it.isNew }
     }
 }
