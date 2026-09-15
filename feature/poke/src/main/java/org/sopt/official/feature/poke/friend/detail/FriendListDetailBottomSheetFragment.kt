@@ -268,8 +268,7 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                 when (it) {
                     is UiState.Loading -> {}
                     is UiState.Success<List<PokeUser>> -> updateRecyclerView(it.data)
-                    is UiState.ApiError -> activity?.showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> activity?.showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    is UiState.Failure -> activity?.showPokeToast(getString(R.string.toast_poke_error))
                 }
             }
             .launchIn(lifecycleScope)
@@ -323,15 +322,9 @@ class FriendListDetailBottomSheetFragment : BottomSheetDialogFragment() {
                             showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_error))
-                    }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
                 }
             }

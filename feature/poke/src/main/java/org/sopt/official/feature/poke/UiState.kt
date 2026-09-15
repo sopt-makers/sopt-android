@@ -31,11 +31,6 @@ sealed class UiState<out T : Any> {
         val isFirstMeet: Boolean = false,
     ) : UiState<T>()
 
-    data class ApiError(
-        val statusCode: String,
-        val responseMessage: String,
-    ) : UiState<Nothing>()
-
     data class Failure(
         val throwable: Throwable,
     ) : UiState<Nothing>()

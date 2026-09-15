@@ -163,7 +163,7 @@ fun PokeScreen(
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
 
-                is UiState.ApiError, is UiState.Failure -> {
+                is UiState.Failure -> {
                     activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                     currentBinding.refreshLayoutPokeMain.isRefreshing = false
                 }
@@ -182,7 +182,7 @@ fun PokeScreen(
                     }
                 }
 
-                is UiState.ApiError, is UiState.Failure -> {
+                is UiState.Failure -> {
                     currentBinding.layoutSomeonePokeMe.setVisible(false)
                 }
 
@@ -200,17 +200,11 @@ fun PokeScreen(
                         initPokeFriendView(currentBinding, state.data, tracker, userStatus, activity, viewModel)
                     }
                 }
-
-                is UiState.ApiError -> {
-                    currentBinding.layoutPokeMyFriend.setVisible(false)
-                    if (state.statusCode != POKE_FRIEND_EMPTY_STATUS_CODE) {
-                        activity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                    }
-                }
-
                 is UiState.Failure -> {
                     currentBinding.layoutPokeMyFriend.setVisible(false)
-                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    if (state.throwable !is PokeFriendEmptyException) {
+                        activity?.showPokeToast(context.getString(R.string.toast_poke_error))
+                    }
                 }
 
                 else -> {}
@@ -258,13 +252,8 @@ fun PokeScreen(
                         }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
-                }
-
                 is UiState.Failure -> {
-                    activity?.showPokeToast(state.throwable.message ?: context.getString(R.string.toast_poke_error))
+                    activity?.showPokeToast(context.getString(R.string.toast_poke_error))
                 }
 
                 else -> {}

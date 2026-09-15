@@ -24,8 +24,6 @@
  */
 package org.sopt.official.domain.poke.entity
 
-class GetFriendListSummaryResponse : BaseResponse<FriendListSummary>()
-
 data class FriendListSummary(
     val newFriend: List<PokeUser>,
     val newFriendSize: Int,

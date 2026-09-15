@@ -32,9 +32,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.usecase.GetFriendListDetailUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
@@ -84,9 +81,6 @@ class FriendListDetailViewModel @Inject constructor(
                         currentPaginationIndex = response.pageNum
                         _friendListDetailUiState.emit(UiState.Success(oldData.plus(response.friendList)))
                     }
-                    .onApiError { statusCode, responseMessage ->
-                        _friendListDetailUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                    }
                     .onFailure { throwable ->
                         _friendListDetailUiState.emit(UiState.Failure(throwable))
                     }
@@ -104,9 +98,6 @@ class FriendListDetailViewModel @Inject constructor(
                 .onSuccess { response ->
                     updatePokeUserState(response.userId)
                     _pokeUserUiState.emit(UiState.Success(response))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))

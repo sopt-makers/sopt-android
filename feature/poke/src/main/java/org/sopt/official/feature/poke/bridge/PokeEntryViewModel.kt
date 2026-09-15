@@ -31,8 +31,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.poke.entity.ApiResult
-import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.poke.bridge.state.PokeEntryState
 import javax.inject.Inject
@@ -52,22 +50,19 @@ class PokeEntryViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
 
-            when (val apiResult = checkNewInPokeUseCase()) {
-                is ApiResult.Success<CheckNewInPoke> -> {
+            checkNewInPokeUseCase()
+                .onSuccess { result ->
                     _uiState.update {
                         it.copy(
                             isLoading = false,
-                            isNewPoke = apiResult.data.isNew,
-                            // generation = apiResult.data.generation ?: 0
+                            isNewPoke = result.isNew,
+                            // generation = result.generation ?: 0
                         )
                     }
                 }
-
-                is ApiResult.ApiError, is ApiResult.Failure -> {
+                .onFailure {
                     _uiState.update { it.copy(isLoading = false, isError = true) }
                 }
-
-            }
         }
     }
 

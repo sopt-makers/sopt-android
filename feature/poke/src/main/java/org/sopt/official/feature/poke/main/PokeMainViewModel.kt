@@ -32,9 +32,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeFriendUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
@@ -43,7 +40,8 @@ import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
 import javax.inject.Inject
 
-internal const val POKE_FRIEND_EMPTY_STATUS_CODE = "EMPTY_POKE_FRIEND"
+/** 친구가 없을 때 [UiState.Failure]로 전달되는 예외. UI는 이 경우 에러 토스트를 띄우지 않는다. */
+internal object PokeFriendEmptyException : Exception()
 
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
@@ -75,9 +73,6 @@ class PokeMainViewModel @Inject constructor(
                 .onSuccess { // todo: 데이터 없으면 null로 넘어옴.. 처리 필요..
                     _pokeMeUiState.emit(UiState.Success(it))
                 }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeMeUiState.emit(UiState.ApiError(statusCode, responseMessage))
-                }
                 .onFailure {
                     _pokeMeUiState.emit(UiState.Failure(it))
                     Timber.e(it)
@@ -92,10 +87,7 @@ class PokeMainViewModel @Inject constructor(
                 .onSuccess { friendList ->
                     friendList.firstOrNull()?.let {
                         _pokeFriendUiState.emit(UiState.Success(it))
-                    } ?: _pokeFriendUiState.emit(UiState.ApiError(POKE_FRIEND_EMPTY_STATUS_CODE, ""))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
+                    } ?: _pokeFriendUiState.emit(UiState.Failure(PokeFriendEmptyException))
                 }
                 .onFailure {
                     _pokeFriendUiState.emit(UiState.Failure(it))
@@ -110,9 +102,6 @@ class PokeMainViewModel @Inject constructor(
             getOnboardingPokeUserListUseCase.invoke(randomType = "ALL", size = 2)
                 .onSuccess {
                     _pokeSimilarFriendUiState.emit(UiState.Success(it.randomInfoList))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeSimilarFriendUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure {
                     _pokeSimilarFriendUiState.emit(UiState.Failure(it))
@@ -131,9 +120,6 @@ class PokeMainViewModel @Inject constructor(
             )
                 .onSuccess { response ->
                     _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure { throwable ->
                     _pokeUserUiState.emit(UiState.Failure(throwable))

@@ -30,125 +30,55 @@ import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
 import org.sopt.official.data.poke.dto.request.PokeMessageRequest
 import org.sopt.official.data.poke.dto.request.PokeUserRequest
 import org.sopt.official.data.poke.service.PokeService
-import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
-import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
-import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
-import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
-import org.sopt.official.domain.poke.entity.GetPokeMeResponse
-import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
-import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
-import org.sopt.official.domain.poke.entity.PokeUserResponse
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.entity.FriendListDetail
+import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeMessageList
+import org.sopt.official.domain.poke.entity.PokeNotificationList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
+import org.sopt.official.domain.poke.entity.PokeUser
 import javax.inject.Inject
 
 class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
 ) {
-    suspend fun checkNewInPoke(): CheckNewInPokeResponse {
-        val response = service.checkNewInPoke()
-        return CheckNewInPokeResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun checkNewInPoke(): CheckNewInPoke =
+        service.checkNewInPoke().data.toEntity()
 
-    suspend fun getOnboardingPokeUserList(randomType: String?, size: Int): GetOnboardingPokeUserListResponse {
-        val response = service.getOnboardingPokeUserList(randomType, size)
-        return GetOnboardingPokeUserListResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getOnboardingPokeUserList(randomType: String?, size: Int): PokeRandomUserList =
+        service.getOnboardingPokeUserList(randomType, size).data.toEntity()
 
-    suspend fun getPokeMe(): GetPokeMeResponse {
-        val response = service.getPokeMe()
-        return GetPokeMeResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getPokeMe(): PokeUser =
+        service.getPokeMe().data.toEntity()
 
-    suspend fun getPokeFriend(): GetPokeFriendResponse {
-        val response = service.getPokeFriend()
-        return GetPokeFriendResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.map { it.toEntity() }
-        }
-    }
+    suspend fun getPokeFriend(): List<PokeUser> =
+        service.getPokeFriend().data.map { it.toEntity() }
 
-    suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse {
-        val response = service.getPokeFriendOfFriendList()
-        return GetPokeFriendOfFriendListResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.map { it.toEntity() }
-        }
-    }
+    suspend fun getPokeFriendOfFriendList(): List<PokeFriendOfFriendList> =
+        service.getPokeFriendOfFriendList().data.map { it.toEntity() }
 
-    suspend fun getPokeNotificationList(getPokeNotificationListRequest: GetPokeNotificationListRequest): GetPokeNotificationListResponse {
-        val response =
-            service.getPokeNotificationList(
-                page = getPokeNotificationListRequest.page,
-            )
-        return GetPokeNotificationListResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getPokeNotificationList(getPokeNotificationListRequest: GetPokeNotificationListRequest): PokeNotificationList =
+        service.getPokeNotificationList(page = getPokeNotificationListRequest.page).data.toEntity()
 
-    suspend fun getFriendListSummary(): GetFriendListSummaryResponse {
-        val response = service.getFriendListSummary()
-        return GetFriendListSummaryResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getFriendListSummary(): FriendListSummary =
+        service.getFriendListSummary().data.toEntity()
 
-    suspend fun getFriendListDetail(getFriendListDetailRequest: GetFriendListDetailRequest): GetFriendListDetailResponse {
-        val response =
-            service.getFriendListDetail(
-                type = getFriendListDetailRequest.type.typeName,
-                page = getFriendListDetailRequest.page,
-            )
-        return GetFriendListDetailResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getFriendListDetail(getFriendListDetailRequest: GetFriendListDetailRequest): FriendListDetail =
+        service.getFriendListDetail(
+            type = getFriendListDetailRequest.type.typeName,
+            page = getFriendListDetailRequest.page,
+        ).data.toEntity()
 
-    suspend fun getPokeMessageList(getPokeMessageListRequest: GetPokeMessageListRequest): GetPokeMessageListResponse {
-        val response =
-            service.getPokeMessageList(
-                messageType = getPokeMessageListRequest.messageType.typeName,
-            )
-        return GetPokeMessageListResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun getPokeMessageList(getPokeMessageListRequest: GetPokeMessageListRequest): PokeMessageList =
+        service.getPokeMessageList(messageType = getPokeMessageListRequest.messageType.typeName).data.toEntity()
 
-    suspend fun pokeUser(pokeUserRequest: PokeUserRequest): PokeUserResponse {
-        val response =
-            service.pokeUser(
-                userId = pokeUserRequest.userId,
-                pokeMessageRequest = PokeMessageRequest(
-                    isAnonymous = pokeUserRequest.isAnonymous,
-                    message = pokeUserRequest.message,
-                ),
-            )
-        return PokeUserResponse().apply {
-            statusCode = response.code().toString()
-            responseMessage = response.message()
-            data = response.body()?.data?.toEntity()
-        }
-    }
+    suspend fun pokeUser(pokeUserRequest: PokeUserRequest): PokeUser =
+        service.pokeUser(
+            userId = pokeUserRequest.userId,
+            pokeMessageRequest = PokeMessageRequest(
+                isAnonymous = pokeUserRequest.isAnonymous,
+                message = pokeUserRequest.message,
+            ),
+        ).data.toEntity()
 }

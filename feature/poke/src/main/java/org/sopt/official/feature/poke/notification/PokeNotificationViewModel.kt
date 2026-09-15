@@ -33,9 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.UiState
@@ -83,9 +80,6 @@ class PokeNotificationViewModel @Inject constructor(
                         currentPaginationIndex = it.pageNum
                         _pokeNotification.emit(UiState.Success(oldData.plus(it.history)))
                     }
-                    .onApiError { statusCode, responseMessage ->
-                        _pokeNotification.emit(UiState.ApiError(statusCode, responseMessage))
-                    }
                     .onFailure { throwable ->
                         _pokeNotification.emit(UiState.Failure(throwable))
                     }
@@ -100,8 +94,6 @@ class PokeNotificationViewModel @Inject constructor(
                 message = message
             ).onSuccess { response ->
                 _pokeUserUiState.emit(UiState.Success(response, isFirstMeet))
-            }.onApiError { statusCode, responseMessage ->
-                _pokeUserUiState.emit(UiState.ApiError(statusCode, responseMessage))
             }.onFailure { throwable ->
                 _pokeUserUiState.emit(UiState.Failure(throwable))
             }

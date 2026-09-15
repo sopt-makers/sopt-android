@@ -193,7 +193,6 @@ class PokeMainActivity : AppCompatActivity() {
                 when (it) {
                     is UiState.Loading -> {}
                     is UiState.Success<PokeUser> -> initPokeMeView(it.data)
-                    is UiState.ApiError -> binding.layoutSomeonePokeMe.setVisible(false)
                     is UiState.Failure -> binding.layoutSomeonePokeMe.setVisible(false)
                 }
             }
@@ -207,17 +206,11 @@ class PokeMainActivity : AppCompatActivity() {
                         binding.layoutPokeMyFriend.setVisible(true)
                         initPokeFriendView(it.data)
                     }
-
-                    is UiState.ApiError -> {
-                        binding.layoutPokeMyFriend.setVisible(false)
-                        if (it.statusCode != POKE_FRIEND_EMPTY_STATUS_CODE) {
-                            showPokeToast(getString(R.string.toast_poke_error))
-                        }
-                    }
-
                     is UiState.Failure -> {
                         binding.layoutPokeMyFriend.setVisible(false)
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        if (it.throwable !is PokeFriendEmptyException) {
+                            showPokeToast(getString(R.string.toast_poke_error))
+                        }
                     }
                 }
             }
@@ -230,9 +223,7 @@ class PokeMainActivity : AppCompatActivity() {
                     pokeMainListAdapter?.submitList(it.data)
                     binding.refreshLayoutPokeMain.isRefreshing = false
                 }
-
-                is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                is UiState.Failure -> showPokeToast(getString(R.string.toast_poke_error))
             }
         }.launchIn(lifecycleScope)
 
@@ -281,15 +272,9 @@ class PokeMainActivity : AppCompatActivity() {
                             }
                         }
                     }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_error))
-                    }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
                 }
             }

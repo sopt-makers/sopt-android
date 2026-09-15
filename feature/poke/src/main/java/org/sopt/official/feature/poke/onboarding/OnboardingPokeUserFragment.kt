@@ -130,9 +130,7 @@ class OnboardingPokeUserFragment : Fragment() {
                         it.data.randomTitle,
                         it.data.userInfoList
                     )
-
-                    is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                    is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    is UiState.Failure -> showPokeToast(getString(R.string.toast_poke_error))
                 }
             }.launchIn(lifecycleScope)
     }
@@ -149,15 +147,9 @@ class OnboardingPokeUserFragment : Fragment() {
                             false -> showPokeToast(getString(R.string.toast_poke_user_success))
                         }
                     }
-
-                    is UiState.ApiError -> {
-                        messageListBottomSheet?.dismiss()
-                        showPokeToast(getString(R.string.toast_poke_error))
-                    }
-
                     is UiState.Failure -> {
                         messageListBottomSheet?.dismiss()
-                        showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
                 }
             }.launchIn(lifecycleScope)

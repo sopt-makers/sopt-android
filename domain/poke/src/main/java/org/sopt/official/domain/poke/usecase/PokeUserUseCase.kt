@@ -25,21 +25,17 @@
 package org.sopt.official.domain.poke.usecase
 
 import javax.inject.Inject
-import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 
 class PokeUserUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
-    suspend operator fun invoke(userId: Int, isAnonymous: Boolean, message: String,): ApiResult<PokeUser> {
-        return apiResult {
-            repository.pokeUser(
+    suspend operator fun invoke(userId: Int, isAnonymous: Boolean, message: String,): Result<PokeUser> {
+        return repository.pokeUser(
                 userId = userId,
                 isAnonymous = isAnonymous,
                 message = message,
             )
-        }
     }
 }
