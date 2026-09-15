@@ -40,9 +40,6 @@ import org.sopt.official.feature.poke.UiState
 import timber.log.Timber
 import javax.inject.Inject
 
-/** 친구가 없을 때 [UiState.Failure]로 전달되는 예외. UI는 이 경우 에러 토스트를 띄우지 않는다. */
-internal object PokeFriendEmptyException : Exception()
-
 @HiltViewModel
 class PokeMainViewModel @Inject constructor(
     private val getPokeMeUseCase: GetPokeMeUseCase,
@@ -53,8 +50,8 @@ class PokeMainViewModel @Inject constructor(
     private val _pokeMeUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
     val pokeMeUiState: StateFlow<UiState<PokeUser>> get() = _pokeMeUiState
 
-    private val _pokeFriendUiState = MutableStateFlow<UiState<PokeUser>>(UiState.Loading)
-    val pokeFriendUiState: StateFlow<UiState<PokeUser>> get() = _pokeFriendUiState
+    private val _pokeFriendUiState = MutableStateFlow<UiState<PokeUser?>>(UiState.Loading)
+    val pokeFriendUiState: StateFlow<UiState<PokeUser?>> get() = _pokeFriendUiState
 
     private val _pokeSimilarFriendUiState = MutableStateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>>(UiState.Loading)
     val pokeSimilarFriendUiState: StateFlow<UiState<List<PokeRandomUserList.PokeRandomUsers>>> get() = _pokeSimilarFriendUiState
@@ -85,9 +82,7 @@ class PokeMainViewModel @Inject constructor(
             _pokeFriendUiState.emit(UiState.Loading)
             getPokeFriendUseCase.invoke()
                 .onSuccess { friendList ->
-                    friendList.firstOrNull()?.let {
-                        _pokeFriendUiState.emit(UiState.Success(it))
-                    } ?: _pokeFriendUiState.emit(UiState.Failure(PokeFriendEmptyException))
+                    _pokeFriendUiState.emit(UiState.Success(friendList.firstOrNull()))
                 }
                 .onFailure {
                     _pokeFriendUiState.emit(UiState.Failure(it))
@@ -140,9 +135,9 @@ class PokeMainViewModel @Inject constructor(
                     )
                 }
             }
-            if (_pokeFriendUiState.value is UiState.Success<PokeUser>) {
-                val oldData = (_pokeFriendUiState.value as UiState.Success<PokeUser>).data
-                if (oldData.userId == userId) {
+            if (_pokeFriendUiState.value is UiState.Success<PokeUser?>) {
+                val oldData = (_pokeFriendUiState.value as UiState.Success<PokeUser?>).data
+                if (oldData?.userId == userId) {
                     _pokeFriendUiState.emit(UiState.Loading)
                     _pokeFriendUiState.emit(
                         UiState.Success(

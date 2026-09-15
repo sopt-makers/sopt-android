@@ -202,15 +202,13 @@ class PokeMainActivity : AppCompatActivity() {
             .onEach {
                 when (it) {
                     is UiState.Loading -> {}
-                    is UiState.Success<PokeUser> -> {
-                        binding.layoutPokeMyFriend.setVisible(true)
-                        initPokeFriendView(it.data)
+                    is UiState.Success<PokeUser?> -> {
+                        binding.layoutPokeMyFriend.setVisible(it.data != null)
+                        it.data?.let(::initPokeFriendView)
                     }
                     is UiState.Failure -> {
                         binding.layoutPokeMyFriend.setVisible(false)
-                        if (it.throwable !is PokeFriendEmptyException) {
-                            showPokeToast(getString(R.string.toast_poke_error))
-                        }
+                        showPokeToast(getString(R.string.toast_poke_error))
                     }
                 }
             }
