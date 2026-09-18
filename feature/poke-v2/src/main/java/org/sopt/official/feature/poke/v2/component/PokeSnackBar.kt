@@ -31,7 +31,8 @@ import org.sopt.official.mds.theme.SoptTheme
  */
 enum class PokeSnackBarType {
     SUCCESS,
-    WARNING
+    WARNING,
+    FAILURE,
 }
 
 class PokeSnackBarVisuals(
@@ -56,12 +57,11 @@ internal fun PokeSnackBarHost(
         hostState = hostState,
         modifier = modifier
     ) { data ->
-        val visuals = data.visuals
-        PokeSnackBar(
-            message = visuals.message,
-            type = (visuals as? PokeSnackBarVisuals)?.type ?: PokeSnackBarType.WARNING,
-            modifier = Modifier.padding(SoptTheme.spacing.s16)
-        )
+        when (val visuals = data.visuals) {
+            is PokeSnackBarVisuals -> PokeSnackBar(message = visuals.message, type = visuals.type)
+            // showSnackbar(message) 로 직접 호출된 경우. showPokeSnackBar 사용을 권장
+            else -> PokeSnackBar(message = visuals.message, type = PokeSnackBarType.WARNING)
+        }
     }
 }
 
@@ -74,6 +74,7 @@ internal fun PokeSnackBar(
     val iconRes = when (type) {
         PokeSnackBarType.SUCCESS -> R.drawable.icon_success
         PokeSnackBarType.WARNING -> R.drawable.icon_warning
+        PokeSnackBarType.FAILURE -> R.drawable.icon_failure
     }
 
     Row(
@@ -109,6 +110,7 @@ private fun PokeSnackBarPreview() {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
             PokeSnackBar(message = "콕 찌르기를 완료했어요.", type = PokeSnackBarType.SUCCESS)
             PokeSnackBar(message = "익명 해제 시, 상대방이 나를 알 수 있어요.", type = PokeSnackBarType.WARNING)
+            PokeSnackBar(message = "문제가 발생했습니다.", type = PokeSnackBarType.FAILURE)
         }
     }
 }
