@@ -41,7 +41,7 @@ internal fun PokeAvatar(
     onProfileClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (user.isAnonymous) {
+    if (user.isAnonymousVisible) {
         PokeAnonymousAvatar(
             size = size,
             strokeColor = strokeColor,
