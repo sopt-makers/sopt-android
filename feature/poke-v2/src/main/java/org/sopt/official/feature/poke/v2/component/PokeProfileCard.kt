@@ -67,7 +67,7 @@ internal fun PokeProfileCard(
 
         Spacer(modifier = Modifier.height(SoptTheme.spacing.s4))
         Text(
-            text = user.infoText,
+            text = user.generationPartText,
             style = SoptTheme.typography.label4,
             color = SoptTheme.colors.fg.neutral.subtle,
             maxLines = 1,
