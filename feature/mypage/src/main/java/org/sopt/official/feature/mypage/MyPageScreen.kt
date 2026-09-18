@@ -52,6 +52,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.EventType
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.impl.FakeTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.component.MyPageDialog
@@ -372,12 +373,7 @@ private fun ShowMyPageDialog(
 @Composable
 private fun MyPageScreenPreview() {
     SoptTheme {
-        val track = remember {
-            object : Tracker {
-                override fun track(type: EventType, name: String, properties: Map<String, Any?>) = Unit
-                override fun setNotificationStateToUserProperties(value: Boolean) = Unit
-            }
-        }
+        val track = FakeTracker
 
         MyPageScreen(
             state = MyPageState(
