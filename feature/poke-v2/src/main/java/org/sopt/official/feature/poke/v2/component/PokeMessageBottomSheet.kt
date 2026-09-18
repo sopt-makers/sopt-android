@@ -33,7 +33,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.Gray30
-import org.sopt.official.designsystem.R
+import org.sopt.official.feature.poke.v2.R
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.designsystem.SoptTheme as LegacySoptTheme
@@ -145,7 +145,7 @@ private fun PokeAnonymousCheckbox(
     ) {
         Image(
             painter = painterResource(
-                if (checked) R.drawable.ic_chechbox_checked else R.drawable.ic_checkbox_unchecked,
+                if (checked) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
             ),
             contentDescription = null,
             modifier = Modifier.size(26.dp),
