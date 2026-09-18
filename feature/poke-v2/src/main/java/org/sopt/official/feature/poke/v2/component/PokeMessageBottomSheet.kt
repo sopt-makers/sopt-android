@@ -189,19 +189,21 @@ private fun PokeMessageItem(
 @Composable
 private fun PokeMessageBottomSheetContentPreview() {
     SoptTheme {
-        PokeMessageBottomSheetContent(
-            title = "보낼 메시지를 골라주세요",
-            messages = persistentListOf(
-                PokeMessageUiState(messageId = 1, content = "메시지 내용을 넣어봐요"),
-                PokeMessageUiState(messageId = 2, content = "메시지 내용을 넣어봐요"),
-                PokeMessageUiState(messageId = 3, content = "메시지 내용을 넣어봐요"),
-                PokeMessageUiState(messageId = 4, content = "메시지 내용을 넣어봐요"),
-                PokeMessageUiState(messageId = 5, content = "메시지 내용을 넣어봐요"),
-            ),
-            isAnonymous = true,
-            isAnonymousCheckboxLocked = false,
-            onAnonymousClick = {},
-            onMessageClick = {},
-        )
+        LegacySoptTheme {
+            PokeMessageBottomSheetContent(
+                title = "보낼 메시지를 골라주세요",
+                messages = persistentListOf(
+                    PokeMessageUiState(messageId = 1, content = "메시지 내용을 넣어봐요"),
+                    PokeMessageUiState(messageId = 2, content = "메시지 내용을 넣어봐요"),
+                    PokeMessageUiState(messageId = 3, content = "메시지 내용을 넣어봐요"),
+                    PokeMessageUiState(messageId = 4, content = "메시지 내용을 넣어봐요"),
+                    PokeMessageUiState(messageId = 5, content = "메시지 내용을 넣어봐요"),
+                ),
+                isAnonymous = true,
+                isAnonymousCheckboxLocked = false,
+                onAnonymousClick = {},
+                onMessageClick = {},
+            )
+        }
     }
 }
