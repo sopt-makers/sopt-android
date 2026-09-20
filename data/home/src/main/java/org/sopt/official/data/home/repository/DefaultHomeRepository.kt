@@ -57,13 +57,20 @@ internal class DefaultHomeRepository @Inject constructor(
 
     override suspend fun getHomeAppService(forceRefresh: Boolean): Result<HomeAppServiceInfo> =
         suspendRunCatching {
-            if (forceRefresh) homeAppServiceCache.invalidate()
-            homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().toDomain() }
+            if (forceRefresh) {
+                homeAppServiceCache.refresh { homeApi.getHomeAppService().toDomain() }
+            } else {
+                homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().toDomain() }
+            }
         }
 
-    override suspend fun getTabAppService(): Result<List<AppService>> =
+    override suspend fun getTabAppService(forceRefresh: Boolean): Result<List<AppService>> =
         suspendRunCatching {
-            tabAppServiceCache.getOrFetch { homeApi.getTabAppService().map { it.toDomain() } }
+            if (forceRefresh) {
+                tabAppServiceCache.refresh { homeApi.getTabAppService().map { it.toDomain() } }
+            } else {
+                tabAppServiceCache.getOrFetch { homeApi.getTabAppService().map { it.toDomain() } }
+            }
         }
 
     override fun observeTabAppService(): Flow<List<AppService>?> = tabAppServiceCache.data

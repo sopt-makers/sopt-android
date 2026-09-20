@@ -102,6 +102,7 @@ internal fun HomeRoute(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     onUpdateBottomBadge: (Map<String?, String>) -> Unit,
+    onRefreshTabBadges: () -> Unit,
     navigateToSopletter: () -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
@@ -125,6 +126,7 @@ internal fun HomeRoute(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 newHomeViewModel.refreshNotificationStatus()
+                onRefreshTabBadges()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -307,8 +309,6 @@ private fun HomeScreenForMember(
 
                 HomeEnjoySoptServicesBlock(
                     // Current server policy returns only "솝레터" for home app-services.
-                    // TODO: 콕찌르기 등 AppService 재노출 시 선택된 HomeAppService를 콜백으로 전달하고,
-                    //  서비스별 navigation과 HomeAnalyticsEvent를 연결한다.
                     appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
                     onAppServiceClick = {
                         tracker.trackViewType(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU, viewType)

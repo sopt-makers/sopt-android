@@ -42,7 +42,7 @@ interface HomeRepository {
 
     suspend fun getHomeAppService(forceRefresh: Boolean = false): Result<HomeAppServiceInfo>
 
-    suspend fun getTabAppService(): Result<List<AppService>>
+    suspend fun getTabAppService(forceRefresh: Boolean = false): Result<List<AppService>>
 
     fun observeTabAppService(): Flow<List<AppService>?>
 

@@ -67,9 +67,10 @@ class MainViewModel @Inject constructor(
     }
 
     fun updateBadge(badges: Map<String?, String?>) {
-        _badgeMap.update {
+        _badgeMap.update { current ->
             _mainTabs.value.associateWith { tab ->
-                tab.deeplink?.let { badges[it] }
+                val deeplink = tab.deeplink
+                if (deeplink != null && badges.containsKey(deeplink)) badges[deeplink] else current[tab]
             }
         }
     }
@@ -78,10 +79,17 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch { getTabAppServiceUseCase() }
     }
 
+    fun refreshTabAppServices() {
+        viewModelScope.launch { getTabAppServiceUseCase(forceRefresh = true) }
+    }
+
     private fun updateMainTabs(services: List<AppService>, isAppjam: Boolean) {
-        val badgeByDeeplink = services.associate {
-            it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null
-        }
+        // 홈 탭 자신의 뱃지는 홈 화면이 home/app-service 응답을 바탕으로 직접 소유·갱신한다
+        // (HomeRoute -> onUpdateBottomBadge). 여기서 같은 키를 다시 계산해서 덮어쓰면
+        // 홈 화면이 방금 반영한 최신 값을 지워버리게 되므로 홈 탭 키는 제외한다.
+        val badgeByDeeplink = services
+            .filter { it.deepLink != MainTab.Home.deeplink }
+            .associate { it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null }
 
         val deepLinks = services.map { it.deepLink }.filter { deepLink ->
             when (deepLink) {

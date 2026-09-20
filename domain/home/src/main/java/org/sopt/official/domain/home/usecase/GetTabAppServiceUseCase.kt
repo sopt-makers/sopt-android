@@ -31,5 +31,6 @@ import org.sopt.official.domain.home.repository.HomeRepository
 class GetTabAppServiceUseCase @Inject constructor(
     private val homeRepository: HomeRepository
 ) {
-    suspend operator fun invoke(): Result<List<AppService>> = homeRepository.getTabAppService()
+    suspend operator fun invoke(forceRefresh: Boolean = false): Result<List<AppService>> =
+        homeRepository.getTabAppService(forceRefresh)
 }

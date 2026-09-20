@@ -265,6 +265,7 @@ fun MainScreen(
                             userStatus = userStatus,
                             paddingValues = innerPadding,
                             onUpdateBottomBadge = viewModel::updateBadge,
+                            onRefreshTabBadges = viewModel::refreshTabAppServices,
                             homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                                 private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, url)
