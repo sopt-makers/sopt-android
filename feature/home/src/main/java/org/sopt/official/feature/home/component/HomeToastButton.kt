@@ -26,6 +26,7 @@ package org.sopt.official.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,10 +37,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.MdsGray950
@@ -64,6 +67,11 @@ fun HomeToastButton(
             .fillMaxWidth()
             .clip(CircleShape)
             .background(Orange400)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = {}
+            )
             .padding(13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -110,6 +118,20 @@ fun HomeToastButton(
                 .background(Black)
                 .padding(horizontal = 11.dp, vertical = 6.dp)
                 .clickable(onClick = onClick)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeToastButtonPreview() {
+    SoptTheme {
+        HomeToastButton(
+            imageUrl = "",
+            longTitle = "",
+            missionDescription = "",
+            buttonText = "",
+            onClick = {}
         )
     }
 }
