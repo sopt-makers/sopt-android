@@ -52,4 +52,20 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+
+    <!--
+        화면을 그리지 않는 AppCompatActivity(예: DeepLinkSchemeActivity)를 위한 테마.
+        android:Theme.NoDisplay는 AppCompat 계열이 아니라서 AppCompatDelegate가
+        "You need to use a Theme.AppCompat theme" 예외를 던지므로, Theme.SOPT(AppCompat 계열)를
+        상속한 뒤 투명/플로팅 속성으로 아무것도 그리지 않도록 구성한다.
+    -->
+    <style name="Theme.SOPT.NoDisplay" parent="Theme.SOPT">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 </resources>
