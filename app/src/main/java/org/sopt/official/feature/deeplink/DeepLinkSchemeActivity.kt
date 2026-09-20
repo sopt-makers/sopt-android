@@ -25,6 +25,7 @@
 package org.sopt.official.feature.deeplink
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -55,6 +56,8 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val uri = intent?.data
+
         lifecycleScope.launch {
             val accessToken = tokenStorage.accessToken.first()
 
@@ -64,9 +67,9 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
                 return@launch
             }
 
-            if (intent?.data?.scheme == "https") {
+            if (uri?.scheme == "https") {
                 Intent(this@DeepLinkSchemeActivity, WebViewActivity::class.java).apply {
-                    putExtra(INTENT_URL, intent?.dataString)
+                    putExtra(INTENT_URL, resolveWebViewUrl(uri))
                 }.also {
                     startActivity(it)
                 }
@@ -78,6 +81,16 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
         }
     }
 
+    private fun resolveWebViewUrl(uri: Uri): String {
+        if (!uri.path.orEmpty().startsWith(ACCOUNTS_PATH_PREFIX)) return uri.toString()
+
+        return Uri.Builder()
+            .scheme(uri.scheme)
+            .authority(uri.authority)
+            .build()
+            .toString()
+    }
+
     private fun dispatchDeepLink() {
         val deepLinkDelegate = DeepLinkDelegate(
             AppDeeplinkModuleRegistry(),
@@ -85,5 +98,9 @@ class DeepLinkSchemeActivity : AppCompatActivity() {
         )
         deepLinkDelegate.dispatchFrom(this)
         finish()
+    }
+
+    companion object {
+        private const val ACCOUNTS_PATH_PREFIX = "/accounts"
     }
 }
