@@ -28,7 +28,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.util.fastForEach
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.util.noRippleClickable
@@ -119,7 +118,7 @@ internal fun PokeMessageBottomSheetContent(
             )
         }
 
-        messages.fastForEach { message ->
+        messages.forEach { message ->
             PokeMessageItem(
                 message = message,
                 onClick = { onMessageClick(message) },
