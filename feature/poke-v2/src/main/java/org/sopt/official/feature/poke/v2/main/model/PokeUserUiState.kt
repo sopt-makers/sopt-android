@@ -29,18 +29,19 @@ import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 
 /**
- * 찌르기(Poke) 대상 유저 한 명의 UI 상태를 표현하는 데이터 클래스
+ * 찌르기 대상 유저 한 명의 UI 상태
  *
  * @property userId                 유저 고유 식별 ID
- * @property userName               프로필 이미지 하단(LARGE) 또는 우측(SMALL)에 표시되는 이름
+ * @property userName               프로필 이름
  * @property anonymousName          익명 상태일 때 표시되는 이름
  * @property userGeneration         SOPT 기수
  * @property userPart               SOPT 파트
- * @property profileImageUrl        프로필 이미지 URL. `null`이면 `@drawable/ic_empty_profile` 기본 이미지를 표시
+ * @property profileImageUrl        프로필 이미지 URL
  * @property pokeCount              누적 찌르기 횟수
- * @property relationName           친구 관계명. SMALL 타입의 프로필 테두리 색상을 결정할 때 사용
+ * @property relationName           친구 관계명
  * @property isAnonymous            익명 여부
  * @property isPokeButtonEnabled    찌르기 버튼 활성화 여부
+ * @property isFirstMeet            처음 찌르는 상대 여부
  */
 @Immutable
 data class PokeUserUiState(
@@ -53,12 +54,13 @@ data class PokeUserUiState(
     val pokeCount: Int = 0,
     val relationName: String = "",
     val isAnonymous: Boolean = false,
-    val isPokeButtonEnabled: Boolean = true
+    val isPokeButtonEnabled: Boolean = true,
+    val isFirstMeet: Boolean = false,
 ) {
     val displayName: String
         get() = if (isAnonymousVisible && anonymousName.isNotBlank()) anonymousName else userName
 
-    val infoText: String
+    val generationPartText: String
         get() = "${userGeneration}기 $userPart"
 
     val isAnonymousVisible: Boolean
@@ -90,13 +92,6 @@ fun PokeUser.toPokeUserUiState() = PokeUserUiState(
     pokeCount = pokeNum,
     relationName = relationName,
     isAnonymous = isAnonymous,
-    isPokeButtonEnabled = !isAlreadyPoke
+    isPokeButtonEnabled = !isAlreadyPoke,
+    isFirstMeet = isFirstMeet,
 )
-
-// TODO: 추후 현재 모듈로 PokeFriendType 파일 옮겨야 함
-// 익명 유저지만 천생연분이 되는 순간(pokeNum == 11) 더 이상 익명으로 보여주지 않음
-private fun isAnonymousVisible(
-    isAnonymous: Boolean,
-    relationName: String,
-    pokeNum: Int
-): Boolean = isAnonymous && !(relationName == PokeFriendType.SOULMATE.readableName && pokeNum == 11)
