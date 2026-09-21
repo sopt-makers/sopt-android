@@ -51,7 +51,6 @@ internal fun PokeUserRowLayout(
         PokeAvatar(
             user = user,
             size = AvatarSize,
-            strokeColor = user.relationStrokeColor,
             onProfileClick = onProfileClick,
             modifier = Modifier.align(avatarAlignment),
         )

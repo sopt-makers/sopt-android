@@ -30,17 +30,22 @@ private val AvatarStrokeWidth = 2.dp
  *
  * @param user            표시할 유저
  * @param size            아바타 크기
- * @param strokeColor     관계별 테두리 색 ([relationStrokeColor])
  * @param onProfileClick  프로필 탭 시 userId 전달 (익명이면 탭 불가)
  */
 @Composable
 internal fun PokeAvatar(
     user: PokeUserUiState,
     size: Dp,
-    strokeColor: Color,
     onProfileClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val strokeColor = when (user.relationName) {
+        PokeFriendType.NEW.readableName -> SoptTheme.colors.stroke.secondary.default
+        PokeFriendType.BEST_FRIEND.readableName -> SoptTheme.colors.fg.success.default
+        PokeFriendType.SOULMATE.readableName -> SoptTheme.colors.stroke.brand.default
+        else -> Color.Transparent
+    }
+
     if (user.isAnonymousVisible) {
         PokeAnonymousAvatar(
             size = size,
@@ -97,18 +102,3 @@ internal fun PokeProfileAvatar(
         modifier = modifier.throttledNoRippleClickable(onClick = onClick),
     )
 }
-
-/**
- * 관계별 프로필 테두리 색
- * - 새로운 친구: stroke/secondary/default (blue)
- * - 단짝친구: fg/success/default (green400)
- * - 천생연분: stroke/brand/default (orange)
- * - 그 외: Transparent
- */
-internal val PokeUserUiState.relationStrokeColor: Color
-    @Composable get() = when (relationName) {
-        PokeFriendType.NEW.readableName -> SoptTheme.colors.stroke.secondary.default
-        PokeFriendType.BEST_FRIEND.readableName -> SoptTheme.colors.fg.success.default
-        PokeFriendType.SOULMATE.readableName -> SoptTheme.colors.stroke.brand.default
-        else -> Color.Transparent
-    }
