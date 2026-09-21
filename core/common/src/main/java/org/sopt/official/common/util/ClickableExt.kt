@@ -87,10 +87,20 @@ private class ThrottledNoRippleClickableNode(
     override fun onCancelPointerInput() = Unit
 }
 
-inline fun Modifier.noRippleClickable(crossinline onClick: () -> Unit): Modifier =
+/**
+ * 리플 효과 없이 클릭 이벤트를 처리하는 Modifier
+ *
+ * @param enabled false 이면 클릭 이벤트를 받지 않음
+ * @param onClick 클릭 이벤트 콜백
+ */
+inline fun Modifier.noRippleClickable(
+    enabled: Boolean = true,
+    crossinline onClick: () -> Unit,
+): Modifier =
     composed {
         then(
             Modifier.clickable(
+                enabled = enabled,
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
             ) {
