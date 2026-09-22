@@ -30,6 +30,7 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.webkit.WebSettings
 import android.webkit.WebView
+import androidx.core.graphics.toColorInt
 import dagger.hilt.android.EntryPointAccessors
 import org.sopt.official.webview.BuildConfig
 import org.sopt.official.webview.di.SoptWebViewEntryPoint
@@ -66,6 +67,7 @@ open class SoptWebView : WebView {
     init {
         isFocusable = true
         isFocusableInTouchMode = true
+        setBackgroundColor(BACKGROUND_COLOR)
         settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
@@ -84,10 +86,12 @@ open class SoptWebView : WebView {
     }
 
     open fun initWebView() {
+        if (isWebContentsDebuggingInitialized) return
         setWebContentsDebuggingEnabled(BuildConfig.DEBUG)
+        isWebContentsDebuggingInitialized = true
     }
 
-    protected fun release() {
+    internal fun release() {
         stopLoading()
         loadUrl(Uri.EMPTY.toString())
         webChromeClient = null
@@ -97,5 +101,13 @@ open class SoptWebView : WebView {
         clearCache(true)
         removeAllViews()
         destroy()
+    }
+
+    companion object {
+        // WebView 기본 배경은 테마와 무관하게 흰색이라 로딩 전 흰 화면이 노출되므로 서비스 배경색(black_100)으로 고정
+        private val BACKGROUND_COLOR = "#0F1010".toColorInt()
+
+        // setWebContentsDebuggingEnabled는 프로세스 전역 설정이라 인스턴스마다 다시 호출할 필요가 없음
+        private var isWebContentsDebuggingInitialized = false
     }
 }

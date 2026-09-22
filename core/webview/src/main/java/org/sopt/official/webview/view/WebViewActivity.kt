@@ -44,17 +44,30 @@ import androidx.core.content.getSystemService
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
+import java.util.concurrent.atomic.AtomicBoolean
+import javax.inject.Inject
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import mozilla.components.support.utils.DownloadUtils
+import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.util.viewBinding
 import org.sopt.official.common.view.toast
+import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.webview.databinding.ActivityWebViewBinding
 
 @AndroidEntryPoint
 @DeepLink("sopt://web")
 class WebViewActivity : AppCompatActivity() {
+    @Inject
+    lateinit var navigator: NavigatorProvider
+
+    @Inject
+    lateinit var userStorage: UserStorage
+
     private val binding by viewBinding(ActivityWebViewBinding::inflate)
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
     private val imageResult = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri: Uri? ->
@@ -77,6 +90,10 @@ class WebViewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!isActive.compareAndSet(false, true)) {
+            finish()
+            return
+        }
         setContentView(binding.root)
         enableEdgeToEdge()
         applySystemBarInsetsAsPadding()
@@ -131,6 +148,18 @@ class WebViewActivity : AppCompatActivity() {
         handleOnBackPressed()
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleLinkUrl()
+    }
+
+    override fun onDestroy() {
+        isActive.set(false)
+        binding.webView.release()
+        super.onDestroy()
+    }
+
     private fun applySystemBarInsetsAsPadding() {
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, windowInsets ->
             val types = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
@@ -143,26 +172,38 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     private fun handleLinkUrl() {
-        if (intent.getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
-            val url = intent.extras?.getString(INTENT_URL) ?: intent.getStringExtra(INTENT_URL) ?: "https://google.com"
-            binding.webView.loadUrl(url)
+        val url = if (intent.getBooleanExtra(DeepLink.IS_DEEP_LINK, false)) {
+            intent.extras?.getString(INTENT_URL) ?: intent.getStringExtra(INTENT_URL) ?: "https://google.com"
         } else {
-            val linkUrl = intent.getStringExtra(INTENT_URL)
-            linkUrl?.let { binding.webView.loadUrl(it) }
+            intent.getStringExtra(INTENT_URL)
+        }
+
+        if (url != null && url != binding.webView.url) {
+            binding.webView.loadUrl(url)
         }
     }
 
     private fun handleOnBackPressed() {
         onBackPressedDispatcher.addCallback(owner = this) {
-            if (binding.webView.canGoBack()) {
-                binding.webView.goBack()
-            } else {
-                if (!isFinishing) finish()
+            when {
+                binding.webView.canGoBack() -> binding.webView.goBack()
+                isTaskRoot -> navigateToMainActivity()
+                else -> if (!isFinishing) finish()
             }
+        }
+    }
+
+    private fun navigateToMainActivity() {
+        // 딥링크로 바로 진입해 이 화면이 태스크 루트인 경우, 뒤로가기가 앱 종료로 이어지지 않도록 홈으로 이동
+        lifecycleScope.launch {
+            val userStatus = userStorage.userStatus.first()
+            startActivity(navigator.getMainActivityIntent(userStatus, null))
+            finish()
         }
     }
 
     companion object {
         const val INTENT_URL = "url"
+        private val isActive = AtomicBoolean(false)
     }
 }
