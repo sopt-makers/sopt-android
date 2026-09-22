@@ -51,7 +51,7 @@ internal fun WriteSopletterFloatingActionButton(
                 color = Color.White,
                 shape = RoundedCornerShape(24.dp),
             )
-            .noRippleClickable(onWriteFABClick),
+            .noRippleClickable(onClick = onWriteFABClick),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

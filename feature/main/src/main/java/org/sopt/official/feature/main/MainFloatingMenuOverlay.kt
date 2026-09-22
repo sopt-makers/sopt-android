@@ -110,7 +110,7 @@ internal fun MainFloatingMenuOverlay(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(SoptTheme.colors.onSurface.copy(alpha = backgroundAlpha))
-                    .noRippleClickable(onClose)
+                    .noRippleClickable(onClick = onClose)
             )
 
             Box(

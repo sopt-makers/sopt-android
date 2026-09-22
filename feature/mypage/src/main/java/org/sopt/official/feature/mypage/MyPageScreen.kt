@@ -51,6 +51,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.impl.FakeTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
@@ -102,7 +103,7 @@ internal fun MyPageRoute(
         persistentListOf(
             MyPageUiModel.Header(title = "서비스 이용 방침"),
             MyPageUiModel.MyPageItem(
-                title = "개인정보 처리 방침",
+                title = "개인정보처리방침",
                 onItemClick = {
                     Intent(context, WebViewActivity::class.java).apply {
                         putExtra(WebViewActivity.INTENT_URL, WebUrlConstant.NOTICE_PRIVATE_INFO)
@@ -350,7 +351,7 @@ private fun ShowMyPageDialog(
 @Composable
 private fun MyPageScreenPreview() {
     SoptTheme {
-        val track = LocalTracker.current
+        val track = FakeTracker
 
         MyPageScreen(
             state = MyPageState(
@@ -360,7 +361,7 @@ private fun MyPageScreenPreview() {
             isAppjamMode = false,
             serviceSectionItems = persistentListOf(
                 MyPageUiModel.Header(title = "서비스 이용 방침"),
-                MyPageUiModel.MyPageItem(title = "개인정보 처리 방침", onItemClick = {}),
+                MyPageUiModel.MyPageItem(title = "개인정보처리방침", onItemClick = {}),
                 MyPageUiModel.MyPageItem(title = "서비스 이용약관", onItemClick = {}),
                 MyPageUiModel.MyPageItem(title = "의견 보내기", onItemClick = {})
             ),
