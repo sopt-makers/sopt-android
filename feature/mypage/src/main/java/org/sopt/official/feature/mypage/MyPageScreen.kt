@@ -246,9 +246,9 @@ internal fun MyPageScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .verticalScroll(scrollState)
                 .padding(innerPadding)
-                .padding(vertical = 16.dp, horizontal = 20.dp)
-                .verticalScroll(scrollState),
+                .padding(vertical = 16.dp, horizontal = 20.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             MyPageUserInfo(

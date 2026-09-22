@@ -32,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -118,7 +119,8 @@ private fun SignOutScreen(
                 text = "탈퇴하기",
                 type = MdsActionButtonType.DANGER,
                 size = MdsActionButtonSize.LARGE,
-                onClick = onWithDraw
+                onClick = onWithDraw,
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }

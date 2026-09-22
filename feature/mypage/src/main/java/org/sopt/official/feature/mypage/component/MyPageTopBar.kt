@@ -25,6 +25,7 @@
 package org.sopt.official.feature.mypage.component
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +35,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import org.sopt.official.mds.MdsIcons
 import org.sopt.official.mds.theme.SoptTheme
 
@@ -45,7 +47,8 @@ fun MyPageTopBar(
     onNavigationIconClick: (() -> Unit)? = null
 ) {
     CenterAlignedTopAppBar(
-        modifier = modifier,
+        modifier = modifier
+            .padding(horizontal = 20.dp),
         title = {
             Text(
                 text = title,
@@ -65,7 +68,7 @@ fun MyPageTopBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = SoptTheme.colors.bg.layer.basement,
             titleContentColor = SoptTheme.colors.fg.neutral.bold,
-            actionIconContentColor = SoptTheme.colors.fg.neutral.bold
+            navigationIconContentColor = SoptTheme.colors.fg.neutral.bold
         )
     )
 }

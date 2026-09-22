@@ -91,7 +91,7 @@ class AdjustSentenceActivity : AppCompatActivity() {
                         topBar = {
                             MyPageTopBar(
                                 title = "한 마디 편집",
-                                onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
+                                onNavigationIconClick = onBackPressedDispatcher::onBackPressed
                             )
                         },
                         containerColor = SoptTheme.colors.bg.layer.basement
@@ -100,7 +100,6 @@ class AdjustSentenceActivity : AppCompatActivity() {
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
-                                .padding(vertical = 16.dp)
                         ) {
                             MdsTextArea(
                                 state = uiState.current,
