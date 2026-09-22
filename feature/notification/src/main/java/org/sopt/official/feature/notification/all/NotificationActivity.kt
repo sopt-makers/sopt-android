@@ -75,6 +75,7 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
 import org.sopt.official.common.view.toast
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.notification.NotificationAnalyticsEvent
 import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
@@ -82,8 +83,6 @@ import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.all.component.NotificationCategoryChip
 import org.sopt.official.feature.notification.all.component.NotificationInfoItem
 import org.sopt.official.mds.MdsIcons
-import org.sopt.official.mds.components.dialog.MdsDialog
-import org.sopt.official.mds.components.dialog.MdsDialogType
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
@@ -281,13 +280,8 @@ class NotificationActivity : AppCompatActivity() {
                                 }
 
                                 is LoadState.Error -> {
-                                    MdsDialog(
-                                        title = "네트워크가 원활하지 않습니다.",
-                                        description = "인터넷 연결을 확인하고 다시 시도해 주세요.",
-                                        type = MdsDialogType.INFORMATION,
-                                        positiveButtonText = "확인",
-                                        onPositiveButtonClick = notifications::refresh,
-                                        onDismiss = { }
+                                    NetworkErrorDialog(
+                                        onConfirm = notifications::refresh
                                     )
                                 }
                             }
