@@ -113,10 +113,10 @@ private fun PokeFriendListSection(
             ) {
                 // 최대 2개
                 state.items.take(n = 2).fastForEach { user ->
-                    PokeUserItem(
+                    PokeFriendRow(
                         user = user,
                         onProfileClick = onProfileClick,
-                        onPokeClick = onPokeClick
+                        onPokeClick = onPokeClick,
                     )
                 }
             }
