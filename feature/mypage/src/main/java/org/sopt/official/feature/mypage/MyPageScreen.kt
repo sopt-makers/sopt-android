@@ -78,7 +78,7 @@ internal fun MyPageRoute(
     navigateToPlayGroundProfile: () -> Unit,
     onRestartApp: () -> Unit,
     userStatus: UserStatus,
-    viewModel: MyPageViewModel = hiltViewModel(),
+    viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
@@ -191,16 +191,6 @@ internal fun MyPageRoute(
         )
     }
 
-    val etcLoginSectionItems = remember {
-        persistentListOf(
-            MyPageUiModel.Header(title = "기타"),
-            MyPageUiModel.MyPageItem(
-                title = "로그인",
-                onItemClick = onRestartApp,
-            )
-        )
-    }
-
     MyPageScreen(
         state = state,
         isAppjamMode = isAppjamMode,
@@ -208,7 +198,6 @@ internal fun MyPageRoute(
         notificationSectionItems = notificationSectionItems,
         soptampSectionItems = soptampSectionItems,
         etcSectionItems = etcSectionItems,
-        etcLoginSectionItems = etcLoginSectionItems,
         onAction = viewModel::onAction,
         navigateToSoptLog = navigateToSoptLog,
         navigateToPlayGroundProfile = navigateToPlayGroundProfile,
@@ -225,7 +214,6 @@ internal fun MyPageScreen(
     notificationSectionItems: ImmutableList<MyPageUiModel>,
     soptampSectionItems: ImmutableList<MyPageUiModel>,
     etcSectionItems: ImmutableList<MyPageUiModel>,
-    etcLoginSectionItems: ImmutableList<MyPageUiModel>,
     onAction: (MyPageAction) -> Unit,
     navigateToSoptLog: () -> Unit,
     navigateToPlayGroundProfile: () -> Unit,
@@ -379,15 +367,11 @@ private fun MyPageScreenPreview() {
                 MyPageUiModel.MyPageItem(title = "로그아웃", onItemClick = {}),
                 MyPageUiModel.MyPageItem(title = "탈퇴하기", onItemClick = {})
             ),
-            etcLoginSectionItems = persistentListOf(
-                MyPageUiModel.Header(title = "기타"),
-                MyPageUiModel.MyPageItem(title = "로그인", onItemClick = {})
-            ),
             onAction = {},
             navigateToSoptLog = {},
             navigateToPlayGroundProfile = {},
             tracker = track,
-            viewType = "",
+            viewType = ""
         )
     }
 }
