@@ -133,6 +133,11 @@ fun MainScreen(
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
     val badgeList by viewModel.badgeMap.collectAsStateWithLifecycle()
 
+    val currentTab = navigator.currentTab
+    LaunchedEffect(currentTab) {
+        if (currentTab != null) viewModel.refreshTabAppServices()
+    }
+
     var backPressedTime = 0L
 
     BackHandler {
@@ -264,8 +269,6 @@ fun MainScreen(
                         homeNavGraph(
                             userStatus = userStatus,
                             paddingValues = innerPadding,
-                            onUpdateBottomBadge = viewModel::updateBadge,
-                            onRefreshTabBadges = viewModel::refreshTabAppServices,
                             homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                                 private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, url)

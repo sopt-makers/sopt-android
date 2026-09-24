@@ -43,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -101,8 +100,6 @@ internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
-    onUpdateBottomBadge: (Map<String?, String>) -> Unit,
-    onRefreshTabBadges: () -> Unit,
     navigateToSopletter: () -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
@@ -110,23 +107,10 @@ internal fun HomeRoute(
     val tracker = LocalTracker.current
     val lifecycleOwner = LocalLifecycleOwner.current
 
-    val badgeContentList = remember(uiState) {
-        when (val state = uiState) {
-            is Member -> {
-                state.homeServices
-                    .filter { it.isShowAlarmBadge }
-                    .associate { it.deepLink to it.alarmBadgeContent }
-            }
-
-            else -> emptyMap()
-        }
-    }
-
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 newHomeViewModel.refreshNotificationStatus()
-                onRefreshTabBadges()
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -141,10 +125,6 @@ internal fun HomeRoute(
 
     LaunchedEffect(Unit) {
         tracker.trackViewType(HomeAnalyticsEvent.VIEW_APP_HOME, viewType)
-    }
-
-    LaunchedEffect(badgeContentList) {
-        onUpdateBottomBadge(badgeContentList)
     }
 
     when (val state = uiState) {

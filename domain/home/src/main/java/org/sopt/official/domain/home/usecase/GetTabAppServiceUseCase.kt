@@ -25,12 +25,12 @@
 package org.sopt.official.domain.home.usecase
 
 import javax.inject.Inject
-import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.repository.HomeRepository
 
 class GetTabAppServiceUseCase @Inject constructor(
     private val homeRepository: HomeRepository
 ) {
-    suspend operator fun invoke(forceRefresh: Boolean = false): Result<List<AppService>> =
+    suspend operator fun invoke(forceRefresh: Boolean = false): Result<HomeAppServiceInfo> =
         homeRepository.getTabAppService(forceRefresh)
 }

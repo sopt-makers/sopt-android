@@ -47,8 +47,6 @@ fun NavGraphBuilder.homeNavGraph(
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
     paddingValues: PaddingValues,
-    onUpdateBottomBadge: (Map<String?, String>) -> Unit,
-    onRefreshTabBadges: () -> Unit,
     navigateToSopletter: () -> Unit
 ) {
     composable<Home> {
@@ -56,8 +54,6 @@ fun NavGraphBuilder.homeNavGraph(
             userStatus = userStatus,
             homeNavigation = homeNavigation,
             paddingValues = paddingValues,
-            onUpdateBottomBadge = onUpdateBottomBadge,
-            onRefreshTabBadges = onRefreshTabBadges,
             navigateToSopletter = navigateToSopletter
         )
     }
