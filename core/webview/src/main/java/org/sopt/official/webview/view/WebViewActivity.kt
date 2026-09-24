@@ -88,9 +88,13 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
+    // 인스턴스가 락을 실제로 획득했었는지 기억해두는 용도
+    private var acquiredLock = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!isActive.compareAndSet(false, true)) {
+        acquiredLock = isActive.compareAndSet(false, true)
+        if (!acquiredLock) {
             finish()
             return
         }
@@ -155,7 +159,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        isActive.set(false)
+        if (acquiredLock) isActive.set(false)
         binding.webView.release()
         super.onDestroy()
     }

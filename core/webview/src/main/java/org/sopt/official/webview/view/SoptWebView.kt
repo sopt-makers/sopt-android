@@ -94,11 +94,11 @@ open class SoptWebView : WebView {
     internal fun release() {
         stopLoading()
         loadUrl(Uri.EMPTY.toString())
+        (webViewClient as? SoptWebViewClient)?.cancelCoroutines()
         webChromeClient = null
         settings.javaScriptEnabled = false
         settings.blockNetworkImage = false
         clearHistory()
-        clearCache(true)
         removeAllViews()
         destroy()
     }
