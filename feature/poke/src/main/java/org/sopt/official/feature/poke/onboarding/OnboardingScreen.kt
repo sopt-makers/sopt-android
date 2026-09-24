@@ -107,7 +107,7 @@ fun OnboardingScreen(
     }
 
     LaunchedEffect(onboardingUiState) {
-        if (onboardingUiState is UiState.ApiError || onboardingUiState is UiState.Failure) {
+        if (onboardingUiState is UiState.Failure) {
             showErrorDialog = true
         }
     }

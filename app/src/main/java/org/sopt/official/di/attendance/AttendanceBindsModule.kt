@@ -30,7 +30,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import org.sopt.official.common.di.OperationRetrofit
+import org.sopt.official.common.di.AppRetrofit
 import org.sopt.official.data.repository.attendance.AttendanceRepositoryImpl
 import org.sopt.official.data.service.attendance.AttendanceService
 import org.sopt.official.domain.repository.attendance.AttendanceRepository
@@ -46,7 +46,7 @@ abstract class AttendanceBindsModule {
     companion object {
         @Provides
         @Singleton
-        fun provideAttendanceService(@OperationRetrofit retrofit: Retrofit): AttendanceService =
+        fun provideAttendanceService(@AppRetrofit retrofit: Retrofit): AttendanceService =
             retrofit.create(AttendanceService::class.java)
     }
 }

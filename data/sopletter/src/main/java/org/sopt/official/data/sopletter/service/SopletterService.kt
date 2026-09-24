@@ -37,29 +37,30 @@ import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 interface SopletterService {
     @GET("sopt-letter/topics/default/messages")
     suspend fun getDefaultMessages(
         @Query("cursor") cursor: Long?,
         @Query("size") size: Int,
-    ): SopletterMessagesResponseDto
+    ): BaseResponse<SopletterMessagesResponseDto>
 
     @GET("sopt-letter/topics/{topicId}/messages")
     suspend fun getTopicMessages(
         @Path("topicId") topicId: Long,
         @Query("cursor") cursor: Long?,
         @Query("size") size: Int,
-    ): SopletterMessagesResponseDto
+    ): BaseResponse<SopletterMessagesResponseDto>
 
     @GET("sopt-letter/report-form")
-    suspend fun getReportForm(): SopletterReportFormResponseDto
+    suspend fun getReportForm(): BaseResponse<SopletterReportFormResponseDto>
 
     @GET("sopt-letter/topics/{topicId}/messages/{messageId}")
     suspend fun getMessageDetail(
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
-    ): SopletterMessageDetailResponseDto
+    ): BaseResponse<SopletterMessageDetailResponseDto>
 
     @POST("sopt-letter/topics/{topicId}/messages/{messageId}/likes")
     suspend fun addMessageLike(
@@ -78,7 +79,7 @@ interface SopletterService {
         @Path("topicId") topicId: Long,
         @Path("messageId") messageId: Long,
         @Body body: UpdateSopletterMessageRequestDto,
-    ): SopletterMessageDetailResponseDto
+    ): BaseResponse<SopletterMessageDetailResponseDto>
 
     @DELETE("sopt-letter/topics/{topicId}/messages/{messageId}")
     suspend fun deleteMessage(
@@ -89,8 +90,8 @@ interface SopletterService {
     @GET("sopt-letter/topics")
     suspend fun getTopics(
         @Query("type") type: String,
-    ): SopletterTopicsResponseDto
+    ): BaseResponse<SopletterTopicsResponseDto>
 
     @GET("sopt-letter/cta")
-    suspend fun getCta(): SopletterCtaResponseDto
+    suspend fun getCta(): BaseResponse<SopletterCtaResponseDto>
 }

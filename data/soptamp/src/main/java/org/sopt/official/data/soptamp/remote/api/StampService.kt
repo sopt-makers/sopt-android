@@ -40,16 +40,17 @@ import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 interface StampService {
     @GET("stamp")
-    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): StampGetResponse
+    suspend fun retrieveStamp(@Query("missionId") missionId: Int, @Query("nickname") nickname: String): BaseResponse<StampGetResponse>
 
     @PUT("stamp")
-    suspend fun modifyStamp(@Body body: StampRequest): ModifyStampResponse
+    suspend fun modifyStamp(@Body body: StampRequest): BaseResponse<ModifyStampResponse>
 
     @POST("stamp")
-    suspend fun registerStamp(@Body body: StampRequest): StampResponse
+    suspend fun registerStamp(@Body body: StampRequest): BaseResponse<StampResponse>
 
     @DELETE("stamp/{missionId}")
     suspend fun deleteStamp(@Path("missionId") missionId: Int)
@@ -58,14 +59,14 @@ interface StampService {
     suspend fun deleteAllStamps()
 
     @GET("stamp/report")
-    suspend fun getReportUrl(): ReportUrlResponse
+    suspend fun getReportUrl(): BaseResponse<ReportUrlResponse>
 
     @GET("s3/stamp")
-    suspend fun getS3URL(): S3URLResponse
+    suspend fun getS3URL(): BaseResponse<S3URLResponse>
 
     @GET("stamp/{stampId}/clappers")
-    suspend fun getClapUser(@Path("stampId") stampId: Int): StampGetClappersResponse
+    suspend fun getClapUser(@Path("stampId") stampId: Int): BaseResponse<StampGetClappersResponse>
 
     @POST("stamp/{stampId}/clap")
-    suspend fun postClapStamp(@Path("stampId") stampId: Int, @Body body: StampClapRequest): StampPostClapResponse
+    suspend fun postClapStamp(@Path("stampId") stampId: Int, @Body body: StampClapRequest): BaseResponse<StampPostClapResponse>
 }

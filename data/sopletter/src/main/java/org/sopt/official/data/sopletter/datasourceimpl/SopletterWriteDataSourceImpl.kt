@@ -34,6 +34,6 @@ internal class SopletterWriteDataSourceImpl @Inject constructor(
     private val service: SopletterWriteService
 ) : SopletterWriteDataSource {
     override suspend fun postTopicSopletter(topicId: Long, request: SopletterWriteRequest): SopletterWriteResponse {
-        return service.postTopicSopletter(topicId, request)
+        return service.postTopicSopletter(topicId, request).data
     }
 }

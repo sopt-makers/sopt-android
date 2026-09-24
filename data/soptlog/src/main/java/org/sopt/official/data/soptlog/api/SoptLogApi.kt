@@ -26,9 +26,10 @@ package org.sopt.official.data.soptlog.api
 
 import org.sopt.official.data.soptlog.dto.SoptLogInfoResponse
 import retrofit2.http.GET
+import org.sopt.official.common.network.BaseResponse
 
 interface SoptLogApi {
 
     @GET("user/my-sopt-log")
-    suspend fun getSoptLogInfo(): SoptLogInfoResponse
+    suspend fun getSoptLogInfo(): BaseResponse<SoptLogInfoResponse>
 }

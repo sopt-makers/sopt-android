@@ -47,16 +47,16 @@ internal class DefaultUserRepository @Inject constructor(
     override val userInfo: StateFlow<UserInfo?> = cache.data
 
     override suspend fun getUserInfo(): Result<UserInfo> =
-        suspendRunCatching { cache.getOrFetch { userApi.getUserMain().toDomain() } }
+        suspendRunCatching { cache.getOrFetch { userApi.getUserMain().data.toDomain() } }
 
     override suspend fun refreshUserInfo(): Result<UserInfo> = suspendRunCatching {
         cache.invalidate()
-        cache.getOrFetch { userApi.getUserMain().toDomain() }
+        cache.getOrFetch { userApi.getUserMain().data.toDomain() }
     }
 
     override suspend fun withdraw(): Result<WithdrawModel> = suspendRunCatching {
         cache.invalidate()
-        userApi.withdraw().toDomain()
+        userApi.withdraw().data.toDomain()
     }
 
     override suspend fun invalidate() {

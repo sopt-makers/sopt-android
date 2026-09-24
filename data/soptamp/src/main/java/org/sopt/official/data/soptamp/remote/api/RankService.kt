@@ -30,21 +30,22 @@ import org.sopt.official.data.soptamp.remote.model.response.RankResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
+import org.sopt.official.common.network.BaseResponse
 
 internal interface RankService {
 
     @GET("rank")
-    suspend fun getRanking(): List<RankResponse>
+    suspend fun getRanking(): BaseResponse<List<RankResponse>>
 
     @GET("rank/current")
-    suspend fun getCurrentRanking(): List<RankResponse>
+    suspend fun getCurrentRanking(): BaseResponse<List<RankResponse>>
 
     @GET("rank/detail")
-    suspend fun getRankDetail(@Query("nickname") nickname: String): RankDetailResponse
+    suspend fun getRankDetail(@Query("nickname") nickname: String): BaseResponse<RankDetailResponse>
 
     @GET("rank/part")
-    suspend fun getPartRanking(): List<PartRankResponse>
+    suspend fun getPartRanking(): BaseResponse<List<PartRankResponse>>
 
     @GET("rank/current/part/{part}")
-    suspend fun getCurrentPartRanking(@Path("part") part: String): List<RankResponse>
+    suspend fun getCurrentPartRanking(@Path("part") part: String): BaseResponse<List<RankResponse>>
 }

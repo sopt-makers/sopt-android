@@ -33,9 +33,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.PokeRandomUserList
-import org.sopt.official.domain.poke.entity.onApiError
-import org.sopt.official.domain.poke.entity.onFailure
-import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
 import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
@@ -86,9 +83,6 @@ class OnboardingViewModel @Inject constructor(
             getOnboardingPokeUserListUseCase.invoke(size = 6)
                 .onSuccess { response ->
                     _onboardingPokeUserListUiState.emit(UiState.Success(response))
-                }
-                .onApiError { statusCode, responseMessage ->
-                    _onboardingPokeUserListUiState.emit(UiState.ApiError(statusCode, responseMessage))
                 }
                 .onFailure { throwable ->
                     _onboardingPokeUserListUiState.emit(UiState.Failure(throwable))

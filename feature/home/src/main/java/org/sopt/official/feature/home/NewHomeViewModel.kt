@@ -48,8 +48,6 @@ import org.sopt.official.domain.home.repository.HomeRepository
 import org.sopt.official.domain.home.usecase.GetAppServiceUseCase
 import org.sopt.official.domain.user.model.UserInfo
 import org.sopt.official.domain.user.repository.SoptUserRepository
-import org.sopt.official.domain.poke.entity.ApiResult
-import org.sopt.official.domain.poke.entity.CheckNewInPoke
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeUseCase
 import org.sopt.official.feature.home.mapper.toModel
 import org.sopt.official.feature.home.model.HomeAppService
@@ -146,22 +144,9 @@ internal class NewHomeViewModel @Inject constructor(
     suspend fun fetchIsNewPoke(): Result<Boolean> {
         viewModelState.update { it.copy(isLoading = true) }
 
-        return when (val apiResult: ApiResult<*> = checkNewInPokeUseCase()) {
-            is ApiResult.Success -> {
-                viewModelState.update { it.copy(isLoading = false) }
-                Result.success((apiResult as ApiResult.Success<CheckNewInPoke>).data.isNew)
-            }
-
-            is ApiResult.ApiError -> {
-                viewModelState.update { it.copy(isLoading = false) }
-                Result.failure(Exception("API Error: ${apiResult.statusCode} - ${apiResult.responseMessage}"))
-            }
-
-            is ApiResult.Failure -> {
-                viewModelState.update { it.copy(isLoading = false) }
-                Result.failure(apiResult.throwable)
-            }
-        }
+        return checkNewInPokeUseCase()
+            .map { it.isNew }
+            .also { viewModelState.update { it.copy(isLoading = false) } }
     }
 
     fun refreshNotificationStatus() {

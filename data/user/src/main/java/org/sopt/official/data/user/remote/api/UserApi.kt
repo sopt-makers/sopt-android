@@ -28,12 +28,13 @@ import org.sopt.official.data.user.remote.response.UserMainResponseDto
 import org.sopt.official.data.user.remote.response.WithdrawResponseDto
 import retrofit2.http.GET
 import retrofit2.http.POST
+import org.sopt.official.common.network.BaseResponse
 
 internal interface UserApi {
 
     @GET("user/main")
-    suspend fun getUserMain(): UserMainResponseDto
+    suspend fun getUserMain(): BaseResponse<UserMainResponseDto>
 
     @POST("user/withdraw")
-    suspend fun withdraw(): WithdrawResponseDto
+    suspend fun withdraw(): BaseResponse<WithdrawResponseDto>
 }

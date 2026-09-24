@@ -24,8 +24,6 @@
  */
 package org.sopt.official.domain.poke.entity
 
-class GetPokeFriendOfFriendListResponse : BaseResponse<List<PokeFriendOfFriendList>>()
-
 data class PokeFriendOfFriendList(
     val friendId: Long,
     val userId: Int,

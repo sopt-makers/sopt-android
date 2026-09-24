@@ -25,17 +25,13 @@
 package org.sopt.official.domain.poke.usecase
 
 import javax.inject.Inject
-import org.sopt.official.domain.poke.entity.ApiResult
 import org.sopt.official.domain.poke.entity.PokeUser
-import org.sopt.official.domain.poke.entity.apiResult
 import org.sopt.official.domain.poke.repository.PokeRepository
 
 class GetPokeFriendUseCase @Inject constructor(
     private val repository: PokeRepository
 ) {
-    suspend operator fun invoke(): ApiResult<List<PokeUser>> {
-        return apiResult {
-            repository.getPokeFriend()
-        }
+    suspend operator fun invoke(): Result<List<PokeUser>> {
+        return repository.getPokeFriend()
     }
 }

@@ -24,6 +24,10 @@ object ConfigurationManager {
             buildConfigField("String", "POKE_DATA_STORE_KEY", properties.getQuotedProperty("pokeDataStoreKey"))
 
             // Base URLs
+            // 통합 서버 (앱/운영/인증 단일 도메인). 전환 완료 후 아래 legacy URL들은 제거 예정
+            buildConfigField("String", "DEV_BASE_URL", properties.getQuotedProperty("devBaseUrl"))
+            buildConfigField("String", "PROD_BASE_URL", properties.getQuotedProperty("prodBaseUrl"))
+            // legacy (전환 전 서버)
             buildConfigField("String", "SOPT_DEV_BASE_URL", properties.getQuotedProperty("devApi"))
             buildConfigField("String", "SOPT_BASE_URL", properties.getQuotedProperty("newApi"))
             buildConfigField("String", "SOPT_DEV_OPERATION_BASE_URL", properties.getQuotedProperty("devOperationApi"))

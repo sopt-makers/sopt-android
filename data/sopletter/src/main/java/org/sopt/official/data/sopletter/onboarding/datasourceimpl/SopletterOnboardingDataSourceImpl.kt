@@ -33,8 +33,8 @@ class SopletterOnboardingDataSourceImpl @Inject constructor(
     private val sopletterOnboardingService: SopletterOnboardingService
 ): SopletterOnboardingDataSource {
     override suspend fun getOnboarding(): SopletterOnboardingResponseDto =
-        sopletterOnboardingService.getOnboarding()
+        sopletterOnboardingService.getOnboarding().data
 
     override suspend fun completeOnboarding(): SopletterOnboardingResponseDto =
-        sopletterOnboardingService.completeOnboarding()
+        sopletterOnboardingService.completeOnboarding().data
 }

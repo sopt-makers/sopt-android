@@ -50,34 +50,34 @@ internal class DefaultHomeRepository @Inject constructor(
 ) : HomeRepository {
 
     override suspend fun getRecentCalendar(): Result<RecentCalendar> =
-        suspendRunCatching { calendarApi.getRecentCalendar().toDomain() }
+        suspendRunCatching { calendarApi.getRecentCalendar().data.toDomain() }
 
     override suspend fun getHomeDescription(): Result<UserDescription> =
-        suspendRunCatching { homeApi.getHomeDescription().toDomain() }
+        suspendRunCatching { homeApi.getHomeDescription().data.toDomain() }
 
     override suspend fun getHomeAppService(forceRefresh: Boolean): Result<HomeAppServiceInfo> =
         suspendRunCatching {
             if (forceRefresh) homeAppServiceCache.invalidate()
-            homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().toDomain() }
+            homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().data.toDomain() }
         }
 
     override suspend fun getTabAppService(): Result<List<AppService>> =
         suspendRunCatching {
-            tabAppServiceCache.getOrFetch { homeApi.getTabAppService().map { it.toDomain() } }
+            tabAppServiceCache.getOrFetch { homeApi.getTabAppService().data.map { it.toDomain() } }
         }
 
     override fun observeTabAppService(): Flow<List<AppService>?> = tabAppServiceCache.data
 
     override suspend fun getHomeReviewForm(): Result<ReviewForm> =
-        suspendRunCatching { homeApi.getReviewForm().toDomain() }
+        suspendRunCatching { homeApi.getReviewForm().data.toDomain() }
 
     override suspend fun getHomeFloatingToast(): Result<FloatingToast> =
-        suspendRunCatching { homeApi.getHomeFloatingToast().toDomain() }
+        suspendRunCatching { homeApi.getHomeFloatingToast().data.toDomain() }
 
     override suspend fun getHomePopularPosts(): Result<List<PopularPost>> =
-        suspendRunCatching { homeApi.getHomePopularPosts().popularPosts.map { it.toDomain() } }
+        suspendRunCatching { homeApi.getHomePopularPosts().data.popularPosts.map { it.toDomain() } }
 
     override suspend fun getHomeLatestPosts(): Result<List<LatestPost>> {
-        return suspendRunCatching { homeApi.getHomeLatestPosts().recentPosts.map { it.toDomain() } }
+        return suspendRunCatching { homeApi.getHomeLatestPosts().data.recentPosts.map { it.toDomain() } }
     }
 }

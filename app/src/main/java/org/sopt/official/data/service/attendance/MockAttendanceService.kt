@@ -26,21 +26,22 @@ package org.sopt.official.data.service.attendance
 
 import kotlinx.serialization.json.Json
 import org.sopt.official.data.model.attendance.*
+import org.sopt.official.common.network.BaseResponse
 
 class MockAttendanceService : AttendanceService {
-    override suspend fun getSoptEvent(): BaseAttendanceResponse<SoptEventResponse> {
+    override suspend fun getSoptEvent(): BaseResponse<SoptEventResponse> {
         return NOT_EVENT_DAY
     }
 
-    override suspend fun getAttendanceHistory(): BaseAttendanceResponse<AttendanceHistoryResponse> {
+    override suspend fun getAttendanceHistory(): BaseResponse<AttendanceHistoryResponse> {
         return ATTENDANCE_HISTORY
     }
 
-    override suspend fun getAttendanceRound(lectureId: Long): BaseAttendanceResponse<AttendanceRoundResponse> {
+    override suspend fun getAttendanceRound(lectureId: Long): BaseResponse<AttendanceRoundResponse?> {
         return ATTENDANCE_ROUND_ONE
     }
 
-    override suspend fun confirmAttendanceCode(param: RequestAttendanceCode): BaseAttendanceResponse<AttendanceCodeResponse> {
+    override suspend fun confirmAttendanceCode(param: RequestAttendanceCode): BaseResponse<AttendanceCodeResponse?> {
         return FAIL_ATTENDANCE_BEFORE
     }
 
@@ -59,7 +60,7 @@ class MockAttendanceService : AttendanceService {
                 }
             }
         """
-        private val NOT_EVENT_DAY: BaseAttendanceResponse<SoptEventResponse> =
+        private val NOT_EVENT_DAY: BaseResponse<SoptEventResponse> =
             Json.decodeFromString(NOT_EVENT_DAY_JSON_TEXT)
         private const val SEMINAR_EVENT_BEFORE_START_JSON_TEXT = """
             {
@@ -82,7 +83,7 @@ class MockAttendanceService : AttendanceService {
                 }
             }
         """
-        private val SEMINAR_EVENT_BEFORE_START: BaseAttendanceResponse<SoptEventResponse> =
+        private val SEMINAR_EVENT_BEFORE_START: BaseResponse<SoptEventResponse> =
             Json.decodeFromString(SEMINAR_EVENT_BEFORE_START_JSON_TEXT)
         private const val SEMINAR_EVENT_AFTER_START_BEFORE_END_JSON_TEXT = """
             {
@@ -107,7 +108,7 @@ class MockAttendanceService : AttendanceService {
 	            }
             }
         """
-        private val SEMINAR_EVENT_AFTER_START_BEFORE_END: BaseAttendanceResponse<SoptEventResponse> =
+        private val SEMINAR_EVENT_AFTER_START_BEFORE_END: BaseResponse<SoptEventResponse> =
             Json.decodeFromString(SEMINAR_EVENT_AFTER_START_BEFORE_END_JSON_TEXT)
         private const val SEMINAR_EVENT_AFTER_END_JSON_TEXT = """
             {
@@ -132,7 +133,7 @@ class MockAttendanceService : AttendanceService {
                 }
             }
         """
-        private val SEMINAR_EVENT_AFTER_END: BaseAttendanceResponse<SoptEventResponse> =
+        private val SEMINAR_EVENT_AFTER_END: BaseResponse<SoptEventResponse> =
             Json.decodeFromString(SEMINAR_EVENT_AFTER_END_JSON_TEXT)
         private const val EVENT_NO_ATTENDANCE_JSON_TEXT = """
             {
@@ -150,7 +151,7 @@ class MockAttendanceService : AttendanceService {
                 }
             }
         """
-        private val EVENT_NO_ATTENDANCE: BaseAttendanceResponse<SoptEventResponse> =
+        private val EVENT_NO_ATTENDANCE: BaseResponse<SoptEventResponse> =
             Json.decodeFromString(EVENT_NO_ATTENDANCE_JSON_TEXT)
 
         private const val ATTENDANCE_HISTORY_JSON_TEXT = """
@@ -197,7 +198,7 @@ class MockAttendanceService : AttendanceService {
                 }
             }
         """
-        private val ATTENDANCE_HISTORY: BaseAttendanceResponse<AttendanceHistoryResponse> =
+        private val ATTENDANCE_HISTORY: BaseResponse<AttendanceHistoryResponse> =
             Json.decodeFromString(ATTENDANCE_HISTORY_JSON_TEXT)
 
         private const val NO_SECTION_JSON_TEXT = """
@@ -207,7 +208,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val NO_SECTION: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val NO_SECTION: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(NO_SECTION_JSON_TEXT)
 
         private const val NO_ATTENDANCE_JSON_TEXT = """
@@ -217,7 +218,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val NO_ATTENDANCE: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val NO_ATTENDANCE: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(NO_ATTENDANCE_JSON_TEXT)
 
         private const val NO_TIME_FIRST_JSON_TEXT = """
@@ -227,7 +228,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val NO_TIME_FIRST: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val NO_TIME_FIRST: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(NO_TIME_FIRST_JSON_TEXT)
 
         private const val NO_TIME_SECOND_JSON_TEXT = """
@@ -237,7 +238,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val NO_TIME_SECOND: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val NO_TIME_SECOND: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(NO_TIME_SECOND_JSON_TEXT)
 
         private const val AFTER_TIME_FIRST_JSON_TEXT = """
@@ -247,7 +248,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val AFTER_TIME_FIRST: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val AFTER_TIME_FIRST: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(AFTER_TIME_FIRST_JSON_TEXT)
 
         private const val AFTER_TIME_SECOND_JSON_TEXT = """
@@ -257,7 +258,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val AFTER_TIME_SECOND: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val AFTER_TIME_SECOND: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(AFTER_TIME_SECOND_JSON_TEXT)
 
         private const val ATTENDANCE_ROUND_TWO_JSON_TEXT = """
@@ -270,7 +271,7 @@ class MockAttendanceService : AttendanceService {
               }
             }
         """
-        private val ATTENDANCE_ROUND_TWO: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val ATTENDANCE_ROUND_TWO: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(ATTENDANCE_ROUND_TWO_JSON_TEXT)
 
         private const val ATTENDANCE_ROUND_ONE_JSON_TEXT = """
@@ -283,7 +284,7 @@ class MockAttendanceService : AttendanceService {
               }
             }
         """
-        private val ATTENDANCE_ROUND_ONE: BaseAttendanceResponse<AttendanceRoundResponse> =
+        private val ATTENDANCE_ROUND_ONE: BaseResponse<AttendanceRoundResponse?> =
             Json.decodeFromString(ATTENDANCE_ROUND_ONE_JSON_TEXT)
 
         private const val SUCCESS_ATTENDNACE_TEXT = """
@@ -295,7 +296,7 @@ class MockAttendanceService : AttendanceService {
               }
             }
         """
-        private val SUCCESS_ATTENDANCE: BaseAttendanceResponse<AttendanceCodeResponse> =
+        private val SUCCESS_ATTENDANCE: BaseResponse<AttendanceCodeResponse?> =
             Json.decodeFromString(SUCCESS_ATTENDNACE_TEXT)
 
         private const val FAIL_ATTENDNACE_WRONG_CODE_TEXT = """
@@ -305,7 +306,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val FAIL_ATTENDNACE_WRONG_CODE: BaseAttendanceResponse<AttendanceCodeResponse> =
+        private val FAIL_ATTENDNACE_WRONG_CODE: BaseResponse<AttendanceCodeResponse?> =
             Json.decodeFromString(FAIL_ATTENDNACE_WRONG_CODE_TEXT)
 
         private const val FAIL_ATTENDANCE_BEFORE_TEXT = """
@@ -315,7 +316,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val FAIL_ATTENDANCE_BEFORE: BaseAttendanceResponse<AttendanceCodeResponse> =
+        private val FAIL_ATTENDANCE_BEFORE: BaseResponse<AttendanceCodeResponse?> =
             Json.decodeFromString(FAIL_ATTENDANCE_BEFORE_TEXT)
 
         private const val FAIL_ATTENDANCE_AFTER_TIME_TEXT = """
@@ -325,7 +326,7 @@ class MockAttendanceService : AttendanceService {
               "data": null
             }
         """
-        private val FAIL_ATTENDANCE_AFTER_TIME: BaseAttendanceResponse<AttendanceCodeResponse> =
+        private val FAIL_ATTENDANCE_AFTER_TIME: BaseResponse<AttendanceCodeResponse?> =
             Json.decodeFromString(FAIL_ATTENDANCE_AFTER_TIME_TEXT)
     }
 }

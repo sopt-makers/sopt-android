@@ -215,8 +215,7 @@ class PokeNotificationActivity : AppCompatActivity() {
             when (it) {
                 is UiState.Loading -> {}
                 is UiState.Success<List<PokeUser>> -> pokeNotificationAdapter.updatePokeNotification(it.data)
-                is UiState.ApiError -> showPokeToast(getString(R.string.toast_poke_error))
-                is UiState.Failure -> showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                is UiState.Failure -> showPokeToast(getString(R.string.toast_poke_error))
             }
         }.launchIn(lifecycleScope)
 
@@ -262,15 +261,9 @@ class PokeNotificationActivity : AppCompatActivity() {
                         }
                     }
                 }
-
-                is UiState.ApiError -> {
-                    messageListBottomSheet?.dismiss()
-                    showPokeToast(getString(R.string.toast_poke_error))
-                }
-
                 is UiState.Failure -> {
                     messageListBottomSheet?.dismiss()
-                    showPokeToast(it.throwable.message ?: getString(R.string.toast_poke_error))
+                    showPokeToast(getString(R.string.toast_poke_error))
                 }
             }
         }.launchIn(lifecycleScope)

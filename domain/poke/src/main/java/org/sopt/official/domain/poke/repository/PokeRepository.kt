@@ -24,34 +24,32 @@
  */
 package org.sopt.official.domain.poke.repository
 
-import org.sopt.official.domain.poke.entity.CheckNewInPokeResponse
-import org.sopt.official.domain.poke.entity.GetFriendListDetailResponse
-import org.sopt.official.domain.poke.entity.GetFriendListSummaryResponse
-import org.sopt.official.domain.poke.entity.GetOnboardingPokeUserListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendOfFriendListResponse
-import org.sopt.official.domain.poke.entity.GetPokeFriendResponse
-import org.sopt.official.domain.poke.entity.GetPokeMeResponse
-import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
-import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
-import org.sopt.official.domain.poke.entity.PokeUserResponse
+import org.sopt.official.domain.poke.entity.CheckNewInPoke
+import org.sopt.official.domain.poke.entity.FriendListDetail
+import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeFriendOfFriendList
+import org.sopt.official.domain.poke.entity.PokeMessageList
+import org.sopt.official.domain.poke.entity.PokeNotificationList
+import org.sopt.official.domain.poke.entity.PokeRandomUserList
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.domain.poke.type.PokeMessageType
 
 interface PokeRepository {
     suspend fun checkNewInPokeOnboarding(): Boolean
     suspend fun updateNewInPokeOnboarding()
-    suspend fun checkNewInPoke(): CheckNewInPokeResponse
-    suspend fun getOnboardingPokeUserList(randomType: String? = null, size: Int): GetOnboardingPokeUserListResponse
-    suspend fun getPokeMe(): GetPokeMeResponse
-    suspend fun getPokeFriend(): GetPokeFriendResponse
-    suspend fun getPokeFriendOfFriendList(): GetPokeFriendOfFriendListResponse
-    suspend fun getPokeNotificationList(page: Int): GetPokeNotificationListResponse
+    suspend fun checkNewInPoke(): Result<CheckNewInPoke>
+    suspend fun getOnboardingPokeUserList(randomType: String? = null, size: Int): Result<PokeRandomUserList>
+    suspend fun getPokeMe(): Result<PokeUser>
+    suspend fun getPokeFriend(): Result<List<PokeUser>>
+    suspend fun getPokeFriendOfFriendList(): Result<List<PokeFriendOfFriendList>>
+    suspend fun getPokeNotificationList(page: Int): Result<PokeNotificationList>
 
-    suspend fun getFriendListSummary(): GetFriendListSummaryResponse
+    suspend fun getFriendListSummary(): Result<FriendListSummary>
 
-    suspend fun getFriendListDetail(type: PokeFriendType, page: Int): GetFriendListDetailResponse
+    suspend fun getFriendListDetail(type: PokeFriendType, page: Int): Result<FriendListDetail>
 
-    suspend fun getPokeMessageList(messageType: PokeMessageType): GetPokeMessageListResponse
+    suspend fun getPokeMessageList(messageType: PokeMessageType): Result<PokeMessageList>
 
-    suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): PokeUserResponse
+    suspend fun pokeUser(userId: Int, isAnonymous: Boolean, message: String): Result<PokeUser>
 }
