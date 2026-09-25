@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
@@ -48,8 +47,8 @@ fun LoadingIndicator(
     ) {
         CircularProgressIndicator(
             modifier = Modifier.size(32.dp),
-            color = colorScheme.secondary,
-            trackColor = colorScheme.surfaceVariant,
+            color = SoptTheme.colors.fg.neutral.default,
+            trackColor = SoptTheme.colors.fg.neutral.subtle,
             strokeWidth = 4.dp
         )
     }
