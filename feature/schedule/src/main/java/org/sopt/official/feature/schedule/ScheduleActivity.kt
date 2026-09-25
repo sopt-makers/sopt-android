@@ -38,27 +38,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -68,9 +68,12 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.schedule.component.ScheduleItem
-import org.sopt.official.feature.schedule.component.VerticalDividerWithCircle
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 
 private val applicationNavigator by lazy {
@@ -128,42 +131,59 @@ private fun ScheduleScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = SoptTheme.colors.background,
-                    titleContentColor = SoptTheme.colors.surface
+                    containerColor = SoptTheme.colors.bg.layer.basement,
+                    titleContentColor = SoptTheme.colors.fg.neutral.bold
                 ),
                 navigationIcon = {
                     Icon(
-                        imageVector = Icons.Default.ArrowBackIosNew,
+                        imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
                         contentDescription = "뒤로 가기",
-                        tint = SoptTheme.colors.surface,
+                        tint = SoptTheme.colors.fg.neutral.bold,
                         modifier = Modifier
                             .padding(start = 12.dp)
+                            .size(40.dp)
                             .clickable(onClick = navigateUp)
+                            .padding(8.dp)
                     )
                 },
                 title = {
                     Text(
                         text = "일정",
-                        style = SoptTheme.typography.body16M,
+                        style = SoptTheme.typography.title4,
                     )
                 }
             )
-        }
+        },
+        containerColor = SoptTheme.colors.bg.layer.basement
     ) { innerPadding ->
         Box(
             modifier = Modifier
-                .padding(paddingValues = innerPadding)
                 .fillMaxSize()
-                .background(color = SoptTheme.colors.background)
-                .padding(bottom = 34.dp)
+                .padding(paddingValues = innerPadding)
         ) {
+            VerticalDivider(
+                thickness = Dp.Hairline,
+                color = SoptTheme.colors.stroke.neutral.default,
+                modifier = Modifier
+                    .padding(start = 28.dp)
+            )
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 20.dp),
-                contentPadding = PaddingValues(vertical = 16.dp),
+                contentPadding = PaddingValues(bottom = 200.dp),
                 state = lazyListState
             ) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(28.dp)
+                            .background(SoptTheme.colors.bg.layer.basement),
+                    )
+                }
+
                 items(state.scheduleList) { item ->
                     ScheduleItem(
                         date = item.date,
@@ -172,60 +192,35 @@ private fun ScheduleScreen(
                         isRecentSchedule = item.isRecentSchedule
                     )
                 }
-
-                item {
-                    VerticalDividerWithCircle(
-                        circleColor = Color.Unspecified,
-                        height = 200.dp
-                    )
-                }
             }
 
-            Box(
-                modifier = Modifier.align(Alignment.BottomCenter)
-            ) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    Color(0x000F1010),
-                                    Color(0xFF0F1010)
-                                )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .align(Alignment.BottomCenter)
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0x000F1010),
+                                Color(0xFF0F1010)
                             )
                         )
-                )
+                    )
+            )
 
-                if(userStatus == UserStatus.ACTIVE) {
-                    Box(
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                            .clip(shape = RoundedCornerShape(12.dp))
-                            .background(color = SoptTheme.colors.primary)
-                            .clickable(onClick = navigateAttendance),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "출석하러 가기",
-                            style = SoptTheme.typography.label18SB,
-                            color = SoptTheme.colors.onPrimary,
-                            modifier = Modifier.padding(horizontal = 26.dp, vertical = 16.dp)
-                        )
-                    }
-                }
+            if (userStatus == UserStatus.ACTIVE) {
+                MdsActionButton(
+                    text = "출석하러 가기",
+                    type = MdsActionButtonType.PRIMARY,
+                    size = MdsActionButtonSize.LARGE,
+                    onClick = navigateAttendance,
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 24.dp)
+                )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun ScheduleActivityPreview() {
-    SoptTheme {
-        ScheduleScreen()
     }
 }
