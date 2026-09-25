@@ -26,11 +26,11 @@ package org.sopt.official.domain.home.usecase
 
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
-import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.repository.HomeRepository
 
 class ObserveTabAppServiceUseCase @Inject constructor(
     private val homeRepository: HomeRepository
 ) {
-    operator fun invoke(): Flow<List<AppService>?> = homeRepository.observeTabAppService()
+    operator fun invoke(): Flow<HomeAppServiceInfo?> = homeRepository.observeTabAppService()
 }

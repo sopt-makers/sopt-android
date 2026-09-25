@@ -43,7 +43,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -101,25 +100,12 @@ internal fun HomeRoute(
     paddingValues: PaddingValues,
     userStatus: UserStatus,
     homeNavigation: HomeNavigation,
-    onUpdateBottomBadge: (Map<String?, String>) -> Unit,
     navigateToSopletter: () -> Unit,
     newHomeViewModel: NewHomeViewModel = hiltViewModel(),
 ) {
     val uiState by newHomeViewModel.uiState.collectAsStateWithLifecycle()
     val tracker = LocalTracker.current
     val lifecycleOwner = LocalLifecycleOwner.current
-
-    val badgeContentList = remember(uiState) {
-        when (val state = uiState) {
-            is Member -> {
-                state.homeServices
-                    .filter { it.isShowAlarmBadge }
-                    .associate { it.deepLink to it.alarmBadgeContent }
-            }
-
-            else -> emptyMap()
-        }
-    }
 
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -139,10 +125,6 @@ internal fun HomeRoute(
 
     LaunchedEffect(Unit) {
         tracker.trackViewType(HomeAnalyticsEvent.VIEW_APP_HOME, viewType)
-    }
-
-    LaunchedEffect(badgeContentList) {
-        onUpdateBottomBadge(badgeContentList)
     }
 
     when (val state = uiState) {
@@ -307,8 +289,6 @@ private fun HomeScreenForMember(
 
                 HomeEnjoySoptServicesBlock(
                     // Current server policy returns only "솝레터" for home app-services.
-                    // TODO: 콕찌르기 등 AppService 재노출 시 선택된 HomeAppService를 콜백으로 전달하고,
-                    //  서비스별 navigation과 HomeAnalyticsEvent를 연결한다.
                     appServices = homeAppServices.filter { it.serviceName == "솝레터" }.toImmutableList(),
                     onAppServiceClick = {
                         tracker.trackViewType(HomeAnalyticsEvent.CLICK_SOPTLETTER_MENU, viewType)

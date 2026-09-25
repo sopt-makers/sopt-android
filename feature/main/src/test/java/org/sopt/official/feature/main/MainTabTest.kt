@@ -22,33 +22,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.cache
+package org.sopt.official.feature.main
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import org.junit.Assert.assertEquals
+import org.junit.Test
 
-class InMemoryCache<T> {
-    private val mutex = Mutex()
-    private val _data = MutableStateFlow<T?>(null)
-    val data: StateFlow<T?> = _data.asStateFlow()
+class MainTabTest {
 
-    suspend fun getOrFetch(fetcher: suspend () -> T): T {
-        _data.value?.let { return it }
-        return mutex.withLock {
-            _data.value ?: fetcher().also { _data.value = it }
-        }
+    @Test
+    fun `Home과 MyPage는 activeServices와 무관하게 항상 포함되고 양 끝에 위치한다`() {
+        val tabs = MainTab.getActiveTabs(emptyList())
+
+        assertEquals(MainTab.Home, tabs.first())
+        assertEquals(MainTab.MyPage, tabs.last())
     }
 
-    suspend fun refresh(fetcher: suspend () -> T): T {
-        val fresh = fetcher()
-        mutex.withLock { _data.value = fresh }
-        return fresh
+    @Test
+    fun `activeServices에 있는 deeplink의 탭만 중간에 추가되고, 순서는 입력이 아닌 MainTab 선언 순서를 따른다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke", "soptamp"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Soptamp, MainTab.Poke, MainTab.MyPage), tabs)
     }
 
-    suspend fun invalidate() {
-        mutex.withLock { _data.value = null }
+    @Test
+    fun `activeServices에 없는 deeplink는 제외된다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Poke, MainTab.MyPage), tabs)
+    }
+
+    @Test
+    fun `알 수 없는 deeplink는 무시된다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke", "unknown-service"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Poke, MainTab.MyPage), tabs)
     }
 }
