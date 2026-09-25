@@ -32,9 +32,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.HorizontalDivider
@@ -42,13 +40,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import java.util.Date
 import java.util.Locale
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.domain.notification.entity.NotificationItem
+import org.sopt.official.mds.theme.SoptTheme
 
 private const val ONE_DAY_IN_MILLISECONDS = 86400000L
 private const val ONE_HOUR_IN_MILLISECONDS = 3600000L
@@ -62,19 +60,19 @@ fun NotificationInfoItem(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .height(100.dp)
             .clickable(onClick = onCLick)
             .background(
                 if (notification?.isRead == true) {
-                    SoptTheme.colors.onSurface800
+                    Color.Transparent
                 } else {
-                    SoptTheme.colors.background
+                    SoptTheme.colors.bg.neutral.ghost
                 }
             )
             .padding(
                 horizontal = 20.dp,
                 vertical = 16.dp
-            )
+            ),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -83,8 +81,8 @@ fun NotificationInfoItem(
         ) {
             Text(
                 text = notification?.title.orEmpty(),
-                style = SoptTheme.typography.body16M,
-                color = SoptTheme.colors.onSurface30,
+                style = SoptTheme.typography.title5,
+                color = SoptTheme.colors.fg.neutral.default,
                 modifier = Modifier
                     .weight(1f)
                     .widthIn(max = 250.dp),
@@ -93,21 +91,21 @@ fun NotificationInfoItem(
             )
             Text(
                 text = notification?.createdAt.orEmpty().convertToTimesAgo(),
-                style = SoptTheme.typography.body13M.copy(fontSize = 12.sp),
-                color = SoptTheme.colors.onSurface100
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.neutral.ghost
             )
         }
-        Spacer(modifier = Modifier.height(8.dp))
+
         Text(
             text = notification?.content.orEmpty(),
-            style = SoptTheme.typography.body16M,
-            color = SoptTheme.colors.onSurface400,
+            style = SoptTheme.typography.body2,
+            color = SoptTheme.colors.fg.neutral.subtle,
+            minLines = 2,
             maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
+            overflow = TextOverflow.Ellipsis
         )
     }
-    HorizontalDivider(color = SoptTheme.colors.onSurface600)
+    HorizontalDivider(color = SoptTheme.colors.stroke.neutral.ghost)
 }
 
 private fun String.convertToTimesAgo(): String {

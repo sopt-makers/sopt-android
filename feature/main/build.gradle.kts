@@ -25,6 +25,7 @@
 plugins {
     sopt("feature")
     sopt("compose")
+    sopt("test")
 }
 
 android {
@@ -49,4 +50,7 @@ dependencies {
     implementation(projects.feature.appjamtamp)
     implementation(projects.feature.mypage)
     implementation(projects.feature.sopletter)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.coroutines.test)
 }

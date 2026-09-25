@@ -32,7 +32,6 @@ import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.home.mapper.toDomain
 import org.sopt.official.data.home.remote.api.CalendarApi
 import org.sopt.official.data.home.remote.api.HomeApi
-import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.FloatingToast
 import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.model.LatestPost
@@ -46,7 +45,7 @@ internal class DefaultHomeRepository @Inject constructor(
     private val homeApi: HomeApi,
     private val calendarApi: CalendarApi,
     @param:Named("homeAppService") private val homeAppServiceCache: InMemoryCache<HomeAppServiceInfo>,
-    @param:Named("tabAppService") private val tabAppServiceCache: InMemoryCache<List<AppService>>,
+    @param:Named("tabAppService") private val tabAppServiceCache: InMemoryCache<HomeAppServiceInfo>,
 ) : HomeRepository {
 
     override suspend fun getRecentCalendar(): Result<RecentCalendar> =
@@ -57,16 +56,23 @@ internal class DefaultHomeRepository @Inject constructor(
 
     override suspend fun getHomeAppService(forceRefresh: Boolean): Result<HomeAppServiceInfo> =
         suspendRunCatching {
-            if (forceRefresh) homeAppServiceCache.invalidate()
-            homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().toDomain() }
+            if (forceRefresh) {
+                homeAppServiceCache.refresh { homeApi.getHomeAppService().toDomain() }
+            } else {
+                homeAppServiceCache.getOrFetch { homeApi.getHomeAppService().toDomain() }
+            }
         }
 
-    override suspend fun getTabAppService(): Result<List<AppService>> =
+    override suspend fun getTabAppService(forceRefresh: Boolean): Result<HomeAppServiceInfo> =
         suspendRunCatching {
-            tabAppServiceCache.getOrFetch { homeApi.getTabAppService().map { it.toDomain() } }
+            if (forceRefresh) {
+                tabAppServiceCache.refresh { homeApi.getTabAppService().toDomain() }
+            } else {
+                tabAppServiceCache.getOrFetch { homeApi.getTabAppService().toDomain() }
+            }
         }
 
-    override fun observeTabAppService(): Flow<List<AppService>?> = tabAppServiceCache.data
+    override fun observeTabAppService(): Flow<HomeAppServiceInfo?> = tabAppServiceCache.data
 
     override suspend fun getHomeReviewForm(): Result<ReviewForm> =
         suspendRunCatching { homeApi.getReviewForm().toDomain() }
