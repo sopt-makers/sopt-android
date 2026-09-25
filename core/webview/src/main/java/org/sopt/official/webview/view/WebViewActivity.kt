@@ -159,8 +159,10 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        if (acquiredLock) isActive.set(false)
-        binding.webView.release()
+        if (acquiredLock) {
+            isActive.set(false)
+            binding.webView.release()
+        }
         super.onDestroy()
     }
 
