@@ -43,6 +43,7 @@ ksp {
 dependencies {
     implementation(projects.core.common)
     implementation(projects.core.localstorage)
+    implementation(projects.core.model)
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
