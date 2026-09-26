@@ -148,6 +148,7 @@ fun DataPickerBottomSheet(
     var chosenDay by remember { mutableIntStateOf(currentDay) }
 
     val isValidDate by remember { derivedStateOf { calculateValidDate(chosenYear, chosenMonth, chosenDay) } }
+    val isPastDate by remember { derivedStateOf { calculatePastDate(chosenYear, chosenMonth, chosenDay) } }
 
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -156,6 +157,7 @@ fun DataPickerBottomSheet(
     ) {
         DatePickerUI(
             isValidDate = isValidDate,
+            isPastDate = isPastDate,
             chosenYear = chosenYear,
             chosenMonth = chosenMonth,
             chosenDay = chosenDay,
@@ -196,12 +198,26 @@ fun calculateValidDate(
         }
     val referenceCalendar = Calendar.getInstance()
 
-    return !givenCalendar.after(referenceCalendar)
+    return !givenCalendar.after(referenceCalendar) && !givenCalendar.before(minSelectableDate)
+}
+
+fun calculatePastDate(
+    year: Int,
+    month: Int,
+    day: Int,
+): Boolean {
+    val givenCalendar =
+        Calendar.getInstance().apply {
+            set(year, month - 1, day)
+        }
+
+    return givenCalendar.before(minSelectableDate)
 }
 
 @Composable
 fun DatePickerUI(
     isValidDate: Boolean,
+    isPastDate: Boolean,
     chosenYear: Int,
     chosenMonth: Int,
     chosenDay: Int,
@@ -218,6 +234,7 @@ fun DatePickerUI(
     ) {
         DateSelectionSection(
             isValidDate = isValidDate,
+            isPastDate = isPastDate,
             chosenYear = chosenYear,
             chosenMonth = chosenMonth,
             chosenDay = chosenDay,
@@ -231,6 +248,7 @@ fun DatePickerUI(
 @Composable
 fun DateSelectionSection(
     isValidDate: Boolean,
+    isPastDate: Boolean,
     chosenYear: Int,
     chosenMonth: Int,
     chosenDay: Int,
@@ -244,6 +262,8 @@ fun DateSelectionSection(
     ) {
         DateItemsPicker(
             isValidDate = isValidDate,
+            isPastDate = isPastDate,
+            min = minYear - START_YEAR,
             max = YEAR_INDEX,
             items = years,
             firstIndex = (chosenYear - START_YEAR),
@@ -252,6 +272,8 @@ fun DateSelectionSection(
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
             isValidDate = isValidDate,
+            isPastDate = isPastDate,
+            min = minMonth,
             max = currentMonth,
             items = monthsNumber,
             firstIndex = chosenMonth,
@@ -260,6 +282,8 @@ fun DateSelectionSection(
         Spacer(modifier = Modifier.width(10.dp))
         DateItemsPicker(
             isValidDate = isValidDate,
+            isPastDate = isPastDate,
+            min = minDay - 1,
             max = currentDay - 1,
             items =
                 when {
@@ -277,6 +301,8 @@ fun DateSelectionSection(
 @Composable
 fun DateItemsPicker(
     isValidDate: Boolean,
+    isPastDate: Boolean,
+    min: Int,
     max: Int,
     items: ImmutableList<String>,
     firstIndex: Int,
@@ -286,11 +312,16 @@ fun DateItemsPicker(
     val listState = rememberLazyListState(firstIndex)
     val currentValue = remember { mutableStateOf("") }
 
-    LaunchedEffect(!listState.isScrollInProgress, isValidDate) {
+    LaunchedEffect(!listState.isScrollInProgress, isValidDate, isPastDate) {
         if (isValidDate) {
             if (currentValue.value.isNotEmpty()) {
                 onItemSelected(currentValue.value)
                 listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
+            }
+        } else if (isPastDate) { // 오늘부터 6개월 전의 날짜 선택시
+            if (currentValue.value.isNotEmpty() && listState.firstVisibleItemIndex < min) {
+                listState.animateScrollToItem(index = min)
+                onItemSelected(currentValue.value)
             }
         } else { // 오늘 이후의 날짜 선택시
             if (currentValue.value.isNotEmpty() && max < currentValue.value.toInt()) {
@@ -351,6 +382,12 @@ private val currentYear = Calendar.getInstance().get(Calendar.YEAR)
 private val currentMonth = Calendar.getInstance().get(Calendar.MONTH)
 private val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
 
+private const val AVAILABLE_RANGE_MONTH = 6 // 오늘부터 6개월 전까지 선택 가능
+private val minSelectableDate = Calendar.getInstance().apply { add(Calendar.MONTH, -AVAILABLE_RANGE_MONTH) }
+private val minYear = minSelectableDate.get(Calendar.YEAR)
+private val minMonth = minSelectableDate.get(Calendar.MONTH)
+private val minDay = minSelectableDate.get(Calendar.DAY_OF_MONTH)
+
 private const val YEAR_INDEX = 50 // 현재 년도의 +- 50년까지 Date Picker에 표시
 private val START_YEAR = currentYear - YEAR_INDEX
 private val END_YEAR = currentYear + YEAR_INDEX
@@ -384,6 +421,7 @@ private fun CustomDatePickerPreview() {
     SoptTheme {
         DatePickerUI(
             isValidDate = true,
+            isPastDate = false,
             chosenYear = chosenYear.intValue,
             chosenMonth = chosenMonth.intValue,
             chosenDay = chosenDay.intValue,
