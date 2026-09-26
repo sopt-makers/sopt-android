@@ -24,15 +24,16 @@
  */
 package org.sopt.official.feature.mypage.soptamp.state
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Stable
 
 @Stable
 data class ModifySoptampProfileUiState(
-    val current: String,
+    val current: TextFieldState,
     val previous: String,
     val onChangeCurrent: (String) -> Unit,
     val onUpdate: () -> Unit,
 ) {
     val isConfirmed: Boolean
-        get() = current != previous
+        get() = current.text.toString() != previous
 }

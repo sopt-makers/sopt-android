@@ -26,14 +26,14 @@ package org.sopt.official.feature.mypage
 
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -53,9 +53,6 @@ import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.impl.FakeTracker
 import org.sopt.official.analytics.trackViewType
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.component.MyPageDialog
-import org.sopt.official.feature.mypage.component.MyPageNavigatorButton
 import org.sopt.official.feature.mypage.component.MyPageSection
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.component.MyPageUserContentsInfo
@@ -65,6 +62,12 @@ import org.sopt.official.feature.mypage.model.MyPageUiModel
 import org.sopt.official.feature.mypage.signout.SignOutActivity
 import org.sopt.official.feature.mypage.soptamp.ui.AdjustSentenceActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.components.dialog.MdsDialog
+import org.sopt.official.mds.components.dialog.MdsDialogType
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 import org.sopt.official.webview.view.WebViewActivity
@@ -75,7 +78,7 @@ internal fun MyPageRoute(
     navigateToPlayGroundProfile: () -> Unit,
     onRestartApp: () -> Unit,
     userStatus: UserStatus,
-    viewModel: MyPageViewModel = hiltViewModel(),
+    viewModel: MyPageViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val tracker = LocalTracker.current
@@ -188,16 +191,6 @@ internal fun MyPageRoute(
         )
     }
 
-    val etcLoginSectionItems = remember {
-        persistentListOf(
-            MyPageUiModel.Header(title = "기타"),
-            MyPageUiModel.MyPageItem(
-                title = "로그인",
-                onItemClick = onRestartApp,
-            )
-        )
-    }
-
     MyPageScreen(
         state = state,
         isAppjamMode = isAppjamMode,
@@ -205,7 +198,6 @@ internal fun MyPageRoute(
         notificationSectionItems = notificationSectionItems,
         soptampSectionItems = soptampSectionItems,
         etcSectionItems = etcSectionItems,
-        etcLoginSectionItems = etcLoginSectionItems,
         onAction = viewModel::onAction,
         navigateToSoptLog = navigateToSoptLog,
         navigateToPlayGroundProfile = navigateToPlayGroundProfile,
@@ -222,18 +214,17 @@ internal fun MyPageScreen(
     notificationSectionItems: ImmutableList<MyPageUiModel>,
     soptampSectionItems: ImmutableList<MyPageUiModel>,
     etcSectionItems: ImmutableList<MyPageUiModel>,
-    etcLoginSectionItems: ImmutableList<MyPageUiModel>,
     onAction: (MyPageAction) -> Unit,
     navigateToSoptLog: () -> Unit,
     navigateToPlayGroundProfile: () -> Unit,
-    tracker:Tracker,
-    viewType:String
+    tracker: Tracker,
+    viewType: String
 ) {
     val scrollState = rememberScrollState()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        containerColor = SoptTheme.colors.background,
+        containerColor = SoptTheme.colors.bg.layer.basement,
         topBar = {
             MyPageTopBar(
                 title = "마이페이지",
@@ -243,94 +234,65 @@ internal fun MyPageScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .background(SoptTheme.colors.background)
                 .verticalScroll(scrollState)
+                .padding(innerPadding)
+                .padding(vertical = 16.dp, horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
             MyPageUserInfo(
                 name = state.name,
                 profileImage = state.profileImage,
-                part = state.part,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                part = state.part
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            MyPageNavigatorButton(
+            MdsActionButton(
                 text = "프로필 수정",
-                modifier = Modifier
-                    .padding(horizontal = 20.dp),
-                onClick = {
-                    navigateToPlayGroundProfile()
-                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_PROFILE_EDIT_BUTTON, viewType )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
+                type = MdsActionButtonType.SECONDARY,
+                size = MdsActionButtonSize.SMALL,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                tracker.trackViewType(MypageAnalyticsEvent.CLICK_PROFILE_EDIT_BUTTON, viewType)
+                navigateToPlayGroundProfile()
+            }
 
             MyPageUserContentsInfo(
                 userStatus = state.userStatus,
                 totalSoptampCount = state.soptampCount,
                 totalPokeCount = state.totalPokeCount,
-                isAppjamPeriod = isAppjamMode,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                isAppjamPeriod = isAppjamMode
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
-
-            MyPageNavigatorButton(
+            MdsActionButton(
                 text = "마이 솝트로그 확인하기",
-                shape = RoundedCornerShape(999.dp),
-                modifier = Modifier
-                    .padding(horizontal = 20.dp),
-                onClick = {
-                    navigateToSoptLog()
-                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_SOPTLOG, viewType )
-                }
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
+                type = MdsActionButtonType.SECONDARY,
+                size = MdsActionButtonSize.SMALL,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                tracker.trackViewType(MypageAnalyticsEvent.CLICK_MYPAGE_SOPTLOG, viewType)
+                navigateToSoptLog()
+            }
 
             MyPageSection(items = serviceSectionItems)
 
-            Spacer(modifier = Modifier.height(16.dp))
+            MyPageSection(items = notificationSectionItems)
 
-            when (state.userStatus) {
-                UserStatus.ACTIVE, UserStatus.INACTIVE -> {
-                    MyPageSection(items = notificationSectionItems)
+            MyPageSection(items = soptampSectionItems)
 
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    MyPageSection(items = soptampSectionItems)
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    MyPageSection(items = etcSectionItems)
-                }
-
-                UserStatus.UNAUTHENTICATED -> {
-                    MyPageSection(items = etcLoginSectionItems)
-                }
-            }
+            MyPageSection(items = etcSectionItems)
 
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-        if (state.dialogState != MyPageDialogState.CLEAR) {
-            ShowMyPageDialog(
-                dialogState = state.dialogState,
-                onDismissRequest = { onAction(MyPageAction.CloseDialog) },
-                onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
-                onLogoutClick = {
-                    onAction(MyPageAction.ConfirmLogout)
-                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
-                },
-            )
-        }
+
+        ShowMyPageDialog(
+            dialogState = state.dialogState,
+            onDismissRequest = { onAction(MyPageAction.CloseDialog) },
+            onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
+            onLogoutClick = {
+                onAction(MyPageAction.ConfirmLogout)
+                tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
+            },
+        )
     }
 }
 
@@ -343,24 +305,29 @@ private fun ShowMyPageDialog(
 ) {
     when (dialogState) {
         MyPageDialogState.CLEAR_SOPTAMP -> {
-            MyPageDialog(
-                onDismissRequest = onDismissRequest,
+            MdsDialog(
                 title = "솝탬프 미션을 초기화 하실 건가요?",
-                subTitle = "미션에 등록된 사진, 메모가 삭제되고\n전체 미션이 미완료 상태로 초기화됩니다.",
-                negativeText = "취소",
-                positiveText = "초기화",
-                onPositiveButtonClick = onClearSoptampClick
+                onDismiss = onDismissRequest,
+                description = "미션에 등록된 사진, 메모가 삭제되고\n전체 미션이 미완료 상태로 초기화됩니다.",
+                type = MdsDialogType.DEFAULT,
+                positiveButtonText = "초기화",
+                negativeButtonText = "취소",
+                onPositiveButtonClick = onClearSoptampClick,
+                onNegativeButtonClick = onDismissRequest
             )
         }
 
         MyPageDialogState.REQUEST_LOGOUT -> {
-            MyPageDialog(
-                onDismissRequest = onDismissRequest,
+
+            MdsDialog(
                 title = "로그아웃 하실 건가요?",
-                subTitle = "로그아웃을 해도 언제든 솝트에\n다시 접속할 수 있어요.",
-                negativeText = "취소",
-                positiveText = "로그아웃",
-                onPositiveButtonClick = onLogoutClick
+                onDismiss = onDismissRequest,
+                description = "로그아웃을 해도 언제든 솝트에\n다시 접속할 수 있어요.",
+                type = MdsDialogType.DEFAULT,
+                positiveButtonText = "로그아웃",
+                negativeButtonText = "취소",
+                onPositiveButtonClick = onLogoutClick,
+                onNegativeButtonClick = onDismissRequest
             )
         }
 
@@ -400,15 +367,11 @@ private fun MyPageScreenPreview() {
                 MyPageUiModel.MyPageItem(title = "로그아웃", onItemClick = {}),
                 MyPageUiModel.MyPageItem(title = "탈퇴하기", onItemClick = {})
             ),
-            etcLoginSectionItems = persistentListOf(
-                MyPageUiModel.Header(title = "기타"),
-                MyPageUiModel.MyPageItem(title = "로그인", onItemClick = {})
-            ),
             onAction = {},
             navigateToSoptLog = {},
             navigateToPlayGroundProfile = {},
             tracker = track,
-            viewType = "",
+            viewType = ""
         )
     }
 }

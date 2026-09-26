@@ -25,6 +25,8 @@
 package org.sopt.official.feature.mypage.soptamp.state
 
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,7 +35,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.mypage.repository.UserRepository
 import timber.log.Timber
@@ -43,7 +44,7 @@ fun rememberModifyProfileState(
     userRepository: UserRepository,
     onShowToast: (String) -> Unit,
 ): ModifySoptampProfileUiState {
-    var current by rememberRetained { mutableStateOf("") }
+    val current = rememberTextFieldState()
     var previous by rememberSaveable { mutableStateOf("") }
     val scope = rememberCoroutineScope()
 
@@ -53,7 +54,7 @@ fun rememberModifyProfileState(
     LaunchedEffect(Unit) {
         userRepository.getUserInfo()
             .onSuccess {
-                current = it.profileMessage
+                current.setTextAndPlaceCursorAtEnd(it.profileMessage)
                 previous = it.profileMessage
             }.onFailure {
                 Timber.e(it)
@@ -63,17 +64,15 @@ fun rememberModifyProfileState(
     return ModifySoptampProfileUiState(
         current = current,
         previous = previous,
-        onChangeCurrent = { current = it },
+        onChangeCurrent = { current.setTextAndPlaceCursorAtEnd(it) },
         onUpdate = {
             scope.launch {
-                userRepository.updateProfileMessage(current)
+                userRepository.updateProfileMessage(current.text.toString())
                     .onSuccess {
                         keyboardController?.hide()
                         onShowToast("한마디가 변경되었습니다")
                         onBackPressedDispatcherOwner?.onBackPressedDispatcher?.onBackPressed()
-                    }.onFailure {
-                        Timber.e(it)
-                    }
+                    }.onFailure(Timber::e)
             }
         }
     )

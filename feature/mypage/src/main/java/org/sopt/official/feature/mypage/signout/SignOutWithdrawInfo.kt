@@ -37,14 +37,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Gray60
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.R
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun SignOutWithdrawInfo(
@@ -54,26 +52,25 @@ internal fun SignOutWithdrawInfo(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.onSurface800,
+                color = SoptTheme.colors.bg.neutral.ghost,
                 shape = RoundedCornerShape(12.dp)
             )
-            .padding(top = 28.dp, bottom = 34.dp, start = 20.dp, end = 20.dp),
+            .padding(top = 28.dp, bottom = 32.dp, start = 20.dp, end = 20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_withdraw),
+            imageVector = ImageVector.vectorResource(MdsIcons.alertTriangleFilled),
             contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier
-                .size(64.dp)
+            tint = SoptTheme.colors.fg.danger.default,
+            modifier = Modifier.size(64.dp)
         )
 
         Spacer(modifier = Modifier.height(20.dp))
 
         Text(
             text = "탈퇴 시 유의사항",
-            style = SoptTheme.typography.heading18B,
-            color = SoptTheme.colors.onSurface50
+            style = SoptTheme.typography.title3,
+            color = SoptTheme.colors.fg.neutral.bold
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -81,8 +78,8 @@ internal fun SignOutWithdrawInfo(
         Text(
             text = "회원 탈퇴를 신청하시면 해당 이메일은 즉시 탈퇴 처리됩니다.\n" +
                 "탈퇴 처리 시 계정 내에서 입력했던 정보는 영구적으로 삭제되며, 복구가 어렵습니다.",
-            style = SoptTheme.typography.body14R,
-            color = Gray60
+            style = SoptTheme.typography.body2,
+            color = SoptTheme.colors.fg.neutral.subtle
         )
     }
 }

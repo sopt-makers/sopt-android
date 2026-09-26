@@ -32,6 +32,7 @@ object DependencyManager {
             "implementation"(platform(libs.findLibrary("compose-bom").get()))
             "implementation"(libs.findBundle("compose").get())
             "implementation"(libs.findLibrary("coil-compose").get())
+            "implementation"(libs.findLibrary("coil3-compose").get())
             "implementation"(libs.findLibrary("kotlin-collections-immutable").get())
             "implementation"(libs.findLibrary("compose-navigation").get())
             "implementation"(libs.findLibrary("compose-hilt-navigation").get())

@@ -29,18 +29,16 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.Serializable
@@ -51,14 +49,15 @@ import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.serializableExtra
 import org.sopt.official.common.view.toast
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.mypage.MypageAnalyticsEvent
-import org.sopt.official.feature.mypage.R
-import org.sopt.official.feature.mypage.component.MyPageButton
-import org.sopt.official.feature.mypage.component.MyPageTextField
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.userRepository
 import org.sopt.official.feature.mypage.soptamp.state.rememberModifyProfileState
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.components.input.MdsTextArea
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
@@ -88,44 +87,40 @@ class AdjustSentenceActivity : AppCompatActivity() {
                     )
 
                     Scaffold(
-                        modifier = Modifier
-                            .background(SoptTheme.colors.background)
-                            .fillMaxSize(),
+                        modifier = Modifier.fillMaxSize(),
                         topBar = {
                             MyPageTopBar(
                                 title = "한 마디 편집",
-                                onNavigationIconClick = { onBackPressedDispatcher.onBackPressed() }
+                                onNavigationIconClick = onBackPressedDispatcher::onBackPressed
                             )
-                        }
+                        },
+                        containerColor = SoptTheme.colors.bg.layer.basement
                     ) { innerPadding ->
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .padding(innerPadding)
-                                .background(SoptTheme.colors.background)
                         ) {
-                            Spacer(modifier = Modifier.height(20.dp))
-                            MyPageTextField(
-                                sentence = uiState.current,
-                                modifier = Modifier.padding(horizontal = 20.dp),
-                                onTextChange = { uiState.onChangeCurrent(it) },
+                            MdsTextArea(
+                                state = uiState.current,
+                                placeholder = "설정된 한 마디가 없습니다.",
+                                inputLimits = TextFieldLineLimits.MultiLine(2, 2),
+                                modifier = Modifier.padding(horizontal = 20.dp)
                             )
-                            Spacer(modifier = Modifier.height(32.dp))
-                            MyPageButton(
-                                paddingVertical = 16.dp,
+
+                            Spacer(modifier = Modifier.height(44.dp))
+
+                            MdsActionButton(
+                                text = "저장",
+                                type = MdsActionButtonType.PRIMARY,
+                                size = MdsActionButtonSize.LARGE,
+                                enabled = uiState.isConfirmed,
                                 modifier = Modifier
-                                    .padding(20.dp)
-                                    .fillMaxWidth(),
-                                onClick = {
-                                    uiState.onUpdate()
-                                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_EDIT_STATUSMESSAGE, viewType)
-                                },
-                                isEnabled = uiState.isConfirmed
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp)
                             ) {
-                                Text(
-                                    text = stringResource(R.string.adjust_sentence_button),
-                                    style = SoptTheme.typography.heading18B
-                                )
+                                tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_EDIT_STATUSMESSAGE, viewType)
+                                uiState.onUpdate()
                             }
                         }
                     }
