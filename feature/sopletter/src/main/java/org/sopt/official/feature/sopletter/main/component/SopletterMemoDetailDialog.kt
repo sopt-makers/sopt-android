@@ -100,7 +100,7 @@ internal fun SopletterMemoDetailDialog(
         modifier = Modifier
             .fillMaxSize()
             .background(SoptTheme.colors.onSurface950.copy(alpha = MEMO_DIALOG_OVERLAY_ALPHA))
-            .noRippleClickable(actions::onDismissClick),
+            .noRippleClickable(onClick = actions::onDismissClick),
     ) {
         BoxWithConstraints(
             modifier = Modifier.fillMaxSize(),
@@ -171,7 +171,7 @@ internal fun SopletterMemoDetailDialog(
                         Row(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(2.dp),
-                            modifier = Modifier.noRippleClickable(actions::onLikeClick),
+                            modifier = Modifier.noRippleClickable(onClick = actions::onLikeClick),
                         ) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(
@@ -228,7 +228,7 @@ private fun MemoDialogActionButton(
             )
             .then(
                 if (!isDisabled) {
-                    Modifier.noRippleClickable(onClick)
+                    Modifier.noRippleClickable(onClick = onClick)
                 } else {
                     Modifier
                 },
@@ -273,7 +273,7 @@ private fun MemoDialogHeader(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_close_32),
                     contentDescription = null,
                     tint = SoptTheme.colors.onSurface500,
-                    modifier = Modifier.noRippleClickable(onEditCancelClick),
+                    modifier = Modifier.noRippleClickable(onClick = onEditCancelClick),
                 )
             }
 
@@ -286,14 +286,14 @@ private fun MemoDialogHeader(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_edit_32),
                         contentDescription = null,
                         tint = Color.Unspecified,
-                        modifier = Modifier.noRippleClickable(onEditClick),
+                        modifier = Modifier.noRippleClickable(onClick = onEditClick),
                     )
 
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_trash_32),
                         contentDescription = null,
                         tint = Color.Unspecified,
-                        modifier = Modifier.noRippleClickable(onDeleteClick),
+                        modifier = Modifier.noRippleClickable(onClick = onDeleteClick),
                     )
                 }
             }

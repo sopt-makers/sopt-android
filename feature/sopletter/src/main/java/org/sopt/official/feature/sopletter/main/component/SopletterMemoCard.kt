@@ -57,7 +57,7 @@ internal fun SopletterMemoCard(
     Box(
         modifier = modifier
             .rotate(memo.rotationDegree.toFloat())
-            .noRippleClickable(onClick),
+            .noRippleClickable(onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Image(

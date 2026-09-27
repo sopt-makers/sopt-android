@@ -42,6 +42,12 @@ class InMemoryCache<T> {
         }
     }
 
+    suspend fun refresh(fetcher: suspend () -> T): T {
+        val fresh = fetcher()
+        mutex.withLock { _data.value = fresh }
+        return fresh
+    }
+
     suspend fun invalidate() {
         mutex.withLock { _data.value = null }
     }

@@ -158,7 +158,7 @@ private fun ZoomInIcon(
 ) {
     Box(
         modifier = modifier
-            .noRippleClickable(onClickZoomIn)
+            .noRippleClickable(onClick = onClickZoomIn)
             .padding(16.dp)
             .clip(CircleShape)
             .background(

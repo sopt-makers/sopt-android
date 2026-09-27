@@ -22,9 +22,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.main.model
+package org.sopt.official.feature.main
 
-enum class PokeViewType {
-    LARGE,
-    SMALL
+import org.junit.Assert.assertEquals
+import org.junit.Test
+
+class MainTabTest {
+
+    @Test
+    fun `Home과 MyPage는 activeServices와 무관하게 항상 포함되고 양 끝에 위치한다`() {
+        val tabs = MainTab.getActiveTabs(emptyList())
+
+        assertEquals(MainTab.Home, tabs.first())
+        assertEquals(MainTab.MyPage, tabs.last())
+    }
+
+    @Test
+    fun `activeServices에 있는 deeplink의 탭만 중간에 추가되고, 순서는 입력이 아닌 MainTab 선언 순서를 따른다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke", "soptamp"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Soptamp, MainTab.Poke, MainTab.MyPage), tabs)
+    }
+
+    @Test
+    fun `activeServices에 없는 deeplink는 제외된다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Poke, MainTab.MyPage), tabs)
+    }
+
+    @Test
+    fun `알 수 없는 deeplink는 무시된다`() {
+        val tabs = MainTab.getActiveTabs(listOf("poke", "unknown-service"))
+
+        assertEquals(listOf(MainTab.Home, MainTab.Poke, MainTab.MyPage), tabs)
+    }
 }

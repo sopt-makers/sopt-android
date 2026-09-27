@@ -40,7 +40,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.Black
 import org.sopt.official.designsystem.MdsGray950
 import org.sopt.official.designsystem.Orange400
@@ -64,6 +66,9 @@ fun HomeToastButton(
             .fillMaxWidth()
             .clip(CircleShape)
             .background(Orange400)
+            .noRippleClickable(
+                onClick = {}
+            )
             .padding(13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -110,6 +115,20 @@ fun HomeToastButton(
                 .background(Black)
                 .padding(horizontal = 11.dp, vertical = 6.dp)
                 .clickable(onClick = onClick)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun HomeToastButtonPreview() {
+    SoptTheme {
+        HomeToastButton(
+            imageUrl = "",
+            longTitle = "",
+            missionDescription = "",
+            buttonText = "",
+            onClick = {}
         )
     }
 }

@@ -31,7 +31,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 import javax.inject.Singleton
 import org.sopt.official.cache.InMemoryCache
-import org.sopt.official.domain.home.model.AppService
 import org.sopt.official.domain.home.model.HomeAppServiceInfo
 
 @Module
@@ -46,5 +45,5 @@ internal object CacheModule {
     @Provides
     @Singleton
     @Named("tabAppService")
-    fun provideTabAppServiceCache(): InMemoryCache<List<AppService>> = InMemoryCache()
+    fun provideTabAppServiceCache(): InMemoryCache<HomeAppServiceInfo> = InMemoryCache()
 }

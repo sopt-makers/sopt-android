@@ -67,7 +67,7 @@ fun ImageModal(
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .noRippleClickable(onDismiss)
+                .noRippleClickable(onClick = onDismiss)
                 .background(
                     color = SoptTheme.colors.backgroundDimmed.copy(0.8f),
                 )
