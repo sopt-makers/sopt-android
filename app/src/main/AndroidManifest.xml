@@ -73,7 +73,7 @@
         <activity
             android:name=".feature.deeplink.DeepLinkSchemeActivity"
             android:exported="true"
-            android:theme="@android:style/Theme.NoDisplay">
+            android:theme="@style/Theme.SOPT.NoDisplay">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
