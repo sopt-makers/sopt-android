@@ -55,7 +55,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.Dp
@@ -202,8 +201,8 @@ private fun ScheduleScreen(
                     .background(
                         brush = Brush.verticalGradient(
                             colors = listOf(
-                                Color(0x000F1010),
-                                Color(0xFF0F1010)
+                                SoptTheme.colors.bg.layer.basement.copy(0f),
+                                SoptTheme.colors.bg.layer.basement
                             )
                         )
                     )

@@ -61,7 +61,7 @@ internal fun ScheduleItem(
         modifier = Modifier.padding(bottom = 40.dp)
     ) {
         ScheduleIndicator(
-            circleColor = if (isRecentSchedule) SoptTheme.colors.fg.neutral.bold else SoptTheme.colors.fg.neutral.ghost,
+            circleColor = if (isRecentSchedule) SoptTheme.colors.fg.neutral.bold else SoptTheme.colors.fg.neutral.ghost
         )
 
         Column(
