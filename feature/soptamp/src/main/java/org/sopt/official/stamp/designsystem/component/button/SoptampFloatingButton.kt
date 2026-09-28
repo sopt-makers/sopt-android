@@ -30,6 +30,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.util.DefaultPreview
@@ -47,7 +48,7 @@ fun SoptampFloatingButton(
         Text(
             text = text,
             color = SoptTheme.colors.onSurface,
-            style = SoptTheme.typography.body18M,
+            style = SoptTheme.typography.body18M.copy(fontWeight = FontWeight.Bold),
             modifier =
                 Modifier
                     .padding(horizontal = 24.dp, vertical = 16.dp),

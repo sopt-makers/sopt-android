@@ -133,6 +133,20 @@ fun MainScreen(
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
     val badgeList by viewModel.badgeMap.collectAsStateWithLifecycle()
 
+    // 어떤 탭으로 전환되든(바텀바 탭, 딥링크 진입 등) 그 시점에 탭 뱃지를 최신으로
+    // 단, 최초 진입은 viewModel.init의 fetchTabAppServices()가 이미 처리하므로
+    // 여기서 또 강제 refresh를 쏘면 콜드 스타트 때 같은 응답을 두 번 요청하게 되므로 수정
+    var isFirstTab by remember { mutableStateOf(true) }
+    val currentTab = navigator.currentTab
+    LaunchedEffect(currentTab) {
+        if (currentTab == null) return@LaunchedEffect
+        if (isFirstTab) {
+            isFirstTab = false
+            return@LaunchedEffect
+        }
+        viewModel.refreshTabAppServices()
+    }
+
     var backPressedTime = 0L
 
     BackHandler {
@@ -264,7 +278,6 @@ fun MainScreen(
                         homeNavGraph(
                             userStatus = userStatus,
                             paddingValues = innerPadding,
-                            onUpdateBottomBadge = viewModel::updateBadge,
                             homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
                                 private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, url)
