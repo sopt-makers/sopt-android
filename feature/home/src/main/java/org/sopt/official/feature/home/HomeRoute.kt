@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
@@ -61,9 +62,6 @@ import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.common.util.ui.dropShadow
 import org.sopt.official.designsystem.GrayAlpha700
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SoptTheme.typography
-import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.home.component.HomeEnjoySoptServicesBlock
@@ -92,6 +90,8 @@ import org.sopt.official.feature.home.navigation.HomeNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeShortcutNavigation
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
@@ -131,9 +131,6 @@ internal fun HomeRoute(
         is Unauthenticated -> {
             HomeScreenForVisitor(
                 homeShortcutNavigation = homeNavigation as HomeShortcutNavigation,
-                homeAppServicesNavigation = homeNavigation as HomeAppServicesNavigation,
-                homeDashboardNavigation = homeNavigation as HomeDashboardNavigation,
-                homeAppServices = uiState.homeServices,
                 tracker = tracker,
                 viewType = viewType,
                 paddingValues = paddingValues,
@@ -200,8 +197,6 @@ private fun HomeScreenForMember(
                 .padding(paddingValues)
                 .verticalScroll(scrollState),
         ) {
-            Spacer(modifier = Modifier.height(height = 8.dp))
-
             HomeTopBarForMember(
                 hasNotification = hasNotification,
                 onNotificationClick = {
@@ -212,7 +207,7 @@ private fun HomeScreenForMember(
                     .padding(horizontal = 20.dp)
             )
 
-            Spacer(modifier = Modifier.height(height = 16.dp))
+            Spacer(modifier = Modifier.height(height = 8.dp))
 
             HomeUserSoptLogDashboardForMember(
                 onDashboardClick = homeDashboardNavigation::navigateToEditProfile,
@@ -245,18 +240,20 @@ private fun HomeScreenForMember(
                     .fillMaxWidth()
                     .noRippleClickable(onClick = homeShortcutNavigation::navigateToPlaygroundHome)
                     .padding(horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 Text(
                     text = "SOPT Playground",
-                    style = typography.title14SB,
-                    color = White,
+                    style = SoptTheme.typography.label4,
+                    color = SoptTheme.colors.fg.neutral.bold
                 )
 
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                    imageVector = ImageVector.vectorResource(MdsIcons.chevronRightOutlined),
                     contentDescription = null,
-                    tint = White
+                    tint = SoptTheme.colors.fg.neutral.bold,
+                    modifier = Modifier.size(20.dp)
                 )
             }
 
@@ -284,7 +281,7 @@ private fun HomeScreenForMember(
             )
 
             // 솝트 더 재밌게 즐기기 영역
-             if (homeAppServices.isNotEmpty()) {
+            if (homeAppServices.isNotEmpty()) {
                 Spacer(modifier = Modifier.height(height = 40.dp))
 
                 HomeEnjoySoptServicesBlock(
@@ -387,9 +384,6 @@ private fun HomeScreenForMember(
 @Composable
 private fun HomeScreenForVisitor(
     homeShortcutNavigation: HomeShortcutNavigation,
-    homeDashboardNavigation: HomeDashboardNavigation,
-    homeAppServicesNavigation: HomeAppServicesNavigation,
-    homeAppServices: ImmutableList<HomeAppService>,
     tracker: Tracker,
     viewType: String,
     paddingValues: PaddingValues
@@ -398,19 +392,24 @@ private fun HomeScreenForVisitor(
         modifier = Modifier
             .fillMaxSize()
             .padding(paddingValues)
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
     ) {
-        Spacer(modifier = Modifier.height(height = 8.dp))
         HomeTopBarForVisitor()
-        Spacer(modifier = Modifier.height(height = 16.dp))
-        HomeUserSoptLogDashboardForVisitor(onDashboardClick = homeDashboardNavigation::navigateToEditProfile)
+
+        Spacer(modifier = Modifier.height(height = 8.dp))
+
+        HomeUserSoptLogDashboardForVisitor()
+
         Spacer(modifier = Modifier.height(height = 36.dp))
+
         Text(
             text = "SOPT를 더 알고 싶다면, 둘러보세요",
-            style = typography.heading20B,
-            color = colors.onBackground,
+            style = SoptTheme.typography.heading3,
+            color = SoptTheme.colors.fg.neutral.bold
         )
+
         Spacer(modifier = Modifier.height(height = 16.dp))
+
         HomeShortcutButtonsForVisitor(
             onHomePageClick = {
                 homeShortcutNavigation.navigateToSoptHomepage()
