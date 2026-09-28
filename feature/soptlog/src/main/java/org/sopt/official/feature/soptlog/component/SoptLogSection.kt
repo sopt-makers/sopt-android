@@ -47,7 +47,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.skydoves.balloon.ArrowOrientation
@@ -65,41 +64,11 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.designsystem.Gray950
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
-import org.sopt.official.feature.soptlog.R
 import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.state.SoptLogState
 import org.sopt.official.mds.MdsIcons
 import org.sopt.official.mds.theme.SoptTheme
-
-@Composable
-internal fun SoptLogEmptySection(
-    content: String
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(12.dp))
-            .background(color = SoptTheme.colors.bg.layer.default)
-            .padding(horizontal = 18.dp)
-            .padding(top = 48.dp, bottom = 54.dp),
-        verticalArrangement = Arrangement.spacedBy(space = 10.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptlog_empty_view_eyes),
-            contentDescription = null,
-            tint = SoptTheme.colors.fg.neutral.ghost
-        )
-
-        Text(
-            text = content,
-            color = SoptTheme.colors.fg.neutral.ghost,
-            style = SoptTheme.typography.title4,
-            textAlign = TextAlign.Center
-        )
-    }
-}
 
 @Composable
 internal fun SoptLogSection(
