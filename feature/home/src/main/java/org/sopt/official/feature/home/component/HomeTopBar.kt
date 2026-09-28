@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
@@ -43,9 +44,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.R.drawable.ic_notification_off
-import org.sopt.official.feature.home.R.drawable.ic_notification_on
 import org.sopt.official.feature.home.R.drawable.img_logo
+import org.sopt.official.mds.MdsIcons
 
 @Composable
 internal fun HomeTopBarForMember(
@@ -56,11 +56,14 @@ internal fun HomeTopBarForMember(
     HomeTopBar(modifier = modifier) {
         Icon(
             imageVector = ImageVector.vectorResource(
-                if (hasNotification) ic_notification_on else ic_notification_off
+                if (hasNotification) MdsIcons.bellActiveFilled else MdsIcons.bellFilled
             ),
             contentDescription = null,
             tint = Unspecified,
-            modifier = Modifier.clickable(onClick = onNotificationClick),
+            modifier = Modifier
+                .size(32.dp)
+                .padding(6.dp)
+                .clickable(onClick = onNotificationClick),
         )
     }
 }
@@ -100,7 +103,9 @@ private fun HomeTopBar(
     Row(
         horizontalArrangement = SpaceBetween,
         verticalAlignment = CenterVertically,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
     ) {
         Image(
             painter = painterResource(img_logo),

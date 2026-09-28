@@ -45,15 +45,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomePageIndicator(
     numberOfPages: Int,
     modifier: Modifier = Modifier,
     selectedPage: Int = 0,
-    selectedColor: Color = SoptTheme.colors.onSurface50,
-    defaultColor: Color = SoptTheme.colors.onSurface700,
+    selectedColor: Color = SoptTheme.colors.fg.neutral.bold,
+    defaultColor: Color = SoptTheme.colors.fg.neutral.ghostDisabled,
     animationDurationInMillis: Int = 300,
 ) {
     Row(

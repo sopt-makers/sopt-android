@@ -24,6 +24,8 @@
  */
 package org.sopt.official.feature.home.component
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,52 +43,38 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.ParagraphStyle
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
-import androidx.compose.ui.unit.sp
-import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SoptTheme.typography
-import org.sopt.official.designsystem.SuitBold
-import org.sopt.official.designsystem.component.UrlImage
-import org.sopt.official.feature.home.R.drawable.ic_empty_profile
-import org.sopt.official.feature.home.R.drawable.ic_edit_profile_pencil
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.avatar.MdsAvatar
+import org.sopt.official.mds.components.tag.MdsTagType
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeUserSoptLogDashboardForVisitor(
-    onDashboardClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier
 ) {
     HomeBox(
         modifier = modifier
-            .fillMaxWidth()
-            .clickable { onDashboardClick() },
+            .fillMaxWidth(),
         content = {
             Column(
                 modifier = Modifier.padding(all = 16.dp),
             ) {
                 Text(
                     text = "안녕하세요.\nSOPT의 열정이 되어주세요!",
-                    style = typography.body18M,
-                    color = colors.onBackground,
+                    style = SoptTheme.typography.heading4,
+                    color = SoptTheme.colors.fg.neutral.bold,
                 )
-                Spacer(modifier = Modifier.height(height = 12.dp))
+                Spacer(modifier = Modifier.height(height = 8.dp))
                 RecentGenerationChip(
-                    chipColor = Black40,
-                    textColor = colors.onBackground,
-                    text = "비회원"
+                    text = "비회원",
+                    tagType = MdsTagType.DEFAULT
                 )
             }
         }
@@ -97,9 +85,7 @@ internal fun HomeUserSoptLogDashboardForVisitor(
 @Composable
 private fun HomeUserSoptLogDashboardForVisitorPreview() {
     SoptTheme {
-        HomeUserSoptLogDashboardForVisitor(
-            onDashboardClick = {},
-        )
+        HomeUserSoptLogDashboardForVisitor()
     }
 }
 
@@ -115,65 +101,47 @@ internal fun HomeUserSoptLogDashboardForMember(
             Row(
                 verticalAlignment = CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
             ) {
                 Column(
-                    modifier = Modifier.padding(start = 18.dp)
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
                         text = buildAnnotatedString {
-                            withStyle(style = ParagraphStyle(lineHeight = 28.sp)) {
-                                withStyle(
-                                    style = SpanStyle(
-                                        fontFamily = SuitBold,
-                                        fontSize = 18.sp,
-                                        letterSpacing = (-0.02).em
-                                    )
-                                ) { append(homeUserSoptLogDashboardModel.emphasizedDescription) }
-                                append(homeUserSoptLogDashboardModel.remainingDescription)
-                            }
+                            withStyle(
+                                style = SoptTheme.typography.heading4.toSpanStyle()
+                            ) { append(homeUserSoptLogDashboardModel.emphasizedDescription) }
+                            append(homeUserSoptLogDashboardModel.remainingDescription)
                         },
-                        style = typography.body18M,
-                        color = colors.onBackground
+                        style = SoptTheme.typography.body1,
+                        color = SoptTheme.colors.fg.neutral.bold
                     )
-                    Spacer(modifier = Modifier.height(height = 9.dp))
+
                     HomeGenerationChips(homeUserSoptLogDashboardModel = homeUserSoptLogDashboardModel)
                 }
 
                 Box(
                     modifier = Modifier
                         .clickable(onClick = onDashboardClick)
-                        .padding(horizontal = 14.dp, vertical = 35.dp)
                 ) {
-                    if (homeUserSoptLogDashboardModel.userProfile.isNotEmpty()) {
-                        UrlImage(
-                            url = homeUserSoptLogDashboardModel.userProfile,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(size = 54.dp)
-                                .align(Alignment.Center)
-                                .padding(end = 2.dp)
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(ic_empty_profile),
-                            contentDescription = null,
-                            tint = Unspecified,
-                            modifier = Modifier
-                                .size(size = 54.dp)
-                                .align(Alignment.Center)
-                                .padding(end = 2.dp)
-                        )
-                    }
+                    MdsAvatar(
+                        imageUrl = homeUserSoptLogDashboardModel.userProfile,
+                        size = 54.dp,
+                        modifier = Modifier.padding(end = 2.dp)
+                    )
+
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = ic_edit_profile_pencil),
+                        imageVector = ImageVector.vectorResource(id = MdsIcons.writeOutlined),
                         contentDescription = null,
-                        tint = Unspecified,
+                        tint = SoptTheme.colors.fg.neutral.bold,
                         modifier = Modifier
+                            .size(size = 20.dp)
                             .align(Alignment.BottomEnd)
-                            .size(size = 19.dp)
+                            .background(color = SoptTheme.colors.bg.neutral.default, shape = CircleShape)
+                            .border(width = 3.dp, color = SoptTheme.colors.bg.layer.default, shape = CircleShape)
+                            .padding(6.dp)
                     )
                 }
             }

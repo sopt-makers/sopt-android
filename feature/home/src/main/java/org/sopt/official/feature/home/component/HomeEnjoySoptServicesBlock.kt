@@ -29,17 +29,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -51,12 +46,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.designsystem.Orange400
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SoptTheme.typography
 import org.sopt.official.designsystem.component.UrlImage
 import org.sopt.official.feature.home.model.HomeAppService
+import org.sopt.official.mds.components.tag.MdsTag
+import org.sopt.official.mds.components.tag.MdsTagEmphasis
+import org.sopt.official.mds.components.tag.MdsTagShape
+import org.sopt.official.mds.components.tag.MdsTagSize
+import org.sopt.official.mds.components.tag.MdsTagType
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeEnjoySoptServicesBlock(
@@ -65,14 +62,15 @@ internal fun HomeEnjoySoptServicesBlock(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "SOPT 더 재밌게 즐기기!",
-            style = typography.heading20B,
-            color = colors.onBackground,
+            style = SoptTheme.typography.heading3,
+            color = SoptTheme.colors.fg.neutral.bold
         )
-        Spacer(modifier = Modifier.height(height = 16.dp))
+
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(space = 16.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -108,31 +106,47 @@ private fun AppServiceItem(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { onItemClick() }
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = Modifier.clickable(onClick = onItemClick)
     ) {
-        Box(contentAlignment = TopEnd) {
-            HomeButtonCircleBox {
-                if (appService.defaultIcon != null) {
-                    Image(
-                        painter = painterResource(appService.defaultIcon),
-                        contentDescription = "",
-                        modifier = Modifier.size(size = 60.dp),
-                    )
-                } else {
-                    UrlImage(
-                        url = appService.iconUrl ?: "",
-                        modifier = Modifier.size(size = 60.dp),
-                    )
-                }
+        Box(
+            contentAlignment = Center,
+            modifier = Modifier
+                .size(size = 80.dp)
+                .background(
+                    shape = CircleShape,
+                    color = SoptTheme.colors.bg.neutral.ghost
+                )
+        ) {
+            if (appService.defaultIcon != null) {
+                Image(
+                    painter = painterResource(appService.defaultIcon),
+                    contentDescription = null,
+                    modifier = Modifier.size(size = 60.dp),
+                )
+            } else {
+                UrlImage(
+                    url = appService.iconUrl ?: "",
+                    modifier = Modifier.size(size = 60.dp),
+                )
             }
 
-            if (appService.isShowAlarmBadge) AppServiceAlarmBadge(text = appService.alarmBadgeContent)
+            if (appService.isShowAlarmBadge) {
+                MdsTag(
+                    text = appService.alarmBadgeContent,
+                    type = MdsTagType.PRIMARY,
+                    emphasis = MdsTagEmphasis.SOLID,
+                    size = MdsTagSize.SMALL,
+                    shape = MdsTagShape.PILL,
+                    modifier = Modifier.align(TopEnd)
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(height = 8.dp))
+
         Text(
             text = appService.serviceName,
-            style = typography.body14M,
-            color = colors.onSurface200,
+            style = SoptTheme.typography.label3,
+            color = SoptTheme.colors.fg.neutral.subtle
         )
     }
 }
@@ -145,60 +159,6 @@ private fun AppServiceItemPreview() {
             appService = PREVIEW_FIXTURE[0],
             onItemClick = { },
         )
-    }
-}
-
-@Composable
-private fun AppServiceAlarmBadge(
-    text: String,
-) {
-    Box(
-        contentAlignment = Center,
-        modifier = Modifier.background(
-            color = Orange400,
-            shape = RoundedCornerShape(size = 10.dp),
-        ).height(height = 20.dp)
-    ) {
-        Text(
-            text = text,
-            style = typography.label12SB,
-            color = colors.background,
-            modifier = Modifier.padding(horizontal = 6.dp)
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun AppServiceAlarmBadgePreview() {
-    SoptTheme {
-        AppServiceAlarmBadge(
-            text = "9+"
-        )
-    }
-}
-
-@Composable
-private fun HomeButtonCircleBox(
-    content: @Composable BoxScope.() -> Unit,
-) {
-    Box(
-        content = content,
-        contentAlignment = Center,
-        modifier = Modifier
-            .size(size = 80.dp)
-            .background(
-                shape = CircleShape,
-                color = colors.onSurface800,
-            ),
-    )
-}
-
-@Preview
-@Composable
-private fun HomeButtonCircleBoxPreview() {
-    SoptTheme {
-        HomeButtonCircleBox {}
     }
 }
 

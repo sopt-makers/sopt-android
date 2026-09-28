@@ -24,44 +24,38 @@
  */
 package org.sopt.official.feature.home.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Blue400
-import org.sopt.official.designsystem.BlueAlpha200
-import org.sopt.official.designsystem.Green400
-import org.sopt.official.designsystem.Orange400
-import org.sopt.official.designsystem.OrangeAlpha200
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SoptTheme.typography
-import org.sopt.official.feature.home.R.drawable.ic_arrow_right
-import org.sopt.official.feature.home.R.drawable.ic_check_filled
 import org.sopt.official.feature.home.model.HomeSoptScheduleModel
 import org.sopt.official.feature.home.model.Schedule
-import org.sopt.official.feature.home.model.Schedule.EVENT
-import org.sopt.official.feature.home.model.Schedule.SEMINAR
-import org.sopt.official.feature.home.model.Schedule.JOINT_SEMINAR
 import org.sopt.official.feature.home.model.Schedule.BREAK
+import org.sopt.official.feature.home.model.Schedule.EVENT
+import org.sopt.official.feature.home.model.Schedule.JOINT_SEMINAR
+import org.sopt.official.feature.home.model.Schedule.SEMINAR
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.components.tag.MdsTag
+import org.sopt.official.mds.components.tag.MdsTagEmphasis
+import org.sopt.official.mds.components.tag.MdsTagShape
+import org.sopt.official.mds.components.tag.MdsTagSize
+import org.sopt.official.mds.components.tag.MdsTagType
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeSoptScheduleDashboard(
@@ -74,7 +68,7 @@ internal fun HomeSoptScheduleDashboard(
     HomeBox(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { onScheduleClick() },
+            .clickable(onClick = onScheduleClick),
         content = {
             Row(
                 verticalAlignment = CenterVertically,
@@ -83,28 +77,44 @@ internal fun HomeSoptScheduleDashboard(
                     end = 10.dp,
                     top = 10.dp,
                     bottom = 10.dp,
-                ),
+                )
             ) {
                 Text(
                     text = homeSoptScheduleModel.formattedDate,
-                    style = typography.title14SB,
-                    color = colors.onSurface400,
+                    style = SoptTheme.typography.label3,
+                    color = SoptTheme.colors.fg.neutral.subtle
                 )
+
                 Spacer(modifier = Modifier.width(width = 8.dp))
+
                 HomeScheduleTypeChip(homeSoptScheduleModel.type)
+
                 Spacer(modifier = Modifier.width(width = 8.dp))
+
                 Text(
                     text = homeSoptScheduleModel.title,
-                    style = typography.title16SB,
-                    color = colors.onBackground,
+                    style = SoptTheme.typography.title5,
+                    color = SoptTheme.colors.fg.neutral.bold,
                 )
+
                 Icon(
-                    imageVector = ImageVector.vectorResource(ic_arrow_right),
+                    imageVector = ImageVector.vectorResource(MdsIcons.chevronRightOutlined),
                     contentDescription = null,
-                    tint = Unspecified,
+                    tint = SoptTheme.colors.fg.neutral.bold,
+                    modifier = Modifier.size(20.dp)
                 )
+
                 Spacer(modifier = Modifier.weight(weight = 1f))
-                if (isActivatedGeneration) HomeAttendanceButton(onButtonClick = onAttendanceButtonClick)
+
+                if (isActivatedGeneration) {
+                    MdsActionButton(
+                        text = "출석",
+                        type = MdsActionButtonType.PRIMARY,
+                        size = MdsActionButtonSize.SMALL,
+                        prefixIcon = MdsIcons.checkCircleFilled,
+                        onClick = onAttendanceButtonClick,
+                    )
+                }
             }
         }
     )
@@ -115,61 +125,21 @@ private fun HomeScheduleTypeChip(
     schedule: Schedule,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier.background(
-            color = when (schedule) {
-                EVENT -> BlueAlpha200
-                SEMINAR -> OrangeAlpha200
-                JOINT_SEMINAR -> Orange400.copy(0.2f)
-                BREAK -> Green400.copy(0.2f)
-            },
-            shape = RoundedCornerShape(size = 4.dp),
-        )
-    ) {
-        Text(
-            text = schedule.titleKR,
-            style = typography.label11SB,
-            color = when (schedule) {
-                EVENT -> Blue400
-                SEMINAR -> Orange400
-                JOINT_SEMINAR -> Orange400
-                BREAK -> Green400
-            },
-            modifier = Modifier.padding(
-                horizontal = 6.dp,
-                vertical = 3.dp,
-            ),
-        )
+    val tagType = when (schedule) {
+        EVENT -> MdsTagType.SECONDARY
+        SEMINAR -> MdsTagType.PRIMARY
+        JOINT_SEMINAR -> MdsTagType.PRIMARY
+        BREAK -> MdsTagType.DEFAULT
     }
-}
 
-@Composable
-private fun HomeAttendanceButton(
-    onButtonClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Button(
-        colors = ButtonDefaults.buttonColors(containerColor = colors.onBackground),
-        shape = RoundedCornerShape(size = 8.dp),
-        contentPadding = PaddingValues(
-            vertical = 10.dp,
-            horizontal = 14.dp,
-        ),
-        onClick = onButtonClick,
-        modifier = modifier,
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(ic_check_filled),
-            contentDescription = null,
-            tint = Unspecified,
-        )
-        Spacer(modifier = Modifier.width(width = 4.dp))
-        Text(
-            text = "출석",
-            style = typography.label14SB,
-            color = colors.background,
-        )
-    }
+    MdsTag(
+        text = schedule.titleKR,
+        type = tagType,
+        emphasis = MdsTagEmphasis.SUBTLE,
+        size = MdsTagSize.SMALL,
+        shape = MdsTagShape.RECT,
+        modifier = modifier
+    )
 }
 
 @Preview

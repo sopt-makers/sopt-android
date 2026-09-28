@@ -37,25 +37,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Orange300
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.component.UrlImage
-import org.sopt.official.feature.home.R
+import org.sopt.official.mds.components.avatar.MdsAvatar
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomePlaygroundPost(
@@ -77,7 +68,7 @@ internal fun HomePlaygroundPost(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.onSurface900,
+                color = SoptTheme.colors.bg.layer.default,
                 shape = RoundedCornerShape(12.dp)
             )
             .clickable(onClick = onClick)
@@ -116,41 +107,26 @@ private fun ProfileItem(
         modifier = modifier
             .width(IntrinsicSize.Min)
     ) {
-        if (isAnonymous || profileImage.isBlank()) {
-            Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_empty_profile),
-                contentDescription = null,
-                tint = Color.Unspecified,
-                modifier = Modifier
-                    .size(54.dp)
-                    .clip(shape = CircleShape)
-                    .background(SoptTheme.colors.onSurface800)
-            )
-        } else {
-            UrlImage(
-                url = profileImage,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(54.dp)
-                    .clip(shape = CircleShape)
-                    .background(SoptTheme.colors.onSurface800)
-            )
-        }
+        MdsAvatar(
+            profileImage,
+            size = 48.dp
+        )
 
         Text(
             text = name,
-            style = SoptTheme.typography.body10M,
-            color = SoptTheme.colors.primary,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.bold,
             overflow = TextOverflow.Ellipsis,
             textAlign = TextAlign.Center,
             maxLines = if (isAnonymous) 2 else 1,
-            modifier = Modifier.padding(top = 3.dp, bottom = 1.dp)
+            modifier = Modifier.padding(top = 4.dp, bottom = 2.dp)
         )
+
         if (!part.isNullOrBlank()) {
             Text(
                 text = part,
-                style = SoptTheme.typography.body10M,
-                color = SoptTheme.colors.onSurface400,
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.neutral.subtle,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -173,18 +149,18 @@ private fun PostContentSection(
         ) {
             Text(
                 text = label,
-                style = SoptTheme.typography.label11SB,
-                color = Orange300
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.brand.default
             )
             Box(
                 modifier = Modifier
-                    .background(SoptTheme.colors.onSurface600)
+                    .background(SoptTheme.colors.stroke.neutral.default)
                     .size(width = 1.dp, height = 7.dp)
             )
             Text(
                 text = category,
-                style = SoptTheme.typography.label11SB,
-                color = Orange300
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.brand.default
             )
         }
 
@@ -192,8 +168,8 @@ private fun PostContentSection(
 
         Text(
             text = title,
-            style = SoptTheme.typography.title16SB,
-            color = SoptTheme.colors.primary,
+            style = SoptTheme.typography.title5,
+            color = SoptTheme.colors.fg.neutral.bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
@@ -202,8 +178,8 @@ private fun PostContentSection(
 
         Text(
             text = description,
-            style = SoptTheme.typography.body13M,
-            color = SoptTheme.colors.onSurface400,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.subtle,
             maxLines = 2,
             minLines = 2,
             overflow = TextOverflow.Ellipsis

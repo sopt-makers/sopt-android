@@ -44,9 +44,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R
 import org.sopt.official.feature.home.model.HomeOfficialChannel
+import org.sopt.official.mds.theme.SoptTheme
 
 private val officialChannelList = persistentListOf(
     HomeOfficialChannel.HOMEPAGE to R.drawable.ic_homepage_24,
@@ -71,20 +71,20 @@ internal fun HomeOfficialChannelButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(RoundedCornerShape(8.dp))
-                    .background(SoptTheme.colors.onSurface800)
+                    .background(SoptTheme.colors.bg.layer.default)
                     .padding(vertical = 10.dp, horizontal = 8.dp)
                     .clickable { onChannelClick(channel) }
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(iconRes),
                     contentDescription = null,
-                    tint = SoptTheme.colors.onSurface100
+                    tint = SoptTheme.colors.fg.neutral.default
                 )
 
                 Text(
                     text = channel.title,
-                    style = SoptTheme.typography.body14M,
-                    color = SoptTheme.colors.onSurface100
+                    style = SoptTheme.typography.body2,
+                    color = SoptTheme.colors.fg.neutral.default
                 )
             }
         }
