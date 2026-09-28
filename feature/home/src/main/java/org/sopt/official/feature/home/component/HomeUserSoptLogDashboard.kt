@@ -57,10 +57,12 @@ import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeUserSoptLogDashboardForVisitor(
+    onDashboardClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     HomeBox(
         modifier = modifier
+            .clickable(onClick = onDashboardClick)
             .fillMaxWidth(),
         content = {
             Column(
@@ -85,7 +87,9 @@ internal fun HomeUserSoptLogDashboardForVisitor(
 @Composable
 private fun HomeUserSoptLogDashboardForVisitorPreview() {
     SoptTheme {
-        HomeUserSoptLogDashboardForVisitor()
+        HomeUserSoptLogDashboardForVisitor(
+            onDashboardClick = {}
+        )
     }
 }
 

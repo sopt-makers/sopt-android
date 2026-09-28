@@ -398,7 +398,9 @@ private fun HomeScreenForVisitor(
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
-        HomeUserSoptLogDashboardForVisitor()
+        HomeUserSoptLogDashboardForVisitor(
+            onDashboardClick = homeShortcutNavigation::navigateToPlaygroundHome
+        )
 
         Spacer(modifier = Modifier.height(height = 36.dp))
 
