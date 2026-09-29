@@ -30,7 +30,7 @@
             android:name=".view.WebViewActivity"
             android:exported="false"
             android:hardwareAccelerated="true"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan" />
     </application>
 </manifest>

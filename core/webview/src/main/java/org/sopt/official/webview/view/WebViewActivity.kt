@@ -48,7 +48,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.deeplinkdispatch.DeepLink
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLDecoder
-import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -88,16 +87,8 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    // 인스턴스가 락을 실제로 획득했었는지 기억해두는 용도
-    private var acquiredLock = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        acquiredLock = isActive.compareAndSet(false, true)
-        if (!acquiredLock) {
-            finish()
-            return
-        }
         setContentView(binding.root)
         enableEdgeToEdge()
         applySystemBarInsetsAsPadding()
@@ -159,10 +150,7 @@ class WebViewActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        if (acquiredLock) {
-            isActive.set(false)
-            binding.webView.release()
-        }
+        binding.webView.release()
         super.onDestroy()
     }
 
@@ -210,6 +198,5 @@ class WebViewActivity : AppCompatActivity() {
 
     companion object {
         const val INTENT_URL = "url"
-        private val isActive = AtomicBoolean(false)
     }
 }
