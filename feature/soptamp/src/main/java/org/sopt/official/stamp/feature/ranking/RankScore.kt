@@ -36,7 +36,6 @@ import androidx.compose.ui.unit.sp
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.designsystem.style.MontserratRegular
 import org.sopt.official.stamp.designsystem.style.PretendardMedium
-import java.util.Locale
 
 @Composable
 fun RankScore(
@@ -51,7 +50,7 @@ fun RankScore(
     modifier: Modifier = Modifier,
     score: Double,
 ) {
-    val formattedScore = String.format(Locale.getDefault(),"%.2f", score)
+    val formattedScore = score.toLong().toString()
 
     RankScoreText(modifier = modifier, scoreText = formattedScore)
 }
