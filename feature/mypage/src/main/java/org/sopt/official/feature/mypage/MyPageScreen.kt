@@ -283,16 +283,17 @@ internal fun MyPageScreen(
             Spacer(modifier = Modifier.height(32.dp))
         }
 
-
-        ShowMyPageDialog(
-            dialogState = state.dialogState,
-            onDismissRequest = { onAction(MyPageAction.CloseDialog) },
-            onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
-            onLogoutClick = {
-                onAction(MyPageAction.ConfirmLogout)
-                tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
-            },
-        )
+        if (state.dialogState != MyPageDialogState.CLEAR) {
+            ShowMyPageDialog(
+                dialogState = state.dialogState,
+                onDismissRequest = { onAction(MyPageAction.CloseDialog) },
+                onClearSoptampClick = { onAction(MyPageAction.ResetSoptamp) },
+                onLogoutClick = {
+                    onAction(MyPageAction.ConfirmLogout)
+                    tracker.trackViewType(MypageAnalyticsEvent.CLICK_DONE_LOGOUT, viewType)
+                },
+            )
+        }
     }
 }
 
@@ -303,6 +304,8 @@ private fun ShowMyPageDialog(
     onClearSoptampClick: () -> Unit,
     onLogoutClick: () -> Unit,
 ) {
+    if (dialogState == MyPageDialogState.CLEAR) return
+
     when (dialogState) {
         MyPageDialogState.CLEAR_SOPTAMP -> {
             MdsDialog(
@@ -330,8 +333,6 @@ private fun ShowMyPageDialog(
                 onNegativeButtonClick = onDismissRequest
             )
         }
-
-        else -> {}
     }
 }
 
