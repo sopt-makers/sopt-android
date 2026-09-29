@@ -31,7 +31,6 @@ import androidx.compose.runtime.Stable
 data class ModifySoptampProfileUiState(
     val current: TextFieldState,
     val previous: String,
-    val onChangeCurrent: (String) -> Unit,
     val onUpdate: () -> Unit,
 ) {
     val isConfirmed: Boolean

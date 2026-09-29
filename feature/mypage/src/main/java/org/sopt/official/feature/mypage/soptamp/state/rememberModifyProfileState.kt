@@ -64,7 +64,6 @@ fun rememberModifyProfileState(
     return ModifySoptampProfileUiState(
         current = current,
         previous = previous,
-        onChangeCurrent = { current.setTextAndPlaceCursorAtEnd(it) },
         onUpdate = {
             scope.launch {
                 userRepository.updateProfileMessage(current.text.toString())
