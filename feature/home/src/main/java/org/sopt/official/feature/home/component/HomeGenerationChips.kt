@@ -32,70 +32,55 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Transparent
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import kotlinx.collections.immutable.ImmutableList
-import org.sopt.official.designsystem.Black40
-import org.sopt.official.designsystem.Orange400
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SuitMedium
-import org.sopt.official.designsystem.SuitSemiBold
 import org.sopt.official.feature.home.model.HomeUserSoptLogDashboardModel
+import org.sopt.official.mds.components.tag.MdsTag
+import org.sopt.official.mds.components.tag.MdsTagEmphasis
+import org.sopt.official.mds.components.tag.MdsTagShape
+import org.sopt.official.mds.components.tag.MdsTagSize
+import org.sopt.official.mds.components.tag.MdsTagType
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeGenerationChips(
     homeUserSoptLogDashboardModel: HomeUserSoptLogDashboardModel,
     modifier: Modifier = Modifier,
 ) {
-    val recentChipColor = if (homeUserSoptLogDashboardModel.isActivated) Orange400 else Black40
-    val recentChipTextColor = if (homeUserSoptLogDashboardModel.isActivated) colors.background else colors.onBackground
+    val tagType = if (homeUserSoptLogDashboardModel.isActivated) MdsTagType.PRIMARY else MdsTagType.DEFAULT
 
     Row(modifier = modifier) {
         RecentGenerationChip(
-            chipColor = recentChipColor,
-            textColor = recentChipTextColor,
-            text = homeUserSoptLogDashboardModel.recentGenerationDescription,
+            tagType = tagType,
+            text = homeUserSoptLogDashboardModel.recentGenerationDescription
         )
+
         Spacer(modifier = Modifier.width(width = 8.dp))
+
         LastGenerationChips(homeUserSoptLogDashboardModel.lastGenerations)
     }
 }
 
 @Composable
 internal fun RecentGenerationChip(
-    @ColorRes chipColor: Color,
-    @ColorRes textColor: Color,
     text: String,
-    modifier: Modifier = Modifier,
+    tagType: MdsTagType,
+    modifier: Modifier = Modifier
 ) {
-    Box(
-        contentAlignment = Center,
-        modifier = modifier.background(
-            color = chipColor,
-            shape = RoundedCornerShape(size = 15.dp),
-        ).size(
-            width = 82.dp,
-            height = 24.dp,
-        )
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(
-                fontFamily = SuitSemiBold, fontSize = 12.sp, lineHeight = 15.sp
-            ),
-            color = textColor,
-        )
-    }
+    MdsTag(
+        text = text,
+        modifier = modifier,
+        type = tagType,
+        emphasis = MdsTagEmphasis.SOLID,
+        size = MdsTagSize.SMALL,
+        shape = MdsTagShape.PILL
+    )
 }
 
 @Composable
@@ -103,39 +88,39 @@ private fun LastGenerationChips(generations: ImmutableList<Long>) {
     generations.forEachIndexed { index, generation ->
         when (index) {
             0 -> GenerationChip(
-                chipColor = colors.onSurface600,
-                textColor = colors.onBackground,
+                chipColor = SoptTheme.colors.bg.neutral.default,
+                textColor = SoptTheme.colors.fg.neutral.bold,
                 text = generation.toString(),
             )
 
             1 -> GenerationChip(
-                chipColor = colors.onSurface700,
-                textColor = colors.onSurface10,
+                chipColor = SoptTheme.colors.bg.neutral.subtle,
+                textColor = SoptTheme.colors.fg.neutral.bold,
                 text = generation.toString(),
             )
 
             2 -> GenerationChip(
-                chipColor = Transparent,
-                textColor = colors.onSurface100,
+                chipColor = SoptTheme.colors.bg.neutral.ghost,
+                textColor = SoptTheme.colors.fg.neutral.default,
                 text = generation.toString(),
             )
 
             3 -> GenerationChip(
-                chipColor = Transparent,
-                textColor = colors.onSurface200,
+                chipColor = SoptTheme.colors.bg.neutral.ghost,
+                textColor = SoptTheme.colors.fg.neutral.subtle,
                 text = generation.toString(),
             )
 
             4 -> GenerationChip(
-                chipColor = Transparent,
-                textColor = colors.onSurface300,
+                chipColor = SoptTheme.colors.bg.neutral.ghost,
+                textColor = SoptTheme.colors.fg.neutral.subtle,
                 text = generation.toString(),
             )
 
             5 -> {
                 GenerationChip(
-                    chipColor = Transparent,
-                    textColor = colors.onBackground,
+                    chipColor = SoptTheme.colors.bg.neutral.ghost,
+                    textColor = SoptTheme.colors.fg.neutral.bold,
                     text = "+1",
                 )
                 return@forEachIndexed
@@ -154,17 +139,17 @@ private fun GenerationChip(
 ) {
     Box(
         contentAlignment = Center,
-        modifier = modifier.background(
-            color = chipColor,
-            shape = CircleShape,
-        ).size(size = 24.dp)
+        modifier = modifier
+            .background(
+                color = chipColor,
+                shape = CircleShape,
+            )
+            .size(size = 24.dp)
     ) {
         Text(
             text = text,
-            style = TextStyle(
-                fontFamily = SuitMedium, fontSize = 12.sp, lineHeight = 15.sp
-            ),
-            color = textColor,
+            style = SoptTheme.typography.label4,
+            color = textColor
         )
     }
 }

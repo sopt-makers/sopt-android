@@ -46,9 +46,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.Orange300
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.UrlImage
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomePlaygroundEmptyPost(
@@ -66,7 +65,7 @@ internal fun HomePlaygroundEmptyPost(
             .fillMaxWidth()
             .clickable(onClick = onClick)
             .background(
-                color = SoptTheme.colors.onSurface900,
+                color = SoptTheme.colors.bg.layer.default,
                 shape = RoundedCornerShape(12.dp)
             )
             .padding(start = 24.dp, end = 18.dp)
@@ -77,19 +76,19 @@ internal fun HomePlaygroundEmptyPost(
         ) {
             Text(
                 text = title,
-                style = SoptTheme.typography.body13M,
-                color = SoptTheme.colors.onSurface300
+                style = SoptTheme.typography.body3,
+                color = SoptTheme.colors.fg.neutral.subtle
             )
             Text(
                 text = buildAnnotatedString {
-                    withStyle(SpanStyle(color = Orange300)) {
+                    withStyle(SpanStyle(color = SoptTheme.colors.fg.brand.default)) {
                         append(category)
                     }
-                    withStyle(SpanStyle(color = SoptTheme.colors.onSurface10)) {
+                    withStyle(SpanStyle(color = SoptTheme.colors.fg.neutral.bold)) {
                         append(description)
                     }
                 },
-                style = SoptTheme.typography.heading16B
+                style = SoptTheme.typography.heading4
             )
         }
 
@@ -101,7 +100,7 @@ internal fun HomePlaygroundEmptyPost(
                 .size(64.dp)
                 .clip(CircleShape)
                 .background(
-                    color = SoptTheme.colors.onSurface700
+                    color = SoptTheme.colors.bg.neutral.subtle
                 )
                 .padding(15.dp)
         )

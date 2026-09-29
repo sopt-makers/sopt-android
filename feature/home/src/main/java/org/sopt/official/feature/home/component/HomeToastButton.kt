@@ -43,14 +43,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
-import org.sopt.official.designsystem.Black
-import org.sopt.official.designsystem.MdsGray950
-import org.sopt.official.designsystem.Orange400
 import org.sopt.official.designsystem.Orange500
 import org.sopt.official.designsystem.Orange700
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.UrlImage
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 fun HomeToastButton(
@@ -65,10 +61,8 @@ fun HomeToastButton(
         modifier = modifier
             .fillMaxWidth()
             .clip(CircleShape)
-            .background(Orange400)
-            .noRippleClickable(
-                onClick = {}
-            )
+            .background(SoptTheme.colors.bg.brand.default)
+            .noRippleClickable(onClick = {})
             .padding(13.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -89,16 +83,16 @@ fun HomeToastButton(
         ) {
             Text(
                 text = longTitle,
-                style = SoptTheme.typography.heading16B,
-                color = MdsGray950,
+                style = SoptTheme.typography.heading4,
+                color = SoptTheme.colors.fg.neutral.inverse,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
 
             Text(
                 text = missionDescription,
-                style = SoptTheme.typography.label12SB,
-                color = Orange700,
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.bg.brand.subtle,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1
             )
@@ -108,11 +102,11 @@ fun HomeToastButton(
 
         Text(
             text = buttonText,
-            style = SoptTheme.typography.body13M,
-            color = White,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.bold,
             modifier = Modifier
                 .clip(CircleShape)
-                .background(Black)
+                .background(SoptTheme.colors.bg.layer.default)
                 .padding(horizontal = 11.dp, vertical = 6.dp)
                 .clickable(onClick = onClick)
         )

@@ -34,9 +34,7 @@ import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.White
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeBox(
@@ -47,7 +45,7 @@ internal fun HomeBox(
     Box(
         contentAlignment = contentAlignment,
         modifier = modifier.background(
-            color = colors.onSurface900,
+            color = SoptTheme.colors.bg.layer.default,
             shape = RoundedCornerShape(size = 8.dp),
         ),
     ) {
@@ -63,7 +61,7 @@ private fun HomeBoxPreview() {
             content = {
                 Text(
                     text = "123",
-                    color = White
+                    color = SoptTheme.colors.fg.neutral.bold
                 )
             }
         )
