@@ -313,18 +313,22 @@ fun DateItemsPicker(
     val currentValue = remember { mutableStateOf("") }
 
     LaunchedEffect(!listState.isScrollInProgress, isValidDate, isPastDate) {
-        if (isValidDate) {
-            if (currentValue.value.isNotEmpty()) {
+        if (currentValue.value.isEmpty()) return@LaunchedEffect
+
+        when {
+            isValidDate -> {
                 onItemSelected(currentValue.value)
                 listState.animateScrollToItem(index = listState.firstVisibleItemIndex)
             }
-        } else if (isPastDate) { // 오늘부터 6개월 전의 날짜 선택시
-            if (currentValue.value.isNotEmpty() && listState.firstVisibleItemIndex < min) {
+
+            // 오늘부터 6개월 전의 날짜 선택시
+            isPastDate && listState.firstVisibleItemIndex < min -> {
                 listState.animateScrollToItem(index = min)
                 onItemSelected(currentValue.value)
             }
-        } else { // 오늘 이후의 날짜 선택시
-            if (currentValue.value.isNotEmpty() && max < currentValue.value.toInt()) {
+
+            // 오늘 이후의 날짜 선택시
+            !isPastDate && max < currentValue.value.toInt() -> {
                 listState.animateScrollToItem(index = max)
                 onItemSelected(currentValue.value)
             }
