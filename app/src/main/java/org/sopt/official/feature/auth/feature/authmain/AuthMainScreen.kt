@@ -71,9 +71,7 @@ import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray50
-import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
@@ -284,6 +282,8 @@ private fun AuthFooter(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
+        /*
+        TODO 회원가입 버튼 임시 제거(회원가입 로직 완성후 복구 예정)
         AuthButton(
             padding = PaddingValues(vertical = 12.dp),
             onClick = navigateToCertification,
@@ -298,6 +298,7 @@ private fun AuthFooter(
                 style = SoptTheme.typography.label16SB
             )
         }
+         */
         Spacer(modifier = Modifier.height(16.dp))
         AuthNavigationText(
             text = "나중에 로그인할래요.",

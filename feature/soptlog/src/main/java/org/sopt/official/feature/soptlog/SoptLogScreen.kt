@@ -26,6 +26,7 @@ package org.sopt.official.feature.soptlog
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,7 +44,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
@@ -54,8 +54,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
-import org.sopt.official.common.util.throttledNoRippleClickable
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptlog.model.SoptLogInfo
@@ -64,6 +62,8 @@ import org.sopt.official.feature.soptlog.model.MySoptLogItemType
 import org.sopt.official.feature.soptlog.model.SoptLogCategory
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.state.SoptLogNavigationEvent
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
@@ -139,35 +139,33 @@ private fun SoptlogScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(color = SoptTheme.colors.background)
+            .background(color = SoptTheme.colors.bg.layer.basement)
             .verticalScroll(scrollState)
     ) {
         CenterAlignedTopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = SoptTheme.colors.background,
-                titleContentColor = SoptTheme.colors.surface
+                containerColor = SoptTheme.colors.bg.layer.basement,
+                titleContentColor = SoptTheme.colors.fg.neutral.bold,
+                navigationIconContentColor = SoptTheme.colors.fg.neutral.bold
             ),
             title = {
                 Text(
                     text = "마이 솝트로그",
-                    style = SoptTheme.typography.body16M,
+                    style = SoptTheme.typography.heading4,
                 )
             },
             navigationIcon = {
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_soptlog_arrow_left),
+                    imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
                     contentDescription = null,
-                    tint = Color.Unspecified,
                     modifier = Modifier
-                        .throttledNoRippleClickable(
-                            onClick = navigateUp
-                        )
-                        .padding(start = 20.dp)
+                        .clickable(onClick = navigateUp)
                 )
-            }
+            },
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 20.dp)
         )
 
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_title),
@@ -193,22 +191,17 @@ private fun SoptlogScreen(
                 Spacer(modifier = Modifier.height(28.dp))
             }
 
-            // 각 섹션 엠티뷰 표시 시
-            /*SoptLogEmptySection(
-                content = "콕찌르기 기능 정비 중입니다.\n곧 사용할 수 있어요!"
-            )*/
             SoptLogSection(
                 title = "콕찌르기 로그",
                 items = MySoptLogItemType.entries.filter { it.category == SoptLogCategory.POKE }.toImmutableList(),
                 soptLogInfo = soptLogInfo,
-                onItemClick = {
-                    onNavigationClick(it.url)
+                onItemClick = { type ->
+                    onNavigationClick(type.url)
                 }
             )
-
         }
 
-        Spacer(modifier = Modifier.height(36.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.img_soptlog_bottom),
@@ -216,8 +209,6 @@ private fun SoptlogScreen(
             modifier = Modifier.fillMaxWidth(),
             contentScale = ContentScale.FillWidth
         )
-
-        Spacer(modifier = Modifier.height(72.dp))
     }
 }
 
