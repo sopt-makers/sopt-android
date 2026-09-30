@@ -33,6 +33,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventPass
 import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.node.PointerInputModifierNode
 import androidx.compose.ui.unit.IntSize
@@ -107,4 +108,20 @@ inline fun Modifier.noRippleClickable(
                 onClick()
             },
         )
+    }
+
+/**
+ * [enabled] 이면 이 노드 하위의 모든 터치 이벤트를 막는 Modifier
+ */
+fun Modifier.blockTouches(enabled: Boolean): Modifier =
+    if (!enabled) {
+        this
+    } else {
+        pointerInput(Unit) {
+            awaitPointerEventScope {
+                while (true) {
+                    awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
+                }
+            }
+        }
     }
