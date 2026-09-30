@@ -40,6 +40,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -260,213 +262,216 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding(),
+        containerColor = SoptTheme.colors.background,
+        bottomBar = {
+            SoptBottomBar(
+                visible = navigator.shouldShowBottomBar(),
+                tabs = visibleTabs.toImmutableList(),
+                showBadgeContent = badgeList,
+                currentTab = navigator.currentTab,
+                onTabSelected = { selectedTab ->
+                    selectedTab.loggingName?.let { loggingName ->
+                        tracker.trackViewType(
+                            type = MainTab.CLICK_EVENT_TYPE,
+                            name = loggingName,
+                            viewType = userStatus.toViewType(),
+                        )
+                    }
+
+                    if (navigator.isSameTab(selectedTab)) {
+                        navigator.navigateAndClear(selectedTab, userStatus) {
+                            isOpenDialog = true
+                        }
+                    } else {
+                        navigator.navigate(selectedTab, userStatus) {
+                            isOpenDialog = true
+                        }
+                    }
+                },
+                isMenuOpen = isFloatingMenuOpen,
+                onMenuToggle = {
+                    tracker.trackViewType(
+                        type = MainTab.CLICK_EVENT_TYPE,
+                        name = MainTab.PLUS_BUTTON_LOGGING_NAME,
+                        viewType = userStatus.toViewType(),
+                    )
+                    isFloatingMenuOpen = !isFloatingMenuOpen
+                }
+            )
+        },
         content = { innerPadding ->
-            Column(
+            // 탭바 높이(bottom)는 여기서 패딩 + 소비해서 하위 화면의 imePadding이 중복 계산하지 않게 하고,
+            // 나머지(status bar 등)는 기존처럼 각 화면에 넘긴다
+            val bottomBarPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding())
+            val contentPadding = PaddingValues(top = innerPadding.calculateTopPadding())
+
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(color = SoptTheme.colors.background),
+                    .padding(bottomBarPadding)
+                    .consumeWindowInsets(bottomBarPadding)
             ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
+                NavHost(
+                    modifier = Modifier.fillMaxSize(),
+                    navController = navigator.navController,
+                    startDestination = navigator.startDestination
                 ) {
-                    NavHost(
-                        modifier = Modifier.fillMaxSize(),
-                        navController = navigator.navController,
-                        startDestination = navigator.startDestination
-                    ) {
-                        homeNavGraph(
-                            userStatus = userStatus,
-                            paddingValues = innerPadding,
-                            homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
-                                private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
-                                    putExtra(INTENT_URL, url)
-                                }
+                    homeNavGraph(
+                        userStatus = userStatus,
+                        paddingValues = contentPadding,
+                        homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
+                            private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
+                                putExtra(INTENT_URL, url)
+                            }
 
-                                override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
-                                override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
-                                override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
-                                override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
-                                override fun navigateToPlaygroundProject() = context.startActivity(getIntent(PlaygroundWebLink.PROJECT))
-                                override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getIntent(PlaygroundWebLink.COFFEE_CHAT))
-                                override fun navigateToSoptHomepage() = context.startActivity(getIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
-                                override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
-                                override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))
-                                override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
+                            override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
+                            override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
+                            override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
+                            override fun navigateToPlaygroundProject() = context.startActivity(getIntent(PlaygroundWebLink.PROJECT))
+                            override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getIntent(PlaygroundWebLink.COFFEE_CHAT))
+                            override fun navigateToSoptHomepage() = context.startActivity(getIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
+                            override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))
+                            override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
 
-                                override fun navigateToNotification() =
-                                    context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
+                            override fun navigateToNotification() =
+                                context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
 
-                                override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
-                                override fun navigateToEditProfile() {
-                                    val intent = Intent(context, WebViewActivity::class.java).apply {
-                                        putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
-                                    }
-                                    context.startActivity(intent)
-                                }
-
-                                override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
-                                override fun navigateToDeepLink(url: String) {
-                                    if (userStatus == UserStatus.UNAUTHENTICATED) {
-                                        isOpenDialog = true
-                                        return
-                                    }
-
-                                    val deepLinkType = DeepLinkType.of(url)
-
-                                    when (deepLinkType) {
-                                        DeepLinkType.SOPTAMP -> {
-                                            navigator.navigate(MainTab.Soptamp, userStatus)
-                                        }
-
-                                        DeepLinkType.APPJAMTAMP -> {
-                                            navigator.navigate(MainTab.Appjamtamp, userStatus)
-                                        }
-
-                                        else -> {
-                                            context.startActivity(deepLinkType.getIntent(context, userStatus, url))
-                                        }
-                                    }
-                                }
-
-                                override fun navigateToWebUrl(url: String) {
-                                    context.startActivity(getIntent(url))
-                                }
-
-                                override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
-                                    when (isNewPoke) {
-                                        true -> navigator.navController.navigateToPokeOnboarding(
-                                            generation = currentDestination,
-                                            userStatus = userStatus.name
-                                        )
-
-                                        false -> navigator.navigate(MainTab.Poke, userStatus)
-                                    }
-
-                                override fun navigateToPlaygroundMemberProfile(userId: Int) {
-                                    context.startActivity(
-                                        getIntent("${PlaygroundWebLink.MEMBER}/$userId")
-                                    )
-                                }
-                            },
-                            navigateToSopletter = navigator.navController::navigateToSopletter
-                        )
-
-                        soptampNavGraph(
-                            navController = navigator.navController,
-                            tracker = tracker,
-                            userStatus = userStatus,
-                            currentIntent = intentState
-                        )
-
-                        appjamtampNavGraph(
-                            paddingValues = innerPadding,
-                            navController = navigator.navController
-                        )
-
-                        pokeNavGraph(
-                            navController = navigator.navController,
-                            paddingValues = innerPadding,
-                            userStatus = userStatus
-                        )
-
-                        myPageNavGraph(
-                            userStatus = userStatus,
-                            navigateToSoptLog = {
-                                navigator.navController.navigate(SoptLog)
-                            },
-                            navigateToAuthActivity = {
-                                context.startActivity(applicationNavigator.getAuthActivityIntent())
-                            },
-                            navigateToPlayGroundProfile = {
+                            override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
+                            override fun navigateToEditProfile() {
                                 val intent = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
                                 }
                                 context.startActivity(intent)
                             }
-                        ) {
-                            soptLogNavGraph(
-                                userStatus = userStatus,
-                                soptLogNavigation = object : SoptLogNavigation {
-                                    override fun navigateToDeepLink(url: String) {
-                                        if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
-                                        else if (url == DeepLinkType.SOPTAMP.link) {
-                                            navigator.navigate(MainTab.Soptamp, userStatus)
-                                        } else {
-                                            context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
-                                        }
+
+                            override fun navigateToAttendance() = context.startActivity(applicationNavigator.getAttendanceActivityIntent())
+                            override fun navigateToDeepLink(url: String) {
+                                if (userStatus == UserStatus.UNAUTHENTICATED) {
+                                    isOpenDialog = true
+                                    return
+                                }
+
+                                val deepLinkType = DeepLinkType.of(url)
+
+                                when (deepLinkType) {
+                                    DeepLinkType.SOPTAMP -> {
+                                        navigator.navigate(MainTab.Soptamp, userStatus)
                                     }
 
-                                    override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {
-                                        when {
-                                            url.contains("home/poke/friend-list-summary") -> {
-                                                navigator.navController.navigateToPokeFriendList(friendType, null)
-                                            }
-
-                                            isNewPoke -> {
-                                                navigator.navController.navigateToPokeOnboarding(currentDestination, userStatus.name)
-                                            }
-
-                                            else -> {
-                                                navigator.navigate(MainTab.Poke, userStatus)
-                                            }
-                                        }
+                                    DeepLinkType.APPJAMTAMP -> {
+                                        navigator.navigate(MainTab.Appjamtamp, userStatus)
                                     }
-                                },
-                                navigateUp = navigator::navigateUp
-                            )
-                        }
 
-                        sopletterGraph(
-                            userStatus = userStatus,
-                            navigateToHome = {
-                                if (!navigator.navController.popBackStack()) {
-                                    navigator.navigateAndClear(MainTab.Home, userStatus)
+                                    else -> {
+                                        context.startActivity(deepLinkType.getIntent(context, userStatus, url))
+                                    }
                                 }
                             }
+
+                            override fun navigateToWebUrl(url: String) {
+                                context.startActivity(getIntent(url))
+                            }
+
+                            override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
+                                when (isNewPoke) {
+                                    true -> navigator.navController.navigateToPokeOnboarding(
+                                        generation = currentDestination,
+                                        userStatus = userStatus.name
+                                    )
+
+                                    false -> navigator.navigate(MainTab.Poke, userStatus)
+                                }
+
+                            override fun navigateToPlaygroundMemberProfile(userId: Int) {
+                                context.startActivity(
+                                    getIntent("${PlaygroundWebLink.MEMBER}/$userId")
+                                )
+                            }
+                        },
+                        navigateToSopletter = navigator.navController::navigateToSopletter
+                    )
+
+                    soptampNavGraph(
+                        navController = navigator.navController,
+                        tracker = tracker,
+                        userStatus = userStatus,
+                        currentIntent = intentState
+                    )
+
+                    appjamtampNavGraph(
+                        paddingValues = contentPadding,
+                        navController = navigator.navController
+                    )
+
+                    pokeNavGraph(
+                        navController = navigator.navController,
+                        paddingValues = contentPadding,
+                        userStatus = userStatus
+                    )
+
+                    myPageNavGraph(
+                        userStatus = userStatus,
+                        navigateToSoptLog = {
+                            navigator.navController.navigate(SoptLog)
+                        },
+                        navigateToAuthActivity = {
+                            context.startActivity(applicationNavigator.getAuthActivityIntent())
+                        },
+                        navigateToPlayGroundProfile = {
+                            val intent = Intent(context, WebViewActivity::class.java).apply {
+                                putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
+                            }
+                            context.startActivity(intent)
+                        }
+                    ) {
+                        soptLogNavGraph(
+                            userStatus = userStatus,
+                            soptLogNavigation = object : SoptLogNavigation {
+                                override fun navigateToDeepLink(url: String) {
+                                    if (userStatus == UserStatus.UNAUTHENTICATED) isOpenDialog = true
+                                    else if (url == DeepLinkType.SOPTAMP.link) {
+                                        navigator.navigate(MainTab.Soptamp, userStatus)
+                                    } else {
+                                        context.startActivity(DeepLinkType.of(url).getIntent(context, userStatus, url))
+                                    }
+                                }
+
+                                override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int, friendType: String?) {
+                                    when {
+                                        url.contains("home/poke/friend-list-summary") -> {
+                                            navigator.navController.navigateToPokeFriendList(friendType, null)
+                                        }
+
+                                        isNewPoke -> {
+                                            navigator.navController.navigateToPokeOnboarding(currentDestination, userStatus.name)
+                                        }
+
+                                        else -> {
+                                            navigator.navigate(MainTab.Poke, userStatus)
+                                        }
+                                    }
+                                }
+                            },
+                            navigateUp = navigator::navigateUp
                         )
                     }
 
-                    MainFloatingMenuOverlay(
-                        isOpen = isFloatingMenuOpen,
-                        onClose = { isFloatingMenuOpen = false },
-                        paddingValues = innerPadding
+                    sopletterGraph(
+                        userStatus = userStatus,
+                        navigateToHome = {
+                            if (!navigator.navController.popBackStack()) {
+                                navigator.navigateAndClear(MainTab.Home, userStatus)
+                            }
+                        }
                     )
                 }
 
-                SoptBottomBar(
-                    visible = navigator.shouldShowBottomBar(),
-                    tabs = visibleTabs.toImmutableList(),
-                    showBadgeContent = badgeList,
-                    currentTab = navigator.currentTab,
-                    onTabSelected = { selectedTab ->
-                        selectedTab.loggingName?.let { loggingName ->
-                            tracker.trackViewType(
-                                type = MainTab.CLICK_EVENT_TYPE,
-                                name = loggingName,
-                                viewType = userStatus.toViewType(),
-                            )
-                        }
-
-                        if (navigator.isSameTab(selectedTab)) {
-                            navigator.navigateAndClear(selectedTab, userStatus) {
-                                isOpenDialog = true
-                            }
-                        } else {
-                            navigator.navigate(selectedTab, userStatus) {
-                                isOpenDialog = true
-                            }
-                        }
-                    },
-                    isMenuOpen = isFloatingMenuOpen,
-                    onMenuToggle = {
-                        tracker.trackViewType(
-                            type = MainTab.CLICK_EVENT_TYPE,
-                            name = MainTab.PLUS_BUTTON_LOGGING_NAME,
-                            viewType = userStatus.toViewType(),
-                        )
-                        isFloatingMenuOpen = !isFloatingMenuOpen
-                    }
+                MainFloatingMenuOverlay(
+                    isOpen = isFloatingMenuOpen,
+                    onClose = { isFloatingMenuOpen = false },
+                    paddingValues = contentPadding
                 )
             }
         }
