@@ -362,7 +362,7 @@ internal class MissionDetailViewModel @Inject constructor(
     fun onDelete() {
         viewModelScope.launch {
             uiState.update {
-                it.copy(isError = false, error = null, isLoading = true)
+                it.copy(isError = false, error = null, isLoading = true, isDeleting = true)
             }
             stampRepository.deleteMission(uiState.value.stampId)
                 .onSuccess {
@@ -372,7 +372,7 @@ internal class MissionDetailViewModel @Inject constructor(
                 }.onFailure { error ->
                     Timber.e(error)
                     uiState.update {
-                        it.copy(isLoading = false, isError = true, error = error)
+                        it.copy(isLoading = false, isDeleting = false, isError = true, error = error)
                     }
                 }
         }

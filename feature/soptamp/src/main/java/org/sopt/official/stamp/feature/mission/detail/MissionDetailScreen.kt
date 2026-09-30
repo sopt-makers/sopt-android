@@ -223,7 +223,7 @@ internal fun MissionDetailScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
             .imePadding()
-            .blockTouches(enabled = uiState.isSubmitting || uiState.isSuccess),
+            .blockTouches(enabled = uiState.isInteractionBlocked),
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -349,11 +349,11 @@ internal fun MissionDetailScreen(
         }
     }
 
-    BackHandler(enabled = uiState.isSubmitting || uiState.isSuccess) {
+    BackHandler(enabled = uiState.isInteractionBlocked) {
         if (uiState.isSuccess) finishWithResult()
     }
 
-    if (uiState.isSubmitting) {
+    if (uiState.isSubmitting || uiState.isDeleting) {
         LoadingIndicator()
     }
     if (uiState.isSuccess) {
