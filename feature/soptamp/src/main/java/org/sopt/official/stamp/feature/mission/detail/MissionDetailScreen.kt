@@ -114,8 +114,6 @@ internal fun MissionDetailScreen(
     val (id, title, level, isCompleted, isMe, nickname) = args
     val uiState by viewModel.missionDetailUiState.collectAsStateWithLifecycle()
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
-    val isEditable = uiState.mode == MissionDetailModeType.WRITE || uiState.mode == MissionDetailModeType.EDIT
-    val isSubmitting = isEditable && uiState.isLoading
     val lottieResId =
         remember(level) {
             when (level.value) {
@@ -175,10 +173,7 @@ internal fun MissionDetailScreen(
         }
     }
     LaunchedEffect(uiState.isDeleteSuccess) {
-        if (uiState.isDeleteSuccess) {
-            navController.setMissionDetailResult(true)
-            navController.popBackStack()
-        }
+        if (uiState.isDeleteSuccess) finishWithResult()
     }
 
     LaunchedEffect(uiState.isShowEditSnackBar) {
@@ -228,7 +223,7 @@ internal fun MissionDetailScreen(
             .statusBarsPadding()
             .navigationBarsPadding()
             .imePadding()
-            .blockTouches(enabled = isSubmitting || uiState.isSuccess),
+            .blockTouches(enabled = uiState.isSubmitting || uiState.isSuccess),
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -272,7 +267,7 @@ internal fun MissionDetailScreen(
                     ImageContent(
                         imageModel = uiState.imageUri,
                         onChangeImage = viewModel::onChangeImage,
-                        isEditable = isEditable && isMe,
+                        isEditable = uiState.isEditable && isMe,
                         onClickZoomIn = { url ->
                             isZoomInDialogOpen = true
                             selectedZoomInImage = url
@@ -280,14 +275,14 @@ internal fun MissionDetailScreen(
                         },
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (isEditable && isMe) {
+                    if (uiState.isEditable && isMe) {
                         DatePicker(
                             value = uiState.date,
                             placeHolder = "날짜를 입력해 주세요.",
                             onClicked = {
                                 viewModel.onChangeDatePickerBottomSheetOpened(true)
                             },
-                            isEditable = isEditable && isMe && !uiState.isSuccess,
+                            isEditable = uiState.isEditable && isMe && !uiState.isSuccess,
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -296,7 +291,7 @@ internal fun MissionDetailScreen(
                         placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                         onValueChange = viewModel::onChangeContent,
                         borderColor = SoptTheme.colors.onSurface600,
-                        isEditable = isEditable && isMe && !uiState.isSuccess,
+                        isEditable = uiState.isEditable && isMe && !uiState.isSuccess,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     if (isCompleted) {
@@ -307,11 +302,11 @@ internal fun MissionDetailScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(if (isEditable && isMe) 20.dp else 120.dp))
+                    Spacer(modifier = Modifier.height(if (uiState.isEditable && isMe) 20.dp else 120.dp))
                 }
 
                 // 스크롤 영역 아래에 두어야 키보드가 올라왔을 때 버튼이 메모를 덮지 않음
-                if (isEditable && isMe) {
+                if (uiState.isEditable && isMe) {
                     SoptampButton(
                         text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
                         onClicked = {
@@ -326,7 +321,7 @@ internal fun MissionDetailScreen(
                 }
             }
 
-            if (!isEditable && isMe) {
+            if (!uiState.isEditable && isMe) {
                 SoptampButton(
                     text = "누가 박수쳤을까요?",
                     onClicked = {
@@ -354,11 +349,11 @@ internal fun MissionDetailScreen(
         }
     }
 
-    BackHandler(enabled = isSubmitting || uiState.isSuccess) {
+    BackHandler(enabled = uiState.isSubmitting || uiState.isSuccess) {
         if (uiState.isSuccess) finishWithResult()
     }
 
-    if (isSubmitting) {
+    if (uiState.isSubmitting) {
         LoadingIndicator()
     }
     if (uiState.isSuccess) {

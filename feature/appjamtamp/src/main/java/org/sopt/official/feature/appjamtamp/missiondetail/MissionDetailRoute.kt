@@ -346,8 +346,6 @@ private fun MissionDetailScreen(
             .imePadding(),
         contentAlignment = Alignment.BottomCenter
     ) {
-        val isWriting = uiState.viewType == DetailViewType.EDIT || uiState.viewType == DetailViewType.WRITE
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -426,11 +424,11 @@ private fun MissionDetailScreen(
                     viewCount = uiState.viewCount
                 )
 
-                Spacer(modifier = Modifier.height(if (isWriting) 20.dp else 120.dp))
+                Spacer(modifier = Modifier.height(if (uiState.isWriting) 20.dp else 120.dp))
             }
 
             // 스크롤 영역 아래에 두어야 키보드가 올라왔을 때 버튼이 메모를 덮지 않음
-            if (isWriting) {
+            if (uiState.isWriting) {
                 AppjamtampButton(
                     text = "미션 완료",
                     onClicked = onActionButtonClick,

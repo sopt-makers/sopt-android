@@ -61,6 +61,12 @@ internal data class MissionDetailUiState(
     val initSnapshotContent: String = "",
     val initSnapshotDate: String = "",
 ) {
+    val isEditable: Boolean
+        get() = mode == MissionDetailModeType.WRITE || mode == MissionDetailModeType.EDIT
+
+    val isSubmitting: Boolean
+        get() = isEditable && isLoading
+
     companion object {
         fun from(data: Archive) =
             MissionDetailUiState(
