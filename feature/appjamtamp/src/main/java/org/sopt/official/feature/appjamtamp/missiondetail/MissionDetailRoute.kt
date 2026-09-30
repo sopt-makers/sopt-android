@@ -31,6 +31,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -264,6 +265,7 @@ private fun MyEmptyMissionDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
+            .imePadding()
             .padding(horizontal = 16.dp)
             .verticalScroll(scrollState)
     ) {
@@ -340,84 +342,104 @@ private fun MissionDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .imePadding(),
         contentAlignment = Alignment.BottomCenter
     ) {
+        val isWriting = uiState.viewType == DetailViewType.EDIT || uiState.viewType == DetailViewType.WRITE
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
                 .align(Alignment.TopCenter)
         ) {
-            BackButtonHeader(
-                title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
-                onBackButtonClick = onBackButtonClick,
-                trailingIcon = {
-                    uiState.viewType.toolbarIcon?.let {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
-                            contentDescription = null,
-                            tint = SoptTheme.colors.onSurface10,
-                            modifier = Modifier
-                                .clickable(onClick = onToolbarIconClick)
-                        )
-                    }
-                },
+            Column(
                 modifier = Modifier
-                    .padding(vertical = 12.dp)
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            MissionHeader(
-                title = uiState.mission.title,
-                stamp = Stamp.findStampByLevel(uiState.mission.level)
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            ImageContent(
-                imageModel = uiState.imageModel,
-                onChangeImage = onChangeImage,
-                onClickZoomIn = onClickZoomIn,
-                isEditable = isEditable
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            ProfileTag(
-                name = uiState.writer.name,
-                profileImage = uiState.writer.profileImage
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            if (isEditable) {
-                DatePicker(
-                    value = uiState.date,
-                    placeHolder = "날짜를 입력해주세요.",
-                    isEditable = true,
-                    onClicked = onDatePickerClick
+                    .weight(1f)
+                    .verticalScroll(scrollState)
+            ) {
+                BackButtonHeader(
+                    title = if (uiState.viewType == DetailViewType.COMPLETE) "내 미션" else uiState.teamName,
+                    onBackButtonClick = onBackButtonClick,
+                    trailingIcon = {
+                        uiState.viewType.toolbarIcon?.let {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(uiState.viewType.toolbarIcon),
+                                contentDescription = null,
+                                tint = SoptTheme.colors.onSurface10,
+                                modifier = Modifier
+                                    .clickable(onClick = onToolbarIconClick)
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .padding(vertical = 12.dp)
                 )
 
+                Spacer(modifier = Modifier.height(10.dp))
+
+                MissionHeader(
+                    title = uiState.mission.title,
+                    stamp = Stamp.findStampByLevel(uiState.mission.level)
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                ImageContent(
+                    imageModel = uiState.imageModel,
+                    onChangeImage = onChangeImage,
+                    onClickZoomIn = onClickZoomIn,
+                    isEditable = isEditable
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+
+                ProfileTag(
+                    name = uiState.writer.name,
+                    profileImage = uiState.writer.profileImage
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                if (isEditable) {
+                    DatePicker(
+                        value = uiState.date,
+                        placeHolder = "날짜를 입력해주세요.",
+                        isEditable = true,
+                        onClicked = onDatePickerClick
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+
+                Memo(
+                    value = uiState.content,
+                    placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
+                    onValueChange = onMemoChange,
+                    isEditable = isEditable
+                )
                 Spacer(modifier = Modifier.height(8.dp))
+
+                DetailInfo(
+                    date = uiState.date,
+                    clapCount = uiState.clapCount,
+                    viewCount = uiState.viewCount
+                )
+
+                Spacer(modifier = Modifier.height(if (isWriting) 20.dp else 120.dp))
             }
 
-            Memo(
-                value = uiState.content,
-                placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
-                onValueChange = onMemoChange,
-                isEditable = isEditable
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            DetailInfo(
-                date = uiState.date,
-                clapCount = uiState.clapCount,
-                viewCount = uiState.viewCount
-            )
-
-            Spacer(modifier = Modifier.height(120.dp))
+            // 스크롤 영역 아래에 두어야 키보드가 올라왔을 때 버튼이 메모를 덮지 않음
+            if (isWriting) {
+                AppjamtampButton(
+                    text = "미션 완료",
+                    onClicked = onActionButtonClick,
+                    isEnabled = isSubmitEnabled,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp)
+                )
+            }
         }
 
         when (uiState.viewType) {
@@ -441,16 +463,7 @@ private fun MissionDetailScreen(
                 )
             }
 
-            DetailViewType.EDIT, DetailViewType.WRITE -> {
-                AppjamtampButton(
-                    text = "미션 완료",
-                    onClicked = onActionButtonClick,
-                    isEnabled = isSubmitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp)
-                )
-            }
+            DetailViewType.EDIT, DetailViewType.WRITE -> Unit
         }
     }
 }

@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -226,6 +227,7 @@ internal fun MissionDetailScreen(
             .fillMaxSize()
             .statusBarsPadding()
             .navigationBarsPadding()
+            .imePadding()
             .blockTouches(enabled = isSubmitting || uiState.isSuccess),
     ) { paddingValues ->
         Box(
@@ -305,22 +307,23 @@ internal fun MissionDetailScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(120.dp))
+                    Spacer(modifier = Modifier.height(if (isEditable && isMe) 20.dp else 120.dp))
                 }
-            }
 
-            if (isEditable && isMe) {
-                SoptampButton(
-                    text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
-                    onClicked = {
-                        focusManager.clearFocus()
-                        viewModel.onSubmit()
-                    },
-                    isEnabled = isSubmitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp),
-                )
+                // 스크롤 영역 아래에 두어야 키보드가 올라왔을 때 버튼이 메모를 덮지 않음
+                if (isEditable && isMe) {
+                    SoptampButton(
+                        text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
+                        onClicked = {
+                            focusManager.clearFocus()
+                            viewModel.onSubmit()
+                        },
+                        isEnabled = isSubmitEnabled,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp),
+                    )
+                }
             }
 
             if (!isEditable && isMe) {
