@@ -26,12 +26,14 @@ package org.sopt.official.stamp.feature.mission.detail
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -53,12 +55,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
@@ -67,8 +71,10 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
+import org.sopt.official.common.util.blockTouches
 import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.domain.soptamp.MissionLevel
 import org.sopt.official.domain.soptamp.fake.FakeImageUploaderRepository
 import org.sopt.official.domain.soptamp.fake.FakeStampRepository
@@ -108,7 +114,6 @@ internal fun MissionDetailScreen(
     val (id, title, level, isCompleted, isMe, nickname) = args
     val uiState by viewModel.missionDetailUiState.collectAsStateWithLifecycle()
     val isSubmitEnabled by viewModel.isSubmitEnabled.collectAsStateWithLifecycle(false)
-    val isEditable = uiState.mode == MissionDetailModeType.WRITE || uiState.mode == MissionDetailModeType.EDIT
     val lottieResId =
         remember(level) {
             when (level.value) {
@@ -146,6 +151,13 @@ internal fun MissionDetailScreen(
     val tracker = LocalTracker.current
     val viewType = userStatus.toViewType()
     val snackBarHostState = remember { SnackbarHostState() }
+    val focusManager = LocalFocusManager.current
+
+    // 로띠 종료와 뒤로가기가 겹쳐도 pop이 한 번만 되도록, 화면이 RESUMED일 때만 실행
+    val finishWithResult = dropUnlessResumed {
+        navController.setMissionDetailResult(true)
+        navController.popBackStack()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getMyName()
@@ -157,15 +169,11 @@ internal fun MissionDetailScreen(
     LaunchedEffect(uiState.isSuccess, progress) {
         if (progress >= 0.99f && uiState.isSuccess) {
             delay(500L)
-            navController.setMissionDetailResult(true)
-            navController.popBackStack()
+            finishWithResult()
         }
     }
     LaunchedEffect(uiState.isDeleteSuccess) {
-        if (uiState.isDeleteSuccess) {
-            navController.setMissionDetailResult(true)
-            navController.popBackStack()
-        }
+        if (uiState.isDeleteSuccess) finishWithResult()
     }
 
     LaunchedEffect(uiState.isShowEditSnackBar) {
@@ -213,7 +221,9 @@ internal fun MissionDetailScreen(
         modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
-            .navigationBarsPadding(),
+            .navigationBarsPadding()
+            .imePadding()
+            .blockTouches(enabled = uiState.isInteractionBlocked),
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -257,7 +267,7 @@ internal fun MissionDetailScreen(
                     ImageContent(
                         imageModel = uiState.imageUri,
                         onChangeImage = viewModel::onChangeImage,
-                        isEditable = isEditable && isMe,
+                        isEditable = uiState.isEditable && isMe,
                         onClickZoomIn = { url ->
                             isZoomInDialogOpen = true
                             selectedZoomInImage = url
@@ -265,14 +275,14 @@ internal fun MissionDetailScreen(
                         },
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (isEditable && isMe) {
+                    if (uiState.isEditable && isMe) {
                         DatePicker(
                             value = uiState.date,
                             placeHolder = "날짜를 입력해 주세요.",
                             onClicked = {
                                 viewModel.onChangeDatePickerBottomSheetOpened(true)
                             },
-                            isEditable = isEditable && isMe && !uiState.isSuccess,
+                            isEditable = uiState.isEditable && isMe && !uiState.isSuccess,
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
@@ -281,7 +291,7 @@ internal fun MissionDetailScreen(
                         placeHolder = "함께한 사람과 어떤 추억을 남겼는지 작성해 주세요.",
                         onValueChange = viewModel::onChangeContent,
                         borderColor = SoptTheme.colors.onSurface600,
-                        isEditable = isEditable && isMe && !uiState.isSuccess,
+                        isEditable = uiState.isEditable && isMe && !uiState.isSuccess,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     if (isCompleted) {
@@ -292,22 +302,26 @@ internal fun MissionDetailScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(120.dp))
+                    Spacer(modifier = Modifier.height(if (uiState.isEditable && isMe) 20.dp else 120.dp))
+                }
+
+                // 스크롤 영역 아래에 두어야 키보드가 올라왔을 때 버튼이 메모를 덮지 않음
+                if (uiState.isEditable && isMe) {
+                    SoptampButton(
+                        text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
+                        onClicked = {
+                            focusManager.clearFocus()
+                            viewModel.onSubmit()
+                        },
+                        isEnabled = isSubmitEnabled,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 20.dp),
+                    )
                 }
             }
 
-            if (isEditable && isMe) {
-                SoptampButton(
-                    text = if (uiState.mode == MissionDetailModeType.EDIT) "수정 완료" else "미션 완료",
-                    onClicked = viewModel::onSubmit,
-                    isEnabled = isSubmitEnabled,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 20.dp),
-                )
-            }
-
-            if (!isEditable && isMe) {
+            if (!uiState.isEditable && isMe) {
                 SoptampButton(
                     text = "누가 박수쳤을까요?",
                     onClicked = {
@@ -335,6 +349,13 @@ internal fun MissionDetailScreen(
         }
     }
 
+    BackHandler(enabled = uiState.isInteractionBlocked) {
+        if (uiState.isSuccess) finishWithResult()
+    }
+
+    if (uiState.isSubmitting || uiState.isDeleting) {
+        LoadingIndicator()
+    }
     if (uiState.isSuccess) {
         PostSubmissionBadge(
             composition = lottieComposition,
