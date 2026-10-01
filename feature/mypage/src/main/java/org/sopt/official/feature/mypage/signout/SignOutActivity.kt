@@ -29,32 +29,29 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jakewharton.processphoenix.ProcessPhoenix
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.mypage.R
-import org.sopt.official.feature.mypage.component.MyPageButton
 import org.sopt.official.feature.mypage.component.MyPageTopBar
 import org.sopt.official.feature.mypage.di.authRepository
 import org.sopt.official.feature.mypage.di.soptUserRepository
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.theme.SoptTheme
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SignOutActivity : AppCompatActivity() {
@@ -99,43 +96,32 @@ private fun SignOutScreen(
 ) {
     Scaffold(
         modifier = modifier
-            .fillMaxSize()
-            .background(SoptTheme.colors.background),
+            .fillMaxSize(),
         topBar = {
             MyPageTopBar(
                 title = "탈퇴하기",
                 onNavigationIconClick = onNavigationIconClick
             )
-        }
+        },
+        containerColor = SoptTheme.colors.bg.layer.basement
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(SoptTheme.colors.background)
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .padding(horizontal = 20.dp)
+                .padding(top = 16.dp, bottom = 28.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            SignOutWithdrawInfo()
 
-            SignOutWithdrawInfo(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-            MyPageButton(
-                paddingVertical = 16.dp,
-                modifier = Modifier
-                    .padding(20.dp)
-                    .fillMaxWidth(),
+            MdsActionButton(
+                text = "탈퇴하기",
+                type = MdsActionButtonType.DANGER,
+                size = MdsActionButtonSize.LARGE,
                 onClick = onWithDraw,
-            ) {
-                Text(
-                    text = stringResource(R.string.sign_out_button),
-                    style = SoptTheme.typography.heading18B,
-                    color = SoptTheme.colors.error
-                )
-            }
-            Spacer(modifier = Modifier.height(14.dp))
+                modifier = Modifier.fillMaxWidth()
+            )
         }
     }
 }
