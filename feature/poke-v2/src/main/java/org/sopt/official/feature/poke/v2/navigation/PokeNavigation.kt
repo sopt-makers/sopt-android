@@ -38,11 +38,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.sopt.official.feature.poke.v2.bridge.PokeEntryRoute
+import org.sopt.official.feature.poke.v2.bridge.navigation.PokeEntry
 import org.sopt.official.feature.poke.v2.component.PokeScaffold
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
 import org.sopt.official.feature.poke.v2.friend.navigation.PokeFriend
 import org.sopt.official.feature.poke.v2.main.navigation.PokeMain
 import org.sopt.official.feature.poke.v2.onboarding.navigation.PokeOnboarding
+import org.sopt.official.model.UserStatus
 
 @Serializable
 data object PokeGraph
@@ -52,15 +55,17 @@ fun NavController.navigateToPoke(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.pokeGraph(
+    userStatus: UserStatus,
     navigateUp: () -> Unit,
 ) {
     composable<PokeGraph> {
-        PokeNavHost(navigateUp = navigateUp)
+        PokeNavHost(userStatus = userStatus, navigateUp = navigateUp)
     }
 }
 
 @Composable
 private fun PokeNavHost(
+    userStatus: UserStatus,
     navigateUp: () -> Unit,
 ) {
     val navController = rememberNavController()
@@ -74,9 +79,25 @@ private fun PokeNavHost(
     PokeScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = PokeMain,
+            startDestination = PokeEntry,
             modifier = Modifier.padding(innerPadding),
         ) {
+            // 브릿지 화면 - 로딩. 신규 유저 여부를 판별해 온보딩/메인으로 분기한다.
+            composable<PokeEntry> {
+                PokeEntryRoute(
+                    navigateToOnboarding = {
+                        // TODO(poke-v2): currentGeneration 소스 결정 전까지 기본값 사용
+                        navController.navigate(PokeOnboarding(userStatus = userStatus.name))
+                    },
+                    navigateToMain = {
+                        navController.navigate(PokeMain) {
+                            popUpTo<PokeEntry> { inclusive = true }
+                            launchSingleTop = true
+                        }
+                    },
+                    navigateUp = navigateUp,
+                )
+            }
             composable<PokeOnboarding> {
                 // TODO PokeOnboardingRoute
             }
@@ -85,6 +106,9 @@ private fun PokeNavHost(
             }
             composable<PokeFriend> {
                 // TODO PokeFriendRoute
+            }
+            composable<PokeNotification> {
+                // TODO PokeNotificationRoute (레거시 이관 예정)
             }
         }
     }
