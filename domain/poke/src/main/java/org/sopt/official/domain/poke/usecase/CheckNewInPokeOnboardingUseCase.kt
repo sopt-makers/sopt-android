@@ -30,7 +30,5 @@ import org.sopt.official.domain.poke.repository.PokeRepository
 class CheckNewInPokeOnboardingUseCase @Inject constructor(
     private val repository: PokeRepository,
 ) {
-    suspend operator fun invoke(): Boolean {
-        return repository.checkNewInPokeOnboarding()
-    }
+    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
 }
