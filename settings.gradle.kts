@@ -22,6 +22,8 @@ include(
 
     ":baselineprofile",
 
+    ":libs:mds",
+
     ":core:analytics",
     ":core:auth",
     ":core:authimpl",
