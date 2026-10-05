@@ -44,16 +44,15 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
 import org.sopt.official.feature.mypage.R
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 
 @Composable
 internal fun MyPageUserContentsInfo(
     userStatus: UserStatus,
     modifier: Modifier = Modifier,
-    isAppjamPeriod : Boolean = false,
+    isAppjamPeriod: Boolean = false,
     totalSoptampCount: Int? = 0,
     totalPokeCount: Int? = 0,
 ) {
@@ -61,8 +60,8 @@ internal fun MyPageUserContentsInfo(
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.onSurface800,
-                shape = RoundedCornerShape(12.dp)
+                color = SoptTheme.colors.bg.layer.default,
+                shape = RoundedCornerShape(10.dp)
             )
             .padding(horizontal = 6.dp, vertical = 4.dp)
     ) {
@@ -85,7 +84,7 @@ internal fun MyPageUserContentsInfo(
 
 @Composable
 private fun MyPageUserContentsInfoItem(
-    @DrawableRes icon: Int ,
+    @DrawableRes icon: Int,
     infoTitleText: String,
     infoContentText: String,
     modifier: Modifier = Modifier
@@ -108,16 +107,16 @@ private fun MyPageUserContentsInfoItem(
 
         Text(
             text = infoTitleText,
-            style = SoptTheme.typography.body14M,
-            color = SoptTheme.colors.onSurface200
+            style = SoptTheme.typography.label3,
+            color = SoptTheme.colors.fg.neutral.default
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         Text(
             text = "${infoContentText}회",
-            style = SoptTheme.typography.heading16B,
-            color = White
+            style = SoptTheme.typography.label2,
+            color = SoptTheme.colors.fg.neutral.bold
         )
     }
 }
