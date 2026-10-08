@@ -11,11 +11,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,6 +32,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.domain.poke.type.PokeFriendType
@@ -54,20 +58,28 @@ internal fun PokeFriendRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
+    val messageSheetSnackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
             .collect { sideEffect ->
                 when (sideEffect) {
-                    is PokeFriendSideEffect.ShowSnackbar -> onShowSnackbar(
-                        PokeSnackBarVisuals(message = sideEffect.message, type = sideEffect.type),
-                    )
+                    is PokeFriendSideEffect.ShowSnackbar -> {
+                        val visuals = PokeSnackBarVisuals(message = sideEffect.message, type = sideEffect.type)
+                        if (sideEffect.isMessageSheet && viewModel.uiState.value.messageSheet != null) {
+                            scope.launch { messageSheetSnackbarHostState.showSnackbar(visuals) }
+                        } else {
+                            onShowSnackbar(visuals)
+                        }
+                    }
                 }
             }
     }
 
     PokeFriendScreen(
         uiState = uiState,
+        messageSheetSnackbarHostState = messageSheetSnackbarHostState,
         onBackClick = navigateUp,
         onRefresh = viewModel::getFriendListSummary,
         onFriendListClick = viewModel::openFriendListSheet,
@@ -90,6 +102,7 @@ internal fun PokeFriendRoute(
 @Composable
 private fun PokeFriendScreen(
     uiState: PokeFriendState,
+    messageSheetSnackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
     onRefresh: () -> Unit,
     onFriendListClick: (PokeFriendType) -> Unit,
@@ -154,6 +167,7 @@ private fun PokeFriendScreen(
             onAnonymousCheckboxClick = onMessageAnonymousClick,
             onMessageClick = onMessageClick,
             onDismissRequest = onMessageSheetDismiss,
+            snackbarHostState = messageSheetSnackbarHostState,
         )
     }
 }
@@ -251,6 +265,7 @@ private fun PokeFriendScreenPreview() {
                     PokeFriendType.SOULMATE to FriendListUiState(friendCount = 0),
                 ),
             ),
+            messageSheetSnackbarHostState = remember { SnackbarHostState() },
             onBackClick = {},
             onRefresh = {},
             onFriendListClick = {},

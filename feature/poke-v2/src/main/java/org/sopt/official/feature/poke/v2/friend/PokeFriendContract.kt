@@ -20,5 +20,6 @@ sealed interface PokeFriendSideEffect {
     data class ShowSnackbar(
         val message: String,
         val type: PokeSnackBarType = PokeSnackBarType.WARNING,
+        val isMessageSheet: Boolean = false,
     ) : PokeFriendSideEffect
 }

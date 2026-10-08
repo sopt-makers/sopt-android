@@ -32,26 +32,37 @@ import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.util.noRippleClickable
@@ -68,6 +79,7 @@ import org.sopt.official.designsystem.SoptTheme as LegacySoptTheme
  * @param isAnonymousCheckboxLocked  true 이면 익명 불가 (체크박스 미체크 고정)
  * @param onAnonymousCheckboxClick   체크박스 탭 시 호출
  * @param onMessageClick             선택한 메시지 전달
+ * @param snackbarHostState          시트가 열려 있는 동안 띄울 스낵바
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -80,6 +92,7 @@ internal fun PokeMessageBottomSheet(
     modifier: Modifier = Modifier,
     title: String = "보낼 메시지를 골라주세요",
     onAnonymousCheckboxClick: () -> Unit = {},
+    snackbarHostState: SnackbarHostState? = null,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
 ) {
     ModalBottomSheet(
@@ -101,7 +114,46 @@ internal fun PokeMessageBottomSheet(
             onAnonymousClick = onAnonymousCheckboxClick,
             onMessageClick = onMessageClick,
         )
+
+        snackbarHostState?.let { PokeMessageBottomSheetSnackbarHost(hostState = it) }
     }
+}
+
+@Composable
+private fun PokeMessageBottomSheetSnackbarHost(
+    hostState: SnackbarHostState
+) {
+    DisposableEffect(hostState) {
+        onDispose { hostState.currentSnackbarData?.dismiss() }
+    }
+
+    val density = LocalDensity.current
+    val topOffset = WindowInsets.statusBars.getTop(density) + with(density) { SoptTheme.spacing.s16.roundToPx() }
+    val snackbarPositionProvider = remember(topOffset) { TopPopupPositionProvider(topOffset) }
+
+    Popup(popupPositionProvider = snackbarPositionProvider) {
+        PokeSnackBarHost(
+            hostState = hostState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = SoptTheme.spacing.s16),
+        )
+    }
+}
+
+private class TopPopupPositionProvider(
+    private val top: Int,
+) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ): IntOffset =
+        IntOffset(
+            x = 0,
+            y = top
+        )
 }
 
 @Composable

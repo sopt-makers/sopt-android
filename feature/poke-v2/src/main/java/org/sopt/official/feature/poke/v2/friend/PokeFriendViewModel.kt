@@ -144,10 +144,10 @@ class PokeFriendViewModel @Inject constructor(
                     }
                 }
                 .onApiError { _, _ ->
-                    emitErrorSnackbar()
+                    emitErrorSnackbar(isMessageSheet = true)
                 }
                 .onFailure { throwable ->
-                    emitErrorSnackbar(throwable)
+                    emitErrorSnackbar(throwable, isMessageSheet = true)
                 }
         }
     }
@@ -157,7 +157,12 @@ class PokeFriendViewModel @Inject constructor(
 
         if (sheet.target.isAnonymousCheckboxLocked) {
             viewModelScope.launch {
-                _sideEffect.emit(PokeFriendSideEffect.ShowSnackbar(message = "천생연분은 실명으로만 콕찌를 수 있어요."))
+                _sideEffect.emit(
+                    PokeFriendSideEffect.ShowSnackbar(
+                        message = "천생연분은 실명으로만 콕찌를 수 있어요.",
+                        isMessageSheet = true,
+                    ),
+                )
             }
             return
         }
@@ -169,7 +174,12 @@ class PokeFriendViewModel @Inject constructor(
 
         if (!isAnonymous) {
             viewModelScope.launch {
-                _sideEffect.emit(PokeFriendSideEffect.ShowSnackbar(message = "익명 해제 시, 상대방이 나를 알 수 있어요."))
+                _sideEffect.emit(
+                    PokeFriendSideEffect.ShowSnackbar(
+                        message = "익명 해제 시, 상대방이 나를 알 수 있어요.",
+                        isMessageSheet = true,
+                    ),
+                )
             }
         }
     }
@@ -262,11 +272,15 @@ class PokeFriendViewModel @Inject constructor(
         _uiState.update { it.copy(relationChange = null) }
     }
 
-    private suspend fun emitErrorSnackbar(throwable: Throwable? = null) {
+    private suspend fun emitErrorSnackbar(
+        throwable: Throwable? = null,
+        isMessageSheet: Boolean = false,
+    ) {
         _sideEffect.emit(
             PokeFriendSideEffect.ShowSnackbar(
                 message = throwable?.message ?: "문제가 발생했습니다.",
                 type = PokeSnackBarType.FAILURE,
+                isMessageSheet = isMessageSheet,
             ),
         )
     }
