@@ -30,10 +30,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.poke.v2.bridge.model.PokeEntryDestination
 
 /**
@@ -65,5 +67,10 @@ fun PokeEntryRoute(
         modifier = Modifier
             .fillMaxSize()
             .background(SoptTheme.colors.background),
-    )
+        contentAlignment = Alignment.Center,
+    ) {
+        if (uiState.destination == PokeEntryDestination.Loading) {
+            LoadingIndicator()
+        }
+    }
 }

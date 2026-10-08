@@ -24,92 +24,98 @@
  */
 package org.sopt.official.feature.poke.v2.navigation
 
+import android.content.Intent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
+import org.sopt.official.core.navigation.MainTabRoute
+import org.sopt.official.feature.poke.v2.R
 import org.sopt.official.feature.poke.v2.bridge.PokeEntryRoute
 import org.sopt.official.feature.poke.v2.bridge.navigation.PokeEntry
 import org.sopt.official.feature.poke.v2.component.PokeScaffold
-import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
 import org.sopt.official.feature.poke.v2.friend.navigation.PokeFriend
 import org.sopt.official.feature.poke.v2.main.navigation.PokeMain
+import org.sopt.official.feature.poke.v2.onboarding.PokeOnboardingRoute
 import org.sopt.official.feature.poke.v2.onboarding.navigation.PokeOnboarding
 import org.sopt.official.model.UserStatus
+import org.sopt.official.webview.view.WebViewActivity
 
 @Serializable
-data object PokeGraph
+data object PokeGraph : MainTabRoute
 
 fun NavController.navigateToPoke(navOptions: NavOptions? = null) {
     navigate(PokeGraph, navOptions)
 }
 
+/**
+ * 콕 찌르기 그래프.
+ *
+ * nav stack 과 controller 는 전부 `feature:main`의 [navController] 가 소유한다 — poke-v2 는
+ * 자체 `NavHost`/`rememberNavController()` 를 두지 않고, 전달받은 [navController] 위에
+ * 자신의 destination 들만 얹는다(레거시 `feature.poke.navigation.pokeNavGraph` 와 동일한 구조).
+ */
 fun NavGraphBuilder.pokeGraph(
+    navController: NavController,
     userStatus: UserStatus,
     navigateUp: () -> Unit,
 ) {
-    composable<PokeGraph> {
-        PokeNavHost(userStatus = userStatus, navigateUp = navigateUp)
-    }
-}
+    navigation<PokeGraph>(startDestination = PokeEntry) {
+        // 브릿지 화면 - 로딩. 신규 유저 여부를 판별해 온보딩/메인으로 분기한다.
+        composable<PokeEntry> {
+            PokeEntryRoute(
+                navigateToOnboarding = {
+                    navController.navigate(PokeOnboarding(userStatus = userStatus.name))
+                },
+                navigateToMain = {
+                    navController.navigate(PokeMain) {
+                        popUpTo<PokeEntry> { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                navigateUp = navigateUp,
+            )
+        }
 
-@Composable
-private fun PokeNavHost(
-    userStatus: UserStatus,
-    navigateUp: () -> Unit,
-) {
-    val navController = rememberNavController()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
+        composable<PokeOnboarding> {
+            val snackbarHostState = remember { SnackbarHostState() }
+            val scope = rememberCoroutineScope()
+            val context = LocalContext.current
 
-    val onShowSnackbar: (PokeSnackBarVisuals) -> Unit = { visuals ->
-        scope.launch { snackbarHostState.showSnackbar(visuals) }
-    }
-
-    PokeScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
-        NavHost(
-            navController = navController,
-            startDestination = PokeEntry,
-            modifier = Modifier.padding(innerPadding),
-        ) {
-            // 브릿지 화면 - 로딩. 신규 유저 여부를 판별해 온보딩/메인으로 분기한다.
-            composable<PokeEntry> {
-                PokeEntryRoute(
-                    navigateToOnboarding = {
-                        // TODO(poke-v2): currentGeneration 소스 결정 전까지 기본값 사용
-                        navController.navigate(PokeOnboarding(userStatus = userStatus.name))
-                    },
-                    navigateToMain = {
-                        navController.navigate(PokeMain) {
-                            popUpTo<PokeEntry> { inclusive = true }
-                            launchSingleTop = true
+            PokeScaffold(snackbarHostState = snackbarHostState) { innerPadding ->
+                PokeOnboardingRoute(
+                    navigateUp = navigateUp,
+                    onShowSnackbar = { visuals -> scope.launch { snackbarHostState.showSnackbar(visuals) } },
+                    navigateToProfile = { userId ->
+                        Intent(context, WebViewActivity::class.java).apply {
+                            putExtra(WebViewActivity.INTENT_URL, context.getString(R.string.poke_user_profile_url, userId))
+                            context.startActivity(this)
                         }
                     },
-                    navigateUp = navigateUp,
+                    modifier = Modifier.padding(innerPadding),
                 )
             }
-            composable<PokeOnboarding> {
-                // TODO PokeOnboardingRoute
-            }
-            composable<PokeMain> {
-                // TODO PokeMainRoute
-            }
-            composable<PokeFriend> {
-                // TODO PokeFriendRoute
-            }
-            composable<PokeNotification> {
-                // TODO PokeNotificationRoute (레거시 이관 예정)
-            }
         }
+
+        composable<PokeMain> {
+            // TODO PokeMainRoute
+        }
+
+        composable<PokeNotification> {
+            // TODO PokeNotificationRoute (레거시 이관 예정)
+        }
+    }
+
+    composable<PokeFriend> {
+        // TODO PokeFriendRoute
     }
 }
