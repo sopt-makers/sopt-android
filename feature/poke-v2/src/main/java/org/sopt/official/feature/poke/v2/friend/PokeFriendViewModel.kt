@@ -19,12 +19,17 @@ import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
 import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.domain.poke.usecase.GetFriendListDetailUseCase
 import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
+import org.sopt.official.domain.poke.usecase.GetPokeMessageListUseCase
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.friend.model.FriendListSheetState
+import org.sopt.official.feature.poke.v2.friend.model.MessageSheetState
 import org.sopt.official.feature.poke.v2.friend.model.toPokeFriendListSections
 import org.sopt.official.feature.poke.v2.friend.navigation.PokeFriend
+import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.main.model.toPokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeUserUiState
 import javax.inject.Inject
 
@@ -33,6 +38,7 @@ class PokeFriendViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getFriendListDetailUseCase: GetFriendListDetailUseCase,
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
+    private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
 ) : ViewModel() {
     private val friendType: PokeFriendType? = savedStateHandle.toRoute<PokeFriend>().friendType
 
@@ -45,6 +51,8 @@ class PokeFriendViewModel @Inject constructor(
     private var totalPageSize = -1
     private var currentPaginationIndex = 0
     private var friendListJob: Job? = null
+
+    private var messageListJob: Job? = null
     init {
         getFriendListSummary()
         friendType?.let(::openFriendListSheet)
@@ -107,6 +115,59 @@ class PokeFriendViewModel @Inject constructor(
     fun closeFriendListSheet() {
         friendListJob?.cancel()
         _uiState.update { it.copy(friendListSheet = null, relationChange = null) }
+    }
+    fun openMessageSheet(target: PokeUserUiState) {
+        messageListJob?.cancel()
+        _uiState.update { it.copy(messageSheet = MessageSheetState(target = target)) }
+
+        messageListJob = viewModelScope.launch {
+            getPokeMessageListUseCase(messageType = PokeMessageType.POKE_FRIEND)
+                .onSuccess { messageList ->
+                    _uiState.update { state ->
+                        state.copy(
+                            messageSheet = state.messageSheet?.copy(
+                                title = messageList.header,
+                                messages = messageList.messages
+                                    .map { it.toPokeMessageUiState() }
+                                    .toImmutableList(),
+                            ),
+                        )
+                    }
+                }
+                .onApiError { _, _ ->
+                    emitErrorSnackbar()
+                }
+                .onFailure { throwable ->
+                    emitErrorSnackbar(throwable)
+                }
+        }
+    }
+
+    fun toggleMessageAnonymous() {
+        val sheet = _uiState.value.messageSheet ?: return
+
+        if (sheet.target.isAnonymousCheckboxLocked) {
+            viewModelScope.launch {
+                _sideEffect.emit(PokeFriendSideEffect.ShowSnackbar(message = "천생연분은 실명으로만 콕찌를 수 있어요."))
+            }
+            return
+        }
+
+        val isAnonymous = !sheet.isAnonymous
+        _uiState.update { state ->
+            state.copy(messageSheet = state.messageSheet?.copy(isAnonymous = isAnonymous))
+        }
+
+        if (!isAnonymous) {
+            viewModelScope.launch {
+                _sideEffect.emit(PokeFriendSideEffect.ShowSnackbar(message = "익명 해제 시, 상대방이 나를 알 수 있어요."))
+            }
+        }
+    }
+
+    fun closeMessageSheet() {
+        messageListJob?.cancel()
+        _uiState.update { it.copy(messageSheet = null) }
     }
     private suspend fun emitErrorSnackbar(throwable: Throwable? = null) {
         _sideEffect.emit(
