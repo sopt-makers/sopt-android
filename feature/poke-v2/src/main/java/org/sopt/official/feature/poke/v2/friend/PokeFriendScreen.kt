@@ -27,14 +27,21 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.BuildConfig
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.domain.poke.type.PokeMessageType
+import org.sopt.official.feature.poke.v2.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.v2.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.v2.PokeClickSource
 import org.sopt.official.feature.poke.v2.component.PokeMessageBottomSheet
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
 import org.sopt.official.feature.poke.v2.friend.component.PokeFriendListBlock
@@ -44,12 +51,16 @@ import org.sopt.official.feature.poke.v2.friend.model.FriendListUiState
 import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.toAnalyticsValue
 import org.sopt.official.mds.MdsIcons
 import org.sopt.official.mds.theme.SoptTheme
+import org.sopt.official.model.UserStatus
+import org.sopt.official.model.toViewType
 import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun PokeFriendRoute(
+    userStatus: UserStatus,
     navigateUp: () -> Unit,
     onShowSnackbar: (PokeSnackBarVisuals) -> Unit,
     modifier: Modifier = Modifier,
@@ -60,6 +71,24 @@ internal fun PokeFriendRoute(
     val context = LocalContext.current
     val messageSheetSnackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val tracker = LocalTracker.current
+    val viewType = userStatus.toViewType()
+
+    LifecycleResumeEffect(Unit) {
+        tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_FRIEND, viewType)
+        onPauseOrDispose { }
+    }
+
+    val openedFriendListType = uiState.friendListSheet?.type
+    LaunchedEffect(openedFriendListType) {
+        openedFriendListType?.let { type ->
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.VIEW_POKE_FRIEND_DETAIL,
+                viewType = viewType,
+                properties = mapOf(PokeAnalyticsPropertyKey.FRIEND_TYPE to type.toAnalyticsValue()),
+            )
+        }
+    }
 
     LaunchedEffect(viewModel.sideEffect, lifecycleOwner) {
         viewModel.sideEffect.flowWithLifecycle(lifecycleOwner.lifecycle)
@@ -85,15 +114,55 @@ internal fun PokeFriendRoute(
         onFriendListClick = viewModel::openFriendListSheet,
         onLoadMoreFriendList = viewModel::loadMoreFriendList,
         onFriendListSheetDismiss = viewModel::closeFriendListSheet,
-        onProfileClick = { userId ->
+        onProfileClick = { userId, friendListType ->
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_MEMBER_PROFILE,
+                viewType = viewType,
+                properties = friendClickProperties(userId = userId, friendListType = friendListType),
+            )
             Intent(context, WebViewActivity::class.java).apply {
                 putExtra(WebViewActivity.INTENT_URL, PLAYGROUND_PROFILE_URL.format(userId))
                 context.startActivity(this)
             }
         },
-        onPokeClick = viewModel::openMessageSheet,
-        onMessageAnonymousClick = viewModel::toggleMessageAnonymous,
-        onMessageClick = viewModel::pokeUser,
+        onPokeClick = { user, friendListType ->
+            tracker.trackViewType(
+                event = PokeAnalyticsEvent.CLICK_POKE_ICON,
+                viewType = viewType,
+                properties = friendClickProperties(userId = user.userId, friendListType = friendListType),
+            )
+            viewModel.openMessageSheet(user)
+        },
+        onMessageAnonymousClick = {
+            viewModel.toggleMessageAnonymous()
+            viewModel.uiState.value.messageSheet?.let { sheet ->
+                if (!sheet.target.isAnonymousCheckboxLocked) {
+                    tracker.trackViewType(
+                        event = PokeAnalyticsEvent.CLICK_POKE_ANONYMITY,
+                        viewType = viewType,
+                        properties = mapOf(
+                            PokeAnalyticsPropertyKey.MESSAGE_TYPE to PokeMessageType.POKE_FRIEND.toAnalyticsValue(),
+                            PokeAnalyticsPropertyKey.IS_ANONYMOUS to sheet.isAnonymous,
+                        ),
+                    )
+                }
+            }
+        },
+        onMessageClick = { message ->
+            viewModel.uiState.value.messageSheet?.let { sheet ->
+                val isAnonymous = if (sheet.target.isAnonymousCheckboxLocked) false else sheet.isAnonymous
+                tracker.trackViewType(
+                    event = PokeAnalyticsEvent.CLICK_POKE_SEND_MESSAGE,
+                    viewType = viewType,
+                    properties = mapOf(
+                        PokeAnalyticsPropertyKey.MESSAGE_TYPE to PokeMessageType.POKE_FRIEND.toAnalyticsValue(),
+                        PokeAnalyticsPropertyKey.MESSAGE_ID to message.messageId,
+                        PokeAnalyticsPropertyKey.IS_ANONYMOUS to isAnonymous,
+                    ),
+                )
+            }
+            viewModel.pokeUser(message)
+        },
         onMessageSheetDismiss = viewModel::closeMessageSheet,
         onRelationChangeLottieEnd = viewModel::finishRelationChangeLottie,
         onSoulmateRevealEnd = viewModel::finishSoulmateReveal,
@@ -111,8 +180,8 @@ private fun PokeFriendScreen(
     onFriendListClick: (PokeFriendType) -> Unit,
     onLoadMoreFriendList: () -> Unit,
     onFriendListSheetDismiss: () -> Unit,
-    onProfileClick: (Int) -> Unit,
-    onPokeClick: (PokeUserUiState) -> Unit,
+    onProfileClick: (userId: Int, friendListType: PokeFriendType?) -> Unit,
+    onPokeClick: (user: PokeUserUiState, friendListType: PokeFriendType?) -> Unit,
     onMessageAnonymousClick: () -> Unit,
     onMessageClick: (PokeMessageUiState) -> Unit,
     onMessageSheetDismiss: () -> Unit,
@@ -122,8 +191,12 @@ private fun PokeFriendScreen(
 ) {
     PokeFriendListBottomSheetScaffold(
         friendListSheet = uiState.friendListSheet,
-        onProfileClick = onProfileClick,
-        onPokeClick = onPokeClick,
+        onProfileClick = { userId ->
+            onProfileClick(userId, uiState.friendListSheet?.type)
+        },
+        onPokeClick = { user ->
+            onPokeClick(user, uiState.friendListSheet?.type)
+        },
         onLoadMore = onLoadMoreFriendList,
         onDismissRequest = onFriendListSheetDismiss,
         overlay = {
@@ -145,8 +218,10 @@ private fun PokeFriendScreen(
                 onBackClick = onBackClick,
                 onRefresh = onRefresh,
                 onFriendListClick = onFriendListClick,
-                onProfileClick = onProfileClick,
-                onPokeClick = onPokeClick,
+                onProfileClick = { userId ->
+                    onProfileClick(userId, null)
+                },
+                onPokeClick = { user -> onPokeClick(user, null) },
             )
 
             if (uiState.friendListSheet == null) {
@@ -240,6 +315,18 @@ private fun PokeFriendTopBar(
     }
 }
 
+private fun friendClickProperties(
+    userId: Int,
+    friendListType: PokeFriendType?,
+): Map<String, Any> = buildMap {
+    put(
+        PokeAnalyticsPropertyKey.CLICK_SOURCE,
+        if (friendListType == null) PokeClickSource.FRIEND_SUMMARY.value else PokeClickSource.FRIEND_DETAIL.value,
+    )
+    put(PokeAnalyticsPropertyKey.VIEW_PROFILE, userId)
+    friendListType?.let { put(PokeAnalyticsPropertyKey.FRIEND_TYPE, it.toAnalyticsValue()) }
+}
+
 private const val PLAYGROUND_PROFILE_URL = BuildConfig.PLAYGROUND_API + "members/%d"
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
@@ -274,8 +361,8 @@ private fun PokeFriendScreenPreview() {
             onFriendListClick = {},
             onLoadMoreFriendList = {},
             onFriendListSheetDismiss = {},
-            onProfileClick = {},
-            onPokeClick = {},
+            onProfileClick = { _, _ -> },
+            onPokeClick = { _, _ -> },
             onMessageAnonymousClick = {},
             onMessageClick = {},
             onMessageSheetDismiss = {},
