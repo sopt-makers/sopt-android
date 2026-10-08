@@ -1,5 +1,6 @@
 package org.sopt.official.feature.poke.v2.friend.component
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,22 +8,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -30,66 +36,119 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.dropWhile
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.v2.component.PokeFriendRow
+import org.sopt.official.feature.poke.v2.friend.model.FriendListSheetState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.MdsIcons
 import org.sopt.official.mds.theme.SoptTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PokeFriendListBottomSheet(
-    type: PokeFriendType,
-    friendCount: Int,
-    friends: ImmutableList<PokeUserUiState>,
+internal fun PokeFriendListBottomSheetScaffold(
+    friendListSheet: FriendListSheetState?,
     onProfileClick: (Int) -> Unit,
     onPokeClick: (PokeUserUiState) -> Unit,
+    onLoadMore: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
-    sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+    overlay: @Composable () -> Unit = {},
+    content: @Composable () -> Unit,
 ) {
+    val sheetState = rememberStandardBottomSheetState(
+        initialValue = SheetValue.Hidden,
+        skipHiddenState = false,
+    )
+    val scaffoldState = rememberBottomSheetScaffoldState(bottomSheetState = sheetState)
+
+    val isSheetOpen = friendListSheet != null
+    val currentOnDismissRequest by rememberUpdatedState(onDismissRequest)
+
     val scope = rememberCoroutineScope()
 
-    ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
-        sheetState = sheetState,
-        containerColor = SoptTheme.colors.bg.neutral.ghost,
-        shape = RoundedCornerShape(
+    val closeSheet: () -> Unit = {
+        scope.launch {
+            sheetState.hide()
+            onDismissRequest()
+        }
+    }
+
+    LaunchedEffect(isSheetOpen) {
+        if (isSheetOpen) sheetState.expand() else sheetState.hide()
+    }
+
+    LaunchedEffect(sheetState) {
+        snapshotFlow { sheetState.currentValue }
+            .dropWhile { it != SheetValue.Expanded }
+            .filter { it != SheetValue.Expanded }
+            .collect { currentOnDismissRequest() }
+    }
+
+    BackHandler(
+        enabled = isSheetOpen,
+        onBack = closeSheet
+    )
+
+    BottomSheetScaffold(
+        scaffoldState = scaffoldState,
+        sheetPeekHeight = 0.dp,
+        sheetDragHandle = null,
+        sheetContainerColor = SoptTheme.colors.bg.neutral.ghost,
+        sheetShape = RoundedCornerShape(
             topStart = SoptTheme.radius.r20,
             topEnd = SoptTheme.radius.r20,
         ),
-        dragHandle = null,
-        modifier = modifier.statusBarsPadding(),
-    ) {
-        PokeFriendListBottomSheetContent(
-            type = type,
-            friendCount = friendCount,
-            friends = friends,
-            onCloseClick = {
-                scope.launch {
-                    sheetState.hide()
-                    onDismissRequest()
+        sheetContent = {
+            friendListSheet?.let { sheet ->
+                Box {
+                    PokeFriendListBottomSheetContent(
+                        type = sheet.type,
+                        friendCount = sheet.friendCount,
+                        friends = sheet.friends,
+                        onCloseClick = closeSheet,
+                        onProfileClick = onProfileClick,
+                        onPokeClick = onPokeClick,
+                        onLoadMore = onLoadMore,
+                    )
+
+                    overlay()
                 }
-            },
-            onProfileClick = onProfileClick,
-            onPokeClick = onPokeClick,
-        )
+            }
+        },
+        containerColor = Color.Transparent,
+        modifier = modifier,
+    ) {
+        content()
     }
 }
 
 @Composable
-internal fun PokeFriendListBottomSheetContent(
+private fun PokeFriendListBottomSheetContent(
     type: PokeFriendType,
     friendCount: Int,
     friends: ImmutableList<PokeUserUiState>,
     onCloseClick: () -> Unit,
     onProfileClick: (Int) -> Unit,
     onPokeClick: (PokeUserUiState) -> Unit,
+    onLoadMore: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    val currentOnLoadMore by rememberUpdatedState(onLoadMore)
+
+    LaunchedEffect(listState) {
+        snapshotFlow {
+            val lastVisibleIndex = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+            val totalItemsCount = listState.layoutInfo.totalItemsCount
+            totalItemsCount > 0 && lastVisibleIndex == totalItemsCount - 1
+        }
+            .filter { it }
+            .collect { currentOnLoadMore() }
+    }
 
     Column(
         modifier = modifier
@@ -220,15 +279,6 @@ private fun PokeFriendListBottomSheetPreview() {
             relationName = type.readableName,
             isPokeButtonEnabled = false,
         ),
-        PokeUserUiState(
-            userId = 4,
-            userName = "최기획",
-            userGeneration = 34,
-            userPart = "기획",
-            profileImageUrl = null,
-            pokeCount = 3,
-            relationName = type.readableName,
-        ),
     )
 
     SoptTheme {
@@ -246,8 +296,8 @@ private fun PokeFriendListBottomSheetPreview() {
                 onCloseClick = {},
                 onProfileClick = {},
                 onPokeClick = {},
+                onLoadMore = {},
             )
         }
     }
 }
-
