@@ -26,7 +26,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -47,6 +46,7 @@ import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.MdsIcons
 import org.sopt.official.mds.theme.SoptTheme
+import org.sopt.official.webview.view.WebViewActivity
 
 @Composable
 internal fun PokeFriendRoute(
@@ -86,7 +86,10 @@ internal fun PokeFriendRoute(
         onLoadMoreFriendList = viewModel::loadMoreFriendList,
         onFriendListSheetDismiss = viewModel::closeFriendListSheet,
         onProfileClick = { userId ->
-            context.startActivity(Intent(Intent.ACTION_VIEW, PLAYGROUND_PROFILE_URL.format(userId).toUri()))
+            Intent(context, WebViewActivity::class.java).apply {
+                putExtra(WebViewActivity.INTENT_URL, PLAYGROUND_PROFILE_URL.format(userId))
+                context.startActivity(this)
+            }
         },
         onPokeClick = viewModel::openMessageSheet,
         onMessageAnonymousClick = viewModel::toggleMessageAnonymous,
