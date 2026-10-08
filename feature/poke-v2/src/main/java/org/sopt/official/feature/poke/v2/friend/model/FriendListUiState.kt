@@ -22,12 +22,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.main.model
+package org.sopt.official.feature.poke.v2.friend.model
 
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 
 /**
  * 친구 목록 섹션 하나의 UI 상태를 표현하는 데이터 클래스

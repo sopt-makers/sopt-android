@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.component
+package org.sopt.official.feature.poke.v2.friend.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -48,10 +48,11 @@ import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.v2.R
-import org.sopt.official.feature.poke.v2.main.model.FriendListUiState
-import org.sopt.official.feature.poke.v2.main.model.PokeFriendListSections
+import org.sopt.official.feature.poke.v2.component.PokeFriendRow
+import org.sopt.official.feature.poke.v2.friend.model.FriendListUiState
+import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
+import org.sopt.official.feature.poke.v2.friend.model.emptyPokeFriendListSections
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
-import org.sopt.official.feature.poke.v2.main.model.emptyPokeFriendListSections
 
 @Composable
 internal fun PokeFriendListBlock(

@@ -33,7 +33,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
 import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.domain.poke.type.PokeFriendType
-import org.sopt.official.feature.poke.v2.component.PokeFriendListEmpty
 import org.sopt.official.feature.poke.v2.component.PokeFriendRow
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.MdsIcons
