@@ -27,8 +27,12 @@ package org.sopt.official.feature.poke.v2.friend.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
+import org.sopt.official.domain.poke.entity.FriendListSummary
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.main.model.toPokeUserUiState
 
 /**
  * 친구 목록 섹션 하나의 UI 상태를 표현하는 데이터 클래스
@@ -50,4 +54,15 @@ internal fun emptyPokeFriendListSections(): PokeFriendListSections = persistentL
     PokeFriendType.NEW to FriendListUiState(friendCount = 0),
     PokeFriendType.BEST_FRIEND to FriendListUiState(friendCount = 0),
     PokeFriendType.SOULMATE to FriendListUiState(friendCount = 0),
+)
+
+internal fun FriendListSummary.toPokeFriendListSections(): PokeFriendListSections = persistentListOf(
+    PokeFriendType.NEW to toFriendListUiState(newFriendSize, newFriend),
+    PokeFriendType.BEST_FRIEND to toFriendListUiState(bestFriendSize, bestFriend),
+    PokeFriendType.SOULMATE to toFriendListUiState(soulmateSize, soulmate),
+)
+
+private fun toFriendListUiState(friendCount: Int, friends: List<PokeUser>) = FriendListUiState(
+    friendCount = friendCount,
+    items = friends.map { it.toPokeUserUiState() }.toImmutableList(),
 )
