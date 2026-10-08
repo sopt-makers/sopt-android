@@ -28,13 +28,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 import kotlinx.serialization.Serializable
 import org.sopt.official.core.navigation.Route
+import org.sopt.official.domain.poke.type.PokeFriendType
 
-/**
- * 내 친구
- */
 @Serializable
-data object PokeFriend : Route
+data class PokeFriend(
+    val friendType: PokeFriendType? = null,
+) : Route
 
-fun NavController.navigateToPokeFriend(navOptions: NavOptions? = null) {
-    navigate(PokeFriend, navOptions)
+fun NavController.navigateToPokeFriend(
+    friendType: PokeFriendType? = null,
+    navOptions: NavOptions? = null,
+) {
+    navigate(PokeFriend(friendType), navOptions)
 }
