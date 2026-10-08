@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,15 +42,20 @@ import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
+import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.domain.poke.usecase.CheckNewInPokeOnboardingUseCase
 import org.sopt.official.domain.poke.usecase.GetOnboardingPokeUserListUseCase
+import org.sopt.official.domain.poke.usecase.GetPokeMessageListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.domain.poke.usecase.UpdateNewInPokeOnboardingUseCase
+import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
+import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.main.model.toPokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeRecommendationUiStates
 import org.sopt.official.feature.poke.v2.main.model.toPokeResultUiState
-import org.sopt.official.feature.poke.v2.onboarding.navigation.PokeOnboarding
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingSideEffect
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingUiState
+import org.sopt.official.feature.poke.v2.onboarding.navigation.PokeOnboarding
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,6 +64,7 @@ class PokeOnboardingViewModel @Inject constructor(
     private val checkNewInPokeOnboardingUseCase: CheckNewInPokeOnboardingUseCase,
     private val updateNewInPokeOnboardingUseCase: UpdateNewInPokeOnboardingUseCase,
     private val getOnboardingPokeUserListUseCase: GetOnboardingPokeUserListUseCase,
+    private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
     private val args: PokeOnboarding = savedStateHandle.toRoute<PokeOnboarding>()
@@ -81,7 +88,7 @@ class PokeOnboardingViewModel @Inject constructor(
 
     /**
      * 온보딩을 처음 보는 유저인지 확인하고, 그렇다면 즉시 "본 것"으로 표시한 뒤
-     * 안내 바텀시트를 띄우도록 상태를 갱신한다. (레거시 `checkNewInPokeOnboarding`)
+     * 안내 바텀시트를 띄우도록 상태를 갱신한다.
      */
     fun checkNewInPokeOnboarding() {
         viewModelScope.launch {
@@ -98,41 +105,111 @@ class PokeOnboardingViewModel @Inject constructor(
         _uiState.update { it.copy(shouldShowGuideBottomSheet = false) }
     }
 
-    fun fetchOnboardingUsers() {
+    fun fetchOnboardingUsers(isRefresh: Boolean = false) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, isError = false) }
+            _uiState.update {
+                it.copy(
+                    isLoading = !isRefresh,
+                    isRefreshing = isRefresh,
+                    isError = false
+                )
+            }
+
             getOnboardingPokeUserListUseCase(size = ONBOARDING_USER_LIST_SIZE)
                 .onSuccess { list ->
                     _uiState.update {
-                        it.copy(isLoading = false, sections = list.toPokeRecommendationUiStates())
+                        it.copy(
+                            isLoading = false,
+                            isRefreshing = false,
+                            pages = list.toPokeRecommendationUiStates(),
+                        )
                     }
                 }
-                .onApiError { _, _ -> _uiState.update { it.copy(isLoading = false, isError = true) } }
-                .onFailure { _uiState.update { it.copy(isLoading = false, isError = true) } }
+                .onApiError { _, _ ->
+                    _uiState.update {
+                        it.copy(isLoading = false, isRefreshing = false, isError = true) }
+                }
+                .onFailure {
+                    _uiState.update {
+                        it.copy(isLoading = false, isRefreshing = false, isError = true)
+                    }
+                }
         }
     }
 
-    /**
-     * @param isFirstMeet 첫 만남(익명) 대상에게 보내는 콕인지. 성공 연출 판별에 사용.
-     */
-    fun pokeUser(userId: Int, isAnonymous: Boolean, message: String, isFirstMeet: Boolean) {
+    /** 유저의 콕 찌르기 버튼 탭 → 메시지 바텀시트를 띄우고 메시지 목록을 불러온다. */
+    fun openPokeMessageSheet(user: PokeUserUiState) {
+        _uiState.update {
+            it.copy(
+                pokeTarget = user,
+                isAnonymous = false,
+                messages = persistentListOf()
+            )
+        }
         viewModelScope.launch {
-            pokeUserUseCase(userId = userId, isAnonymous = isAnonymous, message = message)
+            getPokeMessageListUseCase(PokeMessageType.POKE_SOMEONE)
+                .onSuccess { list ->
+                    _uiState.update {
+                        it.copy(
+                            messages = list.messages.map { message -> message.toPokeMessageUiState() }.toPersistentList()
+                        )
+                    }
+                }
+                .onApiError { _, _ ->
+                    _sideEffect.emit(PokeOnboardingSideEffect.ShowError())
+                }
+                .onFailure { throwable ->
+                    _sideEffect.emit(PokeOnboardingSideEffect.ShowError(throwable.message))
+                }
+        }
+    }
+
+    /** 메시지 바텀시트를 닫는다. */
+    fun dismissPokeMessageSheet() {
+        _uiState.update {
+            it.copy(pokeTarget = null, messages = persistentListOf())
+        }
+    }
+
+    /** 메시지 바텀시트의 익명 체크박스 토글. */
+    fun toggleAnonymous() {
+        _uiState.update {
+            it.copy(isAnonymous = !it.isAnonymous)
+        }
+    }
+
+    /** 메시지를 선택해 [PokeOnboardingUiState.pokeTarget] 에게 콕을 보낸다. */
+    fun pokeUser(message: PokeMessageUiState) {
+        val target = _uiState.value.pokeTarget ?: return
+        val isAnonymous = _uiState.value.isAnonymous && !target.isAnonymousCheckboxLocked
+
+        viewModelScope.launch {
+            pokeUserUseCase(userId = target.userId, isAnonymous = isAnonymous, message = message.content)
                 .onSuccess { response ->
-                    _uiState.update { it.markPoked(userId) }
+                    _uiState.update {
+                        it.markPoked(target.userId).copy(
+                            pokeTarget = null, messages = persistentListOf()
+                        )
+                    }
                     _sideEffect.emit(
-                        PokeOnboardingSideEffect.PokeCompleted(response.toPokeResultUiState(requestedFirstMeet = isFirstMeet)),
+                        PokeOnboardingSideEffect.PokeCompleted(
+                            response.toPokeResultUiState(requestedFirstMeet = target.isAnonymousVisible),
+                        ),
                     )
                 }
-                .onApiError { _, _ -> _sideEffect.emit(PokeOnboardingSideEffect.ShowError()) }
-                .onFailure { throwable -> _sideEffect.emit(PokeOnboardingSideEffect.ShowError(throwable.message)) }
+                .onApiError { _, _ ->
+                    _sideEffect.emit(PokeOnboardingSideEffect.ShowError())
+                }
+                .onFailure { throwable ->
+                    _sideEffect.emit(PokeOnboardingSideEffect.ShowError(throwable.message))
+                }
         }
     }
 
     private fun PokeOnboardingUiState.markPoked(userId: Int): PokeOnboardingUiState = copy(
-        sections = sections.map { section ->
-            section.copy(
-                users = section.users.map { user ->
+        pages = pages.map { page ->
+            page.copy(
+                users = page.users.map { user ->
                     if (user.userId == userId) user.copy(isPokeButtonEnabled = false) else user
                 }.toPersistentList(),
             )

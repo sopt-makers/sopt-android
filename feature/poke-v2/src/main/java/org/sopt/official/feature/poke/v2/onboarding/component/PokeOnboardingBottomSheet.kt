@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.SheetState
@@ -19,6 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.feature.poke.v2.R
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.designsystem.SoptTheme as LegacySoptTheme
 
@@ -41,6 +42,7 @@ internal fun PokeOnboardingBottomSheet(
         dragHandle = null,
     ) {
         PokeOnboardingBottomSheetContent(
+            onConfirmClick = onDismissRequest,
             modifier = modifier
         )
     }
@@ -48,6 +50,7 @@ internal fun PokeOnboardingBottomSheet(
 
 @Composable
 private fun PokeOnboardingBottomSheetContent(
+    onConfirmClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -64,7 +67,6 @@ private fun PokeOnboardingBottomSheetContent(
             text = "솝트에 콕 찌르기가 생겼어요!",
             style = SoptTheme.typography.title3,
             color = SoptTheme.colors.fg.neutral.bold,
-            modifier = Modifier.weight(1f),
         )
 
         Spacer(modifier = Modifier.padding(12.dp))
@@ -82,26 +84,18 @@ private fun PokeOnboardingBottomSheetContent(
             text = "서로 찌르면 친구가 될 수 있어요. 친구와 자주 찌를수록 \n전송할 수 있는 메시지 문구가 다양해져요.",
             style = SoptTheme.typography.body2,
             color = SoptTheme.colors.fg.neutral.bold,
-            modifier = Modifier.weight(1f),
         )
 
         Spacer(modifier = Modifier.padding(20.dp))
 
-        Button(
-            onClick = { /*TODO*/ },
+        MdsActionButton(
+            text = "확인",
+            type = MdsActionButtonType.PRIMARY,
+            size = MdsActionButtonSize.LARGE,
+            onClick = onConfirmClick,
             modifier = Modifier
-                .fillMaxWidth(),
-            shape = RoundedCornerShape(SoptTheme.radius.r12),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = SoptTheme.colors.bg.neutral.bold,
-            ),
-        ) {
-            Text(
-                text = "확인",
-                style = SoptTheme.typography.label2,
-                color = SoptTheme.colors.fg.neutral.bold,
-            )
-        }
+                .fillMaxWidth()
+        )
     }
 }
 
@@ -112,6 +106,7 @@ private fun PokeOnboardingBottomSheetPreview() {
     SoptTheme {
         LegacySoptTheme {
             PokeOnboardingBottomSheetContent(
+                onConfirmClick = {},
             )
         }
     }

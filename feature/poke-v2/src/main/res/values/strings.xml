@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="poke_user_profile_url">https://playground.sopt.org/members/%1$d</string>
+</resources>
