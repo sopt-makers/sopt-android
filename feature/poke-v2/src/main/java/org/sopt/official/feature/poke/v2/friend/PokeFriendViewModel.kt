@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.sopt.official.domain.poke.entity.PokeUser
 import org.sopt.official.domain.poke.entity.onApiError
 import org.sopt.official.domain.poke.entity.onFailure
 import org.sopt.official.domain.poke.entity.onSuccess
@@ -23,11 +24,14 @@ import org.sopt.official.domain.poke.type.PokeMessageType
 import org.sopt.official.domain.poke.usecase.GetFriendListDetailUseCase
 import org.sopt.official.domain.poke.usecase.GetFriendListSummaryUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeMessageListUseCase
+import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.friend.model.FriendListSheetState
 import org.sopt.official.feature.poke.v2.friend.model.MessageSheetState
+import org.sopt.official.feature.poke.v2.friend.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.friend.model.toPokeFriendListSections
 import org.sopt.official.feature.poke.v2.friend.navigation.PokeFriend
+import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeUserUiState
@@ -39,6 +43,7 @@ class PokeFriendViewModel @Inject constructor(
     private val getFriendListDetailUseCase: GetFriendListDetailUseCase,
     private val getFriendListSummaryUseCase: GetFriendListSummaryUseCase,
     private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
+    private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
     private val friendType: PokeFriendType? = savedStateHandle.toRoute<PokeFriend>().friendType
 
@@ -53,10 +58,13 @@ class PokeFriendViewModel @Inject constructor(
     private var friendListJob: Job? = null
 
     private var messageListJob: Job? = null
+    private var pokeJob: Job? = null
+
     init {
         getFriendListSummary()
         friendType?.let(::openFriendListSheet)
     }
+
     fun getFriendListSummary() {
         viewModelScope.launch {
             getFriendListSummaryUseCase()
@@ -116,6 +124,7 @@ class PokeFriendViewModel @Inject constructor(
         friendListJob?.cancel()
         _uiState.update { it.copy(friendListSheet = null, relationChange = null) }
     }
+
     fun openMessageSheet(target: PokeUserUiState) {
         messageListJob?.cancel()
         _uiState.update { it.copy(messageSheet = MessageSheetState(target = target)) }
@@ -169,6 +178,90 @@ class PokeFriendViewModel @Inject constructor(
         messageListJob?.cancel()
         _uiState.update { it.copy(messageSheet = null) }
     }
+
+    fun pokeUser(message: PokeMessageUiState) {
+        val sheet = _uiState.value.messageSheet ?: return
+        if (pokeJob?.isActive == true) return
+
+        pokeJob = viewModelScope.launch {
+            pokeUserUseCase(
+                userId = sheet.target.userId,
+                isAnonymous = sheet.isAnonymous && !sheet.target.isAnonymousCheckboxLocked,
+                message = message.content,
+            )
+                .onSuccess { pokedUser ->
+                    closeMessageSheet()
+                    markPokedFriend(userId = sheet.target.userId)
+                    getFriendListSummary()
+                    showPokeResult(pokedUser)
+                }
+                .onApiError { _, _ ->
+                    closeMessageSheet()
+                    emitErrorSnackbar()
+                }
+                .onFailure { throwable ->
+                    closeMessageSheet()
+                    emitErrorSnackbar(throwable)
+                }
+        }
+    }
+
+    private fun markPokedFriend(userId: Int) {
+        _uiState.update { state ->
+            state.copy(
+                friendListSheet = state.friendListSheet?.let { sheet ->
+                    sheet.copy(
+                        friends = sheet.friends.map { friend ->
+                            if (friend.userId == userId) {
+                                friend.copy(pokeCount = friend.pokeCount + 1, isPokeButtonEnabled = false)
+                            } else {
+                                friend
+                            }
+                        }.toImmutableList(),
+                    )
+                },
+            )
+        }
+    }
+
+    private suspend fun showPokeResult(pokedUser: PokeUser) {
+        val user = pokedUser.toPokeUserUiState()
+        val relationChange = when {
+            user.isBestFriend -> PokeRelationChangeState.BestFriend(user)
+            user.isSoulMate -> PokeRelationChangeState.Soulmate(user)
+            else -> null
+        }
+
+        if (relationChange == null) {
+            _sideEffect.emit(
+                PokeFriendSideEffect.ShowSnackbar(
+                    message = "콕 찌르기를 완료했어요.",
+                    type = PokeSnackBarType.SUCCESS,
+                ),
+            )
+            return
+        }
+
+        _uiState.update { state ->
+            if (state.relationChange.isLottiePlaying()) state else state.copy(relationChange = relationChange)
+        }
+    }
+
+    private fun PokeRelationChangeState?.isLottiePlaying(): Boolean =
+        this is PokeRelationChangeState.BestFriend || this is PokeRelationChangeState.Soulmate
+
+    fun finishRelationChangeLottie() {
+        _uiState.update { state ->
+            val next = (state.relationChange as? PokeRelationChangeState.Soulmate)
+                ?.let { PokeRelationChangeState.SoulmateRevealed(it.user) }
+            state.copy(relationChange = next)
+        }
+    }
+
+    fun finishSoulmateReveal() {
+        _uiState.update { it.copy(relationChange = null) }
+    }
+
     private suspend fun emitErrorSnackbar(throwable: Throwable? = null) {
         _sideEffect.emit(
             PokeFriendSideEffect.ShowSnackbar(
