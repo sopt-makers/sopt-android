@@ -106,6 +106,8 @@ import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
+import org.sopt.official.feature.poke.v2.navigation.navigateToPoke
+import org.sopt.official.feature.poke.v2.navigation.pokeGraph
 import org.sopt.official.feature.sopletter.navigation.navigateToSopletter
 import org.sopt.official.feature.sopletter.navigation.sopletterGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLog
@@ -339,6 +341,13 @@ fun MainScreen(
                                 context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
 
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
+
+                            // TODO(poke-v2): 정식 연결점이 아닌 개발자 전용 테스트 진입점이다.
+                            //  정식 연결점이 정해지면 MainTab/Route 기반 네비게이션으로 교체해야 한다.
+                            override fun navigateToPokeV2Test() {
+                                navigator.navController.navigateToPoke()
+                            }
+
                             override fun navigateToEditProfile() {
                                 val intent = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
@@ -409,6 +418,15 @@ fun MainScreen(
                         navController = navigator.navController,
                         paddingValues = contentPadding,
                         userStatus = userStatus
+                    )
+
+                    // TODO(poke-v2): 정식 연결점이 아닌, 개발자 전용 테스트 진입점(홈 로고 롱클릭)을 위해
+                    //  v2 그래프만 임시로 같이 등록해둔다. 테스트가 끝나면 이 그래프를 MainTab/Route 기반의
+                    //  정식 연결점으로 교체해야 한다.
+                    pokeGraph(
+                        navController = navigator.navController,
+                        userStatus = userStatus,
+                        navigateUp = navigator::navigateUp
                     )
 
                     myPageNavGraph(
