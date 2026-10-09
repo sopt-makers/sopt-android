@@ -45,6 +45,9 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -61,23 +64,25 @@ import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.poke.type.PokeMessageType
-import org.sopt.official.feature.poke.v2.main.model.PokeAnalyticsEvent
-import org.sopt.official.feature.poke.v2.main.model.PokeAnalyticsPropertyKey
-import org.sopt.official.feature.poke.v2.main.model.PokeClickSource
+import org.sopt.official.feature.poke.v2.component.PokeCelebrationLottie
 import org.sopt.official.feature.poke.v2.component.PokeMessageBottomSheet
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
+import org.sopt.official.feature.poke.v2.main.model.PokeAnalyticsEvent
+import org.sopt.official.feature.poke.v2.main.model.PokeAnalyticsPropertyKey
+import org.sopt.official.feature.poke.v2.main.model.PokeClickSource
 import org.sopt.official.feature.poke.v2.main.model.PokeRecommendationUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+import org.sopt.official.feature.poke.v2.main.model.toAnalyticsValue
 import org.sopt.official.feature.poke.v2.onboarding.component.PokeOnboardingBottomSheet
 import org.sopt.official.feature.poke.v2.onboarding.component.PokeOnboardingPageIndicator
 import org.sopt.official.feature.poke.v2.onboarding.component.PokeOnboardingUserItem
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingSideEffect
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingUiState
-import org.sopt.official.feature.poke.v2.main.model.toAnalyticsValue
 import org.sopt.official.mds.R
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.toViewType
+import org.sopt.official.feature.poke.v2.R as PokeR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -91,6 +96,7 @@ fun PokeOnboardingRoute(
     val tracker = LocalTracker.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val viewType = viewModel.userStatus.toViewType()
+    var friendCompleteMessage by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_ONBOARDING, viewType)
@@ -108,16 +114,16 @@ fun PokeOnboardingRoute(
                     )
 
                 is PokeOnboardingSideEffect.PokeCompleted ->
-                    onShowSnackbar(
-                        PokeSnackBarVisuals(
-                            message = if (effect.result.isPlainPoke) {
-                                "콕 찔렀어요!"
-                            } else {
-                                "${effect.result.anonymousName}과 친구가 되었어요!"
-                            },
-                            type = PokeSnackBarType.SUCCESS,
-                        ),
-                    )
+                    if (effect.result.becameFriend) {
+                        friendCompleteMessage = "${effect.result.anonymousName}과 친구가 되었어요!"
+                    } else {
+                        onShowSnackbar(
+                            PokeSnackBarVisuals(
+                                message = "콕 찔렀어요!",
+                                type = PokeSnackBarType.SUCCESS,
+                            ),
+                        )
+                    }
             }
         }
     }
@@ -197,6 +203,15 @@ fun PokeOnboardingRoute(
                 viewModel.pokeUser(message)
             },
             onDismissRequest = viewModel::dismissPokeMessageSheet,
+        )
+    }
+
+    val completeMessage = friendCompleteMessage
+    if (completeMessage != null) {
+        PokeCelebrationLottie(
+            lottieRes = PokeR.raw.friendcomplete,
+            message = completeMessage,
+            onAnimationEnd = { friendCompleteMessage = null },
         )
     }
 }

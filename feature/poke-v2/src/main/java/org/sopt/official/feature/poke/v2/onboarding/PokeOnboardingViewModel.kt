@@ -127,7 +127,8 @@ class PokeOnboardingViewModel @Inject constructor(
                 }
                 .onApiError { _, _ ->
                     _uiState.update {
-                        it.copy(isLoading = false, isRefreshing = false, isError = true) }
+                        it.copy(isLoading = false, isRefreshing = false, isError = true)
+                    }
                 }
                 .onFailure {
                     _uiState.update {
@@ -193,7 +194,7 @@ class PokeOnboardingViewModel @Inject constructor(
                     }
                     _sideEffect.emit(
                         PokeOnboardingSideEffect.PokeCompleted(
-                            response.toPokeResultUiState(requestedFirstMeet = target.isAnonymousVisible),
+                            response.toPokeResultUiState(requestedFirstMeet = target.isFirstMeet),
                         ),
                     )
                 }
