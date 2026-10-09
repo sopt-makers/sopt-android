@@ -24,32 +24,34 @@
  */
 package org.sopt.official.feature.poke.v2.navigation
 
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.Route
+import androidx.navigation.NavDestination.Companion.hasRoute
+import androidx.navigation.NavDestination.Companion.hierarchy
 
 /**
- * 아직 비즈니스 로직이 이관되지 않은 화면들의 라우트.
+ * [PokeGraph] 스코프 기반의 공유 [SnackbarHostState]를 반환하는 헬퍼 함수.
  *
- * 브릿지·메인에서 이 화면들로의 이동 경로만 먼저 확보해 둔다. 각 화면 이관이 끝나면
- * 해당 화면 패키지의 `navigation/` 하위로 옮긴다.
- *
+ * - **PokeGraph 내부**: 백스택의 [PokeSnackbarViewModel] 인스턴스를 공유.
+ * - **PokeGraph 외부**: [NavDestination.hierarchy] 체크 후 안전하게 로컬 [SnackbarHostState]로 폴백.
  */
+@Composable
+fun rememberPokeGraphSnackbarHostState(
+    navController: NavController,
+    backStackEntry: NavBackStackEntry,
+): SnackbarHostState {
+    val pokeGraphEntry = remember(backStackEntry) {
+        val isInsidePokeGraph = backStackEntry.destination.hierarchy.any { it.hasRoute<PokeGraph>() }
+        if (isInsidePokeGraph) navController.getBackStackEntry(PokeGraph) else null
+    }
 
-/**
- * 콕 찌르기 알림 화면.
- *
- * @property userStatus [org.sopt.official.model.UserStatus] 이름.
- */
-@Serializable
-data class PokeNotification(
-    val userStatus: String = "",
-) : Route
-
-fun NavController.navigateToPokeNotification(
-    userStatus: String,
-    navOptions: NavOptions? = null,
-) {
-    navigate(PokeNotification(userStatus), navOptions)
+    return if (pokeGraphEntry != null) {
+        hiltViewModel<PokeSnackbarViewModel>(pokeGraphEntry).snackbarHostState
+    } else {
+        remember { SnackbarHostState() }
+    }
 }

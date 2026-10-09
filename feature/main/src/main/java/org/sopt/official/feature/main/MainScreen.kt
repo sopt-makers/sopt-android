@@ -132,6 +132,10 @@ fun MainScreen(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val tracker = LocalTracker.current
+
+    fun getWebViewIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
+        putExtra(INTENT_URL, url)
+    }
     var isOpenDialog by remember { mutableStateOf(false) }
     var isFloatingMenuOpen by remember { mutableStateOf(false) }
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
@@ -322,20 +326,16 @@ fun MainScreen(
                         userStatus = userStatus,
                         paddingValues = contentPadding,
                         homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
-                            private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
-                                putExtra(INTENT_URL, url)
-                            }
-
-                            override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
-                            override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
-                            override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
-                            override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
-                            override fun navigateToPlaygroundProject() = context.startActivity(getIntent(PlaygroundWebLink.PROJECT))
-                            override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getIntent(PlaygroundWebLink.COFFEE_CHAT))
-                            override fun navigateToSoptHomepage() = context.startActivity(getIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
-                            override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
-                            override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))
-                            override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
+                            override fun navigateToPlaygroundHome() = context.startActivity(getWebViewIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToPlaygroundCommunity() = context.startActivity(getWebViewIntent(PlaygroundWebLink.COMMUNITY))
+                            override fun navigateToPlaygroundGroup() = context.startActivity(getWebViewIntent(PlaygroundWebLink.GROUP_STUDY))
+                            override fun navigateToPlaygroundMember() = context.startActivity(getWebViewIntent(PlaygroundWebLink.MEMBER))
+                            override fun navigateToPlaygroundProject() = context.startActivity(getWebViewIntent(PlaygroundWebLink.PROJECT))
+                            override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getWebViewIntent(PlaygroundWebLink.COFFEE_CHAT))
+                            override fun navigateToSoptHomepage() = context.startActivity(getWebViewIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToSoptReview() = context.startActivity(getWebViewIntent(SoptWebLink.REVIEW))
+                            override fun navigateToSoptProject() = context.startActivity(getWebViewIntent(SoptWebLink.PROJECT))
+                            override fun navigateToSoptInstagram() = context.startActivity(getWebViewIntent(SoptWebLink.INSTAGRAM))
 
                             override fun navigateToNotification() =
                                 context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
@@ -380,7 +380,7 @@ fun MainScreen(
                             }
 
                             override fun navigateToWebUrl(url: String) {
-                                context.startActivity(getIntent(url))
+                                context.startActivity(getWebViewIntent(url))
                             }
 
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
@@ -395,7 +395,7 @@ fun MainScreen(
 
                             override fun navigateToPlaygroundMemberProfile(userId: Int) {
                                 context.startActivity(
-                                    getIntent("${PlaygroundWebLink.MEMBER}/$userId")
+                                    getWebViewIntent("${PlaygroundWebLink.MEMBER}/$userId")
                                 )
                             }
                         },
@@ -426,7 +426,10 @@ fun MainScreen(
                     pokeGraph(
                         navController = navigator.navController,
                         userStatus = userStatus,
-                        navigateUp = navigator::navigateUp
+                        navigateUp = navigator::navigateUp,
+                        navigateToProfile = { userId ->
+                            context.startActivity(getWebViewIntent("${PlaygroundWebLink.MEMBER}/$userId"))
+                        }
                     )
 
                     myPageNavGraph(

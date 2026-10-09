@@ -24,32 +24,12 @@
  */
 package org.sopt.official.feature.poke.v2.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.Route
+import androidx.compose.material3.SnackbarHostState
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-/**
- * 아직 비즈니스 로직이 이관되지 않은 화면들의 라우트.
- *
- * 브릿지·메인에서 이 화면들로의 이동 경로만 먼저 확보해 둔다. 각 화면 이관이 끝나면
- * 해당 화면 패키지의 `navigation/` 하위로 옮긴다.
- *
- */
-
-/**
- * 콕 찌르기 알림 화면.
- *
- * @property userStatus [org.sopt.official.model.UserStatus] 이름.
- */
-@Serializable
-data class PokeNotification(
-    val userStatus: String = "",
-) : Route
-
-fun NavController.navigateToPokeNotification(
-    userStatus: String,
-    navOptions: NavOptions? = null,
-) {
-    navigate(PokeNotification(userStatus), navOptions)
+@HiltViewModel
+class PokeSnackbarViewModel @Inject constructor() : ViewModel() {
+    val snackbarHostState = SnackbarHostState()
 }
