@@ -93,14 +93,8 @@ class PokeMainViewModel @Inject constructor(
     private suspend fun fetchPokeMe() {
         getPokeMeUseCase()
             .onSuccess { user -> _uiState.update { it.copy(pokeMe = user.toPokeUserUiState()) } }
-            .onApiError { _, _ ->
-                _uiState.update { it.copy(pokeMe = null) }
-                _sideEffect.emit(PokeMainSideEffect.ShowError())
-            }
-            .onFailure { throwable ->
-                _uiState.update { it.copy(pokeMe = null) }
-                _sideEffect.emit(PokeMainSideEffect.ShowError(throwable.message))
-            }
+            .onApiError { _, _ -> _uiState.update { it.copy(pokeMe = null) } }
+            .onFailure { _uiState.update { it.copy(pokeMe = null) } }
     }
 
     private suspend fun fetchFriend() {
