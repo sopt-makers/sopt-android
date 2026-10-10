@@ -345,6 +345,7 @@ fun MainScreen(
                             // TODO(poke-v2): 정식 연결점이 아닌 개발자 전용 테스트 진입점이다.
                             //  정식 연결점이 정해지면 MainTab/Route 기반 네비게이션으로 교체해야 한다.
                             override fun navigateToPokeV2Test() {
+                                if (!BuildConfig.DEBUG) return
                                 navigator.navController.navigateToPoke()
                             }
 
