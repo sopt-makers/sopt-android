@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.usecase
+package org.sopt.official.feature.poke.v2.navigation
 
-import javax.inject.Inject
-import org.sopt.official.domain.poke.repository.PokeRepository
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import kotlinx.serialization.Serializable
+import org.sopt.official.core.navigation.Route
 
-class CheckNewInPokeOnboardingUseCase @Inject constructor(
-    private val repository: PokeRepository,
+/**
+ * 아직 비즈니스 로직이 이관되지 않은 화면들의 라우트.
+ *
+ * 브릿지·메인에서 이 화면들로의 이동 경로만 먼저 확보해 둔다. 각 화면 이관이 끝나면
+ * 해당 화면 패키지의 `navigation/` 하위로 옮긴다.
+ *
+ */
+
+/**
+ * 콕 찌르기 알림 화면.
+ *
+ * @property userStatus [org.sopt.official.model.UserStatus] 이름.
+ */
+@Serializable
+data class PokeNotification(
+    val userStatus: String = "",
+) : Route
+
+fun NavController.navigateToPokeNotification(
+    userStatus: String,
+    navOptions: NavOptions? = null,
 ) {
-    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
+    navigate(PokeNotification(userStatus), navOptions)
 }

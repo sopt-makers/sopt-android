@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.usecase
+package org.sopt.official.feature.poke.v2.bridge.model
 
-import javax.inject.Inject
-import org.sopt.official.domain.poke.repository.PokeRepository
+import androidx.compose.runtime.Immutable
 
-class CheckNewInPokeOnboardingUseCase @Inject constructor(
-    private val repository: PokeRepository,
+/**
+ * 브릿지(로딩) 화면 상태.
+ *
+ * @property isLoading   `checkNewInPoke` 호출 진행 중 여부.
+ * @property isError     조회 실패 여부. `true` 이면 화면 단에서 뒤로가기 처리.
+ * @property isNewPoke   신규 유저 여부. `null` 이면 아직 판별 전. `true` → 온보딩, `false` → 메인.
+ */
+@Immutable
+data class PokeEntryUiState(
+    val isLoading: Boolean = true,
+    val isError: Boolean = false,
+    val isNewPoke: Boolean? = null,
 ) {
-    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
+    val destination: PokeEntryDestination
+        get() = when {
+            isError -> PokeEntryDestination.Back
+            isLoading || isNewPoke == null -> PokeEntryDestination.Loading
+            isNewPoke -> PokeEntryDestination.Onboarding
+            else -> PokeEntryDestination.Main
+        }
+}
+
+/** 브릿지 화면이 판별을 마친 뒤 이동할 목적지. */
+enum class PokeEntryDestination {
+    Loading,
+    Onboarding,
+    Main,
+    Back,
 }

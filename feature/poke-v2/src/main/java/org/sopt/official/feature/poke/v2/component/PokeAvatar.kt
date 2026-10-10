@@ -26,6 +26,8 @@ package org.sopt.official.feature.poke.v2.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -34,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.throttledNoRippleClickable
@@ -125,4 +128,61 @@ internal fun PokeProfileAvatar(
         strokeColor = strokeColor,
         modifier = modifier.throttledNoRippleClickable(onClick = onClick),
     )
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF0F1012)
+@Composable
+private fun PokeAvatarPreview() {
+    SoptTheme {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 1,
+                    userName = "커비",
+                    userGeneration = 38,
+                    userPart = "디자인",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.NEW.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 2,
+                    userName = "박메이커",
+                    userGeneration = 36,
+                    userPart = "기획",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.BEST_FRIEND.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 3,
+                    userName = "이승호",
+                    userGeneration = 29,
+                    userPart = "안드로이드",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.SOULMATE.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 4,
+                    userName = "익명",
+                    userGeneration = 33,
+                    userPart = "서버",
+                    profileImageUrl = null,
+                    isAnonymous = true,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+        }
+    }
 }

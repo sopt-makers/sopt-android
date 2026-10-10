@@ -49,6 +49,10 @@ sealed interface HomeNavigation {
         fun navigateToSchedule()
         fun navigateToEditProfile()
         fun navigateToAttendance()
+
+        // TODO(poke-v2): 정식 연결점이 아닌, 홈 로고 롱클릭을 통한 개발자 전용 테스트 진입점이다.
+        //  정식 연결점이 정해지면 MainTab/Route 기반 네비게이션으로 교체하고 이 메서드는 제거한다.
+        fun navigateToPokeV2Test()
     }
 
     @Stable

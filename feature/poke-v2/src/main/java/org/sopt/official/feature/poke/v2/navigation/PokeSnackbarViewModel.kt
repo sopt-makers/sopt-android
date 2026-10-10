@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.usecase
+package org.sopt.official.feature.poke.v2.navigation
 
+import androidx.compose.material3.SnackbarHostState
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import org.sopt.official.domain.poke.repository.PokeRepository
 
-class CheckNewInPokeOnboardingUseCase @Inject constructor(
-    private val repository: PokeRepository,
-) {
-    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
+@HiltViewModel
+class PokeSnackbarViewModel @Inject constructor() : ViewModel() {
+    val snackbarHostState = SnackbarHostState()
 }

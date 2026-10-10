@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.poke.implementation
 
-import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.poke.dto.request.GetFriendListDetailRequest
 import org.sopt.official.data.poke.dto.request.GetPokeMessageListRequest
 import org.sopt.official.data.poke.dto.request.GetPokeNotificationListRequest
@@ -52,11 +51,7 @@ class PokeRepositoryImpl @Inject constructor(
 ) : PokeRepository {
 
     override suspend fun checkNewInPokeOnboarding(): Boolean {
-        if (!localDataSource.isAnonymousInPokeOnboarding) return false
-
-        return suspendRunCatching {
-            remoteDataSource.checkNewInPoke().data?.isNew == true
-        }.getOrDefault(false)
+        return localDataSource.isAnonymousInPokeOnboarding
     }
 
     override suspend fun updateNewInPokeOnboarding() {

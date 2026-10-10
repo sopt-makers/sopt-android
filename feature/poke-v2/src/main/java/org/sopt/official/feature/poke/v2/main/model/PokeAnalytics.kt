@@ -22,29 +22,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.onboarding.navigation
+package org.sopt.official.feature.poke.v2.main.model
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import kotlinx.serialization.Serializable
-import org.sopt.official.core.navigation.Route
+import org.sopt.official.analytics.AnalyticsEvent
+import org.sopt.official.analytics.EventType
+import org.sopt.official.domain.poke.type.PokeMessageType
 
-/**
- * 콕찌르기 온보딩
- *
- * @property currentGeneration 홈 배너 딥링크로 전달된 현재 기수. Amplitude view type 계산용.
- * @property userStatus        [org.sopt.official.model.UserStatus] 이름.
- */
-@Serializable
-data class PokeOnboarding(
-    val currentGeneration: Int = 0,
-    val userStatus: String = "",
-) : Route
+enum class PokeAnalyticsEvent(
+    override val type: EventType,
+    override val eventName: String,
+) : AnalyticsEvent {
+    VIEW_POKE_ONBOARDING(EventType.VIEW, "poke_onboarding"),
+    CLICK_MEMBER_PROFILE(EventType.CLICK, "memberprofile"),
+    CLICK_POKE_ICON(EventType.CLICK, "poke_icon"),
+    CLICK_POKE_SEND_MESSAGE(EventType.CLICK, "poke_send_message"),
+    CLICK_POKE_ANONYMITY(EventType.CLICK, "poke_anonymity"),
+}
 
-fun NavController.navigateToPokeOnboarding(
-    userStatus: String,
-    currentGeneration: Int = 0,
-    navOptions: NavOptions? = null
+internal object PokeAnalyticsPropertyKey {
+    const val CLICK_SOURCE = "poke_click_source"
+    const val MESSAGE_TYPE = "message_type"
+    const val MESSAGE_ID = "message_id"
+    const val IS_ANONYMOUS = "is_anonymous"
+    const val VIEW_PROFILE = "view_profile"
+}
+
+internal enum class PokeClickSource(
+    val value: String,
 ) {
-    navigate(PokeOnboarding(currentGeneration, userStatus), navOptions)
+    ONBOARDING("onboarding"),
+}
+
+internal fun PokeMessageType.toAnalyticsValue(): String = when (this) {
+    PokeMessageType.POKE_SOMEONE -> "poke_someone"
+    PokeMessageType.POKE_FRIEND -> "poke_friend"
 }

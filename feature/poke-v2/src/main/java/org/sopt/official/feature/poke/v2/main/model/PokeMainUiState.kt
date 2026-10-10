@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.usecase
+package org.sopt.official.feature.poke.v2.main.model
 
-import javax.inject.Inject
-import org.sopt.official.domain.poke.repository.PokeRepository
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
-class CheckNewInPokeOnboardingUseCase @Inject constructor(
-    private val repository: PokeRepository,
+/**
+ * 콕 찌르기 메인 화면 상태.
+ *
+ * @property isLoading      최초 로딩 여부(세 API 중 하나라도 아직 로딩 중).
+ * @property isRefreshing   당겨서 새로고침 진행 여부.
+ * @property pokeMe         나를 찌른 사람 카드. 없으면 `null`.
+ * @property friend         내 친구 카드. 없으면 `null`.
+ * @property recommendations 추천 프로필 섹션 목록.
+ */
+@Immutable
+data class PokeMainUiState(
+    val isLoading: Boolean = true,
+    val isRefreshing: Boolean = false,
+    val pokeMe: PokeUserUiState? = null,
+    val friend: PokeUserUiState? = null,
+    val recommendations: ImmutableList<PokeRecommendationUiState> = persistentListOf(),
 ) {
-    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
+    val hasPokeMe: Boolean get() = pokeMe != null
+    val hasFriend: Boolean get() = friend != null
 }

@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.domain.poke.usecase
+package org.sopt.official.feature.poke.v2.bridge.navigation
 
-import javax.inject.Inject
-import org.sopt.official.domain.poke.repository.PokeRepository
+import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import kotlinx.serialization.Serializable
+import org.sopt.official.core.navigation.Route
 
-class CheckNewInPokeOnboardingUseCase @Inject constructor(
-    private val repository: PokeRepository,
-) {
-    suspend operator fun invoke(): Boolean = repository.checkNewInPokeOnboarding()
+/** 브릿지(로딩) 화면 라우트. 콕 찌르기 그래프의 시작 목적지. */
+@Serializable
+data object PokeEntry : Route
+
+fun NavController.navigateToPokeEntry(navOptions: NavOptions? = null) {
+    navigate(PokeEntry, navOptions)
 }
