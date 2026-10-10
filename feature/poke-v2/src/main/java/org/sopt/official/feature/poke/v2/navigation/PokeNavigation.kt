@@ -74,7 +74,10 @@ fun NavGraphBuilder.pokeGraph(
         composable<PokeEntry> {
             PokeEntryRoute(
                 navigateToOnboarding = {
-                    navController.navigate(PokeOnboarding(userStatus = userStatus.name))
+                    navController.navigate(PokeOnboarding(userStatus = userStatus.name)) {
+                        popUpTo<PokeEntry> { inclusive = true }
+                        launchSingleTop = true
+                    }
                 },
                 navigateToMain = {
                     navController.navigate(PokeMain) {

@@ -55,7 +55,6 @@ import javax.inject.Inject
 /**
  * 콕 찌르기 메인 화면 ViewModel.
  *
- * 레거시 `feature.poke.main.PokeMainViewModel` 을 옮겨온 것으로,
  * - 상태는 단일 [PokeMainUiState] 로 통합
  * - 콕 요청 결과 등 일회성 이벤트는 [PokeMainSideEffect] 로 분리
  * - 도메인 엔티티(`PokeUser`) → UI 모델(`PokeUserUiState`) 변환을 ViewModel 경계에서 수행
@@ -94,8 +93,14 @@ class PokeMainViewModel @Inject constructor(
     private suspend fun fetchPokeMe() {
         getPokeMeUseCase()
             .onSuccess { user -> _uiState.update { it.copy(pokeMe = user.toPokeUserUiState()) } }
-            .onApiError { _, _ -> _uiState.update { it.copy(pokeMe = null) } }
-            .onFailure { _uiState.update { it.copy(pokeMe = null) } }
+            .onApiError { _, _ ->
+                _uiState.update { it.copy(pokeMe = null) }
+                _sideEffect.emit(PokeMainSideEffect.ShowError())
+            }
+            .onFailure { throwable ->
+                _uiState.update { it.copy(pokeMe = null) }
+                _sideEffect.emit(PokeMainSideEffect.ShowError(throwable.message))
+            }
     }
 
     private suspend fun fetchFriend() {

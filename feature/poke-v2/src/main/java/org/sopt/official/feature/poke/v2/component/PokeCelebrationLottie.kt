@@ -77,7 +77,7 @@ internal fun PokeCelebrationLottie(
     Box(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Black.copy(alpha = 0.8f))
+            .background(SoptTheme.colors.bg.dim.default)
             .noRippleClickable {},
         contentAlignment = Alignment.Center,
     ) {
