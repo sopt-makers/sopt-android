@@ -37,6 +37,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.poke.entity.onApiError
@@ -80,6 +81,9 @@ class PokeOnboardingViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<PokeOnboardingSideEffect>()
     val sideEffect: SharedFlow<PokeOnboardingSideEffect> = _sideEffect.asSharedFlow()
+
+    /** 진행 중인 콕 찌르기 요청. 완료 전 중복 호출을 막기 위해 보관한다. */
+    private var pokeJob: Job? = null
 
     init {
         checkNewInPokeOnboarding()
@@ -143,7 +147,7 @@ class PokeOnboardingViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 pokeTarget = user,
-                isAnonymous = false,
+                isAnonymous = true,
                 messages = persistentListOf()
             )
         }
@@ -181,10 +185,11 @@ class PokeOnboardingViewModel @Inject constructor(
 
     /** 메시지를 선택해 [PokeOnboardingUiState.pokeTarget] 에게 콕을 보낸다. */
     fun pokeUser(message: PokeMessageUiState) {
+        if (pokeJob?.isActive == true) return
         val target = _uiState.value.pokeTarget ?: return
         val isAnonymous = _uiState.value.isAnonymous && !target.isAnonymousCheckboxLocked
 
-        viewModelScope.launch {
+        pokeJob = viewModelScope.launch {
             pokeUserUseCase(userId = target.userId, isAnonymous = isAnonymous, message = message.content)
                 .onSuccess { response ->
                     _uiState.update {
@@ -199,9 +204,11 @@ class PokeOnboardingViewModel @Inject constructor(
                     )
                 }
                 .onApiError { _, _ ->
+                    dismissPokeMessageSheet()
                     _sideEffect.emit(PokeOnboardingSideEffect.ShowError())
                 }
                 .onFailure { throwable ->
+                    dismissPokeMessageSheet()
                     _sideEffect.emit(PokeOnboardingSideEffect.ShowError(throwable.message))
                 }
         }

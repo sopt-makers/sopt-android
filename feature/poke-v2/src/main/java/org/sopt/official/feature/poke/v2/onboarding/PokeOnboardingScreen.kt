@@ -39,7 +39,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -51,8 +50,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -79,7 +77,6 @@ import org.sopt.official.feature.poke.v2.onboarding.component.PokeOnboardingPage
 import org.sopt.official.feature.poke.v2.onboarding.component.PokeOnboardingUserItem
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingSideEffect
 import org.sopt.official.feature.poke.v2.onboarding.model.PokeOnboardingUiState
-import org.sopt.official.mds.R
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.toViewType
 import org.sopt.official.feature.poke.v2.R as PokeR
@@ -97,6 +94,7 @@ fun PokeOnboardingRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val viewType = viewModel.userStatus.toViewType()
     var friendCompleteMessage by remember { mutableStateOf<String?>(null) }
+    val friendCompleteMessageTemplate = stringResource(PokeR.string.poke_friend_complete_message)
 
     LaunchedEffect(Unit) {
         tracker.trackViewType(PokeAnalyticsEvent.VIEW_POKE_ONBOARDING, viewType)
@@ -115,7 +113,7 @@ fun PokeOnboardingRoute(
 
                 is PokeOnboardingSideEffect.PokeCompleted ->
                     if (effect.result.becameFriend) {
-                        friendCompleteMessage = "${effect.result.anonymousName}과 친구가 되었어요!"
+                        friendCompleteMessage = friendCompleteMessageTemplate.format(effect.result.anonymousName)
                     } else {
                         onShowSnackbar(
                             PokeSnackBarVisuals(
@@ -238,26 +236,14 @@ private fun PokeOnboardingScreen(
                 .verticalScroll(rememberScrollState())
                 .padding(horizontal = SoptTheme.spacing.s20),
         ) {
-            Row(
+            Text(
+                text = "콕 찌르기",
+                style = SoptTheme.typography.heading4,
+                color = SoptTheme.colors.fg.neutral.bold,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 15.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_x_close_outlined),
-                    contentDescription = null,
-                    tint = SoptTheme.colors.fg.neutral.bold,
-                )
-
-                Text(
-                    text = "콕 찌르기",
-                    style = SoptTheme.typography.heading4,
-                    color = SoptTheme.colors.fg.neutral.bold
-                )
-            }
-
+                    .padding(vertical = 15.dp)
+            )
             Spacer(modifier = Modifier.height(SoptTheme.spacing.s16))
 
             Text(
