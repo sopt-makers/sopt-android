@@ -32,12 +32,12 @@ import org.sopt.official.domain.poke.type.PokeFriendType
 
 @Serializable
 data class PokeFriend(
-    val friendType: PokeFriendType? = null,
+    val friendType: String? = null,
 ) : Route
 
 fun NavController.navigateToPokeFriend(
     friendType: PokeFriendType? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(PokeFriend(friendType), navOptions)
+    navigate(PokeFriend(friendType?.typeName), navOptions)
 }

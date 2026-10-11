@@ -45,7 +45,9 @@ class PokeFriendViewModel @Inject constructor(
     private val getPokeMessageListUseCase: GetPokeMessageListUseCase,
     private val pokeUserUseCase: PokeUserUseCase,
 ) : ViewModel() {
-    private val friendType: PokeFriendType? = savedStateHandle.toRoute<PokeFriend>().friendType
+    private val friendType: PokeFriendType? = savedStateHandle.toRoute<PokeFriend>().friendType?.let { typeName ->
+        PokeFriendType.entries.find { it.typeName == typeName }
+    }
 
     private val _uiState = MutableStateFlow(PokeFriendState())
     val uiState: StateFlow<PokeFriendState> = _uiState.asStateFlow()
