@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.navigation)
     implementation(projects.core.analytics)
+    implementation(projects.core.webview)
 
     // domain
     implementation(projects.domain.poke)

@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.component
+package org.sopt.official.feature.poke.v2.friend.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -39,8 +39,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.poke.v2.R
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun PokeFriendListEmpty(
@@ -54,18 +54,18 @@ internal fun PokeFriendListEmpty(
             painter = painterResource(id = R.drawable.image_poke_empty),
             contentDescription = null,
             modifier = Modifier
-                .padding(top = 18.dp)
-                .size(width = 64.dp, height = 62.dp)
+                .padding(top = 19.dp)
+                .size(68.dp)
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = "아직 없어요 T.T\n더 많은 찌르기로 달성해보세요",
-            style = SoptTheme.typography.body14R,
-            color = SoptTheme.colors.onSurface300,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.subtle,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = 24.dp)
+                .padding(bottom = 23.dp)
         )
     }
 }
