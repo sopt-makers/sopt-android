@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.component
+package org.sopt.official.feature.poke.v2.friend.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -45,20 +45,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.common.util.throttledNoRippleClickable
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.domain.poke.type.PokeFriendType
 import org.sopt.official.feature.poke.v2.R
-import org.sopt.official.feature.poke.v2.main.model.FriendListUiState
-import org.sopt.official.feature.poke.v2.main.model.PokeFriendListSections
+import org.sopt.official.feature.poke.v2.component.PokeFriendRow
+import org.sopt.official.feature.poke.v2.friend.model.FriendListUiState
+import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
+import org.sopt.official.feature.poke.v2.friend.model.emptyPokeFriendListSections
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
-import org.sopt.official.feature.poke.v2.main.model.emptyPokeFriendListSections
 
 @Composable
 internal fun PokeFriendListBlock(
     sections: PokeFriendListSections,
-    onFriendListClick: () -> Unit, // TODO: 로직에 맞게 수정
-    onProfileClick: (Int) -> Unit, // TODO: 로직에 맞게 수정
-    onPokeClick: (PokeUserUiState) -> Unit, // TODO: 로직에 맞게 수정
+    onFriendListClick: (PokeFriendType) -> Unit,
+    onProfileClick: (Int) -> Unit,
+    onPokeClick: (PokeUserUiState) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -68,14 +69,14 @@ internal fun PokeFriendListBlock(
             PokeFriendListSection(
                 type = type,
                 state = sectionState,
-                onFriendListClick = { onFriendListClick() },
+                onFriendListClick = onFriendListClick,
                 onProfileClick = onProfileClick,
                 onPokeClick = onPokeClick
             )
             if (index < sections.lastIndex) {
                 HorizontalDivider(
                     thickness = 8.dp,
-                    color = SoptTheme.colors.onSurface800
+                    color = SoptTheme.colors.bg.layer.default
                 )
             }
         }
@@ -86,7 +87,7 @@ internal fun PokeFriendListBlock(
 private fun PokeFriendListSection(
     type: PokeFriendType,
     state: FriendListUiState,
-    onFriendListClick: () -> Unit,
+    onFriendListClick: (PokeFriendType) -> Unit,
     onProfileClick: (Int) -> Unit,
     onPokeClick: (PokeUserUiState) -> Unit
 ) {
@@ -102,14 +103,11 @@ private fun PokeFriendListSection(
         )
 
         if (state.isEmpty) {
-            PokeFriendListEmpty(
-                modifier = Modifier.padding(top = 10.dp)
-            )
+            PokeFriendListEmpty()
         } else {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp)
             ) {
                 // 최대 2개
                 state.items.take(n = 2).fastForEach { user ->
@@ -128,25 +126,25 @@ private fun PokeFriendListSection(
 private fun PokeFriendListHeader(
     type: PokeFriendType,
     state: FriendListUiState,
-    onFriendListClick: () -> Unit
+    onFriendListClick: (PokeFriendType) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = type.title,
-            style = SoptTheme.typography.heading18B,
-            color = SoptTheme.colors.onSurface30,
+            style = SoptTheme.typography.title4,
+            color = SoptTheme.colors.fg.neutral.bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
             text = type.description,
-            style = SoptTheme.typography.body13M,
-            color = SoptTheme.colors.onSurface300,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.subtle,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -155,8 +153,8 @@ private fun PokeFriendListHeader(
         )
         Text(
             text = "${state.friendCount}명",
-            style = SoptTheme.typography.body14M,
-            color = SoptTheme.colors.onSurface30,
+            style = SoptTheme.typography.label3,
+            color = SoptTheme.colors.fg.neutral.bold,
             maxLines = 1,
             modifier = Modifier.padding(end = 8.dp)
         )
@@ -165,7 +163,7 @@ private fun PokeFriendListHeader(
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp)
-                .throttledNoRippleClickable(onClick = onFriendListClick)
+                .throttledNoRippleClickable(onClick = { onFriendListClick(type) })
         )
     }
 }
