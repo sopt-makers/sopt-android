@@ -21,4 +21,8 @@ data class MessageSheetState(
     val title: String = "보낼 메시지를 골라주세요",
     val messages: ImmutableList<PokeMessageUiState> = persistentListOf(),
     val isAnonymous: Boolean = !target.isAnonymousCheckboxLocked,
-)
+) {
+    // 실제 익명 전송 여부
+    val shouldSendAnonymously: Boolean
+        get() = isAnonymous && !target.isAnonymousCheckboxLocked
+}

@@ -150,14 +150,13 @@ internal fun PokeFriendRoute(
         },
         onMessageClick = { message ->
             viewModel.uiState.value.messageSheet?.let { sheet ->
-                val isAnonymous = if (sheet.target.isAnonymousCheckboxLocked) false else sheet.isAnonymous
                 tracker.trackViewType(
                     event = PokeAnalyticsEvent.CLICK_POKE_SEND_MESSAGE,
                     viewType = viewType,
                     properties = mapOf(
                         PokeAnalyticsPropertyKey.MESSAGE_TYPE to PokeMessageType.POKE_FRIEND.toAnalyticsValue(),
                         PokeAnalyticsPropertyKey.MESSAGE_ID to message.messageId,
-                        PokeAnalyticsPropertyKey.IS_ANONYMOUS to isAnonymous,
+                        PokeAnalyticsPropertyKey.IS_ANONYMOUS to sheet.shouldSendAnonymously,
                     ),
                 )
             }

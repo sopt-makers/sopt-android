@@ -200,7 +200,7 @@ class PokeFriendViewModel @Inject constructor(
         pokeJob = viewModelScope.launch {
             pokeUserUseCase(
                 userId = sheet.target.userId,
-                isAnonymous = sheet.isAnonymous && !sheet.target.isAnonymousCheckboxLocked,
+                isAnonymous = sheet.shouldSendAnonymously,
                 message = message.content,
             )
                 .onSuccess { pokedUser ->
