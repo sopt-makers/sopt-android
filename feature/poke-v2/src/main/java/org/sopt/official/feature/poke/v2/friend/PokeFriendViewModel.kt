@@ -110,7 +110,7 @@ class PokeFriendViewModel @Inject constructor(
                                 val friends = (sheet.friends + response.friendList.map { it.toPokeUserUiState() })
                                     .distinctBy { it.userId }
                                     .toImmutableList()
-                                sheet.copy(friendCount = friends.size, friends = friends)
+                                sheet.copy(friendCount = response.totalSize, friends = friends)
                             },
                         )
                     }
