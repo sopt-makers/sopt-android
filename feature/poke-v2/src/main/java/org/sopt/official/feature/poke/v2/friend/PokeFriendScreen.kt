@@ -188,13 +188,15 @@ private fun PokeFriendScreen(
     onSoulmateRevealEnd: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val friendListType = uiState.friendListSheet?.type
+
     PokeFriendListBottomSheetScaffold(
         friendListSheet = uiState.friendListSheet,
         onProfileClick = { userId ->
-            onProfileClick(userId, uiState.friendListSheet?.type)
+            onProfileClick(userId, friendListType)
         },
         onPokeClick = { user ->
-            onPokeClick(user, uiState.friendListSheet?.type)
+            onPokeClick(user, friendListType)
         },
         onLoadMore = onLoadMoreFriendList,
         onDismissRequest = onFriendListSheetDismiss,
