@@ -107,7 +107,9 @@ class PokeFriendViewModel @Inject constructor(
                     _uiState.update { state ->
                         state.copy(
                             friendListSheet = state.friendListSheet?.let { sheet ->
-                                val friends = (sheet.friends + response.friendList.map { it.toPokeUserUiState() }).toImmutableList()
+                                val friends = (sheet.friends + response.friendList.map { it.toPokeUserUiState() })
+                                    .distinctBy { it.userId }
+                                    .toImmutableList()
                                 sheet.copy(friendCount = friends.size, friends = friends)
                             },
                         )
