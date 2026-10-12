@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.domain.home)
 
     implementation(projects.feature.poke)
+    implementation(projects.feature.pokeV2)
     implementation(projects.feature.soptamp)
     implementation(projects.feature.soptlog)
     implementation(projects.feature.home)

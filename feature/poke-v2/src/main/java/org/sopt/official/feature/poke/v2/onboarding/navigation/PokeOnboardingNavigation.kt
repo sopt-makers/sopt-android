@@ -31,10 +31,20 @@ import org.sopt.official.core.navigation.Route
 
 /**
  * 콕찌르기 온보딩
+ *
+ * @property currentGeneration 홈 배너 딥링크로 전달된 현재 기수. Amplitude view type 계산용.
+ * @property userStatus        [org.sopt.official.model.UserStatus] 이름.
  */
 @Serializable
-data object PokeOnboarding : Route
+data class PokeOnboarding(
+    val currentGeneration: Int = 0,
+    val userStatus: String = "",
+) : Route
 
-fun NavController.navigateToPokeOnboarding(navOptions: NavOptions? = null) {
-    navigate(PokeOnboarding, navOptions)
+fun NavController.navigateToPokeOnboarding(
+    userStatus: String,
+    currentGeneration: Int = 0,
+    navOptions: NavOptions? = null
+) {
+    navigate(PokeOnboarding(currentGeneration, userStatus), navOptions)
 }

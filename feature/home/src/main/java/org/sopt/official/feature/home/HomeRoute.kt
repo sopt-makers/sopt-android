@@ -203,6 +203,7 @@ private fun HomeScreenForMember(
                     homeDashboardNavigation.navigateToNotification()
                     tracker.trackViewType(HomeAnalyticsEvent.CLICK_ALARM, viewType)
                 },
+                onLogoLongClick = homeDashboardNavigation::navigateToPokeV2Test,
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
             )
@@ -394,7 +395,9 @@ private fun HomeScreenForVisitor(
             .padding(paddingValues)
             .padding(horizontal = 20.dp)
     ) {
-        HomeTopBarForVisitor()
+        HomeTopBarForVisitor(
+            onLogoLongClick = {}
+        )
 
         Spacer(modifier = Modifier.height(height = 8.dp))
 
