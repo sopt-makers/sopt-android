@@ -35,8 +35,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.net.toUri
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.launch
 import org.sopt.official.localstorage.source.TokenStorage
 import timber.log.Timber
 
@@ -44,6 +48,9 @@ class SoptWebViewClient(
     private val tokenStorage: TokenStorage
 ) : WebViewClient() {
     val cookieManager: CookieManager = CookieManager.getInstance()
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.Main.immediate + job)
+    private var tokenInjectionJob: Job? = null
 
     override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
         val url = request?.url.toString().toUri()
@@ -147,22 +154,33 @@ class SoptWebViewClient(
     override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
         super.onPageStarted(view, url, favicon)
 
-        val (accessToken, refreshToken) = runBlocking {
-            val access = tokenStorage.accessToken.first() // 로컬 스토리지로
-            val refresh = tokenStorage.refreshToken.first() // 쿠키로
-            access to refresh
-        }
+        val host = url?.toUri()?.host ?: return
+        if (!host.endsWith(PLAYGROUND_HOST)) return
 
-        if (refreshToken.isNotEmpty()) {
-            cookieManager.setCookie(COOKIE_DOMAIN, "Refresh-Token=$refreshToken") {
-                cookieManager.flush()
+        tokenInjectionJob?.cancel()
+        tokenInjectionJob = scope.launch {
+            val accessToken = tokenStorage.accessToken.first() // 로컬 스토리지로
+            val refreshToken = tokenStorage.refreshToken.first() // 쿠키로
+
+            // DataStore 조회가 끝나는 사이 페이지가 이동했을 수 있으므로 주입 직전에 다시 검증
+            val currentHost = view?.url?.toUri()?.host
+            if (currentHost == null || !currentHost.endsWith(PLAYGROUND_HOST)) return@launch
+
+            if (refreshToken.isNotEmpty()) {
+                cookieManager.setCookie(COOKIE_DOMAIN, "Refresh-Token=$refreshToken") {
+                    cookieManager.flush()
+                }
             }
-        }
 
-        val script = """
-            window.localStorage.setItem('serviceAccessToken', '${accessToken}');
-        """.trimIndent()
-        view?.evaluateJavascript(script) {}
+            val script = """
+                window.localStorage.setItem('serviceAccessToken', '${accessToken}');
+            """.trimIndent()
+            view.evaluateJavascript(script) {}
+        }
+    }
+
+    fun cancelCoroutines() {
+        job.cancel()
     }
 
     override fun onPageFinished(view: WebView?, url: String?) {

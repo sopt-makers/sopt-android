@@ -46,6 +46,7 @@ internal data class MissionDetailUiState(
     val mode: MissionDetailModeType = MissionDetailModeType.READ_ONLY,
     val toolbarIconType: ToolbarIconType = ToolbarIconType.NONE,
     val isDeleteSuccess: Boolean = false,
+    val isDeleting: Boolean = false,
     val isDeleteDialogVisible: Boolean = false,
     val isShowEditSnackBar: Boolean = false,
     val isMe: Boolean = true,
@@ -61,6 +62,15 @@ internal data class MissionDetailUiState(
     val initSnapshotContent: String = "",
     val initSnapshotDate: String = "",
 ) {
+    val isEditable: Boolean
+        get() = mode == MissionDetailModeType.WRITE || mode == MissionDetailModeType.EDIT
+
+    val isSubmitting: Boolean
+        get() = isEditable && isLoading
+
+    val isInteractionBlocked: Boolean
+        get() = isSubmitting || isDeleting || isSuccess
+
     companion object {
         fun from(data: Archive) =
             MissionDetailUiState(

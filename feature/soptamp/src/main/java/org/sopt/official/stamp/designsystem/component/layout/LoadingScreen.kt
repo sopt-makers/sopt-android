@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2025 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,11 +27,10 @@ package org.sopt.official.stamp.designsystem.component.layout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.stamp.util.DefaultPreview
 
 @Composable
@@ -41,9 +40,8 @@ fun LoadingScreen() {
             Modifier
                 .fillMaxSize()
                 .background(SoptTheme.colors.onSurface950),
-        contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator()
+        LoadingIndicator()
     }
 }
 

@@ -26,14 +26,11 @@ package org.sopt.official.feature.home.component
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -41,24 +38,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color.Companion.Unspecified
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SuitMedium
-import org.sopt.official.feature.home.R.drawable.ic_file_text_filled
-import org.sopt.official.feature.home.R.drawable.ic_folder
+import org.sopt.official.feature.home.R.drawable.ic_coffeechat
 import org.sopt.official.feature.home.R.drawable.ic_homepage
 import org.sopt.official.feature.home.R.drawable.ic_instagram_40
-import org.sopt.official.feature.home.R.drawable.ic_coffeechat
-import org.sopt.official.feature.home.R.drawable.ic_moim
-import org.sopt.official.feature.home.R.drawable.is_playground
-import org.sopt.official.feature.home.R.drawable.ic_member
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun HomeShortcutButtonsForMember(
@@ -73,17 +62,17 @@ internal fun HomeShortcutButtonsForMember(
         modifier = modifier.fillMaxWidth(),
     ) {
         HomeShortcutButton(
-            icon = ic_member,
+            icon = MdsIcons.userFilled,
             text = "멤버",
             onClick = onMemberClick,
         )
         HomeShortcutButton(
-            icon = ic_moim,
+            icon = MdsIcons.usersFilled,
             text = "모임/스터디",
             onClick = onStudyClick,
         )
         HomeShortcutButton(
-            icon = ic_file_text_filled,
+            icon = MdsIcons.fileTextFilled,
             text = "프로젝트",
             onClick = onProjectClick,
         )
@@ -91,6 +80,7 @@ internal fun HomeShortcutButtonsForMember(
             icon = ic_coffeechat,
             text = "커피솝",
             onClick = onCoffeeChat,
+            iconColor = Color.Unspecified
         )
     }
 }
@@ -126,12 +116,12 @@ internal fun HomeShortcutButtonsForVisitor(
             onClick = onHomePageClick,
         )
         HomeShortcutButton(
-            icon = is_playground,
+            icon = MdsIcons.messageChatFilled,
             text = "활동후기",
             onClick = onPlaygroundClick,
         )
         HomeShortcutButton(
-            icon = ic_folder,
+            icon = MdsIcons.folderFilled,
             text = "프로젝트",
             onClick = onProjectClick,
         )
@@ -162,31 +152,30 @@ private fun HomeShortcutButton(
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    iconColor: Color = SoptTheme.colors.fg.neutral.subtle,
 ) {
     Column(
         horizontalAlignment = CenterHorizontally,
-        modifier = modifier.clickable { onClick() },
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        modifier = modifier.clickable(onClick = onClick)
     ) {
-        Box(modifier = Modifier.padding(horizontal = 3.dp)) {
-            HomeBox(
-                modifier = Modifier.size(size = 68.dp),
-                contentAlignment = Center,
-                content = {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(icon),
-                        contentDescription = null,
-                        tint = Unspecified,
-                    )
-                }
-            )
-        }
-        Spacer(modifier = Modifier.height(height = 4.dp))
+        HomeBox(
+            modifier = Modifier.size(size = 68.dp),
+            contentAlignment = Center,
+            content = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(icon),
+                    contentDescription = null,
+                    tint = iconColor,
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+        )
+
         Text(
             text = text,
-            style = TextStyle(
-                fontFamily = SuitMedium, fontSize = 14.sp, lineHeight = 20.sp
-            ),
-            color = colors.onSurface200,
+            style = SoptTheme.typography.label3,
+            color = SoptTheme.colors.fg.neutral.subtle
         )
     }
 }

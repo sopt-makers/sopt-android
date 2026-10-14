@@ -31,21 +31,18 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -59,18 +56,21 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 import org.sopt.official.analytics.Tracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.NavigatorEntryPoint
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.notification.NotificationAnalyticsEvent
 import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
-import org.sopt.official.feature.notification.R
 import org.sopt.official.feature.notification.toNotificationLinkType
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.button.MdsActionButton
+import org.sopt.official.mds.components.button.MdsActionButtonSize
+import org.sopt.official.mds.components.button.MdsActionButtonType
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
-import javax.inject.Inject
 
 private val navigator by lazy {
     EntryPointAccessors.fromApplication(
@@ -101,30 +101,30 @@ class NotificationDetailActivity : AppCompatActivity() {
             SoptTheme {
                 Scaffold(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(SoptTheme.colors.background),
-                    containerColor = SoptTheme.colors.background,
+                        .fillMaxSize(),
+                    containerColor = SoptTheme.colors.bg.layer.basement,
                     topBar = {
                         CenterAlignedTopAppBar(
                             title = {
                                 Text(
                                     text = "알림",
-                                    style = SoptTheme.typography.body16M
+                                    style = SoptTheme.typography.title5
                                 )
                             },
                             navigationIcon = {
-                                IconButton(onClick = onBackPressedDispatcher::onBackPressed) {
-                                    Icon(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
-                                        contentDescription = null,
-                                        tint = SoptTheme.colors.onSurface10
-                                    )
-                                }
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .padding(start = 20.dp)
+                                        .size(24.dp)
+                                        .clickable(onClick = onBackPressedDispatcher::onBackPressed)
+                                )
                             },
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = SoptTheme.colors.background,
-                                titleContentColor = SoptTheme.colors.onBackground,
-                                navigationIconContentColor = SoptTheme.colors.onBackground
+                                containerColor = SoptTheme.colors.bg.layer.basement,
+                                titleContentColor = SoptTheme.colors.fg.neutral.bold,
+                                navigationIconContentColor = SoptTheme.colors.fg.neutral.bold
                             )
                         )
                     }
@@ -133,79 +133,63 @@ class NotificationDetailActivity : AppCompatActivity() {
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(innerPadding)
-                            .background(SoptTheme.colors.background)
-                            .padding(top = 20.dp)
+                            .padding(top = 20.dp, bottom = 16.dp)
                             .padding(horizontal = 20.dp),
                         verticalArrangement = Arrangement.SpaceBetween
                     ) {
                         Column(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .clip(RoundedCornerShape(10.dp))
-                                .background(SoptTheme.colors.onSurface800)
-                                .padding(
-                                    vertical = 24.dp,
-                                    horizontal = 12.dp
-                                )
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(SoptTheme.colors.bg.neutral.ghost)
+                                .padding(20.dp),
+                            verticalArrangement = Arrangement.spacedBy(14.dp)
                         ) {
                             Text(
                                 text = notification?.title.orEmpty(),
-                                style = SoptTheme.typography.heading18B,
-                                color = SoptTheme.colors.onSurface10
+                                style = SoptTheme.typography.title4,
+                                color = SoptTheme.colors.fg.neutral.bold
                             )
-                            Spacer(modifier = Modifier.padding(14.dp))
-                            HorizontalDivider(color = SoptTheme.colors.onSurface400)
+
+                            HorizontalDivider(color = SoptTheme.colors.stroke.neutral.subtle)
+
                             Text(
                                 text = notification?.content.orEmpty(),
-                                style = SoptTheme.typography.body16M,
-                                color = SoptTheme.colors.onSurface10,
-                                modifier = Modifier.padding(top = 24.dp)
+                                style = SoptTheme.typography.body1,
+                                color = SoptTheme.colors.fg.neutral.bold
                             )
                         }
                         if (isValidLinks(deepLink = notification?.deepLink, webLink = notification?.webLink)) {
-                            Column {
-                                Button(
-                                    onClick = {
-                                        val link = notification?.webLink
+                            MdsActionButton(
+                                text = "바로가기",
+                                type = MdsActionButtonType.PRIMARY,
+                                size = MdsActionButtonSize.LARGE,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                val link = notification?.webLink
+                                    ?.takeIf(String::isNotBlank)
+                                    ?: notification?.deepLink
+
+                                tracker.trackViewType(
+                                    event = NotificationAnalyticsEvent.CLICK_LINK_BUTTON,
+                                    viewType = userStatus.toViewType(),
+                                    properties = buildMap {
+                                        notification?.notificationId
                                             ?.takeIf(String::isNotBlank)
-                                            ?: notification?.deepLink
-
-                                        tracker.trackViewType(
-                                            event = NotificationAnalyticsEvent.CLICK_LINK_BUTTON,
-                                            viewType = userStatus.toViewType(),
-                                            properties = buildMap {
-                                                notification?.notificationId
-                                                    ?.takeIf(String::isNotBlank)
-                                                    ?.let { put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it) }
-                                                put(
-                                                    NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
-                                                    link.toNotificationLinkType().value,
-                                                )
-                                            },
-                                        )
-
-                                        context.startActivity(
-                                            navigator.getSchemeActivityIntent(
-                                                notificationId = notification?.notificationId.orEmpty(),
-                                                link = link.orEmpty()
-                                            )
+                                            ?.let { put(NotificationAnalyticsPropertyKey.NOTIFICATION_ID, it) }
+                                        put(
+                                            NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
+                                            link.toNotificationLinkType().value,
                                         )
                                     },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = SoptTheme.colors.primary,
-                                        contentColor = SoptTheme.colors.onPrimary
-                                    ),
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .height(56.dp),
-                                    shape = RoundedCornerShape(10.dp)
-                                ) {
-                                    Text(
-                                        text = "바로가기 >",
-                                        style = SoptTheme.typography.body16M
+                                )
+
+                                context.startActivity(
+                                    navigator.getSchemeActivityIntent(
+                                        notificationId = notification?.notificationId.orEmpty(),
+                                        link = link.orEmpty()
                                     )
-                                }
-                                Spacer(modifier = Modifier.height(14.dp))
+                                )
                             }
                         }
                     }

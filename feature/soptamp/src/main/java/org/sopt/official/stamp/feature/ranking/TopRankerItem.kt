@@ -51,6 +51,7 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.stamp.R
 import org.sopt.official.stamp.designsystem.component.button.SoptampIconButton
 import org.sopt.official.common.util.noRippleClickable
+import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.stamp.designsystem.style.Pink300
 import org.sopt.official.stamp.feature.ranking.model.RankerUiModel
 
@@ -115,7 +116,7 @@ fun TopRankBarOfUserName(
     Box(
         modifier =
             Modifier
-                .noRippleClickable(onClick = onClickTopRankerBubble)
+                .throttledNoRippleClickable(onClick = onClickTopRankerBubble)
                 .size(width = 97.dp, height = 32.dp)
                 .background(
                     color = SoptTheme.colors.onSurface800,

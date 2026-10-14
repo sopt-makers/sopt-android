@@ -26,7 +26,7 @@ package org.sopt.official.feature.deeplink
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.deeplinkdispatch.DeepLinkHandler
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +44,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 @DeepLinkHandler(value = [AppDeeplinkModule::class, WebDeeplinkModule::class])
-class DeepLinkSchemeActivity : AppCompatActivity() {
+class DeepLinkSchemeActivity : ComponentActivity() {
 
     @Inject
     lateinit var tokenStorage: TokenStorage

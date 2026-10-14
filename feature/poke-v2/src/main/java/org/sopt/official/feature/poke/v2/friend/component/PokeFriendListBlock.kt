@@ -1,0 +1,240 @@
+/*
+ * MIT License
+ * Copyright 2026 SOPT - Shout Our Passion Together
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.sopt.official.feature.poke.v2.friend.component
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.common.util.throttledNoRippleClickable
+import org.sopt.official.mds.theme.SoptTheme
+import org.sopt.official.domain.poke.type.PokeFriendType
+import org.sopt.official.feature.poke.v2.R
+import org.sopt.official.feature.poke.v2.component.PokeFriendRow
+import org.sopt.official.feature.poke.v2.friend.model.FriendListUiState
+import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
+import org.sopt.official.feature.poke.v2.friend.model.emptyPokeFriendListSections
+import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
+
+@Composable
+internal fun PokeFriendListBlock(
+    sections: PokeFriendListSections,
+    onFriendListClick: (PokeFriendType) -> Unit,
+    onProfileClick: (Int) -> Unit,
+    onPokeClick: (PokeUserUiState) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        sections.forEachIndexed { index, (type, sectionState) ->
+            PokeFriendListSection(
+                type = type,
+                state = sectionState,
+                onFriendListClick = onFriendListClick,
+                onProfileClick = onProfileClick,
+                onPokeClick = onPokeClick
+            )
+            if (index < sections.lastIndex) {
+                HorizontalDivider(
+                    thickness = 8.dp,
+                    color = SoptTheme.colors.bg.layer.default
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun PokeFriendListSection(
+    type: PokeFriendType,
+    state: FriendListUiState,
+    onFriendListClick: (PokeFriendType) -> Unit,
+    onProfileClick: (Int) -> Unit,
+    onPokeClick: (PokeUserUiState) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+    ) {
+        PokeFriendListHeader(
+            type = type,
+            state = state,
+            onFriendListClick = onFriendListClick
+        )
+
+        if (state.isEmpty) {
+            PokeFriendListEmpty()
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                // 최대 2개
+                state.items.take(n = 2).fastForEach { user ->
+                    PokeFriendRow(
+                        user = user,
+                        onProfileClick = onProfileClick,
+                        onPokeClick = onPokeClick,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PokeFriendListHeader(
+    type: PokeFriendType,
+    state: FriendListUiState,
+    onFriendListClick: (PokeFriendType) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = type.title,
+            style = SoptTheme.typography.title4,
+            color = SoptTheme.colors.fg.neutral.bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = type.description,
+            style = SoptTheme.typography.label4,
+            color = SoptTheme.colors.fg.neutral.subtle,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 8.dp)
+        )
+        Text(
+            text = "${state.friendCount}명",
+            style = SoptTheme.typography.label3,
+            color = SoptTheme.colors.fg.neutral.bold,
+            maxLines = 1,
+            modifier = Modifier.padding(end = 8.dp)
+        )
+        Image(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_chevron_right),
+            contentDescription = null,
+            modifier = Modifier
+                .size(24.dp)
+                .throttledNoRippleClickable(onClick = { onFriendListClick(type) })
+        )
+    }
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF000000)
+@Composable
+private fun PokeFriendListBlockPreview(
+    @PreviewParameter(PokeFriendListBlockPreviewParameterProvider::class) sections: PokeFriendListSections,
+) {
+    SoptTheme {
+        PokeFriendListBlock(
+            sections = sections,
+            onFriendListClick = {},
+            onProfileClick = {},
+            onPokeClick = {}
+        )
+    }
+}
+
+private class PokeFriendListBlockPreviewParameterProvider : PreviewParameterProvider<PokeFriendListSections> {
+    override val values = sequenceOf(
+        persistentListOf(
+            PokeFriendType.NEW to FriendListUiState(
+                friendCount = 2,
+                items = persistentListOf(
+                    PokeUserUiState(
+                        userId = 1,
+                        userName = "김솝트",
+                        anonymousName = "수상한 솝트인",
+                        userGeneration = 36,
+                        userPart = "안드로이드",
+                        profileImageUrl = null,
+                        pokeCount = 3,
+                        relationName = PokeFriendType.NEW.readableName,
+                        isPokeButtonEnabled = false
+                    ),
+                    PokeUserUiState(
+                        userId = 2,
+                        userName = "김솝트",
+                        anonymousName = "수상한 솝트인",
+                        userGeneration = 36,
+                        userPart = "안드로이드",
+                        profileImageUrl = null,
+                        isAnonymous = true,
+                        pokeCount = 4,
+                        relationName = PokeFriendType.NEW.readableName,
+                    )
+                )
+            ),
+            PokeFriendType.BEST_FRIEND to FriendListUiState(
+                friendCount = 1,
+                items = persistentListOf(
+                    PokeUserUiState(
+                        userId = 2,
+                        userName = "박메이커",
+                        anonymousName = "익명의 메이커",
+                        userGeneration = 36,
+                        userPart = "디자인",
+                        profileImageUrl = null,
+                        pokeCount = 7,
+                        relationName = PokeFriendType.BEST_FRIEND.readableName,
+                        isAnonymous = true,
+                        isPokeButtonEnabled = false
+                    )
+                )
+            ),
+            PokeFriendType.SOULMATE to FriendListUiState(
+                friendCount = 0,
+                items = persistentListOf()
+            )
+        ),
+        emptyPokeFriendListSections()
+    )
+}

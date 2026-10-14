@@ -105,7 +105,9 @@ class MissionsViewModel @Inject constructor(
         filter: String? = null,
         nickname: String = "",
     ) = viewModelScope.launch {
-        _state.value = MissionsState.Loading
+        if (_state.value !is MissionsState.Success) {
+            _state.value = MissionsState.Loading
+        }
         fetchMissions(
             filter = filter?.let { MissionsFilter.findFilterOf(filter) } ?: MissionsFilter.ALL_MISSION,
             nickname = nickname,

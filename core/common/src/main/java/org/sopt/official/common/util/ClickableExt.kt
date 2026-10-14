@@ -26,16 +26,16 @@ package org.sopt.official.common.util
 
 import android.os.SystemClock
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
-import androidx.compose.ui.input.pointer.PointerEvent
 import androidx.compose.ui.input.pointer.PointerEventPass
-import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.SuspendingPointerInputModifierNode
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.node.DelegatingNode
 import androidx.compose.ui.node.ModifierNodeElement
-import androidx.compose.ui.node.PointerInputModifierNode
-import androidx.compose.ui.unit.IntSize
 
 /**
  * 연속 클릭을 방지하기 위해 [throttleTime] 동안 클릭 이벤트를 무시하며,
@@ -64,27 +64,25 @@ private data class ThrottledNoRippleClickableElement(
 private class ThrottledNoRippleClickableNode(
     private val throttleTime: Long,
     var onClick: () -> Unit,
-) : PointerInputModifierNode, Modifier.Node() {
+) : DelegatingNode() {
 
     private var lastClickTime = 0L
 
-    override fun onPointerEvent(
-        pointerEvent: PointerEvent,
-        pass: PointerEventPass,
-        bounds: IntSize,
-    ) {
-        if (pass == PointerEventPass.Main &&
-            pointerEvent.type == PointerEventType.Release
-        ) {
-            val nowTime = SystemClock.elapsedRealtime()
-            if (nowTime - lastClickTime >= throttleTime) {
-                lastClickTime = nowTime
-                onClick()
-            }
-        }
+    init {
+        delegate(
+            SuspendingPointerInputModifierNode {
+                detectTapGestures(
+                    onTap = {
+                        val nowTime = SystemClock.elapsedRealtime()
+                        if (nowTime - lastClickTime >= throttleTime) {
+                            lastClickTime = nowTime
+                            onClick()
+                        }
+                    },
+                )
+            },
+        )
     }
-
-    override fun onCancelPointerInput() = Unit
 }
 
 /**
@@ -107,4 +105,20 @@ inline fun Modifier.noRippleClickable(
                 onClick()
             },
         )
+    }
+
+/**
+ * [enabled] 이면 이 노드 하위의 모든 터치 이벤트를 막는 Modifier
+ */
+fun Modifier.blockTouches(enabled: Boolean): Modifier =
+    if (!enabled) {
+        this
+    } else {
+        pointerInput(Unit) {
+            awaitPointerEventScope {
+                while (true) {
+                    awaitPointerEvent(PointerEventPass.Initial).changes.forEach { it.consume() }
+                }
+            }
+        }
     }

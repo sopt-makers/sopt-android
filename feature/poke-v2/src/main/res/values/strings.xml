@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="poke_friend_complete_message">찌르기 답장으로\n%1$s님과\n친구가 되었어요!</string>
+</resources>

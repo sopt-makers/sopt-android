@@ -50,9 +50,9 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.R
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 private const val AUTO_SCROLL_DELAY = 3000L
 private const val AUTO_SCROLL_ANIMATION_DELAY = 450
@@ -157,9 +157,10 @@ private fun TitleSection(
     ) {
         Text(
             text = "최신 게시물",
-            style = SoptTheme.typography.heading20B,
-            color = SoptTheme.colors.primary
+            style = SoptTheme.typography.heading3,
+            color = SoptTheme.colors.fg.neutral.bold
         )
+
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
@@ -167,15 +168,14 @@ private fun TitleSection(
         ) {
             Text(
                 text = "전체보기",
-                style = SoptTheme.typography.label12SB,
-                color = SoptTheme.colors.onSurface300
+                style = SoptTheme.typography.label4,
+                color = SoptTheme.colors.fg.neutral.subtle
             )
             Icon(
-                imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right),
+                imageVector = ImageVector.vectorResource(MdsIcons.chevronRightOutlined),
                 contentDescription = null,
-                tint = SoptTheme.colors.onSurface300,
-                modifier = Modifier
-                    .size(16.dp)
+                tint = SoptTheme.colors.fg.neutral.subtle,
+                modifier = Modifier.size(16.dp)
             )
         }
     }

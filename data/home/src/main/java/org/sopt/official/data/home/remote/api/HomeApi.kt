@@ -24,7 +24,6 @@
  */
 package org.sopt.official.data.home.remote.api
 
-import org.sopt.official.data.home.remote.response.HomeAppServiceResponseDto
 import org.sopt.official.data.home.remote.response.HomeAppServicesResponseDto
 import org.sopt.official.data.home.remote.response.HomeDescriptionResponseDto
 import org.sopt.official.data.home.remote.response.HomeFloatingToastDto
@@ -38,11 +37,12 @@ internal interface HomeApi {
     @GET("home/description")
     suspend fun getHomeDescription(): HomeDescriptionResponseDto
 
+    // TODO: isAppjamMode 소유권이 tab-app-service-info로 옮겨가 이 응답의 isAppjamMode는 더 이상 쓰지 않음. 우선 필드는 남겨둠.
     @GET("home/app-service")
     suspend fun getHomeAppService(): HomeAppServicesResponseDto
 
-    @GET("home/tab-app-service")
-    suspend fun getTabAppService(): List<HomeAppServiceResponseDto>
+    @GET("home/tab-app-service-info")
+    suspend fun getTabAppService(): HomeAppServicesResponseDto
 
     @GET("home/review-form")
     suspend fun getReviewForm(): HomeReviewFormResponseDto

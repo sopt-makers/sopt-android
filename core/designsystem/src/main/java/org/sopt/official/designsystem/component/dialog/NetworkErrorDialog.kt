@@ -24,19 +24,12 @@
  */
 package org.sopt.official.designsystem.component.dialog
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.SoptTheme.colors
-import org.sopt.official.designsystem.SoptTheme.typography
+import org.sopt.official.mds.components.dialog.MdsDialog
+import org.sopt.official.mds.components.dialog.MdsDialogType
+import org.sopt.official.mds.theme.SoptTheme
 
 /**
  * 네트워크 연결 불안정 상황에서 사용하는 공통 에러 다이얼로그
@@ -62,31 +55,14 @@ fun NetworkErrorDialog(
     content: String = "인터넷 연결을 확인하고 다시 시도해 주세요.",
     buttonText: String = "확인",
 ) {
-    OneButtonDialog(
-        onDismiss = onConfirm,
-        buttonText = buttonText,
-        onButtonClick = onConfirm,
-        modifier = modifier,
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = title,
-                style = typography.title18SB,
-                color = colors.primary,
-            )
-
-            Spacer(modifier = Modifier.height(height = 24.dp))
-
-            Text(
-                text = content,
-                style = typography.body14R,
-                color = colors.onSurface100,
-            )
-        }
-    }
+    MdsDialog(
+        title = title,
+        description = content,
+        type = MdsDialogType.INFORMATION,
+        positiveButtonText = buttonText,
+        onPositiveButtonClick = onConfirm,
+        onDismiss = onConfirm
+    )
 }
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 800)
@@ -94,7 +70,7 @@ fun NetworkErrorDialog(
 private fun NetworkErrorDialogPreview() {
     SoptTheme {
         NetworkErrorDialog(
-            onConfirm = {},
+            onConfirm = { },
         )
     }
 }

@@ -26,41 +26,49 @@ package org.sopt.official.feature.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement.SpaceBetween
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Unspecified
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.feature.home.R.drawable.ic_notification_off
-import org.sopt.official.feature.home.R.drawable.ic_notification_on
 import org.sopt.official.feature.home.R.drawable.img_logo
+import org.sopt.official.mds.MdsIcons
 
 @Composable
 internal fun HomeTopBarForMember(
     hasNotification: Boolean,
     onNotificationClick: () -> Unit,
+    onLogoLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    HomeTopBar(modifier = modifier) {
+    HomeTopBar(modifier = modifier, onLogoLongClick = onLogoLongClick) {
         Icon(
             imageVector = ImageVector.vectorResource(
-                if (hasNotification) ic_notification_on else ic_notification_off
+                if (hasNotification) MdsIcons.bellActiveFilled else MdsIcons.bellFilled
             ),
             contentDescription = null,
             tint = Unspecified,
-            modifier = Modifier.clickable(onClick = onNotificationClick),
+            modifier = Modifier
+                .size(32.dp)
+                .padding(6.dp)
+                .clickable(onClick = onNotificationClick),
         )
     }
 }
@@ -72,22 +80,26 @@ private fun HomeTopBarForMemberPreview() {
         HomeTopBarForMember(
             hasNotification = true,
             onNotificationClick = {},
+            onLogoLongClick = {}
         )
     }
 }
 
 @Composable
 internal fun HomeTopBarForVisitor(
+    onLogoLongClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    HomeTopBar(modifier = modifier) {}
+    HomeTopBar(modifier = modifier, onLogoLongClick = onLogoLongClick) {}
 }
 
 @Preview
 @Composable
 private fun HomeTopBarForVisitorPreview() {
     SoptTheme {
-        HomeTopBarForVisitor()
+        HomeTopBarForVisitor(
+            onLogoLongClick = {}
+        )
     }
 }
 
@@ -95,20 +107,33 @@ private fun HomeTopBarForVisitorPreview() {
 @Composable
 private fun HomeTopBar(
     modifier: Modifier = Modifier,
+    onLogoLongClick: () -> Unit = {},
     content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         horizontalArrangement = SpaceBetween,
         verticalAlignment = CenterVertically,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp),
     ) {
+        val currentLogoLongClick by rememberUpdatedState(onLogoLongClick)
+
         Image(
             painter = painterResource(img_logo),
             contentDescription = null,
-            modifier = Modifier.size(
-                width = 72.dp,
-                height = 40.dp,
-            )
+            modifier = Modifier
+                .size(
+                    width = 72.dp,
+                    height = 40.dp,
+                )
+                // TODO(poke-v2): 로고 롱클릭은 poke v2를 테스트하기 위한 개발자 전용 임시 진입점이다.
+                //  정식 연결점이 정해지면 MainTab/Route 기반 네비게이션으로 교체하고 이 진입점은 제거한다.
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onLongPress = { currentLogoLongClick() },
+                    )
+                }
         )
         Row(
             horizontalArrangement = spacedBy(space = 10.dp),

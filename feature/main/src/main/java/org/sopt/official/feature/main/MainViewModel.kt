@@ -31,13 +31,12 @@ import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.home.model.AppService
+import org.sopt.official.domain.home.model.HomeAppServiceInfo
 import org.sopt.official.domain.home.usecase.GetTabAppServiceUseCase
 import org.sopt.official.domain.home.usecase.ObserveTabAppServiceUseCase
 import org.sopt.official.localstorage.source.UserStorage
@@ -46,7 +45,7 @@ import org.sopt.official.localstorage.source.UserStorage
 class MainViewModel @Inject constructor(
     private val getTabAppServiceUseCase: GetTabAppServiceUseCase,
     private val observeTabAppServiceUseCase: ObserveTabAppServiceUseCase,
-    userStorage: UserStorage,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
 
     private val _mainTabs = MutableStateFlow(MainTab.getActiveTabs(emptyList()))
@@ -59,17 +58,18 @@ class MainViewModel @Inject constructor(
 
     init {
         fetchTabAppServices()
-        combine(
-            observeTabAppServiceUseCase().filterNotNull(),
-            userStorage.isAppjamMode,
-        ) { services, isAppjam -> updateMainTabs(services, isAppjam) }
+        // tab-app-service-info 응답이 isAppjamMode + 탭 활성화/뱃지의 단일 출처
+        observeTabAppServiceUseCase()
+            .filterNotNull()
+            .onEach { info -> updateMainTabs(info) }
             .launchIn(viewModelScope)
     }
 
-    fun updateBadge(badges: Map<String?, String?>) {
-        _badgeMap.update {
+    private fun updateBadge(badges: Map<String?, String?>) {
+        _badgeMap.update { current ->
             _mainTabs.value.associateWith { tab ->
-                tab.deeplink?.let { badges[it] }
+                val deeplink = tab.deeplink
+                if (deeplink != null && badges.containsKey(deeplink)) badges[deeplink] else current[tab]
             }
         }
     }
@@ -78,15 +78,22 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch { getTabAppServiceUseCase() }
     }
 
-    private fun updateMainTabs(services: List<AppService>, isAppjam: Boolean) {
-        val badgeByDeeplink = services.associate {
-            it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null
-        }
+    fun refreshTabAppServices() {
+        viewModelScope.launch { getTabAppServiceUseCase(forceRefresh = true) }
+    }
 
-        val deepLinks = services.map { it.deepLink }.filter { deepLink ->
+    private suspend fun updateMainTabs(info: HomeAppServiceInfo) {
+        // MyPage 등 다른 화면은 UserStorage를 통해 isAppjamMode를 읽으므로,
+        // 이 API 응답을 받는 이 지점이 유일한 저장 지점이어야 한다.
+        userStorage.saveIsAppjamMode(info.isAppjamMode)
+
+        val badgeByDeeplink = info.appServices
+            .associate { it.deepLink to if (it.displayAlarmBadge) it.alarmBadge else null }
+
+        val deepLinks = info.appServices.map { it.deepLink }.filter { deepLink ->
             when (deepLink) {
-                "soptamp" -> !isAppjam
-                "appjamtamp" -> isAppjam
+                "soptamp" -> !info.isAppjamMode
+                "appjamtamp" -> info.isAppjamMode
                 else -> true
             }
         }

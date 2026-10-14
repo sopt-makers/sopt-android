@@ -59,9 +59,10 @@ import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.Orange200
 import org.sopt.official.designsystem.Orange300
 import org.sopt.official.designsystem.Orange500
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.home.R
 import org.sopt.official.feature.home.model.HomePlaygroundPostModel
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 private const val POPULAR_NEWS_LIST_SIZE = 3
 
@@ -93,12 +94,12 @@ internal fun HomePopularNewsSection(
         ) {
             Text(
                 text = "지금 인기 소식",
-                style = SoptTheme.typography.heading20B,
-                color = SoptTheme.colors.primary
+                style = SoptTheme.typography.heading3,
+                color = SoptTheme.colors.fg.neutral.bold
             )
 
             Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fire) ,
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_fire),
                 contentDescription = null,
                 modifier = Modifier.padding(vertical = 5.dp)
             )
@@ -114,15 +115,15 @@ internal fun HomePopularNewsSection(
             ) {
                 Text(
                     text = "전체보기",
-                    style = SoptTheme.typography.label12SB,
-                    color = SoptTheme.colors.onSurface300
+                    style = SoptTheme.typography.label4,
+                    color = SoptTheme.colors.fg.neutral.subtle
                 )
 
                 Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right),
-                    contentDescription = "전체보기",
-                    tint = SoptTheme.colors.onSurface300,
-                    modifier = Modifier.size(size = 16.dp)
+                    imageVector = ImageVector.vectorResource(MdsIcons.chevronRightOutlined),
+                    contentDescription = null,
+                    tint = SoptTheme.colors.fg.neutral.subtle,
+                    modifier = Modifier.size(16.dp)
                 )
             }
         }

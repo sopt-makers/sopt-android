@@ -45,20 +45,21 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 import org.sopt.official.common.util.getVersionName
 import org.sopt.official.common.util.launchPlayStore
 import org.sopt.official.config.FcmPushTokenManager
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.auth.component.UpdateDialog
 import org.sopt.official.feature.main.MainActivity
 import org.sopt.official.feature.mypage.web.WebUrlConstant
 import org.sopt.official.localstorage.source.TokenStorage
 import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import timber.log.Timber
-import javax.inject.Inject
+import org.sopt.official.designsystem.SoptTheme as SoptAppTheme
 
 @AndroidEntryPoint
 class AuthActivity : AppCompatActivity() {
@@ -77,97 +78,113 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SoptTheme {
-                val context = LocalContext.current
-                val lifecycleOwner = LocalLifecycleOwner.current
+            SoptAppTheme {
+                SoptTheme {
+                    val context = LocalContext.current
+                    val lifecycleOwner = LocalLifecycleOwner.current
 
-                val accessToken by tokenStorage.accessToken.collectAsStateWithLifecycle(initialValue = "")
-                val platform by userStorage.platform.collectAsStateWithLifecycle(initialValue = "")
-                val updateState by viewModel.updateState.collectAsStateWithLifecycle()
+                    val accessToken by tokenStorage.accessToken.collectAsStateWithLifecycle(initialValue = "")
+                    val platform by userStorage.platform.collectAsStateWithLifecycle(initialValue = "")
+                    val updateState by viewModel.updateState.collectAsStateWithLifecycle()
 
-                LaunchedEffect(Unit) {
-                    viewModel.getUpdateConfig(context.getVersionName())
-                }
-
-                LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
-                    viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
-                        .collect { event ->
-                            when (event) {
-                                is AuthUiEvent.Success -> startActivity(
-                                    MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
-                                )
-
-                                is AuthUiEvent.Failure -> startActivity(
-                                    MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
-                                )
-                            }
-                        }
-                }
-
-                Box(modifier = Modifier.fillMaxSize()) {
-                    if (accessToken.isEmpty()) {
-                        AuthScreen(
-                            navigateToHome = {
-                                try {
-                                    if (accessToken.isNotEmpty()) {
-                                        startActivity(
-                                            MainActivity.getIntent(
-                                                context = context,
-                                                args = MainActivity.StartArgs(UserStatus.ACTIVE)
-                                            )
-                                        )
-                                    }
-                                } catch (e: Exception) {
-                                    Timber.e(e)
-                                }
-                            },
-                            navigateToUnAuthenticatedHome = {
-                                startActivity(
-                                    MainActivity.getIntent(
-                                        context = this@AuthActivity,
-                                        args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
-                                    )
-                                )
-                            },
-                            onContactChannelClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT))) },
-                            onGoogleFormClick = { startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM))) },
-                            platform = platform
-                        )
+                    LaunchedEffect(Unit) {
+                        viewModel.getUpdateConfig(context.getVersionName())
                     }
 
-                    when (val state = updateState) {
-                        is UpdateState.Default -> LoadingIndicator()
-                        is UpdateState.PatchUpdateAvailable -> {
-                            var dialogVisibility by rememberSaveable { mutableStateOf(true) }
+                    LaunchedEffect(viewModel.uiEvent, lifecycleOwner) {
+                        viewModel.uiEvent.flowWithLifecycle(lifecycle = lifecycleOwner.lifecycle)
+                            .collect { event ->
+                                when (event) {
+                                    is AuthUiEvent.Success -> startActivity(
+                                        MainActivity.getIntent(context, MainActivity.StartArgs(event.userStatus))
+                                    )
 
-                            if (dialogVisibility) {
-                                UpdateDialog(
-                                    description = state.message,
-                                    onDismiss = {
-                                        dialogVisibility = false
-                                        navigateToMainActivity(accessToken)
-                                    },
-                                    onPositiveClick = this@AuthActivity::launchPlayStore,
-                                    onNegativeClick = {
-                                        dialogVisibility = false
-                                        navigateToMainActivity(accessToken)
-                                    }
-                                )
+                                    is AuthUiEvent.Failure -> startActivity(
+                                        MainActivity.getIntent(context, MainActivity.StartArgs(UserStatus.UNAUTHENTICATED))
+                                    )
+                                }
                             }
-                        }
+                    }
 
-                        is UpdateState.UpdateRequired -> {
-                            UpdateDialog(
-                                description = state.message,
-                                onDismiss = this@AuthActivity::finishAffinity,
-                                onPositiveClick = this@AuthActivity::launchPlayStore,
-                                onNegativeClick = this@AuthActivity::finishAffinity,
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        if (accessToken.isEmpty()) {
+                            AuthScreen(
+                                navigateToHome = {
+                                    try {
+                                        if (accessToken.isNotEmpty()) {
+                                            startActivity(
+                                                MainActivity.getIntent(
+                                                    context = context,
+                                                    args = MainActivity.StartArgs(UserStatus.ACTIVE)
+                                                )
+                                            )
+                                        }
+                                    } catch (e: Exception) {
+                                        Timber.e(e)
+                                    }
+                                },
+                                navigateToUnAuthenticatedHome = {
+                                    startActivity(
+                                        MainActivity.getIntent(
+                                            context = this@AuthActivity,
+                                            args = MainActivity.StartArgs(UserStatus.UNAUTHENTICATED)
+                                        )
+                                    )
+                                },
+                                onContactChannelClick = {
+                                    startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(WebUrlConstant.OPINION_KAKAO_CHAT)
+                                        )
+                                    )
+                                },
+                                onGoogleFormClick = {
+                                    startActivity(
+                                        Intent(
+                                            Intent.ACTION_VIEW,
+                                            Uri.parse(WebUrlConstant.SOPT_GOOGLE_FROM)
+                                        )
+                                    )
+                                },
+                                platform = platform
                             )
                         }
 
-                        else -> {
-                            LaunchedEffect(accessToken) {
-                                navigateToMainActivity(accessToken)
+                        when (val state = updateState) {
+                            is UpdateState.Default -> LoadingIndicator()
+                            is UpdateState.PatchUpdateAvailable -> {
+                                var dialogVisibility by rememberSaveable { mutableStateOf(true) }
+
+                                if (dialogVisibility) {
+                                    UpdateDialog(
+                                        description = state.message,
+                                        onDismiss = {
+                                            dialogVisibility = false
+                                            navigateToMainActivity(accessToken)
+                                        },
+                                        onPositiveClick = this@AuthActivity::launchPlayStore,
+                                        onNegativeClick = {
+                                            dialogVisibility = false
+                                            navigateToMainActivity(accessToken)
+                                        }
+                                    )
+                                }
+                            }
+
+                            is UpdateState.UpdateRequired -> {
+                                UpdateDialog(
+                                    description = state.message,
+                                    onDismiss = this@AuthActivity::finishAffinity,
+                                    onPositiveClick = this@AuthActivity::launchPlayStore,
+                                    onNegativeClick = this@AuthActivity::finishAffinity,
+                                )
+                            }
+
+                            else -> {
+                                LaunchedEffect(accessToken) {
+                                    navigateToMainActivity(accessToken)
+                                }
                             }
                         }
                     }

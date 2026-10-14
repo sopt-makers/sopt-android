@@ -57,6 +57,9 @@ internal data class MissionDetailState(
     val initSnapshotDate: String = "",
     val initSnapshotContent: String = "",
 ) {
+    val isWriting: Boolean
+        get() = viewType == DetailViewType.EDIT || viewType == DetailViewType.WRITE
+
     val isSubmitEnabled: Boolean
         get() {
             val commonGuard = !isLoading && content.isNotBlank() && date.isNotBlank() && !imageModel.isEmpty()

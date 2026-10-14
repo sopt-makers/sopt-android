@@ -1,7 +1,33 @@
+/*
+ * MIT License
+ * Copyright 2026 SOPT - Shout Our Passion Together
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.sopt.official.feature.poke.v2.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -10,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.throttledNoRippleClickable
@@ -101,4 +128,61 @@ internal fun PokeProfileAvatar(
         strokeColor = strokeColor,
         modifier = modifier.throttledNoRippleClickable(onClick = onClick),
     )
+}
+
+@Preview(showBackground = true, backgroundColor = 0xFF0F1012)
+@Composable
+private fun PokeAvatarPreview() {
+    SoptTheme {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 1,
+                    userName = "커비",
+                    userGeneration = 38,
+                    userPart = "디자인",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.NEW.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 2,
+                    userName = "박메이커",
+                    userGeneration = 36,
+                    userPart = "기획",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.BEST_FRIEND.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 3,
+                    userName = "이승호",
+                    userGeneration = 29,
+                    userPart = "안드로이드",
+                    profileImageUrl = null,
+                    relationName = PokeFriendType.SOULMATE.readableName,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+            PokeAvatar(
+                user = PokeUserUiState(
+                    userId = 4,
+                    userName = "익명",
+                    userGeneration = 33,
+                    userPart = "서버",
+                    profileImageUrl = null,
+                    isAnonymous = true,
+                ),
+                size = 56.dp,
+                onProfileClick = {},
+            )
+        }
+    }
 }

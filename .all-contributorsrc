@@ -234,6 +234,15 @@
         "code",
         "doc"
       ]
+    },
+    {
+      "login": "vahkjsdf",
+      "name": "이지민",
+      "avatar_url": "https://avatars.githubusercontent.com/u/130419090?v=4",
+      "profile": "https://github.com/vahkjsdf",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
