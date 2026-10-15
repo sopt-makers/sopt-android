@@ -1,3 +1,27 @@
+/*
+ * MIT License
+ * Copyright 2026 SOPT - Shout Our Passion Together
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
 package org.sopt.official.feature.poke.v2.notification
 
 import androidx.lifecycle.ViewModel
@@ -61,6 +85,7 @@ class PokeNotificationViewModel @Inject constructor(
         PokeNotificationPagingSource(getPokeNotificationListUseCase)
     }.flow
         .map { pagingData -> pagingData.map { it.toPokeMessageRowUiState() } }
+        .cachedIn(viewModelScope)
         .combine(_pokedUsersId) { pagingData, pokedIds ->
             pagingData.map { notification ->
                 if (notification.user.userId in pokedIds) {
@@ -75,7 +100,6 @@ class PokeNotificationViewModel @Inject constructor(
                 }
             }
         }
-        .cachedIn(viewModelScope)
 
     fun onPokeButtonClick(target: PokeUserUiState) {
         openBottomSheet(target)
@@ -149,9 +173,11 @@ class PokeNotificationViewModel @Inject constructor(
                     }
                 }.onApiError { statusCode, message ->
                     Timber.e("statusCode: $statusCode, message: $message")
+                    closeBottomSheet()
                     _sideEffect.emit(PokeNotificationSideEffect.ShowErrorSnackbar(message))
                 }.onFailure { throwable ->
                     Timber.e(throwable)
+                    closeBottomSheet()
                     _sideEffect.emit(PokeNotificationSideEffect.ShowErrorSnackbar("문제가 발생했어요"))
                 }
         }
@@ -176,7 +202,6 @@ class PokeNotificationViewModel @Inject constructor(
 
     private suspend fun handlePokeSuccess(pokeResult: PokeResultUiState) {
         when {
-            // TODO: 이거 친구 바뀌는 조건 다시 검토하기 -> 처음 바뀔 때만 로띠 보여줘야 하는데 지금 로직은 그게 아닌 것 같음
             pokeResult.isPlainPoke -> _sideEffect.emit(PokeNotificationSideEffect.ShowSuccessSnackbar("콕 찌르기를 완료했어요."))
             pokeResult.becameFriend -> _sideEffect.emit(PokeNotificationSideEffect.ShowLottie(PokeRelationChangeState.Friend(pokeResult.user)))
             pokeResult.becameBestFriend -> _sideEffect.emit(PokeNotificationSideEffect.ShowLottie(PokeRelationChangeState.BestFriend(pokeResult.user)))

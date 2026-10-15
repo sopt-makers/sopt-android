@@ -55,12 +55,12 @@ import org.sopt.official.feature.poke.v2.component.PokeRelationChangeOverlay
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageRowUiState
-import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.notification.component.PokeNotificationTopAppBar
 import org.sopt.official.mds.theme.SoptTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PokeNotificationRoute(
     navigateUp: () -> Unit,
@@ -72,6 +72,18 @@ fun PokeNotificationRoute(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val notifications = viewModel.notifications.collectAsLazyPagingItems()
+    val refreshState = notifications.loadState.refresh
+
+    LaunchedEffect(refreshState) {
+        if (refreshState is LoadState.Error) {
+            onShowSnackbar(
+                PokeSnackBarVisuals(
+                    message = refreshState.error.message ?: "문제가 발생했어요",
+                    type = PokeSnackBarType.FAILURE
+                )
+            )
+        }
+    }
 
     var lottieState by remember { mutableStateOf<PokeRelationChangeState?>(null) }
 
@@ -99,16 +111,24 @@ fun PokeNotificationRoute(
     }
 
     PokeNotificationScreen(
-        uiState = uiState,
         notifications = notifications,
         onNavigationIconClick = navigateUp,
         onProfileClick = navigateToProfile,
         onPokeClick = viewModel::onPokeButtonClick,
-        onMessageClick = viewModel::onMessageClick,
-        onBottomSheetDismiss = viewModel::closeBottomSheet,
-        onAnonymousCheckboxClick = viewModel::toggleAnonymous,
         onRefresh = viewModel::onRefresh
     )
+
+    if (uiState.bottomSheetVisibility) {
+        PokeMessageBottomSheet(
+            title = uiState.header,
+            messages = uiState.pokeMessages,
+            isAnonymous = uiState.isAnonymous,
+            isAnonymousCheckboxLocked = false,
+            onMessageClick = viewModel::onMessageClick,
+            onDismissRequest = viewModel::closeBottomSheet,
+            onAnonymousCheckboxClick = viewModel::toggleAnonymous
+        )
+    }
 
     val currentLottie = lottieState
     currentLottie?.let {
@@ -132,17 +152,12 @@ fun PokeNotificationRoute(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PokeNotificationScreen(
-    uiState: PokeNotificationUiState,
     notifications: LazyPagingItems<PokeMessageRowUiState>,
     onNavigationIconClick: () -> Unit,
     onProfileClick: (Int) -> Unit,
     onPokeClick: (PokeUserUiState) -> Unit,
-    onMessageClick: (PokeMessageUiState) -> Unit,
-    onBottomSheetDismiss: () -> Unit,
-    onAnonymousCheckboxClick: () -> Unit,
     onRefresh: () -> Unit
 ) {
     val isRefreshing = notifications.loadState.refresh is LoadState.Loading
@@ -197,18 +212,5 @@ private fun PokeNotificationScreen(
                 }
             }
         }
-    }
-
-    // TODO: 이거 스크린 안으로 넣을지 라우트에 둘지 고민
-    if (uiState.bottomSheetVisibility) {
-        PokeMessageBottomSheet(
-            title = uiState.header,
-            messages = uiState.pokeMessages,
-            isAnonymous = uiState.isAnonymous,
-            isAnonymousCheckboxLocked = false,
-            onMessageClick = onMessageClick,
-            onDismissRequest = onBottomSheetDismiss,
-            onAnonymousCheckboxClick = onAnonymousCheckboxClick
-        )
     }
 }
