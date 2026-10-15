@@ -46,7 +46,7 @@ import org.sopt.official.feature.poke.v2.component.PokeMessageBottomSheet
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarVisuals
 import org.sopt.official.feature.poke.v2.friend.component.PokeFriendListBlock
 import org.sopt.official.feature.poke.v2.friend.component.PokeFriendListBottomSheetScaffold
-import org.sopt.official.feature.poke.v2.friend.component.PokeRelationChangeOverlay
+import org.sopt.official.feature.poke.v2.component.PokeRelationChangeOverlay
 import org.sopt.official.feature.poke.v2.friend.model.FriendListUiState
 import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState

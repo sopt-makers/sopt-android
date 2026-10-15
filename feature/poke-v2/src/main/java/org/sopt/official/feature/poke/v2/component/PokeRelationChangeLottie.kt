@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke.v2.friend.component
+package org.sopt.official.feature.poke.v2.component
 
 import androidx.annotation.RawRes
 import androidx.compose.foundation.background
