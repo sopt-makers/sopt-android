@@ -68,6 +68,7 @@ import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
 import org.sopt.official.feature.sopletter.write.component.SopletterTopicSelectDialog
 import org.sopt.official.feature.sopletter.write.component.SopletterTopicSelectField
@@ -135,7 +136,7 @@ private fun SopletterWriteScreen(
     val isButtonEnabled by remember(uiState.isLoading, uiState.selectedTopicId) {
         derivedStateOf {
             textFieldState.text.isNotEmpty() &&
-                textFieldState.text.length <= maxLength &&
+                textFieldState.text.characterCount() <= maxLength &&
                 !uiState.isLoading &&
                 uiState.selectedTopicId != null
         }

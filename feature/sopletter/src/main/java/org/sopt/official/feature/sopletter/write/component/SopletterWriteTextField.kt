@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
 
@@ -62,14 +63,15 @@ fun SopletterWriteTextBox(
     maxLength: Int = 350,
     onLimitExceeded: () -> Unit = {}
 ) {
-    val isOverLimit = state.text.length > maxLength
+    val characterCount = state.text.characterCount()
+    val isOverLimit = characterCount > maxLength
     val borderColor = if (isOverLimit) SoptTheme.colors.stroke.danger.default else Color.Transparent
     val counterColor = if (isOverLimit) SoptTheme.colors.fg.danger.default else SoptTheme.colors.fg.neutral.subtle
 
     val scrollState = rememberScrollState()
 
     LaunchedEffect(state) {
-        snapshotFlow { state.text.length > maxLength }
+        snapshotFlow { state.text.characterCount() > maxLength }
             .drop(1)
             .filter { it }
             .collect { onLimitExceeded() }
@@ -128,7 +130,7 @@ fun SopletterWriteTextBox(
         )
 
         Text(
-            text = "${state.text.length}/${maxLength}자",
+            text = "${characterCount}/${maxLength}자",
             style = SoptTheme.typography.label3,
             color = counterColor,
             modifier = Modifier.align(Alignment.End)
