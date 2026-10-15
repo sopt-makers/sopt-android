@@ -70,6 +70,9 @@ internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetai
 internal fun SopletterTopicDto.toDomain(): SopletterTopic = SopletterTopic(
     topicId = topicId,
     title = title,
+    subtitle = subtitle,
+    isNew = isNew,
+    isHot = isHot,
 )
 
 internal fun SopletterCtaResponseDto.toDomain(): SopletterCta = SopletterCta(
