@@ -1,11 +1,12 @@
-package org.sopt.official.feature.poke.v2.friend.component
+package org.sopt.official.feature.poke.v2.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import org.sopt.official.feature.poke.v2.friend.model.PokeRelationChangeState
+import org.sopt.official.feature.poke.v2.R
+import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.theme.SoptTheme
 
@@ -17,6 +18,12 @@ internal fun PokeRelationChangeOverlay(
     modifier: Modifier = Modifier,
 ) {
     when (relationChange) {
+        is PokeRelationChangeState.Friend -> PokeCelebrationLottie(
+            lottieRes = R.raw.friendcomplete,
+            message = "찌르기 답장으로\n${relationChange.user.anonymousName}님과 친구가 되었어요!",
+            onAnimationEnd = onRelationChangeLottieEnd
+        )
+
         is PokeRelationChangeState.BestFriend -> PokeRelationChangeLottie(
             type = PokeRelationChangeType.BEST_FRIEND,
             anonymousName = relationChange.user.anonymousName,

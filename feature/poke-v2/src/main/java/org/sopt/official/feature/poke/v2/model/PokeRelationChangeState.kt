@@ -1,4 +1,4 @@
-package org.sopt.official.feature.poke.v2.friend.model
+package org.sopt.official.feature.poke.v2.model
 
 import androidx.compose.runtime.Immutable
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
@@ -14,6 +14,11 @@ import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 
 sealed interface PokeRelationChangeState {
     val user: PokeUserUiState
+
+    @Immutable
+    data class Friend(
+        override val user: PokeUserUiState
+    ) : PokeRelationChangeState
 
     @Immutable
     data class BestFriend(
