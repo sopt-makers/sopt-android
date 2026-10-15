@@ -56,4 +56,5 @@ internal enum class PokeClickSource(
 internal fun PokeMessageType.toAnalyticsValue(): String = when (this) {
     PokeMessageType.POKE_SOMEONE -> "poke_someone"
     PokeMessageType.POKE_FRIEND -> "poke_friend"
+    PokeMessageType.REPLY_NEW -> "reply_new"
 }

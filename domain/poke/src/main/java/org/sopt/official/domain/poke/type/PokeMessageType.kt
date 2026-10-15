@@ -1,6 +1,6 @@
 /*
  * MIT License
- * Copyright 2023-2024 SOPT - Shout Our Passion Together
+ * Copyright 2023-2026 SOPT - Shout Our Passion Together
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,5 +28,6 @@ enum class PokeMessageType(
     val typeName: String,
 ) {
     POKE_SOMEONE("pokeSomeone"),
-    POKE_FRIEND("pokeFriend")
+    POKE_FRIEND("pokeFriend"),
+    REPLY_NEW("replyNew")
 }
