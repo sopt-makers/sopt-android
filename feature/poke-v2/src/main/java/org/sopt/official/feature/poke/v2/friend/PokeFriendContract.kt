@@ -5,7 +5,7 @@ import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.friend.model.FriendListSheetState
 import org.sopt.official.feature.poke.v2.friend.model.MessageSheetState
 import org.sopt.official.feature.poke.v2.friend.model.PokeFriendListSections
-import org.sopt.official.feature.poke.v2.friend.model.PokeRelationChangeState
+import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.friend.model.emptyPokeFriendListSections
 
 @Immutable
