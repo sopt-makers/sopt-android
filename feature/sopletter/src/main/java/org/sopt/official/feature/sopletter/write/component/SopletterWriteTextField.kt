@@ -51,7 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
 
 @Composable
@@ -63,8 +63,8 @@ fun SopletterWriteTextBox(
     onLimitExceeded: () -> Unit = {}
 ) {
     val isOverLimit = state.text.length > maxLength
-    val borderColor = if (isOverLimit) SoptTheme.colors.error else Color.Transparent
-    val counterColor = if (isOverLimit) SoptTheme.colors.error else SoptTheme.colors.onSurface300
+    val borderColor = if (isOverLimit) SoptTheme.colors.stroke.danger.default else Color.Transparent
+    val counterColor = if (isOverLimit) SoptTheme.colors.fg.danger.default else SoptTheme.colors.fg.neutral.subtle
 
     val scrollState = rememberScrollState()
 
@@ -78,27 +78,27 @@ fun SopletterWriteTextBox(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = SoptTheme.colors.onSurface700, shape = RoundedCornerShape(10.dp))
-            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(10.dp))
+            .background(color = SoptTheme.colors.bg.neutral.ghost, shape = RoundedCornerShape(SoptTheme.radius.r10))
+            .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(SoptTheme.radius.r10))
             .padding(
                 top = 28.dp,
-                start = 20.dp,
-                end = 20.dp,
-                bottom = 20.dp
+                start = SoptTheme.spacing.s20,
+                end = SoptTheme.spacing.s20,
+                bottom = SoptTheme.spacing.s20
             ),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         Text(
             text = userName,
-            style = SoptTheme.typography.title16SB,
-            color = SoptTheme.colors.onSurface10
+            style = SoptTheme.typography.title4,
+            color = SoptTheme.colors.fg.neutral.bold
         )
 
         BasicTextField(
             state = state,
             scrollState = scrollState,
-            textStyle = SoptTheme.typography.body16R.copy(color = SoptTheme.colors.primary),
-            cursorBrush = SolidColor(SoptTheme.colors.onSurface10),
+            textStyle = SoptTheme.typography.body1.copy(color = SoptTheme.colors.fg.neutral.bold),
+            cursorBrush = SolidColor(SoptTheme.colors.fg.neutral.bold),
             lineLimits = TextFieldLineLimits.MultiLine(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -107,7 +107,7 @@ fun SopletterWriteTextBox(
                     scrollState = scrollState,
                     thumbWidth = 4.dp,
                     thumbHeight = 100.dp,
-                    thumbColor = SoptTheme.colors.onSurface300.copy(alpha = 0.5f)
+                    thumbColor = SoptTheme.colors.fg.neutral.subtle.copy(alpha = 0.5f)
                 ),
             decorator = { innerTextField ->
                 Box(
@@ -118,8 +118,8 @@ fun SopletterWriteTextBox(
                     if (state.text.isEmpty()) {
                         Text(
                             text = "나와 같은 기수의 솝트인들에게 전하고 싶은 말을 자유롭게 적어보세요.",
-                            style = SoptTheme.typography.body16R,
-                            color = SoptTheme.colors.onSurface400
+                            style = SoptTheme.typography.body1,
+                            color = SoptTheme.colors.fg.neutral.ghost
                         )
                     }
                     innerTextField()
@@ -129,7 +129,7 @@ fun SopletterWriteTextBox(
 
         Text(
             text = "${state.text.length}/${maxLength}자",
-            style = SoptTheme.typography.body14M,
+            style = SoptTheme.typography.label3,
             color = counterColor,
             modifier = Modifier.align(Alignment.End)
         )
