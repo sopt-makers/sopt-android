@@ -519,7 +519,7 @@ private fun UnauthenticatedDialog(
         title = "로그인이 필요해요",
         onDismiss = onDismissRequest,
         positiveButtonText = "로그인",
-        description = "로그인을 해야만 사용할 수 있어요.\n솝트 회원이라면 로그인해주세요.",
+        description = "해당 기능은 로그인 후 이용할 수 있어요.\n로그인하고 SOPT 앱의 다양한 기능을 이용해 보세요!",
         type = MdsDialogType.DEFAULT,
         negativeButtonText = "닫기",
         onNegativeButtonClick = onDismissRequest,
