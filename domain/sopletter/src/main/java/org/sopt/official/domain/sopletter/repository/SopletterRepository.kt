@@ -69,7 +69,7 @@ interface SopletterRepository {
         messageId: Long,
     ): Result<Unit>
 
-    suspend fun getTopics(): Result<List<SopletterTopic>>
+    suspend fun getTopics(type: String? = TOPIC_TYPE_NORMAL): Result<List<SopletterTopic>>
 
     suspend fun getCta(): Result<SopletterCta>
 
