@@ -22,22 +22,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.component
+package org.sopt.official.feature.sopletter.common.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
-import org.sopt.official.sopletter.R
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun WriteSopletterFloatingActionButton(
@@ -46,18 +48,29 @@ internal fun WriteSopletterFloatingActionButton(
 ) {
     Box(
         modifier = modifier
-            .size(64.dp)
             .background(
-                color = Color.White,
-                shape = RoundedCornerShape(24.dp),
+                color = SoptTheme.colors.bg.neutral.inverse,
+                shape = RoundedCornerShape(SoptTheme.radius.r16),
             )
+            .padding(10.dp)
             .noRippleClickable(onClick = onWriteFABClick),
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_edit_28),
+            imageVector = ImageVector.vectorResource(MdsIcons.writeOutlined),
             contentDescription = null,
-            tint = Color.Unspecified,
+            modifier = Modifier.size(28.dp),
+            tint = SoptTheme.colors.fg.neutral.inverse,
+        )
+    }
+}
+
+@Preview(showBackground = false)
+@Composable
+private fun WriteSopletterFloatingActionButtonPreview() {
+    SoptTheme {
+        WriteSopletterFloatingActionButton(
+            onWriteFABClick = {}
         )
     }
 }
