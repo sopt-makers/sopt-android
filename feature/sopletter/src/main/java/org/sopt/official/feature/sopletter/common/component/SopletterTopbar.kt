@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,20 +42,21 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.sopletter.R
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.theme.SoptTheme
+
 @Composable
 fun SopletterTopbar(
     onBackClick : () -> Unit ,
     modifier: Modifier = Modifier,
     topbarTitle: String = "솝레터 작성",
-    @DrawableRes iconRes: Int = R.drawable.icon_chevron_left
+    @DrawableRes iconRes: Int = MdsIcons.chevronLeftOutlined
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = SoptTheme.colors.background)
-            .padding(vertical = 12.dp)
+            .background(color = SoptTheme.colors.bg.layer.basement)
+            .padding(vertical = 16.dp)
             .padding(start = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -62,15 +64,16 @@ fun SopletterTopbar(
         Icon(
             imageVector = ImageVector.vectorResource(id = iconRes),
             contentDescription = null,
-            tint = Color.Unspecified,
+            tint = SoptTheme.colors.fg.neutral.bold,
             modifier = Modifier
+                .size(24.dp)
                 .noRippleClickable(onClick = onBackClick)
         )
 
         Text(
             text = topbarTitle,
-            color = SoptTheme.colors.onSurface10,
-            style = SoptTheme.typography.heading18B
+            color = SoptTheme.colors.fg.neutral.bold,
+            style = SoptTheme.typography.title4,
         )
     }
 }
