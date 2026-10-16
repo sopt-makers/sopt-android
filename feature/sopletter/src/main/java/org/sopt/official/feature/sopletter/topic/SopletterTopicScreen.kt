@@ -25,6 +25,7 @@
 package org.sopt.official.feature.sopletter.topic
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,6 +35,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +45,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
+import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
 import org.sopt.official.mds.theme.SoptTheme
 
@@ -50,6 +53,7 @@ import org.sopt.official.mds.theme.SoptTheme
 internal fun SopletterTopicRoute(
     navigateUp: () -> Unit,
     navigateToMain: (Long) -> Unit,
+    navigateToWrite: () -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -58,6 +62,7 @@ internal fun SopletterTopicRoute(
         uiState = uiState,
         onBackClick = navigateUp,
         onTopicClick = navigateToMain,
+        onWriteClick = navigateToWrite,
         onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
@@ -67,46 +72,58 @@ private fun SopletterTopicScreen(
     uiState: SopletterTopicState,
     onBackClick: () -> Unit,
     onTopicClick: (Long) -> Unit,
+    onWriteClick: () -> Unit,
     onErrorConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(
                 color = SoptTheme.colors.bg.layer.basement
             ),
     ) {
-        SopletterTopbar(
-            onBackClick = onBackClick,
-            topbarTitle = "솝레터 주제"
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        LazyColumn(
-            modifier = Modifier.weight(1f),
+        Column(
+            modifier = Modifier.fillMaxSize(),
         ) {
-            items(
-                items = uiState.topicList,
-                key = { it.topicId }
-            ) { item ->
-                SopletterTopicItem(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    topicTitle = item.title,
-                    topicSubTitle = item.subTitle,
-                    isHot = item.isHot,
-                    isNew = item.isNew,
-                    unReadCount = item.unreadCount,
-                    onTopicClick = {
-                        onTopicClick(item.topicId)
-                    }
-                )
-                Spacer(modifier = Modifier.height(10.dp))
+            SopletterTopbar(
+                onBackClick = onBackClick,
+                topbarTitle = "솝레터 주제"
+            )
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+            ) {
+                items(
+                    items = uiState.topicList,
+                    key = { it.topicId }
+                ) { item ->
+                    SopletterTopicItem(
+                        modifier = Modifier.padding(horizontal = 20.dp),
+                        topicTitle = item.title,
+                        topicSubTitle = item.subTitle,
+                        isHot = item.isHot,
+                        isNew = item.isNew,
+                        unReadCount = item.unreadCount,
+                        onTopicClick = {
+                            onTopicClick(item.topicId)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(10.dp))
+                }
             }
+
+            Spacer(modifier = Modifier.weight(1f))
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        WriteSopletterFloatingActionButton(
+            onWriteFABClick = onWriteClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 20.dp, bottom = 28.dp),
+        )
     }
 
     if (uiState.isShowErrorDialog) {
@@ -165,6 +182,7 @@ private fun SopletterTopicScreenPreview() {
             ),
             onBackClick = {},
             onTopicClick = {},
+            onWriteClick = {},
             onErrorConfirm = {},
         )
     }

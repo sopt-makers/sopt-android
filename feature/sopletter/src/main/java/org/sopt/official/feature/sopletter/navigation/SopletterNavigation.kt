@@ -180,6 +180,7 @@ private fun SopletterNavHost(
                 SopletterTopicRoute(
                     navigateUp = navController::navigateUp,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
+                    navigateToWrite = navController::navigateToSopletterWrite,
                 )
             }
 
