@@ -115,8 +115,10 @@ internal class SopletterRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTopics(): Result<List<SopletterTopic>> = suspendRunCatching {
-        sopletterDataSource.getTopics(type = SopletterRepository.TOPIC_TYPE_NORMAL).toDomain()
+    override suspend fun getTopics(
+        type: String?,
+    ): Result<List<SopletterTopic>> = suspendRunCatching {
+        sopletterDataSource.getTopics(type = type).toDomain()
     }
 
     override suspend fun getCta(): Result<SopletterCta> = suspendRunCatching {

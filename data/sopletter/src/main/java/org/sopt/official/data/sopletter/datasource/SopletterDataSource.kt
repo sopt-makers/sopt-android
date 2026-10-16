@@ -71,7 +71,7 @@ interface SopletterDataSource {
     )
 
     suspend fun getTopics(
-        type: String,
+        type: String?,
     ): SopletterTopicsResponseDto
 
     suspend fun getCta(): SopletterCtaResponseDto
