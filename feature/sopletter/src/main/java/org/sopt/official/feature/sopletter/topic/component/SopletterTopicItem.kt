@@ -39,6 +39,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
@@ -89,7 +90,7 @@ internal fun SopletterTopicItem(
                 Text(
                     text = topicSubTitle,
                     style = SoptTheme.typography.label3,
-                    color = SoptTheme.colors.fg.neutral.default,
+                    color = TOPIC_SUBTITLE_COLOR,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -155,6 +156,9 @@ private fun SopletterTopicTag(
         modifier = modifier
     )
 }
+
+// TODO: MDS에 gray40 색상 추가시 교체
+private val TOPIC_SUBTITLE_COLOR = Color(0xFFC0C5C9)
 
 @Preview
 @Composable
