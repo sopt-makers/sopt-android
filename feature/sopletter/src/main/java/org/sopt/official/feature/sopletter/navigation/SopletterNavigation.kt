@@ -149,8 +149,8 @@ private fun SopletterNavHost(
             composable<SopletterName> {
                 SopletterNameRoute(
                     viewType = viewType,
-                    navigateToSopletterMain = {
-                        navController.navigateToSopletterMain(
+                    navigateToSopletterTopic = {
+                        navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterOnboarding>(),
                         )
                     },
