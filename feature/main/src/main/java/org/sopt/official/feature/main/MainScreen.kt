@@ -106,6 +106,8 @@ import org.sopt.official.feature.poke.navigation.navigateToPokeFriendList
 import org.sopt.official.feature.poke.navigation.navigateToPokeNotification
 import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
+import org.sopt.official.feature.poke.v2.navigation.navigateToPoke
+import org.sopt.official.feature.poke.v2.navigation.pokeGraph
 import org.sopt.official.feature.sopletter.navigation.navigateToSopletter
 import org.sopt.official.feature.sopletter.navigation.sopletterGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLog
@@ -130,6 +132,10 @@ fun MainScreen(
     val context = LocalContext.current
     val activity = LocalActivity.current
     val tracker = LocalTracker.current
+
+    fun getWebViewIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
+        putExtra(INTENT_URL, url)
+    }
     var isOpenDialog by remember { mutableStateOf(false) }
     var isFloatingMenuOpen by remember { mutableStateOf(false) }
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
@@ -320,25 +326,29 @@ fun MainScreen(
                         userStatus = userStatus,
                         paddingValues = contentPadding,
                         homeNavigation = object : HomeShortcutNavigation, HomeDashboardNavigation, HomeAppServicesNavigation {
-                            private fun getIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
-                                putExtra(INTENT_URL, url)
-                            }
-
-                            override fun navigateToPlaygroundHome() = context.startActivity(getIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
-                            override fun navigateToPlaygroundCommunity() = context.startActivity(getIntent(PlaygroundWebLink.COMMUNITY))
-                            override fun navigateToPlaygroundGroup() = context.startActivity(getIntent(PlaygroundWebLink.GROUP_STUDY))
-                            override fun navigateToPlaygroundMember() = context.startActivity(getIntent(PlaygroundWebLink.MEMBER))
-                            override fun navigateToPlaygroundProject() = context.startActivity(getIntent(PlaygroundWebLink.PROJECT))
-                            override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getIntent(PlaygroundWebLink.COFFEE_CHAT))
-                            override fun navigateToSoptHomepage() = context.startActivity(getIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
-                            override fun navigateToSoptReview() = context.startActivity(getIntent(SoptWebLink.REVIEW))
-                            override fun navigateToSoptProject() = context.startActivity(getIntent(SoptWebLink.PROJECT))
-                            override fun navigateToSoptInstagram() = context.startActivity(getIntent(SoptWebLink.INSTAGRAM))
+                            override fun navigateToPlaygroundHome() = context.startActivity(getWebViewIntent(PlaygroundWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToPlaygroundCommunity() = context.startActivity(getWebViewIntent(PlaygroundWebLink.COMMUNITY))
+                            override fun navigateToPlaygroundGroup() = context.startActivity(getWebViewIntent(PlaygroundWebLink.GROUP_STUDY))
+                            override fun navigateToPlaygroundMember() = context.startActivity(getWebViewIntent(PlaygroundWebLink.MEMBER))
+                            override fun navigateToPlaygroundProject() = context.startActivity(getWebViewIntent(PlaygroundWebLink.PROJECT))
+                            override fun navigateToPlaygroundCoffeeChat() = context.startActivity(getWebViewIntent(PlaygroundWebLink.COFFEE_CHAT))
+                            override fun navigateToSoptHomepage() = context.startActivity(getWebViewIntent(SoptWebLink.OFFICIAL_HOMEPAGE))
+                            override fun navigateToSoptReview() = context.startActivity(getWebViewIntent(SoptWebLink.REVIEW))
+                            override fun navigateToSoptProject() = context.startActivity(getWebViewIntent(SoptWebLink.PROJECT))
+                            override fun navigateToSoptInstagram() = context.startActivity(getWebViewIntent(SoptWebLink.INSTAGRAM))
 
                             override fun navigateToNotification() =
                                 context.startActivity(applicationNavigator.getNotificationActivityIntent(userStatus))
 
                             override fun navigateToSchedule() = context.startActivity(applicationNavigator.getScheduleActivityIntent())
+
+                            // TODO(poke-v2): 정식 연결점이 아닌 개발자 전용 테스트 진입점이다.
+                            //  정식 연결점이 정해지면 MainTab/Route 기반 네비게이션으로 교체해야 한다.
+                            override fun navigateToPokeV2Test() {
+                                if (!BuildConfig.DEBUG) return
+                                navigator.navController.navigateToPoke()
+                            }
+
                             override fun navigateToEditProfile() {
                                 val intent = Intent(context, WebViewActivity::class.java).apply {
                                     putExtra(INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
@@ -371,7 +381,7 @@ fun MainScreen(
                             }
 
                             override fun navigateToWebUrl(url: String) {
-                                context.startActivity(getIntent(url))
+                                context.startActivity(getWebViewIntent(url))
                             }
 
                             override fun navigateToPoke(url: String, isNewPoke: Boolean, currentDestination: Int) =
@@ -386,7 +396,7 @@ fun MainScreen(
 
                             override fun navigateToPlaygroundMemberProfile(userId: Int) {
                                 context.startActivity(
-                                    getIntent("${PlaygroundWebLink.MEMBER}/$userId")
+                                    getWebViewIntent("${PlaygroundWebLink.MEMBER}/$userId")
                                 )
                             }
                         },
@@ -409,6 +419,18 @@ fun MainScreen(
                         navController = navigator.navController,
                         paddingValues = contentPadding,
                         userStatus = userStatus
+                    )
+
+                    // TODO(poke-v2): 정식 연결점이 아닌, 개발자 전용 테스트 진입점(홈 로고 롱클릭)을 위해
+                    //  v2 그래프만 임시로 같이 등록해둔다. 테스트가 끝나면 이 그래프를 MainTab/Route 기반의
+                    //  정식 연결점으로 교체해야 한다.
+                    pokeGraph(
+                        navController = navigator.navController,
+                        userStatus = userStatus,
+                        navigateUp = navigator::navigateUp,
+                        navigateToProfile = { userId ->
+                            context.startActivity(getWebViewIntent("${PlaygroundWebLink.MEMBER}/$userId"))
+                        }
                     )
 
                     myPageNavGraph(
