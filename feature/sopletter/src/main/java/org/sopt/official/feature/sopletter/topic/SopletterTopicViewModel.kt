@@ -43,12 +43,8 @@ class SopletterTopicViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SopletterTopicState())
     val uiState: StateFlow<SopletterTopicState> = _uiState.asStateFlow()
 
-    init {
-        fetchTopics()
-    }
-
-    private fun fetchTopics() = viewModelScope.launch {
-        sopletterRepository.getTopics()
+    fun fetchTopics() = viewModelScope.launch {
+        sopletterRepository.getTopics(type = null)
             .onSuccess { topics ->
                 _uiState.update { state ->
                     state.copy(

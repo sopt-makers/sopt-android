@@ -99,7 +99,7 @@ class SopletterDataSourceImpl @Inject constructor(
     )
 
     override suspend fun getTopics(
-        type: String,
+        type: String?,
     ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type)
 
     override suspend fun getCta(): SopletterCtaResponseDto = sopletterService.getCta()

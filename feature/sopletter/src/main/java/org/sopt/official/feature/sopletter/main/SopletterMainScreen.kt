@@ -71,6 +71,7 @@ import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
+import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.analytics.TrackedSopletterMemoDetailDialogActions
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
@@ -78,7 +79,6 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
 import org.sopt.official.feature.sopletter.main.component.SopletterTopicCta
-import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
