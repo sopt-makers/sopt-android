@@ -48,7 +48,7 @@ class SopletterTopicViewModel @Inject constructor(
     }
 
     private fun fetchTopics() = viewModelScope.launch {
-        sopletterRepository.getTopics()
+        sopletterRepository.getTopics(type = null)
             .onSuccess { topics ->
                 _uiState.update { state ->
                     state.copy(
