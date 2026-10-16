@@ -109,10 +109,10 @@ private fun SopletterTopicScreen(
                     SopletterTopicItem(
                         modifier = Modifier.padding(horizontal = 20.dp),
                         topicTitle = item.title,
-                        topicSubTitle = item.subTitle,
+                        topicSubtitle = item.subtitle,
                         isHot = item.isHot,
                         isNew = item.isNew,
-                        unReadCount = item.unreadCount,
+                        unreadCount = item.unreadCount,
                         onTopicClick = {
                             onTopicClick(item.topicId)
                         }
@@ -145,7 +145,7 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 1,
                         title = "38기 회고",
-                        subTitle = "자유롭게 수다 나누는 방방",
+                        subtitle = "자유롭게 수다 나누는 방방",
                         isNew = true,
                         isHot = true,
                         unreadCount = 0,
@@ -153,7 +153,7 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 2,
                         title = "38기 회고",
-                        subTitle = "자유롭게 수다 나누는 방방",
+                        subtitle = "자유롭게 수다 나누는 방방",
                         isNew = false,
                         isHot = true,
                         unreadCount = 3,
@@ -161,7 +161,7 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 3,
                         title = "38기 회고",
-                        subTitle = "자유롭게 수다 나누는 방방",
+                        subtitle = "자유롭게 수다 나누는 방방",
                         isNew = false,
                         isHot = false,
                         unreadCount = 3,
@@ -169,7 +169,7 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 4,
                         title = "38기 회고",
-                        subTitle = "자유롭게 수다 나누는 방방",
+                        subtitle = "자유롭게 수다 나누는 방방",
                         isNew = false,
                         isHot = false,
                         unreadCount = 0,
@@ -177,7 +177,7 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 5,
                         title = "38기 회고",
-                        subTitle = "자유롭게 수다 나누는 방방",
+                        subtitle = "자유롭게 수다 나누는 방방",
                         isNew = true,
                         isHot = false,
                         unreadCount = 3,

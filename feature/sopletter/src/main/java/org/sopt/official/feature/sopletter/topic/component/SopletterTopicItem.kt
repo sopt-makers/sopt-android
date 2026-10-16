@@ -57,10 +57,10 @@ import org.sopt.official.mds.theme.SoptTheme
 @Composable
 internal fun SopletterTopicItem(
     topicTitle: String,
-    topicSubTitle: String?,
+    topicSubtitle: String?,
     isHot: Boolean,
     isNew: Boolean,
-    unReadCount: Int,
+    unreadCount: Int,
     onTopicClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -86,9 +86,9 @@ internal fun SopletterTopicItem(
                 color = SoptTheme.colors.fg.neutral.bold,
             )
 
-            if (topicSubTitle != null) {
+            if (topicSubtitle != null) {
                 Text(
-                    text = topicSubTitle,
+                    text = topicSubtitle,
                     style = SoptTheme.typography.label3,
                     color = TOPIC_SUBTITLE_COLOR,
                     maxLines = 1,
@@ -111,10 +111,10 @@ internal fun SopletterTopicItem(
             )
         }
 
-        if (unReadCount > 0) {
+        if (unreadCount > 0) {
             if (!isHot && !isNew) {
                 Text(
-                    text = "${unReadCount}개",
+                    text = "${unreadCount}개",
                     style = SoptTheme.typography.label3,
                     color = SoptTheme.colors.fg.brand.default,
                 )
@@ -166,10 +166,10 @@ private fun SopletterTopicItemPreview() {
     SoptTheme {
         SopletterTopicItem(
             topicTitle = "38기 회고",
-            topicSubTitle = "자유롭게 수다 나누는 방방",
+            topicSubtitle = "자유롭게 수다 나누는 방방",
             isHot = true,
             isNew = true,
-            unReadCount = 2,
+            unreadCount = 2,
             onTopicClick = {}
         )
     }
