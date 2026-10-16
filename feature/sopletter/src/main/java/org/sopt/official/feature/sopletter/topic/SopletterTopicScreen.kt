@@ -120,8 +120,6 @@ private fun SopletterTopicScreen(
                     Spacer(modifier = Modifier.height(10.dp))
                 }
             }
-
-            Spacer(modifier = Modifier.weight(1f))
         }
 
         WriteSopletterFloatingActionButton(
