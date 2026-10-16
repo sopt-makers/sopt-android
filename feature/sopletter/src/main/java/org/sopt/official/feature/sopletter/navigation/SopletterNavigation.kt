@@ -81,7 +81,8 @@ private fun NavController.popBackStackToMainList() {
         val entry = currentBackStackEntry ?: return
         val isMainList = entry.destination.hasRoute<SopletterMain>() &&
             entry.toRoute<SopletterMain>().topicId == null
-        if (isMainList) return
+        val isTopicList = entry.destination.hasRoute<SopletterTopic>()
+        if (isMainList || isTopicList) return
         if (!popBackStack()) return
     }
 }
