@@ -89,7 +89,7 @@ class SopletterMainPreviewParameterProvider : PreviewParameterProvider<Sopletter
                 likeCount = 32,
                 likedByMe = true,
                 mine = true,
-            ).toMemoDetailDialogState(
+            ).toMemoDetailDialogState().copy(
                 memoColor = memoList[1].memoColor(),
             ),
         ),

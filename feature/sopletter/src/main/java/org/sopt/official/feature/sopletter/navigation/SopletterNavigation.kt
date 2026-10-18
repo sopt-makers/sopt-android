@@ -94,7 +94,7 @@ private fun NavController.popBackStackToMainList() {
 fun NavController.navigateToSopletter(
     topicId: Long? = null,
     messageId: Long? = null,
-    navOptions: NavOptions? = null,
+    navOptions: NavOptions? = singleTopNavOptions<SopletterGraph>(),
 ) {
     navigate(SopletterGraph(topicId = topicId, messageId = messageId), navOptions)
 }
