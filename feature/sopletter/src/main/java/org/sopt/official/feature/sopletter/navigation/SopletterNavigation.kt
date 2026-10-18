@@ -190,18 +190,10 @@ private fun SopletterNavHost(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     onBackClick = navController::navigateUp,
-                    onNavigateToMain = {
-                        // 작성을 시작한 화면(디폴트 or 토픽 상세)으로 돌아가되,
-                        // 새 엔트리로 다시 올려 목록을 갱신한다.
-                        val originTopicId = navController.previousBackStackEntry
-                            ?.takeIf { entry -> entry.destination.hasRoute<SopletterMain>() }
-                            ?.toRoute<SopletterMain>()
-                            ?.topicId
+                    onNavigateToMain = { topicId ->
+                        // 주제 목록까지 돌아간 뒤, 작성한 주제의 메인을 새 엔트리로 올려 목록을 갱신한다.
                         navController.popBackStackToMainList()
-                        if (originTopicId == null) {
-                            navController.popBackStack()
-                        }
-                        navController.navigateToSopletterMain(topicId = originTopicId)
+                        navController.navigateToSopletterMain(topicId = topicId)
                     },
                 )
             }

@@ -82,7 +82,7 @@ fun SopletterWriteRoute(
     viewType: String,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
-    onNavigateToMain: () -> Unit,
+    onNavigateToMain: (Long?) -> Unit,
     viewModel: SopletterWriteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -99,7 +99,7 @@ fun SopletterWriteRoute(
                     }
 
                     is SopletterWriteSideEffect.NavigateToMain -> {
-                        onNavigateToMain()
+                        onNavigateToMain(sideEffect.topicId)
                     }
                 }
             }
