@@ -69,7 +69,7 @@ internal fun SopletterTopicItem(
             .fillMaxWidth()
             .background(
                 color = SoptTheme.colors.bg.neutral.subtle,
-                shape = RoundedCornerShape(10.dp)
+                shape = RoundedCornerShape(SoptTheme.radius.r10)
             )
             .noRippleClickable(onClick = onTopicClick)
             .padding(vertical = 12.dp, horizontal = 20.dp),
