@@ -266,7 +266,7 @@ private fun SopletterMainScreen(
                             onWriteFABClick = onWriteFABClick,
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 20.dp, bottom = 24.dp),
+                                .padding(end = 20.dp, bottom = 28.dp),
                         )
                     }
                 }
@@ -310,7 +310,7 @@ private fun SopletterMainScreen(
                             onWriteFABClick = onWriteFABClick,
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 20.dp, bottom = 24.dp),
+                                .padding(end = 20.dp, bottom = 28.dp),
                         )
                     }
                 }
