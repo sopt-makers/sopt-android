@@ -138,12 +138,7 @@ fun SopletterMainRoute(
         onRefresh = viewModel::refreshMainContent,
         onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
         dialogActions = trackedDialogActions,
-        onBackClick = {
-            if (uiState.routeTopicId == null) {
-                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
-            }
-            navigateUp()
-        },
+        onBackClick = navigateUp,
         onDownloadClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_EXPORT_SOPTLETTER, viewType)
             isPrintDialogVisible = true

@@ -43,6 +43,14 @@ enum class SopletterAnalyticsEvent(
         type = EventType.VIEW,
         eventName = "soptletter_main",
     ),
+    VIEW_SOPTLETTER_TOPIC_LIST(
+        type = EventType.VIEW,
+        eventName = "soptletter_topic_list",
+    ),
+    CLICK_SOPTLETTER_TOPIC(
+        type = EventType.CLICK,
+        eventName = "soptletter_topic",
+    ),
     CLICK_SOPTLETTER_START_BUTTON(
         type = EventType.CLICK,
         eventName = "soptletter_start_button",

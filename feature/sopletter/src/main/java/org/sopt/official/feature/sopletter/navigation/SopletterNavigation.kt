@@ -200,6 +200,7 @@ private fun SopletterNavHost(
 
             composable<SopletterTopic> {
                 SopletterTopicRoute(
+                    viewType = viewType,
                     navigateUp = navigateToHome,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
                     navigateToWrite = navController::navigateToSopletterWrite,
