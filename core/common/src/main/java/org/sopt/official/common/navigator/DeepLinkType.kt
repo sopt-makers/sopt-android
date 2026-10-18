@@ -139,7 +139,6 @@ enum class DeepLinkType(
             userStatus.setIntent(
                 navigator.getMainActivityIntent(userStatus, null).apply {
                     putExtra("isSopletterDeepLink", true)
-                    putExtra("sopletterTarget", "TOPIC_LIST")
                 }
             )
     },
@@ -153,7 +152,6 @@ enum class DeepLinkType(
                 navigator.getMainActivityIntent(userStatus, null).apply {
                     putExtra("isSopletterDeepLink", true)
                     if (topicId != null && messageId != null) {
-                        putExtra("sopletterTarget", "MESSAGE_DETAIL")
                         putExtra("sopletterTopicId", topicId)
                         putExtra("sopletterMessageId", messageId)
                     }

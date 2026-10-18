@@ -42,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.MdsIcons
 import org.sopt.official.sopletter.R
 
 @Composable
@@ -72,12 +73,12 @@ internal fun SopletterMainTopBar(
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(
-                    if (isTopicDetail) R.drawable.icon_chevron_left else R.drawable.ic_close_32,
+                    if (isTopicDetail) MdsIcons.chevronLeftOutlined else R.drawable.ic_close_32,
                 ),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(24.dp)
                     .noRippleClickable(onClick = onBackClick),
             )
 

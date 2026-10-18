@@ -88,7 +88,7 @@ interface SopletterService {
 
     @GET("sopt-letter/topics")
     suspend fun getTopics(
-        @Query("type") type: String,
+        @Query("type") type: String?,
     ): SopletterTopicsResponseDto
 
     @GET("sopt-letter/cta")

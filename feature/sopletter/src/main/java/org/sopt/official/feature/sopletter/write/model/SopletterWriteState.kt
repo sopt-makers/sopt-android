@@ -25,16 +25,24 @@
 package org.sopt.official.feature.sopletter.write.model
 
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 
 @Immutable
 data class SopletterWriteUiState(
     val writerName: String = "",
+    val topics: ImmutableList<SopletterTopic> = persistentListOf(),
+    val selectedTopicId: Long? = null,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val isError: Boolean = false,
     val errorMessage: String? = null
-)
+) {
+    val selectedTopicTitle: String?
+        get() = topics.find { it.topicId == selectedTopicId }?.title
+}
 
 sealed interface SopletterWriteSideEffect {
     data class ShowSnackbar(
@@ -42,5 +50,5 @@ sealed interface SopletterWriteSideEffect {
         val type: SopletterSnackbarType
     ) : SopletterWriteSideEffect
 
-    data object NavigateToMain : SopletterWriteSideEffect
+    data class NavigateToMain(val topicId: Long?) : SopletterWriteSideEffect
 }

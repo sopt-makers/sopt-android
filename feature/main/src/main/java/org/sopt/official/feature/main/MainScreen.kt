@@ -108,7 +108,6 @@ import org.sopt.official.feature.poke.navigation.navigateToPokeOnboarding
 import org.sopt.official.feature.poke.navigation.pokeNavGraph
 import org.sopt.official.feature.poke.v2.navigation.navigateToPoke
 import org.sopt.official.feature.poke.v2.navigation.pokeGraph
-import org.sopt.official.feature.sopletter.navigation.SopletterPushTarget
 import org.sopt.official.feature.sopletter.navigation.navigateToSopletter
 import org.sopt.official.feature.sopletter.navigation.sopletterGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLog
@@ -249,11 +248,6 @@ fun MainScreen(
 
         if (shouldNavigateToSopletter) {
             val sopletterIntent = activity?.intent
-            val pushTarget = when (sopletterIntent?.getStringExtra("sopletterTarget")) {
-                "TOPIC_LIST" -> SopletterPushTarget.TOPIC_LIST
-                "MESSAGE_DETAIL" -> SopletterPushTarget.MESSAGE_DETAIL
-                else -> null
-            }
             val topicId = sopletterIntent
                 ?.getLongExtra("sopletterTopicId", -1L)
                 ?.takeIf { it > 0L }
@@ -262,7 +256,6 @@ fun MainScreen(
                 ?.takeIf { it > 0L }
 
             navigator.navController.navigateToSopletter(
-                pushTarget = pushTarget,
                 topicId = topicId,
                 messageId = messageId,
             )

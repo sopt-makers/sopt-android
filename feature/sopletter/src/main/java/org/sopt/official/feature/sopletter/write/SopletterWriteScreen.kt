@@ -46,7 +46,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,12 +63,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
+import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.feature.sopletter.write.component.SopletterExplainArea
+import org.sopt.official.feature.sopletter.write.component.SopletterTopicSelectDialog
+import org.sopt.official.feature.sopletter.write.component.SopletterTopicSelectField
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteButton
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteTextBox
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
@@ -77,7 +82,7 @@ fun SopletterWriteRoute(
     viewType: String,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
-    onNavigateToMain: () -> Unit,
+    onNavigateToMain: (Long?) -> Unit,
     viewModel: SopletterWriteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -94,7 +99,7 @@ fun SopletterWriteRoute(
                     }
 
                     is SopletterWriteSideEffect.NavigateToMain -> {
-                        onNavigateToMain()
+                        onNavigateToMain(sideEffect.topicId)
                     }
                 }
             }
@@ -110,6 +115,7 @@ fun SopletterWriteRoute(
             viewModel.postSopletter(textFieldState.text.toString())
         },
         onLimitExceeded = viewModel::onLimitExceeded,
+        onTopicSelect = viewModel::selectTopic,
     )
 }
 
@@ -121,15 +127,18 @@ private fun SopletterWriteScreen(
     onBackClick: () -> Unit,
     onPostClick: () -> Unit,
     onLimitExceeded: () -> Unit,
+    onTopicSelect: (Long) -> Unit,
     modifier: Modifier = Modifier,
     maxLength: Int = 350
 ) {
     val isImeVisible = WindowInsets.isImeVisible
-    val isButtonEnabled by remember {
+    var isTopicDialogVisible by remember { mutableStateOf(false) }
+    val isButtonEnabled by remember(uiState.isLoading, uiState.selectedTopicId) {
         derivedStateOf {
             textFieldState.text.isNotEmpty() &&
-                textFieldState.text.length <= maxLength &&
-                !uiState.isLoading
+                textFieldState.text.characterCount() <= maxLength &&
+                !uiState.isLoading &&
+                uiState.selectedTopicId != null
         }
     }
 
@@ -137,7 +146,7 @@ private fun SopletterWriteScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = SoptTheme.colors.background)
+                .background(color = SoptTheme.colors.bg.layer.basement)
                 .imePadding(),
         ) {
             SopletterTopbar(onBackClick = { if (!uiState.isLoading) onBackClick() })
@@ -151,11 +160,21 @@ private fun SopletterWriteScreen(
                     enter = fadeIn() + expandVertically(),
                     exit = fadeOut() + shrinkVertically()
                 ) {
-                    Column {
-                        SopletterExplainArea()
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
+                    SopletterExplainArea(
+                        modifier = Modifier.padding(
+                            top = SoptTheme.spacing.s10,
+                            bottom = SoptTheme.spacing.s12,
+                        ),
+                    )
                 }
+
+                SopletterTopicSelectField(
+                    selectedTopicTitle = uiState.selectedTopicTitle,
+                    onClick = { isTopicDialogVisible = true },
+                    modifier = Modifier.padding(horizontal = SoptTheme.spacing.s20)
+                )
+
+                Spacer(modifier = Modifier.height(SoptTheme.spacing.s10))
 
                 SopletterWriteTextBox(
                     userName = uiState.writerName,
@@ -164,20 +183,32 @@ private fun SopletterWriteScreen(
                     onLimitExceeded = onLimitExceeded,
                     modifier = Modifier
                         .weight(weight = 1f, fill = false)
-                        .padding(horizontal = 20.dp)
+                        .padding(horizontal = SoptTheme.spacing.s20)
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(SoptTheme.spacing.s20))
 
             SopletterWriteButton(
                 isEnabled = isButtonEnabled,
                 onButtonClick = onPostClick,
                 modifier = Modifier
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = SoptTheme.spacing.s20)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        if (isTopicDialogVisible) {
+            SopletterTopicSelectDialog(
+                topics = uiState.topics,
+                selectedTopicId = uiState.selectedTopicId,
+                onDismissRequest = { isTopicDialogVisible = false },
+                onSelectComplete = { topicId ->
+                    onTopicSelect(topicId)
+                    isTopicDialogVisible = false
+                },
+            )
         }
 
         if (uiState.isLoading) {
@@ -188,7 +219,7 @@ private fun SopletterWriteScreen(
                     .zIndex(10f),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = SoptTheme.colors.primary)
+                CircularProgressIndicator(color = SoptTheme.colors.fg.neutral.bold)
             }
         }
     }
@@ -205,7 +236,8 @@ private fun SopletterWriteScreenPreview() {
             textFieldState = textFieldState,
             onBackClick = { },
             onPostClick = { },
-            onLimitExceeded = { }
+            onLimitExceeded = { },
+            onTopicSelect = { }
         )
     }
 }
