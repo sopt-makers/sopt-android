@@ -46,6 +46,7 @@ import org.sopt.official.feature.notification.NotificationAnalyticsEvent
 import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.toNotificationLinkType
+import org.sopt.official.feature.notification.toNotificationProductType
 import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.model.toViewType
 import timber.log.Timber
@@ -90,7 +91,6 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
         lifecycleScope.launch {
             suspendRunCatching {
-                // TODO(Amplitude): link의 pushType 쿼리를 notification_product_type 속성으로 추가
                 tracker.trackViewType(
                     event = NotificationAnalyticsEvent.RECEIVED_PUSH,
                     viewType = userStorage.userStatus.first().toViewType(),
@@ -102,6 +102,9 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
                             NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
                             link.toNotificationLinkType().value,
                         )
+                        link.toNotificationProductType()?.let {
+                            put(NotificationAnalyticsPropertyKey.NOTIFICATION_PRODUCT_TYPE, it)
+                        }
                     },
                 )
             }.onFailure { exception ->
