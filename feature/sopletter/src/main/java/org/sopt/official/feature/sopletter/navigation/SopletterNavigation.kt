@@ -24,6 +24,7 @@
  */
 package org.sopt.official.feature.sopletter.navigation
 
+import androidx.annotation.Keep
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -63,8 +64,19 @@ import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterW
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
+// 푸시 알림으로 진입했을 때 온보딩 완료 유저가 도착할 화면
+@Keep
+enum class SopletterPushTarget {
+    TOPIC_LIST,
+    MESSAGE_DETAIL,
+}
+
 @Serializable
-data object SopletterGraph
+data class SopletterGraph(
+    val pushTarget: SopletterPushTarget? = null,
+    val topicId: Long? = null,
+    val messageId: Long? = null,
+)
 
 @Serializable
 data object SopletterEntry
@@ -86,17 +98,26 @@ private fun NavController.popBackStackToMainList() {
     }
 }
 
-fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
-    navigate(SopletterGraph, navOptions)
+fun NavController.navigateToSopletter(
+    pushTarget: SopletterPushTarget? = null,
+    topicId: Long? = null,
+    messageId: Long? = null,
+    navOptions: NavOptions? = null,
+) {
+    navigate(SopletterGraph(pushTarget = pushTarget, topicId = topicId, messageId = messageId), navOptions)
 }
 
 fun NavGraphBuilder.sopletterGraph(
     userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
-    composable<SopletterGraph> {
+    composable<SopletterGraph> { backStackEntry ->
+        val route = backStackEntry.toRoute<SopletterGraph>()
         SopletterNavHost(
             userStatus = userStatus,
+            pushTarget = route.pushTarget,
+            pushTopicId = route.topicId,
+            pushMessageId = route.messageId,
             navigateToHome = navigateToHome,
         )
     }
@@ -105,6 +126,9 @@ fun NavGraphBuilder.sopletterGraph(
 @Composable
 private fun SopletterNavHost(
     userStatus: UserStatus,
+    pushTarget: SopletterPushTarget?,
+    pushTopicId: Long?,
+    pushMessageId: Long?,
     navigateToHome: () -> Unit,
 ) {
     val navController = rememberNavController()
@@ -125,9 +149,18 @@ private fun SopletterNavHost(
             composable<SopletterEntry> {
                 SopletterEntryRoute(
                     navigateToMain = {
+                        // 온보딩 완료 유저만 이 경로를 타므로 푸시 목적지로 분기한다.
+                        // 온보딩 미완료 유저는 아래 navigateToOnboarding으로 가서 푸시 목적지가 무시된다.
+                        val isMessageDetail = pushTarget == SopletterPushTarget.MESSAGE_DETAIL &&
+                            pushTopicId != null && pushMessageId != null
                         navController.navigateToSopletterMain(
+                            topicId = pushTopicId.takeIf { isMessageDetail },
+                            messageId = pushMessageId.takeIf { isMessageDetail },
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )
+                        if (pushTarget == SopletterPushTarget.TOPIC_LIST) {
+                            navController.navigateToSopletterTopic()
+                        }
                     },
                     navigateToOnboarding = {
                         navController.navigate(SopletterOnboarding) {

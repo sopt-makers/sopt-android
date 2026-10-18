@@ -28,7 +28,9 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
+import org.sopt.official.feature.sopletter.main.model.DEFAULT_MEMO_COLOR
 import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+import org.sopt.official.feature.sopletter.main.model.toMemoColorOrNull
 
 internal const val SOPLETTER_MEMO_MAX_LENGTH = 350
 
@@ -59,10 +61,11 @@ interface SopletterMemoDetailDialogContract {
     }
 }
 
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
+// 색상 우선순위: 상세 응답 colorCode → 호출자가 넘긴 색(목록 카드 등) → 기본 색
+internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color? = null): State =
     State(
         memoId = messageId,
-        memoColor = memoColor,
+        memoColor = colorCode.toMemoColorOrNull() ?: memoColor ?: DEFAULT_MEMO_COLOR,
         writerName = authorNickname,
         isMine = mine,
         isLiked = likedByMe,

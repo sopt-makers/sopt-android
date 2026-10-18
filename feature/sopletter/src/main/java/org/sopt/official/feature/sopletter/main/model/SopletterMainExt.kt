@@ -43,4 +43,8 @@ internal fun SopletterMessage.memoColor(): Color = runCatching {
     Color(colorCode.toColorInt())
 }.getOrDefault(DEFAULT_MEMO_COLOR)
 
-private val DEFAULT_MEMO_COLOR = Color(0xFFC8E1FF)
+internal fun String?.toMemoColorOrNull(): Color? = this?.let { code ->
+    runCatching { Color(code.toColorInt()) }.getOrNull()
+}
+
+internal val DEFAULT_MEMO_COLOR = Color(0xFFC8E1FF)

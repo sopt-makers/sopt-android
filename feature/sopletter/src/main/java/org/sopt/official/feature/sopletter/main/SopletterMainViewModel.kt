@@ -58,6 +58,7 @@ class SopletterMainViewModel @Inject constructor(
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     private val topicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
+    private val pushMessageId: Long? = savedStateHandle.toRoute<SopletterMain>().messageId
 
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
@@ -67,6 +68,14 @@ class SopletterMainViewModel @Inject constructor(
 
     init {
         initMessages(topicId = topicId)
+        openPushMessageDetail()
+    }
+
+    // 좋아요 푸시로 진입한 경우 목록 로드를 기다리지 않고 상세 모달을 바로 연다.
+    private fun openPushMessageDetail() {
+        val messageId = pushMessageId ?: return
+        if (topicId == null) return
+        fetchMemoDetail(messageId = messageId, memoColor = null)
     }
 
     // ---------------- Main screen ----------------
@@ -222,9 +231,8 @@ class SopletterMainViewModel @Inject constructor(
 
     // ---------------- Memo detail dialog ----------------
 
-    fun fetchMemoDetail(messageId: Long, memoColor: Color) = viewModelScope.launch {
-        val topicId = _uiState.value.topicId
-        if (topicId <= 0L) return@launch
+    fun fetchMemoDetail(messageId: Long, memoColor: Color?) = viewModelScope.launch {
+        val topicId = _uiState.value.topicId.takeIf { it > 0L } ?: this@SopletterMainViewModel.topicId ?: return@launch
 
         sopletterRepository.getMessageDetail(
             topicId = topicId,
@@ -232,6 +240,7 @@ class SopletterMainViewModel @Inject constructor(
         ).onSuccess { detail ->
             _uiState.update { state ->
                 state.copy(
+                    topicId = topicId,
                     selectedMemoDetail = detail.toMemoDetailDialogState(memoColor = memoColor),
                     isShowErrorDialog = false,
                 )
