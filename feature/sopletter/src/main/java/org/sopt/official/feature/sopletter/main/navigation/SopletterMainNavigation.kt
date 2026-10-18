@@ -32,11 +32,14 @@ import org.sopt.official.core.navigation.Route
 @Serializable
 data class SopletterMain(
     val topicId: Long? = null,
+    // 좋아요 푸시 진입 시 상세 모달을 바로 열 메시지
+    val messageId: Long? = null,
 ) : Route
 
 fun NavController.navigateToSopletterMain(
     topicId: Long? = null,
+    messageId: Long? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(SopletterMain(topicId = topicId), navOptions)
+    navigate(SopletterMain(topicId = topicId, messageId = messageId), navOptions)
 }

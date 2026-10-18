@@ -39,8 +39,9 @@ internal fun SopletterShapeType.imageRes(): Int = when (this) {
     SopletterShapeType.CLOUD -> R.drawable.ic_sopletter_memo_cloud
 }
 
-internal fun SopletterMessage.memoColor(): Color = runCatching {
-    Color(colorCode.toColorInt())
-}.getOrDefault(DEFAULT_MEMO_COLOR)
+internal fun SopletterMessage.memoColor(): Color = colorCode.toMemoColor()
 
-private val DEFAULT_MEMO_COLOR = Color(0xFFC8E1FF)
+internal fun String?.toMemoColor(): Color =
+    runCatching { Color(requireNotNull(this).toColorInt()) }.getOrDefault(DEFAULT_MEMO_COLOR)
+
+internal val DEFAULT_MEMO_COLOR = Color(0xFFC8E1FF)

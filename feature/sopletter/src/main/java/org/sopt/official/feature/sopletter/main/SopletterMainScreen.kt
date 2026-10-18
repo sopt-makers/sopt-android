@@ -133,10 +133,7 @@ fun SopletterMainRoute(
         uiState = uiState,
         onMemoClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
-            viewModel.fetchMemoDetail(
-                messageId = it.messageId,
-                memoColor = it.memoColor(),
-            )
+            viewModel.fetchMemoDetail(messageId = it.messageId)
         },
         onRefresh = viewModel::refreshMainContent,
         onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },

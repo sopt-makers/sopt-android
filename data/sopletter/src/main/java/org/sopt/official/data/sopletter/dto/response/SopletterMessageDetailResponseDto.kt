@@ -37,6 +37,8 @@ data class SopletterMessageDetailResponseDto(
     val authorNickname: String,
     @SerialName("content")
     val content: String,
+    @SerialName("colorCode")
+    val colorCode: String? = null,
     @SerialName("createdAt")
     val createdAt: String,
     @SerialName("likeCount")

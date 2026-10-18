@@ -63,8 +63,12 @@ import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterW
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
+// 좋아요 푸시로 진입하면 topicId, messageId가 채워져 해당 메시지 상세 모달을 바로 연다.
 @Serializable
-data object SopletterGraph
+data class SopletterGraph(
+    val topicId: Long? = null,
+    val messageId: Long? = null,
+)
 
 @Serializable
 data object SopletterEntry
@@ -87,17 +91,24 @@ private fun NavController.popBackStackToMainList() {
     }
 }
 
-fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
-    navigate(SopletterGraph, navOptions)
+fun NavController.navigateToSopletter(
+    topicId: Long? = null,
+    messageId: Long? = null,
+    navOptions: NavOptions? = singleTopNavOptions<SopletterGraph>(),
+) {
+    navigate(SopletterGraph(topicId = topicId, messageId = messageId), navOptions)
 }
 
 fun NavGraphBuilder.sopletterGraph(
     userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
-    composable<SopletterGraph> {
+    composable<SopletterGraph> { backStackEntry ->
+        val route = backStackEntry.toRoute<SopletterGraph>()
         SopletterNavHost(
             userStatus = userStatus,
+            pushTopicId = route.topicId,
+            pushMessageId = route.messageId,
             navigateToHome = navigateToHome,
         )
     }
@@ -106,6 +117,8 @@ fun NavGraphBuilder.sopletterGraph(
 @Composable
 private fun SopletterNavHost(
     userStatus: UserStatus,
+    pushTopicId: Long?,
+    pushMessageId: Long?,
     navigateToHome: () -> Unit,
 ) {
     val navController = rememberNavController()
@@ -129,6 +142,14 @@ private fun SopletterNavHost(
                         navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )
+                        // 온보딩 완료 유저가 좋아요 푸시로 들어온 경우 주제 목록 위에 메시지 상세를 올린다.
+                        // 온보딩 미완료 유저는 navigateToOnboarding으로 가서 푸시 목적지가 무시된다.
+                        if (pushTopicId != null && pushMessageId != null) {
+                            navController.navigateToSopletterMain(
+                                topicId = pushTopicId,
+                                messageId = pushMessageId,
+                            )
+                        }
                     },
                     navigateToOnboarding = {
                         navController.navigate(SopletterOnboarding) {

@@ -61,6 +61,7 @@ internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetai
     topicId = topicId,
     authorNickname = authorNickname,
     content = content,
+    colorCode = colorCode,
     createdAt = createdAt,
     likeCount = likeCount,
     likedByMe = likedByMe,

@@ -57,7 +57,8 @@ class SopletterMainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
-    private val topicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
+    private val routeTopicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
+    private val pushMessageId: Long? = savedStateHandle.toRoute<SopletterMain>().messageId
 
     private val _uiState = MutableStateFlow(SopletterMainUiState())
     val uiState: StateFlow<SopletterMainUiState> = _uiState.asStateFlow()
@@ -66,7 +67,15 @@ class SopletterMainViewModel @Inject constructor(
     val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        initMessages(topicId = topicId)
+        initMessages(topicId = routeTopicId)
+        openPushMessageDetail()
+    }
+
+    // 좋아요 푸시로 진입한 경우 목록 로드를 기다리지 않고 상세 모달을 바로 연다.
+    private fun openPushMessageDetail() {
+        val messageId = pushMessageId ?: return
+        if (routeTopicId == null) return
+        fetchMemoDetail(messageId = messageId, isFromPush = true)
     }
 
     // ---------------- Main screen ----------------
@@ -222,9 +231,11 @@ class SopletterMainViewModel @Inject constructor(
 
     // ---------------- Memo detail dialog ----------------
 
-    fun fetchMemoDetail(messageId: Long, memoColor: Color) = viewModelScope.launch {
-        val topicId = _uiState.value.topicId
-        if (topicId <= 0L) return@launch
+    fun fetchMemoDetail(
+        messageId: Long,
+        isFromPush: Boolean = false,
+    ) = viewModelScope.launch {
+        val topicId = _uiState.value.topicId.takeIf { it > 0L } ?: routeTopicId ?: return@launch
 
         sopletterRepository.getMessageDetail(
             topicId = topicId,
@@ -232,13 +243,26 @@ class SopletterMainViewModel @Inject constructor(
         ).onSuccess { detail ->
             _uiState.update { state ->
                 state.copy(
-                    selectedMemoDetail = detail.toMemoDetailDialogState(memoColor = memoColor),
+                    topicId = topicId,
+                    selectedMemoDetail = detail.toMemoDetailDialogState(),
                     isShowErrorDialog = false,
                 )
             }
         }.onFailure {
-            _uiState.update { state ->
-                state.copy(isShowErrorDialog = true)
+            if (isFromPush) {
+                // 푸시 진입 시 실패는 대부분 삭제된 메시지이므로 에러 다이얼로그 대신 안내만 한다.
+                _sideEffect.emit(
+                    SopletterMainSideEffect.ShowSnackbar(
+                        visuals = SopletterSnackbarVisuals(
+                            message = "삭제되었거나 볼 수 없는 메시지예요",
+                            type = SopletterSnackbarType.WARNING,
+                        ),
+                    ),
+                )
+            } else {
+                _uiState.update { state ->
+                    state.copy(isShowErrorDialog = true)
+                }
             }
         }
     }
@@ -368,9 +392,8 @@ class SopletterMainViewModel @Inject constructor(
                             }
                         }.toPersistentList(),
                         selectedMemoDetail = if (currentDetail?.memoId == updatedMessage.messageId) {
-                            updatedMessage.toMemoDetailDialogState(
-                                memoColor = currentDetail.memoColor,
-                            )
+                            updatedMessage.toMemoDetailDialogState()
+                                .copy(memoColor = currentDetail.memoColor)
                         } else {
                             currentDetail
                         },

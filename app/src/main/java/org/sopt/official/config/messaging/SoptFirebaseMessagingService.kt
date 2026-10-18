@@ -90,6 +90,7 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
 
         lifecycleScope.launch {
             suspendRunCatching {
+                // TODO(Amplitude): link의 pushType 쿼리를 notification_product_type 속성으로 추가
                 tracker.trackViewType(
                     event = NotificationAnalyticsEvent.RECEIVED_PUSH,
                     viewType = userStorage.userStatus.first().toViewType(),
