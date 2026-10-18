@@ -101,15 +101,13 @@ internal fun SopletterTopicItem(
 
         if (isHot) {
             SopletterTopicTag(
-                text = "HOT🔥",
-                type = MdsTagType.PRIMARY
+                type = SopletterTopicBadgeType.HOT
             )
         }
 
         if (isNew) {
             SopletterTopicTag(
-                text = "NEW!",
-                type = MdsTagType.SECONDARY
+                type = SopletterTopicBadgeType.NEW
             )
         }
 
@@ -145,18 +143,31 @@ internal fun SopletterTopicItem(
 
 @Composable
 private fun SopletterTopicTag(
-    text: String,
-    type: MdsTagType,
+    type: SopletterTopicBadgeType,
     modifier: Modifier = Modifier,
 ) {
     MdsTag(
-        text = text,
-        type = type,
+        text = type.text,
+        type = type.type,
         emphasis = MdsTagEmphasis.SUBTLE,
         size = MdsTagSize.SMALL,
         shape = MdsTagShape.PILL,
         modifier = modifier
     )
+}
+
+private enum class SopletterTopicBadgeType(
+    val text: String,
+    val type: MdsTagType
+) {
+    HOT(
+        text = "HOT🔥",
+        type = MdsTagType.PRIMARY
+    ),
+    NEW(
+        text = "NEW!",
+        type = MdsTagType.SECONDARY
+    ),
 }
 
 // TODO: MDS에 gray40 색상 추가시 교체
