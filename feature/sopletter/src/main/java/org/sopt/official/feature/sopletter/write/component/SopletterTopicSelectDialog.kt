@@ -18,7 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -67,7 +67,10 @@ internal fun SopletterTopicSelectDialog(
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
         val dialogWindow = (LocalView.current.parent as? DialogWindowProvider)?.window
-        SideEffect { dialogWindow?.setGravity(Gravity.BOTTOM) }
+        DisposableEffect(dialogWindow) {
+            dialogWindow?.setGravity(Gravity.BOTTOM)
+            onDispose { }
+        }
 
         SopletterTopicSelectContent(
             topics = topics,
