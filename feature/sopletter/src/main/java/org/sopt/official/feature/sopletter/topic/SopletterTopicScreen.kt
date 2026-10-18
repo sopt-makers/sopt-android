@@ -27,6 +27,7 @@ package org.sopt.official.feature.sopletter.topic
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -101,6 +102,7 @@ private fun SopletterTopicScreen(
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(bottom = 76.dp),
             ) {
                 items(
                     items = uiState.topicList,
