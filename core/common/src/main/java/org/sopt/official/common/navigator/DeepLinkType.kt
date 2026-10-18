@@ -132,6 +132,35 @@ enum class DeepLinkType(
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(navigator.getScheduleActivityIntent())
     },
+    // 새 주제 / 미작성 리마인드 푸시: 솝레터 주제 목록으로 진입 (온보딩 미완료 유저는 온보딩으로)
+    // TODO(Amplitude): 푸시 클릭/수신 이벤트에 deepLink의 pushType을 notification_product_type으로 전달
+    SOPLETTER_TOPIC("soptletter/topic") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
+            userStatus.setIntent(
+                navigator.getMainActivityIntent(userStatus, null).apply {
+                    putExtra("isSopletterDeepLink", true)
+                    putExtra("sopletterTarget", "TOPIC_LIST")
+                }
+            )
+    },
+    // 좋아요 푸시: topicId, messageId가 모두 있으면 메시지 상세 모달로, 없으면 솝레터 진입
+    SOPLETTER("soptletter") {
+        override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String): Intent {
+            val topicId = deepLink.extractQueryParameter("topicId").toLongOrNull()
+            val messageId = deepLink.extractQueryParameter("messageId").toLongOrNull()
+
+            return userStatus.setIntent(
+                navigator.getMainActivityIntent(userStatus, null).apply {
+                    putExtra("isSopletterDeepLink", true)
+                    if (topicId != null && messageId != null) {
+                        putExtra("sopletterTarget", "MESSAGE_DETAIL")
+                        putExtra("sopletterTopicId", topicId)
+                        putExtra("sopletterMessageId", messageId)
+                    }
+                }
+            )
+        }
+    },
     UNKNOWN("unknown-deep-link") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) = getIntent(userStatus, UNKNOWN)
     },
