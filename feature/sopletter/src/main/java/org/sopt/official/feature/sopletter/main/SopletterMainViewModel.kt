@@ -139,7 +139,6 @@ class SopletterMainViewModel @Inject constructor(
                         totalCount = response.totalCount,
                         nextCursor = response.nextCursor,
                         hasNext = response.hasNext,
-                        hasNormalTopic = response.hasNormalTopic,
                         memoList = if (isLoadMore) {
                             (state.memoList + response.messages)
                                 .distinctBy(SopletterMessage::messageId)

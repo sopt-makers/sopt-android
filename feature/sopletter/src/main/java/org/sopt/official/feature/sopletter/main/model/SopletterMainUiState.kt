@@ -39,7 +39,6 @@ data class SopletterMainUiState(
     val totalCount: Int = 0,
     val nextCursor: Long? = null,
     val hasNext: Boolean = false,
-    val hasNormalTopic: Boolean? = null,
     val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
     val reportFormUrl: String? = null,
     val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,

@@ -91,7 +91,6 @@ fun SopletterMainRoute(
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
-    navigateToTopic: () -> Unit = {},
     navigateToWrite: (Long?) -> Unit = {},
     navigateToPrint: (Long?) -> Unit = {},
 ) {
@@ -147,7 +146,6 @@ fun SopletterMainRoute(
             navigateToPrint(uiState.selectedTopicId)
         },
         printDialogTitle = uiState.topicTitle,
-        onTopicClick = navigateToTopic,
         onReportClick = viewModel::openReportForm,
         onErrorConfirm = viewModel::dismissErrorDialog,
         onWriteFABClick = {
@@ -172,7 +170,6 @@ private fun SopletterMainScreen(
     onPrintConfirm: () -> Unit,
     printDialogTitle: String,
     onReportClick: () -> Unit,
-    onTopicClick: () -> Unit,
     onErrorConfirm: () -> Unit,
     onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -205,7 +202,6 @@ private fun SopletterMainScreen(
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,
                 onReportClick = onReportClick,
-                onTopicClick = if (uiState.routeTopicId == null && uiState.hasNormalTopic == true) onTopicClick else null,
             )
 
             when {
@@ -384,7 +380,6 @@ private fun SopletterMainScreenPreview(
             onReportClick = {},
             onErrorConfirm = {},
             onWriteFABClick = {},
-            onTopicClick = {},
         )
     }
 }
