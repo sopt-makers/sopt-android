@@ -27,7 +27,8 @@ package org.sopt.official.domain.sopletter.model
 data class SopletterTopic(
     val topicId: Long,
     val title: String,
-    val subtitle: String? = null,
-    val isNew: Boolean = false,
-    val isHot: Boolean = false,
+    val subtitle: String?,
+    val isNew: Boolean,
+    val isHot: Boolean,
+    val unreadCount: Int,
 )

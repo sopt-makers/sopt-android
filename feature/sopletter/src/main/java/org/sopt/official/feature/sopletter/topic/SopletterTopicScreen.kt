@@ -25,37 +25,51 @@
 package org.sopt.official.feature.sopletter.topic
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
+import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun SopletterTopicRoute(
     navigateUp: () -> Unit,
     navigateToMain: (Long) -> Unit,
+    navigateToWrite: () -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        viewModel.fetchTopics()
+    }
 
     SopletterTopicScreen(
         uiState = uiState,
         onBackClick = navigateUp,
         onTopicClick = navigateToMain,
+        onWriteClick = navigateToWrite,
         onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
@@ -65,38 +79,60 @@ private fun SopletterTopicScreen(
     uiState: SopletterTopicState,
     onBackClick: () -> Unit,
     onTopicClick: (Long) -> Unit,
+    onWriteClick: () -> Unit,
     onErrorConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
             .background(
-                color = SoptTheme.colors.background
+                color = SoptTheme.colors.bg.layer.basement
             ),
     ) {
-        SopletterTopbar(
-            onBackClick = onBackClick,
-            topbarTitle = "솝레터 주제"
-        )
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        uiState.topicList.forEachIndexed { index, item ->
-            SopletterTopicItem(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp),
-                topicTitle = item.title,
-                onTopicClick = {
-                    onTopicClick(item.topicId)
-                }
+        Column(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            SopletterTopbar(
+                onBackClick = onBackClick,
+                topbarTitle = "솝레터 주제"
             )
-            if (index < uiState.topicList.lastIndex) {
-                Spacer(modifier = Modifier.height(12.dp))
+
+            Spacer(modifier = Modifier.height(SoptTheme.spacing.s10))
+
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(bottom = 76.dp),
+            ) {
+                items(
+                    items = uiState.topicList,
+                    key = { it.topicId }
+                ) { item ->
+                    SopletterTopicItem(
+                        modifier = Modifier.padding(horizontal = SoptTheme.spacing.s20),
+                        topicTitle = item.title,
+                        topicSubtitle = item.subtitle,
+                        isHot = item.isHot,
+                        isNew = item.isNew,
+                        unreadCount = item.unreadCount,
+                        onTopicClick = {
+                            onTopicClick(item.topicId)
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(SoptTheme.spacing.s10))
+                }
             }
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        WriteSopletterFloatingActionButton(
+            onWriteFABClick = onWriteClick,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(
+                    end = SoptTheme.spacing.s20,
+                    bottom = SoptTheme.spacing.s28
+                ),
+        )
     }
 
     if (uiState.isShowErrorDialog) {
@@ -114,16 +150,48 @@ private fun SopletterTopicScreenPreview() {
                     SopletterTopic(
                         topicId = 1,
                         title = "38기 회고",
+                        subtitle = "자유롭게 수다 나누는 방방",
+                        isNew = true,
+                        isHot = true,
+                        unreadCount = 0,
                     ),
                     SopletterTopic(
                         topicId = 2,
                         title = "38기 회고",
+                        subtitle = "자유롭게 수다 나누는 방방",
+                        isNew = false,
+                        isHot = true,
+                        unreadCount = 3,
                     ),
-
+                    SopletterTopic(
+                        topicId = 3,
+                        title = "38기 회고",
+                        subtitle = "자유롭게 수다 나누는 방방",
+                        isNew = false,
+                        isHot = false,
+                        unreadCount = 3,
+                    ),
+                    SopletterTopic(
+                        topicId = 4,
+                        title = "38기 회고",
+                        subtitle = "자유롭게 수다 나누는 방방",
+                        isNew = false,
+                        isHot = false,
+                        unreadCount = 0,
+                    ),
+                    SopletterTopic(
+                        topicId = 5,
+                        title = "38기 회고",
+                        subtitle = "자유롭게 수다 나누는 방방",
+                        isNew = true,
+                        isHot = false,
+                        unreadCount = 3,
+                    ),
                 )
             ),
             onBackClick = {},
             onTopicClick = {},
+            onWriteClick = {},
             onErrorConfirm = {},
         )
     }

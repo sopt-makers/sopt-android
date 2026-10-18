@@ -73,6 +73,7 @@ internal fun SopletterTopicDto.toDomain(): SopletterTopic = SopletterTopic(
     subtitle = subtitle,
     isNew = isNew,
     isHot = isHot,
+    unreadCount = unreadCount,
 )
 
 internal fun SopletterCtaResponseDto.toDomain(): SopletterCta = SopletterCta(

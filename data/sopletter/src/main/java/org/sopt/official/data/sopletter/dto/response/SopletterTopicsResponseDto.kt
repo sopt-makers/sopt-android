@@ -45,4 +45,6 @@ data class SopletterTopicDto(
     val isNew: Boolean = false,
     @SerialName("isHot")
     val isHot: Boolean = false,
+    @SerialName("unreadCount")
+    val unreadCount: Int,
 )
