@@ -38,12 +38,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SopletterService {
-    @GET("sopt-letter/topics/default/messages")
-    suspend fun getDefaultMessages(
-        @Query("cursor") cursor: Long?,
-        @Query("size") size: Int,
-    ): SopletterMessagesResponseDto
-
     @GET("sopt-letter/topics/{topicId}/messages")
     suspend fun getTopicMessages(
         @Path("topicId") topicId: Long,

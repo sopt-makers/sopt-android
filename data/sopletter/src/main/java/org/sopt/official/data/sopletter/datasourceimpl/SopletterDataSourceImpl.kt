@@ -35,14 +35,6 @@ import javax.inject.Inject
 class SopletterDataSourceImpl @Inject constructor(
     private val sopletterService: SopletterService,
 ) : SopletterDataSource {
-    override suspend fun getDefaultMessages(
-        cursor: Long?,
-        size: Int,
-    ): SopletterMessagesResponseDto = sopletterService.getDefaultMessages(
-        cursor = cursor,
-        size = size,
-    )
-
     override suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long?,

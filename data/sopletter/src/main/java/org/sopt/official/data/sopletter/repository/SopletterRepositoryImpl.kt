@@ -36,16 +36,6 @@ import org.sopt.official.domain.sopletter.repository.SopletterRepository
 internal class SopletterRepositoryImpl @Inject constructor(
     private val sopletterDataSource: SopletterDataSource,
 ) : SopletterRepository {
-    override suspend fun getDefaultMessages(
-        cursor: Long?,
-        size: Int,
-    ): Result<SopletterMessages> = suspendRunCatching {
-        sopletterDataSource.getDefaultMessages(
-            cursor = cursor,
-            size = size,
-        ).toDomain()
-    }
-
     override suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long?,

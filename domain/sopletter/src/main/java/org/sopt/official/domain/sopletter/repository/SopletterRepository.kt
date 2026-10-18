@@ -29,11 +29,6 @@ import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterTopic
 
 interface SopletterRepository {
-    suspend fun getDefaultMessages(
-        cursor: Long? = null,
-        size: Int = DEFAULT_PAGE_SIZE,
-    ): Result<SopletterMessages>
-
     suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long? = null,

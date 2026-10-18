@@ -30,11 +30,6 @@ import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponse
 import org.sopt.official.data.sopletter.dto.response.SopletterTopicsResponseDto
 
 interface SopletterDataSource {
-    suspend fun getDefaultMessages(
-        cursor: Long?,
-        size: Int,
-    ): SopletterMessagesResponseDto
-
     suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long?,
