@@ -39,8 +39,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.sopletter.R
 
 @Composable
@@ -50,8 +49,8 @@ fun SopletterExplainArea (
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = SoptTheme.colors.background)
-            .padding(horizontal = 20.dp),
+            .background(color = SoptTheme.colors.bg.layer.basement)
+            .padding(horizontal = SoptTheme.spacing.s20),
         verticalAlignment = Alignment.CenterVertically,
     ){
         Image(
@@ -60,12 +59,12 @@ fun SopletterExplainArea (
             contentScale = ContentScale.None,
         )
 
-        Spacer(modifier = Modifier.width(14.dp))
+        Spacer(modifier = Modifier.width(SoptTheme.spacing.s14))
 
         Text(
             text = stringResource(id = R.string.sopletter_write_explain),
-            style = SoptTheme.typography.body14M,
-            color = SoptTheme.colors.onSurface10,
+            style = SoptTheme.typography.body2,
+            color = SoptTheme.colors.fg.neutral.bold,
         )
     }
 }

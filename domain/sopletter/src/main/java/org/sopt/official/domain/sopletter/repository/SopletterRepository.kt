@@ -77,5 +77,6 @@ interface SopletterRepository {
 
     companion object {
         const val DEFAULT_PAGE_SIZE = 20
+        const val TOPIC_TYPE_NORMAL = "normal"
     }
 }
