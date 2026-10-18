@@ -30,5 +30,5 @@ data class SopletterTopic(
     val subtitle: String?,
     val isNew: Boolean,
     val isHot: Boolean,
-    val unreadCount: Int,
+    val unreadCount: Int = 0,
 )

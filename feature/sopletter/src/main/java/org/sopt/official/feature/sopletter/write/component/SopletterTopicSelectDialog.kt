@@ -255,9 +255,9 @@ private fun SopletterTopicSelectDialogPreview() {
     SoptTheme {
         SopletterTopicSelectContent(
             topics = persistentListOf(
-                SopletterTopic(topicId = 1, title = "전체", subtitle = "자유롭게 수다 나누는 방", isHot = true),
-                SopletterTopic(topicId = 2, title = "36기 앱잼 회고", subtitle = "얘들아 앱잼 어땠어?", isNew = true),
-                SopletterTopic(topicId = 3, title = "크리스마스 D-100", subtitle = "크리스마스때 모해 얘드라"),
+                SopletterTopic(topicId = 1, title = "전체", subtitle = "자유롭게 수다 나누는 방", isNew = false, isHot = true),
+                SopletterTopic(topicId = 2, title = "36기 앱잼 회고", subtitle = "얘들아 앱잼 어땠어?", isNew = true, isHot = false),
+                SopletterTopic(topicId = 3, title = "크리스마스 D-100", subtitle = "크리스마스때 모해 얘드라", isNew = false, isHot = false),
             ),
             selectedTopicId = 2,
             onTopicClick = {},
