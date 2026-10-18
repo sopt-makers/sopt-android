@@ -50,5 +50,5 @@ sealed interface SopletterWriteSideEffect {
         val type: SopletterSnackbarType
     ) : SopletterWriteSideEffect
 
-    data class NavigateToMain(val topicId: Long?) : SopletterWriteSideEffect
+    data class NavigateToMain(val topicId: Long) : SopletterWriteSideEffect
 }

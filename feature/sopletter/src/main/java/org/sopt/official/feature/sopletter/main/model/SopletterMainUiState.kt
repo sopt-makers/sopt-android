@@ -32,8 +32,6 @@ import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDial
 
 @Immutable
 data class SopletterMainUiState(
-    val routeTopicId: Long? = null,
-    val selectedTopicId: Long? = null,
     val topicId: Long = 0L,
     val topicTitle: String = "",
     val totalCount: Int = 0,

@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -78,17 +77,9 @@ private inline fun <reified T : Any> singleTopNavOptions() = navOptions {
     launchSingleTop = true
 }
 
-// SopletterMain이 목록(topicId == null)과 주제 상세(topicId != null)를 겸하고 있어
-// popUpTo<SopletterMain>으로는 목록만 남길 수 없으므로 직접 목록까지 pop한다.
-private fun NavController.popBackStackToMainList() {
-    while (true) {
-        val entry = currentBackStackEntry ?: return
-        val isMainList = entry.destination.hasRoute<SopletterMain>() &&
-            entry.toRoute<SopletterMain>().topicId == null
-        val isTopicList = entry.destination.hasRoute<SopletterTopic>()
-        if (isMainList || isTopicList) return
-        if (!popBackStack()) return
-    }
+// 작성 완료 후 주제 목록만 남기고 그 위의 화면(주제 메인, 작성)을 지운다.
+private fun NavController.popBackStackToTopicList() {
+    popBackStack<SopletterTopic>(inclusive = false)
 }
 
 fun NavController.navigateToSopletter(
@@ -181,17 +172,11 @@ private fun SopletterNavHost(
             }
 
             composable<SopletterMain> {
-                val isTopicDetail = it.toRoute<SopletterMain>().topicId != null
-                val onNavigateUp: () -> Unit = if (isTopicDetail) {
-                    { if (!navController.popBackStack()) navigateToHome() }
-                } else {
-                    navigateToHome
-                }
                 SopletterMainRoute(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
-                    navigateUp = onNavigateUp,
-                    navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId) },
+                    navigateUp = { if (!navController.popBackStack()) navigateToHome() },
+                    navigateToWrite = navController::navigateToSopletterWrite,
                     navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
                 )
             }
@@ -212,7 +197,7 @@ private fun SopletterNavHost(
                     onBackClick = navController::navigateUp,
                     onNavigateToMain = { topicId ->
                         // 주제 목록까지 돌아간 뒤, 작성한 주제의 메인을 새 엔트리로 올려 목록을 갱신한다.
-                        navController.popBackStackToMainList()
+                        navController.popBackStackToTopicList()
                         navController.navigateToSopletterMain(topicId = topicId)
                     },
                 )

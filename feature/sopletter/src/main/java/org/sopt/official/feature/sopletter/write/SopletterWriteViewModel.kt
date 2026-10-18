@@ -109,7 +109,9 @@ class SopletterWriteViewModel @Inject constructor(
                     )
                 }
                 _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "메세지 작성을 완료했어요.", type = SopletterSnackbarType.SUCCESS))
-                _sideEffect.emit(SopletterWriteSideEffect.NavigateToMain(topicId = _uiState.value.selectedTopicId))
+                _uiState.value.selectedTopicId?.let { topicId ->
+                    _sideEffect.emit(SopletterWriteSideEffect.NavigateToMain(topicId = topicId))
+                }
 
             }.onFailure { _ ->
                 _uiState.update { it.copy(isLoading = false, isError = true) }

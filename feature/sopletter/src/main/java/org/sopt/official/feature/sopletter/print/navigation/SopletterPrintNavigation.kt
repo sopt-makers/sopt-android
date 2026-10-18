@@ -32,11 +32,11 @@ import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 
 @Serializable
 data class SopletterPrint(
-    val topicId: Long? = null,
+    val topicId: Long,
 ) : Route
 
 fun NavController.navigateToSopletterPrint(
-    topicId: Long? = null,
+    topicId: Long,
     navOptions: NavOptions? = null,
 ) {
     navigate(SopletterPrint(topicId = topicId), navOptions)

@@ -91,8 +91,8 @@ fun SopletterMainRoute(
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
-    navigateToWrite: (Long?) -> Unit = {},
-    navigateToPrint: (Long?) -> Unit = {},
+    navigateToWrite: () -> Unit = {},
+    navigateToPrint: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
@@ -143,14 +143,14 @@ fun SopletterMainRoute(
         onPrintDialogDismiss = { isPrintDialogVisible = false },
         onPrintConfirm = {
             isPrintDialogVisible = false
-            navigateToPrint(uiState.selectedTopicId)
+            navigateToPrint(uiState.topicId)
         },
         printDialogTitle = uiState.topicTitle,
         onReportClick = viewModel::openReportForm,
         onErrorConfirm = viewModel::dismissErrorDialog,
         onWriteFABClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
-            navigateToWrite(uiState.selectedTopicId)
+            navigateToWrite()
         },
     )
 }
@@ -197,7 +197,6 @@ private fun SopletterMainScreen(
         ) {
             SopletterMainTopBar(
                 title = uiState.topicTitle,
-                isTopicDetail = uiState.routeTopicId != null,
                 isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,

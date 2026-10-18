@@ -30,13 +30,10 @@ import kotlinx.serialization.Serializable
 import org.sopt.official.core.navigation.Route
 
 @Serializable
-data class SopletterWrite(
-    val topicId: Long? = null,
-) : Route
+data object SopletterWrite : Route
 
 fun NavController.navigateToSopletterWrite(
-    topicId: Long? = null,
     navOptions: NavOptions? = null,
 ) {
-    navigate(SopletterWrite(topicId = topicId), navOptions)
+    navigate(SopletterWrite, navOptions)
 }

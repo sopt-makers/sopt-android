@@ -48,7 +48,6 @@ import org.sopt.official.sopletter.R
 @Composable
 internal fun SopletterMainTopBar(
     title: String,
-    isTopicDetail: Boolean,
     isDownloadBtnVisible: Boolean,
     onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
@@ -71,9 +70,7 @@ internal fun SopletterMainTopBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    if (isTopicDetail) MdsIcons.chevronLeftOutlined else R.drawable.ic_close_32,
-                ),
+                imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
@@ -124,7 +121,6 @@ private fun SopletterMainTopBarPreview() {
     SoptTheme {
         SopletterMainTopBar(
             title = "38기 솝레터",
-            isTopicDetail = false,
             isDownloadBtnVisible = true,
             onBackClick = {},
             onDownloadClick = {},
