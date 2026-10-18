@@ -53,7 +53,7 @@ internal fun WriteSopletterFloatingActionButton(
                 shape = RoundedCornerShape(SoptTheme.radius.r16),
             )
             .noRippleClickable(onClick = onWriteFABClick)
-            .padding(10.dp),
+            .padding(SoptTheme.spacing.s10),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

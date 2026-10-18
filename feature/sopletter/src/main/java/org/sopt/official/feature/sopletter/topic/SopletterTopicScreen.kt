@@ -98,7 +98,7 @@ private fun SopletterTopicScreen(
                 topbarTitle = "솝레터 주제"
             )
 
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(SoptTheme.spacing.s10))
 
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -109,7 +109,7 @@ private fun SopletterTopicScreen(
                     key = { it.topicId }
                 ) { item ->
                     SopletterTopicItem(
-                        modifier = Modifier.padding(horizontal = 20.dp),
+                        modifier = Modifier.padding(horizontal = SoptTheme.spacing.s20),
                         topicTitle = item.title,
                         topicSubtitle = item.subtitle,
                         isHot = item.isHot,
@@ -119,7 +119,7 @@ private fun SopletterTopicScreen(
                             onTopicClick(item.topicId)
                         }
                     )
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(SoptTheme.spacing.s10))
                 }
             }
         }
@@ -128,7 +128,10 @@ private fun SopletterTopicScreen(
             onWriteFABClick = onWriteClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(end = 20.dp, bottom = 28.dp),
+                .padding(
+                    end = SoptTheme.spacing.s20,
+                    bottom = SoptTheme.spacing.s28
+                ),
         )
     }
 

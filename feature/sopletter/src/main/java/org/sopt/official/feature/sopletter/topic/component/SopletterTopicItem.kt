@@ -72,13 +72,16 @@ internal fun SopletterTopicItem(
                 shape = RoundedCornerShape(SoptTheme.radius.r10)
             )
             .noRippleClickable(onClick = onTopicClick)
-            .padding(vertical = 12.dp, horizontal = 20.dp),
+            .padding(
+                vertical = SoptTheme.spacing.s12,
+                horizontal = SoptTheme.spacing.s20
+            ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(SoptTheme.spacing.s6),
     ) {
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(4.dp)
+            verticalArrangement = Arrangement.spacedBy(SoptTheme.spacing.s4)
         ) {
             Text(
                 text = topicTitle,
@@ -134,7 +137,7 @@ internal fun SopletterTopicItem(
             imageVector = ImageVector.vectorResource(MdsIcons.chevronRightOutlined),
             contentDescription = null,
             modifier = Modifier
-                .padding(start = 2.dp)
+                .padding(start = SoptTheme.spacing.s2)
                 .size(20.dp),
             tint = SoptTheme.colors.fg.neutral.bold,
         )
