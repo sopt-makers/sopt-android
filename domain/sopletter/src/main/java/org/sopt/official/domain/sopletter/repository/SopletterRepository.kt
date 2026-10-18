@@ -24,7 +24,6 @@
  */
 package org.sopt.official.domain.sopletter.repository
 
-import org.sopt.official.domain.sopletter.model.SopletterCta
 import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterTopic
@@ -72,8 +71,6 @@ interface SopletterRepository {
     suspend fun getTopics(
         type: String?,
     ): Result<List<SopletterTopic>>
-
-    suspend fun getCta(): Result<SopletterCta>
 
     companion object {
         const val DEFAULT_PAGE_SIZE = 20

@@ -26,7 +26,6 @@ package org.sopt.official.data.sopletter.datasourceimpl
 
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
-import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
@@ -101,6 +100,4 @@ class SopletterDataSourceImpl @Inject constructor(
     override suspend fun getTopics(
         type: String?,
     ): SopletterTopicsResponseDto = sopletterService.getTopics(type = type)
-
-    override suspend fun getCta(): SopletterCtaResponseDto = sopletterService.getCta()
 }

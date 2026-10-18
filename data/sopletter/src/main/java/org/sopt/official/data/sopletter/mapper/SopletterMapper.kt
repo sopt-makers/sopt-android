@@ -23,7 +23,6 @@
  * SOFTWARE.
  */
 package org.sopt.official.data.sopletter.mapper
-import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDto
@@ -34,7 +33,6 @@ import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.model.SopletterShapeType
 import org.sopt.official.domain.sopletter.model.SopletterTopic
-import org.sopt.official.domain.sopletter.model.SopletterCta
 
 internal fun SopletterTopicsResponseDto.toDomain(): List<SopletterTopic> = topics.map(SopletterTopicDto::toDomain)
 
@@ -75,10 +73,4 @@ internal fun SopletterTopicDto.toDomain(): SopletterTopic = SopletterTopic(
     isNew = isNew,
     isHot = isHot,
     unreadCount = unreadCount,
-)
-
-internal fun SopletterCtaResponseDto.toDomain(): SopletterCta = SopletterCta(
-    showCta = showCta,
-    topicId = topicId,
-    ctaText = ctaText,
 )

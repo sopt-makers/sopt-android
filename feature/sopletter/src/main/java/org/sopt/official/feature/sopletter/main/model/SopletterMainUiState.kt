@@ -27,7 +27,6 @@ package org.sopt.official.feature.sopletter.main.model
 import androidx.compose.runtime.Immutable
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import org.sopt.official.domain.sopletter.model.SopletterCta
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 
@@ -41,7 +40,6 @@ data class SopletterMainUiState(
     val nextCursor: Long? = null,
     val hasNext: Boolean = false,
     val hasNormalTopic: Boolean? = null,
-    val cta: SopletterCta? = null,
     val memoList: ImmutableList<SopletterMessage> = persistentListOf(),
     val reportFormUrl: String? = null,
     val selectedMemoDetail: SopletterMemoDetailDialogContract.State? = null,

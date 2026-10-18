@@ -192,7 +192,6 @@ private fun SopletterNavHost(
                     onShowSnackbar = onShowSnackbar,
                     navigateUp = onNavigateUp,
                     navigateToTopic = navController::navigateToSopletterTopic,
-                    navigateToTopicDetail = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
                     navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId) },
                     navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
                 )

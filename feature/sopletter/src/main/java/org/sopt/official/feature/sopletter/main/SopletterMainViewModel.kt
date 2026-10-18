@@ -95,28 +95,7 @@ class SopletterMainViewModel @Inject constructor(
     }
 
     fun refreshMainContent() {
-        if (_uiState.value.routeTopicId == null) {
-            fetchCta()
-        }
         fetchMessages()
-    }
-
-    fun fetchCta() = viewModelScope.launch {
-        if (_uiState.value.routeTopicId != null) return@launch
-
-        sopletterRepository.getCta()
-            .onSuccess { cta ->
-                _uiState.update { state ->
-                    state.copy(
-                        cta = cta.takeIf { it.showCta },
-                    )
-                }
-            }
-            .onFailure {
-                _uiState.update { state ->
-                    state.copy(cta = null)
-                }
-            }
     }
 
     fun fetchMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
