@@ -254,7 +254,7 @@ class SopletterMainViewModel @Inject constructor(
                 _sideEffect.emit(
                     SopletterMainSideEffect.ShowSnackbar(
                         visuals = SopletterSnackbarVisuals(
-                            message = "삭제되었거나 볼 수 없는 메시지에요",
+                            message = "삭제되었거나 볼 수 없는 메시지예요",
                             type = SopletterSnackbarType.WARNING,
                         ),
                     ),
