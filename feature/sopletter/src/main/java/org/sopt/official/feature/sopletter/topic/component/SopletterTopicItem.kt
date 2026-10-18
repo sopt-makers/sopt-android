@@ -84,6 +84,8 @@ internal fun SopletterTopicItem(
                 text = topicTitle,
                 style = SoptTheme.typography.label2,
                 color = SoptTheme.colors.fg.neutral.bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             if (topicSubtitle != null) {
