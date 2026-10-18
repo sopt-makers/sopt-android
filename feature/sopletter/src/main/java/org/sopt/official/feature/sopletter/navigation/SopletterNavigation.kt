@@ -81,7 +81,8 @@ private fun NavController.popBackStackToMainList() {
         val entry = currentBackStackEntry ?: return
         val isMainList = entry.destination.hasRoute<SopletterMain>() &&
             entry.toRoute<SopletterMain>().topicId == null
-        if (isMainList) return
+        val isTopicList = entry.destination.hasRoute<SopletterTopic>()
+        if (isMainList || isTopicList) return
         if (!popBackStack()) return
     }
 }
@@ -124,8 +125,8 @@ private fun SopletterNavHost(
         ) {
             composable<SopletterEntry> {
                 SopletterEntryRoute(
-                    navigateToMain = {
-                        navController.navigateToSopletterMain(
+                    navigateToTopic = {
+                        navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )
                     },
@@ -149,8 +150,8 @@ private fun SopletterNavHost(
             composable<SopletterName> {
                 SopletterNameRoute(
                     viewType = viewType,
-                    navigateToSopletterMain = {
-                        navController.navigateToSopletterMain(
+                    navigateToSopletterTopic = {
+                        navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterOnboarding>(),
                         )
                     },
@@ -178,8 +179,9 @@ private fun SopletterNavHost(
 
             composable<SopletterTopic> {
                 SopletterTopicRoute(
-                    navigateUp = navController::navigateUp,
+                    navigateUp = navigateToHome,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
+                    navigateToWrite = navController::navigateToSopletterWrite,
                 )
             }
 

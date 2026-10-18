@@ -69,12 +69,13 @@ interface SopletterRepository {
         messageId: Long,
     ): Result<Unit>
 
-    suspend fun getTopics(): Result<List<SopletterTopic>>
+    suspend fun getTopics(
+        type: String?,
+    ): Result<List<SopletterTopic>>
 
     suspend fun getCta(): Result<SopletterCta>
 
     companion object {
         const val DEFAULT_PAGE_SIZE = 20
-        const val TOPIC_TYPE_NORMAL = "normal"
     }
 }
