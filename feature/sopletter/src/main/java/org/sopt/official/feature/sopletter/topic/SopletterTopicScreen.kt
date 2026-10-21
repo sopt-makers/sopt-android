@@ -85,7 +85,10 @@ internal fun SopletterTopicRoute(
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_TOPIC, viewType)
             navigateToMain(topicId)
         },
-        onWriteClick = navigateToWrite,
+        onWriteClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
+            navigateToWrite()
+        },
         onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
