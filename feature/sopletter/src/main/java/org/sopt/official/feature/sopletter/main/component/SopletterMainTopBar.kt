@@ -70,7 +70,7 @@ internal fun SopletterMainTopBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(MdsIcons.chevronLeftOutlined),
+                imageVector = ImageVector.vectorResource(MdsIcons.xCloseOutlined),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
