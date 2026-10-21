@@ -185,15 +185,12 @@ private fun SopletterPrintScreen(
     modifier: Modifier = Modifier,
 ) {
     val isPreviewLoading = uiState.previewMemoList.isEmpty()
-    // 로딩이 짧으면 딤과 토스트가 깜빡이므로, 일정 시간 이상 걸릴 때만 노출
-    var isPreviewLoadingOverlayVisible by remember { mutableStateOf(false) }
+    // 로딩이 짧으면 딤과 토스트가 깜빡이므로, 로딩이 끝나도 최소 시간 동안은 노출
+    var isPreviewOverlayMinTimePassed by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isPreviewLoading) {
-        isPreviewLoadingOverlayVisible = false
-        if (isPreviewLoading) {
-            delay(300L.milliseconds)
-            isPreviewLoadingOverlayVisible = true
-        }
+    LaunchedEffect(Unit) {
+        delay(1000L.milliseconds)
+        isPreviewOverlayMinTimePassed = true
     }
 
     Box(modifier = modifier.fillMaxSize()) {
@@ -290,7 +287,7 @@ private fun SopletterPrintScreen(
             }
         }
 
-        if (isPreviewLoading) {
+        if (isPreviewLoading || !isPreviewOverlayMinTimePassed) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
