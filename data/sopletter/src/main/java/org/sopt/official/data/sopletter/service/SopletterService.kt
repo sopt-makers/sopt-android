@@ -25,7 +25,6 @@
 package org.sopt.official.data.sopletter.service
 
 import org.sopt.official.data.sopletter.dto.request.UpdateSopletterMessageRequestDto
-import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterReportFormResponseDto
@@ -39,12 +38,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface SopletterService {
-    @GET("sopt-letter/topics/default/messages")
-    suspend fun getDefaultMessages(
-        @Query("cursor") cursor: Long?,
-        @Query("size") size: Int,
-    ): SopletterMessagesResponseDto
-
     @GET("sopt-letter/topics/{topicId}/messages")
     suspend fun getTopicMessages(
         @Path("topicId") topicId: Long,
@@ -90,7 +83,4 @@ interface SopletterService {
     suspend fun getTopics(
         @Query("type") type: String?,
     ): SopletterTopicsResponseDto
-
-    @GET("sopt-letter/cta")
-    suspend fun getCta(): SopletterCtaResponseDto
 }

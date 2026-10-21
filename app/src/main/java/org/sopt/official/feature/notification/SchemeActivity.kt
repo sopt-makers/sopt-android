@@ -79,7 +79,6 @@ class SchemeActivity : AppCompatActivity() {
 
             if (isPush) {
                 suspendRunCatching {
-                    // TODO(Amplitude): link의 pushType 쿼리를 notification_product_type 속성으로 추가
                     tracker.trackViewType(
                         event = NotificationAnalyticsEvent.CLICK_PUSH,
                         viewType = userStatus.toViewType(),
@@ -95,6 +94,9 @@ class SchemeActivity : AppCompatActivity() {
                                 NotificationAnalyticsPropertyKey.NOTIFICATION_LAUNCH_TYPE,
                                 launchType.value,
                             )
+                            args?.link.toNotificationProductType()?.let {
+                                put(NotificationAnalyticsPropertyKey.NOTIFICATION_PRODUCT_TYPE, it)
+                            }
                         },
                     )
                 }.onFailure { exception ->

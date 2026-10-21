@@ -133,7 +133,6 @@ enum class DeepLinkType(
             userStatus.setIntent(navigator.getScheduleActivityIntent())
     },
     // 새 주제 / 미작성 리마인드 푸시: 솝레터 주제 목록으로 진입 (온보딩 미완료 유저는 온보딩으로)
-    // TODO(Amplitude): 푸시 클릭/수신 이벤트에 deepLink의 pushType을 notification_product_type으로 전달
     SOPLETTER_TOPIC("soptletter/topic") {
         override fun getIntent(context: Context, userStatus: UserStatus, deepLink: String) =
             userStatus.setIntent(

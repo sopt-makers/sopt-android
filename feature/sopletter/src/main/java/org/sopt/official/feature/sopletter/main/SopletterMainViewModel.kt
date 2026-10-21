@@ -57,7 +57,7 @@ class SopletterMainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
-    private val routeTopicId: Long? = savedStateHandle.toRoute<SopletterMain>().topicId
+    private val routeTopicId: Long = savedStateHandle.toRoute<SopletterMain>().topicId
     private val pushMessageId: Long? = savedStateHandle.toRoute<SopletterMain>().messageId
 
     private val _uiState = MutableStateFlow(SopletterMainUiState())
@@ -67,62 +67,25 @@ class SopletterMainViewModel @Inject constructor(
     val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
 
     init {
-        initMessages(topicId = routeTopicId)
+        fetchMessages()
         openPushMessageDetail()
     }
 
     // 좋아요 푸시로 진입한 경우 목록 로드를 기다리지 않고 상세 모달을 바로 연다.
     private fun openPushMessageDetail() {
         val messageId = pushMessageId ?: return
-        if (routeTopicId == null) return
         fetchMemoDetail(messageId = messageId, isFromPush = true)
     }
 
     // ---------------- Main screen ----------------
 
-    fun initMessages(topicId: Long?) {
-        val currentState = _uiState.value
-        if (currentState.isInitialized && currentState.routeTopicId == topicId) return
-
-        _uiState.value = SopletterMainUiState(
-            routeTopicId = topicId,
-        )
-        if (topicId == null) {
-            refreshMainContent()
-        } else {
-            fetchMessages()
-        }
-    }
-
     fun refreshMainContent() {
-        if (_uiState.value.routeTopicId == null) {
-            fetchCta()
-        }
         fetchMessages()
-    }
-
-    fun fetchCta() = viewModelScope.launch {
-        if (_uiState.value.routeTopicId != null) return@launch
-
-        sopletterRepository.getCta()
-            .onSuccess { cta ->
-                _uiState.update { state ->
-                    state.copy(
-                        cta = cta.takeIf { it.showCta },
-                    )
-                }
-            }
-            .onFailure {
-                _uiState.update { state ->
-                    state.copy(cta = null)
-                }
-            }
     }
 
     fun fetchMessages(isLoadMore: Boolean = false) = viewModelScope.launch {
         val currentState = _uiState.value
         if (currentState.isLoading) return@launch
-        val routeTopicId = currentState.routeTopicId
 
         val cursor = if (isLoadMore) {
             if (!currentState.hasNext) return@launch
@@ -140,27 +103,18 @@ class SopletterMainViewModel @Inject constructor(
             )
         }
 
-        val result = if (routeTopicId == null) {
-            sopletterRepository.getDefaultMessages(cursor = cursor)
-        } else {
-            sopletterRepository.getTopicMessages(
-                topicId = routeTopicId,
-                cursor = cursor,
-            )
-        }
-
-        result
+        sopletterRepository.getTopicMessages(
+            topicId = routeTopicId,
+            cursor = cursor,
+        )
             .onSuccess { response ->
                 _uiState.update { state ->
                     state.copy(
-                        routeTopicId = routeTopicId,
-                        selectedTopicId = response.topicId,
                         topicId = response.topicId,
                         topicTitle = response.title,
                         totalCount = response.totalCount,
                         nextCursor = response.nextCursor,
                         hasNext = response.hasNext,
-                        hasNormalTopic = response.hasNormalTopic,
                         memoList = if (isLoadMore) {
                             (state.memoList + response.messages)
                                 .distinctBy(SopletterMessage::messageId)
@@ -235,7 +189,7 @@ class SopletterMainViewModel @Inject constructor(
         messageId: Long,
         isFromPush: Boolean = false,
     ) = viewModelScope.launch {
-        val topicId = _uiState.value.topicId.takeIf { it > 0L } ?: routeTopicId ?: return@launch
+        val topicId = routeTopicId
 
         sopletterRepository.getMessageDetail(
             topicId = topicId,

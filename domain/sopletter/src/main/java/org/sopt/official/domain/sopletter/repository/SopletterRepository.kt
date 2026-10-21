@@ -24,17 +24,11 @@
  */
 package org.sopt.official.domain.sopletter.repository
 
-import org.sopt.official.domain.sopletter.model.SopletterCta
 import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterTopic
 
 interface SopletterRepository {
-    suspend fun getDefaultMessages(
-        cursor: Long? = null,
-        size: Int = DEFAULT_PAGE_SIZE,
-    ): Result<SopletterMessages>
-
     suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long? = null,
@@ -73,10 +67,7 @@ interface SopletterRepository {
         type: String?,
     ): Result<List<SopletterTopic>>
 
-    suspend fun getCta(): Result<SopletterCta>
-
     companion object {
         const val DEFAULT_PAGE_SIZE = 20
-        const val TOPIC_TYPE_NORMAL = "normal"
     }
 }

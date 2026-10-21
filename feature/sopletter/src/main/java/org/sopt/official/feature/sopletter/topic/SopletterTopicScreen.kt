@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,8 +46,11 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.analytics.compose.LocalTracker
+import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterTopic
+import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
@@ -54,12 +58,18 @@ import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 internal fun SopletterTopicRoute(
+    viewType: String,
     navigateUp: () -> Unit,
     navigateToMain: (Long) -> Unit,
     navigateToWrite: () -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val tracker = LocalTracker.current
+
+    LaunchedEffect(Unit) {
+        tracker.trackViewType(SopletterAnalyticsEvent.VIEW_SOPTLETTER_TOPIC_LIST, viewType)
+    }
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         viewModel.fetchTopics()
@@ -67,9 +77,18 @@ internal fun SopletterTopicRoute(
 
     SopletterTopicScreen(
         uiState = uiState,
-        onBackClick = navigateUp,
-        onTopicClick = navigateToMain,
-        onWriteClick = navigateToWrite,
+        onBackClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
+            navigateUp()
+        },
+        onTopicClick = { topicId ->
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_TOPIC, viewType)
+            navigateToMain(topicId)
+        },
+        onWriteClick = {
+            tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
+            navigateToWrite()
+        },
         onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
