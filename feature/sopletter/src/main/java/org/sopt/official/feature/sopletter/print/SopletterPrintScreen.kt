@@ -185,7 +185,7 @@ private fun SopletterPrintScreen(
     modifier: Modifier = Modifier,
 ) {
     val isPreviewLoading = uiState.previewMemoList.isEmpty()
-    // 로딩이 짧으면 딤과 토스트가 깜빡이므로, 로딩이 끝나도 최소 시간 동안은 노출
+    // 로딩이 짧으면 딤과 토스트가 깜빡이므로, 로딩이 끝나도 최소 1초 노출
     var isPreviewOverlayMinTimePassed by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
