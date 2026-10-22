@@ -86,15 +86,19 @@ import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.theme.SoptTheme as MdsSoptTheme
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
 import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterSnackBar
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintSideEffect
 import org.sopt.official.feature.sopletter.print.model.SopletterPrintUiState
 import timber.log.Timber
+import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun SopletterPrintRoute(
@@ -181,6 +185,13 @@ private fun SopletterPrintScreen(
     modifier: Modifier = Modifier,
 ) {
     val isPreviewLoading = uiState.previewMemoList.isEmpty()
+    // 로딩이 짧으면 딤과 토스트가 깜빡이므로, 로딩이 끝나도 최소 1초 노출
+    var isPreviewOverlayMinTimePassed by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(1000L.milliseconds)
+        isPreviewOverlayMinTimePassed = true
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
 
@@ -223,10 +234,7 @@ private fun SopletterPrintScreen(
                             .fillMaxWidth()
                             .border(1.dp, SoptTheme.colors.onSurface100, RoundedCornerShape(10.dp))
                             .padding(8.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(color = SoptTheme.colors.primary)
-                    }
+                    )
                 } else {
                     Column(
                         modifier = Modifier
@@ -275,6 +283,22 @@ private fun SopletterPrintScreen(
                     text = "PDF 저장하기",
                     style = SoptTheme.typography.title16SB,
                     color = SoptTheme.colors.onSurface30
+                )
+            }
+        }
+
+        if (isPreviewLoading || !isPreviewOverlayMinTimePassed) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MdsSoptTheme.colors.bg.dim.default)
+                    .zIndex(10f)
+                    .noRippleClickable {},
+            ) {
+                SopletterSnackBar(
+                    sopletterSnackbarType = SopletterSnackbarType.WARNING,
+                    message = "이미지 미리보기 생성 중 ...",
+                    modifier = Modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
                 )
             }
         }

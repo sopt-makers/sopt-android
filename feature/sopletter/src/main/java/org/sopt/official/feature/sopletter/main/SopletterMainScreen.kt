@@ -91,7 +91,7 @@ fun SopletterMainRoute(
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
-    navigateToWrite: () -> Unit = {},
+    navigateToWrite: (Long) -> Unit = {},
     navigateToPrint: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -150,7 +150,7 @@ fun SopletterMainRoute(
         onErrorConfirm = viewModel::dismissErrorDialog,
         onWriteFABClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
-            navigateToWrite()
+            navigateToWrite(viewModel.routeTopicId)
         },
     )
 }

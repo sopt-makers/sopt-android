@@ -24,8 +24,10 @@
  */
 package org.sopt.official.feature.sopletter.write
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -41,18 +43,22 @@ import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
+import org.sopt.official.feature.sopletter.write.navigation.SopletterWrite
 import org.sopt.official.sopletter.repository.SopletterWriteRepository
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterWriteViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val sopletterWriteRepository: SopletterWriteRepository,
     private val sopletterOnboardingRepository: SopletterOnboardingRepository,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SopletterWriteUiState())
+    private val _uiState = MutableStateFlow(
+        SopletterWriteUiState(selectedTopicId = savedStateHandle.toRoute<SopletterWrite>().topicId),
+    )
     val uiState: StateFlow<SopletterWriteUiState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SopletterWriteSideEffect>()

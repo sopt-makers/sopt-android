@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.filter
+import org.sopt.official.designsystem.PretendardMedium
 import org.sopt.official.feature.sopletter.common.util.characterCount
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.feature.sopletter.component.verticalScrollbar
@@ -99,7 +100,11 @@ fun SopletterWriteTextBox(
         BasicTextField(
             state = state,
             scrollState = scrollState,
-            textStyle = SoptTheme.typography.body1.copy(color = SoptTheme.colors.fg.neutral.bold),
+            // TODO: MDS 폰트에서 일부 조합 글자('습' 등)가 보이지 않는 문제가 해결되면 MDS 폰트로 되돌린다.
+            textStyle = SoptTheme.typography.body1.copy(
+                color = SoptTheme.colors.fg.neutral.bold,
+                fontFamily = PretendardMedium,
+            ),
             cursorBrush = SolidColor(SoptTheme.colors.fg.neutral.bold),
             lineLimits = TextFieldLineLimits.MultiLine(),
             modifier = Modifier

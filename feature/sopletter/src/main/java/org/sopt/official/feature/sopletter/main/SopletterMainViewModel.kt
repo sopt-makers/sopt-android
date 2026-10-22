@@ -57,7 +57,7 @@ class SopletterMainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
-    private val routeTopicId: Long = savedStateHandle.toRoute<SopletterMain>().topicId
+    val routeTopicId: Long = savedStateHandle.toRoute<SopletterMain>().topicId
     private val pushMessageId: Long? = savedStateHandle.toRoute<SopletterMain>().messageId
 
     private val _uiState = MutableStateFlow(SopletterMainUiState())

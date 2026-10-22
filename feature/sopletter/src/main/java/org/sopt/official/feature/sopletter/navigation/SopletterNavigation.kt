@@ -176,7 +176,7 @@ private fun SopletterNavHost(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     navigateUp = { if (!navController.popBackStack()) navigateToHome() },
-                    navigateToWrite = navController::navigateToSopletterWrite,
+                    navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId = topicId) },
                     navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
                 )
             }
@@ -186,7 +186,7 @@ private fun SopletterNavHost(
                     viewType = viewType,
                     navigateUp = navigateToHome,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
-                    navigateToWrite = navController::navigateToSopletterWrite,
+                    navigateToWrite = { navController.navigateToSopletterWrite() },
                 )
             }
 
