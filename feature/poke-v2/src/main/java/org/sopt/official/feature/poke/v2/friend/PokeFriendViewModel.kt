@@ -28,7 +28,7 @@ import org.sopt.official.domain.poke.usecase.PokeUserUseCase
 import org.sopt.official.feature.poke.v2.component.PokeSnackBarType
 import org.sopt.official.feature.poke.v2.friend.model.FriendListSheetState
 import org.sopt.official.feature.poke.v2.friend.model.MessageSheetState
-import org.sopt.official.feature.poke.v2.friend.model.PokeRelationChangeState
+import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.friend.model.toPokeFriendListSections
 import org.sopt.official.feature.poke.v2.friend.navigation.PokeFriend
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState

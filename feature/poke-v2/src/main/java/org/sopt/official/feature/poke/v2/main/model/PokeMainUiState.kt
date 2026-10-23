@@ -41,9 +41,15 @@ import kotlinx.collections.immutable.persistentListOf
 data class PokeMainUiState(
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
-    val pokeMe: PokeUserUiState? = null,
+    val pokeMe: PokeMessageRowUiState? = null,
     val friend: PokeUserUiState? = null,
     val recommendations: ImmutableList<PokeRecommendationUiState> = persistentListOf(),
+
+    val bottomSheetVisibility: Boolean = false,
+    val target: PokeUserUiState? = null,
+    val header: String = "함께 보낼 메시지를 선택해주세요",
+    val pokeMessages: ImmutableList<PokeMessageUiState> = persistentListOf(),
+    val isAnonymous: Boolean = true
 ) {
     val hasPokeMe: Boolean get() = pokeMe != null
     val hasFriend: Boolean get() = friend != null
