@@ -31,6 +31,7 @@ import org.sopt.official.core.navigation.MainTabRoute
 import org.sopt.official.core.navigation.Route
 import org.sopt.official.feature.appjamtamp.navigation.AppjamtampNavGraph
 import org.sopt.official.feature.mypage.navigation.MyPageGraph
+import org.sopt.official.mds.MdsIcons
 
 enum class MainTab(
     @param:DrawableRes val icon: Int,
@@ -40,7 +41,7 @@ enum class MainTab(
     val deeplink: String? = null
 ) {
     Home(
-        icon = R.drawable.ic_main_home_filled,
+        icon = MdsIcons.homeFilled,
         contentDescription = "홈",
         route = org.sopt.official.feature.home.navigation.Home,
         loggingName = "navi_home",
@@ -72,7 +73,7 @@ enum class MainTab(
     ),
 
     MyPage(
-        icon = R.drawable.ic_main_mypage,
+        icon = MdsIcons.userFilled,
         contentDescription = "마이페이지",
         route = MyPageGraph,
         loggingName = "navi_mypage",
