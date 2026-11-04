@@ -49,7 +49,7 @@ gradleplugin = "9.4.1"
 kspplugin = "2.3.12"
 
 dagger-hilt = "2.60.1"
-dagger-hilt-navigation-compose = "1.3.0"
+dagger-hilt-navigation-compose = "1.4.0"
 okhttp = "5.5.0"
 retrofit = "3.0.0"
 timber = "5.0.1"
