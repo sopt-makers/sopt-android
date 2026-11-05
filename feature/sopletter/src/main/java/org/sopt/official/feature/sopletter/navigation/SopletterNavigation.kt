@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.NavHost
@@ -63,8 +62,12 @@ import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterW
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
+// 좋아요 푸시로 진입하면 topicId, messageId가 채워져 해당 메시지 상세 모달을 바로 연다.
 @Serializable
-data object SopletterGraph
+data class SopletterGraph(
+    val topicId: Long? = null,
+    val messageId: Long? = null,
+)
 
 @Serializable
 data object SopletterEntry
@@ -74,29 +77,29 @@ private inline fun <reified T : Any> singleTopNavOptions() = navOptions {
     launchSingleTop = true
 }
 
-// SopletterMain이 목록(topicId == null)과 주제 상세(topicId != null)를 겸하고 있어
-// popUpTo<SopletterMain>으로는 목록만 남길 수 없으므로 직접 목록까지 pop한다.
-private fun NavController.popBackStackToMainList() {
-    while (true) {
-        val entry = currentBackStackEntry ?: return
-        val isMainList = entry.destination.hasRoute<SopletterMain>() &&
-            entry.toRoute<SopletterMain>().topicId == null
-        if (isMainList) return
-        if (!popBackStack()) return
-    }
+// 작성 완료 후 주제 목록만 남기고 그 위의 화면(주제 메인, 작성)을 지운다.
+private fun NavController.popBackStackToTopicList() {
+    popBackStack<SopletterTopic>(inclusive = false)
 }
 
-fun NavController.navigateToSopletter(navOptions: NavOptions? = null) {
-    navigate(SopletterGraph, navOptions)
+fun NavController.navigateToSopletter(
+    topicId: Long? = null,
+    messageId: Long? = null,
+    navOptions: NavOptions? = singleTopNavOptions<SopletterGraph>(),
+) {
+    navigate(SopletterGraph(topicId = topicId, messageId = messageId), navOptions)
 }
 
 fun NavGraphBuilder.sopletterGraph(
     userStatus: UserStatus,
     navigateToHome: () -> Unit,
 ) {
-    composable<SopletterGraph> {
+    composable<SopletterGraph> { backStackEntry ->
+        val route = backStackEntry.toRoute<SopletterGraph>()
         SopletterNavHost(
             userStatus = userStatus,
+            pushTopicId = route.topicId,
+            pushMessageId = route.messageId,
             navigateToHome = navigateToHome,
         )
     }
@@ -105,6 +108,8 @@ fun NavGraphBuilder.sopletterGraph(
 @Composable
 private fun SopletterNavHost(
     userStatus: UserStatus,
+    pushTopicId: Long?,
+    pushMessageId: Long?,
     navigateToHome: () -> Unit,
 ) {
     val navController = rememberNavController()
@@ -124,10 +129,18 @@ private fun SopletterNavHost(
         ) {
             composable<SopletterEntry> {
                 SopletterEntryRoute(
-                    navigateToMain = {
-                        navController.navigateToSopletterMain(
+                    navigateToTopic = {
+                        navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )
+                        // 온보딩 완료 유저가 좋아요 푸시로 들어온 경우 주제 목록 위에 메시지 상세를 올린다.
+                        // 온보딩 미완료 유저는 navigateToOnboarding으로 가서 푸시 목적지가 무시된다.
+                        if (pushTopicId != null && pushMessageId != null) {
+                            navController.navigateToSopletterMain(
+                                topicId = pushTopicId,
+                                messageId = pushMessageId,
+                            )
+                        }
                     },
                     navigateToOnboarding = {
                         navController.navigate(SopletterOnboarding) {
@@ -149,8 +162,8 @@ private fun SopletterNavHost(
             composable<SopletterName> {
                 SopletterNameRoute(
                     viewType = viewType,
-                    navigateToSopletterMain = {
-                        navController.navigateToSopletterMain(
+                    navigateToSopletterTopic = {
+                        navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterOnboarding>(),
                         )
                     },
@@ -159,27 +172,21 @@ private fun SopletterNavHost(
             }
 
             composable<SopletterMain> {
-                val isTopicDetail = it.toRoute<SopletterMain>().topicId != null
-                val onNavigateUp: () -> Unit = if (isTopicDetail) {
-                    { if (!navController.popBackStack()) navigateToHome() }
-                } else {
-                    navigateToHome
-                }
                 SopletterMainRoute(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
-                    navigateUp = onNavigateUp,
-                    navigateToTopic = navController::navigateToSopletterTopic,
-                    navigateToTopicDetail = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
-                    navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId) },
+                    navigateUp = { if (!navController.popBackStack()) navigateToHome() },
+                    navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId = topicId) },
                     navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
                 )
             }
 
             composable<SopletterTopic> {
                 SopletterTopicRoute(
-                    navigateUp = navController::navigateUp,
+                    viewType = viewType,
+                    navigateUp = navigateToHome,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
+                    navigateToWrite = { navController.navigateToSopletterWrite() },
                 )
             }
 
@@ -188,18 +195,10 @@ private fun SopletterNavHost(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
                     onBackClick = navController::navigateUp,
-                    onNavigateToMain = {
-                        // 작성을 시작한 화면(디폴트 or 토픽 상세)으로 돌아가되,
-                        // 새 엔트리로 다시 올려 목록을 갱신한다.
-                        val originTopicId = navController.previousBackStackEntry
-                            ?.takeIf { entry -> entry.destination.hasRoute<SopletterMain>() }
-                            ?.toRoute<SopletterMain>()
-                            ?.topicId
-                        navController.popBackStackToMainList()
-                        if (originTopicId == null) {
-                            navController.popBackStack()
-                        }
-                        navController.navigateToSopletterMain(topicId = originTopicId)
+                    onNavigateToMain = { topicId ->
+                        // 주제 목록까지 돌아간 뒤, 작성한 주제의 메인을 새 엔트리로 올려 목록을 갱신한다.
+                        navController.popBackStackToTopicList()
+                        navController.navigateToSopletterMain(topicId = topicId)
                     },
                 )
             }

@@ -191,6 +191,12 @@ fun MainScreen(
         intent?.getBooleanExtra("isSoptLogDeepLink", false) == true
     }
 
+    // sopletter 검사 로직
+    val shouldNavigateToSopletter = remember(intentState) {
+        val intent = intentState
+        intent?.getBooleanExtra("isSopletterDeepLink", false) == true
+    }
+
     // poke 검사 로직
     val shouldNavigateToPoke = remember(intentState) {
         val intent = intentState
@@ -214,7 +220,8 @@ fun MainScreen(
         shouldNavigateToPokeNotification,
         shouldNavigatePokeFriendList,
         shouldNavigateToMyPage,
-        shouldNavigateToSoptLog
+        shouldNavigateToSoptLog,
+        shouldNavigateToSopletter
     ) {
         if (shouldNavigateToSoptamp()) {
             navigator.navigateAndClear(MainTab.Soptamp, userStatus)
@@ -235,6 +242,22 @@ fun MainScreen(
             navigator.navigate(MainTab.MyPage, userStatus)
             navigator.navController.navigate(SoptLog)
             activity?.intent?.putExtra("isSoptLogDeepLink", false)
+        }
+
+        if (shouldNavigateToSopletter) {
+            val sopletterIntent = activity?.intent
+            val topicId = sopletterIntent
+                ?.getLongExtra("sopletterTopicId", -1L)
+                ?.takeIf { it > 0L }
+            val messageId = sopletterIntent
+                ?.getLongExtra("sopletterMessageId", -1L)
+                ?.takeIf { it > 0L }
+
+            navigator.navController.navigateToSopletter(
+                topicId = topicId,
+                messageId = messageId,
+            )
+            sopletterIntent?.putExtra("isSopletterDeepLink", false)
         }
 
         if (shouldNavigateToPoke) {
@@ -398,7 +421,7 @@ fun MainScreen(
                                 )
                             }
                         },
-                        navigateToSopletter = navigator.navController::navigateToSopletter
+                        navigateToSopletter = { navigator.navController.navigateToSopletter() }
                     )
 
                     soptampNavGraph(

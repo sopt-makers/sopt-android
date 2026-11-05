@@ -28,7 +28,6 @@ import javax.inject.Inject
 import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.sopletter.datasource.SopletterDataSource
 import org.sopt.official.data.sopletter.mapper.toDomain
-import org.sopt.official.domain.sopletter.model.SopletterCta
 import org.sopt.official.domain.sopletter.model.SopletterMessages
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterTopic
@@ -37,16 +36,6 @@ import org.sopt.official.domain.sopletter.repository.SopletterRepository
 internal class SopletterRepositoryImpl @Inject constructor(
     private val sopletterDataSource: SopletterDataSource,
 ) : SopletterRepository {
-    override suspend fun getDefaultMessages(
-        cursor: Long?,
-        size: Int,
-    ): Result<SopletterMessages> = suspendRunCatching {
-        sopletterDataSource.getDefaultMessages(
-            cursor = cursor,
-            size = size,
-        ).toDomain()
-    }
-
     override suspend fun getTopicMessages(
         topicId: Long,
         cursor: Long?,
@@ -115,11 +104,9 @@ internal class SopletterRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getTopics(): Result<List<SopletterTopic>> = suspendRunCatching {
-        sopletterDataSource.getTopics(type = SopletterRepository.TOPIC_TYPE_NORMAL).toDomain()
-    }
-
-    override suspend fun getCta(): Result<SopletterCta> = suspendRunCatching {
-        sopletterDataSource.getCta().toDomain()
+    override suspend fun getTopics(
+        type: String?,
+    ): Result<List<SopletterTopic>> = suspendRunCatching {
+        sopletterDataSource.getTopics(type = type).toDomain()
     }
 }

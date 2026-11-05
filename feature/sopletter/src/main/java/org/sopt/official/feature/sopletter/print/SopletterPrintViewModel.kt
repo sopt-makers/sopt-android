@@ -62,7 +62,7 @@ class SopletterPrintViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<SopletterPrintSideEffect>()
     val sideEffect: SharedFlow<SopletterPrintSideEffect> = _sideEffect.asSharedFlow()
 
-    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterPrint>().topicId
+    private val currentTopicId: Long = savedStateHandle.toRoute<SopletterPrint>().topicId
 
     private var pdfWriter: PdfHelper.ProgressiveWriter? = null
 
@@ -70,14 +70,8 @@ class SopletterPrintViewModel @Inject constructor(
         fetchPreviewMessages()
     }
 
-    private suspend fun fetchMessages(size: Int): Result<SopletterMessages> {
-        val topicId = currentTopicId
-        return if (topicId != null) {
-            sopletterRepository.getTopicMessages(topicId = topicId, cursor = null, size = size)
-        } else {
-            sopletterRepository.getDefaultMessages(cursor = null, size = size)
-        }
-    }
+    private suspend fun fetchMessages(size: Int): Result<SopletterMessages> =
+        sopletterRepository.getTopicMessages(topicId = currentTopicId, cursor = null, size = size)
 
     private fun fetchPreviewMessages() {
         viewModelScope.launch {

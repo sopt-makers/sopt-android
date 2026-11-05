@@ -22,79 +22,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.sopletter.main.component
+package org.sopt.official.feature.sopletter.write.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
-import org.sopt.official.designsystem.SoptTheme
-import org.sopt.official.designsystem.White
-import org.sopt.official.sopletter.R
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
-internal fun SopletterTopicCta(
-    text: String,
+internal fun SopletterTopicSelectField(
+    selectedTopicTitle: String?,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
+    Text(
+        text = selectedTopicTitle ?: "주제를 선택해 주세요.",
+        style = SoptTheme.typography.body1,
+        color = if (selectedTopicTitle != null) SoptTheme.colors.fg.neutral.bold else SoptTheme.colors.fg.neutral.subtle,
         modifier = modifier
             .fillMaxWidth()
             .background(
-                color = SoptTheme.colors.onSurface800,
-                shape = RoundedCornerShape(12.dp),
+                color = SoptTheme.colors.bg.neutral.ghost,
+                shape = RoundedCornerShape(SoptTheme.radius.r12),
             )
             .noRippleClickable(onClick = onClick)
-            .padding(horizontal = 10.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Image(
-            painter = painterResource(R.drawable.img_sopletter_logo),
-            contentDescription = null,
-            modifier = Modifier.size(40.dp),
-        )
-
-        Text(
-            text = text,
-            style = SoptTheme.typography.body16R,
-            color = White,
-        )
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.icon_chevron_right),
-            contentDescription = null,
-            tint = Color.Unspecified,
-        )
-    }
+            .padding(
+                horizontal = SoptTheme.spacing.s20,
+                vertical = SoptTheme.spacing.s10,
+            ),
+    )
 }
 
 @Preview
 @Composable
-private fun SopletterTopicCtaPreview() {
+private fun SopletterTopicSelectFieldPreview() {
     SoptTheme {
-        SopletterTopicCta(
-            text = "이번 기수 회고하러 가볼까요?",
+        SopletterTopicSelectField(
+            selectedTopicTitle = null,
             onClick = {},
         )
     }

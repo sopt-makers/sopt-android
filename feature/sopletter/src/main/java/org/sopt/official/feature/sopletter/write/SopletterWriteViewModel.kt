@@ -29,6 +29,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -38,6 +39,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.onboarding.repository.SopletterOnboardingRepository
+import org.sopt.official.domain.sopletter.repository.SopletterRepository
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
@@ -50,19 +52,21 @@ import javax.inject.Inject
 class SopletterWriteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterWriteRepository: SopletterWriteRepository,
-    private val sopletterOnboardingRepository: SopletterOnboardingRepository
+    private val sopletterOnboardingRepository: SopletterOnboardingRepository,
+    private val sopletterRepository: SopletterRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SopletterWriteUiState())
+    private val _uiState = MutableStateFlow(
+        SopletterWriteUiState(selectedTopicId = savedStateHandle.toRoute<SopletterWrite>().topicId),
+    )
     val uiState: StateFlow<SopletterWriteUiState> = _uiState.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SopletterWriteSideEffect>()
     val sideEffect: SharedFlow<SopletterWriteSideEffect> = _sideEffect.asSharedFlow()
 
-    private val currentTopicId: Long? = savedStateHandle.toRoute<SopletterWrite>().topicId
-
     init {
         fetchWriterProfile()
+        fetchTopics()
     }
 
     private fun fetchWriterProfile() {
@@ -77,6 +81,23 @@ class SopletterWriteViewModel @Inject constructor(
         }
     }
 
+    private fun fetchTopics() {
+        viewModelScope.launch {
+            sopletterRepository.getTopics(type = null)
+                .onSuccess { topics ->
+                    _uiState.update { it.copy(topics = topics.toPersistentList()) }
+                }
+                .onFailure {
+                    Timber.e(it)
+                    _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "일시적인 오류가 발생했어요.", type = SopletterSnackbarType.FAILURE))
+                }
+        }
+    }
+
+    fun selectTopic(topicId: Long) {
+        _uiState.update { it.copy(selectedTopicId = topicId) }
+    }
+
     fun postSopletter(content: String) {
         if (_uiState.value.isLoading) return
 
@@ -84,7 +105,7 @@ class SopletterWriteViewModel @Inject constructor(
             _uiState.update { it.copy(isLoading = true, isError = false) }
 
             sopletterWriteRepository.postSopletter(
-                topicId = currentTopicId,
+                topicId = _uiState.value.selectedTopicId,
                 content = content
             ).onSuccess { response ->
                 _uiState.update {
@@ -94,7 +115,9 @@ class SopletterWriteViewModel @Inject constructor(
                     )
                 }
                 _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "메세지 작성을 완료했어요.", type = SopletterSnackbarType.SUCCESS))
-                _sideEffect.emit(SopletterWriteSideEffect.NavigateToMain)
+                _uiState.value.selectedTopicId?.let { topicId ->
+                    _sideEffect.emit(SopletterWriteSideEffect.NavigateToMain(topicId = topicId))
+                }
 
             }.onFailure { _ ->
                 _uiState.update { it.copy(isLoading = false, isError = true) }

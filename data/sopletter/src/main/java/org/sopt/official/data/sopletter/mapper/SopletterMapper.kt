@@ -23,7 +23,6 @@
  * SOFTWARE.
  */
 package org.sopt.official.data.sopletter.mapper
-import org.sopt.official.data.sopletter.dto.response.SopletterCtaResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessagesResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDetailResponseDto
 import org.sopt.official.data.sopletter.dto.response.SopletterMessageDto
@@ -34,7 +33,6 @@ import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.model.SopletterShapeType
 import org.sopt.official.domain.sopletter.model.SopletterTopic
-import org.sopt.official.domain.sopletter.model.SopletterCta
 
 internal fun SopletterTopicsResponseDto.toDomain(): List<SopletterTopic> = topics.map(SopletterTopicDto::toDomain)
 
@@ -44,7 +42,6 @@ internal fun SopletterMessagesResponseDto.toDomain(): SopletterMessages = Soplet
     totalCount = totalCount,
     nextCursor = nextCursor,
     hasNext = hasNext,
-    hasNormalTopic = hasNormalTopic,
     messages = messages.map(SopletterMessageDto::toDomain),
 )
 
@@ -61,6 +58,7 @@ internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetai
     topicId = topicId,
     authorNickname = authorNickname,
     content = content,
+    colorCode = colorCode,
     createdAt = createdAt,
     likeCount = likeCount,
     likedByMe = likedByMe,
@@ -70,10 +68,8 @@ internal fun SopletterMessageDetailResponseDto.toDomain(): SopletterMessageDetai
 internal fun SopletterTopicDto.toDomain(): SopletterTopic = SopletterTopic(
     topicId = topicId,
     title = title,
-)
-
-internal fun SopletterCtaResponseDto.toDomain(): SopletterCta = SopletterCta(
-    showCta = showCta,
-    topicId = topicId,
-    ctaText = ctaText,
+    subtitle = subtitle,
+    isNew = isNew,
+    isHot = isHot,
+    unreadCount = unreadCount,
 )
