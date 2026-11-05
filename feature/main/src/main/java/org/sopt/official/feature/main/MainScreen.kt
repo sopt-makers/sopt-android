@@ -40,22 +40,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BadgedBox
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -67,17 +64,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -90,7 +84,6 @@ import org.sopt.official.analytics.trackViewType
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorProvider
 import org.sopt.official.common.view.toast
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.appjamtamp.navigation.appjamtampNavGraph
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeAppServicesNavigation
 import org.sopt.official.feature.home.navigation.HomeNavigation.HomeDashboardNavigation
@@ -113,6 +106,10 @@ import org.sopt.official.feature.sopletter.navigation.sopletterGraph
 import org.sopt.official.feature.soptlog.navigation.SoptLog
 import org.sopt.official.feature.soptlog.navigation.SoptLogNavigation
 import org.sopt.official.feature.soptlog.navigation.soptLogNavGraph
+import org.sopt.official.mds.MdsIcons
+import org.sopt.official.mds.components.dialog.MdsDialog
+import org.sopt.official.mds.components.dialog.MdsDialogType
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 import org.sopt.official.stamp.feature.navigation.soptampNavGraph
@@ -136,6 +133,7 @@ fun MainScreen(
     fun getWebViewIntent(url: String) = Intent(context, WebViewActivity::class.java).apply {
         putExtra(INTENT_URL, url)
     }
+
     var isOpenDialog by remember { mutableStateOf(false) }
     var isFloatingMenuOpen by remember { mutableStateOf(false) }
     val visibleTabs by viewModel.mainTabs.collectAsStateWithLifecycle()
@@ -291,7 +289,7 @@ fun MainScreen(
     Scaffold(
         modifier = Modifier
             .navigationBarsPadding(),
-        containerColor = SoptTheme.colors.background,
+        containerColor = SoptTheme.colors.bg.layer.basement,
         bottomBar = {
             SoptBottomBar(
                 visible = navigator.shouldShowBottomBar(),
@@ -536,94 +534,24 @@ fun MainScreen(
 }
 
 @Composable
-fun UnauthenticatedDialog(
+private fun UnauthenticatedDialog(
     onDismissRequest: () -> Unit,
     onLogin: () -> Unit,
 ) {
-    Dialog(
-        onDismissRequest = onDismissRequest
-    ) {
-        Card(
-            shape = RoundedCornerShape(20.dp),
-            colors = CardDefaults.cardColors(
-                containerColor = SoptTheme.colors.onSurface800
-            ),
-        ) {
-            Column(
-                modifier = Modifier.padding(20.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.End
-            ) {
-                Text(
-                    text = "로그인이 필요해요",
-                    style = SoptTheme.typography.title18SB,
-                    color = SoptTheme.colors.onSurface10,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "솝트로그는 로그인을 해야만 사용할 수 있어요.\n" + "솝트 회원이라면 로그인해주세요.",
-                    style = SoptTheme.typography.body14R,
-                    color = SoptTheme.colors.onSurface100,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.fillMaxWidth()
-                )
-
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row {
-                    SoptButton(
-                        title = "닫기",
-                        onClick = onDismissRequest,
-                        containerColor = SoptTheme.colors.onSurface600,
-                        textColor = SoptTheme.colors.primary,
-                        modifier = Modifier.weight(1f)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    SoptButton(
-                        title = "로그인",
-                        onClick = onLogin,
-                        containerColor = SoptTheme.colors.primary,
-                        textColor = SoptTheme.colors.onPrimary,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            }
-        }
-    }
+    MdsDialog(
+        title = "로그인이 필요해요",
+        onDismiss = onDismissRequest,
+        positiveButtonText = "로그인",
+        description = "해당 기능은 로그인 후 이용할 수 있어요.\n로그인하고 SOPT 앱의 다양한 기능을 이용해 보세요!",
+        type = MdsDialogType.DEFAULT,
+        negativeButtonText = "닫기",
+        onNegativeButtonClick = onDismissRequest,
+        onPositiveButtonClick = onLogin
+    )
 }
 
 @Composable
-fun SoptButton(
-    title: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    containerColor: Color = SoptTheme.colors.onSurface800,
-    textColor: Color = SoptTheme.colors.primary,
-) {
-    Box(
-        modifier = modifier
-            .clip(RoundedCornerShape(12.dp))
-            .background(containerColor)
-            .padding(horizontal = 20.dp, vertical = 12.dp)
-            .clickable(onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = title,
-            style = SoptTheme.typography.label16SB,
-            color = textColor,
-        )
-    }
-}
-
-@Composable
-fun SoptBottomBar(
+private fun SoptBottomBar(
     visible: Boolean,
     tabs: ImmutableList<MainTab>,
     showBadgeContent: Map<MainTab, String?>,
@@ -645,12 +573,13 @@ fun SoptBottomBar(
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .background(color = SoptTheme.colors.onSurface800),
+                .background(color = SoptTheme.colors.bg.neutral.ghost),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             tabs.forEach { tab ->
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
                     modifier = Modifier
                         .padding(top = 10.dp, bottom = 18.dp, start = 8.dp)
                         .weight(1f)
@@ -673,35 +602,35 @@ fun SoptBottomBar(
                             imageVector = ImageVector.vectorResource(tab.icon),
                             contentDescription = tab.contentDescription,
                             tint = if (tab == currentTab) {
-                                SoptTheme.colors.primary
+                                SoptTheme.colors.fg.neutral.bold
                             } else {
-                                SoptTheme.colors.onSurface500
+                                SoptTheme.colors.fg.neutral.ghost
                             },
-                            modifier = Modifier
-                                .size(24.dp)
+                            modifier = Modifier.size(24.dp)
                         )
                     }
+
                     Text(
                         text = tab.contentDescription,
-                        style = SoptTheme.typography.body10M,
+                        style = SoptTheme.typography.body3.copy(fontSize = 10.sp),
                         color = if (tab == currentTab) {
-                            SoptTheme.colors.primary
+                            SoptTheme.colors.fg.neutral.bold
                         } else {
-                            SoptTheme.colors.onSurface500
-                        },
-                        modifier = Modifier
-                            .padding(top = 2.dp)
+                            SoptTheme.colors.fg.neutral.ghost
+                        }
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.then(
-                if (tabs.size > 3) {
-                    Modifier.width(20.dp)
-                } else {
-                    Modifier.width(42.dp)
-                }
-            ))
+            Spacer(
+                modifier = Modifier.then(
+                    if (tabs.size > 3) {
+                        Modifier.width(20.dp)
+                    } else {
+                        Modifier.width(42.dp)
+                    }
+                )
+            )
 
             Box(
                 modifier = Modifier
@@ -712,16 +641,18 @@ fun SoptBottomBar(
                     modifier = Modifier
                         .size(48.dp)
                         .background(
-                            color = SoptTheme.colors.primary,
+                            color = SoptTheme.colors.bg.neutral.inverse,
                             shape = RoundedCornerShape(18.dp)
                         )
                         .clickable(onClick = onMenuToggle),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_close_28),
+                        imageVector = ImageVector.vectorResource(MdsIcons.xCloseOutlined),
                         contentDescription = null,
-                        modifier = Modifier.rotate(rotation)
+                        modifier = Modifier
+                            .size(28.dp)
+                            .rotate(rotation)
                     )
                 }
             }
@@ -730,7 +661,7 @@ fun SoptBottomBar(
 }
 
 @Composable
-fun SlideUpDownWithFadeAnimatedVisibility(
+private fun SlideUpDownWithFadeAnimatedVisibility(
     visible: Boolean,
     content: @Composable AnimatedVisibilityScope.() -> Unit,
 ) {

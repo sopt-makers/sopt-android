@@ -35,8 +35,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,7 +49,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -62,8 +59,8 @@ import androidx.compose.ui.unit.dp
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import org.sopt.official.common.util.noRippleClickable
-import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.feature.main.model.PlaygroundWebLink
+import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.webview.view.WebViewActivity.Companion.INTENT_URL
 
@@ -109,7 +106,7 @@ internal fun MainFloatingMenuOverlay(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(SoptTheme.colors.onSurface.copy(alpha = backgroundAlpha))
+                    .background(SoptTheme.colors.bg.layer.basement.copy(alpha = backgroundAlpha))
                     .noRippleClickable(onClick = onClose)
             )
 
@@ -155,7 +152,7 @@ private fun FloatingMenuItem(
         verticalArrangement = Arrangement.spacedBy(10.dp),
         modifier = Modifier
             .background(
-                color = SoptTheme.colors.primary,
+                color = SoptTheme.colors.bg.neutral.inverse,
                 shape = RoundedCornerShape(16.dp)
             )
             .width(162.dp)
@@ -164,17 +161,14 @@ private fun FloatingMenuItem(
     ) {
         Text(
             text = title,
-            style = SoptTheme.typography.body13M,
-            color = SoptTheme.colors.onSurface950
+            style = SoptTheme.typography.body3,
+            color = SoptTheme.colors.fg.neutral.inverse
         )
         menuList.forEach { (icon, text, weblink) ->
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
-                    ) {
+                    .noRippleClickable {
                         context.startActivity(getIntent(weblink, context))
                     }
             ) {
@@ -185,8 +179,8 @@ private fun FloatingMenuItem(
                 )
                 Text(
                     text = text,
-                    style = SoptTheme.typography.body14M,
-                    color = SoptTheme.colors.onSurface950,
+                    style = SoptTheme.typography.body2,
+                    color = SoptTheme.colors.fg.neutral.inverse,
                     modifier = Modifier
                         .padding(6.dp)
                         .fillMaxWidth()
