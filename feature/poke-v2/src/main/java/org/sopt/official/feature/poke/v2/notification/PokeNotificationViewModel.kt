@@ -173,12 +173,12 @@ class PokeNotificationViewModel @Inject constructor(
                     }
                 }.onApiError { statusCode, message ->
                     Timber.e("statusCode: $statusCode, message: $message")
-                    closeBottomSheet()
                     _sideEffect.emit(PokeNotificationSideEffect.ShowErrorSnackbar(message))
+                    closeBottomSheet()
                 }.onFailure { throwable ->
                     Timber.e(throwable)
-                    closeBottomSheet()
                     _sideEffect.emit(PokeNotificationSideEffect.ShowErrorSnackbar("문제가 발생했어요"))
+                    closeBottomSheet()
                 }
         }
     }
@@ -204,7 +204,14 @@ class PokeNotificationViewModel @Inject constructor(
         when {
             pokeResult.isPlainPoke -> _sideEffect.emit(PokeNotificationSideEffect.ShowSuccessSnackbar("콕 찌르기를 완료했어요."))
             pokeResult.becameFriend -> _sideEffect.emit(PokeNotificationSideEffect.ShowLottie(PokeRelationChangeState.Friend(pokeResult.user)))
-            pokeResult.becameBestFriend -> _sideEffect.emit(PokeNotificationSideEffect.ShowLottie(PokeRelationChangeState.BestFriend(pokeResult.user)))
+            pokeResult.becameBestFriend -> _sideEffect.emit(
+                PokeNotificationSideEffect.ShowLottie(
+                    PokeRelationChangeState.BestFriend(
+                        pokeResult.user
+                    )
+                )
+            )
+
             pokeResult.becameSoulmate -> _sideEffect.emit(PokeNotificationSideEffect.ShowLottie(PokeRelationChangeState.Soulmate(pokeResult.user)))
         }
     }
