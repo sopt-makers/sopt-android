@@ -60,6 +60,7 @@ import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import org.sopt.official.common.util.throttledNoRippleClickable
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageUiState
 import org.sopt.official.mds.components.control.checkbox.MdsCheckbox
 import org.sopt.official.mds.components.control.checkbox.MdsCheckboxSize
@@ -221,9 +222,7 @@ private fun PokeMessageItem(
             .fillMaxWidth()
             .clip(RoundedCornerShape(SoptTheme.radius.r6))
             .background(backgroundColor)
-            .clickable(
-                interactionSource = interactionSource,
-                indication = null,
+            .throttledNoRippleClickable(
                 onClick = onClick,
             )
             .padding(horizontal = SoptTheme.spacing.s8, vertical = SoptTheme.spacing.s12),
