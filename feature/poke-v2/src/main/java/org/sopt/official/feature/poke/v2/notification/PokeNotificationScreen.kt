@@ -123,7 +123,7 @@ fun PokeNotificationRoute(
             title = uiState.header,
             messages = uiState.pokeMessages,
             isAnonymous = uiState.isAnonymous,
-            isAnonymousCheckboxLocked = false,
+            isAnonymousCheckboxLocked = uiState.target?.isAnonymousCheckboxLocked ?: false,
             onMessageClick = viewModel::onMessageClick,
             onDismissRequest = viewModel::closeBottomSheet,
             onAnonymousCheckboxClick = viewModel::toggleAnonymous
@@ -132,23 +132,14 @@ fun PokeNotificationRoute(
 
     val currentLottie = lottieState
     currentLottie?.let {
-        when (currentLottie) {
-            is PokeRelationChangeState.Soulmate -> {
-                PokeRelationChangeOverlay(
-                    relationChange = currentLottie,
-                    onRelationChangeLottieEnd = { lottieState = PokeRelationChangeState.SoulmateRevealed(currentLottie.user) },
-                    onSoulmateRevealEnd = { lottieState = null },
-                )
-            }
-
-            else -> {
-                PokeRelationChangeOverlay(
-                    relationChange = currentLottie,
-                    onRelationChangeLottieEnd = { lottieState = null },
-                    onSoulmateRevealEnd = { }
-                )
-            }
-        }
+        PokeRelationChangeOverlay(
+            relationChange = currentLottie,
+            onRelationChangeLottieEnd = {
+                lottieState =
+                    if (currentLottie is PokeRelationChangeState.Soulmate) PokeRelationChangeState.SoulmateRevealed(currentLottie.user) else null
+            },
+            onSoulmateRevealEnd = { lottieState = null },
+        )
     }
 }
 
@@ -167,7 +158,7 @@ private fun PokeNotificationScreen(
         onRefresh = {
             onRefresh()
             notifications.refresh()
-        },
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize()
@@ -197,8 +188,7 @@ private fun PokeNotificationScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(
-                    count = notifications.itemCount,
-                    key = { index -> notifications[index]?.user?.userId ?: index }
+                    count = notifications.itemCount
                 ) { index ->
                     val notification = notifications[index]
 
