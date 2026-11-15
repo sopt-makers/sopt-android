@@ -41,7 +41,6 @@ import org.sopt.official.domain.poke.entity.GetPokeMessageListResponse
 import org.sopt.official.domain.poke.entity.GetPokeNotificationListResponse
 import org.sopt.official.domain.poke.entity.PokeUserResponse
 import javax.inject.Inject
-import org.sopt.official.domain.poke.entity.PokeUser
 
 class PokeRemoteDataSource @Inject constructor(
     private val service: PokeService,
