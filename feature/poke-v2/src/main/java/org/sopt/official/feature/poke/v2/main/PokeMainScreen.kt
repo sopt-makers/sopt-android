@@ -200,7 +200,7 @@ private fun PokeMainScreen(
                         )
 
                         PokeProfileCard(
-                            user = recommendation.users[0],
+                            user = recommendation.users[1],
                             onProfileClick = onProfileClick,
                             onPokeClick = onPokeClick
                         )

@@ -49,7 +49,6 @@ import org.sopt.official.domain.poke.usecase.GetPokeFriendUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeMeUseCase
 import org.sopt.official.domain.poke.usecase.GetPokeMessageListUseCase
 import org.sopt.official.domain.poke.usecase.PokeUserUseCase
-import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import org.sopt.official.feature.poke.v2.main.model.PokeMainSideEffect
 import org.sopt.official.feature.poke.v2.main.model.PokeMainUiState
 import org.sopt.official.feature.poke.v2.main.model.PokeMessageRowUiState
@@ -61,6 +60,7 @@ import org.sopt.official.feature.poke.v2.main.model.toPokeMessageUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeRecommendationUiStates
 import org.sopt.official.feature.poke.v2.main.model.toPokeResultUiState
 import org.sopt.official.feature.poke.v2.main.model.toPokeUserUiState
+import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
 import timber.log.Timber
 
 /**
@@ -134,7 +134,9 @@ class PokeMainViewModel @Inject constructor(
                 _uiState.update { it.copy(recommendations = list.toPokeRecommendationUiStates()) }
             }.onApiError { statusCode, message ->
                 Timber.e("statusCode: $statusCode, message: $message")
+                _sideEffect.emit(PokeMainSideEffect.ShowError(message))
             }.onFailure { throwable ->
+                Timber.e(throwable)
                 _sideEffect.emit(PokeMainSideEffect.ShowError("문제가 발생했어요"))
             }
     }
@@ -249,7 +251,7 @@ class PokeMainViewModel @Inject constructor(
                 }.onApiError { statusCode, message ->
                     Timber.e("statusCode: $statusCode, message: $message")
                     closeBottomSheet()
-                    _sideEffect.emit(PokeMainSideEffect.ShowSuccess(message))
+                    _sideEffect.emit(PokeMainSideEffect.ShowError(message))
                 }.onFailure { throwable ->
                     Timber.e(throwable)
                     closeBottomSheet()
