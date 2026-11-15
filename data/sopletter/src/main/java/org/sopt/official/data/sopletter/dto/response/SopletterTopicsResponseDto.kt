@@ -39,4 +39,12 @@ data class SopletterTopicDto(
     val topicId: Long,
     @SerialName("title")
     val title: String,
+    @SerialName("subtitle")
+    val subtitle: String? = null,
+    @SerialName("isNew")
+    val isNew: Boolean = false,
+    @SerialName("isHot")
+    val isHot: Boolean = false,
+    @SerialName("unreadCount")
+    val unreadCount: Int,
 )

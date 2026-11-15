@@ -42,17 +42,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.sopt.official.common.util.noRippleClickable
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.mds.MdsIcons
 import org.sopt.official.sopletter.R
 
 @Composable
 internal fun SopletterMainTopBar(
     title: String,
-    isTopicDetail: Boolean,
     isDownloadBtnVisible: Boolean,
     onBackClick: () -> Unit,
     onDownloadClick: () -> Unit,
     onReportClick: () -> Unit,
-    onTopicClick: (() -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -71,13 +70,11 @@ internal fun SopletterMainTopBar(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(
-                    if (isTopicDetail) R.drawable.icon_chevron_left else R.drawable.ic_close_32,
-                ),
+                imageVector = ImageVector.vectorResource(MdsIcons.xCloseOutlined),
                 contentDescription = null,
                 tint = Color.Unspecified,
                 modifier = Modifier
-                    .size(32.dp)
+                    .size(24.dp)
                     .noRippleClickable(onClick = onBackClick),
             )
 
@@ -114,17 +111,6 @@ internal fun SopletterMainTopBar(
                     .size(32.dp)
                     .noRippleClickable(onClick = onReportClick),
             )
-
-            if (onTopicClick != null) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_topic_32),
-                    contentDescription = null,
-                    tint = Color.Unspecified,
-                    modifier = Modifier
-                        .size(32.dp)
-                        .noRippleClickable(onClick = onTopicClick),
-                )
-            }
         }
     }
 }
@@ -135,12 +121,10 @@ private fun SopletterMainTopBarPreview() {
     SoptTheme {
         SopletterMainTopBar(
             title = "38기 솝레터",
-            isTopicDetail = false,
             isDownloadBtnVisible = true,
             onBackClick = {},
             onDownloadClick = {},
             onReportClick = {},
-            onTopicClick = {},
         )
     }
 }

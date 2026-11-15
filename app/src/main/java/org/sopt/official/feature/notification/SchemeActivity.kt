@@ -94,6 +94,9 @@ class SchemeActivity : AppCompatActivity() {
                                 NotificationAnalyticsPropertyKey.NOTIFICATION_LAUNCH_TYPE,
                                 launchType.value,
                             )
+                            args?.link.toNotificationProductType()?.let {
+                                put(NotificationAnalyticsPropertyKey.NOTIFICATION_PRODUCT_TYPE, it)
+                            }
                         },
                     )
                 }.onFailure { exception ->

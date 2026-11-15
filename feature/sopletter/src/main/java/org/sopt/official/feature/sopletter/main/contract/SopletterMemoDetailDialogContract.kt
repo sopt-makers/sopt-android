@@ -29,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import org.sopt.official.domain.sopletter.model.SopletterMessageDetail
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract.State
 import org.sopt.official.feature.sopletter.main.model.formatCreatedAt
+import org.sopt.official.feature.sopletter.main.model.toMemoColor
 
 internal const val SOPLETTER_MEMO_MAX_LENGTH = 350
 
@@ -59,10 +60,10 @@ interface SopletterMemoDetailDialogContract {
     }
 }
 
-internal fun SopletterMessageDetail.toMemoDetailDialogState(memoColor: Color): State =
+internal fun SopletterMessageDetail.toMemoDetailDialogState(): State =
     State(
         memoId = messageId,
-        memoColor = memoColor,
+        memoColor = colorCode.toMemoColor(),
         writerName = authorNickname,
         isMine = mine,
         isLiked = likedByMe,

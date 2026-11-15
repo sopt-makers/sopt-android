@@ -29,6 +29,7 @@ data class SopletterMessageDetail(
     val topicId: Long?,
     val authorNickname: String,
     val content: String,
+    val colorCode: String? = null,
     val createdAt: String,
     val likeCount: Int,
     val likedByMe: Boolean,

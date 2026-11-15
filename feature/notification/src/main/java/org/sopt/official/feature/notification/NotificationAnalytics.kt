@@ -26,6 +26,7 @@ package org.sopt.official.feature.notification
 
 import org.sopt.official.analytics.AnalyticsEvent
 import org.sopt.official.analytics.EventType
+import org.sopt.official.common.util.extractQueryParameter
 
 enum class NotificationAnalyticsEvent(
     override val type: EventType,
@@ -43,6 +44,7 @@ object NotificationAnalyticsPropertyKey {
     const val NOTIFICATION_ID = "notification_id"
     const val NOTIFICATION_LINK_TYPE = "notification_link_type"
     const val NOTIFICATION_LAUNCH_TYPE = "notification_launch_type"
+    const val NOTIFICATION_PRODUCT_TYPE = "notification_product_type"
 }
 
 enum class NotificationLinkType(
@@ -70,3 +72,11 @@ fun String?.toNotificationLinkType(): NotificationLinkType = when {
     startsWith("http://") || startsWith("https://") -> NotificationLinkType.WEB
     else -> NotificationLinkType.DEEP_LINK
 }
+
+/**
+ * 알림 링크를 Amplitude의 `notification_product_type` 프로퍼티 값으로 변환하는 함수
+ *
+ * @return 링크의 `pushType` 쿼리 값 (예: `soptletter_liked`), 없으면 null
+ */
+fun String?.toNotificationProductType(): String? =
+    this?.extractQueryParameter("pushType")?.takeIf(String::isNotBlank)

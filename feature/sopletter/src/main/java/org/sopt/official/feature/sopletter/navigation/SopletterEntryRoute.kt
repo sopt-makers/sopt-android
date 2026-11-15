@@ -37,7 +37,7 @@ import org.sopt.official.designsystem.SoptTheme
 
 @Composable
 fun SopletterEntryRoute(
-    navigateToMain: () -> Unit,
+    navigateToTopic: () -> Unit,
     navigateToOnboarding: () -> Unit,
     viewModel: SopletterEntryViewModel = hiltViewModel(),
 ) {
@@ -45,7 +45,7 @@ fun SopletterEntryRoute(
 
     LaunchedEffect(isOnboardingCompleted) {
         when (isOnboardingCompleted) {
-            true -> navigateToMain()
+            true -> navigateToTopic()
             false -> navigateToOnboarding()
             null -> Unit
         }
