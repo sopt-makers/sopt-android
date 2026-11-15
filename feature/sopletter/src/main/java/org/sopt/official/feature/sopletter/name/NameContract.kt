@@ -34,5 +34,5 @@ data class NameState(
 )
 
 sealed interface NameSideEffect {
-    data object NavigateToSopletterMain : NameSideEffect
+    data object NavigateToSopletterTopic : NameSideEffect
 }

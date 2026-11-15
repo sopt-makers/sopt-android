@@ -127,7 +127,7 @@ internal fun SopletterSnackbarHost(
 }
 
 @Composable
-private fun SopletterSnackBar(
+internal fun SopletterSnackBar(
     sopletterSnackbarType: SopletterSnackbarType,
     message: String,
     modifier: Modifier = Modifier,

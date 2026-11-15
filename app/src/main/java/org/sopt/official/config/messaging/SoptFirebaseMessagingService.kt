@@ -46,6 +46,7 @@ import org.sopt.official.feature.notification.NotificationAnalyticsEvent
 import org.sopt.official.feature.notification.NotificationAnalyticsPropertyKey
 import org.sopt.official.feature.notification.SchemeActivity
 import org.sopt.official.feature.notification.toNotificationLinkType
+import org.sopt.official.feature.notification.toNotificationProductType
 import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.model.toViewType
 import timber.log.Timber
@@ -101,6 +102,9 @@ class SoptFirebaseMessagingService : LifecycleAwareFirebaseMessagingService() {
                             NotificationAnalyticsPropertyKey.NOTIFICATION_LINK_TYPE,
                             link.toNotificationLinkType().value,
                         )
+                        link.toNotificationProductType()?.let {
+                            put(NotificationAnalyticsPropertyKey.NOTIFICATION_PRODUCT_TYPE, it)
+                        }
                     },
                 )
             }.onFailure { exception ->

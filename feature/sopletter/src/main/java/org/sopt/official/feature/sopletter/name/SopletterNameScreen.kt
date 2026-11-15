@@ -53,7 +53,7 @@ import org.sopt.official.sopletter.R
 @Composable
 fun SopletterNameRoute(
     viewType: String,
-    navigateToSopletterMain: () -> Unit,
+    navigateToSopletterTopic: () -> Unit,
     navigateToHome: () -> Unit,
     viewModel: SopletterNameViewModel = hiltViewModel()
 ) {
@@ -66,7 +66,7 @@ fun SopletterNameRoute(
         lifeCycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    NameSideEffect.NavigateToSopletterMain -> navigateToSopletterMain()
+                    NameSideEffect.NavigateToSopletterTopic -> navigateToSopletterTopic()
                 }
             }
         }
@@ -74,9 +74,9 @@ fun SopletterNameRoute(
 
     SopletterNameScreen(
         state = state,
-        navigateToSopletterMain = {
+        navigateToSopletterTopic = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_START_BUTTON, viewType)
-            navigateToSopletterMain()
+            navigateToSopletterTopic()
         },
         navigateToHome = navigateToHome,
     )
@@ -85,7 +85,7 @@ fun SopletterNameRoute(
 @Composable
 private fun SopletterNameScreen(
     state: NameState,
-    navigateToSopletterMain: () -> Unit = {},
+    navigateToSopletterTopic: () -> Unit = {},
     navigateToHome: () -> Unit = {}
 ) {
     Column(
@@ -112,7 +112,7 @@ private fun SopletterNameScreen(
 
         SopletterButton(
             buttonText = "${state.generation}기 솝레터 바로가기",
-            onClick = navigateToSopletterMain,
+            onClick = navigateToSopletterTopic,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
@@ -132,7 +132,7 @@ private fun SopletterNameScreenPreview() {
                 name = "익명의 김솝트",
                 generation = 38
             ),
-            navigateToSopletterMain = {}
+            navigateToSopletterTopic = {}
         )
     }
 }

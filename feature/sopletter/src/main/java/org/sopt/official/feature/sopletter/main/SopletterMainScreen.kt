@@ -36,7 +36,6 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material.ExperimentalMaterialApi
@@ -71,14 +70,13 @@ import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
 import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
+import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.analytics.TrackedSopletterMemoDetailDialogActions
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
 import org.sopt.official.feature.sopletter.main.component.SopletterMainTopBar
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoCard
 import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDialog
-import org.sopt.official.feature.sopletter.main.component.SopletterTopicCta
-import org.sopt.official.feature.sopletter.main.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
@@ -93,10 +91,8 @@ fun SopletterMainRoute(
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
-    navigateToTopic: () -> Unit = {},
-    navigateToTopicDetail: (Long) -> Unit = {},
-    navigateToWrite: (Long?) -> Unit = {},
-    navigateToPrint: (Long?) -> Unit = {},
+    navigateToWrite: (Long) -> Unit = {},
+    navigateToPrint: (Long) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val dialogActions: SopletterMemoDetailDialogContract.Actions = viewModel
@@ -133,20 +129,12 @@ fun SopletterMainRoute(
         uiState = uiState,
         onMemoClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
-            viewModel.fetchMemoDetail(
-                messageId = it.messageId,
-                memoColor = it.memoColor(),
-            )
+            viewModel.fetchMemoDetail(messageId = it.messageId)
         },
         onRefresh = viewModel::refreshMainContent,
         onLoadMore = { viewModel.fetchMessages(isLoadMore = true) },
         dialogActions = trackedDialogActions,
-        onBackClick = {
-            if (uiState.routeTopicId == null) {
-                tracker.trackViewType(SopletterAnalyticsEvent.CLICK_QUIT_SOPTLETTER, viewType)
-            }
-            navigateUp()
-        },
+        onBackClick = navigateUp,
         onDownloadClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_EXPORT_SOPTLETTER, viewType)
             isPrintDialogVisible = true
@@ -155,16 +143,14 @@ fun SopletterMainRoute(
         onPrintDialogDismiss = { isPrintDialogVisible = false },
         onPrintConfirm = {
             isPrintDialogVisible = false
-            navigateToPrint(uiState.selectedTopicId)
+            navigateToPrint(uiState.topicId)
         },
         printDialogTitle = uiState.topicTitle,
-        onTopicClick = navigateToTopic,
-        onTopicCtaClick = navigateToTopicDetail,
         onReportClick = viewModel::openReportForm,
         onErrorConfirm = viewModel::dismissErrorDialog,
         onWriteFABClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
-            navigateToWrite(uiState.selectedTopicId)
+            navigateToWrite(viewModel.routeTopicId)
         },
     )
 }
@@ -184,8 +170,6 @@ private fun SopletterMainScreen(
     onPrintConfirm: () -> Unit,
     printDialogTitle: String,
     onReportClick: () -> Unit,
-    onTopicClick: () -> Unit,
-    onTopicCtaClick: (Long) -> Unit,
     onErrorConfirm: () -> Unit,
     onWriteFABClick: () -> Unit,
     modifier: Modifier = Modifier,
@@ -195,8 +179,6 @@ private fun SopletterMainScreen(
         refreshing = uiState.isMessageRefreshing,
         onRefresh = onRefresh,
     )
-    val isTopicCtaVisible = uiState.routeTopicId == null
-    val cta = uiState.cta
 
     gridState.onBottomReached(
         threshold = 4,
@@ -215,12 +197,10 @@ private fun SopletterMainScreen(
         ) {
             SopletterMainTopBar(
                 title = uiState.topicTitle,
-                isTopicDetail = uiState.routeTopicId != null,
                 isDownloadBtnVisible = uiState.memoList.isNotEmpty(),
                 onBackClick = onBackClick,
                 onDownloadClick = onDownloadClick,
                 onReportClick = onReportClick,
-                onTopicClick = if (uiState.routeTopicId == null && uiState.hasNormalTopic == true) onTopicClick else null,
             )
 
             when {
@@ -245,14 +225,6 @@ private fun SopletterMainScreen(
                         isShowIndicator = uiState.isInitialized,
                     ) {
                         Column(modifier = Modifier.fillMaxSize()) {
-                            if (isTopicCtaVisible && cta != null) {
-                                SopletterTopicCta(
-                                    text = cta.ctaText.orEmpty(),
-                                    onClick = { onTopicCtaClick(cta.topicId ?: return@SopletterTopicCta) },
-                                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                                )
-                            }
-
                             Spacer(modifier = Modifier.weight(86f))
 
                             EmptySopletterContent(
@@ -266,7 +238,7 @@ private fun SopletterMainScreen(
                             onWriteFABClick = onWriteFABClick,
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 20.dp, bottom = 24.dp),
+                                .padding(end = 20.dp, bottom = 28.dp),
                         )
                     }
                 }
@@ -282,16 +254,6 @@ private fun SopletterMainScreen(
                             columns = StaggeredGridCells.Fixed(2),
                             verticalItemSpacing = (-10).dp,
                         ) {
-                            if (isTopicCtaVisible && cta != null) {
-                                item(span = StaggeredGridItemSpan.FullLine) {
-                                    SopletterTopicCta(
-                                        text = cta.ctaText.orEmpty(),
-                                        onClick = { onTopicCtaClick(cta.topicId ?: return@SopletterTopicCta) },
-                                        modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp),
-                                    )
-                                }
-                            }
-
                             itemsIndexed(
                                 items = uiState.memoList,
                                 key = { _, item -> item.messageId },
@@ -310,7 +272,7 @@ private fun SopletterMainScreen(
                             onWriteFABClick = onWriteFABClick,
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(end = 20.dp, bottom = 24.dp),
+                                .padding(end = 20.dp, bottom = 28.dp),
                         )
                     }
                 }
@@ -415,10 +377,8 @@ private fun SopletterMainScreenPreview(
             onPrintConfirm = {},
             printDialogTitle = previewState.topicTitle,
             onReportClick = {},
-            onTopicCtaClick = {},
             onErrorConfirm = {},
             onWriteFABClick = {},
-            onTopicClick = {},
         )
     }
 }
