@@ -1,0 +1,77 @@
+/*
+ * MIT License
+ * Copyright 2026 SOPT - Shout Our Passion Together
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+package org.sopt.official.feature.poke.v2.notification
+
+import androidx.paging.PagingSource
+import androidx.paging.PagingState
+import org.sopt.official.domain.poke.entity.PokeUser
+import org.sopt.official.domain.poke.entity.onApiError
+import org.sopt.official.domain.poke.entity.onFailure
+import org.sopt.official.domain.poke.entity.onSuccess
+import org.sopt.official.domain.poke.usecase.GetPokeNotificationListUseCase
+import timber.log.Timber
+
+class PokeNotificationPagingSource(
+    private val getPokeNotificationListUseCase: GetPokeNotificationListUseCase,
+) : PagingSource<Int, PokeUser>() {
+    override fun getRefreshKey(state: PagingState<Int, PokeUser>): Int? {
+        return state.anchorPosition?.let { anchorPosition ->
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }
+    }
+
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PokeUser> {
+        val page = params.key ?: 0
+
+        val result = getPokeNotificationListUseCase(page)
+
+        var loadResult: LoadResult<Int, PokeUser>? = null
+
+        result.onSuccess { response ->
+            val data = response.history
+            val nextKey = if (data.isEmpty() || page >= response.totalPageSize - 1) {
+                null
+            } else {
+                page + 1
+            }
+            val prevKey = if (page == 0) null else page - 1
+
+            loadResult = LoadResult.Page(
+                data = data,
+                prevKey = prevKey,
+                nextKey = nextKey
+            )
+        }.onApiError { statusCode, message ->
+            Timber.e("statusCode: $statusCode, message: $message")
+            loadResult = LoadResult.Error(Exception(message))
+        }.onFailure { throwable ->
+            Timber.e(throwable)
+            loadResult = LoadResult.Error(throwable)
+        }
+
+        return loadResult ?: LoadResult.Error(Exception("Unknown error"))
+    }
+}
