@@ -193,17 +193,13 @@ private fun PokeMainScreen(
                         horizontalArrangement = Arrangement.SpaceAround,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        PokeProfileCard(
-                            user = recommendation.users[0],
-                            onProfileClick = onProfileClick,
-                            onPokeClick = onPokeClick
-                        )
-
-                        PokeProfileCard(
-                            user = recommendation.users[1],
-                            onProfileClick = onProfileClick,
-                            onPokeClick = onPokeClick
-                        )
+                        recommendation.users.forEach { user ->
+                            PokeProfileCard(
+                                user = user,
+                                onProfileClick = onProfileClick,
+                                onPokeClick = onPokeClick
+                            )
+                        }
                     }
                 }
             }
