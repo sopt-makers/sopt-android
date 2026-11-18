@@ -185,7 +185,6 @@ dependencies {
     implementation(libs.google.id.identity)
     implementation(libs.semver)
 
-    implementation(libs.code.gson)
     implementation(libs.lifecycle.livedata.ktx)
 }
 
