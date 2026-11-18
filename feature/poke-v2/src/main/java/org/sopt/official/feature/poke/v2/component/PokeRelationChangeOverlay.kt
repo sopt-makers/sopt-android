@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import org.sopt.official.feature.poke.v2.R
-import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.feature.poke.v2.model.PokeRelationChangeState
+import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
