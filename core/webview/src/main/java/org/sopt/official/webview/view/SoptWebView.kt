@@ -64,6 +64,8 @@ open class SoptWebView : WebView {
         ).tokenStorage()
     }
 
+    var onAppSchemeUrl: ((Uri) -> Unit)? = null
+
     init {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -79,7 +81,7 @@ open class SoptWebView : WebView {
             displayZoomControls = false
             javaScriptCanOpenWindowsAutomatically = true
             setSupportZoom(false)
-            webViewClient = SoptWebViewClient(tokenStorage)
+            webViewClient = SoptWebViewClient(tokenStorage) { url -> onAppSchemeUrl?.invoke(url) }
             userAgentString = "Chrome/130.0.0.0 Mobile SOPT-Android"
         }
         initWebView()
