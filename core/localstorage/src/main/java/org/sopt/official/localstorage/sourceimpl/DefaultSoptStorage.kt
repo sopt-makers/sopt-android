@@ -71,6 +71,10 @@ class DefaultSoptStorage @Inject constructor(
         preferences[KEY_NOTIFICATION_PERMISSION_REQUESTED] ?: false
     }
 
+    override val needProfileSetup: Flow<Boolean> = dataStore.data.map { preferences ->
+        preferences[KEY_NEED_PROFILE_SETUP] ?: false
+    }
+
     override suspend fun saveTokens(accessToken: String, refreshToken: String) {
         dataStore.edit { preferences ->
             preferences[KEY_ACCESS_TOKEN] = accessToken.encryptInReleaseMode(keyAlias = ACCESS_TOKEN_KEY_ALIAS)
@@ -141,6 +145,12 @@ class DefaultSoptStorage @Inject constructor(
         }
     }
 
+    override suspend fun saveNeedProfileSetup(needProfileSetup: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[KEY_NEED_PROFILE_SETUP] = needProfileSetup
+        }
+    }
+
     override suspend fun clearUser() {
         dataStore.edit { preferences ->
             preferences.remove(KEY_USER_STATUS)
@@ -169,6 +179,7 @@ class DefaultSoptStorage @Inject constructor(
         private val KEY_ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         private val KEY_IS_APPJAM_MODE = booleanPreferencesKey("is_appjam_mode")
         private val KEY_NOTIFICATION_PERMISSION_REQUESTED = booleanPreferencesKey("notification_permission_requested")
+        private val KEY_NEED_PROFILE_SETUP = booleanPreferencesKey("need_profile_setup")
 
 
         private const val DEFAULT_VALUE = ""

@@ -39,12 +39,14 @@ import org.sopt.official.domain.auth.model.Auth
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.model.AuthStatus
+import org.sopt.official.localstorage.source.UserStorage
 import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class SocialAccountViewModel @Inject constructor(
     private val authRepository: AuthRepository,
+    private val userStorage: UserStorage,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<SocialAccountState> = MutableStateFlow(SocialAccountState())
@@ -91,6 +93,7 @@ class SocialAccountViewModel @Inject constructor(
                     authPlatform = GOOGLE,
                 )
             ).onSuccess {
+                userStorage.saveNeedProfileSetup(true)
                 _sideEffect.emit(SocialAccountSideEffect.NavigateToAuthMain)
             }.onFailure(Timber::e)
         }
