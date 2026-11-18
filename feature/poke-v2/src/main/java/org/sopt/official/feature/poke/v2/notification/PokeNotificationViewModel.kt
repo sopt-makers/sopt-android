@@ -110,7 +110,7 @@ class PokeNotificationViewModel @Inject constructor(
 
         pokeUser(
             userId = target.userId,
-            isAnonymous = _uiState.value.isAnonymous,
+            isAnonymous = _uiState.value.isAnonymous && !target.isAnonymousCheckboxLocked,
             message = message.content,
             isFirstMeet = target.isFirstMeet
         )
@@ -125,6 +125,11 @@ class PokeNotificationViewModel @Inject constructor(
     }
 
     fun toggleAnonymous() {
+        if (_uiState.value.target?.isAnonymousCheckboxLocked == true) {
+            emitSideEffect(PokeNotificationSideEffect.ShowWarningSnackbar("천생연분은 실명으로만 콕찌를 수 있어요."))
+            return
+        }
+
         _uiState.update {
             it.copy(isAnonymous = !it.isAnonymous)
         }
