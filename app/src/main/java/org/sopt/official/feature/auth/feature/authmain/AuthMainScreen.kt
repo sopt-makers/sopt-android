@@ -68,10 +68,13 @@ import androidx.lifecycle.flowWithLifecycle
 import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.sopt.official.BuildConfig
 import org.sopt.official.R
 import org.sopt.official.designsystem.Gray300
 import org.sopt.official.designsystem.Gray50
+import org.sopt.official.designsystem.Gray700
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.White
 import org.sopt.official.designsystem.component.indicator.LoadingIndicator
 import org.sopt.official.feature.auth.component.AuthButton
 import org.sopt.official.feature.auth.component.AuthNavigationText
@@ -282,23 +285,23 @@ private fun AuthFooter(
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
-        /*
-        TODO 회원가입 버튼 임시 제거(회원가입 로직 완성후 복구 예정)
-        AuthButton(
-            padding = PaddingValues(vertical = 12.dp),
-            onClick = navigateToCertification,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            containerColor = Gray700,
-            contentColor = White
-        ) {
-            Text(
-                text = "SOPT 회원가입",
-                style = SoptTheme.typography.label16SB
-            )
+        // TODO 회원가입 QA 완료 후 release에도 노출
+        if (BuildConfig.DEBUG) {
+            AuthButton(
+                padding = PaddingValues(vertical = 12.dp),
+                onClick = navigateToCertification,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                containerColor = Gray700,
+                contentColor = White
+            ) {
+                Text(
+                    text = "SOPT 회원가입",
+                    style = SoptTheme.typography.label16SB
+                )
+            }
         }
-         */
         Spacer(modifier = Modifier.height(16.dp))
         AuthNavigationText(
             text = "나중에 로그인할래요.",
