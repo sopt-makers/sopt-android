@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package org.sopt.official.feature.poke.v2.friend.component
+package org.sopt.official.feature.poke.v2.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -43,7 +43,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
-import org.sopt.official.feature.poke.v2.component.PokeProfileAvatar
 import org.sopt.official.feature.poke.v2.main.model.PokeUserUiState
 import org.sopt.official.mds.theme.SoptTheme
 import kotlin.time.Duration.Companion.milliseconds
