@@ -63,6 +63,7 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase))
     implementation(libs.bundles.firebase)
+    implementation(libs.compose.paging)
 
     // etc
     implementation(libs.kotlin.collections.immutable)
