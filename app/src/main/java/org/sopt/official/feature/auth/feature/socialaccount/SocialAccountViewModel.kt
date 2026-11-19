@@ -95,7 +95,7 @@ class SocialAccountViewModel @Inject constructor(
             ).onSuccess {
                 userStorage.saveNeedProfileSetup(true)
                 _sideEffect.emit(SocialAccountSideEffect.NavigateToAuthMain)
-            }.onFailure(Timber::e)
+            }.onFailure { showFailure(it) }
         }
     }
 
@@ -113,11 +113,17 @@ class SocialAccountViewModel @Inject constructor(
                 )
             ).onSuccess {
                 _sideEffect.emit(SocialAccountSideEffect.NavigateToAuthMain)
-            }.onFailure(Timber::e)
+            }.onFailure { showFailure(it) }
         }
+    }
+
+    private suspend fun showFailure(throwable: Throwable) {
+        Timber.e(throwable)
+        _sideEffect.emit(SocialAccountSideEffect.ShowToast(DEFAULT_ERROR_MESSAGE))
     }
 
     companion object {
         private const val GOOGLE = "GOOGLE"
+        private const val DEFAULT_ERROR_MESSAGE = "요청에 실패했어요. 잠시 후 다시 시도해주세요."
     }
 }
