@@ -63,6 +63,10 @@ class DefaultSoptStorage @Inject constructor(
         preferences[KEY_ONBOARDING_COMPLETED]
     }
 
+    override val sopletterNickname: Flow<String?> = dataStore.data.map { preferences ->
+        preferences[KEY_SOPLETTER_NICKNAME]
+    }
+
     override val isAppjamMode: Flow<Boolean> = dataStore.data.map { preferences ->
         preferences[KEY_IS_APPJAM_MODE] ?: false
     }
@@ -123,9 +127,10 @@ class DefaultSoptStorage @Inject constructor(
         }
     }
 
-    override suspend fun saveOnboardingCompleted(isOnboarded: Boolean) {
+    override suspend fun saveSopletterProfile(isOnboarded: Boolean, nickname: String) {
         dataStore.edit { preferences ->
             preferences[KEY_ONBOARDING_COMPLETED] = isOnboarded
+            preferences[KEY_SOPLETTER_NICKNAME] = nickname
         }
     }
 
@@ -167,6 +172,7 @@ class DefaultSoptStorage @Inject constructor(
         private val KEY_PUSH_TOKEN = stringPreferencesKey("push_token")
         private val KEY_PLATFORM = stringPreferencesKey("platform")
         private val KEY_ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
+        private val KEY_SOPLETTER_NICKNAME = stringPreferencesKey("sopletter_nickname")
         private val KEY_IS_APPJAM_MODE = booleanPreferencesKey("is_appjam_mode")
         private val KEY_NOTIFICATION_PERMISSION_REQUESTED = booleanPreferencesKey("notification_permission_requested")
 
