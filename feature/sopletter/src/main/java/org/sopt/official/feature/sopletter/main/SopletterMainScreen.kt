@@ -66,11 +66,10 @@ import org.sopt.official.designsystem.SoptTheme
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterOnboardingRequiredDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterPrintDialog
-import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
-import org.sopt.official.feature.sopletter.common.component.SopletterSnackbarHost
 import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
+import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.main.analytics.TrackedSopletterMemoDetailDialogActions
 import org.sopt.official.feature.sopletter.main.component.EmptySopletterContent
 import org.sopt.official.feature.sopletter.main.component.SopletterDeleteDialog
@@ -80,15 +79,14 @@ import org.sopt.official.feature.sopletter.main.component.SopletterMemoDetailDia
 import org.sopt.official.feature.sopletter.main.contract.SopletterMainSideEffect
 import org.sopt.official.feature.sopletter.main.contract.SopletterMemoDetailDialogContract
 import org.sopt.official.feature.sopletter.main.model.SopletterMainUiState
-import org.sopt.official.feature.sopletter.main.model.memoColor
 import org.sopt.official.feature.sopletter.main.preview.SopletterMainPreviewParameterProvider
 import org.sopt.official.webview.view.WebViewActivity
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SopletterMainRoute(
     viewType: String,
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
+    navigateToOnboarding: () -> Unit,
     viewModel: SopletterMainViewModel = hiltViewModel(),
     navigateUp: () -> Unit = {},
     navigateToWrite: (Long) -> Unit = {},
@@ -127,6 +125,7 @@ fun SopletterMainRoute(
 
     SopletterMainScreen(
         uiState = uiState,
+        navigateToOnboarding = navigateToOnboarding,
         onMemoClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_SOPTLETTER_DETAIL, viewType)
             viewModel.fetchMemoDetail(messageId = it.messageId)
@@ -147,7 +146,7 @@ fun SopletterMainRoute(
         },
         printDialogTitle = uiState.topicTitle,
         onReportClick = viewModel::openReportForm,
-        onErrorConfirm = viewModel::dismissErrorDialog,
+        onErrorConfirm = viewModel::retryError,
         onWriteFABClick = {
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
             navigateToWrite(viewModel.routeTopicId)
@@ -159,6 +158,7 @@ fun SopletterMainRoute(
 @Composable
 private fun SopletterMainScreen(
     uiState: SopletterMainUiState,
+    navigateToOnboarding: () -> Unit,
     onMemoClick: (SopletterMessage) -> Unit,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
@@ -297,6 +297,10 @@ private fun SopletterMainScreen(
             NetworkErrorDialog(onConfirm = onErrorConfirm)
         }
 
+        if (uiState.isShowOnboardingDialog) {
+            SopletterOnboardingRequiredDialog(onConfirm = navigateToOnboarding)
+        }
+
         if (isPrintDialogVisible) {
             SopletterPrintDialog(
                 title = printDialogTitle,
@@ -366,6 +370,7 @@ private fun SopletterMainScreenPreview(
 
         SopletterMainScreen(
             uiState = previewState,
+            navigateToOnboarding = {},
             onMemoClick = { _ -> },
             onRefresh = {},
             onLoadMore = {},

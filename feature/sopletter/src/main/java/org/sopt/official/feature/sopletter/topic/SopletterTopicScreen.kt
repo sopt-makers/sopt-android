@@ -51,6 +51,7 @@ import org.sopt.official.analytics.trackViewType
 import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
 import org.sopt.official.domain.sopletter.model.SopletterTopic
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
+import org.sopt.official.feature.sopletter.common.component.SopletterOnboardingRequiredDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.component.WriteSopletterFloatingActionButton
 import org.sopt.official.feature.sopletter.topic.component.SopletterTopicItem
@@ -62,6 +63,7 @@ internal fun SopletterTopicRoute(
     navigateUp: () -> Unit,
     navigateToMain: (Long) -> Unit,
     navigateToWrite: () -> Unit,
+    navigateToOnboarding: () -> Unit,
     viewModel: SopletterTopicViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -89,6 +91,7 @@ internal fun SopletterTopicRoute(
             tracker.trackViewType(SopletterAnalyticsEvent.CLICK_WRITE_SOPTLETTER, viewType)
             navigateToWrite()
         },
+        onNavigateToOnboarding = navigateToOnboarding,
         onErrorConfirm = viewModel::retryFetchTopics,
     )
 }
@@ -99,6 +102,7 @@ private fun SopletterTopicScreen(
     onBackClick: () -> Unit,
     onTopicClick: (Long) -> Unit,
     onWriteClick: () -> Unit,
+    onNavigateToOnboarding: () -> Unit,
     onErrorConfirm: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -157,6 +161,10 @@ private fun SopletterTopicScreen(
     if (uiState.isShowErrorDialog) {
         NetworkErrorDialog(onConfirm = onErrorConfirm)
     }
+
+    if (uiState.isShowOnboardingDialog) {
+        SopletterOnboardingRequiredDialog(onConfirm = onNavigateToOnboarding)
+    }
 }
 
 @Preview
@@ -211,6 +219,7 @@ private fun SopletterTopicScreenPreview() {
             onBackClick = {},
             onTopicClick = {},
             onWriteClick = {},
+            onNavigateToOnboarding = {},
             onErrorConfirm = {},
         )
     }

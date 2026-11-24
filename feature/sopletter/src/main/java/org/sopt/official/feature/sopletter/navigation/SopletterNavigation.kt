@@ -62,7 +62,7 @@ import org.sopt.official.feature.sopletter.write.navigation.navigateToSopletterW
 import org.sopt.official.model.UserStatus
 import org.sopt.official.model.toViewType
 
-// 좋아요 푸시로 진입하면 topicId, messageId가 채워져 해당 메시지 상세 모달을 바로 연다.
+// 솝레터 진입 시 프로필을 확인한 뒤, 온보딩이 완료된 좋아요 푸시만 해당 메시지 상세로 연결한다.
 @Serializable
 data class SopletterGraph(
     val topicId: Long? = null,
@@ -80,6 +80,13 @@ private inline fun <reified T : Any> singleTopNavOptions() = navOptions {
 // 작성 완료 후 주제 목록만 남기고 그 위의 화면(주제 메인, 작성)을 지운다.
 private fun NavController.popBackStackToTopicList() {
     popBackStack<SopletterTopic>(inclusive = false)
+}
+
+private fun NavController.navigateToSopletterOnboarding() {
+    navigate(SopletterOnboarding) {
+        popUpTo<SopletterTopic> { inclusive = true }
+        launchSingleTop = true
+    }
 }
 
 fun NavController.navigateToSopletter(
@@ -133,8 +140,8 @@ private fun SopletterNavHost(
                         navController.navigateToSopletterTopic(
                             navOptions = singleTopNavOptions<SopletterEntry>(),
                         )
-                        // 온보딩 완료 유저가 좋아요 푸시로 들어온 경우 주제 목록 위에 메시지 상세를 올린다.
-                        // 온보딩 미완료 유저는 navigateToOnboarding으로 가서 푸시 목적지가 무시된다.
+                        // 프로필 확인 후 온보딩 완료 유저만 주제 목록 위에 푸시 메시지 상세를 올린다.
+                        // 온보딩 미완료 유저는 온보딩으로 이동하므로 푸시 목적지는 이어서 열지 않는다.
                         if (pushTopicId != null && pushMessageId != null) {
                             navController.navigateToSopletterMain(
                                 topicId = pushTopicId,
@@ -175,6 +182,7 @@ private fun SopletterNavHost(
                 SopletterMainRoute(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
+                    navigateToOnboarding = navController::navigateToSopletterOnboarding,
                     navigateUp = { if (!navController.popBackStack()) navigateToHome() },
                     navigateToWrite = { topicId -> navController.navigateToSopletterWrite(topicId = topicId) },
                     navigateToPrint = { topicId -> navController.navigateToSopletterPrint(topicId) },
@@ -184,6 +192,7 @@ private fun SopletterNavHost(
             composable<SopletterTopic> {
                 SopletterTopicRoute(
                     viewType = viewType,
+                    navigateToOnboarding = navController::navigateToSopletterOnboarding,
                     navigateUp = navigateToHome,
                     navigateToMain = { topicId -> navController.navigateToSopletterMain(topicId = topicId) },
                     navigateToWrite = { navController.navigateToSopletterWrite() },
@@ -194,6 +203,7 @@ private fun SopletterNavHost(
                 SopletterWriteRoute(
                     viewType = viewType,
                     onShowSnackbar = onShowSnackbar,
+                    navigateToOnboarding = navController::navigateToSopletterOnboarding,
                     onBackClick = navController::navigateUp,
                     onNavigateToMain = { topicId ->
                         // 주제 목록까지 돌아간 뒤, 작성한 주제의 메인을 새 엔트리로 올려 목록을 갱신한다.

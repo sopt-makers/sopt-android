@@ -25,6 +25,7 @@
 plugins {
     sopt("feature")
     sopt("compose")
+    sopt("test")
 }
 
 android {
@@ -37,11 +38,13 @@ dependencies {
     implementation(projects.core.common)
     implementation(projects.core.designsystem)
     implementation(projects.core.model)
-    implementation(projects.core.localstorage)
     implementation(projects.core.webview)
     implementation(projects.core.navigation)
 
     // domain
     implementation(projects.domain.sopletter)
     implementation(projects.data.sopletter)
+
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlin.coroutines.test)
 }

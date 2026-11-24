@@ -34,6 +34,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.sopt.official.designsystem.SoptTheme
+import org.sopt.official.designsystem.component.dialog.NetworkErrorDialog
+import org.sopt.official.feature.sopletter.common.component.SopletterOnboardingRequiredDialog
 
 @Composable
 fun SopletterEntryRoute(
@@ -42,11 +44,12 @@ fun SopletterEntryRoute(
     viewModel: SopletterEntryViewModel = hiltViewModel(),
 ) {
     val isOnboardingCompleted by viewModel.isOnboardingCompleted.collectAsStateWithLifecycle()
+    val isShowErrorDialog by viewModel.isShowErrorDialog.collectAsStateWithLifecycle()
 
     LaunchedEffect(isOnboardingCompleted) {
         when (isOnboardingCompleted) {
             true -> navigateToTopic()
-            false -> navigateToOnboarding()
+            false -> Unit
             null -> Unit
         }
     }
@@ -56,4 +59,12 @@ fun SopletterEntryRoute(
             .fillMaxSize()
             .background(SoptTheme.colors.background),
     )
+
+    if (isShowErrorDialog) {
+        NetworkErrorDialog(onConfirm = viewModel::refreshOnboardingStatus)
+    }
+
+    if (isOnboardingCompleted == false) {
+        SopletterOnboardingRequiredDialog(onConfirm = navigateToOnboarding)
+    }
 }

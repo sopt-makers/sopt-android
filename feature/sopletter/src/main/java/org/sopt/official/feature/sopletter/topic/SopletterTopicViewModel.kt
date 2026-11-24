@@ -34,11 +34,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
+import org.sopt.official.domain.sopletter.onboarding.usecase.SopletterProfileUseCase
+import org.sopt.official.feature.sopletter.common.util.isSopletterNotFound
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterTopicViewModel @Inject constructor(
     private val sopletterRepository: SopletterRepository,
+    private val profileUseCase: SopletterProfileUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SopletterTopicState())
     val uiState: StateFlow<SopletterTopicState> = _uiState.asStateFlow()
@@ -53,9 +56,17 @@ class SopletterTopicViewModel @Inject constructor(
                     )
                 }
             }
-            .onFailure {
-                _uiState.update { state ->
-                    state.copy(isShowErrorDialog = true)
+            .onFailure { error ->
+                val profile = if (error.isSopletterNotFound()) {
+                    profileUseCase.refresh().getOrNull()
+                } else {
+                    null
+                }
+
+                if (profile?.isOnboarded == false) {
+                    _uiState.update { state -> state.copy(isShowOnboardingDialog = true) }
+                } else {
+                    _uiState.update { state -> state.copy(isShowErrorDialog = true) }
                 }
             }
     }

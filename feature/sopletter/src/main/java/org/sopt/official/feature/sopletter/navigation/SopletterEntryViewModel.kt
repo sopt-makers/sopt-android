@@ -30,47 +30,37 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.sopletter.onboarding.repository.SopletterOnboardingRepository
-import org.sopt.official.localstorage.source.UserStorage
+import org.sopt.official.domain.sopletter.onboarding.usecase.SopletterProfileUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SopletterEntryViewModel @Inject constructor(
-    private val userStorage: UserStorage,
-    private val sopletterOnboardingRepository: SopletterOnboardingRepository,
+    private val profileUseCase: SopletterProfileUseCase,
 ) : ViewModel() {
     private val _isOnboardingCompleted = MutableStateFlow<Boolean?>(null)
     val isOnboardingCompleted: StateFlow<Boolean?> = _isOnboardingCompleted.asStateFlow()
+    private val _isShowErrorDialog = MutableStateFlow(false)
+    val isShowErrorDialog: StateFlow<Boolean> = _isShowErrorDialog.asStateFlow()
 
     init {
-        observeOnboardingState()
-        initializeOnboardingState()
+        refreshOnboardingStatus()
     }
 
-    private fun observeOnboardingState() = viewModelScope.launch {
-        userStorage.isSopletterOnboardingCompleted.collectLatest { isCompleted ->
-            if (isCompleted != null) {
-                _isOnboardingCompleted.value = isCompleted
-            }
-        }
-    }
-
-    private fun initializeOnboardingState() = viewModelScope.launch {
-        val localState = userStorage.isSopletterOnboardingCompleted.first()
-        if (localState != null) {
-            _isOnboardingCompleted.value = localState
-            return@launch
-        }
-
-        sopletterOnboardingRepository.getOnboarding()
+    fun refreshOnboardingStatus() = viewModelScope.launch {
+        _isShowErrorDialog.value = false
+        _isOnboardingCompleted.value = null
+        profileUseCase.refresh()
             .onSuccess { onboarding ->
-                userStorage.saveOnboardingCompleted(onboarding.isOnboarded)
+                _isOnboardingCompleted.value = onboarding.isOnboarded
             }
             .onFailure {
-                _isOnboardingCompleted.value = false
+                val localState = profileUseCase.cachedOnboardingStatus()
+                if (localState != null) {
+                    _isOnboardingCompleted.value = localState
+                } else {
+                    _isShowErrorDialog.value = true
+                }
             }
     }
 }

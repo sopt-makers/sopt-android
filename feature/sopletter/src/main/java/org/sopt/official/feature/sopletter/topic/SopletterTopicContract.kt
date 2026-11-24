@@ -33,4 +33,5 @@ import org.sopt.official.domain.sopletter.model.SopletterTopic
 data class SopletterTopicState(
     val topicList: ImmutableList<SopletterTopic> = persistentListOf(),
     val isShowErrorDialog: Boolean = false,
+    val isShowOnboardingDialog: Boolean = false,
 )
