@@ -8,17 +8,11 @@ import org.sopt.official.model.UserStatus
 class ProfileSetupManager @Inject constructor(
     private val userStorage: UserStorage,
 ) {
-    suspend fun shouldOpenProfileSetup(userStatus: UserStatus): Boolean {
+    suspend fun consumeProfileSetup(userStatus: UserStatus): Boolean {
         if (userStatus == UserStatus.UNAUTHENTICATED) return false
-        return userStorage.needProfileSetup.first()
-    }
 
-    suspend fun handleWebViewResult(appSchemeUrl: String?) {
-        if (appSchemeUrl != PROFILE_COMPLETE_URL) return
-        userStorage.saveNeedProfileSetup(false)
-    }
-
-    companion object {
-        const val PROFILE_COMPLETE_URL = "sopt://profile/complete"
+        val needProfileSetup = userStorage.needProfileSetup.first()
+        if (needProfileSetup) userStorage.saveNeedProfileSetup(false)
+        return needProfileSetup
     }
 }

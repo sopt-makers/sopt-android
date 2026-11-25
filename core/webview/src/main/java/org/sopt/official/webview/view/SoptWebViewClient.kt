@@ -46,7 +46,7 @@ import timber.log.Timber
 
 class SoptWebViewClient(
     private val tokenStorage: TokenStorage,
-    private val onAppSchemeUrl: (Uri) -> Unit,
+    private val onProfileComplete: () -> Unit,
 ) : WebViewClient() {
     val cookieManager: CookieManager = CookieManager.getInstance()
     private val job = SupervisorJob()
@@ -69,14 +69,14 @@ class SoptWebViewClient(
             url.scheme == "notion" -> handleNotionScheme(view, url)
             url.scheme == "nmap" -> handleNMapScheme(view, url)
             url.scheme == "intent" -> handleIntentScheme(view, url)
-            url.scheme == APP_SCHEME -> handleAppScheme(url)
+            url.toString() == PROFILE_COMPLETE_URL -> handleProfileComplete()
 
             else -> false
         }
     }
 
-    private fun handleAppScheme(url: Uri): Boolean {
-        onAppSchemeUrl(url)
+    private fun handleProfileComplete(): Boolean {
+        onProfileComplete()
         return true
     }
 
@@ -239,6 +239,6 @@ class SoptWebViewClient(
     companion object {
         private const val COOKIE_DOMAIN = ".sopt.org"
         private const val PLAYGROUND_HOST = "sopt.org"
-        private const val APP_SCHEME = "sopt"
+        private const val PROFILE_COMPLETE_URL = "sopt://profile/complete"
     }
 }

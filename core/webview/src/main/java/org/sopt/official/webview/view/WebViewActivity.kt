@@ -139,7 +139,7 @@ class WebViewActivity : AppCompatActivity() {
             }
         }
 
-        binding.webView.onAppSchemeUrl = ::finishWithAppSchemeUrl
+        binding.webView.onProfileComplete = ::closeWebView
         handleLinkUrl()
         handleOnBackPressed()
     }
@@ -188,8 +188,7 @@ class WebViewActivity : AppCompatActivity() {
         }
     }
 
-    private fun finishWithAppSchemeUrl(url: Uri) {
-        setResult(RESULT_OK, Intent().setData(url))
+    private fun closeWebView() {
         if (isTaskRoot) navigateToMainActivity() else finish()
     }
 

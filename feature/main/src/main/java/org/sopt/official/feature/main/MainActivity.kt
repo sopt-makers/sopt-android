@@ -57,7 +57,7 @@ import org.sopt.official.feature.main.profile.ProfileSetupManager
 import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
-import org.sopt.official.webview.contract.OpenWebViewForAppScheme
+import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.designsystem.SoptTheme as SoptAppTheme
 
 private val applicationNavigator by lazy {
@@ -81,9 +81,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var profileSetupManager: ProfileSetupManager
 
-    private val profileSetupLauncher = registerForActivityResult(OpenWebViewForAppScheme()) { appSchemeUrl ->
-        lifecycleScope.launch { profileSetupManager.handleWebViewResult(appSchemeUrl) }
-    }
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {}
@@ -125,8 +122,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun openProfileSetupIfNeeded(userStatus: UserStatus) {
         lifecycleScope.launch {
-            if (profileSetupManager.shouldOpenProfileSetup(userStatus)) {
-                profileSetupLauncher.launch(PlaygroundWebLink.EDIT_PROFILE)
+            if (profileSetupManager.consumeProfileSetup(userStatus)) {
+                startActivity(
+                    Intent(this@MainActivity, WebViewActivity::class.java)
+                        .putExtra(WebViewActivity.INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
+                )
             }
         }
     }
