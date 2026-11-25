@@ -143,7 +143,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
+                                errorMessage = errorMessage?.let(ErrorCase::fromMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
                             )
                         }
                     }
@@ -181,7 +181,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
+                                errorMessage = errorMessage?.let(ErrorCase::fromMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
                             )
                         }
                     }
@@ -278,8 +278,8 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun extractErrorMessage(throwable: HttpException): String {
+    private fun extractErrorMessage(throwable: HttpException): String? {
         val errorBody = throwable.response()?.errorBody()?.string().orEmpty()
-        return json.decodeFromString<ErrorResponse>(errorBody).message
+        return runCatching { json.decodeFromString<ErrorResponse>(errorBody).message }.getOrNull()
     }
 }
