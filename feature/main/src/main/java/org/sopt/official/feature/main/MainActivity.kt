@@ -52,9 +52,12 @@ import org.sopt.official.analytics.compose.ProvideTracker
 import org.sopt.official.common.context.appContext
 import org.sopt.official.common.navigator.DeepLinkType
 import org.sopt.official.common.navigator.NavigatorEntryPoint
+import org.sopt.official.feature.main.model.PlaygroundWebLink
+import org.sopt.official.feature.main.profile.ProfileSetupManager
 import org.sopt.official.localstorage.source.UserStorage
 import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.model.UserStatus
+import org.sopt.official.webview.view.WebViewActivity
 import org.sopt.official.designsystem.SoptTheme as SoptAppTheme
 
 private val applicationNavigator by lazy {
@@ -75,6 +78,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var userStorage: UserStorage
 
     private var intentState by mutableStateOf<Intent?>(null)
+    @Inject
+    lateinit var profileSetupManager: ProfileSetupManager
+
     private val notificationPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) {}
@@ -104,6 +110,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         requestNotificationPermissionOnce(userStatus)
+        if (savedInstanceState == null) openProfileSetupIfNeeded(userStatus)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -111,6 +118,17 @@ class MainActivity : AppCompatActivity() {
         setIntent(intent)
 
         intentState = intent
+    }
+
+    private fun openProfileSetupIfNeeded(userStatus: UserStatus) {
+        lifecycleScope.launch {
+            if (profileSetupManager.consumeProfileSetup(userStatus)) {
+                startActivity(
+                    Intent(this@MainActivity, WebViewActivity::class.java)
+                        .putExtra(WebViewActivity.INTENT_URL, PlaygroundWebLink.EDIT_PROFILE)
+                )
+            }
+        }
     }
 
     private fun requestNotificationPermissionOnce(userStatus: UserStatus) {

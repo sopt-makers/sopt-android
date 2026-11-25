@@ -64,6 +64,8 @@ open class SoptWebView : WebView {
         ).tokenStorage()
     }
 
+    var onProfileComplete: (() -> Unit)? = null
+
     init {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -79,8 +81,8 @@ open class SoptWebView : WebView {
             displayZoomControls = false
             javaScriptCanOpenWindowsAutomatically = true
             setSupportZoom(false)
-            webViewClient = SoptWebViewClient(tokenStorage)
-            userAgentString = "Chrome/130.0.0.0 Mobile"
+            webViewClient = SoptWebViewClient(tokenStorage) { onProfileComplete?.invoke() }
+            userAgentString = "Chrome/130.0.0.0 Mobile SOPT-Android"
         }
         initWebView()
     }

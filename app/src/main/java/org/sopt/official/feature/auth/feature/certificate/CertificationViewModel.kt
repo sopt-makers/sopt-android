@@ -26,7 +26,6 @@ package org.sopt.official.feature.auth.feature.certificate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin
@@ -40,6 +39,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import org.sopt.official.domain.auth.model.User
 import org.sopt.official.domain.auth.repository.AuthRepository
 import org.sopt.official.feature.auth.feature.certificate.model.ErrorResponse
@@ -89,7 +89,8 @@ internal enum class CertificationButtonText(val message: String) {
 @HiltViewModel
 class CertificationViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val userStorage: UserStorage
+    private val userStorage: UserStorage,
+    private val json: Json,
 ) : ViewModel() {
 
     private val _state: MutableStateFlow<CertificationState> =
@@ -142,7 +143,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
+                                errorMessage = errorMessage?.let(ErrorCase::fromMessage) ?: ErrorCase.PHONE_UNKNOWN_ERROR,
                             )
                         }
                     }
@@ -180,7 +181,7 @@ class CertificationViewModel @Inject constructor(
 
                         _state.update { currentState ->
                             currentState.copy(
-                                errorMessage = ErrorCase.fromMessage(errorMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
+                                errorMessage = errorMessage?.let(ErrorCase::fromMessage) ?: ErrorCase.CODE_UNKNOWN_ERROR
                             )
                         }
                     }
@@ -277,10 +278,8 @@ class CertificationViewModel @Inject constructor(
         }
     }
 
-    private fun extractErrorMessage(throwable: HttpException): String {
-        val errorBody = throwable.response()?.errorBody()?.string()
-        val gson = Gson()
-        val errorResponse = gson.fromJson(errorBody, ErrorResponse::class.java)
-        return errorResponse.message
+    private fun extractErrorMessage(throwable: HttpException): String? {
+        val errorBody = throwable.response()?.errorBody()?.string().orEmpty()
+        return runCatching { json.decodeFromString<ErrorResponse>(errorBody).message }.getOrNull()
     }
 }

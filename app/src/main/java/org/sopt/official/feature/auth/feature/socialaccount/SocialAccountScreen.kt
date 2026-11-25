@@ -55,6 +55,7 @@ import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.launch
 import org.sopt.official.R
 import org.sopt.official.R.drawable.ic_auth_process_second
+import org.sopt.official.common.view.toast
 import org.sopt.official.designsystem.Gray10
 import org.sopt.official.designsystem.Gray100
 import org.sopt.official.designsystem.Gray60
@@ -97,6 +98,7 @@ internal fun SocialAccountRoute(
             .collect { sideEffect ->
                 when (sideEffect) {
                     is SocialAccountSideEffect.NavigateToAuthMain -> navigateToAuthMain()
+                    is SocialAccountSideEffect.ShowToast -> context.toast(sideEffect.message)
                 }
             }
     }

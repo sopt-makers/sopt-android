@@ -34,10 +34,12 @@ import org.sopt.official.model.UserStatus
  * @param platform 인증 플랫폼
  * @param isSopletterOnboardingCompleted 솝레터 온보딩 완료 여부
  * @param isNotificationPermissionRequested 알림 권한 요청 여부
+ * @param needProfileSetup 플그 프로필 등록 화면 노출 필요 여부 (회원가입 후 한 번 노출하기 전까지 true)
  * @param saveUserStatus 유저 상태 저장
  * @param savePushToken 푸시 토큰 저장
  * @param savePlatform 인증 플랫폼 저장
  * @param saveNotificationPermissionRequested 알림 권한 요청 여부 저장
+ * @param saveNeedProfileSetup 플그 프로필 등록 화면 노출 필요 여부 저장
  * @param clearUser 유저 정보 초기화
  * */
 interface UserStorage {
@@ -47,6 +49,7 @@ interface UserStorage {
     val isSopletterOnboardingCompleted: Flow<Boolean?>
     val isAppjamMode: Flow<Boolean>
     val isNotificationPermissionRequested: Flow<Boolean>
+    val needProfileSetup: Flow<Boolean>
 
     suspend fun saveUserStatus(status: UserStatus)
     suspend fun savePushToken(token: String)
@@ -54,5 +57,6 @@ interface UserStorage {
     suspend fun saveOnboardingCompleted(isOnboarded: Boolean)
     suspend fun saveIsAppjamMode(isAppjamMode: Boolean)
     suspend fun saveNotificationPermissionRequested(isRequested: Boolean)
+    suspend fun saveNeedProfileSetup(needProfileSetup: Boolean)
     suspend fun clearUser()
 }

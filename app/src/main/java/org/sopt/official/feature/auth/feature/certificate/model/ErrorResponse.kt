@@ -24,8 +24,11 @@
  */
 package org.sopt.official.feature.auth.feature.certificate.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class ErrorResponse(
-    val success: Boolean,
+    @SerialName("message")
     val message: String,
-    val data: Any?
 )
