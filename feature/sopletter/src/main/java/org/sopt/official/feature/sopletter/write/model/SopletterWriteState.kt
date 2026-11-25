@@ -38,6 +38,7 @@ data class SopletterWriteUiState(
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val isError: Boolean = false,
+    val isShowOnboardingDialog: Boolean = false,
     val errorMessage: String? = null
 ) {
     val selectedTopicTitle: String?

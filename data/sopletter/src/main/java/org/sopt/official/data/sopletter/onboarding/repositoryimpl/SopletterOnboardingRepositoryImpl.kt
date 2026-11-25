@@ -28,17 +28,29 @@ import org.sopt.official.common.coroutines.suspendRunCatching
 import org.sopt.official.data.sopletter.onboarding.service.SopletterOnboardingService
 import org.sopt.official.domain.sopletter.onboarding.model.SopletterOnboardingModel
 import org.sopt.official.domain.sopletter.onboarding.repository.SopletterOnboardingRepository
+import org.sopt.official.localstorage.source.UserStorage
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 internal class SopletterOnboardingRepositoryImpl @Inject constructor(
     private val sopletterOnboardingService: SopletterOnboardingService,
+    private val userStorage: UserStorage,
 ) : SopletterOnboardingRepository {
 
     override suspend fun getOnboarding(): Result<SopletterOnboardingModel> = suspendRunCatching {
-        sopletterOnboardingService.getOnboarding().toDomain()
+        sopletterOnboardingService.getOnboarding().toDomain().also { saveProfile(it) }
     }
 
     override suspend fun completeOnboarding(): Result<SopletterOnboardingModel> = suspendRunCatching {
-        sopletterOnboardingService.completeOnboarding().toDomain()
+        sopletterOnboardingService.completeOnboarding().toDomain().also { saveProfile(it) }
+    }
+
+    override suspend fun getCachedOnboardingStatus(): Boolean? =
+        userStorage.isSopletterOnboardingCompleted.first()
+
+    override suspend fun getCachedNickname(): String? = userStorage.sopletterNickname.first()
+
+    private suspend fun saveProfile(profile: SopletterOnboardingModel) {
+        userStorage.saveSopletterProfile(profile.isOnboarded, profile.nickname)
     }
 }

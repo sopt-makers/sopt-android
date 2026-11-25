@@ -24,7 +24,6 @@
  */
 package org.sopt.official.feature.sopletter.main
 
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -41,6 +40,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.sopt.official.domain.sopletter.model.SopletterMessage
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
+import org.sopt.official.domain.sopletter.onboarding.usecase.SopletterProfileUseCase
+import org.sopt.official.feature.sopletter.common.util.isSopletterNotFound
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.util.characterCount
@@ -56,6 +57,7 @@ import javax.inject.Inject
 class SopletterMainViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterRepository: SopletterRepository,
+    private val profileUseCase: SopletterProfileUseCase,
 ) : ViewModel(), SopletterMemoDetailDialogContract.Actions {
     val routeTopicId: Long = savedStateHandle.toRoute<SopletterMain>().topicId
     private val pushMessageId: Long? = savedStateHandle.toRoute<SopletterMain>().messageId
@@ -65,6 +67,12 @@ class SopletterMainViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<SopletterMainSideEffect>()
     val sideEffect: SharedFlow<SopletterMainSideEffect> = _sideEffect.asSharedFlow()
+    private val pendingRetries = mutableSetOf<RetryTarget>()
+
+    private sealed interface RetryTarget {
+        data class Messages(val isLoadMore: Boolean) : RetryTarget
+        data class MessageDetail(val messageId: Long) : RetryTarget
+    }
 
     init {
         fetchMessages()
@@ -74,7 +82,7 @@ class SopletterMainViewModel @Inject constructor(
     // 좋아요 푸시로 진입한 경우 목록 로드를 기다리지 않고 상세 모달을 바로 연다.
     private fun openPushMessageDetail() {
         val messageId = pushMessageId ?: return
-        fetchMemoDetail(messageId = messageId, isFromPush = true)
+        fetchMemoDetail(messageId = messageId)
     }
 
     // ---------------- Main screen ----------------
@@ -99,7 +107,7 @@ class SopletterMainViewModel @Inject constructor(
                 isLoading = true,
                 isMessageRefreshing = !isLoadMore && currentState.isInitialized,
                 isPaging = isLoadMore,
-                isShowErrorDialog = false,
+                isShowErrorDialog = pendingRetries.isNotEmpty(),
             )
         }
 
@@ -108,6 +116,7 @@ class SopletterMainViewModel @Inject constructor(
             cursor = cursor,
         )
             .onSuccess { response ->
+                pendingRetries.remove(RetryTarget.Messages(isLoadMore))
                 _uiState.update { state ->
                     state.copy(
                         topicId = response.topicId,
@@ -126,18 +135,23 @@ class SopletterMainViewModel @Inject constructor(
                         isLoading = false,
                         isMessageRefreshing = false,
                         isPaging = false,
-                        isShowErrorDialog = false,
+                        isShowErrorDialog = pendingRetries.isNotEmpty(),
                     )
                 }
             }
-            .onFailure {
+            .onFailure { error ->
+                val onboardingStatus = resolveOnboardingAfterNotFound(error)
+                val onboardingRequired = _uiState.value.isShowOnboardingDialog
                 _uiState.update { state ->
                     state.copy(
                         isLoading = false,
                         isMessageRefreshing = false,
                         isPaging = false,
-                        isShowErrorDialog = true,
+                        isShowErrorDialog = onboardingStatus != false && !onboardingRequired,
                     )
+                }
+                if (onboardingStatus != false && !onboardingRequired) {
+                    pendingRetries.add(RetryTarget.Messages(isLoadMore))
                 }
             }
     }
@@ -153,7 +167,7 @@ class SopletterMainViewModel @Inject constructor(
         _uiState.update { state ->
             state.copy(
                 isLoading = true,
-                isShowErrorDialog = false,
+                isShowErrorDialog = pendingRetries.isNotEmpty(),
             )
         }
 
@@ -167,44 +181,58 @@ class SopletterMainViewModel @Inject constructor(
                 }
                 _sideEffect.emit(SopletterMainSideEffect.NavigateToReportForm(url))
             }
-            .onFailure {
+            .onFailure { error ->
+                val onboardingStatus = resolveOnboardingAfterNotFound(error)
                 _uiState.update { state ->
-                    state.copy(
-                        isLoading = false,
-                        isShowErrorDialog = true,
+                    state.copy(isLoading = false)
+                }
+                if (onboardingStatus != false) {
+                    _sideEffect.emit(
+                        SopletterMainSideEffect.ShowSnackbar(
+                            SopletterSnackbarVisuals(
+                                message = "일시적인 오류가 발생했어요.",
+                                type = SopletterSnackbarType.FAILURE,
+                            ),
+                        ),
                     )
                 }
             }
     }
 
-    fun dismissErrorDialog() {
+    fun retryError() {
+        val retryTargets = pendingRetries.toList()
+        pendingRetries.clear()
         _uiState.update { state ->
             state.copy(isShowErrorDialog = false)
+        }
+        retryTargets.forEach { retryTarget ->
+            when (retryTarget) {
+                is RetryTarget.Messages -> fetchMessages(isLoadMore = retryTarget.isLoadMore)
+                is RetryTarget.MessageDetail -> fetchMemoDetail(retryTarget.messageId)
+            }
         }
     }
 
     // ---------------- Memo detail dialog ----------------
 
-    fun fetchMemoDetail(
-        messageId: Long,
-        isFromPush: Boolean = false,
-    ) = viewModelScope.launch {
+    fun fetchMemoDetail(messageId: Long) = viewModelScope.launch {
         val topicId = routeTopicId
 
         sopletterRepository.getMessageDetail(
             topicId = topicId,
             messageId = messageId,
         ).onSuccess { detail ->
+            pendingRetries.remove(RetryTarget.MessageDetail(messageId))
             _uiState.update { state ->
                 state.copy(
                     topicId = topicId,
                     selectedMemoDetail = detail.toMemoDetailDialogState(),
-                    isShowErrorDialog = false,
+                    isShowErrorDialog = pendingRetries.isNotEmpty(),
                 )
             }
-        }.onFailure {
-            if (isFromPush) {
-                // 푸시 진입 시 실패는 대부분 삭제된 메시지이므로 에러 다이얼로그 대신 안내만 한다.
+        }.onFailure { error ->
+            val onboardingStatus = resolveOnboardingAfterNotFound(error)
+            if (onboardingStatus == true) {
                 _sideEffect.emit(
                     SopletterMainSideEffect.ShowSnackbar(
                         visuals = SopletterSnackbarVisuals(
@@ -213,7 +241,8 @@ class SopletterMainViewModel @Inject constructor(
                         ),
                     ),
                 )
-            } else {
+            } else if (onboardingStatus != false && !_uiState.value.isShowOnboardingDialog) {
+                pendingRetries.add(RetryTarget.MessageDetail(messageId))
                 _uiState.update { state ->
                     state.copy(isShowErrorDialog = true)
                 }
@@ -267,17 +296,17 @@ class SopletterMainViewModel @Inject constructor(
             result.onSuccess {
                 _uiState.update { state ->
                     state.copy(
-                        isShowErrorDialog = false,
+                        isShowErrorDialog = pendingRetries.isNotEmpty(),
                     )
                 }
-            }.onFailure {
+            }.onFailure { error ->
                 updateSelectedMemoLikeState(
                     memoId = selectedMemoDetail.memoId,
                     isLiked = selectedMemoDetail.isLiked,
                     likeCount = selectedMemoDetail.likeCount,
                 )
-                _uiState.update { state ->
-                    state.copy(isShowErrorDialog = true)
+                if (resolveOnboardingAfterNotFound(error) != false) {
+                    showFailureSnackbar()
                 }
             }
         }
@@ -351,7 +380,7 @@ class SopletterMainViewModel @Inject constructor(
                         } else {
                             currentDetail
                         },
-                        isShowErrorDialog = false,
+                        isShowErrorDialog = pendingRetries.isNotEmpty(),
                     )
                 }
 
@@ -363,18 +392,12 @@ class SopletterMainViewModel @Inject constructor(
                         ),
                     ),
                 )
-            }.onFailure {
+            }.onFailure { error ->
+                val onboardingStatus = resolveOnboardingAfterNotFound(error)
                 _uiState.update { state ->
-                    state.copy(isShowErrorDialog = false)
+                    state.copy(isShowErrorDialog = pendingRetries.isNotEmpty())
                 }
-                _sideEffect.emit(
-                    SopletterMainSideEffect.ShowSnackbar(
-                        visuals = SopletterSnackbarVisuals(
-                            message = "일시적인 오류가 발생했어요.",
-                            type = SopletterSnackbarType.FAILURE,
-                        ),
-                    ),
-                )
+                if (onboardingStatus != false) showFailureSnackbar()
             }
         }
     }
@@ -410,7 +433,7 @@ class SopletterMainViewModel @Inject constructor(
                             .toPersistentList(),
                         selectedMemoDetail = null,
                         isDeleteDialogVisible = false,
-                        isShowErrorDialog = false,
+                        isShowErrorDialog = pendingRetries.isNotEmpty(),
                     )
                 }
 
@@ -422,13 +445,15 @@ class SopletterMainViewModel @Inject constructor(
                         ),
                     ),
                 )
-            }.onFailure {
+            }.onFailure { error ->
+                val onboardingStatus = resolveOnboardingAfterNotFound(error)
                 _uiState.update { state ->
                     state.copy(
                         isDeleteDialogVisible = false,
-                        isShowErrorDialog = true,
+                        isShowErrorDialog = pendingRetries.isNotEmpty(),
                     )
                 }
+                if (onboardingStatus != false) showFailureSnackbar()
             }
         }
     }
@@ -442,6 +467,33 @@ class SopletterMainViewModel @Inject constructor(
         }
     }
 
+    private suspend fun resolveOnboardingAfterNotFound(error: Throwable): Boolean? {
+        if (!error.isSopletterNotFound()) return null
+
+        val profile = profileUseCase.refresh().getOrNull() ?: return null
+        if (profile.isOnboarded) return true
+
+        pendingRetries.clear()
+        _uiState.update { state ->
+            state.copy(
+                isShowErrorDialog = pendingRetries.isNotEmpty(),
+                isShowOnboardingDialog = true,
+            )
+        }
+        return false
+    }
+
+    private suspend fun showFailureSnackbar() {
+        _sideEffect.emit(
+            SopletterMainSideEffect.ShowSnackbar(
+                SopletterSnackbarVisuals(
+                    message = "일시적인 오류가 발생했어요.",
+                    type = SopletterSnackbarType.FAILURE,
+                ),
+            ),
+        )
+    }
+
     private fun updateSelectedMemoLikeState(
         memoId: Long,
         isLiked: Boolean,
@@ -452,7 +504,7 @@ class SopletterMainViewModel @Inject constructor(
             if (currentDetail.memoId != memoId) return@update state
 
             state.copy(
-                isShowErrorDialog = false,
+                isShowErrorDialog = pendingRetries.isNotEmpty(),
                 selectedMemoDetail = currentDetail.copy(
                     isLiked = isLiked,
                     likeCount = likeCount,

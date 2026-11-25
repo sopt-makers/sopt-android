@@ -38,8 +38,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.sopt.official.domain.sopletter.onboarding.repository.SopletterOnboardingRepository
 import org.sopt.official.domain.sopletter.repository.SopletterRepository
+import org.sopt.official.domain.sopletter.onboarding.usecase.SopletterProfileUseCase
+import org.sopt.official.feature.sopletter.common.util.isSopletterNotFound
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarType
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
@@ -52,7 +53,7 @@ import javax.inject.Inject
 class SopletterWriteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val sopletterWriteRepository: SopletterWriteRepository,
-    private val sopletterOnboardingRepository: SopletterOnboardingRepository,
+    private val profileUseCase: SopletterProfileUseCase,
     private val sopletterRepository: SopletterRepository,
 ) : ViewModel() {
 
@@ -71,13 +72,9 @@ class SopletterWriteViewModel @Inject constructor(
 
     private fun fetchWriterProfile() {
         viewModelScope.launch {
-            sopletterOnboardingRepository.getOnboarding()
-                .onSuccess { onboarding ->
-                    _uiState.update { it.copy(writerName = onboarding.nickname) }
-                }
-                .onFailure {
-                    Timber.e(it)
-                }
+            profileUseCase.cachedNickname()?.let { nickname ->
+                _uiState.update { it.copy(writerName = nickname) }
+            }
         }
     }
 
@@ -87,9 +84,11 @@ class SopletterWriteViewModel @Inject constructor(
                 .onSuccess { topics ->
                     _uiState.update { it.copy(topics = topics.toPersistentList()) }
                 }
-                .onFailure {
-                    Timber.e(it)
-                    _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "일시적인 오류가 발생했어요.", type = SopletterSnackbarType.FAILURE))
+                .onFailure { error ->
+                    Timber.e(error)
+                    if (!showOnboardingDialogIfRequired(error)) {
+                        _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "일시적인 오류가 발생했어요.", type = SopletterSnackbarType.FAILURE))
+                    }
                 }
         }
     }
@@ -119,10 +118,13 @@ class SopletterWriteViewModel @Inject constructor(
                     _sideEffect.emit(SopletterWriteSideEffect.NavigateToMain(topicId = topicId))
                 }
 
-            }.onFailure { _ ->
-                _uiState.update { it.copy(isLoading = false, isError = true) }
+            }.onFailure { error ->
+                val isOnboardingRequired = showOnboardingDialogIfRequired(error)
+                _uiState.update { it.copy(isLoading = false, isError = !isOnboardingRequired) }
 
-                _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "일시적인 오류가 발생했어요.", type = SopletterSnackbarType.FAILURE))
+                if (!isOnboardingRequired) {
+                    _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "일시적인 오류가 발생했어요.", type = SopletterSnackbarType.FAILURE))
+                }
             }
         }
     }
@@ -131,5 +133,14 @@ class SopletterWriteViewModel @Inject constructor(
         viewModelScope.launch {
             _sideEffect.emit(SopletterWriteSideEffect.ShowSnackbar(message = "공백 포함 350자 이하로만 작성할 수 있어요.", type = SopletterSnackbarType.WARNING))
         }
+    }
+
+    private suspend fun showOnboardingDialogIfRequired(error: Throwable): Boolean {
+        if (!error.isSopletterNotFound()) return false
+        val profile = profileUseCase.refresh().getOrNull() ?: return false
+        if (profile.isOnboarded) return false
+
+        _uiState.update { it.copy(isShowOnboardingDialog = true) }
+        return true
     }
 }

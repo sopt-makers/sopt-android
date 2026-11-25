@@ -34,6 +34,7 @@ dependencies {
     // core
     implementation(projects.core.network)
     implementation(projects.core.common)
+    implementation(projects.core.localstorage)
     implementation(platform(libs.okhttp.bom))
     implementation(libs.bundles.okhttp)
 

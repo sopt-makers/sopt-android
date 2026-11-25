@@ -29,4 +29,6 @@ import org.sopt.official.domain.sopletter.onboarding.model.SopletterOnboardingMo
 interface SopletterOnboardingRepository {
     suspend fun getOnboarding(): Result<SopletterOnboardingModel>
     suspend fun completeOnboarding(): Result<SopletterOnboardingModel>
+    suspend fun getCachedOnboardingStatus(): Boolean?
+    suspend fun getCachedNickname(): String?
 }

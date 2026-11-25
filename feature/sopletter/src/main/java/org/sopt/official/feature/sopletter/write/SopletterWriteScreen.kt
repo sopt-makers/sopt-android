@@ -60,12 +60,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.flowWithLifecycle
 import org.sopt.official.analytics.compose.LocalTracker
 import org.sopt.official.analytics.trackViewType
-import org.sopt.official.mds.theme.SoptTheme
 import org.sopt.official.feature.sopletter.SopletterAnalyticsEvent
-import org.sopt.official.feature.sopletter.common.component.SopletterScaffold
+import org.sopt.official.feature.sopletter.common.component.SopletterOnboardingRequiredDialog
 import org.sopt.official.feature.sopletter.common.component.SopletterTopbar
 import org.sopt.official.feature.sopletter.common.model.SopletterSnackbarVisuals
 import org.sopt.official.feature.sopletter.common.util.characterCount
@@ -76,6 +74,7 @@ import org.sopt.official.feature.sopletter.write.component.SopletterWriteButton
 import org.sopt.official.feature.sopletter.write.component.SopletterWriteTextBox
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteSideEffect
 import org.sopt.official.feature.sopletter.write.model.SopletterWriteUiState
+import org.sopt.official.mds.theme.SoptTheme
 
 @Composable
 fun SopletterWriteRoute(
@@ -83,6 +82,7 @@ fun SopletterWriteRoute(
     onShowSnackbar: (SopletterSnackbarVisuals) -> Unit,
     onBackClick: () -> Unit,
     onNavigateToMain: (Long) -> Unit,
+    navigateToOnboarding: () -> Unit,
     viewModel: SopletterWriteViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -101,6 +101,7 @@ fun SopletterWriteRoute(
                     is SopletterWriteSideEffect.NavigateToMain -> {
                         onNavigateToMain(sideEffect.topicId)
                     }
+
                 }
             }
         }
@@ -117,6 +118,10 @@ fun SopletterWriteRoute(
         onLimitExceeded = viewModel::onLimitExceeded,
         onTopicSelect = viewModel::selectTopic,
     )
+
+    if (uiState.isShowOnboardingDialog) {
+        SopletterOnboardingRequiredDialog(onConfirm = navigateToOnboarding)
+    }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
