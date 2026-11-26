@@ -24,7 +24,7 @@ exifinterface = "1.4.2"
 compose-bom = "2026.03.00"
 androidx-paging = "3.4.2"
 desugarJdk = "2.1.5"
-androidx-credential = "1.5.0"
+androidx-credential = "1.6.0"
 datastore = "1.2.1"
 
 material = "1.13.0"
